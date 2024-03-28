@@ -95,8 +95,9 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 			"ns_system": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"audit_logs": {
@@ -249,32 +250,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -324,34 +330,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -359,14 +371,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -472,32 +486,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -547,34 +566,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -582,14 +607,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -690,32 +717,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -765,34 +797,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -800,14 +838,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -880,32 +920,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -955,34 +1000,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -990,14 +1041,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1041,29 +1094,34 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 			"elastic_receiver": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"auth_aws": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1071,68 +1129,79 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"auth_basic": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"password": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"blindfold_secret_info_internal": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"secret_encoding_type": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"blindfold_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1140,19 +1209,22 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"clear_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"url": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1160,34 +1232,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"vault_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"key": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"provider": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"secret_encoding": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"version": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1195,14 +1273,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"wingman_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1212,8 +1292,9 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 									},
 
 									"user_name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1221,51 +1302,59 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"auth_none": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"batch": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"max_bytes": {
 
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"max_bytes_disabled": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"max_events": {
 
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"max_events_disabled": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"timeout_seconds": {
 
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"timeout_seconds_default": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1273,131 +1362,152 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 						"compression": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"compression_gzip": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"compression_none": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 
 						"endpoint": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"no_tls": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"use_tls": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"no_ca": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"trusted_ca_url": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"mtls_disabled": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"mtls_enable": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"key_url": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1405,19 +1515,22 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"url": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1425,34 +1538,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1460,14 +1579,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1481,26 +1602,30 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"disable_verify_certificate": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"enable_verify_certificate": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"disable_verify_hostname": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"enable_verify_hostname": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1638,32 +1763,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"blindfold_secret_info_internal": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"secret_encoding_type": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"blindfold_secret_info": {
@@ -1713,34 +1843,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"vault_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"key": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"provider": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"secret_encoding": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"version": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1748,14 +1884,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"wingman_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1794,32 +1932,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"blindfold_secret_info_internal": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"secret_encoding_type": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"blindfold_secret_info": {
@@ -1869,34 +2012,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"vault_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"key": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"provider": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"secret_encoding": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"version": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1904,14 +2053,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 												"wingman_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2043,32 +2194,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -2118,34 +2274,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2153,14 +2315,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2349,32 +2513,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -2424,34 +2593,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2459,14 +2634,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2524,32 +2701,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -2599,34 +2781,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2634,14 +2822,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2792,32 +2982,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -2867,34 +3062,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2902,14 +3103,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3156,32 +3359,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -3231,34 +3439,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3266,14 +3480,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3334,32 +3550,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -3409,34 +3630,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3444,14 +3671,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -3509,32 +3738,37 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -3584,34 +3818,40 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3619,14 +3859,16 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -9028,6 +9270,7 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

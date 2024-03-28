@@ -140,6 +140,7 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteChoice().(type) {
 	case *CreateSpecType_SiteAcl:
+
 		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
@@ -151,6 +152,7 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_ReAcl:
+
 		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
@@ -162,6 +164,7 @@ func (m *CreateSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_LegacyAcl:
+
 		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
@@ -782,6 +785,7 @@ func (m *FastACLRuleType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *FastACLRuleType_IpPrefixSet:
+
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -1165,6 +1169,7 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteChoice().(type) {
 	case *GetSpecType_SiteAcl:
+
 		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
@@ -1176,6 +1181,7 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_ReAcl:
+
 		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
@@ -1187,6 +1193,7 @@ func (m *GetSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_LegacyAcl:
+
 		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")
@@ -1408,6 +1415,7 @@ func (m *GlobalSpecType) GetConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConfigChoice().(type) {
 	case *GlobalSpecType_SiteAcl:
+
 		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
@@ -1419,6 +1427,7 @@ func (m *GlobalSpecType) GetConfigChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_ReAcl:
+
 		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
@@ -2344,6 +2353,7 @@ func (m *ReACLType) GetVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReACLType_SelectedTenantVip:
+
 		drInfos, err := m.GetSelectedTenantVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSelectedTenantVip().GetDRefInfo() FAILED")
@@ -2651,6 +2661,7 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteChoice().(type) {
 	case *ReplaceSpecType_SiteAcl:
+
 		drInfos, err := m.GetSiteAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteAcl().GetDRefInfo() FAILED")
@@ -2662,6 +2673,7 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_ReAcl:
+
 		drInfos, err := m.GetReAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetReAcl().GetDRefInfo() FAILED")
@@ -2673,6 +2685,7 @@ func (m *ReplaceSpecType) GetSiteChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_LegacyAcl:
+
 		drInfos, err := m.GetLegacyAcl().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyAcl().GetDRefInfo() FAILED")

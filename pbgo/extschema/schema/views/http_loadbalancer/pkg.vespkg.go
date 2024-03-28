@@ -21,8 +21,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.APIGroupsApiep"] = APIGroupsApiepValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq"] = GetAPIEndpointsForGroupsReqValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsRsp"] = GetAPIEndpointsForGroupsRspValidator()
+	vr["ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesReq"] = GetAPIEndpointsSchemaUpdatesReqValidator()
+	vr["ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesResp"] = GetAPIEndpointsSchemaUpdatesRespValidator()
 	vr["ves.io.schema.views.http_loadbalancer.SwaggerSpecReq"] = SwaggerSpecReqValidator()
 	vr["ves.io.schema.views.http_loadbalancer.SwaggerSpecRsp"] = SwaggerSpecRspValidator()
+	vr["ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasReq"] = UpdateAPIEndpointsSchemasReqValidator()
+	vr["ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasResp"] = UpdateAPIEndpointsSchemasRespValidator()
 
 	vr["ves.io.schema.views.http_loadbalancer.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CreateResponse"] = CreateResponseValidator()
@@ -68,6 +72,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.BotAdvancedMobileSDKConfigType"] = BotAdvancedMobileSDKConfigTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedPolicyType"] = BotDefenseAdvancedPolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedType"] = BotDefenseAdvancedTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.BypassRateLimitingRule"] = BypassRateLimitingRuleValidator()
+	vr["ves.io.schema.views.http_loadbalancer.BypassRateLimitingRules"] = BypassRateLimitingRulesValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType"] = CSDJavaScriptInsertAllWithExceptionsTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertType"] = CSDJavaScriptInsertTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertionRule"] = CSDJavaScriptInsertionRuleValidator()
@@ -301,32 +307,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -335,6 +317,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "spec.threat_intelligence_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
 
@@ -380,32 +366,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -415,13 +377,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
 		},
+		{
+			FieldPath:           "spec.threat_intelligence_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = "ves.io.schema.views.http_loadbalancer.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Get"] = []string{
 		"create_form.spec.jwt_validation.jwks",
-		"object",
 		"replace_form.spec.jwt_validation.jwks",
 		"spec.jwt_validation.jwks",
 	}
@@ -468,32 +433,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "create_form.spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "create_form.spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "create_form.spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "create_form.spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "create_form.spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "create_form.spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -504,80 +445,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"devtest", "test"},
 		},
 		{
-			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			FieldPath:           "create_form.spec.threat_intelligence_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -620,32 +489,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "replace_form.spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "replace_form.spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -654,6 +499,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "replace_form.spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.threat_intelligence_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
@@ -696,32 +545,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -731,11 +556,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
 		},
+		{
+			FieldPath:           "spec.threat_intelligence_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.List"] = []string{
 		"items.#.get_spec.jwt_validation.jwks",
-		"items.#.object.spec.gc_spec.jwt_validation.jwks",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.http_loadbalancer.API.List"] = []svcfw.EnvironmentField{
@@ -780,32 +608,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "items.#.get_spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "items.#.get_spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -816,80 +620,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"devtest", "test"},
 		},
 		{
-			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			FieldPath:           "items.#.get_spec.threat_intelligence_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
 
@@ -1035,32 +767,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.default_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_cert_params.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https.tls_parameters.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.https_auto_cert.use_mtls.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.jwt_validation.mandatory_claims",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
@@ -1069,6 +777,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
 			AllowedEnvironments: []string{"devtest", "test"},
+		},
+		{
+			FieldPath:           "spec.threat_intelligence_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
 

@@ -914,35 +914,35 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CDNAccessLogAggregationQuery(ctx context.Context, in *CDNAccessLogAggregationRequest, opts ...grpc.CallOption) (*CDNLogAggregationResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogAggregationQuery", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogAggregationQuery")
 	return c.CustomAPIServer.CDNAccessLogAggregationQuery(ctx, in)
 }
 func (c *customAPIInprocClient) CDNAccessLogs(ctx context.Context, in *CDNAccessLogRequest, opts ...grpc.CallOption) (*CDNLogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogs", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogs")
 	return c.CustomAPIServer.CDNAccessLogs(ctx, in)
 }
 func (c *customAPIInprocClient) CDNCachePurge(ctx context.Context, in *LilacCDNCachePurgeRequest, opts ...grpc.CallOption) (*LilacCDNCachePurgeResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge")
 	return c.CustomAPIServer.CDNCachePurge(ctx, in)
 }
 func (c *customAPIInprocClient) CDNMetrics(ctx context.Context, in *LilacCDNMetricsRequest, opts ...grpc.CallOption) (*LilacCDNMetricsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNMetrics")
 	return c.CustomAPIServer.CDNMetrics(ctx, in)
 }
 func (c *customAPIInprocClient) GetServiceOperation(ctx context.Context, in *GetServiceOperationReq, opts ...grpc.CallOption) (*GetServiceOperationRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.GetServiceOperation", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.GetServiceOperation")
 	return c.CustomAPIServer.GetServiceOperation(ctx, in)
 }
 func (c *customAPIInprocClient) ListServiceOperations(ctx context.Context, in *ListServiceOperationsReq, opts ...grpc.CallOption) (*ListServiceOperationsRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.ListServiceOperations", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.ListServiceOperations")
 	return c.CustomAPIServer.ListServiceOperations(ctx, in)
 }
 func (c *customAPIInprocClient) Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.Subscribe", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.Subscribe")
 	return c.CustomAPIServer.Subscribe(ctx, in)
 }
 func (c *customAPIInprocClient) Unsubscribe(ctx context.Context, in *UnsubscribeRequest, opts ...grpc.CallOption) (*UnsubscribeResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.Unsubscribe", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.Unsubscribe")
 	return c.CustomAPIServer.Unsubscribe(ctx, in)
 }
 

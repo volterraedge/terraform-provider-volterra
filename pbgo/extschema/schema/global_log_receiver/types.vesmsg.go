@@ -1211,6 +1211,7 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *CreateSpecType_S3Receiver:
+
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -1234,6 +1235,7 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_ElasticReceiver:
+
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -1253,6 +1255,7 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_AwsCloudWatchReceiver:
+
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -1280,6 +1283,7 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_GcpBucketReceiver:
+
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
@@ -2642,6 +2646,7 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *GetSpecType_S3Receiver:
+
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -2665,6 +2670,7 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_ElasticReceiver:
+
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -2684,6 +2690,7 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_AwsCloudWatchReceiver:
+
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -2711,6 +2718,7 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_GcpBucketReceiver:
+
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
@@ -3218,6 +3226,7 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *GlobalSpecType_S3Receiver:
+
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -3241,6 +3250,7 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_ElasticReceiver:
+
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -3260,6 +3270,7 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_AwsCloudWatchReceiver:
+
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -3287,6 +3298,7 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_GcpBucketReceiver:
+
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")
@@ -5041,6 +5053,7 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetReceiver().(type) {
 	case *ReplaceSpecType_S3Receiver:
+
 		drInfos, err := m.GetS3Receiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetS3Receiver().GetDRefInfo() FAILED")
@@ -5064,6 +5077,7 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_ElasticReceiver:
+
 		drInfos, err := m.GetElasticReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetElasticReceiver().GetDRefInfo() FAILED")
@@ -5083,6 +5097,7 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_AwsCloudWatchReceiver:
+
 		drInfos, err := m.GetAwsCloudWatchReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsCloudWatchReceiver().GetDRefInfo() FAILED")
@@ -5110,6 +5125,7 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_GcpBucketReceiver:
+
 		drInfos, err := m.GetGcpBucketReceiver().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcpBucketReceiver().GetDRefInfo() FAILED")

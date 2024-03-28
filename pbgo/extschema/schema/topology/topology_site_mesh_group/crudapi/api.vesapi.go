@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.topology.topology_site_mesh_group.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.topology.topology_site_mesh_group.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.topology.topology_site_mesh_group.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.topology.topology_site_mesh_group.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.topology.topology_site_mesh_group.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.topology_site_mesh_group.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2929,36 +2944,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaLabelSelectorType": {
-            "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
-            "title": "LabelSelectorType",
-            "x-displayname": "Label Selector",
-            "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
-            "properties": {
-                "expressions": {
-                    "type": "array",
-                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.k8s_label_selector: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4096\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "expressions",
-                    "maxItems": 1,
-                    "items": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 4096
-                    },
-                    "x-displayname": "Selector Expression",
-                    "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.k8s_label_selector": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_len": "4096",
-                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                }
-            }
-        },
         "schemaListMetaType": {
             "type": "object",
             "description": "ListMetaType is metadata that all lists must have.",
@@ -3302,12 +3287,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/site_mesh_groupHubFullMeshGroupType",
                     "x-displayname": "Hub"
                 },
-                "site_selector": {
-                    "description": " Label selector for virtual site",
-                    "title": "Site Selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType",
-                    "x-displayname": "Site Selector Expression"
-                },
                 "site_type": {
                     "description": " Site type for sites in the virtual site",
                     "title": "site_type",
@@ -3320,11 +3299,33 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/site_mesh_groupSpokeMeshGroupType",
                     "x-displayname": "Spoke"
                 },
+                "topology_site": {
+                    "type": "array",
+                    "description": " Topology Sites referenced in this site_mesh_group",
+                    "title": "Topology Site Reference",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Topology Site"
+                },
                 "type": {
                     "description": " Site Mesh Group Type",
                     "title": "Type",
                     "$ref": "#/definitions/schemasite_mesh_groupSiteMeshGroupType",
                     "x-displayname": "Type"
+                },
+                "virtual_site": {
+                    "type": "array",
+                    "description": " Virtual Site referenced in this site_mesh_group\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "virtual_site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Virtual Site",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },

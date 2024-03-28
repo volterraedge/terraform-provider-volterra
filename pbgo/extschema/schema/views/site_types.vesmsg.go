@@ -5557,6 +5557,7 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 	}
 	switch m.GetConnectionChoice().(type) {
 	case *GlobalNetworkConnectionType_SliToGlobalDr:
+
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -5568,6 +5569,7 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 		return drInfos, err
 
 	case *GlobalNetworkConnectionType_SloToGlobalDr:
+
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -6595,6 +6597,93 @@ func SiteCloudLinkTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SiteError) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteError) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteError) DeepCopy() *SiteError {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteError{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteError) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteError) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteErrorValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSiteError struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteError) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteError)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteError got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteErrorValidator = func() *ValidateSiteError {
+	v := &ValidateSiteError{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SiteErrorValidator() db.Validator {
+	return DefaultSiteErrorValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteStaticRoutesListType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6823,6 +6912,7 @@ func (m *SiteStaticRoutesType) GetConfigModeChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetConfigModeChoice().(type) {
 	case *SiteStaticRoutesType_CustomStaticRoute:
+
 		drInfos, err := m.GetCustomStaticRoute().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomStaticRoute().GetDRefInfo() FAILED")
@@ -6954,6 +7044,465 @@ var DefaultSiteStaticRoutesTypeValidator = func() *ValidateSiteStaticRoutesType 
 
 func SiteStaticRoutesTypeValidator() db.Validator {
 	return DefaultSiteStaticRoutesTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateSiteErrorRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateSiteErrorRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateSiteErrorRequest) DeepCopy() *UpdateSiteErrorRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateSiteErrorRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateSiteErrorRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateSiteErrorRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateSiteErrorRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateSiteErrorRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateSiteErrorRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateSiteErrorRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateSiteErrorRequest) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateSiteErrorRequest) SiteErrorsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for site_errors")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SiteError, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SiteErrorValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for site_errors")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SiteError)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SiteError, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated site_errors")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items site_errors")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateSiteErrorRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateSiteErrorRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateSiteErrorRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		if err := fv(ctx, m.GetSiteErrors(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant"))
+		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateSiteErrorRequestValidator = func() *ValidateUpdateSiteErrorRequest {
+	v := &ValidateUpdateSiteErrorRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateSiteErrorRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateSiteErrorRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhTenant := v.TenantValidationRuleHandler
+	rulesTenant := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhTenant(rulesTenant)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateSiteErrorRequest.tenant: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant"] = vFn
+
+	vrhSiteErrors := v.SiteErrorsValidationRuleHandler
+	rulesSiteErrors := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSiteErrors(rulesSiteErrors)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateSiteErrorRequest.site_errors: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_errors"] = vFn
+
+	return v
+}()
+
+func UpdateSiteErrorRequestValidator() db.Validator {
+	return DefaultUpdateSiteErrorRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateSiteErrorResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateSiteErrorResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateSiteErrorResponse) DeepCopy() *UpdateSiteErrorResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateSiteErrorResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateSiteErrorResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateSiteErrorResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateSiteErrorResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateSiteErrorResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateSiteErrorResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateSiteErrorResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateSiteErrorResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateSiteErrorResponseValidator = func() *ValidateUpdateSiteErrorResponse {
+	v := &ValidateUpdateSiteErrorResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateSiteErrorResponseValidator() db.Validator {
+	return DefaultUpdateSiteErrorResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValidateConfigRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValidateConfigRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValidateConfigRequest) DeepCopy() *ValidateConfigRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValidateConfigRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValidateConfigRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValidateConfigRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValidateConfigRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValidateConfigRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValidateConfigRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValidateConfigRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValidateConfigRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValidateConfigRequestValidator = func() *ValidateValidateConfigRequest {
+	v := &ValidateValidateConfigRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ValidateConfigRequestValidator() db.Validator {
+	return DefaultValidateConfigRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValidateConfigResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValidateConfigResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValidateConfigResponse) DeepCopy() *ValidateConfigResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValidateConfigResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValidateConfigResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValidateConfigResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValidateConfigResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValidateConfigResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValidateConfigResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValidateConfigResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValidateConfigResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValidateConfigResponseValidator = func() *ValidateValidateConfigResponse {
+	v := &ValidateValidateConfigResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ValidateConfigResponseValidator() db.Validator {
+	return DefaultValidateConfigResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

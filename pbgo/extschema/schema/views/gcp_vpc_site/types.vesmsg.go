@@ -252,6 +252,7 @@ func (m *CreateSpecType) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *CreateSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -279,6 +280,7 @@ func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_IngressEgressGw:
+
 		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
@@ -290,6 +292,7 @@ func (m *CreateSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_VoltstackCluster:
+
 		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
@@ -529,6 +532,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
 			return err
 		}
 
@@ -931,6 +943,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	return v
 }()
 
@@ -1153,6 +1167,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetForwardProxyChoiceDRefInfo() ([]db
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwReplaceType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -1184,6 +1199,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]d
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwReplaceType_GlobalNetworkList:
+
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -1211,6 +1227,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetInsideStaticRouteChoiceDRefInfo() 
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwReplaceType_InsideStaticRoutes:
+
 		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
@@ -1238,6 +1255,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]d
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwReplaceType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -1249,6 +1267,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]d
 		return drInfos, err
 
 	case *GCPVPCIngressEgressGwReplaceType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -1276,6 +1295,7 @@ func (m *GCPVPCIngressEgressGwReplaceType) GetOutsideStaticRouteChoiceDRefInfo()
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwReplaceType_OutsideStaticRoutes:
+
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
@@ -1990,6 +2010,7 @@ func (m *GCPVPCIngressEgressGwType) GetForwardProxyChoiceDRefInfo() ([]db.DRefIn
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -2021,6 +2042,7 @@ func (m *GCPVPCIngressEgressGwType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefI
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwType_GlobalNetworkList:
+
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -2048,6 +2070,7 @@ func (m *GCPVPCIngressEgressGwType) GetInsideStaticRouteChoiceDRefInfo() ([]db.D
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwType_InsideStaticRoutes:
+
 		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
@@ -2075,6 +2098,7 @@ func (m *GCPVPCIngressEgressGwType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefI
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -2086,6 +2110,7 @@ func (m *GCPVPCIngressEgressGwType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefI
 		return drInfos, err
 
 	case *GCPVPCIngressEgressGwType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -2113,6 +2138,7 @@ func (m *GCPVPCIngressEgressGwType) GetOutsideStaticRouteChoiceDRefInfo() ([]db.
 		return nil, nil
 
 	case *GCPVPCIngressEgressGwType_OutsideStaticRoutes:
+
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
@@ -3470,6 +3496,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetForwardProxyChoiceDRefInfo() ([]d
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterReplaceType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -3501,6 +3528,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterReplaceType_GlobalNetworkList:
+
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -3528,6 +3556,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterReplaceType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -3539,6 +3568,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]
 		return drInfos, err
 
 	case *GCPVPCVoltstackClusterReplaceType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -3566,6 +3596,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetOutsideStaticRouteChoiceDRefInfo(
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterReplaceType_OutsideStaticRoutes:
+
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
@@ -4158,6 +4189,7 @@ func (m *GCPVPCVoltstackClusterType) GetForwardProxyChoiceDRefInfo() ([]db.DRefI
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -4189,6 +4221,7 @@ func (m *GCPVPCVoltstackClusterType) GetGlobalNetworkChoiceDRefInfo() ([]db.DRef
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterType_GlobalNetworkList:
+
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -4281,6 +4314,7 @@ func (m *GCPVPCVoltstackClusterType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRef
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -4292,6 +4326,7 @@ func (m *GCPVPCVoltstackClusterType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRef
 		return drInfos, err
 
 	case *GCPVPCVoltstackClusterType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -4319,6 +4354,7 @@ func (m *GCPVPCVoltstackClusterType) GetOutsideStaticRouteChoiceDRefInfo() ([]db
 		return nil, nil
 
 	case *GCPVPCVoltstackClusterType_OutsideStaticRoutes:
+
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
@@ -5230,6 +5266,7 @@ func (m *GetSpecType) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, err
 		return nil, nil
 
 	case *GetSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -5257,6 +5294,7 @@ func (m *GetSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_IngressEgressGw:
+
 		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
@@ -5268,6 +5306,7 @@ func (m *GetSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_VoltstackCluster:
+
 		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
@@ -5541,6 +5580,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["deployment"]; exists {
 		val := m.GetDeployment()
 		vOpts := append(opts,
@@ -5720,6 +5768,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		for idx, item := range m.GetSiteErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
@@ -5798,6 +5858,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
 		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validation_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validation_state"))
+		if err := fv(ctx, m.GetValidationState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6002,6 +6071,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 
 	v.FldValidators["cloud_site_info"] = GCPVPCSiteInfoTypeValidator().Validate
 
@@ -6254,6 +6325,7 @@ func (m *GlobalSpecType) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *GlobalSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -6281,6 +6353,7 @@ func (m *GlobalSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_IngressEgressGw:
+
 		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
@@ -6292,6 +6365,7 @@ func (m *GlobalSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_VoltstackCluster:
+
 		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
@@ -6663,6 +6737,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["deployment"]; exists {
 		val := m.GetDeployment()
 		vOpts := append(opts,
@@ -6851,6 +6934,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		for idx, item := range m.GetSiteErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_to_site_tunnel_ip"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_to_site_tunnel_ip"))
@@ -6947,6 +7042,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
 		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validation_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validation_state"))
+		if err := fv(ctx, m.GetValidationState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7164,6 +7268,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -7402,6 +7508,7 @@ func (m *ReplaceSpecType) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo,
 		return nil, nil
 
 	case *ReplaceSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -7429,6 +7536,7 @@ func (m *ReplaceSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_IngressEgressGw:
+
 		drInfos, err := m.GetIngressEgressGw().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIngressEgressGw().GetDRefInfo() FAILED")
@@ -7440,6 +7548,7 @@ func (m *ReplaceSpecType) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_VoltstackCluster:
+
 		drInfos, err := m.GetVoltstackCluster().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVoltstackCluster().GetDRefInfo() FAILED")
@@ -7584,6 +7693,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7839,6 +7957,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	return v
 }()
 
@@ -8034,6 +8154,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Address = f.GetAddress()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.GcpLabels = f.GetGcpLabels()
@@ -8067,6 +8188,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Address = m1.Address
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.GcpLabels = m1.GcpLabels
@@ -8893,6 +9015,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.CloudSiteInfo = f.GetCloudSiteInfo()
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.ErrorDescription = f.GetErrorDescription()
@@ -8904,11 +9027,13 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.GetPrivateConnectivityChoiceFromGlobalSpecType(f)
+	m.SiteErrors = f.GetSiteErrors()
 
 	m.GetSiteTypeFromGlobalSpecType(f)
 	m.SshKey = f.GetSshKey()
 	m.SuggestedAction = f.GetSuggestedAction()
 	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
+	m.ValidationState = f.GetValidationState()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -8931,6 +9056,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.CloudSiteInfo = m1.CloudSiteInfo
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.ErrorDescription = m1.ErrorDescription
@@ -8942,11 +9068,13 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	m1.SetPrivateConnectivityChoiceToGlobalSpecType(f)
+	f.SiteErrors = m1.SiteErrors
 
 	m1.SetSiteTypeToGlobalSpecType(f)
 	f.SshKey = m1.SshKey
 	f.SuggestedAction = m1.SuggestedAction
 	f.UserModificationTimestamp = m1.UserModificationTimestamp
+	f.ValidationState = m1.ValidationState
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
@@ -9173,6 +9301,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Address = f.GetAddress()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -9198,6 +9327,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Address = m1.Address
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetDeploymentToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode

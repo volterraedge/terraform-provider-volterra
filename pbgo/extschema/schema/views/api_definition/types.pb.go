@@ -59,26 +59,35 @@ type GlobalSpecType struct {
 	// x-displayName: "API Inventory Inclusion List"
 	// List of API Endpoints included in the API Inventory.
 	// Typically, discovered API endpoints are added to the API Inventory using this list.
-	// note: hidden until full release of the API Inventory feature
-	ApiInventoryInclusionList []*ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	ApiInventoryInclusionList []*views.ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
 	// api_inventory_exclusion_list
 	//
 	// x-displayName: "API Inventory Exclusion List"
 	// List of API Endpoints excluded from the API Inventory.
-	// note: hidden until full release of the API Inventory feature
-	ApiInventoryExclusionList []*ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	ApiInventoryExclusionList []*views.ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
 	// non_api_endpoints
 	//
 	// x-displayName: "API Discovery Exclusion List"
 	// List of Non-API Endpoints.
-	// note: hidden until full release of the API Inventory feature
-	NonApiEndpoints []*ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	NonApiEndpoints []*views.ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
 	// api_inventory_openapi_spec
 	//
 	// x-displayName: "API Inventory OpenAPI specification files"
-	// A stored object link to internally generated OpenAPI specification file.
-	// note: hidden until full release of the API Inventory feature
+	// Links to internally generated OpenAPI specification files.
 	ApiInventoryOpenapiSpec []string `protobuf:"bytes,7,rep,name=api_inventory_openapi_spec,json=apiInventoryOpenapiSpec,proto3" json:"api_inventory_openapi_spec,omitempty"`
+	// schema_updates_strategy
+	//
+	// x-displayName: "Schema Updates Strategy"
+	// x-required
+	// Set schema update strategy for the API Inventory schemas management.
+	// In case when multiple AppTypes are associated with a single API Inventory,
+	// it is possible that for a single API Endpoint may be multiple sources.
+	// The strategy defines how schema origin should be treated in case of multiple schemas.
+	//
+	// Types that are valid to be assigned to SchemaUpdatesStrategy:
+	//	*GlobalSpecType_StrictSchemaOrigin
+	//	*GlobalSpecType_MixedSchemaOrigin
+	SchemaUpdatesStrategy isGlobalSpecType_SchemaUpdatesStrategy `protobuf_oneof:"schema_updates_strategy"`
 	// view_internal
 	//
 	// x-displayName: "View Internal"
@@ -119,6 +128,30 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
+type isGlobalSpecType_SchemaUpdatesStrategy interface {
+	isGlobalSpecType_SchemaUpdatesStrategy()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GlobalSpecType_StrictSchemaOrigin struct {
+	StrictSchemaOrigin *schema.Empty `protobuf:"bytes,9,opt,name=strict_schema_origin,json=strictSchemaOrigin,proto3,oneof" json:"strict_schema_origin,omitempty"`
+}
+type GlobalSpecType_MixedSchemaOrigin struct {
+	MixedSchemaOrigin *schema.Empty `protobuf:"bytes,10,opt,name=mixed_schema_origin,json=mixedSchemaOrigin,proto3,oneof" json:"mixed_schema_origin,omitempty"`
+}
+
+func (*GlobalSpecType_StrictSchemaOrigin) isGlobalSpecType_SchemaUpdatesStrategy() {}
+func (*GlobalSpecType_MixedSchemaOrigin) isGlobalSpecType_SchemaUpdatesStrategy()  {}
+
+func (m *GlobalSpecType) GetSchemaUpdatesStrategy() isGlobalSpecType_SchemaUpdatesStrategy {
+	if m != nil {
+		return m.SchemaUpdatesStrategy
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetSwaggerSpecs() []string {
 	if m != nil {
 		return m.SwaggerSpecs
@@ -133,21 +166,21 @@ func (m *GlobalSpecType) GetDefaultApiGroupsBuilders() []*ApiGroupBuilder {
 	return nil
 }
 
-func (m *GlobalSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+func (m *GlobalSpecType) GetApiInventoryInclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryInclusionList
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+func (m *GlobalSpecType) GetApiInventoryExclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryExclusionList
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetNonApiEndpoints() []*ApiOperation {
+func (m *GlobalSpecType) GetNonApiEndpoints() []*views.ApiOperation {
 	if m != nil {
 		return m.NonApiEndpoints
 	}
@@ -157,6 +190,20 @@ func (m *GlobalSpecType) GetNonApiEndpoints() []*ApiOperation {
 func (m *GlobalSpecType) GetApiInventoryOpenapiSpec() []string {
 	if m != nil {
 		return m.ApiInventoryOpenapiSpec
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetStrictSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*GlobalSpecType_StrictSchemaOrigin); ok {
+		return x.StrictSchemaOrigin
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetMixedSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*GlobalSpecType_MixedSchemaOrigin); ok {
+		return x.MixedSchemaOrigin
 	}
 	return nil
 }
@@ -175,16 +222,28 @@ func (m *GlobalSpecType) GetApiGroups() []*ApiGroupSummary {
 	return nil
 }
 
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GlobalSpecType_StrictSchemaOrigin)(nil),
+		(*GlobalSpecType_MixedSchemaOrigin)(nil),
+	}
+}
+
 // CreateSpecType
 //
 // x-displayName: "Create API Definition"
 // x-required
 // Create API Definition.
 type CreateSpecType struct {
-	SwaggerSpecs              []string        `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
-	ApiInventoryInclusionList []*ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
-	ApiInventoryExclusionList []*ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
-	NonApiEndpoints           []*ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	SwaggerSpecs              []string              `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	ApiInventoryInclusionList []*views.ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	ApiInventoryExclusionList []*views.ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	NonApiEndpoints           []*views.ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	// Types that are valid to be assigned to SchemaUpdatesStrategy:
+	//	*CreateSpecType_StrictSchemaOrigin
+	//	*CreateSpecType_MixedSchemaOrigin
+	SchemaUpdatesStrategy isCreateSpecType_SchemaUpdatesStrategy `protobuf_oneof:"schema_updates_strategy"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -215,6 +274,30 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
 
+type isCreateSpecType_SchemaUpdatesStrategy interface {
+	isCreateSpecType_SchemaUpdatesStrategy()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CreateSpecType_StrictSchemaOrigin struct {
+	StrictSchemaOrigin *schema.Empty `protobuf:"bytes,9,opt,name=strict_schema_origin,json=strictSchemaOrigin,proto3,oneof" json:"strict_schema_origin,omitempty"`
+}
+type CreateSpecType_MixedSchemaOrigin struct {
+	MixedSchemaOrigin *schema.Empty `protobuf:"bytes,10,opt,name=mixed_schema_origin,json=mixedSchemaOrigin,proto3,oneof" json:"mixed_schema_origin,omitempty"`
+}
+
+func (*CreateSpecType_StrictSchemaOrigin) isCreateSpecType_SchemaUpdatesStrategy() {}
+func (*CreateSpecType_MixedSchemaOrigin) isCreateSpecType_SchemaUpdatesStrategy()  {}
+
+func (m *CreateSpecType) GetSchemaUpdatesStrategy() isCreateSpecType_SchemaUpdatesStrategy {
+	if m != nil {
+		return m.SchemaUpdatesStrategy
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetSwaggerSpecs() []string {
 	if m != nil {
 		return m.SwaggerSpecs
@@ -222,25 +305,47 @@ func (m *CreateSpecType) GetSwaggerSpecs() []string {
 	return nil
 }
 
-func (m *CreateSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+func (m *CreateSpecType) GetApiInventoryInclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryInclusionList
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+func (m *CreateSpecType) GetApiInventoryExclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryExclusionList
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetNonApiEndpoints() []*ApiOperation {
+func (m *CreateSpecType) GetNonApiEndpoints() []*views.ApiOperation {
 	if m != nil {
 		return m.NonApiEndpoints
 	}
 	return nil
+}
+
+func (m *CreateSpecType) GetStrictSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*CreateSpecType_StrictSchemaOrigin); ok {
+		return x.StrictSchemaOrigin
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetMixedSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*CreateSpecType_MixedSchemaOrigin); ok {
+		return x.MixedSchemaOrigin
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CreateSpecType_StrictSchemaOrigin)(nil),
+		(*CreateSpecType_MixedSchemaOrigin)(nil),
+	}
 }
 
 // GetSpecType
@@ -248,13 +353,16 @@ func (m *CreateSpecType) GetNonApiEndpoints() []*ApiOperation {
 // x-displayName: "Get API Definition"
 // Get API Definition.
 type GetSpecType struct {
-	SwaggerSpecs              []string           `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
-	DefaultApiGroupsBuilders  []*ApiGroupBuilder `protobuf:"bytes,3,rep,name=default_api_groups_builders,json=defaultApiGroupsBuilders,proto3" json:"default_api_groups_builders,omitempty"`
-	ApiInventoryInclusionList []*ApiOperation    `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
-	ApiInventoryExclusionList []*ApiOperation    `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
-	NonApiEndpoints           []*ApiOperation    `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
-	ApiInventoryOpenapiSpec   []string           `protobuf:"bytes,7,rep,name=api_inventory_openapi_spec,json=apiInventoryOpenapiSpec,proto3" json:"api_inventory_openapi_spec,omitempty"`
-	ApiGroups                 []*ApiGroupSummary `protobuf:"bytes,1001,rep,name=api_groups,json=apiGroups,proto3" json:"api_groups,omitempty"`
+	SwaggerSpecs              []string              `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	DefaultApiGroupsBuilders  []*ApiGroupBuilder    `protobuf:"bytes,3,rep,name=default_api_groups_builders,json=defaultApiGroupsBuilders,proto3" json:"default_api_groups_builders,omitempty"`
+	ApiInventoryInclusionList []*views.ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	ApiInventoryExclusionList []*views.ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	NonApiEndpoints           []*views.ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	// Types that are valid to be assigned to SchemaUpdatesStrategy:
+	//	*GetSpecType_StrictSchemaOrigin
+	//	*GetSpecType_MixedSchemaOrigin
+	SchemaUpdatesStrategy isGetSpecType_SchemaUpdatesStrategy `protobuf_oneof:"schema_updates_strategy"`
+	ApiGroups             []*ApiGroupSummary                  `protobuf:"bytes,1001,rep,name=api_groups,json=apiGroups,proto3" json:"api_groups,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -285,6 +393,30 @@ func (m *GetSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetSpecType proto.InternalMessageInfo
 
+type isGetSpecType_SchemaUpdatesStrategy interface {
+	isGetSpecType_SchemaUpdatesStrategy()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type GetSpecType_StrictSchemaOrigin struct {
+	StrictSchemaOrigin *schema.Empty `protobuf:"bytes,9,opt,name=strict_schema_origin,json=strictSchemaOrigin,proto3,oneof" json:"strict_schema_origin,omitempty"`
+}
+type GetSpecType_MixedSchemaOrigin struct {
+	MixedSchemaOrigin *schema.Empty `protobuf:"bytes,10,opt,name=mixed_schema_origin,json=mixedSchemaOrigin,proto3,oneof" json:"mixed_schema_origin,omitempty"`
+}
+
+func (*GetSpecType_StrictSchemaOrigin) isGetSpecType_SchemaUpdatesStrategy() {}
+func (*GetSpecType_MixedSchemaOrigin) isGetSpecType_SchemaUpdatesStrategy()  {}
+
+func (m *GetSpecType) GetSchemaUpdatesStrategy() isGetSpecType_SchemaUpdatesStrategy {
+	if m != nil {
+		return m.SchemaUpdatesStrategy
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetSwaggerSpecs() []string {
 	if m != nil {
 		return m.SwaggerSpecs
@@ -299,30 +431,37 @@ func (m *GetSpecType) GetDefaultApiGroupsBuilders() []*ApiGroupBuilder {
 	return nil
 }
 
-func (m *GetSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+func (m *GetSpecType) GetApiInventoryInclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryInclusionList
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+func (m *GetSpecType) GetApiInventoryExclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryExclusionList
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetNonApiEndpoints() []*ApiOperation {
+func (m *GetSpecType) GetNonApiEndpoints() []*views.ApiOperation {
 	if m != nil {
 		return m.NonApiEndpoints
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetApiInventoryOpenapiSpec() []string {
-	if m != nil {
-		return m.ApiInventoryOpenapiSpec
+func (m *GetSpecType) GetStrictSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*GetSpecType_StrictSchemaOrigin); ok {
+		return x.StrictSchemaOrigin
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetMixedSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*GetSpecType_MixedSchemaOrigin); ok {
+		return x.MixedSchemaOrigin
 	}
 	return nil
 }
@@ -334,16 +473,28 @@ func (m *GetSpecType) GetApiGroups() []*ApiGroupSummary {
 	return nil
 }
 
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetSpecType_StrictSchemaOrigin)(nil),
+		(*GetSpecType_MixedSchemaOrigin)(nil),
+	}
+}
+
 // ReplaceSpecType
 //
 // x-displayName: "Replace API Definition"
 // x-required
 // Replace API Definition.
 type ReplaceSpecType struct {
-	SwaggerSpecs              []string        `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
-	ApiInventoryInclusionList []*ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
-	ApiInventoryExclusionList []*ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
-	NonApiEndpoints           []*ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	SwaggerSpecs              []string              `protobuf:"bytes,1,rep,name=swagger_specs,json=swaggerSpecs,proto3" json:"swagger_specs,omitempty"`
+	ApiInventoryInclusionList []*views.ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list,json=apiInventoryInclusionList,proto3" json:"api_inventory_inclusion_list,omitempty"`
+	ApiInventoryExclusionList []*views.ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list,json=apiInventoryExclusionList,proto3" json:"api_inventory_exclusion_list,omitempty"`
+	NonApiEndpoints           []*views.ApiOperation `protobuf:"bytes,6,rep,name=non_api_endpoints,json=nonApiEndpoints,proto3" json:"non_api_endpoints,omitempty"`
+	// Types that are valid to be assigned to SchemaUpdatesStrategy:
+	//	*ReplaceSpecType_StrictSchemaOrigin
+	//	*ReplaceSpecType_MixedSchemaOrigin
+	SchemaUpdatesStrategy isReplaceSpecType_SchemaUpdatesStrategy `protobuf_oneof:"schema_updates_strategy"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -374,6 +525,30 @@ func (m *ReplaceSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 
+type isReplaceSpecType_SchemaUpdatesStrategy interface {
+	isReplaceSpecType_SchemaUpdatesStrategy()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ReplaceSpecType_StrictSchemaOrigin struct {
+	StrictSchemaOrigin *schema.Empty `protobuf:"bytes,9,opt,name=strict_schema_origin,json=strictSchemaOrigin,proto3,oneof" json:"strict_schema_origin,omitempty"`
+}
+type ReplaceSpecType_MixedSchemaOrigin struct {
+	MixedSchemaOrigin *schema.Empty `protobuf:"bytes,10,opt,name=mixed_schema_origin,json=mixedSchemaOrigin,proto3,oneof" json:"mixed_schema_origin,omitempty"`
+}
+
+func (*ReplaceSpecType_StrictSchemaOrigin) isReplaceSpecType_SchemaUpdatesStrategy() {}
+func (*ReplaceSpecType_MixedSchemaOrigin) isReplaceSpecType_SchemaUpdatesStrategy()  {}
+
+func (m *ReplaceSpecType) GetSchemaUpdatesStrategy() isReplaceSpecType_SchemaUpdatesStrategy {
+	if m != nil {
+		return m.SchemaUpdatesStrategy
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetSwaggerSpecs() []string {
 	if m != nil {
 		return m.SwaggerSpecs
@@ -381,89 +556,47 @@ func (m *ReplaceSpecType) GetSwaggerSpecs() []string {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetApiInventoryInclusionList() []*ApiOperation {
+func (m *ReplaceSpecType) GetApiInventoryInclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryInclusionList
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetApiInventoryExclusionList() []*ApiOperation {
+func (m *ReplaceSpecType) GetApiInventoryExclusionList() []*views.ApiOperation {
 	if m != nil {
 		return m.ApiInventoryExclusionList
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetNonApiEndpoints() []*ApiOperation {
+func (m *ReplaceSpecType) GetNonApiEndpoints() []*views.ApiOperation {
 	if m != nil {
 		return m.NonApiEndpoints
 	}
 	return nil
 }
 
-// ApiOperation
-//
-// x-displayName: "API Operation"
-// API operation according to OpenAPI specification.
-type ApiOperation struct {
-	// method
-	//
-	// x-displayName: "HTTP Method"
-	// x-required
-	// x-example: 'POST'
-	// Method to match the input request API method against.
-	Method schema.HttpMethod `protobuf:"varint,1,opt,name=method,proto3,enum=ves.io.schema.HttpMethod" json:"method,omitempty"`
-	// path
-	//
-	// x-displayName: "Path"
-	// x-required
-	// x-example: "/api/users/{userid}"
-	// An endpoint path, as specified in OpenAPI, including parameters.
-	// The path should comply with RFC 3986 and may have parameters according to OpenAPI specification
-	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-}
-
-func (m *ApiOperation) Reset()      { *m = ApiOperation{} }
-func (*ApiOperation) ProtoMessage() {}
-func (*ApiOperation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d394c51e1f8ccc10, []int{4}
-}
-func (m *ApiOperation) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ApiOperation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
+func (m *ReplaceSpecType) GetStrictSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*ReplaceSpecType_StrictSchemaOrigin); ok {
+		return x.StrictSchemaOrigin
 	}
-	return b[:n], nil
-}
-func (m *ApiOperation) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ApiOperation.Merge(m, src)
-}
-func (m *ApiOperation) XXX_Size() int {
-	return m.Size()
-}
-func (m *ApiOperation) XXX_DiscardUnknown() {
-	xxx_messageInfo_ApiOperation.DiscardUnknown(m)
+	return nil
 }
 
-var xxx_messageInfo_ApiOperation proto.InternalMessageInfo
-
-func (m *ApiOperation) GetMethod() schema.HttpMethod {
-	if m != nil {
-		return m.Method
+func (m *ReplaceSpecType) GetMixedSchemaOrigin() *schema.Empty {
+	if x, ok := m.GetSchemaUpdatesStrategy().(*ReplaceSpecType_MixedSchemaOrigin); ok {
+		return x.MixedSchemaOrigin
 	}
-	return schema.ANY
+	return nil
 }
 
-func (m *ApiOperation) GetPath() string {
-	if m != nil {
-		return m.Path
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ReplaceSpecType_StrictSchemaOrigin)(nil),
+		(*ReplaceSpecType_MixedSchemaOrigin)(nil),
 	}
-	return ""
 }
 
 // ApiGroupBuilder
@@ -496,20 +629,20 @@ type ApiGroupBuilder struct {
 	// List of operations not matched by the filters to be included in a group.
 	// The list should not include operations matched by the filters.
 	// The paths appear here with parameters as defined in OpenAPI spec file.
-	IncludedOperations []*ApiOperation `protobuf:"bytes,4,rep,name=included_operations,json=includedOperations,proto3" json:"included_operations,omitempty"`
+	IncludedOperations []*views.ApiOperation `protobuf:"bytes,4,rep,name=included_operations,json=includedOperations,proto3" json:"included_operations,omitempty"`
 	// excluded_operations
 	//
 	// x-displayName: "Excluded Operations"
 	// List of operations matched by the filters to be excluded from a group.
 	// The list should only include operations matched by the filters.
 	// The paths appear here with parameters as defined in OpenAPI spec file.
-	ExcludedOperations []*ApiOperation `protobuf:"bytes,5,rep,name=excluded_operations,json=excludedOperations,proto3" json:"excluded_operations,omitempty"`
+	ExcludedOperations []*views.ApiOperation `protobuf:"bytes,5,rep,name=excluded_operations,json=excludedOperations,proto3" json:"excluded_operations,omitempty"`
 }
 
 func (m *ApiGroupBuilder) Reset()      { *m = ApiGroupBuilder{} }
 func (*ApiGroupBuilder) ProtoMessage() {}
 func (*ApiGroupBuilder) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d394c51e1f8ccc10, []int{5}
+	return fileDescriptor_d394c51e1f8ccc10, []int{4}
 }
 func (m *ApiGroupBuilder) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -556,14 +689,14 @@ func (m *ApiGroupBuilder) GetLabelFilter() *schema.LabelSelectorType {
 	return nil
 }
 
-func (m *ApiGroupBuilder) GetIncludedOperations() []*ApiOperation {
+func (m *ApiGroupBuilder) GetIncludedOperations() []*views.ApiOperation {
 	if m != nil {
 		return m.IncludedOperations
 	}
 	return nil
 }
 
-func (m *ApiGroupBuilder) GetExcludedOperations() []*ApiOperation {
+func (m *ApiGroupBuilder) GetExcludedOperations() []*views.ApiOperation {
 	if m != nil {
 		return m.ExcludedOperations
 	}
@@ -593,7 +726,7 @@ type ApiGroupSummary struct {
 func (m *ApiGroupSummary) Reset()      { *m = ApiGroupSummary{} }
 func (*ApiGroupSummary) ProtoMessage() {}
 func (*ApiGroupSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d394c51e1f8ccc10, []int{6}
+	return fileDescriptor_d394c51e1f8ccc10, []int{5}
 }
 func (m *ApiGroupSummary) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -641,8 +774,6 @@ func init() {
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.views.api_definition.GetSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.views.api_definition.ReplaceSpecType")
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.views.api_definition.ReplaceSpecType")
-	proto.RegisterType((*ApiOperation)(nil), "ves.io.schema.views.api_definition.ApiOperation")
-	golang_proto.RegisterType((*ApiOperation)(nil), "ves.io.schema.views.api_definition.ApiOperation")
 	proto.RegisterType((*ApiGroupBuilder)(nil), "ves.io.schema.views.api_definition.ApiGroupBuilder")
 	golang_proto.RegisterType((*ApiGroupBuilder)(nil), "ves.io.schema.views.api_definition.ApiGroupBuilder")
 	proto.RegisterType((*ApiGroupSummary)(nil), "ves.io.schema.views.api_definition.ApiGroupSummary")
@@ -657,86 +788,89 @@ func init() {
 }
 
 var fileDescriptor_d394c51e1f8ccc10 = []byte{
-	// 1250 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6b, 0x1b, 0x47,
-	0x1b, 0xd6, 0x2b, 0xd9, 0x92, 0x3c, 0x72, 0x62, 0x67, 0x63, 0xf8, 0x36, 0x4e, 0xd8, 0x08, 0xe5,
-	0xe3, 0x63, 0xfd, 0x05, 0xed, 0xa6, 0x36, 0x25, 0xd4, 0x81, 0xb6, 0x51, 0x70, 0x52, 0xd3, 0xa4,
-	0x29, 0xeb, 0x52, 0x42, 0xdd, 0x54, 0x8c, 0xa4, 0x91, 0x3c, 0xed, 0x6a, 0x67, 0xb3, 0x33, 0x72,
-	0xe2, 0xa4, 0x06, 0xd3, 0x43, 0x29, 0xf4, 0x57, 0x6a, 0xda, 0xd2, 0xbf, 0xa0, 0x94, 0x5c, 0x7a,
-	0x8f, 0x7d, 0x30, 0x81, 0x42, 0xc8, 0xa1, 0xe4, 0xe8, 0x63, 0x22, 0x53, 0x70, 0x6e, 0x39, 0xf4,
-	0x0f, 0x28, 0x33, 0xda, 0x95, 0x25, 0xd9, 0x75, 0x9a, 0x5f, 0xa5, 0x85, 0x9c, 0xf6, 0xdd, 0x99,
-	0xe7, 0x9d, 0xe7, 0x99, 0x79, 0xe7, 0x7d, 0x67, 0x06, 0x59, 0xf3, 0x84, 0x5b, 0x94, 0xd9, 0xbc,
-	0x3c, 0x47, 0xea, 0xd8, 0x9e, 0xa7, 0xe4, 0x32, 0xb7, 0xb1, 0x4f, 0x8b, 0x15, 0x52, 0xa5, 0x1e,
-	0x15, 0x94, 0x79, 0xb6, 0x58, 0xf0, 0x09, 0xb7, 0xfc, 0x80, 0x09, 0xa6, 0xe5, 0x5a, 0x78, 0xab,
-	0x85, 0xb7, 0x14, 0xde, 0xea, 0xc6, 0x8f, 0xe6, 0x6b, 0x54, 0xcc, 0x35, 0x4a, 0x56, 0x99, 0xd5,
-	0xed, 0x1a, 0xab, 0x31, 0x5b, 0xb9, 0x96, 0x1a, 0x55, 0xf5, 0xa7, 0x7e, 0x94, 0xd5, 0x1a, 0x72,
-	0xf4, 0x68, 0xb7, 0x04, 0x39, 0x58, 0x2d, 0x60, 0x0d, 0xbf, 0x48, 0x5c, 0x52, 0x27, 0x9e, 0xe8,
-	0xe4, 0x1f, 0x3d, 0xd8, 0x0d, 0x66, 0xbe, 0x64, 0x8c, 0x3a, 0x0f, 0x74, 0x77, 0x76, 0xfa, 0x1d,
-	0xea, 0x99, 0x27, 0x76, 0x69, 0x05, 0x0b, 0x12, 0xf6, 0x66, 0xb7, 0xaf, 0x42, 0xb1, 0x7b, 0xe8,
-	0xc3, 0x3b, 0xad, 0x53, 0x07, 0x41, 0xee, 0x77, 0x84, 0xf6, 0x9e, 0x71, 0x59, 0x09, 0xbb, 0x33,
-	0x3e, 0x29, 0xbf, 0xb3, 0xe0, 0x13, 0xed, 0xf3, 0x38, 0xda, 0xc3, 0x2f, 0xe3, 0x5a, 0x8d, 0x04,
-	0x45, 0xee, 0x93, 0x32, 0xd7, 0x21, 0x9b, 0x30, 0x07, 0x0a, 0xbf, 0xc1, 0xcd, 0x55, 0xc8, 0xa5,
-	0x21, 0xa7, 0xc9, 0x56, 0xab, 0x0b, 0x62, 0xc2, 0x31, 0x98, 0x4c, 0x96, 0x99, 0x57, 0xa5, 0xb5,
-	0x5b, 0xab, 0x30, 0x80, 0x52, 0x61, 0xf7, 0xcd, 0x07, 0x6b, 0x89, 0x1f, 0x60, 0x19, 0xbe, 0x85,
-	0xdc, 0x37, 0x10, 0x7c, 0x05, 0xe6, 0x52, 0xdf, 0xf8, 0x67, 0x20, 0x57, 0xcb, 0x66, 0xa5, 0x0f,
-	0x49, 0x59, 0x14, 0xb9, 0x60, 0x01, 0xb1, 0x3d, 0x5c, 0x27, 0xdc, 0xc7, 0x65, 0xc2, 0x6d, 0x73,
-	0x16, 0xe7, 0xaf, 0x5e, 0x34, 0x67, 0xf3, 0x38, 0x7f, 0xf5, 0x58, 0xfe, 0x95, 0x8b, 0xff, 0x9f,
-	0x0d, 0x8d, 0xb1, 0xd7, 0xc6, 0x6c, 0x85, 0xae, 0x14, 0x5b, 0xbe, 0xdc, 0x0e, 0x59, 0x76, 0xf7,
-	0x31, 0xe7, 0x3f, 0x7e, 0x77, 0x6c, 0x56, 0xfe, 0x1d, 0x35, 0xf3, 0xea, 0x7b, 0x6d, 0x7c, 0x71,
-	0xec, 0xda, 0xc4, 0xe2, 0x7f, 0xa5, 0xba, 0xfe, 0x65, 0x88, 0x0f, 0xa3, 0xc8, 0xd2, 0xc1, 0x19,
-	0x0c, 0x07, 0x95, 0x0b, 0xc2, 0xb5, 0x6b, 0xe8, 0x60, 0x85, 0x54, 0x71, 0xc3, 0x15, 0xc5, 0x76,
-	0x88, 0x79, 0xb1, 0xd4, 0xa0, 0x6e, 0x85, 0x04, 0x5c, 0x4f, 0x64, 0x13, 0x66, 0x66, 0x7c, 0xc2,
-	0x7a, 0xf4, 0xfe, 0xb2, 0x4e, 0xfa, 0xf4, 0x8c, 0xf4, 0x2e, 0xb4, 0x7c, 0x0b, 0xa9, 0xf5, 0x45,
-	0xd8, 0x5c, 0x01, 0x70, 0xf4, 0x90, 0x20, 0x02, 0xf0, 0x10, 0xc1, 0xb5, 0x1f, 0x01, 0x1d, 0x92,
-	0xa3, 0x50, 0x6f, 0x9e, 0x78, 0x82, 0x05, 0x0b, 0x45, 0xea, 0x95, 0xdd, 0x06, 0xa7, 0xcc, 0x2b,
-	0xba, 0x94, 0x0b, 0xbd, 0x4f, 0xd1, 0x1f, 0xfb, 0x8b, 0xf4, 0xe7, 0x7d, 0x12, 0x60, 0xf9, 0x53,
-	0x98, 0x08, 0xb9, 0xe5, 0xb4, 0xd3, 0xcb, 0xd0, 0x3f, 0xbc, 0x99, 0xd2, 0xa1, 0x79, 0xef, 0x97,
-	0x44, 0xdf, 0xda, 0x0a, 0x28, 0x23, 0xb9, 0xbc, 0x0a, 0xf1, 0xe1, 0x58, 0xdb, 0x4c, 0xc7, 0x9c,
-	0x03, 0xd8, 0xa7, 0xd3, 0x91, 0x92, 0xe9, 0x48, 0xc8, 0x59, 0xca, 0x85, 0x76, 0x63, 0x9b, 0x50,
-	0x72, 0xa5, 0x4b, 0x68, 0xff, 0x13, 0x0a, 0x3d, 0xbe, 0xbe, 0x08, 0x52, 0xd2, 0xd3, 0x89, 0x9d,
-	0xba, 0xd2, 0x29, 0xf6, 0x3b, 0x40, 0xfb, 0x3c, 0xe6, 0xa9, 0x78, 0x12, 0xaf, 0xe2, 0x33, 0xea,
-	0x09, 0xae, 0x27, 0xff, 0x6e, 0x85, 0x43, 0x1e, 0xf3, 0x4e, 0xfa, 0x74, 0x2a, 0x52, 0xa0, 0x7d,
-	0x1a, 0x47, 0xa3, 0xdd, 0x8b, 0xc8, 0x7c, 0xe2, 0xc9, 0x16, 0x99, 0x63, 0x7a, 0x4a, 0x65, 0xe1,
-	0x6d, 0x08, 0x43, 0x77, 0x6b, 0x15, 0x32, 0xed, 0x34, 0x1b, 0x86, 0x7f, 0x61, 0xa2, 0xfd, 0xa7,
-	0x33, 0x44, 0xe7, 0x5b, 0x53, 0x95, 0x49, 0xa7, 0x7d, 0x80, 0xf6, 0xa8, 0x5a, 0x46, 0x3d, 0x41,
-	0x02, 0x0f, 0xbb, 0xfa, 0x66, 0x2a, 0x0b, 0x66, 0x66, 0x3c, 0xb7, 0x63, 0x70, 0xce, 0x2b, 0x89,
-	0x0e, 0xa9, 0xca, 0xea, 0x55, 0x18, 0xb9, 0xb1, 0xd8, 0xed, 0xac, 0x52, 0x6c, 0x50, 0x36, 0x4d,
-	0x87, 0x2d, 0xda, 0x05, 0x84, 0xb6, 0x72, 0x59, 0x7f, 0x90, 0x7a, 0xfc, 0x1c, 0x9e, 0x69, 0xd4,
-	0xeb, 0x38, 0x58, 0x28, 0x24, 0xd6, 0x17, 0xc1, 0x19, 0xc0, 0x51, 0xe2, 0x4e, 0xfe, 0xef, 0xd6,
-	0x0a, 0xe4, 0x50, 0x16, 0x1d, 0x94, 0xd3, 0x39, 0xf9, 0xf6, 0x74, 0x56, 0xce, 0x87, 0x56, 0x69,
-	0x59, 0xed, 0x95, 0xec, 0x69, 0xea, 0x12, 0xae, 0xc1, 0x4b, 0xb9, 0x2f, 0x12, 0x68, 0xef, 0xa9,
-	0x80, 0x60, 0x41, 0xda, 0x65, 0xf7, 0xc8, 0x8e, 0x55, 0xb7, 0xa7, 0x1a, 0x5d, 0x7a, 0x3e, 0xf5,
-	0x60, 0xb7, 0xd4, 0xbe, 0xf4, 0x7c, 0x32, 0x7b, 0xb7, 0x04, 0x7d, 0xff, 0x19, 0xe6, 0xe7, 0xb6,
-	0x34, 0x9b, 0xdc, 0x77, 0xe7, 0xd5, 0x9e, 0x23, 0x2f, 0xf7, 0x75, 0x3f, 0xca, 0x9c, 0x21, 0xe2,
-	0xf1, 0x62, 0x11, 0x3c, 0xaf, 0x93, 0x61, 0x97, 0x03, 0xe1, 0x45, 0xfc, 0x9f, 0x3a, 0xfe, 0xda,
-	0x89, 0x47, 0x57, 0xd9, 0x3f, 0x2f, 0x4d, 0x33, 0xcf, 0xaa, 0x74, 0x74, 0x56, 0x8d, 0x1d, 0x76,
-	0xe4, 0x97, 0x09, 0x34, 0xe4, 0x10, 0xdf, 0xc5, 0xe5, 0x17, 0x15, 0xe2, 0x9f, 0x50, 0x21, 0x1a,
-	0x68, 0xb0, 0xd3, 0x47, 0x7b, 0x1d, 0x25, 0xeb, 0x44, 0xcc, 0xb1, 0x8a, 0x0e, 0x59, 0x30, 0xf7,
-	0x8e, 0x1f, 0xe8, 0x61, 0x7d, 0x43, 0x08, 0xff, 0x9c, 0x02, 0x14, 0xf6, 0xa8, 0x5b, 0xc1, 0x27,
-	0xd0, 0x3f, 0x0c, 0x39, 0x88, 0x39, 0xa1, 0x9f, 0x76, 0x04, 0xf5, 0xf9, 0x58, 0xcc, 0xe9, 0xf1,
-	0x2c, 0x98, 0x03, 0x85, 0x21, 0x09, 0x42, 0x41, 0x3a, 0x0b, 0xe6, 0x52, 0xfa, 0x7a, 0x02, 0x1c,
-	0xd5, 0x99, 0xfb, 0x35, 0x81, 0x86, 0x7a, 0xaa, 0x83, 0x36, 0x85, 0xd2, 0x75, 0x22, 0x70, 0x05,
-	0x0b, 0xac, 0xc8, 0x33, 0xe3, 0x46, 0x0f, 0xf9, 0x39, 0xc2, 0x39, 0xae, 0x91, 0x73, 0x44, 0x60,
-	0x75, 0x26, 0x0e, 0x84, 0x57, 0x06, 0x1d, 0x9c, 0xb6, 0xab, 0xf6, 0x32, 0xca, 0x48, 0x8a, 0x62,
-	0x95, 0xba, 0x82, 0x04, 0xa1, 0x8c, 0x11, 0x75, 0x3c, 0x07, 0x09, 0x7d, 0x29, 0x1d, 0x5a, 0x6b,
-	0x00, 0x0e, 0x92, 0xc0, 0xd3, 0x0a, 0xa7, 0x9d, 0x42, 0x83, 0x2e, 0x2e, 0x11, 0x37, 0xf2, 0x4b,
-	0x28, 0x05, 0xd9, 0x1e, 0x05, 0x67, 0x25, 0x64, 0x86, 0xb8, 0xa4, 0x2c, 0x58, 0x20, 0x35, 0x38,
-	0x19, 0xe5, 0x15, 0x0e, 0x72, 0x19, 0xed, 0x57, 0xdb, 0xb2, 0x22, 0x6f, 0x18, 0xd1, 0x9a, 0xf2,
-	0x27, 0xbe, 0xcd, 0x8e, 0xb4, 0xaf, 0x17, 0x95, 0x8e, 0xeb, 0x85, 0x16, 0x51, 0xb4, 0x81, 0x5c,
-	0x12, 0xab, 0xcd, 0xd9, 0x43, 0xdc, 0xff, 0x6c, 0x89, 0x23, 0x8a, 0x2d, 0xe2, 0xc9, 0xe4, 0x9d,
-	0x15, 0x88, 0x0f, 0x43, 0xee, 0x67, 0xd8, 0x0a, 0x68, 0x58, 0x09, 0x34, 0x0d, 0xf5, 0xc9, 0x5b,
-	0x99, 0x0a, 0xe6, 0x80, 0xa3, 0x6c, 0xed, 0x4d, 0x94, 0x0e, 0xdf, 0x91, 0x5c, 0x8f, 0x2b, 0x75,
-	0x76, 0x8f, 0xba, 0x6d, 0x0f, 0x4e, 0xab, 0x7b, 0xcb, 0x3a, 0xed, 0x01, 0x26, 0x4f, 0xdc, 0x59,
-	0x81, 0xe3, 0x68, 0x04, 0x21, 0x45, 0x9b, 0x7d, 0x0b, 0xd7, 0xc9, 0x68, 0xb2, 0x45, 0x8a, 0x0e,
-	0xa3, 0xf4, 0x54, 0x84, 0xdb, 0xbf, 0x45, 0xaa, 0xa5, 0xa8, 0x20, 0x75, 0x93, 0x8f, 0x15, 0xbe,
-	0x87, 0xbb, 0xf7, 0x8d, 0xd8, 0xfa, 0x7d, 0x23, 0xf6, 0xf0, 0xbe, 0x01, 0x4b, 0x4d, 0x03, 0x7e,
-	0x6a, 0x1a, 0x70, 0xbb, 0x69, 0xc0, 0xdd, 0xa6, 0x01, 0xeb, 0x4d, 0x03, 0xee, 0x35, 0x0d, 0xd8,
-	0x6c, 0x1a, 0xb1, 0x87, 0x4d, 0x03, 0xae, 0x6f, 0x18, 0xb1, 0xb5, 0x0d, 0x03, 0xee, 0x6e, 0x18,
-	0xb1, 0xf5, 0x0d, 0x23, 0xf6, 0xde, 0x85, 0x1a, 0xf3, 0x3f, 0xaa, 0x59, 0xf3, 0x4c, 0x06, 0x3e,
-	0xc0, 0x56, 0x83, 0xdb, 0xca, 0xa8, 0xb2, 0xa0, 0x9e, 0xf7, 0x03, 0x36, 0x4f, 0x2b, 0x24, 0xc8,
-	0x47, 0xdd, 0xb6, 0x5f, 0xaa, 0x31, 0x9b, 0x5c, 0x11, 0xe1, 0x83, 0x75, 0x97, 0xf7, 0x7d, 0x29,
-	0xa9, 0x5e, 0xb0, 0x13, 0x7f, 0x04, 0x00, 0x00, 0xff, 0xff, 0xae, 0x73, 0xef, 0xcd, 0x0c, 0x10,
-	0x00, 0x00,
+	// 1304 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcd, 0x6f, 0x13, 0x47,
+	0x14, 0xf7, 0x8b, 0x9d, 0xd8, 0x9e, 0xf0, 0x11, 0x96, 0x48, 0x2c, 0x09, 0x5a, 0x5c, 0xd3, 0x83,
+	0x53, 0x62, 0x6f, 0x08, 0x85, 0x96, 0x54, 0x6a, 0x15, 0xa3, 0x10, 0x52, 0x48, 0x53, 0x39, 0x55,
+	0x85, 0x1a, 0x51, 0x6b, 0x6c, 0x8f, 0x37, 0xd3, 0xae, 0x77, 0x56, 0x3b, 0xe3, 0x90, 0x40, 0xa3,
+	0xa2, 0x9e, 0x2a, 0x55, 0xaa, 0x68, 0x84, 0xaa, 0xfe, 0x09, 0x55, 0x2f, 0x70, 0xc6, 0x1c, 0x22,
+	0xa4, 0x4a, 0x88, 0x53, 0x8e, 0x39, 0x82, 0xa3, 0x4a, 0xe1, 0xc6, 0xb9, 0xbd, 0x54, 0x33, 0xde,
+	0x75, 0x6c, 0x27, 0xa4, 0x50, 0x82, 0xd4, 0x4a, 0x9c, 0xfc, 0x76, 0xe6, 0xbd, 0xf7, 0xfb, 0xcd,
+	0xfb, 0xda, 0x1d, 0xa3, 0xcc, 0x02, 0xe1, 0x19, 0xca, 0x4c, 0x5e, 0x9c, 0x27, 0x15, 0x6c, 0x2e,
+	0x50, 0x72, 0x8d, 0x9b, 0xd8, 0xa5, 0xf9, 0x12, 0x29, 0x53, 0x87, 0x0a, 0xca, 0x1c, 0x53, 0x2c,
+	0xb9, 0x84, 0x67, 0x5c, 0x8f, 0x09, 0xa6, 0x25, 0x1b, 0xfa, 0x99, 0x86, 0x7e, 0x46, 0xe9, 0x67,
+	0xda, 0xf5, 0x07, 0xd2, 0x16, 0x15, 0xf3, 0xd5, 0x42, 0xa6, 0xc8, 0x2a, 0xa6, 0xc5, 0x2c, 0x66,
+	0x2a, 0xd3, 0x42, 0xb5, 0xac, 0x9e, 0xd4, 0x83, 0x92, 0x1a, 0x2e, 0x07, 0x4e, 0xb6, 0x53, 0x90,
+	0xce, 0x2c, 0x8f, 0x55, 0xdd, 0x3c, 0xb1, 0x49, 0x85, 0x38, 0xa2, 0x15, 0x7f, 0x60, 0xb0, 0x5d,
+	0x99, 0xb9, 0x12, 0x31, 0xd8, 0x3c, 0xda, 0xbe, 0xd9, 0x6a, 0x77, 0xac, 0xe3, 0x9c, 0xd8, 0xa6,
+	0x25, 0x2c, 0x88, 0xbf, 0x9b, 0xd8, 0x1e, 0x85, 0x7c, 0xbb, 0xeb, 0xe3, 0x3b, 0xc5, 0xa9, 0x05,
+	0x20, 0xf9, 0x0c, 0xa1, 0x03, 0x93, 0x36, 0x2b, 0x60, 0x7b, 0xd6, 0x25, 0xc5, 0xcf, 0x96, 0x5c,
+	0xa2, 0xfd, 0xd0, 0x85, 0xf6, 0xf3, 0x6b, 0xd8, 0xb2, 0x88, 0x97, 0xe7, 0x2e, 0x29, 0x72, 0x1d,
+	0x12, 0xe1, 0x54, 0x3c, 0xfb, 0x07, 0xdc, 0xbb, 0x0f, 0xc9, 0x18, 0x24, 0x35, 0xb9, 0x9a, 0x69,
+	0x53, 0x49, 0xc1, 0x08, 0x8c, 0xf5, 0x14, 0x99, 0x53, 0xa6, 0xd6, 0x83, 0xfb, 0x10, 0x47, 0x51,
+	0x7f, 0xfb, 0xde, 0xd3, 0xd5, 0xf0, 0x2f, 0xb0, 0x02, 0xb7, 0x21, 0xf9, 0x13, 0x78, 0x3f, 0x42,
+	0xea, 0x66, 0x64, 0xf4, 0x7b, 0x90, 0xd1, 0x32, 0x59, 0xe1, 0x2b, 0x52, 0x14, 0x79, 0x2e, 0x98,
+	0x47, 0x4c, 0x07, 0x57, 0x08, 0x77, 0x71, 0x91, 0x70, 0x33, 0x35, 0x87, 0xd3, 0xd7, 0xaf, 0xa6,
+	0xe6, 0xd2, 0x38, 0x7d, 0x7d, 0x24, 0x7d, 0xee, 0xea, 0x3b, 0x73, 0xbe, 0x30, 0xf4, 0xd1, 0x90,
+	0xa9, 0xb4, 0x4b, 0xf9, 0x86, 0x2d, 0x37, 0x7d, 0x94, 0xdd, 0x6d, 0x52, 0x0b, 0xdf, 0x7c, 0x3e,
+	0x34, 0x27, 0x9f, 0x4e, 0xa6, 0xd2, 0xea, 0xf7, 0xc6, 0xe8, 0xf2, 0xd0, 0x8d, 0xd3, 0xcb, 0x6f,
+	0x4b, 0x76, 0xdd, 0x2b, 0xd0, 0xd5, 0x87, 0x02, 0x49, 0x87, 0xdc, 0x3e, 0xdf, 0xa9, 0x0c, 0x08,
+	0xd7, 0x6e, 0xa0, 0xc1, 0x12, 0x29, 0xe3, 0xaa, 0x2d, 0xf2, 0xcd, 0x14, 0xf3, 0x7c, 0xa1, 0x4a,
+	0xed, 0x12, 0xf1, 0xb8, 0x1e, 0x4e, 0x84, 0x53, 0xbd, 0xa3, 0xa7, 0x33, 0xff, 0x5c, 0x5f, 0x99,
+	0x71, 0x97, 0x4e, 0x4a, 0xeb, 0x6c, 0xc3, 0x36, 0x1b, 0x5d, 0x5f, 0x86, 0xcd, 0x1a, 0x40, 0x4e,
+	0xf7, 0x01, 0x02, 0x05, 0xee, 0x6b, 0x70, 0xed, 0x16, 0xa0, 0x63, 0xd2, 0x0b, 0x75, 0x16, 0x88,
+	0x23, 0x98, 0xb7, 0x94, 0xa7, 0x4e, 0xd1, 0xae, 0x72, 0xca, 0x9c, 0xbc, 0x4d, 0xb9, 0xd0, 0x23,
+	0x0a, 0xfe, 0xad, 0x1d, 0xe1, 0xc7, 0x5d, 0x3a, 0xe3, 0x12, 0x0f, 0x4b, 0xf0, 0xec, 0xb0, 0x3c,
+	0x60, 0x6c, 0x05, 0xba, 0xfb, 0x36, 0xa3, 0x3a, 0xd4, 0x1f, 0xff, 0x1e, 0x8e, 0xac, 0xd6, 0x40,
+	0x09, 0x3d, 0x2b, 0xf7, 0xa1, 0xab, 0x2f, 0xd4, 0x14, 0x63, 0xa1, 0xdc, 0x51, 0xec, 0xd2, 0xa9,
+	0x00, 0x73, 0x2a, 0x80, 0xbc, 0x4c, 0xb9, 0xd0, 0x6e, 0x6f, 0xa3, 0x44, 0x16, 0xdb, 0x28, 0x75,
+	0xbf, 0x28, 0xa5, 0x11, 0x49, 0xe0, 0xdf, 0xd3, 0x9a, 0x58, 0x6c, 0xa5, 0xf5, 0x2d, 0x3a, 0xe4,
+	0x30, 0x47, 0xa5, 0x88, 0x38, 0x25, 0x97, 0x51, 0x47, 0x70, 0xbd, 0xe7, 0xf5, 0x51, 0x39, 0xe8,
+	0x30, 0x67, 0xdc, 0xa5, 0x13, 0x01, 0x96, 0x76, 0x05, 0x0d, 0xb4, 0x87, 0x85, 0xb9, 0xc4, 0x91,
+	0x2b, 0xb2, 0x3f, 0xf4, 0xa8, 0xea, 0xa0, 0x41, 0x3f, 0xe3, 0x3b, 0x96, 0xdd, 0x91, 0xd6, 0xc3,
+	0xcd, 0x34, 0x8c, 0x65, 0x09, 0x6a, 0x17, 0x51, 0x3f, 0x17, 0x1e, 0x95, 0xad, 0xa2, 0x0e, 0x90,
+	0x67, 0x1e, 0xb5, 0xa8, 0xa3, 0xc7, 0x13, 0x90, 0xea, 0x1d, 0xed, 0xef, 0x38, 0xdd, 0x44, 0xc5,
+	0x15, 0x4b, 0x17, 0x43, 0x39, 0xad, 0x61, 0x33, 0xab, 0x56, 0x67, 0x94, 0x85, 0x76, 0x01, 0x1d,
+	0xae, 0xd0, 0x45, 0x52, 0xea, 0x70, 0x84, 0x76, 0x75, 0x74, 0x48, 0x99, 0xb4, 0xf9, 0xf9, 0x12,
+	0xed, 0x57, 0xb3, 0x86, 0x3a, 0x82, 0x78, 0x0e, 0xb6, 0xf5, 0xcd, 0xa8, 0x72, 0x91, 0xdc, 0x31,
+	0xd2, 0x33, 0xaa, 0x57, 0x73, 0xa4, 0x2c, 0xa7, 0x4b, 0xb6, 0xff, 0xb7, 0xe5, 0x76, 0x63, 0xd5,
+	0x02, 0xfb, 0xe4, 0xd2, 0x94, 0xbf, 0xa2, 0x5d, 0x41, 0x68, 0xab, 0xd7, 0xf4, 0xa7, 0xd1, 0x97,
+	0xef, 0xb1, 0xd9, 0x6a, 0xa5, 0x82, 0xbd, 0xa5, 0x6c, 0x78, 0x7d, 0x19, 0x72, 0x71, 0x1c, 0x34,
+	0xd6, 0xd8, 0xa5, 0x07, 0x35, 0x98, 0x44, 0x09, 0x34, 0x28, 0x03, 0x3c, 0xfe, 0xe9, 0x54, 0x42,
+	0x46, 0x98, 0x96, 0x69, 0x51, 0xd5, 0x41, 0xe2, 0x02, 0xb5, 0x09, 0xd7, 0xe0, 0x14, 0x3a, 0x81,
+	0x74, 0xb9, 0xdb, 0x4c, 0x6f, 0x62, 0x1a, 0x3b, 0xd8, 0x52, 0x73, 0x5d, 0x8b, 0xbe, 0x3b, 0x7c,
+	0x66, 0xf8, 0xec, 0xf0, 0xfb, 0x59, 0x13, 0x1d, 0xf1, 0x03, 0x59, 0x75, 0xe5, 0x54, 0xe6, 0x79,
+	0x2e, 0x3c, 0x2c, 0x88, 0xb5, 0xa4, 0xf5, 0xaf, 0xd6, 0x20, 0xfe, 0xb0, 0x06, 0xb0, 0x56, 0x83,
+	0x58, 0xbd, 0x06, 0x91, 0x73, 0xc3, 0xa7, 0x46, 0x3e, 0x8e, 0xc4, 0x62, 0x7d, 0xf1, 0xe4, 0x9d,
+	0x08, 0x3a, 0x70, 0xde, 0x23, 0x58, 0x90, 0xe6, 0xc8, 0x3d, 0xb1, 0xe3, 0xc4, 0xed, 0x98, 0x44,
+	0x85, 0x3d, 0x9a, 0x05, 0xbb, 0x75, 0x77, 0x61, 0x8f, 0x9a, 0x7b, 0xb7, 0x56, 0x9d, 0x7e, 0x95,
+	0x56, 0xdd, 0xde, 0x78, 0xff, 0xb9, 0xf6, 0x18, 0x3b, 0xf4, 0xe8, 0xc3, 0x8e, 0x77, 0x6a, 0xf6,
+	0xec, 0xf3, 0x4b, 0x65, 0xf0, 0xbb, 0x3f, 0xe1, 0x79, 0x9b, 0x7e, 0xc5, 0xfc, 0xd5, 0x8d, 0x7a,
+	0x27, 0x89, 0x78, 0xb9, 0x72, 0xf1, 0x5e, 0xd7, 0x8b, 0x6b, 0x97, 0xf7, 0xd5, 0x9b, 0x12, 0xfd,
+	0x7f, 0x94, 0xa8, 0x36, 0xbb, 0x57, 0x13, 0xb6, 0x75, 0xb8, 0xee, 0x69, 0xdd, 0x47, 0xfb, 0x62,
+	0x7e, 0xf5, 0xdf, 0x8d, 0xa0, 0x83, 0x39, 0xe2, 0xda, 0xb8, 0xf8, 0x66, 0x60, 0xbe, 0x19, 0x98,
+	0x2f, 0x34, 0x30, 0xef, 0x86, 0xd1, 0xc1, 0x8e, 0xa9, 0xa5, 0x4d, 0xa0, 0x58, 0x85, 0x08, 0x5c,
+	0xc2, 0x02, 0xeb, 0xa0, 0x18, 0x1a, 0x1d, 0x0c, 0xa7, 0x09, 0xe7, 0xd8, 0x22, 0xd3, 0x44, 0x60,
+	0xc5, 0x21, 0xee, 0x7f, 0xae, 0xe9, 0x90, 0x6b, 0x9a, 0x6a, 0x67, 0x50, 0xaf, 0x8b, 0xc5, 0x7c,
+	0xbe, 0x4c, 0x6d, 0x41, 0x3c, 0xbd, 0x2b, 0x01, 0xa9, 0x78, 0xb6, 0x5f, 0x7d, 0xc7, 0x79, 0x61,
+	0xfd, 0x66, 0xcc, 0x97, 0x56, 0x01, 0x72, 0x48, 0x2a, 0x5e, 0x50, 0x7a, 0xda, 0x79, 0xb4, 0xcf,
+	0xc6, 0x05, 0x62, 0x07, 0x76, 0x61, 0xc5, 0x20, 0xd1, 0xc1, 0xe0, 0xb2, 0x54, 0x99, 0x25, 0x36,
+	0x29, 0x0a, 0xe6, 0x49, 0x0e, 0xb9, 0x5e, 0x65, 0xe5, 0x3b, 0x99, 0x47, 0x87, 0x55, 0x09, 0x97,
+	0xe4, 0x0d, 0x28, 0x48, 0x30, 0x7f, 0xf1, 0x4b, 0x40, 0x7f, 0xf3, 0xc3, 0xb3, 0xd4, 0xf2, 0xe1,
+	0xa9, 0x05, 0x3e, 0x9b, 0x8a, 0x5c, 0x22, 0xa9, 0x42, 0xee, 0x40, 0xea, 0x7e, 0x45, 0xa4, 0xc0,
+	0xe7, 0x16, 0xd2, 0x58, 0xcf, 0xa3, 0x1a, 0x74, 0xf5, 0x41, 0xf2, 0x0e, 0x6c, 0xa5, 0xcc, 0x9f,
+	0x2d, 0x9a, 0x86, 0x22, 0xf2, 0x5e, 0xa8, 0xd2, 0x15, 0xcf, 0x29, 0x59, 0xbb, 0x84, 0x62, 0xfe,
+	0x05, 0x9b, 0xeb, 0x5d, 0x8a, 0x8e, 0xd9, 0x41, 0x67, 0xdb, 0x4d, 0x3c, 0xd3, 0x5e, 0x5b, 0xb9,
+	0xa6, 0x83, 0xb1, 0x0f, 0x1e, 0xd5, 0xe0, 0x3d, 0xd4, 0x8f, 0x90, 0x82, 0x4d, 0x7c, 0x82, 0x2b,
+	0x64, 0xa0, 0xa7, 0x01, 0x8a, 0x8e, 0xa3, 0xd8, 0x44, 0xa0, 0x77, 0x78, 0x0b, 0x54, 0x8b, 0x52,
+	0x41, 0x2a, 0x29, 0x3e, 0x94, 0xfd, 0x19, 0xd6, 0x9e, 0x18, 0xa1, 0xf5, 0x27, 0x46, 0xe8, 0xd9,
+	0x13, 0x03, 0x6e, 0xd6, 0x0d, 0xf8, 0xb5, 0x6e, 0xc0, 0xc3, 0xba, 0x01, 0x6b, 0x75, 0x03, 0xd6,
+	0xeb, 0x06, 0x3c, 0xae, 0x1b, 0xb0, 0x59, 0x37, 0x42, 0xcf, 0xea, 0x06, 0xdc, 0xda, 0x30, 0x42,
+	0xab, 0x1b, 0x06, 0xac, 0x6d, 0x18, 0xa1, 0xf5, 0x0d, 0x23, 0xf4, 0xc5, 0x15, 0x8b, 0xb9, 0x5f,
+	0x5b, 0x99, 0x05, 0x26, 0x53, 0xeb, 0xe1, 0x4c, 0x95, 0x9b, 0x4a, 0x28, 0x33, 0xaf, 0x92, 0x76,
+	0x3d, 0xb6, 0x40, 0x4b, 0xc4, 0x4b, 0x07, 0xdb, 0xa6, 0x5b, 0xb0, 0x98, 0x49, 0x16, 0x85, 0x7f,
+	0x93, 0xdf, 0xe5, 0x8f, 0x8f, 0x42, 0x8f, 0xba, 0xda, 0x9f, 0xfe, 0x3b, 0x00, 0x00, 0xff, 0xff,
+	0x27, 0xac, 0x03, 0x28, 0x25, 0x11, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -806,6 +940,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.SchemaUpdatesStrategy == nil {
+		if this.SchemaUpdatesStrategy != nil {
+			return false
+		}
+	} else if this.SchemaUpdatesStrategy == nil {
+		return false
+	} else if !this.SchemaUpdatesStrategy.Equal(that1.SchemaUpdatesStrategy) {
+		return false
+	}
 	if !this.ViewInternal.Equal(that1.ViewInternal) {
 		return false
 	}
@@ -816,6 +959,54 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		if !this.ApiGroups[i].Equal(that1.ApiGroups[i]) {
 			return false
 		}
+	}
+	return true
+}
+func (this *GlobalSpecType_StrictSchemaOrigin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_StrictSchemaOrigin)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_StrictSchemaOrigin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.StrictSchemaOrigin.Equal(that1.StrictSchemaOrigin) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_MixedSchemaOrigin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_MixedSchemaOrigin)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_MixedSchemaOrigin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MixedSchemaOrigin.Equal(that1.MixedSchemaOrigin) {
+		return false
 	}
 	return true
 }
@@ -869,6 +1060,63 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		if !this.NonApiEndpoints[i].Equal(that1.NonApiEndpoints[i]) {
 			return false
 		}
+	}
+	if that1.SchemaUpdatesStrategy == nil {
+		if this.SchemaUpdatesStrategy != nil {
+			return false
+		}
+	} else if this.SchemaUpdatesStrategy == nil {
+		return false
+	} else if !this.SchemaUpdatesStrategy.Equal(that1.SchemaUpdatesStrategy) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_StrictSchemaOrigin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_StrictSchemaOrigin)
+	if !ok {
+		that2, ok := that.(CreateSpecType_StrictSchemaOrigin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.StrictSchemaOrigin.Equal(that1.StrictSchemaOrigin) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_MixedSchemaOrigin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_MixedSchemaOrigin)
+	if !ok {
+		that2, ok := that.(CreateSpecType_MixedSchemaOrigin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MixedSchemaOrigin.Equal(that1.MixedSchemaOrigin) {
+		return false
 	}
 	return true
 }
@@ -931,13 +1179,14 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
-	if len(this.ApiInventoryOpenapiSpec) != len(that1.ApiInventoryOpenapiSpec) {
-		return false
-	}
-	for i := range this.ApiInventoryOpenapiSpec {
-		if this.ApiInventoryOpenapiSpec[i] != that1.ApiInventoryOpenapiSpec[i] {
+	if that1.SchemaUpdatesStrategy == nil {
+		if this.SchemaUpdatesStrategy != nil {
 			return false
 		}
+	} else if this.SchemaUpdatesStrategy == nil {
+		return false
+	} else if !this.SchemaUpdatesStrategy.Equal(that1.SchemaUpdatesStrategy) {
+		return false
 	}
 	if len(this.ApiGroups) != len(that1.ApiGroups) {
 		return false
@@ -946,6 +1195,54 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		if !this.ApiGroups[i].Equal(that1.ApiGroups[i]) {
 			return false
 		}
+	}
+	return true
+}
+func (this *GetSpecType_StrictSchemaOrigin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_StrictSchemaOrigin)
+	if !ok {
+		that2, ok := that.(GetSpecType_StrictSchemaOrigin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.StrictSchemaOrigin.Equal(that1.StrictSchemaOrigin) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_MixedSchemaOrigin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_MixedSchemaOrigin)
+	if !ok {
+		that2, ok := that.(GetSpecType_MixedSchemaOrigin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MixedSchemaOrigin.Equal(that1.MixedSchemaOrigin) {
+		return false
 	}
 	return true
 }
@@ -1000,16 +1297,25 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if that1.SchemaUpdatesStrategy == nil {
+		if this.SchemaUpdatesStrategy != nil {
+			return false
+		}
+	} else if this.SchemaUpdatesStrategy == nil {
+		return false
+	} else if !this.SchemaUpdatesStrategy.Equal(that1.SchemaUpdatesStrategy) {
+		return false
+	}
 	return true
 }
-func (this *ApiOperation) Equal(that interface{}) bool {
+func (this *ReplaceSpecType_StrictSchemaOrigin) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ApiOperation)
+	that1, ok := that.(*ReplaceSpecType_StrictSchemaOrigin)
 	if !ok {
-		that2, ok := that.(ApiOperation)
+		that2, ok := that.(ReplaceSpecType_StrictSchemaOrigin)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1021,10 +1327,31 @@ func (this *ApiOperation) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if this.Method != that1.Method {
+	if !this.StrictSchemaOrigin.Equal(that1.StrictSchemaOrigin) {
 		return false
 	}
-	if this.Path != that1.Path {
+	return true
+}
+func (this *ReplaceSpecType_MixedSchemaOrigin) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_MixedSchemaOrigin)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_MixedSchemaOrigin)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MixedSchemaOrigin.Equal(that1.MixedSchemaOrigin) {
 		return false
 	}
 	return true
@@ -1111,7 +1438,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 14)
 	s = append(s, "&api_definition.GlobalSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
 	if this.DefaultApiGroupsBuilders != nil {
@@ -1127,6 +1454,9 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
 	}
 	s = append(s, "ApiInventoryOpenapiSpec: "+fmt.Sprintf("%#v", this.ApiInventoryOpenapiSpec)+",\n")
+	if this.SchemaUpdatesStrategy != nil {
+		s = append(s, "SchemaUpdatesStrategy: "+fmt.Sprintf("%#v", this.SchemaUpdatesStrategy)+",\n")
+	}
 	if this.ViewInternal != nil {
 		s = append(s, "ViewInternal: "+fmt.Sprintf("%#v", this.ViewInternal)+",\n")
 	}
@@ -1136,11 +1466,27 @@ func (this *GlobalSpecType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GlobalSpecType_StrictSchemaOrigin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_definition.GlobalSpecType_StrictSchemaOrigin{` +
+		`StrictSchemaOrigin:` + fmt.Sprintf("%#v", this.StrictSchemaOrigin) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_MixedSchemaOrigin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_definition.GlobalSpecType_MixedSchemaOrigin{` +
+		`MixedSchemaOrigin:` + fmt.Sprintf("%#v", this.MixedSchemaOrigin) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 10)
 	s = append(s, "&api_definition.CreateSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
 	if this.ApiInventoryInclusionList != nil {
@@ -1152,14 +1498,33 @@ func (this *CreateSpecType) GoString() string {
 	if this.NonApiEndpoints != nil {
 		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
 	}
+	if this.SchemaUpdatesStrategy != nil {
+		s = append(s, "SchemaUpdatesStrategy: "+fmt.Sprintf("%#v", this.SchemaUpdatesStrategy)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CreateSpecType_StrictSchemaOrigin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_definition.CreateSpecType_StrictSchemaOrigin{` +
+		`StrictSchemaOrigin:` + fmt.Sprintf("%#v", this.StrictSchemaOrigin) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_MixedSchemaOrigin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_definition.CreateSpecType_MixedSchemaOrigin{` +
+		`MixedSchemaOrigin:` + fmt.Sprintf("%#v", this.MixedSchemaOrigin) + `}`}, ", ")
+	return s
 }
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&api_definition.GetSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
 	if this.DefaultApiGroupsBuilders != nil {
@@ -1174,18 +1539,36 @@ func (this *GetSpecType) GoString() string {
 	if this.NonApiEndpoints != nil {
 		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
 	}
-	s = append(s, "ApiInventoryOpenapiSpec: "+fmt.Sprintf("%#v", this.ApiInventoryOpenapiSpec)+",\n")
+	if this.SchemaUpdatesStrategy != nil {
+		s = append(s, "SchemaUpdatesStrategy: "+fmt.Sprintf("%#v", this.SchemaUpdatesStrategy)+",\n")
+	}
 	if this.ApiGroups != nil {
 		s = append(s, "ApiGroups: "+fmt.Sprintf("%#v", this.ApiGroups)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *GetSpecType_StrictSchemaOrigin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_definition.GetSpecType_StrictSchemaOrigin{` +
+		`StrictSchemaOrigin:` + fmt.Sprintf("%#v", this.StrictSchemaOrigin) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_MixedSchemaOrigin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_definition.GetSpecType_MixedSchemaOrigin{` +
+		`MixedSchemaOrigin:` + fmt.Sprintf("%#v", this.MixedSchemaOrigin) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 10)
 	s = append(s, "&api_definition.ReplaceSpecType{")
 	s = append(s, "SwaggerSpecs: "+fmt.Sprintf("%#v", this.SwaggerSpecs)+",\n")
 	if this.ApiInventoryInclusionList != nil {
@@ -1197,19 +1580,27 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.NonApiEndpoints != nil {
 		s = append(s, "NonApiEndpoints: "+fmt.Sprintf("%#v", this.NonApiEndpoints)+",\n")
 	}
+	if this.SchemaUpdatesStrategy != nil {
+		s = append(s, "SchemaUpdatesStrategy: "+fmt.Sprintf("%#v", this.SchemaUpdatesStrategy)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *ApiOperation) GoString() string {
+func (this *ReplaceSpecType_StrictSchemaOrigin) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
-	s = append(s, "&api_definition.ApiOperation{")
-	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
-	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
+	s := strings.Join([]string{`&api_definition.ReplaceSpecType_StrictSchemaOrigin{` +
+		`StrictSchemaOrigin:` + fmt.Sprintf("%#v", this.StrictSchemaOrigin) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_MixedSchemaOrigin) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&api_definition.ReplaceSpecType_MixedSchemaOrigin{` +
+		`MixedSchemaOrigin:` + fmt.Sprintf("%#v", this.MixedSchemaOrigin) + `}`}, ", ")
+	return s
 }
 func (this *ApiGroupBuilder) GoString() string {
 	if this == nil {
@@ -1304,6 +1695,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
+	if m.SchemaUpdatesStrategy != nil {
+		{
+			size := m.SchemaUpdatesStrategy.Size()
+			i -= size
+			if _, err := m.SchemaUpdatesStrategy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.ApiInventoryOpenapiSpec) > 0 {
 		for iNdEx := len(m.ApiInventoryOpenapiSpec) - 1; iNdEx >= 0; iNdEx-- {
 			i -= len(m.ApiInventoryOpenapiSpec[iNdEx])
@@ -1381,6 +1781,48 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GlobalSpecType_StrictSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_StrictSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.StrictSchemaOrigin != nil {
+		{
+			size, err := m.StrictSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_MixedSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_MixedSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MixedSchemaOrigin != nil {
+		{
+			size, err := m.MixedSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1401,6 +1843,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.SchemaUpdatesStrategy != nil {
+		{
+			size := m.SchemaUpdatesStrategy.Size()
+			i -= size
+			if _, err := m.SchemaUpdatesStrategy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.NonApiEndpoints) > 0 {
 		for iNdEx := len(m.NonApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1455,6 +1906,48 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CreateSpecType_StrictSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_StrictSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.StrictSchemaOrigin != nil {
+		{
+			size, err := m.StrictSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_MixedSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_MixedSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MixedSchemaOrigin != nil {
+		{
+			size, err := m.MixedSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1491,13 +1984,13 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0xca
 		}
 	}
-	if len(m.ApiInventoryOpenapiSpec) > 0 {
-		for iNdEx := len(m.ApiInventoryOpenapiSpec) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.ApiInventoryOpenapiSpec[iNdEx])
-			copy(dAtA[i:], m.ApiInventoryOpenapiSpec[iNdEx])
-			i = encodeVarintTypes(dAtA, i, uint64(len(m.ApiInventoryOpenapiSpec[iNdEx])))
-			i--
-			dAtA[i] = 0x3a
+	if m.SchemaUpdatesStrategy != nil {
+		{
+			size := m.SchemaUpdatesStrategy.Size()
+			i -= size
+			if _, err := m.SchemaUpdatesStrategy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
 		}
 	}
 	if len(m.NonApiEndpoints) > 0 {
@@ -1568,6 +2061,48 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *GetSpecType_StrictSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_StrictSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.StrictSchemaOrigin != nil {
+		{
+			size, err := m.StrictSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_MixedSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_MixedSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MixedSchemaOrigin != nil {
+		{
+			size, err := m.MixedSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1588,6 +2123,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.SchemaUpdatesStrategy != nil {
+		{
+			size := m.SchemaUpdatesStrategy.Size()
+			i -= size
+			if _, err := m.SchemaUpdatesStrategy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.NonApiEndpoints) > 0 {
 		for iNdEx := len(m.NonApiEndpoints) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1642,41 +2186,48 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *ApiOperation) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ApiOperation) MarshalTo(dAtA []byte) (int, error) {
+func (m *ReplaceSpecType_StrictSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *ApiOperation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *ReplaceSpecType_StrictSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Path) > 0 {
-		i -= len(m.Path)
-		copy(dAtA[i:], m.Path)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Path)))
+	if m.StrictSchemaOrigin != nil {
+		{
+			size, err := m.StrictSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
 		i--
-		dAtA[i] = 0x12
-	}
-	if m.Method != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Method))
-		i--
-		dAtA[i] = 0x8
+		dAtA[i] = 0x4a
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_MixedSchemaOrigin) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
 
+func (m *ReplaceSpecType_MixedSchemaOrigin) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MixedSchemaOrigin != nil {
+		{
+			size, err := m.MixedSchemaOrigin.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ApiGroupBuilder) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1856,6 +2407,9 @@ func (m *GlobalSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.SchemaUpdatesStrategy != nil {
+		n += m.SchemaUpdatesStrategy.Size()
+	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -1869,6 +2423,30 @@ func (m *GlobalSpecType) Size() (n int) {
 	return n
 }
 
+func (m *GlobalSpecType_StrictSchemaOrigin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StrictSchemaOrigin != nil {
+		l = m.StrictSchemaOrigin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_MixedSchemaOrigin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MixedSchemaOrigin != nil {
+		l = m.MixedSchemaOrigin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1899,9 +2477,36 @@ func (m *CreateSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.SchemaUpdatesStrategy != nil {
+		n += m.SchemaUpdatesStrategy.Size()
+	}
 	return n
 }
 
+func (m *CreateSpecType_StrictSchemaOrigin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StrictSchemaOrigin != nil {
+		l = m.StrictSchemaOrigin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_MixedSchemaOrigin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MixedSchemaOrigin != nil {
+		l = m.MixedSchemaOrigin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1938,11 +2543,8 @@ func (m *GetSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
-	if len(m.ApiInventoryOpenapiSpec) > 0 {
-		for _, s := range m.ApiInventoryOpenapiSpec {
-			l = len(s)
-			n += 1 + l + sovTypes(uint64(l))
-		}
+	if m.SchemaUpdatesStrategy != nil {
+		n += m.SchemaUpdatesStrategy.Size()
 	}
 	if len(m.ApiGroups) > 0 {
 		for _, e := range m.ApiGroups {
@@ -1953,6 +2555,30 @@ func (m *GetSpecType) Size() (n int) {
 	return n
 }
 
+func (m *GetSpecType_StrictSchemaOrigin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StrictSchemaOrigin != nil {
+		l = m.StrictSchemaOrigin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_MixedSchemaOrigin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MixedSchemaOrigin != nil {
+		l = m.MixedSchemaOrigin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1983,25 +2609,36 @@ func (m *ReplaceSpecType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.SchemaUpdatesStrategy != nil {
+		n += m.SchemaUpdatesStrategy.Size()
+	}
 	return n
 }
 
-func (m *ApiOperation) Size() (n int) {
+func (m *ReplaceSpecType_StrictSchemaOrigin) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Method != 0 {
-		n += 1 + sovTypes(uint64(m.Method))
-	}
-	l = len(m.Path)
-	if l > 0 {
+	if m.StrictSchemaOrigin != nil {
+		l = m.StrictSchemaOrigin.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-
+func (m *ReplaceSpecType_MixedSchemaOrigin) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MixedSchemaOrigin != nil {
+		l = m.MixedSchemaOrigin.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ApiGroupBuilder) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2071,17 +2708,17 @@ func (this *GlobalSpecType) String() string {
 	repeatedStringForDefaultApiGroupsBuilders += "}"
 	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryInclusionList {
-		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryInclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryInclusionList += "}"
 	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryExclusionList {
-		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryExclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryExclusionList += "}"
 	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
 	for _, f := range this.NonApiEndpoints {
-		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForNonApiEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForNonApiEndpoints += "}"
 	repeatedStringForApiGroups := "[]*ApiGroupSummary{"
@@ -2096,8 +2733,29 @@ func (this *GlobalSpecType) String() string {
 		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
 		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
 		`ApiInventoryOpenapiSpec:` + fmt.Sprintf("%v", this.ApiInventoryOpenapiSpec) + `,`,
+		`SchemaUpdatesStrategy:` + fmt.Sprintf("%v", this.SchemaUpdatesStrategy) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`ApiGroups:` + repeatedStringForApiGroups + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_StrictSchemaOrigin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_StrictSchemaOrigin{`,
+		`StrictSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.StrictSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_MixedSchemaOrigin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_MixedSchemaOrigin{`,
+		`MixedSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.MixedSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2108,17 +2766,17 @@ func (this *CreateSpecType) String() string {
 	}
 	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryInclusionList {
-		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryInclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryInclusionList += "}"
 	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryExclusionList {
-		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryExclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryExclusionList += "}"
 	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
 	for _, f := range this.NonApiEndpoints {
-		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForNonApiEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForNonApiEndpoints += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
@@ -2126,6 +2784,27 @@ func (this *CreateSpecType) String() string {
 		`ApiInventoryInclusionList:` + repeatedStringForApiInventoryInclusionList + `,`,
 		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
 		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
+		`SchemaUpdatesStrategy:` + fmt.Sprintf("%v", this.SchemaUpdatesStrategy) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_StrictSchemaOrigin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_StrictSchemaOrigin{`,
+		`StrictSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.StrictSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_MixedSchemaOrigin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_MixedSchemaOrigin{`,
+		`MixedSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.MixedSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2141,17 +2820,17 @@ func (this *GetSpecType) String() string {
 	repeatedStringForDefaultApiGroupsBuilders += "}"
 	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryInclusionList {
-		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryInclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryInclusionList += "}"
 	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryExclusionList {
-		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryExclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryExclusionList += "}"
 	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
 	for _, f := range this.NonApiEndpoints {
-		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForNonApiEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForNonApiEndpoints += "}"
 	repeatedStringForApiGroups := "[]*ApiGroupSummary{"
@@ -2165,8 +2844,28 @@ func (this *GetSpecType) String() string {
 		`ApiInventoryInclusionList:` + repeatedStringForApiInventoryInclusionList + `,`,
 		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
 		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
-		`ApiInventoryOpenapiSpec:` + fmt.Sprintf("%v", this.ApiInventoryOpenapiSpec) + `,`,
+		`SchemaUpdatesStrategy:` + fmt.Sprintf("%v", this.SchemaUpdatesStrategy) + `,`,
 		`ApiGroups:` + repeatedStringForApiGroups + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_StrictSchemaOrigin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_StrictSchemaOrigin{`,
+		`StrictSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.StrictSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_MixedSchemaOrigin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_MixedSchemaOrigin{`,
+		`MixedSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.MixedSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2177,17 +2876,17 @@ func (this *ReplaceSpecType) String() string {
 	}
 	repeatedStringForApiInventoryInclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryInclusionList {
-		repeatedStringForApiInventoryInclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryInclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryInclusionList += "}"
 	repeatedStringForApiInventoryExclusionList := "[]*ApiOperation{"
 	for _, f := range this.ApiInventoryExclusionList {
-		repeatedStringForApiInventoryExclusionList += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForApiInventoryExclusionList += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForApiInventoryExclusionList += "}"
 	repeatedStringForNonApiEndpoints := "[]*ApiOperation{"
 	for _, f := range this.NonApiEndpoints {
-		repeatedStringForNonApiEndpoints += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForNonApiEndpoints += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForNonApiEndpoints += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
@@ -2195,17 +2894,27 @@ func (this *ReplaceSpecType) String() string {
 		`ApiInventoryInclusionList:` + repeatedStringForApiInventoryInclusionList + `,`,
 		`ApiInventoryExclusionList:` + repeatedStringForApiInventoryExclusionList + `,`,
 		`NonApiEndpoints:` + repeatedStringForNonApiEndpoints + `,`,
+		`SchemaUpdatesStrategy:` + fmt.Sprintf("%v", this.SchemaUpdatesStrategy) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *ApiOperation) String() string {
+func (this *ReplaceSpecType_StrictSchemaOrigin) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ApiOperation{`,
-		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
-		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
+	s := strings.Join([]string{`&ReplaceSpecType_StrictSchemaOrigin{`,
+		`StrictSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.StrictSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_MixedSchemaOrigin) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_MixedSchemaOrigin{`,
+		`MixedSchemaOrigin:` + strings.Replace(fmt.Sprintf("%v", this.MixedSchemaOrigin), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2216,12 +2925,12 @@ func (this *ApiGroupBuilder) String() string {
 	}
 	repeatedStringForIncludedOperations := "[]*ApiOperation{"
 	for _, f := range this.IncludedOperations {
-		repeatedStringForIncludedOperations += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForIncludedOperations += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForIncludedOperations += "}"
 	repeatedStringForExcludedOperations := "[]*ApiOperation{"
 	for _, f := range this.ExcludedOperations {
-		repeatedStringForExcludedOperations += strings.Replace(f.String(), "ApiOperation", "ApiOperation", 1) + ","
+		repeatedStringForExcludedOperations += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
 	}
 	repeatedStringForExcludedOperations += "}"
 	s := strings.Join([]string{`&ApiGroupBuilder{`,
@@ -2382,7 +3091,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2416,7 +3125,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2450,7 +3159,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &views.ApiOperation{})
 			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2486,6 +3195,76 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ApiInventoryOpenapiSpec = append(m.ApiInventoryOpenapiSpec, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StrictSchemaOrigin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &GlobalSpecType_StrictSchemaOrigin{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MixedSchemaOrigin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &GlobalSpecType_MixedSchemaOrigin{v}
 			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
@@ -2671,7 +3450,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2705,7 +3484,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2739,10 +3518,80 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &views.ApiOperation{})
 			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StrictSchemaOrigin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &CreateSpecType_StrictSchemaOrigin{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MixedSchemaOrigin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &CreateSpecType_MixedSchemaOrigin{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -2892,7 +3741,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2926,7 +3775,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2960,16 +3809,16 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &views.ApiOperation{})
 			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		case 7:
+		case 9:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryOpenapiSpec", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field StrictSchemaOrigin", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -2979,23 +3828,61 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryOpenapiSpec = append(m.ApiInventoryOpenapiSpec, string(dAtA[iNdEx:postIndex]))
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &GetSpecType_StrictSchemaOrigin{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MixedSchemaOrigin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &GetSpecType_MixedSchemaOrigin{v}
 			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
@@ -3145,7 +4032,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &ApiOperation{})
+			m.ApiInventoryInclusionList = append(m.ApiInventoryInclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryInclusionList[len(m.ApiInventoryInclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3179,7 +4066,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &ApiOperation{})
+			m.ApiInventoryExclusionList = append(m.ApiInventoryExclusionList, &views.ApiOperation{})
 			if err := m.ApiInventoryExclusionList[len(m.ApiInventoryExclusionList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3213,88 +4100,16 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.NonApiEndpoints = append(m.NonApiEndpoints, &ApiOperation{})
+			m.NonApiEndpoints = append(m.NonApiEndpoints, &views.ApiOperation{})
 			if err := m.NonApiEndpoints[len(m.NonApiEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ApiOperation) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ApiOperation: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ApiOperation: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
-			}
-			m.Method = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Method |= schema.HttpMethod(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
+		case 9:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field StrictSchemaOrigin", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -3304,23 +4119,61 @@ func (m *ApiOperation) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Path = string(dAtA[iNdEx:postIndex])
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &ReplaceSpecType_StrictSchemaOrigin{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MixedSchemaOrigin", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SchemaUpdatesStrategy = &ReplaceSpecType_MixedSchemaOrigin{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3508,7 +4361,7 @@ func (m *ApiGroupBuilder) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.IncludedOperations = append(m.IncludedOperations, &ApiOperation{})
+			m.IncludedOperations = append(m.IncludedOperations, &views.ApiOperation{})
 			if err := m.IncludedOperations[len(m.IncludedOperations)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3542,7 +4395,7 @@ func (m *ApiGroupBuilder) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ExcludedOperations = append(m.ExcludedOperations, &ApiOperation{})
+			m.ExcludedOperations = append(m.ExcludedOperations, &views.ApiOperation{})
 			if err := m.ExcludedOperations[len(m.ExcludedOperations)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

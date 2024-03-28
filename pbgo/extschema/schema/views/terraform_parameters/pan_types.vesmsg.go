@@ -39,19 +39,13 @@ func (m *PANAWSType) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.PanAuthorizationKeyBlindfolded = ""
-	copy.SshPrivateKeyBlindfolded = ""
-	copy.AdminPasswordBlindfolded = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *PANAWSType) GoString() string {
 	copy := m.DeepCopy()
-	copy.PanAuthorizationKeyBlindfolded = ""
-	copy.SshPrivateKeyBlindfolded = ""
-	copy.AdminPasswordBlindfolded = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -63,7 +57,9 @@ func (m *PANAWSType) Redact(ctx context.Context) error {
 	}
 
 	m.PanAuthorizationKeyBlindfolded = ""
+
 	m.SshPrivateKeyBlindfolded = ""
+
 	m.AdminPasswordBlindfolded = ""
 
 	return nil

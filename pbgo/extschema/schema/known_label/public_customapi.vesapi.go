@@ -410,15 +410,15 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.known_label.CustomAPI.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.known_label.CustomAPI.Create")
 	return c.CustomAPIServer.Create(ctx, in)
 }
 func (c *customAPIInprocClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.known_label.CustomAPI.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.known_label.CustomAPI.Delete")
 	return c.CustomAPIServer.Delete(ctx, in)
 }
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.known_label.CustomAPI.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.known_label.CustomAPI.Get")
 	return c.CustomAPIServer.Get(ctx, in)
 }
 

@@ -1309,6 +1309,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["virtual_host_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_host_status"))
+		if err := fv(ctx, e.GetVirtualHostStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

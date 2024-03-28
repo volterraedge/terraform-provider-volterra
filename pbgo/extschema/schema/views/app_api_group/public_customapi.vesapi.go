@@ -307,11 +307,11 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) EvaluateApiGroup(ctx context.Context, in *EvaluateApiGroupReq, opts ...grpc.CallOption) (*EvaluateApiGroupRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.app_api_group.CustomAPI.EvaluateApiGroup", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.app_api_group.CustomAPI.EvaluateApiGroup")
 	return c.CustomAPIServer.EvaluateApiGroup(ctx, in)
 }
 func (c *customAPIInprocClient) GetApiGroupsStats(ctx context.Context, in *GetApiGroupsStatsReq, opts ...grpc.CallOption) (*GetApiGroupsStatsRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.app_api_group.CustomAPI.GetApiGroupsStats", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.app_api_group.CustomAPI.GetApiGroupsStats")
 	return c.CustomAPIServer.GetApiGroupsStats(ctx, in)
 }
 
@@ -657,7 +657,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Excluded Operations\"\nList of operations matched by the filters to be excluded from a group.\nThe list should only include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
                     "title": "excluded_operations",
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     }
                 },
                 "included_operations": {
@@ -665,7 +665,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Included Operations\"\nList of operations not matched by the filters to be included in a group.\nThe list should not include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
                     "title": "included_operations",
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     }
                 },
                 "label_filter": {
@@ -682,23 +682,6 @@ var CustomAPISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Path Filter\"\nx-example: \"/api/config/.*/path[123]/$\"\nRegular expression to match the input request API path against.\nThe match is considered to succeed if the input request API path matches the specified path regex.",
                     "title": "path_filter"
-                }
-            }
-        },
-        "api_definitionApiOperation": {
-            "type": "object",
-            "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
-            "title": "ApiOperation",
-            "properties": {
-                "method": {
-                    "description": "x-displayName: \"HTTP Method\"\nx-required\nx-example: 'POST'\nMethod to match the input request API method against.",
-                    "title": "method",
-                    "$ref": "#/definitions/schemaHttpMethod"
-                },
-                "path": {
-                    "type": "string",
-                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/api/users/{userid}\"\nAn endpoint path, as specified in OpenAPI, including parameters.\nThe path should comply with RFC 3986 and may have parameters according to OpenAPI specification",
-                    "title": "path"
                 }
             }
         },
@@ -1066,6 +1049,23 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
                     }
+                }
+            }
+        },
+        "viewsApiOperation": {
+            "type": "object",
+            "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
+            "title": "ApiOperation",
+            "properties": {
+                "method": {
+                    "description": "x-displayName: \"HTTP Method\"\nx-required\nx-example: 'POST'\nMethod to match the input request API method against.",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/api/users/{userid}\"\nAn endpoint path, as specified in OpenAPI, including parameters.\nThe path should comply with RFC 3986 and may have parameters according to OpenAPI specification",
+                    "title": "path"
                 }
             }
         },

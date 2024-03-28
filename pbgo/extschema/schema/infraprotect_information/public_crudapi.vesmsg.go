@@ -137,10 +137,6 @@ func (m *GetResponse) Redact(ctx context.Context) error {
 		return nil
 	}
 
-	if err := m.GetObject().Redact(ctx); err != nil {
-		return errors.Wrapf(err, "Redacting GetResponse.object")
-	}
-
 	if err := m.GetSpec().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetResponse.spec")
 	}
@@ -180,9 +176,7 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	var drInfos []db.DRefInfo
-
-	return drInfos, nil
+	return nil, nil
 
 }
 
@@ -232,15 +226,6 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["object"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("object"))
-		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
 			return err
 		}
 
@@ -303,8 +288,6 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGetResponseValidator = func() *ValidateGetResponse {
 	v := &ValidateGetResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["object"] = ObjectValidator().Validate
 
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
 

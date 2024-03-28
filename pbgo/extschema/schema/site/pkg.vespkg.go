@@ -144,31 +144,7 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.site.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "object.spec.gc_spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.inside_vip_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.outside_vip_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.vip_selection",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
 		{
 			FieldPath:           "replace_form.spec.inside_nameserver_v6",
 			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
@@ -230,26 +206,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "items.#.get_spec.vip_selection",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.inside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.inside_vip_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.outside_nameserver_v6",
-			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.outside_vip_v6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.vip_selection",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}

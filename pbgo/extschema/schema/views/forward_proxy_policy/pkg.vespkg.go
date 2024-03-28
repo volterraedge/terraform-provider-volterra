@@ -94,10 +94,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.forward_proxy_policy.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.forward_proxy_policy.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.rule_list.rules.#.dst_prefix_list.ipv6_prefixes.#",
@@ -105,14 +101,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "create_form.spec.rule_list.rules.#.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.rule_list.rules.#.dst_prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.rule_list.rules.#.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -140,14 +128,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "items.#.get_spec.rule_list.rules.#.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.rule_list.rules.#.dst_prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.rule_list.rules.#.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}

@@ -436,6 +436,7 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_HttpLoadbalancer:
+
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -447,6 +448,7 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_ApiDefinition:
+
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
@@ -708,6 +710,7 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_HttpLoadbalancer:
+
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -719,6 +722,7 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_ApiDefinition:
+
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
@@ -1002,6 +1006,7 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_HttpLoadbalancer:
+
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -1013,6 +1018,7 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_ApiDefinition:
+
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")
@@ -1343,6 +1349,7 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_HttpLoadbalancer:
+
 		drInfos, err := m.GetHttpLoadbalancer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpLoadbalancer().GetDRefInfo() FAILED")
@@ -1354,6 +1361,7 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_ApiDefinition:
+
 		drInfos, err := m.GetApiDefinition().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinition().GetDRefInfo() FAILED")

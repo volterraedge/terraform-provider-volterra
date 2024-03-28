@@ -78,24 +78,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.waf_action.waf_in_monitoring_mode",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.service_policy_rule.API.Get"] = []string{
-		"object",
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy_rule.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "object.spec.gc_spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy_rule.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy_rule.API.Replace"] = []string{
 		"spec.any_dst_asn",
 		"spec.any_dst_ip",

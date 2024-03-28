@@ -71,10 +71,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.aws_re.tgw",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_connect.API.Get"] = []string{
-		"object",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

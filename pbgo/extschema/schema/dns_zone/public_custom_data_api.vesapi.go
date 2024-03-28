@@ -320,11 +320,11 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) DnsZoneMetrics(ctx context.Context, in *DnsZoneMetricsRequest, opts ...grpc.CallOption) (*DnsZoneMetricsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneMetrics")
 	return c.CustomDataAPIServer.DnsZoneMetrics(ctx, in)
 }
 func (c *customDataAPIInprocClient) DnsZoneRequestLogs(ctx context.Context, in *DnsZoneRequestLogRequest, opts ...grpc.CallOption) (*DnsZoneRequestLogResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneRequestLogs", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneRequestLogs")
 	return c.CustomDataAPIServer.DnsZoneRequestLogs(ctx, in)
 }
 

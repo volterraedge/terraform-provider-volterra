@@ -74,10 +74,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.k8s_cluster.API.Create"] = "ves.io.schema.k8s_cluster.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.k8s_cluster.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.k8s_cluster.API.Replace"] = []string{
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.argo_cd.generated_yaml",
 		"spec.cluster_wide_app_list.cluster_wide_apps.#.argo_cd.local_domain.password.blindfold_secret_info_internal",

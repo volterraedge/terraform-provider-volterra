@@ -797,6 +797,7 @@ func (m *CreateSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDnsType().(type) {
 	case *CreateSpecType_Primary:
+
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")
@@ -4373,6 +4374,7 @@ func (m *GetSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDnsType().(type) {
 	case *GetSpecType_Primary:
+
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")
@@ -4576,6 +4578,7 @@ func (m *GlobalSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDnsType().(type) {
 	case *GlobalSpecType_Primary:
+
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")
@@ -6748,6 +6751,7 @@ func (m *RRSet) GetTypeRecordSetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *RRSet_LbRecord:
+
 		drInfos, err := m.GetLbRecord().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLbRecord().GetDRefInfo() FAILED")
@@ -7469,6 +7473,7 @@ func (m *ReplaceSpecType) GetDnsTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetDnsType().(type) {
 	case *ReplaceSpecType_Primary:
+
 		drInfos, err := m.GetPrimary().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrimary().GetDRefInfo() FAILED")

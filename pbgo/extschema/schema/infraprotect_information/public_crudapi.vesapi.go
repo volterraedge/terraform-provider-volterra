@@ -12,7 +12,6 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	multierror "github.com/hashicorp/go-multierror"
-	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
 	"gopkg.volterra.us/stdlib/client"
@@ -20,8 +19,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -125,10 +122,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -140,10 +135,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -229,7 +222,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -255,10 +251,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -270,10 +264,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -330,7 +322,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.infraprotect_information")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.infraprotect_information.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.infraprotect_information.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -385,10 +377,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -400,10 +390,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -642,21 +630,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -831,12 +806,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/infraprotect_informationObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -976,146 +945,6 @@ var APISwaggerJSON string = `{
                     "description": " Organisation UUID\n\nExample: - \"value\"-",
                     "x-displayname": "Uuid",
                     "x-ves-example": "value"
-                }
-            }
-        },
-        "infraprotect_informationGlobalSpecType": {
-            "type": "object",
-            "description": "Organisation information",
-            "title": "information",
-            "x-displayname": "Information",
-            "x-ves-oneof-field-as_path_choice": "[\"as_path_choice_full\",\"as_path_choice_none\",\"as_path_choice_origin\"]",
-            "x-ves-oneof-field-default_tunnel_bgp_secret_choice": "[\"default_tunnel_bgp_secret\",\"default_tunnel_bgp_secret_none\"]",
-            "x-ves-oneof-field-route_advertisement_management_choice": "[\"route_advertisement_mgmt_not_specified\",\"route_advertisement_mgmt_not_using_f5xc\",\"route_advertisement_mgmt_using_f5xc\"]",
-            "x-ves-oneof-field-tunnel_f5_ip_usage_choice": "[\"reuse_ips\",\"use_dedicated_ips\"]",
-            "x-ves-proto-message": "ves.io.schema.infraprotect_information.GlobalSpecType",
-            "properties": {
-                "arbor_cid": {
-                    "type": "string",
-                    "description": " L3/L4 provider customer ID\n\nExample: - \"value\"-",
-                    "title": "L3/L4 CID",
-                    "x-displayname": "L3/L4 CID",
-                    "x-ves-example": "value"
-                },
-                "as_path_choice_full": {
-                    "description": "Exclusive with [as_path_choice_none as_path_choice_origin]\n Use Matching Clean VRF's path's AS Path",
-                    "title": "Full AS Path",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Full AS Path"
-                },
-                "as_path_choice_none": {
-                    "description": "Exclusive with [as_path_choice_full as_path_choice_origin]\n No AS Path Used",
-                    "title": "No AS Path",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "None"
-                },
-                "as_path_choice_origin": {
-                    "description": "Exclusive with [as_path_choice_full as_path_choice_none]\n Use Right-Most ASN of Clean VRF's Matching Path's AS Path",
-                    "title": "Origin AS Only",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Origin AS Only"
-                },
-                "asn": {
-                    "type": "integer",
-                    "description": " AS Number\n\nExample: - \"0\"-",
-                    "title": "asn",
-                    "format": "int32",
-                    "x-displayname": "ASN",
-                    "x-ves-example": "0"
-                },
-                "default_tunnel_bgp_secret": {
-                    "description": "Exclusive with [default_tunnel_bgp_secret_none]\n Default tunnel BGP Secret",
-                    "title": "Default tunnel BGP Secret",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Default tunnel BGP Secret"
-                },
-                "default_tunnel_bgp_secret_none": {
-                    "description": "Exclusive with [default_tunnel_bgp_secret]\n No default tunnel BGP secret",
-                    "title": "No default tunnel BGP secret",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No default tunnel BGP secret"
-                },
-                "prefixes": {
-                    "type": "array",
-                    "description": " List of tenant 'super' prefixes noted in CIDR\n\nExample: - \"value\"-",
-                    "title": "prefixes",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Super prefixes",
-                    "x-ves-example": "value"
-                },
-                "primary_network_name": {
-                    "type": "string",
-                    "description": " Name of the default customer network\n\nExample: - \"defensenet_local\"-",
-                    "title": "Primary Network Name",
-                    "x-displayname": "Primary network name",
-                    "x-ves-example": "defensenet_local"
-                },
-                "reuse_ips": {
-                    "description": "Exclusive with [use_dedicated_ips]\n Reuse IP addresses",
-                    "title": "Reuse IP addresses",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Reuse IP addresses"
-                },
-                "route_advertisement_mgmt_not_specified": {
-                    "description": "Exclusive with [route_advertisement_mgmt_not_using_f5xc route_advertisement_mgmt_using_f5xc]\n (management choice) not specified",
-                    "title": "(management choice) not specified",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Not specified"
-                },
-                "route_advertisement_mgmt_not_using_f5xc": {
-                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_using_f5xc]\n Tenant manages outside F5XC",
-                    "title": "Tenant manages outside F5XC",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Tenant manages not using F5XC"
-                },
-                "route_advertisement_mgmt_using_f5xc": {
-                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_not_using_f5xc]\n Tenant manages using F5XC",
-                    "title": "Tenant manages using F5XC",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Tenant manages using F5XC"
-                },
-                "use_dedicated_ips": {
-                    "description": "Exclusive with [reuse_ips]\n Use dedicated IP addresses",
-                    "title": "Use dedicated IP addresses",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Use dedicated IP addresses"
-                },
-                "uuid": {
-                    "type": "string",
-                    "description": " Organisation UUID\n\nExample: - \"value\"-",
-                    "title": "uuid",
-                    "x-displayname": "Uuid",
-                    "x-ves-example": "value"
-                }
-            }
-        },
-        "infraprotect_informationObject": {
-            "type": "object",
-            "title": "Config Object",
-            "x-ves-proto-message": "ves.io.schema.infraprotect_information.Object",
-            "properties": {
-                "metadata": {
-                    "title": "Standard object's metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType"
-                },
-                "spec": {
-                    "title": "Specification of Object",
-                    "$ref": "#/definitions/infraprotect_informationSpecType"
-                },
-                "system_metadata": {
-                    "title": "System generated object's metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType"
-                }
-            }
-        },
-        "infraprotect_informationSpecType": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.infraprotect_information.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "$ref": "#/definitions/infraprotect_informationGlobalSpecType"
                 }
             }
         },
@@ -1378,75 +1207,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
-                }
-            }
-        },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -1723,149 +1483,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
                 }
             }
         },

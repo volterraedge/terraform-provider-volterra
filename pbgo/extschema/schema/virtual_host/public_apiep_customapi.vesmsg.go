@@ -4079,6 +4079,15 @@ func (v *ValidateVulnerability) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["evidence"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("evidence"))

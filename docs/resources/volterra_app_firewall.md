@@ -33,8 +33,29 @@ resource "volterra_app_firewall" "example" {
   default_bot_setting = true
 
   // One of the arguments from this list "default_detection_settings detection_settings" must be set
-  default_detection_settings = true
 
+  detection_settings {
+    // One of the arguments from this list "enable_suppression disable_suppression" must be set
+    enable_suppression = true
+
+    signature_selection_setting {
+      // One of the arguments from this list "default_attack_type_settings attack_type_settings" must be set
+      default_attack_type_settings = true
+
+      // One of the arguments from this list "only_high_accuracy_signatures high_medium_accuracy_signatures high_medium_low_accuracy_signatures" must be set
+      only_high_accuracy_signatures = true
+    }
+
+    // One of the arguments from this list "disable_staging stage_new_signatures stage_new_and_updated_signatures" must be set
+
+    stage_new_and_updated_signatures {
+      staging_period = "7"
+    }
+    // One of the arguments from this list "enable_threat_campaigns disable_threat_campaigns" must be set
+    disable_threat_campaigns = true
+    // One of the arguments from this list "default_violation_settings violation_settings" must be set
+    default_violation_settings = true
+  }
   // One of the arguments from this list "use_loadbalancer_setting blocking monitoring" must be set
   use_loadbalancer_setting = true
 }
@@ -60,65 +81,83 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`allow_all_response_codes` - (Optional) All HTTP response status codes are allowed (bool).
+`allow_all_response_codes` - (Optional) All HTTP response status codes are allowed (`Bool`).
 
-`allowed_response_codes` - (Optional) Define list of HTTP response status codes that are allowed. See [Allowed Response Codes ](#allowed-response-codes) below for details.
+`allowed_response_codes` - (Optional) Define list of HTTP response status codes that are allowed. See [Allowed Response Codes Choice Allowed Response Codes ](#allowed-response-codes-choice-allowed-response-codes) below for details.
 
-`custom_anonymization` - (Optional) Define HTTP headers, query parameters, or cookies whose values should be masked. See [Custom Anonymization ](#custom-anonymization) below for details.
+`custom_anonymization` - (Optional) Define HTTP headers, query parameters, or cookies whose values should be masked. See [Anonymization Setting Custom Anonymization ](#anonymization-setting-custom-anonymization) below for details.
 
-`default_anonymization` - (Optional) Values of query parameters "card", "pass", "pwd" and "password" will be masked. (bool).
+`default_anonymization` - (Optional) Values of query parameters "card", "pass", "pwd" and "password" will be masked. (`Bool`).
 
-`disable_anonymization` - (Optional) Disable masking of sensitive parameters in logs (bool).
+`disable_anonymization` - (Optional) Disable masking of sensitive parameters in logs (`Bool`).
 
-`blocking_page` - (Optional) The system returns a response page with HTML code that you define. See [Blocking Page ](#blocking-page) below for details.
+`blocking_page` - (Optional) The system returns a response page with HTML code that you define. See [Blocking Page Choice Blocking Page ](#blocking-page-choice-blocking-page) below for details.
 
-`use_default_blocking_page` - (Optional) The system returns the system-supplied response page in HTML. No further configuration is needed. (bool).
+`use_default_blocking_page` - (Optional) The system returns the system-supplied response page in HTML. No further configuration is needed. (`Bool`).
 
-`bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Setting ](#bot-protection-setting) below for details.
+`bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Choice Bot Protection Setting ](#bot-protection-choice-bot-protection-setting) below for details.
 
-`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (bool).
+`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (`Bool`).
 
-`default_detection_settings` - (Optional) All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled. (bool).
+`default_detection_settings` - (Optional) All Attack Types, high and medium accuracy signatures, automatic Attack Signatures tuning, Threat Campaigns and all Violations will be enabled. (`Bool`).
 
-`detection_settings` - (Optional) Define Custom Security Policy settings. See [Detection Settings ](#detection-settings) below for details.
+`detection_settings` - (Optional) Define Custom Security Policy settings. See [Detection Setting Choice Detection Settings ](#detection-setting-choice-detection-settings) below for details.
 
-`blocking` - (Optional) Log and block threats (bool).
+`blocking` - (Optional) Log and block threats (`Bool`).
 
-`monitoring` - (Optional) Log threats (bool).
+`monitoring` - (Optional) Log threats (`Bool`).
 
-`use_loadbalancer_setting` - (Optional) Use the mode as specified in the load balancer (bool).
+`use_loadbalancer_setting` - (Optional) Use the mode as specified in the load balancer (`Bool`).(Deprecated)
 
-### Allowed Response Codes
+### Allowed Response Codes Choice Allowed Response Codes
 
 Define list of HTTP response status codes that are allowed.
 
 `response_code` - (Required) List of HTTP response status codes that are allowed (`Int`).
 
-### Anonymization Config
+### Anonymization Choice Cookie
 
-List of HTTP headers, cookies and query parameters whose values will be masked.
+x-displayName: "Cookie".
 
-`cookie` - (Optional) x-displayName: "Cookie". See [Cookie ](#cookie) below for details.
+`cookie_name` - (Required) Masks the cookie value. The setting does not mask the cookie name. (`String`).
 
-`http_header` - (Optional) x-displayName: "HTTP Header". See [Http Header ](#http-header) below for details.
+### Anonymization Choice Http Header
 
-`query_parameter` - (Optional) x-displayName: "Query Parameter". See [Query Parameter ](#query-parameter) below for details.
+x-displayName: "HTTP Header".
 
-### Attack Type Settings
+`header_name` - (Required) Masks the HTTP header value. The setting does not mask the HTTP header name. (`String`).
+
+### Anonymization Choice Query Parameter
+
+x-displayName: "Query Parameter".
+
+`query_param_name` - (Required) Masks the query parameter value. The setting does not mask the query parameter name. (`String`).
+
+### Anonymization Setting Custom Anonymization
+
+Define HTTP headers, query parameters, or cookies whose values should be masked.
+
+`anonymization_config` - (Required) List of HTTP headers, cookies and query parameters whose values will be masked. See [Custom Anonymization Anonymization Config ](#custom-anonymization-anonymization-config) below for details.
+
+### Attack Type Setting Attack Type Settings
 
 Define Attack Types to be disabled for detection.
 
 `disabled_attack_types` - (Required) List of Attack Types that will be ignored and not trigger a detection (`List of Strings`).
 
-### Blocking Page
+### Attack Type Setting Default Attack Type Settings
+
+All Attack Types are enabled for detection.
+
+### Blocking Page Choice Blocking Page
 
 The system returns a response page with HTML code that you define.
 
-`blocking_page` - (Optional) Response body can't exceed 4 KB in size. (`String`).
+`blocking_page` - (Optional) which would be about 3070 bytes in plain text. (`String`).
 
 `response_code` - (Optional) HTTP status code to be sent for blocked requests (`String`).
 
-### Bot Protection Setting
+### Bot Protection Choice Bot Protection Setting
 
 Define custom Bot Protection settings.
 
@@ -128,121 +167,117 @@ Define custom Bot Protection settings.
 
 `suspicious_bot_action` - (Optional) A client that exhibits non-malicious tools such as site crawlers, monitors, spiders, web downloaders and bots behaviors, signatures such as search bots and social media agents (`String`).
 
-### Cookie
+### Custom Anonymization Anonymization Config
 
-x-displayName: "Cookie".
+List of HTTP headers, cookies and query parameters whose values will be masked.
 
-`cookie_name` - (Required) Masks the cookie value. The setting does not mask the cookie name. (`String`).
+###### One of the arguments from this list "http_header, query_parameter, cookie" must be set
 
-### Custom Anonymization
+`cookie` - (Optional) x-displayName: "Cookie". See [Anonymization Choice Cookie ](#anonymization-choice-cookie) below for details.
 
-Define HTTP headers, query parameters, or cookies whose values should be masked.
+`http_header` - (Optional) x-displayName: "HTTP Header". See [Anonymization Choice Http Header ](#anonymization-choice-http-header) below for details.
 
-`anonymization_config` - (Required) List of HTTP headers, cookies and query parameters whose values will be masked. See [Anonymization Config ](#anonymization-config) below for details.
+`query_parameter` - (Optional) x-displayName: "Query Parameter". See [Anonymization Choice Query Parameter ](#anonymization-choice-query-parameter) below for details.
 
-### Default Attack Type Settings
-
-All Attack Types are enabled for detection.
-
-### Default Violation Settings
-
-All violations are enabled for detection.
-
-### Detection Settings
+### Detection Setting Choice Detection Settings
 
 Define Custom Security Policy settings.
 
-`disable_suppression` - (Optional) x-displayName: "Disable" (bool).
+###### One of the arguments from this list "enable_suppression, disable_suppression" must be set
 
-`enable_suppression` - (Optional) x-displayName: "Enable" (bool).
+`disable_suppression` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`signature_selection_setting` - (Optional) Attack Signatures are patterns that identify attacks on a web application and its components. See [Signature Selection Setting ](#signature-selection-setting) below for details.
+`enable_suppression` - (Optional) x-displayName: "Enable" (`Bool`).
 
-`disable_staging` - (Optional) Enforce new and updated attack signatures (bool).
+`signature_selection_setting` - (Optional) Attack Signatures are patterns that identify attacks on a web application and its components. See [Detection Settings Signature Selection Setting ](#detection-settings-signature-selection-setting) below for details.
 
-`stage_new_and_updated_signatures` - (Optional) would not enforce it i.e signature would be in monitoring mode for staging period (instead of blocking mode). See [Stage New And Updated Signatures ](#stage-new-and-updated-signatures) below for details.
+###### One of the arguments from this list "disable_staging, stage_new_signatures, stage_new_and_updated_signatures" can be set
 
-`stage_new_signatures` - (Optional) Stage new attack signatures only. Updated signatures will be enforced. See [Stage New Signatures ](#stage-new-signatures) below for details.
+`disable_staging` - (Optional) Enforce new and updated attack signatures (`Bool`).
 
-`disable_threat_campaigns` - (Optional) x-displayName: "Disable" (bool).
+`stage_new_and_updated_signatures` - (Optional) would not enforce it i.e signature would be in monitoring mode for staging period (instead of blocking mode). See [Signatures Staging Settings Stage New And Updated Signatures ](#signatures-staging-settings-stage-new-and-updated-signatures) below for details.
 
-`enable_threat_campaigns` - (Optional) x-displayName: "Enable" (bool).
+`stage_new_signatures` - (Optional) Stage new attack signatures only. Updated signatures will be enforced. See [Signatures Staging Settings Stage New Signatures ](#signatures-staging-settings-stage-new-signatures) below for details.
 
-`default_violation_settings` - (Optional) All violations are enabled for detection (bool).
+###### One of the arguments from this list "enable_threat_campaigns, disable_threat_campaigns" must be set
 
-`violation_settings` - (Optional) Define violations to be disabled for detection. See [Violation Settings ](#violation-settings) below for details.
+`disable_threat_campaigns` - (Optional) x-displayName: "Disable" (`Bool`).
 
-### Disable Staging
+`enable_threat_campaigns` - (Optional) x-displayName: "Enable" (`Bool`).
 
-Enforce new and updated attack signatures.
+###### One of the arguments from this list "default_violation_settings, violation_settings" must be set
 
-### Disable Suppression
+`default_violation_settings` - (Optional) All violations are enabled for detection (`Bool`).
 
-x-displayName: "Disable".
+`violation_settings` - (Optional) Define violations to be disabled for detection. See [Violation Detection Setting Violation Settings ](#violation-detection-setting-violation-settings) below for details.
 
-### Disable Threat Campaigns
-
-x-displayName: "Disable".
-
-### Enable Suppression
-
-x-displayName: "Enable".
-
-### Enable Threat Campaigns
-
-x-displayName: "Enable".
-
-### High Medium Accuracy Signatures
-
-Enables high and medium accuracy signatures.
-
-### High Medium Low Accuracy Signatures
-
-Enables high, medium and low accuracy signatures.
-
-### Http Header
-
-x-displayName: "HTTP Header".
-
-`header_name` - (Required) Masks the HTTP header value. The setting does not mask the HTTP header name. (`String`).
-
-### Only High Accuracy Signatures
-
-Enables only high accuracy signatures.
-
-### Query Parameter
-
-x-displayName: "Query Parameter".
-
-`query_param_name` - (Required) Masks the query parameter value. The setting does not mask the query parameter name. (`String`).
-
-### Signature Selection Setting
+### Detection Settings Signature Selection Setting
 
 Attack Signatures are patterns that identify attacks on a web application and its components.
 
-`attack_type_settings` - (Optional) Define Attack Types to be disabled for detection. See [Attack Type Settings ](#attack-type-settings) below for details.
+###### One of the arguments from this list "default_attack_type_settings, attack_type_settings" must be set
 
-`default_attack_type_settings` - (Optional) All Attack Types are enabled for detection (bool).
+`attack_type_settings` - (Optional) Define Attack Types to be disabled for detection. See [Attack Type Setting Attack Type Settings ](#attack-type-setting-attack-type-settings) below for details.
 
-`high_medium_accuracy_signatures` - (Optional) Enables high and medium accuracy signatures (bool).
+`default_attack_type_settings` - (Optional) All Attack Types are enabled for detection (`Bool`).
 
-`high_medium_low_accuracy_signatures` - (Optional) Enables high, medium and low accuracy signatures (bool).
+###### One of the arguments from this list "only_high_accuracy_signatures, high_medium_accuracy_signatures, high_medium_low_accuracy_signatures" must be set
 
-`only_high_accuracy_signatures` - (Optional) Enables only high accuracy signatures (bool).
+`high_medium_accuracy_signatures` - (Optional) Enables high and medium accuracy signatures (`Bool`).
 
-### Stage New And Updated Signatures
+`high_medium_low_accuracy_signatures` - (Optional) Enables high, medium and low accuracy signatures (`Bool`).
+
+`only_high_accuracy_signatures` - (Optional) Enables only high accuracy signatures (`Bool`).
+
+### False Positive Suppression Disable Suppression
+
+x-displayName: "Disable".
+
+### False Positive Suppression Enable Suppression
+
+x-displayName: "Enable".
+
+### Signature Selection By Accuracy High Medium Accuracy Signatures
+
+Enables high and medium accuracy signatures.
+
+### Signature Selection By Accuracy High Medium Low Accuracy Signatures
+
+Enables high, medium and low accuracy signatures.
+
+### Signature Selection By Accuracy Only High Accuracy Signatures
+
+Enables only high accuracy signatures.
+
+### Signatures Staging Settings Disable Staging
+
+Enforce new and updated attack signatures.
+
+### Signatures Staging Settings Stage New And Updated Signatures
 
 would not enforce it i.e signature would be in monitoring mode for staging period (instead of blocking mode).
 
 `staging_period` - (Required) 20 days. (`Int`).
 
-### Stage New Signatures
+### Signatures Staging Settings Stage New Signatures
 
 Stage new attack signatures only. Updated signatures will be enforced.
 
 `staging_period` - (Required) 20 days. (`Int`).
 
-### Violation Settings
+### Threat Campaign Choice Disable Threat Campaigns
+
+x-displayName: "Disable".
+
+### Threat Campaign Choice Enable Threat Campaigns
+
+x-displayName: "Enable".
+
+### Violation Detection Setting Default Violation Settings
+
+All violations are enabled for detection.
+
+### Violation Detection Setting Violation Settings
 
 Define violations to be disabled for detection.
 

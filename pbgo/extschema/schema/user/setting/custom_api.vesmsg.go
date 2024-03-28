@@ -757,15 +757,13 @@ func (m *UpdateImageRequest) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *UpdateImageRequest) GoString() string {
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -1128,15 +1126,13 @@ func (m *UserSettingsRequest) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *UserSettingsRequest) GoString() string {
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -1274,15 +1270,13 @@ func (m *UserSettingsResponse) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *UserSettingsResponse) GoString() string {
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 

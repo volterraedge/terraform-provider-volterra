@@ -509,19 +509,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CustomCreate(ctx context.Context, in *CustomCreateRequest, opts ...grpc.CallOption) (*Object, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomCreate", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.role.CustomAPI.CustomCreate")
 	return c.CustomAPIServer.CustomCreate(ctx, in)
 }
 func (c *customAPIInprocClient) CustomGet(ctx context.Context, in *CustomGetRequest, opts ...grpc.CallOption) (*CustomGetResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomGet", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.role.CustomAPI.CustomGet")
 	return c.CustomAPIServer.CustomGet(ctx, in)
 }
 func (c *customAPIInprocClient) CustomList(ctx context.Context, in *CustomListRequest, opts ...grpc.CallOption) (*CustomListResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.role.CustomAPI.CustomList")
 	return c.CustomAPIServer.CustomList(ctx, in)
 }
 func (c *customAPIInprocClient) CustomReplace(ctx context.Context, in *CustomReplaceRequest, opts ...grpc.CallOption) (*Object, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.role.CustomAPI.CustomReplace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.role.CustomAPI.CustomReplace")
 	return c.CustomAPIServer.CustomReplace(ctx, in)
 }
 
@@ -1138,13 +1138,19 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "api_groups": {
                     "type": "array",
-                    "description": " API Groups the role has access to.\n\nExample: - \"value\"-",
+                    "description": " API Groups the role has access to.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "API Groups",
+                    "minItems": 1,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "ApiGroups",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 },
                 "metadata": {
                     "description": " Common attributes that can be set during create for all configuration objects like name, labels etc.",
@@ -1220,13 +1226,19 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "api_groups": {
                     "type": "array",
-                    "description": " API Groups the role has access to.\n\nExample: - \"value\"-",
+                    "description": " API Groups the role has access to.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "API Groups",
+                    "minItems": 1,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "ApiGroups",
-                    "x-ves-example": "value"
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 },
                 "name": {
                     "type": "string",

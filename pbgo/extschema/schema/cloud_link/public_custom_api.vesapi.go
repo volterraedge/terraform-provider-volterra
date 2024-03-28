@@ -210,7 +210,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) ReapplyConfig(ctx context.Context, in *ReapplyConfigRequest, opts ...grpc.CallOption) (*ReapplyConfigResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_link.CustomDataAPI.ReapplyConfig", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_link.CustomDataAPI.ReapplyConfig")
 	return c.CustomDataAPIServer.ReapplyConfig(ctx, in)
 }
 

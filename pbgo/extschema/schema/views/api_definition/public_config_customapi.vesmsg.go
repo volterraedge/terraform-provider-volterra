@@ -73,12 +73,12 @@ func (v *ValidateAPInventoryReq) ApiEndpointsValidationRuleHandler(rules map[str
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_endpoints")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -90,9 +90,9 @@ func (v *ValidateAPInventoryReq) ApiEndpointsValidationRuleHandler(rules map[str
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -263,7 +263,7 @@ func (v *ValidateAPInventoryResp) Validate(ctx context.Context, pm interface{}, 
 var DefaultAPInventoryRespValidator = func() *ValidateAPInventoryResp {
 	v := &ValidateAPInventoryResp{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["updated_api_endpoints"] = ApiOperationValidator().Validate
+	v.FldValidators["updated_api_endpoints"] = ves_io_schema_views.ApiOperationValidator().Validate
 
 	return v
 }()

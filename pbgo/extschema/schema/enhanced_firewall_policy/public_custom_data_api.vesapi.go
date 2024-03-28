@@ -219,7 +219,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) EnhancedFirewallPolicyHits(ctx context.Context, in *EnhancedFirewallPolicyHitsRequest, opts ...grpc.CallOption) (*EnhancedFirewallPolicyHitsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.enhanced_firewall_policy.CustomDataAPI.EnhancedFirewallPolicyHits", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.enhanced_firewall_policy.CustomDataAPI.EnhancedFirewallPolicyHits")
 	return c.CustomDataAPIServer.EnhancedFirewallPolicyHits(ctx, in)
 }
 

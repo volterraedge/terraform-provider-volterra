@@ -102,22 +102,26 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"fast_acl_set": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -164,22 +168,26 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"forward_proxy_policy_set": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -259,22 +267,26 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 			"network_policy_set": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -703,6 +715,7 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

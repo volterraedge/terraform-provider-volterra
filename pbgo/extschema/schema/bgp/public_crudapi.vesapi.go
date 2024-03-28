@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.bgp.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.bgp.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.bgp")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.bgp.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.bgp.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.bgp")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.bgp.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.bgp.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.bgp")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.bgp.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.bgp.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.bgp")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.bgp.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.bgp.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2255,104 +2238,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "bgpBgpPeer": {
-            "type": "object",
-            "description": "x-displayName: \"Legacy BGP Peer\"\nLegacy BGP Peer parameters",
-            "title": "Legacy BGP Peer",
-            "properties": {
-                "all_inside_interfaces": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"All Inside Interfaces\"\nTell vega to create this peer on each inside interface.",
-                    "title": "all_inside_interfaces",
-                    "format": "boolean"
-                },
-                "all_outside_interfaces": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"All Outside Interfaces\"\nTell vega to create this peer on each outside interface.",
-                    "title": "interface_refs",
-                    "format": "boolean"
-                },
-                "asn": {
-                    "type": "integer",
-                    "description": "x-displayName: \"ASN\"\nAutonomous System Number for BGP peer",
-                    "title": "ASN",
-                    "format": "int64"
-                },
-                "bgp_peer_address": {
-                    "description": "x-displayName: \"Peer Address\"\nIf Peer Address Type is set to \"From IP Address\", this is used as Peer Address. Else, this is ignored.",
-                    "title": "Peer Address",
-                    "$ref": "#/definitions/schemaIpAddressType"
-                },
-                "bgp_peer_address_key": {
-                    "type": "string",
-                    "description": "x-displayName: \"Peer Address Key\"\nIf Peer Address Type is set to \"From Site Template\", this is used to lookup BGP peer address\nfrom site template parameters map in site object. Else, this is ignored.",
-                    "title": "Peer Address Key"
-                },
-                "bgp_peer_address_type": {
-                    "description": "x-displayName: \"Peer Address Type\"\nDecides how bgp peer address is derived for this peer",
-                    "title": "Peer Address Type",
-                    "$ref": "#/definitions/bgpBgpPeerAddressType"
-                },
-                "bgp_peer_subnet_offset": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Peer Subnet Offset\"\nx-example: 1\nThis is used to derive BGP Peer Address from subnet of the interface on which BGP is configured. If\nthe interface has Address Allocator configured, BGP Peer Address is derived from the subnet assigned\nby the address allocator for the interface. When Address Allocator is not configured, the subnet of\nthe interface is used to derive BGP Peer Address.\n\nIf Peer Address Type is set to \"Offset from beginning of Subnet\", this offset value is added to the subnet\nand used as the peer address. For example, if the subnet is 1.2.3.0/24 and offset is set to 5 with\nPeer Address Type set to \"Offset from beginning of Subnet\", peer address of 1.2.3.5 is used.\n\nIf Peer Address Type is set to \"Offset from end of Subnet\", this offset value is subtracted from the\nend of subnet and used as the peer address. For example, if the subnet is 1.2.3.0/24 and offset is\nset to 5 with Peer Address Type set to \"Offset from end of Subnet\", peer address of 1.2.3.250 is used.",
-                    "title": "Peer Subnet Offset",
-                    "format": "int64"
-                },
-                "families": {
-                    "type": "array",
-                    "description": "x-displayName: \"Address Families\"\nList of address families for processing in vega code.",
-                    "title": "families",
-                    "items": {
-                        "$ref": "#/definitions/bgpPeerFamilyParameters"
-                    }
-                },
-                "interface_refs": {
-                    "type": "array",
-                    "description": "x-displayName: \"Interface Refs\"\nList of interface refs for processing in vega code.",
-                    "title": "interface_refs",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                },
-                "md5_auth_key": {
-                    "type": "string",
-                    "description": "x-displayName: \"MD5 Authentication Key\"\nMD5 key for protecting BGP Sessions (RFC 2385)",
-                    "title": "md5_auth_key"
-                },
-                "no_authentication": {
-                    "description": "x-displayName: \"No Authentication\"\nNo Authentication of BGP session",
-                    "title": "no_authentication",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "passive": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Passive\"\nIndicates if the peer is passive or not. When set, VER will not send open messages to this peer.",
-                    "title": "passive",
-                    "format": "boolean"
-                },
-                "port": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: 179\nPeer's port number, defaults to port 179 when not set",
-                    "title": "Peer Port",
-                    "format": "int64"
-                }
-            }
-        },
-        "bgpBgpPeerAddressType": {
-            "type": "string",
-            "description": "x-displayName: \"BGP Peer Address\"\nDictates how BGP peer address is derived\n\n - BGP_PEER_ADDRESS_FROM_DEFAULT_GW: x-displayName: \"From Default GW\"\nUse default gateway IP address of interface on which the BGP is configured as BGP peer address\n - BGP_PEER_ADDRESS_FROM_IP_ADDRESS: x-displayName: \"From IP Address\"\nUse BGP Peer Address from BGP Peer as BGP peer address\n - BGP_PEER_ADDRESS_FROM_SITE_OBJECT: x-displayName: \"From Site\"\nUse BGP Peer Address from corresponding site object as BGP peer address\n - BGP_PEER_ADDRESS_FROM_SITE_TEMPLATE_PARAMETERS: x-displayName: \"From Site Template\"\nUse BGP Peer Key from corresponding site's Site Template Parameters as BGP peer address.\nThis is not currently supported.\n - BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_BEGIN: x-displayName: \"Offset from beginning of Subnet\"\nDerive BGP Peer Address from subnet of interface on which the BGP is configured. If the interface\nhas Address Allocator configured, the offset is used to derive BGP Peer Address from the subnet\nassigned by the address allocator for the interface. When Address Allocator is not configured, the\nsubnet of the interface is used to derive BGP Peer Address.\n\nNth address in the subnet, N being the Peer Subnet Offset of the BGP Peer, is used as peer address.\nFor example, if the subnet is 1.2.3.0/24, Peer Subnet Offset is set to 5 and Peer Address Type\nis set to \"Offset from beginning of Subnet\", peer address of 1.2.3.5 is used.\n - BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END: x-displayName: \"Offset from end of Subnet\"\nDerive BGP Peer Address from subnet of interface on which the BGP is configured. If the interface\nhas Address Allocator configured, the offset is used to derive BGP Peer Address from the subnet\nassigned by the address allocator for the interface. When Address Allocator is not configured, the\nsubnet of the interface is used to derive BGP Peer Address.\n\nNth last address in the subnet, N being the Peer Subnet Offset of the BGP Peer, is used as peer address.\nFor example, if the subnet is 1.2.3.0/24, Peer Subnet Offset is set to 5 and Peer Address Type\nis set to \"Offset from end of Subnet\", peer address of 1.2.3.250 is used.",
-            "title": "BGP Peer Address",
-            "enum": [
-                "BGP_PEER_ADDRESS_FROM_DEFAULT_GW",
-                "BGP_PEER_ADDRESS_FROM_IP_ADDRESS",
-                "BGP_PEER_ADDRESS_FROM_SITE_OBJECT",
-                "BGP_PEER_ADDRESS_FROM_SITE_TEMPLATE_PARAMETERS",
-                "BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
-                "BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END"
-            ],
-            "default": "BGP_PEER_ADDRESS_FROM_DEFAULT_GW"
-        },
         "bgpBgpPeerStatusType": {
             "type": "object",
             "description": "Most recently observed status of the BGP Peering session",
@@ -2489,17 +2374,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "bgpBgpTargetService": {
-            "type": "string",
-            "description": "x-displayName: \"BGP Target Service\"\nIndicates the service which is the target for the BGP configuration\n\n - BGP_TARGET_SERVICE_UNSET: x-displayName: \"Unset\"\ntarget type is not set\n - BGP_TARGET_SERVICE_FRR: x-displayName: \"FRR\"\ntarget type is FRR (used by aws_tgw_site)\n - BGP_TARGET_SERVICE_PHOBOS: x-displayName: \"Phobos\"\ntarget type is Phobos",
-            "title": "BGP Target Service",
-            "enum": [
-                "BGP_TARGET_SERVICE_UNSET",
-                "BGP_TARGET_SERVICE_FRR",
-                "BGP_TARGET_SERVICE_PHOBOS"
-            ],
-            "default": "BGP_TARGET_SERVICE_UNSET"
-        },
         "bgpCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2619,18 +2493,45 @@ var APISwaggerJSON string = `{
         },
         "bgpFamilyInet": {
             "type": "object",
-            "description": "x-displayName: \"BGP Family Inet\"\nParameters for inet family.",
+            "description": "Parameters for inet family.",
             "title": "FamilyInet",
+            "x-displayname": "BGP Family Inet",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet",
             "properties": {
                 "disable": {
-                    "description": "x-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
+                    "description": "Exclusive with [enable]\n Disable IPv4 family Route Exchange.",
                     "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable IPv4 Unicast"
                 },
                 "enable": {
-                    "description": "x-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
+                    "description": "Exclusive with [disable]\n Enable IPv4 family Route Exchange.",
                     "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable IPv4 Unicast"
+                }
+            }
+        },
+        "bgpFamilyInet6": {
+            "type": "object",
+            "description": "Parameters for inet6 family.",
+            "title": "FamilyInet6",
+            "x-displayname": "BGP Family Inet6",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet6",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\n Disable IPv6 family Route Exchange.",
+                    "title": "disable",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable IPv6 Unicast"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\n Enable IPv6 family Route Exchange.",
+                    "title": "enable",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable IPv6 Unicast"
                 }
             }
         },
@@ -2756,12 +2657,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/bgpObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -2848,52 +2743,6 @@ var APISwaggerJSON string = `{
                 },
                 "where": {
                     "description": " Site or virtual site where this BGP configuration should be applied.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaSiteVirtualSiteRefSelector",
-                    "x-displayname": "Where",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "bgpGlobalSpecType": {
-            "type": "object",
-            "description": "BGP specification.",
-            "title": "Global Specification",
-            "x-displayname": "Global Specification",
-            "x-ves-displayorder": "2,5,1",
-            "x-ves-proto-message": "ves.io.schema.bgp.GlobalSpecType",
-            "properties": {
-                "bgp_parameters": {
-                    "description": " BGP parameters for local site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "BGP Parameters",
-                    "$ref": "#/definitions/bgpBgpParameters",
-                    "x-displayname": "Parameters",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "peers": {
-                    "type": "array",
-                    "description": " List of peers\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "title": "BGP Peers",
-                    "maxItems": 8,
-                    "items": {
-                        "$ref": "#/definitions/bgpPeer"
-                    },
-                    "x-displayname": "Peers",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "8",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
-                    }
-                },
-                "where": {
-                    "description": " Site or virtual site where this BGP configuration should be applied.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Where",
                     "$ref": "#/definitions/schemaSiteVirtualSiteRefSelector",
                     "x-displayname": "Where",
                     "x-ves-required": "true",
@@ -3015,12 +2864,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/bgpObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -3055,33 +2898,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "bgpObject": {
-            "type": "object",
-            "description": "BGP object",
-            "title": "BGP",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.bgp.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of BGP",
-                    "title": "spec",
-                    "$ref": "#/definitions/bgpSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -3130,15 +2946,16 @@ var APISwaggerJSON string = `{
             "description": "External BGP Peer parameters.",
             "title": "PeerExternal",
             "x-displayname": "External BGP Peer",
-            "x-ves-displayorder": "1,2,10,11,20",
-            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-displayorder": "1,2,29,10,11,12,20,25",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"disable\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-oneof-field-address_choice_v6": "[\"default_gateway_v6\",\"disable_v6\",\"from_site_v6\",\"subnet_begin_offset_v6\",\"subnet_end_offset_v6\"]",
             "x-ves-oneof-field-auth_choice": "[\"md5_auth_key\",\"no_authentication\"]",
             "x-ves-oneof-field-interface_choice": "[\"interface\",\"interface_list\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway disable from_site subnet_begin_offset subnet_end_offset]\n Specify IPV4 peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "address",
                     "x-displayname": "Peer Address",
                     "x-ves-validation-rules": {
@@ -3147,9 +2964,9 @@ var APISwaggerJSON string = `{
                 },
                 "address_ipv6": {
                     "type": "string",
-                    "description": " Specify peer ipv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPV6 address",
-                    "x-displayname": "Peer IPV6 Address",
+                    "description": " Specify peer IPv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "address_ipv6",
+                    "x-displayname": "Peer IPv6 Address",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
                     }
@@ -3168,14 +2985,50 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
+                    "description": "Exclusive with [address disable from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
+                "default_gateway_v6": {
+                    "description": "Exclusive with [disable_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the default gateway address.",
+                    "title": "default_gateway_v6",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default Gateway"
+                },
+                "disable": {
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset subnet_end_offset]\n No Peer Ipv4 Address.",
+                    "title": "disable",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_v6": {
+                    "description": "Exclusive with [default_gateway_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n No Peer IPv6 Address.",
+                    "title": "disable_v6",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "family_inet": {
+                    "description": " Enable/Disable Ipv4 family of routes exchange with peer",
+                    "title": "family_inet",
+                    "$ref": "#/definitions/bgpFamilyInet",
+                    "x-displayname": "Family IPv4 Unicast"
+                },
+                "family_inet_v6": {
+                    "description": " Enable/Disable IPv6 family of routes exchange with peer",
+                    "title": "family_inet_v6",
+                    "$ref": "#/definitions/bgpFamilyInet6",
+                    "x-displayname": "Family IPv6 Unicast"
+                },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
+                    "description": "Exclusive with [address default_gateway disable subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
                     "title": "from_site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Address From Site Object"
+                },
+                "from_site_v6": {
+                    "description": "Exclusive with [default_gateway_v6 disable_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the address specified in the site object.",
+                    "title": "from_site_v6",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Address From Site Object"
                 },
@@ -3217,8 +3070,19 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address default_gateway disable from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset",
+                    "format": "int64",
+                    "x-displayname": "Offset From Beginning Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                },
+                "subnet_begin_offset_v6": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_gateway_v6 disable_v6 from_site_v6 subnet_end_offset_v6]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "subnet_begin_offset_v6",
                     "format": "int64",
                     "x-displayname": "Offset From Beginning Of Subnet",
                     "x-ves-validation-rules": {
@@ -3228,7 +3092,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address default_gateway disable from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset",
                     "format": "int64",
                     "x-displayname": "Offset From End Of Subnet",
@@ -3236,24 +3100,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "32"
                     }
-                }
-            }
-        },
-        "bgpPeerFamilyParameters": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Peer Family\"\nPeer Family parameters - for internal use only.",
-            "title": "PeerFamilyParameters",
-            "properties": {
-                "enable_srv6": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Enable SRv6\"\nEnable extensions for SRv6.",
-                    "title": "enable_srv6",
-                    "format": "boolean"
                 },
-                "family": {
-                    "type": "string",
-                    "description": "x-displayName: \"Family\"\nx-example: \"inetvpn\"\nName of the address family.",
-                    "title": "family"
+                "subnet_end_offset_v6": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_gateway_v6 disable_v6 from_site_v6 subnet_begin_offset_v6]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "subnet_end_offset_v6",
+                    "format": "int64",
+                    "x-displayname": "Offset From End Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
                 }
             }
         },
@@ -3268,7 +3125,7 @@ var APISwaggerJSON string = `{
                     "title": "address"
                 },
                 "disable_mtls": {
-                    "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
+                    "description": "x-displayName: \"Disable mTLS\"\nDisable mTLS",
                     "title": "disable_mtls",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -3278,7 +3135,7 @@ var APISwaggerJSON string = `{
                     "title": "dns_name"
                 },
                 "enable_mtls": {
-                    "description": "x-displayName: \"Enable MTLS\"\nEnable MTLS",
+                    "description": "x-displayName: \"Enable mTLS\"\nEnable mTLS",
                     "title": "enable_mtls",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
@@ -3379,20 +3236,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
-                }
-            }
-        },
-        "bgpSpecType": {
-            "type": "object",
-            "description": "Shape of the bgp specification",
-            "title": "BGP specification",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.bgp.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/bgpGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -3858,75 +3701,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -4249,149 +4023,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
                 }
             }
         },

@@ -23,19 +23,14 @@ resource "volterra_fleet" "example" {
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
   no_bond_devices = true
 
-  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
   no_dc_cluster_group = true
   fleet_label         = ["sfo"]
 
-  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+  // One of the arguments from this list "enable_vgpu disable_gpu enable_gpu" must be set
+  disable_gpu = true
 
-  enable_vgpu {
-    feature_type   = "feature_type"
-    server_address = "gridlicense1.example.com"
-    server_port    = "7070"
-  }
-
-  // One of the arguments from this list "default_config device_list interface_list" must be set
+  // One of the arguments from this list "interface_list default_config device_list" must be set
 
   interface_list {
     interfaces {
@@ -46,7 +41,7 @@ resource "volterra_fleet" "example" {
   }
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
   logs_streaming_disabled = true
-  // One of the arguments from this list "sriov_interfaces default_sriov_interface" must be set
+  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
   default_sriov_interface = true
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
   default_storage_class = true
@@ -54,10 +49,16 @@ resource "volterra_fleet" "example" {
   no_storage_device = true
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
   no_storage_interfaces = true
-  // One of the arguments from this list "storage_static_routes no_storage_static_routes" must be set
+  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
   no_storage_static_routes = true
-  // One of the arguments from this list "allow_all_usb usb_policy deny_all_usb" must be set
-  allow_all_usb = true
+
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+
+  usb_policy {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 }
 
 ```
@@ -83,37 +84,37 @@ Argument Reference
 
 `blocked_services` - (Optional) Configuration to block the default services allowed by the platform. See [Blocked Services ](#blocked-services) below for details.
 
-`bond_device_list` - (Optional) Configure Bond Devices for this fleet. See [Bond Device List ](#bond-device-list) below for details.
+`bond_device_list` - (Optional) Configure Bond Devices for this fleet. See [Bond Choice Bond Device List ](#bond-choice-bond-device-list) below for details.
 
-`no_bond_devices` - (Optional) No Bond Devices configured for this Fleet (bool).
+`no_bond_devices` - (Optional) No Bond Devices configured for this Fleet (`Bool`).
 
 `dc_cluster_group` - (Optional) This fleet is member of dc cluster group via site local network. See [ref](#ref) below for details.
 
 `dc_cluster_group_inside` - (Optional) This fleet is member of dc cluster group via site local inside network. See [ref](#ref) below for details.
 
-`no_dc_cluster_group` - (Optional) This fleet is not a member of a DC cluster group (bool).
+`no_dc_cluster_group` - (Optional) This fleet is not a member of a DC cluster group (`Bool`).
 
 `enable_default_fleet_config_download` - (Optional) Enable default fleet config, It must be set for storage config and gpu config (`Bool`).
 
 `fleet_label` - (Required) fleet_label with "sfo" will create a known_label "ves.io/fleet=sfo" in tenant for the fleet (`String`).
 
-`disable_gpu` - (Optional) GPU is not enabled for this fleet (bool).
+`disable_gpu` - (Optional) GPU is not enabled for this fleet (`Bool`).
 
-`enable_gpu` - (Optional) GPU is enabled for this fleet (bool).
+`enable_gpu` - (Optional) GPU is enabled for this fleet (`Bool`).
 
-`enable_vgpu` - (Optional) Enable NVIDIA vGPU hosted on VMware. See [Enable Vgpu ](#enable-vgpu) below for details.
+`enable_vgpu` - (Optional) Enable NVIDIA vGPU hosted on VMware. See [Gpu Choice Enable Vgpu ](#gpu-choice-enable-vgpu) below for details.
 
 `inside_virtual_network` - (Optional) Default inside (site local) virtual network for the fleet. See [ref](#ref) below for details.
 
-`default_config` - (Optional) Use default configuration for interfaces belonging to this fleet (bool).
+`default_config` - (Optional) Use default configuration for interfaces belonging to this fleet (`Bool`).
 
-`device_list` - (Optional) Add device for all interfaces belonging to this fleet. See [Device List ](#device-list) below for details.
+`device_list` - (Optional) Add device for all interfaces belonging to this fleet. See [Interface Choice Device List ](#interface-choice-device-list) below for details.
 
-`interface_list` - (Optional) Add all interfaces belonging to this fleet. See [Interface List ](#interface-list) below for details.
+`interface_list` - (Optional) Add all interfaces belonging to this fleet. See [Interface Choice Interface List ](#interface-choice-interface-list) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
-`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
+`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (`Bool`).
 
 `network_connectors` - (Optional) The network connectors configuration is applied on all sites that are member of the fleet.. See [ref](#ref) below for details.
 
@@ -125,69 +126,233 @@ Argument Reference
 
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
-`default_sriov_interface` - (Optional) Disable Single Root I/O Virtualization interfaces (bool).
+`default_sriov_interface` - (Optional) Disable Single Root I/O Virtualization interfaces (`Bool`).
 
-`sriov_interfaces` - (Optional) Use custom Single Root I/O Virtualization interfaces. See [Sriov Interfaces ](#sriov-interfaces) below for details.
+`sriov_interfaces` - (Optional) Use custom Single Root I/O Virtualization interfaces. See [Sriov Interface Choice Sriov Interfaces ](#sriov-interface-choice-sriov-interfaces) below for details.
 
-`default_storage_class` - (Optional) Use only default storage class in kubernetes (bool).
+`default_storage_class` - (Optional) Use only default storage class in kubernetes (`Bool`).
 
-`storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for this fleet. See [Storage Class List ](#storage-class-list) below for details.
+`storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for this fleet. See [Storage Class Choice Storage Class List ](#storage-class-choice-storage-class-list) below for details.
 
-`no_storage_device` - (Optional) This fleet does not have any storage devices (bool).
+`no_storage_device` - (Optional) This fleet does not have any storage devices (`Bool`).
 
-`storage_device_list` - (Optional) Add all storage devices belonging to this fleet. See [Storage Device List ](#storage-device-list) below for details.
+`storage_device_list` - (Optional) Add all storage devices belonging to this fleet. See [Storage Device Choice Storage Device List ](#storage-device-choice-storage-device-list) below for details.
 
-`no_storage_interfaces` - (Optional) This fleet does not have any storage interfaces (bool).
+`no_storage_interfaces` - (Optional) This fleet does not have any storage interfaces (`Bool`).
 
-`storage_interface_list` - (Optional) Add all storage interfaces belonging to this fleet. See [Storage Interface List ](#storage-interface-list) below for details.
+`storage_interface_list` - (Optional) Add all storage interfaces belonging to this fleet. See [Storage Interface Choice Storage Interface List ](#storage-interface-choice-storage-interface-list) below for details.
 
-`no_storage_static_routes` - (Optional) This fleet does not have any storage static routes (bool).
+`no_storage_static_routes` - (Optional) This fleet does not have any storage static routes (`Bool`).
 
-`storage_static_routes` - (Optional) Add all storage storage static routes. See [Storage Static Routes ](#storage-static-routes) below for details.
+`storage_static_routes` - (Optional) Add all storage storage static routes. See [Storage Static Routes Choice Storage Static Routes ](#storage-static-routes-choice-storage-static-routes) below for details.
 
-`allow_all_usb` - (Optional) All USB devices are allowed (bool).
+`allow_all_usb` - (Optional) All USB devices are allowed (`Bool`).
 
-`deny_all_usb` - (Optional) All USB devices are denied (bool).
+`deny_all_usb` - (Optional) All USB devices are denied (`Bool`).
 
 `usb_policy` - (Optional) Allow only specific USB devices. See [ref](#ref) below for details.
 
-`disable_vm` - (Optional) VMs support is not enabled for this fleet (bool).
+`disable_vm` - (Optional) VMs support is not enabled for this fleet (`Bool`).
 
-`enable_vm` - (Optional) VMs support is enabled for this fleet. See [Enable Vm ](#enable-vm) below for details.
+`enable_vm` - (Optional) VMs support is enabled for this fleet. See [Vm Choice Enable Vm ](#vm-choice-enable-vm) below for details.
 
 `volterra_software_version` - (Optional) Current software installed can be overridden via site config. (`String`).
-
-### Active Backup
-
-Configure active/backup based bond device.
 
 ### Blocked Services
 
 Configuration to block the default services allowed by the platform.
 
-`dns` - (Optional) Matches DNS port 53 (bool).
+###### One of the arguments from this list "web_user_interface, dns, ssh" can be set
 
-`ssh` - (Optional) Matches ssh port 22 (bool).
+`dns` - (Optional) Matches DNS port 53 (`Bool`).
 
-`web_user_interface` - (Optional) Matches the web user interface port (bool).
+`ssh` - (Optional) Matches ssh port 22 (`Bool`).
+
+`web_user_interface` - (Optional) Matches the web user interface port (`Bool`).
 
 `network_type` - (Optional) Network type in which these ports get blocked (`String`).
 
-### Bond Device List
+### Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+###### One of the arguments from this list "perf_mode_l7_enhanced, perf_mode_l3_enhanced" must be set
+
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
+
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (`Bool`).
+
+### Api Token Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Arrays Flash Array
+
+For FlashArrays you must set the "mgmt_endpoint" and "api_token".
+
+`default_fs_opt` - (Optional) Block volume default mkfs options. Not recommended to change! (`String`).
+
+`default_fs_type` - (Required) Block volume default filesystem type. Not recommended to change! (`String`).
+
+`default_mount_opts` - (Optional) Block volume default filesystem mount options. Not recommended to change! (`String`).
+
+`disable_preempt_attachments` - (Optional) Enable/Disable attachment preemption! (`Bool`).
+
+`flash_arrays` - (Required) For FlashArrays you must set the "mgmt_endpoint" and "api_token". See [Flash Array Flash Arrays ](#flash-array-flash-arrays) below for details.
+
+`iscsi_login_timeout` - (Required) iSCSI login timeout in seconds. Not recommended to change! (`Int`).
+
+`san_type` - (Required) Block volume access protocol, either ISCSI or FC (`String`).
+
+### Arrays Flash Blade
+
+Specify what storage flash blades should be managed the plugin.
+
+`enable_snapshot_directory` - (Optional) Enable/Disable FlashBlade snapshots (`Bool`).
+
+`export_rules` - (Optional) NFS Export rules (`String`).
+
+`flash_blades` - (Required) For FlashBlades you must set the "mgmt_endpoint", "api_token" and nfs_endpoint. See [Flash Blade Flash Blades ](#flash-blade-flash-blades) below for details.
+
+### Backend Choice Netapp Backend Ontap Nas
+
+Backend configuration for ONTAP NAS.
+
+`auto_export_cidrs` - (Optional) List of CIDRs to filter Kubernetes’ node IPs against when autoExportPolicy is enabled. See [Netapp Backend Ontap Nas Auto Export Cidrs ](#netapp-backend-ontap-nas-auto-export-cidrs) below for details.
+
+`auto_export_policy` - (Optional) Enable automatic export policy creation and updating (`Bool`).
+
+`backend_name` - (Optional) Configuration of Backend Name. Driver is name + "_" + dataLIF (`String`).
+
+`client_certificate` - (Optional) Please Enter Base64-encoded value of client certificate. Used for certificate-based auth. (`String`).
+
+`client_private_key` - (Optional) Please Enter value of client private key. Used for certificate-based auth.. See [Netapp Backend Ontap Nas Client Private Key ](#netapp-backend-ontap-nas-client-private-key) below for details.
+
+###### One of the arguments from this list "data_lif_ip, data_lif_dns_name" can be set
+
+`data_lif_dns_name` - (Optional) Backend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
+
+`data_lif_ip` - (Optional) Backend Data LIF IP Address is reachable at the given ip address (`String`).
+
+`labels` - (Optional) List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection. (`String`).
+
+`limit_aggregate_usage` - (Optional) Fail provisioning if usage is above this percentage. Not enforced by default. (`String`).
+
+`limit_volume_size` - (Optional) Fail provisioning if requested volume size is above this value. Not enforced by default. (`String`).
+
+###### One of the arguments from this list "management_lif_ip, management_lif_dns_name" must be set
+
+`management_lif_dns_name` - (Optional) Backend Management LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
+
+`management_lif_ip` - (Optional) Backend Management LIF IP Address is reachable at the given ip address (`String`).
+
+`nfs_mount_options` - (Optional) Comma-separated list of NFS mount options. Not enforced by default. (`String`).
+
+`password` - (Optional) Please Enter you password. Password to connect to the cluster/SVM. See [Netapp Backend Ontap Nas Password ](#netapp-backend-ontap-nas-password) below for details.
+
+`region` - (Optional) Virtual Pool Region (`String`).
+
+`storage` - (Optional) List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.. See [Netapp Backend Ontap Nas Storage ](#netapp-backend-ontap-nas-storage) below for details.
+
+`storage_driver_name` - (Required) Configuration of Backend Name (`String`).
+
+`storage_prefix` - (Optional) Prefix used when provisioning new volumes in the SVM. Once set this cannot be updated (`String`).
+
+`svm` - (Optional) Storage virtual machine to use. Derived if an SVM managementLIF is specified (`String`).
+
+`trusted_ca_certificate` - (Optional) Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth.. (`String`).
+
+`username` - (Required) Username to connect to the cluster/SVM (`String`).
+
+`volume_defaults` - (Optional) List of QoS volume defaults types. See [Netapp Backend Ontap Nas Volume Defaults ](#netapp-backend-ontap-nas-volume-defaults) below for details.
+
+### Backend Choice Netapp Backend Ontap San
+
+Backend configuration for ONTAP SAN.
+
+###### One of the arguments from this list "no_chap, use_chap" can be set
+
+`no_chap` - (Optional) CHAP disabled (`Bool`).
+
+`use_chap` - (Optional) Device NetApp Backend ONTAP SAN CHAP configuration options for enabled CHAP. See [Chap Choice Use Chap ](#chap-choice-use-chap) below for details.
+
+`client_certificate` - (Optional) Please Enter Base64-encoded value of client certificate. Used for certificate-based auth. (`String`).
+
+`client_private_key` - (Optional) Please Enter value of client private key. Used for certificate-based auth.. See [Netapp Backend Ontap San Client Private Key ](#netapp-backend-ontap-san-client-private-key) below for details.
+
+###### One of the arguments from this list "data_lif_ip, data_lif_dns_name" can be set
+
+`data_lif_dns_name` - (Optional) Backend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
+
+`data_lif_ip` - (Optional) Backend Data LIF IP Address is reachable at the given ip address (`String`).
+
+`igroup_name` - (Optional) Name of the igroup for SAN volumes to use (`String`).
+
+`labels` - (Optional) List of labels for Storage Device used in NetApp ONTAP. It is used for storage class selection. (`String`).
+
+`limit_aggregate_usage` - (Optional) Fail provisioning if usage is above this percentage. Not enforced by default. (`Int`).
+
+`limit_volume_size` - (Optional) Fail provisioning if requested volume size in GBi is above this value. Not enforced by default. (`Int`).
+
+###### One of the arguments from this list "management_lif_ip, management_lif_dns_name" must be set
+
+`management_lif_dns_name` - (Optional) Backend Management LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
+
+`management_lif_ip` - (Optional) Backend Management LIF IP Address is reachable at the given ip address (`String`).
+
+`password` - (Optional) Please Enter you password. Password to connect to the cluster/SVM. See [Netapp Backend Ontap San Password ](#netapp-backend-ontap-san-password) below for details.
+
+`region` - (Optional) Virtual Pool Region (`String`).
+
+`storage` - (Optional) List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection.. See [Netapp Backend Ontap San Storage ](#netapp-backend-ontap-san-storage) below for details.
+
+`storage_driver_name` - (Required) Configuration of Backend Name (`String`).
+
+`storage_prefix` - (Optional) Prefix used when provisioning new volumes in the SVM. Once set this cannot be updated (`String`).
+
+`svm` - (Optional) Storage virtual machine to use. Derived if an SVM managementLIF is specified (`String`).
+
+`trusted_ca_certificate` - (Optional) Please Enter Base64-encoded value of trusted CA certificate. Optional. Used for certificate-based auth.. (`String`).
+
+`username` - (Required) Username to connect to the cluster/SVM (`String`).
+
+`volume_defaults` - (Optional) List of QoS volume defaults types. See [Netapp Backend Ontap San Volume Defaults ](#netapp-backend-ontap-san-volume-defaults) below for details.
+
+### Blocked Services Value Type Choice Dns
+
+Matches DNS port 53.
+
+### Blocked Services Value Type Choice Ssh
+
+Matches ssh port 22.
+
+### Blocked Services Value Type Choice Web User Interface
+
+Matches the web user interface port.
+
+### Bond Choice Bond Device List
 
 Configure Bond Devices for this fleet.
 
-`bond_devices` - (Required) List of bond devices. See [Bond Devices ](#bond-devices) below for details.
+`bond_devices` - (Required) List of bond devices. See [Bond Device List Bond Devices ](#bond-device-list-bond-devices) below for details.
 
-### Bond Devices
+### Bond Device List Bond Devices
 
 List of bond devices.
 
 `devices` - (Required) Ethernet devices that will make up this bond (`String`).
 
-`active_backup` - (Optional) Configure active/backup based bond device (bool).
+###### One of the arguments from this list "lacp, active_backup" must be set
 
-`lacp` - (Optional) Configure LACP (802.3ad) based bond device. See [Lacp ](#lacp) below for details.
+`active_backup` - (Optional) Configure active/backup based bond device (`Bool`).
+
+`lacp` - (Optional) Configure LACP (802.3ad) based bond device. See [Lacp Choice Lacp ](#lacp-choice-lacp) below for details.
 
 `link_polling_interval` - (Required) Link polling interval in millisecond (`Int`).
 
@@ -195,47 +360,63 @@ List of bond devices.
 
 `name` - (Required) Bond device name (`String`).
 
-### Custom Storage
+### Chap Choice No Chap
+
+CHAP disabled.
+
+### Chap Choice Use Chap
+
+Device NetApp Backend ONTAP SAN CHAP configuration options for enabled CHAP.
+
+`chap_initiator_secret` - (Optional) CHAP initiator secret. Required if useCHAP=true. See [Use Chap Chap Initiator Secret ](#use-chap-chap-initiator-secret) below for details.
+
+`chap_target_initiator_secret` - (Optional) CHAP target initiator secret. Required if useCHAP=true. See [Use Chap Chap Target Initiator Secret ](#use-chap-chap-target-initiator-secret) below for details.
+
+`chap_target_username` - (Optional) Target username. Required if useCHAP=true (`String`).
+
+`chap_username` - (Optional) Inbound username. Required if useCHAP=true (`String`).
+
+### Chap Initiator Secret Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Chap Target Initiator Secret Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Client Private Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Device Choice Custom Storage
+
+Device configuration for Custom Storage.
+
+### Device Choice Custom Storage
 
 Storage configuration for Custom Storage.
 
 `yaml` - (Optional) K8s YAML for StorageClass (`String`).
 
-### Device List
-
-Add device for all interfaces belonging to this fleet.
-
-`devices` - (Optional) device instance specific sections. See [Devices ](#devices) below for details.
-
-### Devices
-
-device instance specific sections.
-
-`network_device` - (Optional) Device instance is a networking device like ethernet. See [Network Device ](#network-device) below for details.
-
-`name` - (Optional) Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node (`String`).
-
-`owner` - (Required) This option is not yet supported (`String`).
-
-### Dns
-
-Matches DNS port 53.
-
-### Enable Vgpu
-
-Enable NVIDIA vGPU hosted on VMware.
-
-`feature_type` - (Required) Set Feature to be enabled (`String`).
-
-`server_address` - (Optional) Set License Server Address (`String`).
-
-`server_port` - (Optional) Set License Server port number (`Int`).
-
-### Enable Vm
-
-VMs support is enabled for this fleet.
-
-### Hpe Storage
+### Device Choice Hpe Storage
 
 Storage configuration for HPE Storage.
 
@@ -271,35 +452,29 @@ Storage configuration for HPE Storage.
 
 `thick` - (Optional) Indicates that the volume should be thick provisioned. (`Bool`).
 
-### Interface List
+### Device Choice Hpe Storage
 
-Add all interfaces belonging to this fleet.
+Device configuration for HPE Storage.
 
-`interfaces` - (Required) Add all interfaces belonging to this fleet. See [ref](#ref) below for details.
+`api_server_port` - (Optional) Enter Storage Server Port (`Int`).
 
-### Ipv4
+`csi_version` - (Optional) CSI Version (`String`).(Deprecated)
 
-IPv4 Address.
+`iscsi_chap_password` - (Optional) chap Password to connect to the HPE storage. See [Hpe Storage Iscsi Chap Password ](#hpe-storage-iscsi-chap-password) below for details.
 
-`addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
+`iscsi_chap_user` - (Optional) chap Username to connect to the HPE storage (`String`).
 
-### Ipv6
+`log_level` - (Optional) logLevel of CSI (`String`).(Deprecated)
 
-IPv6 Address.
+`password` - (Optional) Please Enter you password.. See [Hpe Storage Password ](#hpe-storage-password) below for details.
 
-`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+`storage_server_ip_address` - (Optional) Enter storage server IP address (`String`).
 
-### Jumbo
+`storage_server_name` - (Optional) Enter storage server Name (`String`).
 
-L3 performance mode enhancement to use jumbo frame.
+`username` - (Required) Username to connect to the HPE storage management IP (`String`).
 
-### Lacp
-
-Configure LACP (802.3ad) based bond device.
-
-`rate` - (Optional) Interval in seconds to transmit LACP packets (`Int`).
-
-### Netapp Trident
+### Device Choice Netapp Trident
 
 Storage class Device configuration for NetApp Trident.
 
@@ -307,57 +482,17 @@ Storage class Device configuration for NetApp Trident.
 
 `storage_pools` - (Optional) The storagePools parameter is used to further restrict the set of pools that match any specified attributes (`String`).
 
-### Network Device
+### Device Choice Netapp Trident
 
-Device instance is a networking device like ethernet.
+Device configuration for NetApp Trident.
 
-`interface` - (Required) if use is NETWORK_INTERFACE_USE_INSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE. See [ref](#ref) below for details.
+###### One of the arguments from this list "netapp_backend_ontap_san, netapp_backend_ontap_nas" must be set
 
-`use` - (Required) Specifies if the network interface is connected to inside network or outside network. (`String`).
+`netapp_backend_ontap_nas` - (Optional) Backend configuration for ONTAP NAS. See [Backend Choice Netapp Backend Ontap Nas ](#backend-choice-netapp-backend-ontap-nas) below for details.
 
-### Nexthop
+`netapp_backend_ontap_san` - (Optional) Backend configuration for ONTAP SAN. See [Backend Choice Netapp Backend Ontap San ](#backend-choice-netapp-backend-ontap-san) below for details.
 
-Nexthop for the route.
-
-`interface` - (Optional) Nexthop is network interface when type is "Network-Interface". See [ref](#ref) below for details.
-
-`nexthop_address` - (Optional) Nexthop address when type is "Use-Configured". See [Nexthop Address ](#nexthop-address) below for details.
-
-`type` - (Optional) Identifies the type of next-hop (`String`).
-
-### Nexthop Address
-
-Nexthop address when type is "Use-Configured".
-
-`ipv4` - (Optional) IPv4 Address. See [Ipv4 ](#ipv4) below for details.
-
-`ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
-
-### No Jumbo
-
-L3 performance mode enhancement without jumbo frame.
-
-### Perf Mode L3 Enhanced
-
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
-
-`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
-
-`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
-
-### Perf Mode L7 Enhanced
-
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
-
-### Performance Enhancement Mode
-
-Performance Enhancement Mode to optimize for L3 or L7 networking.
-
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
-
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
-
-### Pure Service Orchestrator
+### Device Choice Pure Service Orchestrator
 
 Storage class Device configuration for Pure Service Orchestrator.
 
@@ -366,6 +501,404 @@ Storage class Device configuration for Pure Service Orchestrator.
 `bandwidth_limit` - (Optional) Valid unit symbols are K, M, G, representing KiB, MiB, and GiB. (`String`).
 
 `iops_limit` - (Optional) Enable IOPS limitation. It must be between 100 and 100 million. If value is 0, IOPS limit is not defined. (`Int`).
+
+### Device Choice Pure Service Orchestrator
+
+Device configuration for Pure Storage Service Orchestrator.
+
+`arrays` - (Required) This section configure PSO storage arrays. See [Pure Service Orchestrator Arrays ](#pure-service-orchestrator-arrays) below for details.
+
+`cluster_id` - (Required) characters allowed: alphanumeric and underscores (`String`).
+
+`enable_storage_topology` - (Optional) This option is to enable/disable the csi topology feature for pso-csi (`Bool`).
+
+`enable_strict_topology` - (Optional) This option is to enable/disable the strict csi topology feature for pso-csi (`Bool`).
+
+### Device Instance Network Device
+
+Device instance is a networking device like ethernet.
+
+`interface` - (Required) if use is NETWORK_INTERFACE_USE_INSIDE, the virtual-network must of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE. See [ref](#ref) below for details.
+
+`use` - (Required) Specifies if the network interface is connected to inside network or outside network. (`String`).
+
+### Device List Devices
+
+device instance specific sections.
+
+###### One of the arguments from this list "network_device" must be set
+
+`network_device` - (Optional) Device instance is a networking device like ethernet. See [Device Instance Network Device ](#device-instance-network-device) below for details.
+
+`name` - (Optional) Name of the device including the unit number (e.g. eth0 or disk1). The name must match name of device in host-os of node (`String`).
+
+`owner` - (Required) This option is not yet supported (`String`).
+
+### Flash Array Flash Arrays
+
+For FlashArrays you must set the "mgmt_endpoint" and "api_token".
+
+`api_token` - (Optional) Please Enter API TOken. Token to connect to management interface. See [Flash Arrays Api Token ](#flash-arrays-api-token) below for details.
+
+`labels` - (Optional) The labels are optional, and can be any key-value pair for use with the PSO "fleet" provisioner. (`String`).
+
+###### One of the arguments from this list "mgmt_dns_name, mgmt_ip" must be set
+
+`mgmt_dns_name` - (Optional) Management Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
+
+`mgmt_ip` - (Optional) Management Endpoint is reachable at the given ip address (`String`).
+
+### Flash Arrays Api Token
+
+Please Enter API TOken. Token to connect to management interface.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Api Token Blindfold Secret Info Internal ](#api-token-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Flash Blade Flash Blades
+
+For FlashBlades you must set the "mgmt_endpoint", "api_token" and nfs_endpoint.
+
+`api_token` - (Optional) Please Enter API TOken. Token to connect to management interface. See [Flash Blades Api Token ](#flash-blades-api-token) below for details.
+
+`lables` - (Optional) The labels are optional, and can be any key-value pair for use with the PSO "fleet" provisioner. (`String`).
+
+###### One of the arguments from this list "mgmt_ip, mgmt_dns_name" must be set
+
+`mgmt_dns_name` - (Optional) Management Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
+
+`mgmt_ip` - (Optional) Management Endpoint is reachable at the given ip address (`String`).
+
+###### One of the arguments from this list "nfs_endpoint_ip, nfs_endpoint_dns_name" must be set
+
+`nfs_endpoint_dns_name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
+
+`nfs_endpoint_ip` - (Optional) Endpoint is reachable at the given ip address (`String`).
+
+### Flash Blades Api Token
+
+Please Enter API TOken. Token to connect to management interface.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Api Token Blindfold Secret Info Internal ](#api-token-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Gpu Choice Enable Vgpu
+
+Enable NVIDIA vGPU hosted on VMware.
+
+`feature_type` - (Required) Set Feature to be enabled (`String`).
+
+`server_address` - (Optional) Set License Server Address (`String`).
+
+`server_port` - (Optional) Set License Server port number (`Int`).
+
+### Hpe Storage Iscsi Chap Password
+
+chap Password to connect to the HPE storage.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Iscsi Chap Password Blindfold Secret Info Internal ](#iscsi-chap-password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Hpe Storage Password
+
+Please Enter you password..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Interface Choice Device List
+
+Add device for all interfaces belonging to this fleet.
+
+`devices` - (Optional) device instance specific sections. See [Device List Devices ](#device-list-devices) below for details.
+
+### Interface Choice Interface List
+
+Add all interfaces belonging to this fleet.
+
+`interfaces` - (Required) Add all interfaces belonging to this fleet. See [ref](#ref) below for details.
+
+### Iscsi Chap Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Lacp Choice Active Backup
+
+Configure active/backup based bond device.
+
+### Lacp Choice Lacp
+
+Configure LACP (802.3ad) based bond device.
+
+`rate` - (Optional) Interval in seconds to transmit LACP packets (`Int`).
+
+### Netapp Backend Ontap Nas Auto Export Cidrs
+
+List of CIDRs to filter Kubernetes’ node IPs against when autoExportPolicy is enabled.
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Netapp Backend Ontap Nas Client Private Key
+
+Please Enter value of client private key. Used for certificate-based auth..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Client Private Key Blindfold Secret Info Internal ](#client-private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Netapp Backend Ontap Nas Password
+
+Please Enter you password. Password to connect to the cluster/SVM.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Netapp Backend Ontap Nas Storage
+
+List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection..
+
+`labels` - (Optional) List of labels for Storage Device used in NetApp ONTAP. It is used for storage class label match selection. (`String`).
+
+`volume_defaults` - (Optional) List of QoS volume default types. See [Storage Volume Defaults ](#storage-volume-defaults) below for details.
+
+`zone` - (Optional) Virtual Storage Pool zone definition. (`String`).
+
+### Netapp Backend Ontap Nas Volume Defaults
+
+List of QoS volume defaults types.
+
+`encryption` - (Optional) Enable NetApp volume encryption. (`Bool`).
+
+`export_policy` - (Optional) Export policy to use. (`String`).
+
+###### One of the arguments from this list "no_qos, qos_policy, adaptive_qos_policy" must be set
+
+`adaptive_qos_policy` - (Optional) Enter Adaptive QoS Policy Name (`String`).
+
+`no_qos` - (Optional) No QoS configured (`Bool`).
+
+`qos_policy` - (Optional) Enter QoS Policy Name (`String`).
+
+`security_style` - (Optional) Security style for new volumes. (`String`).
+
+`snapshot_dir` - (Optional) Access to the .snapshot directory. (`Bool`).
+
+`snapshot_policy` - (Optional) Snapshot policy to use (`String`).
+
+`snapshot_reserve` - (Optional) Percentage of volume reserved for snapshots. "0" if snapshot policy is "none", else "" (`String`).
+
+`space_reserve` - (Optional) Space reservation mode; “none” (thin) or “volume” (thick) (`String`).
+
+`split_on_clone` - (Optional) Split a clone from its parent upon creation. (`Bool`).
+
+`tiering_policy` - (Optional) Tiering policy to use. "none" is default. (`String`).
+
+`unix_permissions` - (Optional) Unix permission mode for new volumes. All allowed 777 (`Int`).
+
+### Netapp Backend Ontap San Client Private Key
+
+Please Enter value of client private key. Used for certificate-based auth..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Client Private Key Blindfold Secret Info Internal ](#client-private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Netapp Backend Ontap San Password
+
+Please Enter you password. Password to connect to the cluster/SVM.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Netapp Backend Ontap San Storage
+
+List of Virtual Storage Pool definitions which are referred back by Storage Class label match selection..
+
+`labels` - (Optional) List of labels for Storage Device used in NetApp ONTAP. It is used for storage class label match selection. (`String`).
+
+`volume_defaults` - (Optional) List of QoS volume default types. See [Storage Volume Defaults ](#storage-volume-defaults) below for details.
+
+`zone` - (Optional) Virtual Storage Pool zone definition. (`String`).
+
+### Netapp Backend Ontap San Volume Defaults
+
+List of QoS volume defaults types.
+
+`encryption` - (Optional) Enable NetApp volume encryption. (`Bool`).
+
+`export_policy` - (Optional) Export policy to use. (`String`).
+
+###### One of the arguments from this list "qos_policy, adaptive_qos_policy, no_qos" must be set
+
+`adaptive_qos_policy` - (Optional) Enter Adaptive QoS Policy Name (`String`).
+
+`no_qos` - (Optional) No QoS configured (`Bool`).
+
+`qos_policy` - (Optional) Enter QoS Policy Name (`String`).
+
+`security_style` - (Optional) Security style for new volumes. (`String`).
+
+`snapshot_dir` - (Optional) Access to the .snapshot directory. (`Bool`).
+
+`snapshot_policy` - (Optional) Snapshot policy to use (`String`).
+
+`snapshot_reserve` - (Optional) Percentage of volume reserved for snapshots. "0" if snapshot policy is "none", else "" (`String`).
+
+`space_reserve` - (Optional) Space reservation mode; “none” (thin) or “volume” (thick) (`String`).
+
+`split_on_clone` - (Optional) Split a clone from its parent upon creation. (`Bool`).
+
+`tiering_policy` - (Optional) Tiering policy to use. "none" is default. (`String`).
+
+`unix_permissions` - (Optional) Unix permission mode for new volumes. All allowed 777 (`Int`).
+
+### Nexthop Nexthop Address
+
+Nexthop address when type is "Use-Configured".
+
+###### One of the arguments from this list "ipv4, ipv6" can be set
+
+`ipv4` - (Optional) IPv4 Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
+
+`ipv6` - (Optional) IPv6 Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
+
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Perf Mode Choice Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
+
+### Perf Mode Choice No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
+
+### Perf Mode Choice Perf Mode L3 Enhanced
+
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+
+###### One of the arguments from this list "no_jumbo, jumbo" must be set
+
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (`Bool`).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (`Bool`).
+
+### Perf Mode Choice Perf Mode L7 Enhanced
+
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
+
+### Pure Service Orchestrator Arrays
+
+This section configure PSO storage arrays.
+
+`flash_array` - (Optional) For FlashArrays you must set the "mgmt_endpoint" and "api_token". See [Arrays Flash Array ](#arrays-flash-array) below for details.
+
+`flash_blade` - (Optional) Specify what storage flash blades should be managed the plugin. See [Arrays Flash Blade ](#arrays-flash-blade) below for details.
+
+### Qos Policy Choice No Qos
+
+No QoS configured.
 
 ### Ref
 
@@ -377,7 +910,51 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Sriov Interface
+### Secret Info Oneof Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Secret Info Oneof Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted.
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
+### Sriov Interface Choice Sriov Interfaces
+
+Use custom Single Root I/O Virtualization interfaces.
+
+`sriov_interface` - (Optional) Use custom SR-IOV interfaces Configuration. See [Sriov Interfaces Sriov Interface ](#sriov-interfaces-sriov-interface) below for details.
+
+### Sriov Interfaces Sriov Interface
 
 Use custom SR-IOV interfaces Configuration.
 
@@ -387,23 +964,45 @@ Use custom SR-IOV interfaces Configuration.
 
 `number_of_vfs` - (Required) Total number of virtual functions (`Int`).
 
-### Sriov Interfaces
+### Storage Volume Defaults
 
-Use custom Single Root I/O Virtualization interfaces.
+List of QoS volume default types.
 
-`sriov_interface` - (Optional) Use custom SR-IOV interfaces Configuration. See [Sriov Interface ](#sriov-interface) below for details.
+`encryption` - (Optional) Enable NetApp volume encryption. (`Bool`).
 
-### Ssh
+`export_policy` - (Optional) Export policy to use. (`String`).
 
-Matches ssh port 22.
+###### One of the arguments from this list "no_qos, qos_policy, adaptive_qos_policy" must be set
 
-### Storage Class List
+`adaptive_qos_policy` - (Optional) Enter Adaptive QoS Policy Name (`String`).
+
+`no_qos` - (Optional) No QoS configured (`Bool`).
+
+`qos_policy` - (Optional) Enter QoS Policy Name (`String`).
+
+`security_style` - (Optional) Security style for new volumes. (`String`).
+
+`snapshot_dir` - (Optional) Access to the .snapshot directory. (`Bool`).
+
+`snapshot_policy` - (Optional) Snapshot policy to use (`String`).
+
+`snapshot_reserve` - (Optional) Percentage of volume reserved for snapshots. "0" if snapshot policy is "none", else "" (`String`).
+
+`space_reserve` - (Optional) Space reservation mode; “none” (thin) or “volume” (thick) (`String`).
+
+`split_on_clone` - (Optional) Split a clone from its parent upon creation. (`Bool`).
+
+`tiering_policy` - (Optional) Tiering policy to use. "none" is default. (`String`).
+
+`unix_permissions` - (Optional) Unix permission mode for new volumes. All allowed 777 (`Int`).
+
+### Storage Class Choice Storage Class List
 
 Add additional custom storage classes in kubernetes for this fleet.
 
-`storage_classes` - (Optional) List of custom storage classes. See [Storage Classes ](#storage-classes) below for details.
+`storage_classes` - (Optional) List of custom storage classes. See [Storage Class List Storage Classes ](#storage-class-list-storage-classes) below for details.
 
-### Storage Classes
+### Storage Class List Storage Classes
 
 List of custom storage classes.
 
@@ -415,13 +1014,15 @@ List of custom storage classes.
 
 `description` - (Optional) Description for this storage class (`String`).
 
-`custom_storage` - (Optional) Storage configuration for Custom Storage. See [Custom Storage ](#custom-storage) below for details.
+###### One of the arguments from this list "hpe_storage, netapp_trident, pure_service_orchestrator, custom_storage" must be set
 
-`hpe_storage` - (Optional) Storage configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
+`custom_storage` - (Optional) Storage configuration for Custom Storage. See [Device Choice Custom Storage ](#device-choice-custom-storage) below for details.
 
-`netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
+`hpe_storage` - (Optional) Storage configuration for HPE Storage. See [Device Choice Hpe Storage ](#device-choice-hpe-storage) below for details.
 
-`pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
+`netapp_trident` - (Optional) Storage class Device configuration for NetApp Trident. See [Device Choice Netapp Trident ](#device-choice-netapp-trident) below for details.
+
+`pure_service_orchestrator` - (Optional) Storage class Device configuration for Pure Service Orchestrator. See [Device Choice Pure Service Orchestrator ](#device-choice-pure-service-orchestrator) below for details.
 
 `reclaim_policy` - (Optional) Reclaim Policy (`String`).
 
@@ -429,35 +1030,57 @@ List of custom storage classes.
 
 `storage_device` - (Required) Storage device that this class will use. The Device name defined at previous step. (`String`).
 
-### Storage Device List
+### Storage Device Choice Storage Device List
 
 Add all storage devices belonging to this fleet.
 
-`storage_devices` - (Optional) List of custom storage devices. See [Storage Devices ](#storage-devices) below for details.
+`storage_devices` - (Optional) List of custom storage devices. See [Storage Device List Storage Devices ](#storage-device-list-storage-devices) below for details.
 
-### Storage Devices
+### Storage Device List Storage Devices
 
 List of custom storage devices.
 
 `advanced_advanced_parameters` - (Optional) Map of parameter name and string value (`String`).
 
-`custom_storage` - (Optional) Device configuration for Custom Storage (bool).
+###### One of the arguments from this list "custom_storage, hpe_storage, netapp_trident, pure_service_orchestrator" must be set
 
-`hpe_storage` - (Optional) Device configuration for HPE Storage. See [Hpe Storage ](#hpe-storage) below for details.
+`custom_storage` - (Optional) Device configuration for Custom Storage (`Bool`).
 
-`netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Netapp Trident ](#netapp-trident) below for details.
+`hpe_storage` - (Optional) Device configuration for HPE Storage. See [Device Choice Hpe Storage ](#device-choice-hpe-storage) below for details.
 
-`pure_service_orchestrator` - (Optional) Device configuration for Pure Storage Service Orchestrator. See [Pure Service Orchestrator ](#pure-service-orchestrator) below for details.
+`netapp_trident` - (Optional) Device configuration for NetApp Trident. See [Device Choice Netapp Trident ](#device-choice-netapp-trident) below for details.
+
+`pure_service_orchestrator` - (Optional) Device configuration for Pure Storage Service Orchestrator. See [Device Choice Pure Service Orchestrator ](#device-choice-pure-service-orchestrator) below for details.
 
 `storage_device` - (Required) Storage device and device unit (`String`).
 
-### Storage Interface List
+### Storage Interface Choice Storage Interface List
 
 Add all storage interfaces belonging to this fleet.
 
 `interfaces` - (Required) Add all interfaces belonging to this fleet. See [ref](#ref) below for details.
 
-### Storage Routes
+### Storage Routes Nexthop
+
+Nexthop for the route.
+
+`interface` - (Optional) Nexthop is network interface when type is "Network-Interface". See [ref](#ref) below for details.
+
+`nexthop_address` - (Optional) Nexthop address when type is "Use-Configured". See [Nexthop Nexthop Address ](#nexthop-nexthop-address) below for details.
+
+`type` - (Optional) Identifies the type of next-hop (`String`).
+
+### Storage Routes Subnets
+
+List of route prefixes.
+
+###### One of the arguments from this list "ipv6, ipv4" must be set
+
+`ipv4` - (Optional) IPv4 Subnet Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
+
+`ipv6` - (Optional) IPv6 Subnet Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
+
+### Storage Static Routes Storage Routes
 
 List of storage static routes.
 
@@ -465,27 +1088,83 @@ List of storage static routes.
 
 `labels` - (Optional) Add Labels for this Static Route, these labels can be used in network policy (`String`).
 
-`nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
+`nexthop` - (Optional) Nexthop for the route. See [Storage Routes Nexthop ](#storage-routes-nexthop) below for details.
 
-`subnets` - (Required) List of route prefixes. See [Subnets ](#subnets) below for details.
+`subnets` - (Required) List of route prefixes. See [Storage Routes Subnets ](#storage-routes-subnets) below for details.
 
-### Storage Static Routes
+### Storage Static Routes Choice Storage Static Routes
 
 Add all storage storage static routes.
 
-`storage_routes` - (Required) List of storage static routes. See [Storage Routes ](#storage-routes) below for details.
+`storage_routes` - (Required) List of storage static routes. See [Storage Static Routes Storage Routes ](#storage-static-routes-storage-routes) below for details.
 
-### Subnets
+### Use Chap Chap Initiator Secret
 
-List of route prefixes.
+CHAP initiator secret. Required if useCHAP=true.
 
-`ipv4` - (Optional) IPv4 Subnet Address. See [Ipv4 ](#ipv4) below for details.
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Chap Initiator Secret Blindfold Secret Info Internal ](#chap-initiator-secret-blindfold-secret-info-internal) below for details.(Deprecated)
 
-`ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-### Web User Interface
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
-Matches the web user interface port.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Use Chap Chap Target Initiator Secret
+
+CHAP target initiator secret. Required if useCHAP=true.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Chap Target Initiator Secret Blindfold Secret Info Internal ](#chap-target-initiator-secret-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Ver Ipv4
+
+IPv4 Address.
+
+`addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
+
+### Ver Ipv4
+
+IPv4 Subnet Address.
+
+`plen` - (Optional) Prefix-length of the IPv4 subnet. Must be <= 32 (`Int`).
+
+`prefix` - (Optional) Prefix part of the IPv4 subnet in string form with dot-decimal notation (`String`).
+
+### Ver Ipv6
+
+IPv6 Address.
+
+`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+
+### Ver Ipv6
+
+IPv6 Subnet Address.
+
+`plen` - (Optional) Prefix length of the IPv6 subnet. Must be <= 128 (`Int`).
+
+`prefix` - (Optional) e.g. "2001:db8::2::" (`String`).
+
+### Vm Choice Enable Vm
+
+VMs support is enabled for this fleet.
 
 Attribute Reference
 -------------------

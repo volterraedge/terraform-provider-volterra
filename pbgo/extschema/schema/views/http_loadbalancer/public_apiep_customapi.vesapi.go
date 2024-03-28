@@ -44,12 +44,30 @@ func (c *ApiepLBCustomAPIGrpcClient) doRPCGetAPIEndpointsForGroups(ctx context.C
 	return rsp, err
 }
 
+func (c *ApiepLBCustomAPIGrpcClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetAPIEndpointsSchemaUpdatesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAPIEndpointsSchemaUpdates(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepLBCustomAPIGrpcClient) doRPCGetSwaggerSpec(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SwaggerSpecReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.SwaggerSpecReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetSwaggerSpec(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *ApiepLBCustomAPIGrpcClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UpdateAPIEndpointsSchemasReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.UpdateAPIEndpointsSchemas(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -85,7 +103,11 @@ func NewApiepLBCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetAPIEndpointsForGroups"] = ccl.doRPCGetAPIEndpointsForGroups
 
+	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
+
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
+
+	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
 	ccl.rpcFns = rpcFns
 
@@ -184,6 +206,94 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsForGroups(ctx context.C
 	return pbRsp, nil
 }
 
+func (c *ApiepLBCustomAPIRestClient) doRPCGetAPIEndpointsSchemaUpdates(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetAPIEndpointsSchemaUpdatesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		for _, item := range req.ApiEndpointsFilter {
+			q.Add("api_endpoints_filter", fmt.Sprintf("%v", item))
+		}
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("query_type", fmt.Sprintf("%v", req.QueryType))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetAPIEndpointsSchemaUpdatesResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *ApiepLBCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -270,6 +380,93 @@ func (c *ApiepLBCustomAPIRestClient) doRPCGetSwaggerSpec(ctx context.Context, ca
 	return pbRsp, nil
 }
 
+func (c *ApiepLBCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UpdateAPIEndpointsSchemasReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		for _, item := range req.ApiEndpointsSchemaUpdates {
+			q.Add("api_endpoints_schema_updates", fmt.Sprintf("%v", item))
+		}
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &UpdateAPIEndpointsSchemasResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *ApiepLBCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -296,7 +493,11 @@ func NewApiepLBCustomAPIRestClient(baseURL string, hc http.Client) server.Custom
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetAPIEndpointsForGroups"] = ccl.doRPCGetAPIEndpointsForGroups
 
+	rpcFns["GetAPIEndpointsSchemaUpdates"] = ccl.doRPCGetAPIEndpointsSchemaUpdates
+
 	rpcFns["GetSwaggerSpec"] = ccl.doRPCGetSwaggerSpec
+
+	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
 	ccl.rpcFns = rpcFns
 
@@ -311,12 +512,20 @@ type apiepLBCustomAPIInprocClient struct {
 }
 
 func (c *apiepLBCustomAPIInprocClient) GetAPIEndpointsForGroups(ctx context.Context, in *GetAPIEndpointsForGroupsReq, opts ...grpc.CallOption) (*GetAPIEndpointsForGroupsRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups")
 	return c.ApiepLBCustomAPIServer.GetAPIEndpointsForGroups(ctx, in)
 }
+func (c *apiepLBCustomAPIInprocClient) GetAPIEndpointsSchemaUpdates(ctx context.Context, in *GetAPIEndpointsSchemaUpdatesReq, opts ...grpc.CallOption) (*GetAPIEndpointsSchemaUpdatesResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates")
+	return c.ApiepLBCustomAPIServer.GetAPIEndpointsSchemaUpdates(ctx, in)
+}
 func (c *apiepLBCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec")
 	return c.ApiepLBCustomAPIServer.GetSwaggerSpec(ctx, in)
+}
+func (c *apiepLBCustomAPIInprocClient) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemasResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.UpdateAPIEndpointsSchemas")
+	return c.ApiepLBCustomAPIServer.UpdateAPIEndpointsSchemas(ctx, in)
 }
 
 func NewApiepLBCustomAPIInprocClient(svc svcfw.Service) ApiepLBCustomAPIClient {
@@ -389,6 +598,55 @@ func (s *apiepLBCustomAPISrv) GetAPIEndpointsForGroups(ctx context.Context, in *
 
 	return rsp, nil
 }
+func (s *apiepLBCustomAPISrv) GetAPIEndpointsSchemaUpdates(ctx context.Context, in *GetAPIEndpointsSchemaUpdatesReq) (*GetAPIEndpointsSchemaUpdatesResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI")
+	cah, ok := ah.(ApiepLBCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepLBCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetAPIEndpointsSchemaUpdatesResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAPIEndpointsSchemaUpdates(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesResp", rsp)...)
+
+	return rsp, nil
+}
 func (s *apiepLBCustomAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq) (*google_api.HttpBody, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI")
 	cah, ok := ah.(ApiepLBCustomAPIServer)
@@ -435,6 +693,55 @@ func (s *apiepLBCustomAPISrv) GetSwaggerSpec(ctx context.Context, in *SwaggerSpe
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.api.HttpBody", rsp)...)
+
+	return rsp, nil
+}
+func (s *apiepLBCustomAPISrv) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq) (*UpdateAPIEndpointsSchemasResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI")
+	cah, ok := ah.(ApiepLBCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepLBCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *UpdateAPIEndpointsSchemasResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepLBCustomAPI.UpdateAPIEndpointsSchemas' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.UpdateAPIEndpointsSchemas"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UpdateAPIEndpointsSchemas(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasResp", rsp)...)
 
 	return rsp, nil
 }
@@ -653,6 +960,206 @@ var ApiepLBCustomAPISwaggerJSON string = `{
             "x-displayname": "HTTP Load Balancer Custom API",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_endpoints/get_schema_updates": {
+            "post": {
+                "summary": "Get API Endpoints Schema Updates",
+                "description": "Get list of schema pairs, current and updated, for each endpoint in the request\nor all pending changes if empty list is provided.\nNOTE: any API endpoint defined in user swagger files should be ignored",
+                "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerGetAPIEndpointsSchemaUpdatesResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nThe namespace of the HTTP Loadbalancer for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"name\"\nThe name of the HTTP Loadbalancer for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerGetAPIEndpointsSchemaUpdatesReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepLBCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsschemaupdates"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_inventory/api_endpoints/update_schemas": {
+            "post": {
+                "summary": "Update API Endpoints Schemas",
+                "description": "Update the payload schema for the specified endpoints or all pending changes if empty list is provided.\nNOTE: only API endpoints returned by a call to -GetAPIEndpointsSchemaStates- can be updated.",
+                "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.UpdateAPIEndpointsSchemas",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerUpdateAPIEndpointsSchemasResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"shared\"\nThe namespace of the HTTP Loadbalancer for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"name\"\nThe name of the HTTP Loadbalancer for the current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerUpdateAPIEndpointsSchemasReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepLBCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-updateapiendpointsschemas"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.UpdateAPIEndpointsSchemas"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -765,6 +1272,19 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerApiInventorySchemaQueryType": {
+            "type": "string",
+            "description": "API Inventory Schema Query Type\n\n - API_INVENTORY_SCHEMA_FULL_RESPONSE: Full Response\n\n - API_INVENTORY_SCHEMA_CURRENT: Current Schema\n\n - API_INVENTORY_SCHEMA_UPDATED: Updated Schema\n",
+            "title": "API Inventory Schema Query Type",
+            "enum": [
+                "API_INVENTORY_SCHEMA_FULL_RESPONSE",
+                "API_INVENTORY_SCHEMA_CURRENT",
+                "API_INVENTORY_SCHEMA_UPDATED"
+            ],
+            "default": "API_INVENTORY_SCHEMA_FULL_RESPONSE",
+            "x-displayname": "API Inventory Schema Query Type",
+            "x-ves-proto-enum": "ves.io.schema.views.http_loadbalancer.ApiInventorySchemaQueryType"
+        },
         "http_loadbalancerGetAPIEndpointsForGroupsReq": {
             "type": "object",
             "description": "Request shape for Get API Endpoints For Groups",
@@ -813,6 +1333,133 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerGetAPIEndpointsSchemaUpdatesReq": {
+            "type": "object",
+            "description": "Request shape for Get API Endpoints Schema Updates",
+            "title": "Get API Endpoints Schema Updates Request",
+            "x-displayname": "Get API Endpoints Schema Updates Request",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesReq",
+            "properties": {
+                "api_endpoints_filter": {
+                    "type": "array",
+                    "description": " The list of discovered API endpoint to get schema for.\n NOTE: if empty, then the all API endpoints with schema changes would be returned\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n",
+                    "title": "API Endpoints Filter",
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Endpoints Filter",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "100"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of the HTTP Loadbalancer for the current request\n\nExample: - \"name\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The namespace of the HTTP Loadbalancer for the current request\n\nExample: - \"shared\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "shared"
+                },
+                "query_type": {
+                    "description": " An option not to populate the schema fields, to reduce response size and time.",
+                    "title": "Query Type",
+                    "$ref": "#/definitions/http_loadbalancerApiInventorySchemaQueryType",
+                    "x-displayname": "Query Type"
+                }
+            }
+        },
+        "http_loadbalancerGetAPIEndpointsSchemaUpdatesResp": {
+            "type": "object",
+            "description": "Response shape for Get API Endpoints Schema Updates",
+            "title": "Get API Endpoints Schema Updates Response",
+            "x-displayname": "Get API Endpoints Schema Updates Response",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsSchemaUpdatesResp",
+            "properties": {
+                "api_endpoints_current_schemas": {
+                    "type": "array",
+                    "description": " The list of discovered API endpoints with current schemas",
+                    "title": "API Endpoints Current Schemas",
+                    "items": {
+                        "$ref": "#/definitions/viewsApiEndpointWithSchema"
+                    },
+                    "x-displayname": "API Endpoints Current Schemas"
+                },
+                "api_endpoints_updated_schemas": {
+                    "type": "array",
+                    "description": " The list of API Inventory API endpoints with updated schemas",
+                    "title": "API Endpoints Updated Schemas",
+                    "items": {
+                        "$ref": "#/definitions/viewsApiEndpointWithSchema"
+                    },
+                    "x-displayname": "API Endpoints Updated Schemas"
+                }
+            }
+        },
+        "http_loadbalancerUpdateAPIEndpointsSchemasReq": {
+            "type": "object",
+            "description": "Request shape for Update API Endpoints Schemas",
+            "title": "Update API Endpoints Schemas Request",
+            "x-displayname": "Update API Endpoints Schemas Request",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasReq",
+            "properties": {
+                "api_endpoints_schema_updates": {
+                    "type": "array",
+                    "description": " The list of API Inventory API endpoints schema updates.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "API Endpoints Schema Updates",
+                    "minItems": 1,
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiEndpointWithSchema"
+                    },
+                    "x-displayname": "API Endpoints Schema Updates",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of the HTTP Loadbalancer for the current request\n\nExample: - \"name\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The namespace of the HTTP Loadbalancer for the current request\n\nExample: - \"shared\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "shared"
+                }
+            }
+        },
+        "http_loadbalancerUpdateAPIEndpointsSchemasResp": {
+            "type": "object",
+            "description": "Response shape for Update API Endpoints With Newly Discovered Schema",
+            "title": "Update API Endpoints Schema Response",
+            "x-displayname": "Update API Endpoints Schema Response",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.UpdateAPIEndpointsSchemasResp",
+            "properties": {
+                "updated_api_endpoints": {
+                    "type": "array",
+                    "description": " The list of API endpoints which were successfully proceeded by the API Inventory request.",
+                    "title": "Updated API Endpoints",
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "Updated API Endpoints"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -847,6 +1494,75 @@ var ApiepLBCustomAPISwaggerJSON string = `{
             "default": "ANY",
             "x-displayname": "HTTP Method",
             "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
+        "viewsApiEndpointWithSchema": {
+            "type": "object",
+            "description": "API endpoint and its schema",
+            "title": "API Endpoint With Schema",
+            "x-displayname": "API Endpoint With Schema",
+            "x-ves-proto-message": "ves.io.schema.views.ApiEndpointWithSchema",
+            "properties": {
+                "api_operation": {
+                    "description": " The API operation which have schema updates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "API Operation",
+                    "$ref": "#/definitions/viewsApiOperation",
+                    "x-displayname": "API Operation",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "schema_json": {
+                    "type": "string",
+                    "description": " The schema of the API endpoint\n\nExample: - \"{}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 10000\n",
+                    "title": "Schema JSON",
+                    "maxLength": 10000,
+                    "x-displayname": "Schema JSON",
+                    "x-ves-example": "{}",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "10000"
+                    }
+                }
+            }
+        },
+        "viewsApiOperation": {
+            "type": "object",
+            "description": "API operation according to OpenAPI specification.",
+            "title": "ApiOperation",
+            "x-displayname": "API Operation",
+            "x-ves-proto-message": "ves.io.schema.views.ApiOperation",
+            "properties": {
+                "method": {
+                    "description": " Method to match the input request API method against.\n\nExample: - 'POST'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "HTTP Method",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "type": "string",
+                    "description": " An endpoint path, as specified in OpenAPI, including parameters.\n The path should comply with RFC 3986 and may have parameters according to OpenAPI specification\n\nExample: - \"/api/users/{userid}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "title": "path",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/users/{userid}",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.templated_http_path": "true"
+                    }
+                }
+            }
         }
     },
     "x-displayname": "Configure HTTP Load Balancer",

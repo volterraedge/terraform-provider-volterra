@@ -45,6 +45,11 @@ import (
 	ves_io_schema_bgp_asn_set_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set/crudapi"
 	ves_io_schema_bigip_apm "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip/apm"
 	ves_io_schema_bigip_apm_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip/apm/crudapi"
+	ves_io_schema_central_manager "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager"
+	ves_io_schema_central_manager_application "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/application"
+	ves_io_schema_central_manager_provider "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/provider"
+	ves_io_schema_central_manager_registration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/registration"
+	ves_io_schema_central_manager_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/token"
 	ves_io_schema_certificate "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate"
 	ves_io_schema_certificate_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate/crudapi"
 	ves_io_schema_certificate_chain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain"
@@ -128,6 +133,8 @@ import (
 	ves_io_schema_k8s_cluster_role_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role/crudapi"
 	ves_io_schema_k8s_cluster_role_binding "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding"
 	ves_io_schema_k8s_cluster_role_binding_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding/crudapi"
+	ves_io_schema_k8s_pod_security_admission "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_admission"
+	ves_io_schema_k8s_pod_security_admission_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_admission/crudapi"
 	ves_io_schema_k8s_pod_security_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy"
 	ves_io_schema_k8s_pod_security_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy/crudapi"
 	ves_io_schema_known_label "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label"
@@ -146,6 +153,7 @@ import (
 	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
 	ves_io_schema_log_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log_receiver"
 	ves_io_schema_log_receiver_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log_receiver/crudapi"
+	ves_io_schema_maintenance_status "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/maintenance_status"
 	ves_io_schema_malicious_user_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation"
 	ves_io_schema_malicious_user_mitigation_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation/crudapi"
 	ves_io_schema_marketplace_aws_account "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/aws_account"
@@ -358,6 +366,11 @@ func init() {
 	ves_io_schema_bgp_asn_set_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_bigip_apm.InitializeMDRegistry(MDR, true)
 	ves_io_schema_bigip_apm_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_central_manager.InitializeMDRegistry(MDR, true)
+	ves_io_schema_central_manager_application.InitializeMDRegistry(MDR, true)
+	ves_io_schema_central_manager_provider.InitializeMDRegistry(MDR, true)
+	ves_io_schema_central_manager_registration.InitializeMDRegistry(MDR, true)
+	ves_io_schema_central_manager_token.InitializeMDRegistry(MDR, true)
 	ves_io_schema_certificate.InitializeMDRegistry(MDR, true)
 	ves_io_schema_certificate_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_certificate_chain.InitializeMDRegistry(MDR, true)
@@ -441,6 +454,8 @@ func init() {
 	ves_io_schema_k8s_cluster_role_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_k8s_cluster_role_binding.InitializeMDRegistry(MDR, true)
 	ves_io_schema_k8s_cluster_role_binding_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_k8s_pod_security_admission.InitializeMDRegistry(MDR, true)
+	ves_io_schema_k8s_pod_security_admission_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_k8s_pod_security_policy.InitializeMDRegistry(MDR, true)
 	ves_io_schema_k8s_pod_security_policy_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_known_label.InitializeMDRegistry(MDR, true)
@@ -459,6 +474,7 @@ func init() {
 	ves_io_schema_log_vk8s_events.InitializeMDRegistry(MDR, true)
 	ves_io_schema_log_receiver.InitializeMDRegistry(MDR, true)
 	ves_io_schema_log_receiver_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_maintenance_status.InitializeMDRegistry(MDR, true)
 	ves_io_schema_malicious_user_mitigation.InitializeMDRegistry(MDR, true)
 	ves_io_schema_malicious_user_mitigation_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_marketplace_aws_account.InitializeMDRegistry(MDR, true)

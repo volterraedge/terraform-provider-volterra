@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2323,19 +2306,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "KMS Key Reference",
             "x-ves-proto-message": "ves.io.schema.authentication.KMSKeyRefType"
         },
-        "clusterLoadbalancerAlgorithm": {
-            "type": "string",
-            "description": "x-displayName: \"Load Balancer Algorithm\"\nDifferent load balancing algorithms supported\nWhen a connection to a endpoint in an upstream cluster is required, the load balancer uses loadbalancer_algorithm\nto determine which host is selected.\n\n - ROUND_ROBIN: ROUND_ROBIN\n\nx-displayName: \"Round Robin\"\nPolicy in which each healthy/available upstream endpoint is selected in round robin order.\n - LEAST_REQUEST: LEAST_REQUEST\n\nx-displayName: \"Least Request\"\nPolicy in which loadbalancer picks the upstream endpoint which has the fewest active requests\n - RING_HASH: RING_HASH\n\nx-displayName: \"Ring Hash\"\nPolicy implements consistent hashing to upstream endpoints using ring hash of endpoint names\nHash of the incoming request is calculated using request hash policy.\nThe ring/modulo hash load balancer implements consistent hashing to upstream hosts.\nThe algorithm is based on mapping all hosts onto a circle such that the addition or\nremoval of a host from the host set changes only affect 1/N requests. This technique\nis also commonly known as “ketama” hashing. A consistent hashing load balancer is only\neffective when protocol routing is used that specifies a value to hash on. The minimum\nring size governs the replication factor for each host in the ring. For example, if the\nminimum ring size is 1024 and there are 16 hosts, each host will be replicated 64 times.\n - RANDOM: RANDOM\n\nx-displayName: \"Random\"\nPolicy in which each available upstream endpoint is selected in random order.\nThe random load balancer selects a random healthy host. The random load balancer generally\nperforms better than round robin if no health checking policy is configured. Random selection\navoids bias towards the host in the set that comes after a failed host.\n - LB_OVERRIDE: Load Balancer Override\n\nx-displayName: \"Load Balancer Override\"\nHash policy is taken from from the load balancer which is using this origin pool",
-            "title": "LoadbalancerAlgorithm",
-            "enum": [
-                "ROUND_ROBIN",
-                "LEAST_REQUEST",
-                "RING_HASH",
-                "RANDOM",
-                "LB_OVERRIDE"
-            ],
-            "default": "ROUND_ROBIN"
-        },
         "ioschemaDownstreamTlsParamsType": {
             "type": "object",
             "description": "TLS configuration for downstream connections",
@@ -2437,14 +2407,6 @@ var APISwaggerJSON string = `{
                     "format": "byte"
                 }
             }
-        },
-        "protobufNullValue": {
-            "type": "string",
-            "description": "-NullValue- is a singleton enumeration to represent the null value for the\n-Value- type union.\n\n The JSON representation for -NullValue- is JSON -null-.\n\n - NULL_VALUE: Null value.",
-            "enum": [
-                "NULL_VALUE"
-            ],
-            "default": "NULL_VALUE"
         },
         "schemaAppFirewallRefType": {
             "type": "object",
@@ -2595,7 +2557,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 },
                 "xfcc_header_elements": {
                     "type": "array",
@@ -2933,58 +2895,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaDomainType": {
-            "type": "object",
-            "description": "Domains names",
-            "title": "Domains",
-            "x-displayname": "Domains",
-            "x-ves-oneof-field-domain_choice": "[\"exact_value\",\"regex_value\",\"suffix_value\"]",
-            "x-ves-proto-message": "ves.io.schema.DomainType",
-            "properties": {
-                "exact_value": {
-                    "type": "string",
-                    "description": "Exclusive with [regex_value suffix_value]\n Exact domain name.\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
-                    "title": "exact value",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Exact Value",
-                    "x-ves-example": "abc.zyz.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1"
-                    }
-                },
-                "regex_value": {
-                    "type": "string",
-                    "description": "Exclusive with [exact_value suffix_value]\n Regular Expression value for the domain name\n\nExample: - \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "regex values of Domains",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Regex Values of Domains",
-                    "x-ves-example": "([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
-                },
-                "suffix_value": {
-                    "type": "string",
-                    "description": "Exclusive with [exact_value regex_value]\n Suffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
-                    "title": "suffix value",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Suffix Value",
-                    "x-ves-example": "xyz.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1"
-                    }
-                }
-            }
-        },
         "schemaErrorCode": {
             "type": "string",
             "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
@@ -3126,6 +3036,11 @@ var APISwaggerJSON string = `{
                 "default_header_transformation": {
                     "description": "x-displayName: \"Default\"\nNormalize the headers to lower case",
                     "title": "Default header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "preserve_case_header_transformation": {
+                    "description": "x-displayName: \"Preserve Case\"\nPreserves the original case of headers without any modifications.",
+                    "title": "Preserve case header transformation",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "proper_case_header_transformation": {
@@ -3295,75 +3210,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -3507,10 +3353,10 @@ var APISwaggerJSON string = `{
                 },
                 "retry_condition": {
                     "type": "array",
-                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\n \"reset\"           : Retry is done if the upstream server does not respond at all\n                     (disconnect/reset/read timeout.)\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\",\\\"reset\\\"]\n  ves.io.schema.rules.repeated.max_items: 7\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "retry_condition",
                     "minItems": 1,
-                    "maxItems": 6,
+                    "maxItems": 7,
                     "items": {
                         "type": "string"
                     },
@@ -3519,8 +3365,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]",
-                        "ves.io.schema.rules.repeated.max_items": "6",
+                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\",\\\"reset\\\"]",
+                        "ves.io.schema.rules.repeated.max_items": "7",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -3759,149 +3605,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "Handle to fetch certificate and key",
@@ -3963,118 +3666,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaTlsInterceptionPolicy": {
-            "type": "object",
-            "description": "Policy to enable or disable TLS interception.",
-            "title": "TlsInterceptionPolicy",
-            "x-displayname": "TLS Interception Policy",
-            "x-ves-proto-message": "ves.io.schema.TlsInterceptionPolicy",
-            "properties": {
-                "interception_rules": {
-                    "type": "array",
-                    "description": " List of ordered rules to enable or disable for TLS interception\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Interception Rules",
-                    "minItems": 1,
-                    "maxItems": 32,
-                    "items": {
-                        "$ref": "#/definitions/schemaTlsInterceptionRule"
-                    },
-                    "x-displayname": "TLS Interception Rules",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "schemaTlsInterceptionRule": {
-            "type": "object",
-            "description": "x-required\nRule to enable or disable TLS interception based on domain match",
-            "title": "TlsInterceptionRule",
-            "x-displayname": "TLS Interception Rule",
-            "x-ves-oneof-field-enable_disable_choice": "[\"disable_interception\",\"enable_interception\"]",
-            "x-ves-proto-message": "ves.io.schema.TlsInterceptionRule",
-            "properties": {
-                "disable_interception": {
-                    "description": "Exclusive with [enable_interception]\n Disable Interception",
-                    "title": "Disable Interception",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Interception"
-                },
-                "domain_match": {
-                    "description": " Domain value or regular expression to match\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Domain Match",
-                    "$ref": "#/definitions/schemaDomainType",
-                    "x-displayname": "Match Domain",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "enable_interception": {
-                    "description": "Exclusive with [disable_interception]\n Enable Interception",
-                    "title": "Enable Interception",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable Interception"
-                }
-            }
-        },
-        "schemaTlsInterceptionType": {
-            "type": "object",
-            "description": "Configuration to enable TLS interception",
-            "title": "TlsInterceptionType",
-            "x-displayname": "Configuration for TLS interception",
-            "x-ves-oneof-field-interception_policy_choice": "[\"enable_for_all_domains\",\"policy\"]",
-            "x-ves-oneof-field-signing_cert_choice": "[\"custom_certificate\",\"volterra_certificate\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\",\"volterra_trusted_ca\"]",
-            "x-ves-proto-message": "ves.io.schema.TlsInterceptionType",
-            "properties": {
-                "custom_certificate": {
-                    "description": "Exclusive with [volterra_certificate]\n Certificates for generating intermediate certificate for TLS interception.",
-                    "title": "Custom Signing Certificate",
-                    "$ref": "#/definitions/schemaTlsCertificateType",
-                    "x-displayname": "Custom Signing Certificate"
-                },
-                "enable_for_all_domains": {
-                    "description": "Exclusive with [policy]\n Enable interception for all domains",
-                    "title": "Enable For All Domains",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable For All Domains"
-                },
-                "policy": {
-                    "description": "Exclusive with [enable_for_all_domains]\n Policy to enable/disable specific domains, with implicit enable all domains",
-                    "title": "Policy for specific domains",
-                    "$ref": "#/definitions/schemaTlsInterceptionPolicy",
-                    "x-displayname": "Enable/Disable for Specific Domains"
-                },
-                "trusted_ca_url": {
-                    "type": "string",
-                    "description": "Exclusive with [volterra_trusted_ca]\n Custom trusted CA certificates for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Custom List",
-                    "maxLength": 131072,
-                    "x-displayname": "Custom Trusted CA List",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "131072",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
-                },
-                "volterra_certificate": {
-                    "description": "Exclusive with [custom_certificate]\n F5XC certificates for generating intermediate certificate for TLS interception.",
-                    "title": "F5XC Signing Certificate",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "F5XC Signing Certificate"
-                },
-                "volterra_trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Default volterra trusted CA list for validating upstream server certificate",
-                    "title": "F5XC List",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default Trusted CA List"
-                }
-            }
-        },
         "schemaTlsParamsType": {
             "type": "object",
             "description": "Information of different aspects for TLS authentication related to ciphers,\ncertificates and trust store",
@@ -4122,7 +3713,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 }
             }
         },
@@ -4146,7 +3737,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -4157,17 +3748,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Skip verification of hostname"
                 },
                 "trusted_ca": {
-                    "description": " Trusted CA List",
+                    "description": "Exclusive with [trusted_ca_url]\n Root CA Certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaTrustedCAList",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA Certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -4187,9 +3778,9 @@ var APISwaggerJSON string = `{
         },
         "schemaTrustedCAList": {
             "type": "object",
-            "description": "Reference to Trusted CA List",
-            "title": "Trusted CA List",
-            "x-displayname": "Trusted CA List Reference",
+            "description": "Reference to Root CA Certificate",
+            "title": "Root CA Certificate",
+            "x-displayname": "Root CA Certificate Reference",
             "x-ves-proto-message": "ves.io.schema.TrustedCAList"
         },
         "schemaVaultSecretInfoType": {
@@ -5099,584 +4690,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemavirtual_hostGlobalSpecType": {
-            "type": "object",
-            "description": "Configuration specification for VirtualHost",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
-            "x-ves-oneof-field-bot_defense_choice": "[]",
-            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
-            "x-ves-oneof-field-ddos_auto_mitigation_action": "[\"block\",\"ddos_js_challenge\",\"l7_ddos_action_default\"]",
-            "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
-            "x-ves-oneof-field-dns_zone_state_choice": "[\"not_ready\",\"ready\"]",
-            "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
-            "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
-            "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
-            "x-ves-oneof-field-tls_certificates_choice": "[\"tls_cert_params\",\"tls_parameters\"]",
-            "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.GlobalSpecType",
-            "properties": {
-                "add_location": {
-                    "type": "boolean",
-                    "description": " x-example: true\n Appends header x-volterra-location = \u003cre-site-name\u003e in responses. This configuration\n is ignored on CE sites.\n\nExample: - \"true\"-",
-                    "title": "Add Site information",
-                    "format": "boolean",
-                    "x-displayname": "Add Location",
-                    "x-ves-example": "true"
-                },
-                "advertise_policies": {
-                    "type": "array",
-                    "description": " Advertise Policy allows you to define networks or sites where you want a VIP for this virtual host to be advertised.\n Each Policy rule can have different parameters, like TLS configuration, ports, optionally ip address to be used for VIP.\n If advertise policy is not specified then no VIP is assigned for this virtual host.",
-                    "title": "Advertise Policy",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Advertise Policies"
-                },
-                "append_server_name": {
-                    "type": "string",
-                    "description": "Exclusive with [default_header pass_through server_name]\n Specifies the value to be used for Server header if it is not already present.\n If Server Header is already present it is not overwritten. It is just passed.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
-                    "title": "append_server_name",
-                    "maxLength": 8096,
-                    "x-displayname": "Append Server Name if absent",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "8096"
-                    }
-                },
-                "authentication": {
-                    "description": "Exclusive with [no_authentication]\n Configure authentication details",
-                    "title": "Authentication Enabled",
-                    "$ref": "#/definitions/virtual_hostAuthenticationDetails",
-                    "x-displayname": "Enable Authentication"
-                },
-                "auto_cert": {
-                    "type": "boolean",
-                    "description": " Automatically generated certificates. If this field is set, the user cannot specifi the TLS certificates",
-                    "title": "Auto Certificates",
-                    "format": "boolean",
-                    "x-displayname": "Auto Certificates"
-                },
-                "auto_cert_error_msg": {
-                    "type": "string",
-                    "description": " Last encountered error message during certificate minting process.",
-                    "title": "Auto Cert Error Message",
-                    "x-displayname": "Auto Cert Error Message"
-                },
-                "auto_cert_info": {
-                    "description": " Auto certificate related information",
-                    "title": "Auto Cert Information",
-                    "$ref": "#/definitions/virtual_hostAutoCertInfoType",
-                    "x-displayname": "Auto Cert Information"
-                },
-                "auto_cert_state": {
-                    "description": " State of auto certificate generation.",
-                    "title": "Auto Cert State",
-                    "$ref": "#/definitions/virtual_hostCertificationState",
-                    "x-displayname": "Auto Cert State"
-                },
-                "block": {
-                    "description": "Exclusive with [ddos_js_challenge l7_ddos_action_default]\n Block all suspicious sources",
-                    "title": "Block",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Block"
-                },
-                "buffer_policy": {
-                    "description": " Some upstream applications are not capable of handling streamed data and high network latency.\n This config enables buffering the entire request before sending to upstream application. We can\n specify the maximum buffer size and buffer interval with this config.",
-                    "title": "Buffer configuration for requests",
-                    "$ref": "#/definitions/schemaBufferConfigType",
-                    "x-displayname": "Buffer Policy"
-                },
-                "captcha_challenge": {
-                    "description": "Exclusive with [js_challenge no_challenge]\n Configure Captcha challenge on Virtual Host",
-                    "title": "Captcha Challenge",
-                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
-                    "x-displayname": "Captcha Challenge"
-                },
-                "cdn_service": {
-                    "description": " Configure CDN parameters",
-                    "title": "CDN Parameters",
-                    "$ref": "#/definitions/virtual_hostCdnServiceType",
-                    "x-displayname": "CDN Parameters"
-                },
-                "compression_params": {
-                    "description": " Enables loadbalancer to compress dispatched data from an upstream service upon client request.\n Only GZIP compression is supported",
-                    "title": "Compression configuration",
-                    "$ref": "#/definitions/virtual_hostCompressionType",
-                    "x-displayname": "Compression Parameters"
-                },
-                "connection_idle_timeout": {
-                    "type": "integer",
-                    "description": " The idle timeout for downstream connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 2 minutes.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
-                    "title": "Connection Idle Timeout",
-                    "format": "int64",
-                    "x-displayname": "Connection Idle Timeout",
-                    "x-ves-example": "60000",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "600000"
-                    }
-                },
-                "cors_policy": {
-                    "description": " CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",
-                    "title": "Cross-Origin Resource Sharing (CORS) configuration for requests",
-                    "$ref": "#/definitions/schemaCorsPolicy",
-                    "x-displayname": "CORS Policy"
-                },
-                "csrf_policy": {
-                    "description": " Cross-Site Request Forgery configuration.\n\n CSRF is a mechanism that checks if request received at the server is from legitimate user.",
-                    "title": "csrf_policy",
-                    "$ref": "#/definitions/schemaCsrfPolicy",
-                    "x-displayname": "CSRF Policy"
-                },
-                "custom_errors": {
-                    "type": "object",
-                    "description": "\n Map of integer error codes as keys and string values that can be used to provide custom\n http pages for each error code.\n Key of the map can be either response code class or HTTP Error code. Response code classes\n for key is configured as follows\n 3 -- for 3xx response code class\n 4 -- for 4xx response code class\n 5 -- for 5xx response code class\n Value is the uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Access Denied\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Access Denied \u003c/p\u003e\". Base64 encoded string for this html is \"PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg==\"\n Specific response code takes preference when both response code and response code class\n matches for a request.\n\n The configured custom errors are only applicable for loadbalancer generated errors.\n Errors returned from upstream server is propagated as is.\n\n F5XC provides default error pages for the errors generated by the loadbalancer. Content of\n these pages are not editable. User has an option to disable the use of default F5XC error pages\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.uint32.gte: 3\n  ves.io.schema.rules.map.keys.uint32.lte: 599\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 65536\n  ves.io.schema.rules.map.values.string.uri_ref: true\n",
-                    "title": "Custom Errors",
-                    "x-displayname": "Custom Error Responses",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.uint32.gte": "3",
-                        "ves.io.schema.rules.map.keys.uint32.lte": "599",
-                        "ves.io.schema.rules.map.max_pairs": "16",
-                        "ves.io.schema.rules.map.values.string.max_len": "65536",
-                        "ves.io.schema.rules.map.values.string.uri_ref": "true"
-                    }
-                },
-                "ddos_js_challenge": {
-                    "description": "Exclusive with [block l7_ddos_action_default]\n Serve JavaScript challenge to all suspicious sources",
-                    "title": "JavaScript Challenge",
-                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
-                    "x-displayname": "JavaScript Challenge"
-                },
-                "default_header": {
-                    "description": "Exclusive with [append_server_name pass_through server_name]\n Specifies that the default value of \"volt-adc\" should be used for Server Header",
-                    "title": "default_header",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default value for Server header"
-                },
-                "default_loadbalancer": {
-                    "description": "Exclusive with [non_default_loadbalancer]\n",
-                    "title": "Default load balancer",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Yes"
-                },
-                "disable_default_error_pages": {
-                    "type": "boolean",
-                    "description": "\n An option to specify whether to disable using default F5XC error pages\n\nExample: - \"true\"-",
-                    "title": "Disable use of default Error page",
-                    "format": "boolean",
-                    "x-displayname": "Disable default error pages",
-                    "x-ves-example": "true"
-                },
-                "disable_dns_resolve": {
-                    "type": "boolean",
-                    "description": "\n Disable DNS resolution for domains specified in the virtual host\n\n When the  virtual host is configured as Dynamive Resolve Proxy (DRP), disable DNS resolution\n for domains configured.  This configuration is suitable for HTTP CONNECT proxy.\n\nExample: - \"false\"-",
-                    "title": "Disable DNS Resolve",
-                    "format": "boolean",
-                    "x-displayname": "Disable DNS resolution",
-                    "x-ves-example": "false"
-                },
-                "disable_path_normalize": {
-                    "description": "Exclusive with [enable_path_normalize]\n Path normalization is disabled",
-                    "title": "Disable Path normalization",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable path normalization"
-                },
-                "disable_trust_client_ip_headers": {
-                    "description": "Exclusive with [enable_trust_client_ip_headers]\n",
-                    "title": "Disable",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "dns_domains": {
-                    "type": "array",
-                    "description": " Internal reference to dns_domain object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
-                    "title": "DNS domain refs",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "DNS Domains",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256"
-                    }
-                },
-                "dns_info": {
-                    "type": "array",
-                    "description": " DNS information for this virtual host",
-                    "title": "DNS information",
-                    "items": {
-                        "$ref": "#/definitions/virtual_host_dns_infoDnsInfo"
-                    },
-                    "x-displayname": "DNS Information"
-                },
-                "dns_volterra_managed": {
-                    "type": "boolean",
-                    "description": " Is DNS for the specified domain managed by volterra. If this field is set, DNS record will be automatically added to the DNS domain.",
-                    "title": "DNS F5XC Managed",
-                    "format": "boolean",
-                    "x-displayname": "DNS F5XC Managed"
-                },
-                "dns_zones": {
-                    "type": "array",
-                    "description": " Internal reference to dns_zone object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
-                    "title": "DNS Zone refs",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "DNS Zone",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256"
-                    }
-                },
-                "domains": {
-                    "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this virtual host.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the virtual host proxy type is TCP_PROXY_WITH_SNI/HTTPS_PROXY\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 33\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "domains",
-                    "maxItems": 33,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Domains",
-                    "x-ves-example": "www.foo.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-                        "ves.io.schema.rules.repeated.max_items": "33",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "dynamic_reverse_proxy": {
-                    "description": " In this mode of proxy, virtual host will resolve the destination endpoint dynamically.\n\n The dynamic resolution is done using a predefined field in the request. This predefined\n field depends on the ProxyType configured on the Virtual Host.\n\n For HTTP traffic, i.e. with ProxyType as HTTP_PROXY or HTTPS_PROXY, virtual host will use the\n \"HOST\" http header from the request and perform DNS resolution to select destination endpoint.\n\n For TCP traffic with SNI, (If the ProxyType is TCP_PROXY_WITH_SNI), virtual host will perform DNS\n resolution using the SNI.\n\n The DNS resolution is performed in the virtual network specified in outside_network_type or\n outside_network\n\n In both modes of operation(either using Host header or SNI), the DNS resolution could return\n multiple addresses. First IPv4 address from such returned list is used as endpoint for the\n request. The DNS response is cached for 60s by default.",
-                    "title": "Enable the dynamic resolution of the endpoint",
-                    "$ref": "#/definitions/virtual_hostDynamicReverseProxyType",
-                    "x-displayname": "Dynamic Reverse Proxy"
-                },
-                "enable_path_normalize": {
-                    "description": "Exclusive with [disable_path_normalize]\n Path normalization is enabled",
-                    "title": "Enable Path normalization",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable path normalization"
-                },
-                "enable_trust_client_ip_headers": {
-                    "description": "Exclusive with [disable_trust_client_ip_headers]\n",
-                    "title": "Enable",
-                    "$ref": "#/definitions/virtual_hostClientIPHeaders",
-                    "x-displayname": "Enable"
-                },
-                "host_name": {
-                    "type": "string",
-                    "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
-                    "title": "host name",
-                    "x-displayname": "Host Name",
-                    "x-ves-example": "ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io"
-                },
-                "idle_timeout": {
-                    "type": "integer",
-                    "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 504 (Gateway Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
-                    "title": "Idle timeout",
-                    "format": "int64",
-                    "x-displayname": "Idle timeout (in milliseconds)",
-                    "x-ves-example": "2000"
-                },
-                "javascript_info": {
-                    "description": " Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing.",
-                    "title": "javascript_info",
-                    "$ref": "#/definitions/virtual_hostJavaScriptConfigType",
-                    "x-displayname": "Javascript Info"
-                },
-                "js_challenge": {
-                    "description": "Exclusive with [captcha_challenge no_challenge]\n Configure Javascript challenge on Virtual Host",
-                    "title": "Javascript Challenge",
-                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
-                    "x-displayname": "Javascript Challenge"
-                },
-                "jwt": {
-                    "type": "array",
-                    "description": " This HTTP filter specifies how to verify JSON Web Token (JWT). It will verify its signature,\n audiences and issuer",
-                    "title": "JSON Web Token authentication (JWT) configuration for requests",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "JWT Config"
-                },
-                "l7_ddos_action_default": {
-                    "description": "Exclusive with [block ddos_js_challenge]\n Block suspicious sources and serve JavaScript challenge to rest of traffic",
-                    "title": "Default",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default"
-                },
-                "max_request_header_size": {
-                    "type": "integer",
-                    "description": "\n The maximum request header size in KiB for incoming connections.\n\n If un-configured, the default max request headers allowed is 60 KiB.\n\n Requests that exceed this limit will receive a 431 response.\n\n The max configurable limit is 96 KiB, based on current implementation constraints.\n\n Note:\n   a. This configuration parameter is applicable only for HTTP_PROXY and HTTPS_PROXY\n   b. When multiple HTTP_PROXY virtual hosts share the same advertise policy, the effective\n      \"maximum request header size\" for such virtual hosts is the highest value configured\n      on any of the virtual hosts\n\nExample: - \"42\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 96\n",
-                    "title": "Maximum request header size",
-                    "format": "int64",
-                    "x-displayname": "Maximum Request Header Size (KiB)",
-                    "x-ves-example": "42",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "96"
-                    }
-                },
-                "no_authentication": {
-                    "description": "Exclusive with [authentication]\n Disable Authentication",
-                    "title": "Disable Authentication",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Authentication"
-                },
-                "no_challenge": {
-                    "description": "Exclusive with [captcha_challenge js_challenge]\n No challenge is enabled for this virtual host",
-                    "title": "No Challenge",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Challenge"
-                },
-                "non_default_loadbalancer": {
-                    "description": "Exclusive with [default_loadbalancer]\n",
-                    "title": "Not a default load balancer",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No"
-                },
-                "not_ready": {
-                    "description": "Exclusive with [ready]\n",
-                    "title": "DNS Zone config is not ready",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Not Ready"
-                },
-                "pass_through": {
-                    "description": "Exclusive with [append_server_name default_header server_name]\n Passes existing Server Header as is. If server header is absent, nothing is\n appended.",
-                    "title": "pass_through",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Pass existing Server header"
-                },
-                "proxy": {
-                    "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
-                    "title": "Proxy Type",
-                    "$ref": "#/definitions/virtual_hostProxyType",
-                    "x-displayname": "Proxy Type"
-                },
-                "rate_limiter": {
-                    "type": "array",
-                    "description": " A reference to rate_limiter object.\n Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "rate_limiter",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rate Limiter",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "rate_limiter_allowed_prefixes": {
-                    "type": "array",
-                    "description": " References to ip_prefix_set objects.\n Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
-                    "title": "rate_limiter_allowed_prefixes",
-                    "maxItems": 4,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rate Limiter Allowed Prefixes",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "4"
-                    }
-                },
-                "ready": {
-                    "description": "Exclusive with [not_ready]\n",
-                    "title": "DNS Zone config is not ready",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Ready"
-                },
-                "request_headers_to_add": {
-                    "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Headers to add in request",
-                    "maxItems": 32,
-                    "items": {
-                        "$ref": "#/definitions/schemaHeaderManipulationOptionType"
-                    },
-                    "x-displayname": "Add Request Headers",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "request_headers_to_remove": {
-                    "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP request being sent towards upstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Header to be removed from request",
-                    "maxItems": 32,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Remove Request Headers",
-                    "x-ves-example": "host",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "response_headers_to_add": {
-                    "type": "array",
-                    "description": " Headers are key-value pairs to be added to HTTP response being sent towards downstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Headers to add in response",
-                    "maxItems": 32,
-                    "items": {
-                        "$ref": "#/definitions/schemaHeaderManipulationOptionType"
-                    },
-                    "x-displayname": "Add Response Headers",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "response_headers_to_remove": {
-                    "type": "array",
-                    "description": " List of keys of Headers to be removed from the HTTP response being sent towards downstream.\n\nExample: - \"host\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Header to be removed from response",
-                    "maxItems": 32,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Remove Response Headers",
-                    "x-ves-example": "host",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "retry_policy": {
-                    "description": " Indicates that the virtual_host has a retry policy.",
-                    "title": "retry_policy",
-                    "$ref": "#/definitions/schemaRetryPolicyType",
-                    "x-displayname": "Retry Policy"
-                },
-                "routes": {
-                    "type": "array",
-                    "description": " The list of routes that will be matched, in order, for incoming requests.\n The first route that matches will be used. Currently route object is redundant in case of TCP proxy but required.\n For TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY VirtualHosts, the route object only specifies the cluster/weighted-cluster\n as route destination without any match condition. In other words, match condition in route object is ignored for\n TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY VirtualHosts. Routes used for TCP_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY\n VirtualHosts cannot have DirectResponse or Redirect as actions.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n",
-                    "title": "routes",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Routes",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256"
-                    }
-                },
-                "server_name": {
-                    "type": "string",
-                    "description": "Exclusive with [append_server_name default_header pass_through]\n Specifies the value to be used for Server header inserted in responses.\n This will overwrite existing values if any for Server Header\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
-                    "title": "server_name",
-                    "maxLength": 8096,
-                    "x-displayname": "Server Name",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "8096"
-                    }
-                },
-                "slow_ddos_mitigation": {
-                    "description": " A Low and Slow DDoS attack, also known as a slow-rate attack, involves what appears to be\n legitimate traffic at a very slow rate. This type of state exhaustion DDoS attack targets\n application and server resources and is difficult to distinguish from normal traffic.\n This configuration helps to mitigate such type of attacks.",
-                    "title": "Slow DDOS Mitigation",
-                    "$ref": "#/definitions/virtual_hostSlowDDoSMitigation",
-                    "x-displayname": "Slow DDOS Mitigation"
-                },
-                "state": {
-                    "description": " State of the virtual host",
-                    "title": "Virtual Host state",
-                    "$ref": "#/definitions/virtual_hostVirtualHostState",
-                    "x-displayname": "Virtual Host State"
-                },
-                "tls_cert_params": {
-                    "description": "Exclusive with [tls_parameters]\n TLS parameters for downstream connections. These parameters are used if not specified\n in advertise policy",
-                    "$ref": "#/definitions/schemaCertificateParamsType",
-                    "x-displayname": "TLS Parameters"
-                },
-                "tls_intercept": {
-                    "description": "\n Specify TLS interception configuration for the virtual host",
-                    "title": "TLS Interception",
-                    "$ref": "#/definitions/schemaTlsInterceptionType",
-                    "x-displayname": "TLS Interception"
-                },
-                "tls_parameters": {
-                    "description": "Exclusive with [tls_cert_params]\n TLS parameters for downstream connections. These parameters are used if not specified\n in advertise policy",
-                    "$ref": "#/definitions/ioschemaDownstreamTlsParamsType",
-                    "x-displayname": "TLS Parameters"
-                },
-                "type": {
-                    "description": " VirtualHostType indicates if virtual_host is used as VIRTUAL_SERVICE/LOAD_BALANCER/API_GATEWAY.\n Functionally, all types are same, this is mainly used for categorizing metrics and UI visualization.",
-                    "title": "Virtual host type",
-                    "$ref": "#/definitions/virtual_hostVirtualHostType",
-                    "x-displayname": "Virtual Host Type"
-                },
-                "user_domains": {
-                    "type": "array",
-                    "description": " User Provided domains. Used internally.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "User Domains",
-                    "maxItems": 32,
-                    "items": {
-                        "type": "string",
-                        "minLength": 1
-                    },
-                    "x-displayname": "User Provided Domains",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "user_identification": {
-                    "type": "array",
-                    "description": " A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "user_identification",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "User Identification Policy",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "volterra_cert": {
-                    "type": "boolean",
-                    "description": " F5XC managed certificates. If this field is set, the user cannot specifi the TLS certificates",
-                    "title": "F5XC Certificates",
-                    "format": "boolean",
-                    "x-displayname": "F5XC Certificates"
-                },
-                "waf_type": {
-                    "description": " WAF can be used to analyze inbound and outbound http/https traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type is the App Firewall profile to use.",
-                    "title": "Enable the WAF (Web Application Firewall) functionality for VirtualHost",
-                    "$ref": "#/definitions/schemaWafType",
-                    "x-displayname": "WAF Config"
-                }
-            }
-        },
-        "schemavirtual_hostObject": {
-            "type": "object",
-            "description": "Virtual host object",
-            "title": "Virtual host object",
-            "x-displayname": "Virtual host",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the virtual host",
-                    "title": "spec",
-                    "$ref": "#/definitions/schemavirtual_hostSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
-        },
         "schemavirtual_hostReplaceSpecType": {
             "type": "object",
             "description": "Replace a given virtual host in a given namespace.",
@@ -6008,20 +5021,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemavirtual_hostSpecType": {
-            "type": "object",
-            "description": "Shape of the virtual host specification",
-            "title": "Specification for Virtual Host",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/schemavirtual_hostGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
-        },
         "virtual_hostApiSpec": {
             "type": "object",
             "description": "x-displayName: \"OpenAPI Specification\"\nOpenAPI specification settings",
@@ -6144,16 +5143,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "virtual_hostBotDefenseMode": {
-            "type": "string",
-            "description": "x-displayName: \"Bot Defense Mode\"\nBot Defense Mode Type\n\n - API_MODE: API\n\nx-displayName: \"API Mode\"\nBot Defense API Mode\n - INLINE_MODE: INLINE\n\nx-displayName: \"Inline Mode\"\nBot Defense INLINE Mode",
-            "title": "Bot Defense Mode",
-            "enum": [
-                "API_MODE",
-                "INLINE_MODE"
-            ],
-            "default": "API_MODE"
-        },
         "virtual_hostCaptchaChallengeType": {
             "type": "object",
             "description": "\nEnables loadbalancer to perform captcha challenge\n\nCaptcha challenge will be based on Google Recaptcha.\n\nWith this feature enabled, only clients that pass the captcha challenge will be allowed to\ncomplete the HTTP request.\n\nWhen loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it.\nClient will be allowed to make the request only if the captcha challenge is successful.\nLoadbalancer will tag response header with a cookie to avoid Captcha challenge for subsequent requests.\n\nCAPTCHA is mainly used as a security check to ensure only human users can pass through.\nGenerally, computers or bots are not capable of solving a captcha.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
@@ -6225,7 +5214,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostCertificationState": {
             "type": "string",
-            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate",
+            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate\n - AutoCertAccountRateLimited: Auto Cert Account Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertDomainRateLimited: Auto Cert Domain Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - CertificateExpired: Certificate Expired\n\nCertificate has expired",
             "title": "Certification State",
             "enum": [
                 "AutoCertDisabled",
@@ -6242,39 +5231,14 @@ var APISwaggerJSON string = `{
                 "AutoCertError",
                 "PreDomainChallengePending",
                 "DomainChallengeStarted",
-                "AutoCertInitialize"
+                "AutoCertInitialize",
+                "AutoCertAccountRateLimited",
+                "AutoCertDomainRateLimited",
+                "CertificateExpired"
             ],
             "default": "AutoCertDisabled",
             "x-displayname": "Certification State",
             "x-ves-proto-enum": "ves.io.schema.virtual_host.CertificationState"
-        },
-        "virtual_hostClientIPHeaders": {
-            "type": "object",
-            "description": "List of Client IP Headers",
-            "title": "Trust Client IP Headers List Type",
-            "x-displayname": "Trust Client IP Headers List",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.ClientIPHeaders",
-            "properties": {
-                "client_ip_headers": {
-                    "type": "array",
-                    "description": " Define the list of one or more Client IP Headers.  Headers will be used in order from top to bottom, meaning\n if the first header is not present in the request, the system will proceed to check for the second header,\n and so on, until one of the listed headers is found. If none of the defined headers exist, or the value\n is not an IP address, then the system will use the source IP of the packet. If multiple defined headers with\n different names are present in the request, the value of the first header name in the configuration will be used.\n If multiple defined headers with the same name are present in the request, values of all those headers will be combined.\n The system will read the right-most IP address from header, if there are multiple ip addresses in the header value.\n For X-Forwarded-For header, the system will read the IP address(rightmost - 1), as the client ip\n\nExample: - \"Client-IP-Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Client IP Headers",
-                    "maxItems": 5,
-                    "items": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 256
-                    },
-                    "x-displayname": "Client IP Headers",
-                    "x-ves-example": "Client-IP-Header",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
-                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
-                        "ves.io.schema.rules.repeated.max_items": "5",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
         },
         "virtual_hostCompressionType": {
             "type": "object",
@@ -6601,12 +5565,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/schemavirtual_hostObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -6659,62 +5617,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "virtual_hostHttpProtocolOptions": {
-            "type": "object",
-            "description": "x-displayName: \"HTTP Protocol Configuration Options\"\nHTTP protocol configuration options for downstream connections",
-            "title": "HttpProtocolOptions",
-            "properties": {
-                "http_protocol_enable_v1_only": {
-                    "description": "x-displayName: \"HTTP/1.1\"\nEnable HTTP/1.1 for downstream connections",
-                    "title": "http_protocol_enable_v1_only",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "http_protocol_enable_v1_v2": {
-                    "description": "x-displayName: \"HTTP/1.1 and HTTP/2\"\nEnable both HTTP/1.1 and HTTP/2 for downstream connections",
-                    "title": "http_protocol_enable_v1_v2",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "http_protocol_enable_v2_only": {
-                    "description": "x-displayName: \"HTTP/2\"\nEnable HTTP/2 for downstream connections",
-                    "title": "http_protocol_enable_v2_only",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
-        "virtual_hostHttpRedirectOptions": {
-            "type": "object",
-            "description": "x-displayName: \"HTTP Protocol Redirect Options to HTTPS\"\nHTTP protocol redirect options to https for downstream connections",
-            "title": "HttpRedirectOptions"
-        },
-        "virtual_hostJavaScriptConfigType": {
-            "type": "object",
-            "description": "Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing.",
-            "title": "JavaScriptConfigType",
-            "x-displayname": "JavaScript Configuration",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.JavaScriptConfigType",
-            "properties": {
-                "cache_prefix": {
-                    "type": "string",
-                    "description": " Identifier for data store to be used by JavaScript. Data store can be\n KeyValue store referred by script.\n\nExample: - \"value\"-",
-                    "title": "CachePrefix",
-                    "x-displayname": "Cache Identifier",
-                    "x-ves-example": "value"
-                },
-                "custom_script_url": {
-                    "type": "string",
-                    "description": " URL of JavaScript that gets executed\n\nExample: - \"value\"-",
-                    "title": "ScriptURL",
-                    "x-displayname": "Path of Javascript",
-                    "x-ves-example": "value"
-                },
-                "script_config": {
-                    "type": "object",
-                    "description": " Input passed to the script",
-                    "title": "ScriptConfig",
-                    "x-displayname": "Configuration for Script"
-                }
-            }
         },
         "virtual_hostJavascriptChallengeType": {
             "type": "object",
@@ -6846,12 +5748,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/schemavirtual_hostObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -6914,51 +5810,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "virtual_hostPolicyBasedChallenge": {
-            "type": "object",
-            "description": "x-displayName: \"Policy Based Challenge\"\nSpecifies the settings for policy rule based challenge",
-            "title": "policy based challenge",
-            "properties": {
-                "always_enable_captcha_challenge": {
-                    "description": "x-displayName: \"Always enable Captcha Challenge\"\nEnable Captcha challenge for all requests.\nChallenge rules can be used to selectively disable Captcha challenge or enable JS challenge for some requests.",
-                    "title": "always enable captcha challenge",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "always_enable_js_challenge": {
-                    "description": "x-displayName: \"Always enable JS Challenge\"\nEnable JS challenge for all requests.\nChallenge rules can be used to selectively disable JS challenge or enable Captcha challenge for some requests.",
-                    "title": "always enable JS challenge",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "captcha_challenge": {
-                    "description": "x-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge parameters",
-                    "title": "Captcha Challenge",
-                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType"
-                },
-                "js_challenge": {
-                    "description": "x-displayName: \"Javascript Challenge Parameters\"\nConfigure Javascript challenge parameters",
-                    "title": "Javascript Challenge",
-                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType"
-                },
-                "malicious_user_mitigation": {
-                    "type": "array",
-                    "description": "x-displayName: \"Malicious User Mitigation\"\nSettings that specify the actions to be taken when malicious users are determined to be at different threat levels.\nUser's activity is monitored and continuously analyzed for malicious behavior. From this analysis, a threat level is assigned to each user.\nThe settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.",
-                    "title": "Malicious User Mitigation",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                },
-                "no_challenge": {
-                    "description": "x-displayName: \"No Challenge\"\nDisable JS and Captcha challenge for all requests.\nChallenge rules can be used to selectively enable JS or Captcha challenge for some requests.",
-                    "title": "no_challenge",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "temporary_user_blocking": {
-                    "description": "x-displayName: \"Temporary User Blocking\"\nSpecifies configuration for temporary user blocking resulting from malicious user detection",
-                    "title": "Temporary User Blocking",
-                    "$ref": "#/definitions/virtual_hostTemporaryUserBlockingType"
-                }
-            }
-        },
         "virtual_hostProxyType": {
             "type": "string",
             "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy\n - DNS_PROXY: DNS_PROXY\n\nInstall DNS proxy",
@@ -7013,57 +5864,6 @@ var APISwaggerJSON string = `{
                     "title": "Service Domain",
                     "x-displayname": "Service Domain",
                     "x-ves-example": "ves-io-cdn-cdn-acmecorp-com.demo1.ac.vh.volterra.us"
-                }
-            }
-        },
-        "virtual_hostShapeBotDefenseConfigType": {
-            "type": "object",
-            "description": "x-displayName: \"Shape Bot Defense Config for virtual host\"\nThis defines various configuration options for Shape Bot Defense per virtual host.",
-            "title": "ShapeBotDefenseConfigType",
-            "properties": {
-                "api_auth_key": {
-                    "description": "x-displayName: \"API auth key\"\nAPI auth key for Shared Shape Bot Defense instance. This value is set\non the tenant object from Shape Backend.",
-                    "title": "API auth key for Shared Shape Instance",
-                    "$ref": "#/definitions/schemaSecretType"
-                },
-                "application_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"Application ID\"\nx-example: \"707a0c622df8414886a5ca71c46caf2f\"\nShape Bot Defense Application ID is used by shared instances.",
-                    "title": "Application ID"
-                },
-                "blocking_pages": {
-                    "type": "object",
-                    "description": "x-displayName: \"Blocking Pages\"\nBlocking pages used by the Bot Defense Instance where the\nkey is an MD5 representation of the blocking page value.\nThe map entries are limited to the max number of protected endpoints.",
-                    "title": "Blocking Pages"
-                },
-                "instance": {
-                    "type": "array",
-                    "description": "x-displayName: \"Shape Instance\"\nWhich Shape instance to use",
-                    "title": "Shape Instance",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                },
-                "js_path": {
-                    "type": "string",
-                    "description": "x-displayName: \"JS Path\"\nJavaScript download path",
-                    "title": "JS Path"
-                },
-                "mode": {
-                    "description": "x-displayName: \"Bot Defense Mode\"\nBot Defense Mode Type",
-                    "title": "Bot Defense Mode",
-                    "$ref": "#/definitions/virtual_hostBotDefenseMode"
-                },
-                "reload_header_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"SDK Config Header Name\"\nHeader that is used for SDK configuration sync",
-                    "title": "Reload Header Name"
-                },
-                "timeout": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Timeout\"\nx-example: 300\nThe timeout for the inference check, in milliseconds.",
-                    "title": "timeout",
-                    "format": "int64"
                 }
             }
         },

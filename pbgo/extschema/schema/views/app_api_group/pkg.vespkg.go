@@ -67,10 +67,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.generic",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.app_api_group.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.app_api_group.API.Replace"] = []string{
 		"spec.api_definition",
 		"spec.api_group_builder.metadata",

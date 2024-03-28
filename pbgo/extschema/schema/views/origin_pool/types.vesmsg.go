@@ -193,6 +193,7 @@ func (m *CreateSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_UseTls:
+
 		drInfos, err := m.GetUseTls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
@@ -826,6 +827,7 @@ func (m *GetSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_UseTls:
+
 		drInfos, err := m.GetUseTls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
@@ -1465,6 +1467,7 @@ func (m *GlobalSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_UseTls:
+
 		drInfos, err := m.GetUseTls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
@@ -5102,6 +5105,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *OriginServerType_PrivateIp:
+
 		drInfos, err := m.GetPrivateIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateIp().GetDRefInfo() FAILED")
@@ -5117,6 +5121,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *OriginServerType_PrivateName:
+
 		drInfos, err := m.GetPrivateName().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateName().GetDRefInfo() FAILED")
@@ -5128,6 +5133,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *OriginServerType_K8SService:
+
 		drInfos, err := m.GetK8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
@@ -5139,6 +5145,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *OriginServerType_ConsulService:
+
 		drInfos, err := m.GetConsulService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
@@ -5150,6 +5157,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *OriginServerType_CustomEndpointObject:
+
 		drInfos, err := m.GetCustomEndpointObject().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomEndpointObject().GetDRefInfo() FAILED")
@@ -5161,6 +5169,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *OriginServerType_VnPrivateIp:
+
 		drInfos, err := m.GetVnPrivateIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVnPrivateIp().GetDRefInfo() FAILED")
@@ -5172,6 +5181,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *OriginServerType_VnPrivateName:
+
 		drInfos, err := m.GetVnPrivateName().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVnPrivateName().GetDRefInfo() FAILED")
@@ -5183,6 +5193,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *OriginServerType_SegmentIp:
+
 		drInfos, err := m.GetSegmentIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSegmentIp().GetDRefInfo() FAILED")
@@ -5194,6 +5205,7 @@ func (m *OriginServerType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *OriginServerType_SegmentName:
+
 		drInfos, err := m.GetSegmentName().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSegmentName().GetDRefInfo() FAILED")
@@ -6069,6 +6081,7 @@ func (m *ReplaceSpecType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_UseTls:
+
 		drInfos, err := m.GetUseTls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
@@ -6680,7 +6693,7 @@ var DefaultTlsCertificatesTypeValidator = func() *ValidateTlsCertificatesType {
 	vrhTlsCertificates := v.TlsCertificatesValidationRuleHandler
 	rulesTlsCertificates := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.max_items": "1",
 		"ves.io.schema.rules.repeated.min_items": "1",
 	}
 	vFn, err = vrhTlsCertificates(rulesTlsCertificates)
@@ -6848,6 +6861,7 @@ func (m *UpstreamTlsParameters) GetServerValidationChoiceDRefInfo() ([]db.DRefIn
 	}
 	switch m.GetServerValidationChoice().(type) {
 	case *UpstreamTlsParameters_UseServerVerification:
+
 		drInfos, err := m.GetUseServerVerification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseServerVerification().GetDRefInfo() FAILED")

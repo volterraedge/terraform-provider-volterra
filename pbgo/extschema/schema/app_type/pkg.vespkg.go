@@ -99,10 +99,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.business_logic_markup_setting.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.#.metadata.disable",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.app_type.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_type.API.Replace"] = []string{
 		"spec.business_logic_markup_setting.sensitive_data_detection_rules.custom_sensitive_data_detection_rules.#.metadata.disable",
 	}

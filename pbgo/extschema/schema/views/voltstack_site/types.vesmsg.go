@@ -211,6 +211,7 @@ func (m *CreateSpecType) GetLocalControlPlaneChoiceDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *CreateSpecType_LocalControlPlane:
+
 		drInfos, err := m.GetLocalControlPlane().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLocalControlPlane().GetDRefInfo() FAILED")
@@ -303,6 +304,7 @@ func (m *CreateSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -330,6 +332,7 @@ func (m *CreateSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_CustomStorageConfig:
+
 		drInfos, err := m.GetCustomStorageConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomStorageConfig().GetDRefInfo() FAILED")
@@ -702,6 +705,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1287,6 +1299,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	return v
 }()
 
@@ -1475,6 +1489,7 @@ func (m *GetSpecType) GetLocalControlPlaneChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *GetSpecType_LocalControlPlane:
+
 		drInfos, err := m.GetLocalControlPlane().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLocalControlPlane().GetDRefInfo() FAILED")
@@ -1567,6 +1582,7 @@ func (m *GetSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -1594,6 +1610,7 @@ func (m *GetSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_CustomStorageConfig:
+
 		drInfos, err := m.GetCustomStorageConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomStorageConfig().GetDRefInfo() FAILED")
@@ -1986,6 +2003,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2598,6 +2624,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	return v
 }()
 
@@ -2865,6 +2893,7 @@ func (m *GlobalNetworkConnectionType) GetConnectionChoiceDRefInfo() ([]db.DRefIn
 	}
 	switch m.GetConnectionChoice().(type) {
 	case *GlobalNetworkConnectionType_SloToGlobalDr:
+
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -3211,6 +3240,7 @@ func (m *GlobalSpecType) GetLocalControlPlaneChoiceDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *GlobalSpecType_LocalControlPlane:
+
 		drInfos, err := m.GetLocalControlPlane().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLocalControlPlane().GetDRefInfo() FAILED")
@@ -3303,6 +3333,7 @@ func (m *GlobalSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -3330,6 +3361,7 @@ func (m *GlobalSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_CustomStorageConfig:
+
 		drInfos, err := m.GetCustomStorageConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomStorageConfig().GetDRefInfo() FAILED")
@@ -3819,6 +3851,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4481,6 +4522,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -4543,6 +4586,7 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *Interface_EthernetInterface:
+
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -4562,6 +4606,7 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *Interface_TunnelInterface:
+
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -4573,6 +4618,7 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *Interface_LoopbackInterface:
+
 		drInfos, err := m.GetLoopbackInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLoopbackInterface().GetDRefInfo() FAILED")
@@ -5179,6 +5225,7 @@ func (m *ReplaceSpecType) GetLocalControlPlaneChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *ReplaceSpecType_LocalControlPlane:
+
 		drInfos, err := m.GetLocalControlPlane().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLocalControlPlane().GetDRefInfo() FAILED")
@@ -5271,6 +5318,7 @@ func (m *ReplaceSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -5298,6 +5346,7 @@ func (m *ReplaceSpecType) GetStorageCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_CustomStorageConfig:
+
 		drInfos, err := m.GetCustomStorageConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomStorageConfig().GetDRefInfo() FAILED")
@@ -5675,6 +5724,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["gpu_choice"]; exists {
 		val := m.GetGpuChoice()
 		vOpts := append(opts,
@@ -5885,6 +5943,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["os"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os"))
+		if err := fv(ctx, m.GetOs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sriov_interface_choice"]; exists {
 		val := m.GetSriovInterfaceChoice()
 		vOpts := append(opts,
@@ -5953,6 +6020,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sw"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw"))
+		if err := fv(ctx, m.GetSw(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -6231,7 +6307,13 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
+	v.FldValidators["sw"] = ves_io_schema_views.VolterraSoftwareTypeValidator().Validate
+
+	v.FldValidators["os"] = ves_io_schema_views.OperatingSystemTypeValidator().Validate
+
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
+
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 
 	return v
 }()
@@ -6310,6 +6392,7 @@ func (m *SliVnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, erro
 		return nil, nil
 
 	case *SliVnConfiguration_StaticRoutes:
+
 		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
@@ -6337,6 +6420,7 @@ func (m *SliVnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *SliVnConfiguration_StaticV6Routes:
+
 		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
@@ -7252,6 +7336,7 @@ func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *VnConfiguration_StaticRoutes:
+
 		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
@@ -7279,6 +7364,7 @@ func (m *VnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *VnConfiguration_StaticV6Routes:
+
 		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
@@ -7640,6 +7726,7 @@ func (m *VssNetworkConfiguration) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo
 		return nil, nil
 
 	case *VssNetworkConfiguration_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -7671,6 +7758,7 @@ func (m *VssNetworkConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *VssNetworkConfiguration_GlobalNetworkList:
+
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -7698,6 +7786,7 @@ func (m *VssNetworkConfiguration) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *VssNetworkConfiguration_InterfaceList:
+
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -7725,6 +7814,7 @@ func (m *VssNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *VssNetworkConfiguration_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -7736,6 +7826,7 @@ func (m *VssNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 		return drInfos, err
 
 	case *VssNetworkConfiguration_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -7763,6 +7854,7 @@ func (m *VssNetworkConfiguration) GetSliChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *VssNetworkConfiguration_SliConfig:
+
 		drInfos, err := m.GetSliConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliConfig().GetDRefInfo() FAILED")
@@ -7790,6 +7882,7 @@ func (m *VssNetworkConfiguration) GetSloChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *VssNetworkConfiguration_SloConfig:
+
 		drInfos, err := m.GetSloConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloConfig().GetDRefInfo() FAILED")
@@ -7936,6 +8029,16 @@ func (v *ValidateVssNetworkConfiguration) OutsideNameserverV6ValidationRuleHandl
 	return validatorFn, nil
 }
 
+func (v *ValidateVssNetworkConfiguration) BgpPeerAddressV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VssNetworkConfiguration)
 	if !ok {
@@ -7954,6 +8057,15 @@ func (v *ValidateVssNetworkConfiguration) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_address_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_address_v6"))
+		if err := fv(ctx, m.GetBgpPeerAddressV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8468,6 +8580,17 @@ var DefaultVssNetworkConfigurationValidator = func() *ValidateVssNetworkConfigur
 	}
 	v.FldValidators["outside_nameserver_v6"] = vFn
 
+	vrhBgpPeerAddressV6 := v.BgpPeerAddressV6ValidationRuleHandler
+	rulesBgpPeerAddressV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhBgpPeerAddressV6(rulesBgpPeerAddressV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VssNetworkConfiguration.bgp_peer_address_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp_peer_address_v6"] = vFn
+
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
@@ -8572,6 +8695,7 @@ func (m *VssStorageConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo,
 		return nil, nil
 
 	case *VssStorageConfiguration_StaticRoutes:
+
 		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
@@ -8599,6 +8723,7 @@ func (m *VssStorageConfiguration) GetStorageInterfaceChoiceDRefInfo() ([]db.DRef
 		return nil, nil
 
 	case *VssStorageConfiguration_StorageInterfaceList:
+
 		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
@@ -9288,6 +9413,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.GetBondChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetGpuChoiceFromGlobalSpecType(f)
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
@@ -9325,6 +9451,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	m1.SetBondChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetGpuChoiceToGlobalSpecType(f)
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
@@ -9756,6 +9883,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.GetBondChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetGpuChoiceFromGlobalSpecType(f)
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
@@ -9794,6 +9922,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	m1.SetBondChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetGpuChoiceToGlobalSpecType(f)
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
@@ -10226,6 +10355,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.GetBondChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetGpuChoiceFromGlobalSpecType(f)
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
@@ -10234,8 +10364,10 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.MasterNodes = f.GetMasterNodes()
 	m.GetNetworkCfgChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
+	m.Os = f.GetOs()
 	m.GetSriovInterfaceChoiceFromGlobalSpecType(f)
 	m.GetStorageCfgChoiceFromGlobalSpecType(f)
+	m.Sw = f.GetSw()
 	m.GetUsbPolicyChoiceFromGlobalSpecType(f)
 	m.GetVmChoiceFromGlobalSpecType(f)
 	m.VolterraCertifiedHw = f.GetVolterraCertifiedHw()
@@ -10261,6 +10393,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	m1.SetBondChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetGpuChoiceToGlobalSpecType(f)
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
@@ -10269,8 +10402,10 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.MasterNodes = m1.MasterNodes
 	m1.SetNetworkCfgChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
+	f.Os = m1.Os
 	m1.SetSriovInterfaceChoiceToGlobalSpecType(f)
 	m1.SetStorageCfgChoiceToGlobalSpecType(f)
+	f.Sw = m1.Sw
 	m1.SetUsbPolicyChoiceToGlobalSpecType(f)
 	m1.SetVmChoiceToGlobalSpecType(f)
 	f.VolterraCertifiedHw = m1.VolterraCertifiedHw

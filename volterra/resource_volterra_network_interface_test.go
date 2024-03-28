@@ -45,6 +45,22 @@ func TestNetworkInterface(t *testing.T) {
 			},
 		},
 	})
+	resource.Test(t, resource.TestCase{
+		Providers: testAccProviders,
+		PreCheck:  func() { testAccPreCheck() },
+		Steps: []resource.TestStep{
+			{
+				Config: testConfigTunnelInterfaceInterface(ves_io_schema_netw_intf.ObjectType, name),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(resourceName, "name", name),
+					resource.TestCheckResourceAttr(resourceName, "tunnel_interface.0.tunnel.0.name", "my-example-label1"),
+					resource.TestCheckResourceAttr(resourceName, "tunnel_interface.0.cluster", "false"),
+					resource.TestCheckResourceAttr(resourceName, "tunnel_interface.0.node", "master-0"),
+				),
+			},
+		},
+	})
+
 }
 
 func testConfigSLIInterface(objType, name string) string {
@@ -91,6 +107,36 @@ func testConfigSLOInterface(objType, name string) string {
 			dhcp_client        = true
 			is_primary         = true
 			untagged           = true
+		  }
+		}
+		`, tfResourceName, name, name)
+}
+
+func testConfigTunnelInterfaceInterface(objType, name string) string {
+	// convert ves.io.schema.vnamespace.Object to volt_namespace
+	parts := strings.Split(objType, ".")
+	tfResourceName := fmt.Sprintf("volterra_%s", parts[3])
+	return fmt.Sprintf(`
+		resource "%s" "%s" {
+		  name = "%s"
+		  namespace = "system"
+		  tunnel_interface {
+			mtu = "1450"
+			site_local_network = true
+			cluster  = false
+			node = "master-0"
+			priority = "42"
+			static_ip {
+			  node_static_ip {
+				default_gw = "192.168.20.1"
+				dns_server = "192.168.20.1"
+				ip_address = "192.168.20.1/24"
+			  }
+			}
+			tunnel {
+			  name      = "my-example-label1"
+			  namespace = "system"
+			}
 		  }
 		}
 		`, tfResourceName, name, name)

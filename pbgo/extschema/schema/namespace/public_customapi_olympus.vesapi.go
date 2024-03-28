@@ -213,7 +213,7 @@ type namespaceCloudDataCustomAPIInprocClient struct {
 }
 
 func (c *namespaceCloudDataCustomAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCloudDataCustomAPI.SuggestValues", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCloudDataCustomAPI.SuggestValues")
 	return c.NamespaceCloudDataCustomAPIServer.SuggestValues(ctx, in)
 }
 

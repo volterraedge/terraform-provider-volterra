@@ -47,11 +47,17 @@ Argument Reference
 
 `dnssec_mode` - (Optional) Control whether DNSSEC is enabled on the dns domain or not (`String`).
 
-`route53` - (Optional) sub domain in Amazon Route 53 zone owned by users. See [Route53 ](#route53) below for details.
+`route53` - (Optional) sub domain in Amazon Route 53 zone owned by users. See [Domain Choice Route53 ](#domain-choice-route53) below for details.(Deprecated)
 
-`verification_only` - (Optional) F5XC will verify this domain, but will not manage it. (bool).
+`verification_only` - (Optional) F5XC will verify this domain, but will not manage it. (`Bool`).(Deprecated)
 
-`volterra_managed` - (Optional) sub domain (bool).
+`volterra_managed` - (Optional) sub domain (`Bool`).
+
+### Domain Choice Route53
+
+sub domain in Amazon Route 53 zone owned by users.
+
+`creds` - (Optional) Reference to AWS credentials to program route53. See [ref](#ref) below for details.
 
 ### Ref
 
@@ -63,13 +69,8 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Route53
-
-sub domain in Amazon Route 53 zone owned by users.
-
-`creds` - (Optional) Reference to AWS credentials to program route53. See [ref](#ref) below for details.
-
 Attribute Reference
 -------------------
 
 -	`id` - This is the id of the configured dns_domain.
+-	`txt_record` - This is the txt-record of the configured dns_domain.

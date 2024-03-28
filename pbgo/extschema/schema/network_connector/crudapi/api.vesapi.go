@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.network_connector.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.network_connector.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.network_connector.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.network_connector.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.network_connector.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3984,10 +3999,10 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [volterra_trusted_ca]\n Custom trusted CA certificates for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Custom List",
+                    "description": "Exclusive with [volterra_trusted_ca]\n Custom Root CA Certificate for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Custom Root CA Certificate",
                     "maxLength": 131072,
-                    "x-displayname": "Custom Trusted CA List",
+                    "x-displayname": "Custom Root CA Certificate",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.uri_ref": "true"
@@ -4000,10 +4015,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5XC Signing Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Default volterra trusted CA list for validating upstream server certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n F5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Default Trusted CA List"
+                    "x-displayname": "F5XC Default Root CA Certificate"
                 }
             }
         },

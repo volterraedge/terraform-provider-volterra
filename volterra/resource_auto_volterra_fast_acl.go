@@ -87,48 +87,55 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 			"legacy_acl": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"destination_type": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"all_services": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"destination_ip_address": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"address": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"ipv4": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"addr": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -136,14 +143,16 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 															"ipv6": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"addr": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -154,35 +163,40 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 												"ports": {
 
-													Type:     schema.TypeList,
-													Required: true,
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"all": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"dns": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"user_defined": {
 
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"protocol": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -190,34 +204,39 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 									"interface_services": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"selected_vip_address": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"address": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"ipv4": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"addr": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -225,14 +244,16 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 															"ipv6": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"addr": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -246,20 +267,23 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 									"shared_vip_services": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"vhost": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"vip_services": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -267,27 +291,31 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 						"network_type": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"public": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"site_local": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"site_local_inside": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -295,22 +323,26 @@ func resourceVolterraFastAcl() *schema.Resource {
 
 						"source_rules": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -438,8 +470,9 @@ func resourceVolterraFastAcl() *schema.Resource {
 												},
 
 												"disable": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
@@ -451,8 +484,9 @@ func resourceVolterraFastAcl() *schema.Resource {
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"port": {
@@ -726,8 +760,9 @@ func resourceVolterraFastAcl() *schema.Resource {
 												},
 
 												"disable": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
@@ -739,8 +774,9 @@ func resourceVolterraFastAcl() *schema.Resource {
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"port": {
@@ -2134,6 +2170,7 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

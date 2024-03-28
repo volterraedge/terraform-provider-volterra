@@ -40,15 +40,13 @@ func (m *CreateSpecType) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.PaymentProviderToken = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *CreateSpecType) GoString() string {
 	copy := m.DeepCopy()
-	copy.PaymentProviderToken = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -856,15 +854,13 @@ func (m *GlobalSpecType) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.PaymentProviderToken = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *GlobalSpecType) GoString() string {
 	copy := m.DeepCopy()
-	copy.PaymentProviderToken = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 

@@ -187,6 +187,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -2011,6 +2012,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -2424,6 +2426,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -2891,6 +2894,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")

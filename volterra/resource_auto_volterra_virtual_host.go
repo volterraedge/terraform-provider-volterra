@@ -97,29 +97,34 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"api_spec": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"api_definition": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -127,30 +132,35 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"disable_open_api_validation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"enable_open_api_validation": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"allow_only_specified_headers": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"allow_only_specified_query_params": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"fail_oversized_body_validation": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -227,32 +237,37 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -302,34 +317,40 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -337,14 +358,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -367,32 +390,37 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -442,34 +470,40 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -477,14 +511,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -510,22 +546,26 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"auth_hmac_kms": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -587,8 +627,9 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						},
 
 						"max_request_time": {
-							Type:     schema.TypeInt,
-							Optional: true,
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -687,86 +728,100 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"cookies_to_modify": {
 
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:       schema.TypeList,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"disable_tampering_protection": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"enable_tampering_protection": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"add_httponly": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"ignore_httponly": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"ignore_max_age": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"max_age_value": {
 
-							Type:     schema.TypeInt,
-							Optional: true,
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"ignore_samesite": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"samesite_lax": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"samesite_none": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"samesite_strict": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"add_secure": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"ignore_secure": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -825,8 +880,9 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						},
 
 						"max_age": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"maximum_age": {
@@ -908,28 +964,32 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"dns_proxy_configuration": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"cache_profile": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"cache_size": {
 
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"disable_cache_profile": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -937,21 +997,24 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"ddos_profile": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"disable_ddos_mitigation": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"enable_ddos_mitigation": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -959,22 +1022,26 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"irules": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -982,22 +1049,26 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"protocol_inspection": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1008,51 +1079,60 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"domain_cert_map": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"name": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"value": {
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"ecdsa_certificates": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"kind": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"uid": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1060,34 +1140,40 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"rsa_certificates": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"kind": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"uid": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1164,21 +1250,31 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"header_transformation_type": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"default_header_transformation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"preserve_case_header_transformation": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"proper_case_header_transformation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1293,32 +1389,37 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -1368,34 +1469,40 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1403,14 +1510,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1464,32 +1573,37 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -1539,34 +1653,40 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1574,14 +1694,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1667,8 +1789,9 @@ func resourceVolterraVirtualHost() *schema.Resource {
 						},
 
 						"retry_on": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1755,8 +1878,9 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"additional_domains": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -1764,7 +1888,8 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -1775,20 +1900,23 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"enable_strict_sni_host_header_check": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"temporary_user_blocking": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"custom_page": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1796,34 +1924,40 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"tls_cert_params": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"certificates": {
 
-							Type:     schema.TypeList,
-							Required: true,
+							Type:       schema.TypeList,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"kind": {
-										Type:     schema.TypeString,
-										Computed: true,
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1833,7 +1967,8 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -1841,89 +1976,105 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"crl": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"kind": {
-										Type:     schema.TypeString,
-										Computed: true,
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 
 						"maximum_protocol_version": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"minimum_protocol_version": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"require_client_certificate": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"validation_params": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"skip_hostname_verification": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"trusted_ca": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"trusted_ca_list": {
 
-													Type:     schema.TypeList,
-													Optional: true,
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
+																Type:       schema.TypeString,
+																Computed:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1934,20 +2085,23 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 									"trusted_ca_url": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"use_volterra_trusted_ca_url": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"verify_subject_alt_names": {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -1960,7 +2114,8 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -1971,15 +2126,17 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 			"tls_parameters": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"common_params": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -1987,43 +2144,50 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
 									},
 
 									"maximum_protocol_version": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"minimum_protocol_version": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"tls_certificates": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"certificate_url": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"description": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"custom_hash_algorithms": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -2031,7 +2195,8 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Required: true,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -2042,8 +2207,9 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"disable_ocsp_stapling": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
 													},
@@ -2051,8 +2217,9 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"use_system_defaults": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
 													},
@@ -2060,61 +2227,71 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"private_key": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2122,19 +2299,22 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"clear_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"url": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2142,34 +2322,40 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2177,14 +2363,16 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2197,52 +2385,61 @@ func resourceVolterraVirtualHost() *schema.Resource {
 									},
 
 									"trusted_ca_url": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"validation_params": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"skip_hostname_verification": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"trusted_ca": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"trusted_ca_list": {
 
-																Type:     schema.TypeList,
-																Optional: true,
+																Type:       schema.TypeList,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2253,20 +2450,23 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 												"trusted_ca_url": {
 
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"use_volterra_trusted_ca_url": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"verify_subject_alt_names": {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -2280,42 +2480,49 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 						"crl": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"kind": {
-										Type:     schema.TypeString,
-										Computed: true,
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 
 						"require_client_certificate": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"xfcc_header_elements": {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -3773,11 +3980,11 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 					domainCertMapStaticMap := intVal.(map[string]interface{})
 
 					if w, ok := domainCertMapStaticMap["ecdsa_certificates"]; ok && !isIntfNil(w) {
-						domainCertMap[key.(string)].EcdsaCertificates = nil
+						domainCertMap[key.(string)].EcdsaCertificates = w.([]*ves_io_schema.ObjectRefType)
 					}
 
 					if w, ok := domainCertMapStaticMap["rsa_certificates"]; ok && !isIntfNil(w) {
-						domainCertMap[key.(string)].RsaCertificates = nil
+						domainCertMap[key.(string)].RsaCertificates = w.([]*ves_io_schema.ObjectRefType)
 					}
 
 					// break after one loop
@@ -3876,6 +4083,18 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 				if v.(bool) {
 					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
 					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+					headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
 					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
 				}
 
@@ -4988,16 +5207,22 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
 							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
@@ -5497,6 +5722,7 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -6823,11 +7049,11 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 					domainCertMapStaticMap := intVal.(map[string]interface{})
 
 					if w, ok := domainCertMapStaticMap["ecdsa_certificates"]; ok && !isIntfNil(w) {
-						domainCertMap[key.(string)].EcdsaCertificates = nil
+						domainCertMap[key.(string)].EcdsaCertificates = w.([]*ves_io_schema.ObjectRefType)
 					}
 
 					if w, ok := domainCertMapStaticMap["rsa_certificates"]; ok && !isIntfNil(w) {
-						domainCertMap[key.(string)].RsaCertificates = nil
+						domainCertMap[key.(string)].RsaCertificates = w.([]*ves_io_schema.ObjectRefType)
 					}
 
 					// break after one loop
@@ -6923,6 +7149,18 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 				if v.(bool) {
 					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
 					headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+					headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
 					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
 				}
 
@@ -8014,16 +8252,22 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
 							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {

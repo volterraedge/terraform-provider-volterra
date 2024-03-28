@@ -124,8 +124,9 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 
 			"label_matcher": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -133,7 +134,8 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -357,6 +359,7 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

@@ -43,7 +43,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`http_access` - (Optional) http://<server_address>:<server_port>/<path>. See [Http Access ](#http-access) below for details.
+`http_access` - (Optional) http://<server_address>:<server_port>/<path>. See [Access Info Choice Http Access ](#access-info-choice-http-access) below for details.
 
 `refresh_interval` - (Optional) CRL refresh interval, in hours. (`Int`).
 
@@ -53,9 +53,9 @@ Argument Reference
 
 `timeout` - (Optional) CRL download wait time, in seconds (`Int`).
 
-`verify_all_certs_with_crl` - (Optional) from that chain. (`Bool`).
+`verify_all_certs_with_crl` - (Optional) from that chain. (`Bool`).(Deprecated)
 
-### Http Access
+### Access Info Choice Http Access
 
 http://<server_address>:<server_port>/<path>.
 

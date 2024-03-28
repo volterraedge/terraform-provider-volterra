@@ -50,10 +50,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.policer.API.Get"] = []string{
-		"object",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

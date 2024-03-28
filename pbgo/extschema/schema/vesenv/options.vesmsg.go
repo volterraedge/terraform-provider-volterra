@@ -1981,6 +1981,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *ServiceSlugChoice_CvProxy:
+		if fv, exists := v.FldValidators["choice.cv_proxy"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_CvProxy).CvProxy
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("cv_proxy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

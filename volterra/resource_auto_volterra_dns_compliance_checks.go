@@ -235,6 +235,7 @@ func resourceVolterraDnsComplianceChecksUpdate(d *schema.ResourceData, meta inte
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

@@ -61,10 +61,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.dns_proxy_udp_health_check",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.healthcheck.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.healthcheck.API.Replace"] = []string{
 		"spec.dns_health_check",
 		"spec.dns_proxy_icmp_health_check",

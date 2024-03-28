@@ -658,15 +658,13 @@ func (m *SubCA) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.PrivateKey = nil
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *SubCA) GoString() string {
 	copy := m.DeepCopy()
-	copy.PrivateKey = nil
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 

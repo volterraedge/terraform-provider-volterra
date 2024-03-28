@@ -58,57 +58,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.advertise_policy.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.advertise_policy.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.advertise_policy.API.Create"] = "ves.io.schema.advertise_policy.CreateRequest"
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.advertise_policy.API.Get"] = []string{
-		"object",
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.advertise_policy.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.advertise_policy.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.advertise_policy.API.Replace"] = []string{
 		"spec.tls_parameters.common_params.tls_certificates.#.private_key.blindfold_secret_info_internal",
@@ -118,13 +72,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.advertise_policy.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.advertise_policy.API.Replace"] = "ves.io.schema.advertise_policy.ReplaceRequest"

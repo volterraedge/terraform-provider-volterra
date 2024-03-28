@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.ip_prefix_set.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.ip_prefix_set.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.ip_prefix_set.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.ip_prefix_set.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.ip_prefix_set.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.ip_prefix_set.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2829,7 +2844,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "ipv6_prefix": {
                     "type": "array",
-                    "description": " An unordered list of IPv6 prefixes.\n\nExample: - \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An unordered list of IPv6 prefixes.\n\nExample: - \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv6_prefix",
                     "maxItems": 1024,
                     "items": {
@@ -2839,13 +2854,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "prefix": {
                     "type": "array",
-                    "description": " An unordered list of IPv4 prefixes.\n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An unordered list of IPv4 prefixes.\n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "prefix",
                     "maxItems": 1024,
                     "items": {
@@ -2855,6 +2871,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

@@ -195,6 +195,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhPrefix := v.PrefixValidationRuleHandler
 	rulesPrefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -208,6 +209,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhIpv6Prefix := v.Ipv6PrefixValidationRuleHandler
 	rulesIpv6Prefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -398,6 +400,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhPrefix := v.PrefixValidationRuleHandler
 	rulesPrefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -411,6 +414,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhIpv6Prefix := v.Ipv6PrefixValidationRuleHandler
 	rulesIpv6Prefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -601,6 +605,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhPrefix := v.PrefixValidationRuleHandler
 	rulesPrefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -614,6 +619,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhIpv6Prefix := v.Ipv6PrefixValidationRuleHandler
 	rulesIpv6Prefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -804,6 +810,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhPrefix := v.PrefixValidationRuleHandler
 	rulesPrefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -817,6 +824,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhIpv6Prefix := v.Ipv6PrefixValidationRuleHandler
 	rulesIpv6Prefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}

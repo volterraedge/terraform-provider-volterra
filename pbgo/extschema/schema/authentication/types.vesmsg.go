@@ -96,6 +96,7 @@ func (m *CookieParams) GetSecretChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CookieParams_KmsKeyHmac:
+
 		drInfos, err := m.GetKmsKeyHmac().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetKmsKeyHmac().GetDRefInfo() FAILED")

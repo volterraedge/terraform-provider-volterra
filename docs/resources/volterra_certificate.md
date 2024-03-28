@@ -24,16 +24,26 @@ resource "volterra_certificate" "example" {
   private_key {
     blindfold_secret_info_internal {
       decryption_provider = "value"
-      location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-      store_provider      = "value"
+
+      location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+      store_provider = "value"
     }
 
     secret_encoding_type = "secret_encoding_type"
 
-    // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
+    // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-    wingman_secret_info {
-      name = "ChargeBack-API-Key"
+    vault_secret_info {
+      key = "key_pem"
+
+      location = "v1/data/vhost_key"
+
+      provider = "vault-vh-provider"
+
+      secret_encoding = "secret_encoding"
+
+      version = "1"
     }
   }
 }
@@ -63,25 +73,39 @@ Argument Reference
 
 `certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected. (bool).
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected. (`Bool`).
 
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order. (bool).
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order. (`Bool`).
 
 `private_key` - (Required) Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. Key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
 
-### Blindfold Secret Info
+### Private Key
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. Key has to match the accompanying certificate..
 
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
 
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
-### Blindfold Secret Info Internal
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Ocsp Stapling Choice Custom Hash Algorithms
+
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Private Key Blindfold Secret Info Internal
 
 Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
@@ -90,36 +114,6 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Clear Secret Info
-
-Clear Secret is used for the secrets that are not encrypted.
-
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Custom Hash Algorithms
-
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
-
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
-
-### Private Key
-
-Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. Key has to match the accompanying certificate..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -131,7 +125,25 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Vault Secret Info
+### Secret Info Oneof Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Secret Info Oneof Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted.
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -145,7 +157,7 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 

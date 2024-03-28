@@ -91,10 +91,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.cloud_link.API.Create"] = "ves.io.schema.cloud_link.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.cloud_link.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_link.API.Replace"] = []string{
 		"spec.aws.auto",
 		"spec.aws.byoc.connections.#.auth_key.blindfold_secret_info_internal",

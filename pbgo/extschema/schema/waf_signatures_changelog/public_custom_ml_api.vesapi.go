@@ -213,7 +213,7 @@ type signatureCustomApiInprocClient struct {
 }
 
 func (c *signatureCustomApiInprocClient) GetStagedSignatures(ctx context.Context, in *StagedSignaturesReq, opts ...grpc.CallOption) (*StagedSignaturesRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.waf_signatures_changelog.SignatureCustomApi.GetStagedSignatures", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.waf_signatures_changelog.SignatureCustomApi.GetStagedSignatures")
 	return c.SignatureCustomApiServer.GetStagedSignatures(ctx, in)
 }
 

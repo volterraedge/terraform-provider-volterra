@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tenant_configuration.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tenant_configuration")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tenant_configuration.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tenant_configuration")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tenant_configuration.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tenant_configuration")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tenant_configuration.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tenant_configuration")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tenant_configuration.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tenant_configuration.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2510,49 +2493,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "x-displayName: \"Metadata\"\nObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": "x-displayName: \"Annotations\"\nx-example: \"value\"\nAnnotations is an unstructured key value map stored with a resource that may be\nset by external tools to store and retrieve arbitrary metadata. They are not\nqueryable and should be preserved when modifying objects.",
-                    "title": "annotations"
-                },
-                "description": {
-                    "type": "string",
-                    "description": "x-displayName: \"Description\"\nx-example: \"Virtual Host for acmecorp website\"\nHuman readable description for the object",
-                    "title": "description"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Disable\"\nx-example: \"true\"\nA value of true will administratively disable the object",
-                    "title": "disable",
-                    "format": "boolean"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": "x-displayName: \"Labels\"\nx-example: \"value\"\nMap of string keys and values that can be used to organize and categorize\n(scope and select) objects as chosen by the user. Values specified here will be used\nby selector expression",
-                    "title": "labels"
-                },
-                "name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"acmecorp-web\"\nx-required\nThis is the name of configuration object. It has to be unique within the namespace.\nIt can only be specified during create API and cannot be changed during replace API.\nThe value of name has to follow DNS-1035 format.",
-                    "title": "name"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": "x-displayName: \"Namespace\"\nx-example: \"staging\"\nThis defines the workspace within which each the configuration object is to be created.\nMust be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"",
-                    "title": "namespace"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": "x-displayName: \"UID\"\nx-example: \"d15f1fad-4d37-48c0-8706-df1824d76d31\"\nuid is the unique in time and space value for this object. Object create will fail if\nprovided by the client and the value exists in the system. Typically generated by the\nserver on successful creation of an object and is not allowed to change once populated.\nShadowed by SystemObjectMeta's uid field.",
-                    "title": "uid"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "x-displayName: \"Replace Metadata\"\nObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -2791,115 +2731,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "x-displayName: \"System Metadata\"\nSystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": "x-displayName: \"Creation Timestamp\"\nCreationTimestamp is a timestamp representing the server time when this object was\ncreated. It is not guaranteed to be set in happens-before order across separate operations.\nClients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": "x-displayName: \"Creator Class\"\nx-example: \"value\"\nA value identifying the class of the user or service which created this configuration object.",
-                    "title": "creator_class"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": "x-displayName: \"Creator Cookie\"\nx-example: \"value\"\nThis can used by the creator of the object for later audit for e.g. by storing the\nversion identifying information of the object so at future it can be determined if\nversion present at remote end is current or stale.",
-                    "title": "creator_cookie"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"Creator ID\"\nx-example: \"value\"\nA value identifying the exact user or service that created this configuration object",
-                    "title": "creator_id"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": "x-displayName: \"Deletion Timestamp\"\nDeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\nfield is set by the server when a graceful deletion is requested by the user, and is not\ndirectly settable by a client. The resource is expected to be deleted (no longer visible\nfrom resource lists, and not reachable by name) after the time in this field, once the\nfinalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\nOnce the deletionTimestamp is set, this value may not be unset or be set further into the\nfuture, although it may be shortened or the resource may be deleted prior to this time.\nFor example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\nby sending a graceful termination signal to the containers in the pod. After that 30 seconds,\nthe Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\nremove the pod from the API. In the presence of network partitions, this object may still\nexist after this timestamp, until an administrator or automated process can determine the\nresource is fully terminated.\nIf not set, graceful deletion of the object has not been requested.\n\nPopulated by the system when a graceful deletion is requested.\nRead-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": "x-displayName: \"Finalizers\"\nx-example: \"value\"\nMust be empty before the object is deleted from the registry. Each entry\nis an identifier for the responsible component that will remove the entry\nfrom the list. If the deletionTimestamp of the object is non-nil, entries\nin this list can only be removed.",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "initializers": {
-                    "description": "x-displayName: \"Initializers\"\nAn initializer is a controller which enforces some system invariant at object creation time.\nThis field is a list of initializers that have not yet acted on this object. If nil or empty,\nthis object has been completely initialized. Otherwise, the object is considered uninitialized\nand is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\nobserve uninitialized objects.\n\nWhen an object is created, the system will populate this list with the current set of initializers.\nOnly privileged users may set or modify this list. Once it is empty, it may not be modified further\nby any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": "x-displayName: \"Labels\"\nx-example: \"'ves.io/soft-deleted': 'true'\"\nMap of string keys and values that can be used to organize and categorize\n(scope and select) objects as chosen by the operator or software. Values here can be interpreted\nby software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).",
-                    "title": "labels"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": "x-displayName: \"Modification Timestamp\"\nModificationTimestamp is a timestamp representing the server time when this object was\nlast modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": "x-displayName: \"Namespace Reference\"\nThe namespace this object belongs to. This is populated by the service based on the\nmetadata.namespace field when an object is created.",
-                    "title": "namespace",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Object Index\"\nx-example: \"0\"\nUnique index for the object. Some objects need a unique integer index to be allocated\nfor each object type. This field will be populated for all objects that need it and will\nbe zero otherwise.",
-                    "title": "object_index",
-                    "format": "int64"
-                },
-                "owner_view": {
-                    "description": "x-displayName: \"Owner View\"\nReference to the view object that owns this object.\nIf there is no view owner, this field will be nil.\nIf not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"SRE Disable\"\nx-example: \"true\"\nThis should be set to true If VES/SRE operator wants to suppress an object from being\npresented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\nThis is meant only to be used in temporary situations for operational continuity till\na fix is rolled out in business-logic.",
-                    "title": "sre_disable",
-                    "format": "boolean"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nTenant to which this configuration object belongs to. The value for this is found from\npresented credentials.",
-                    "title": "tenant"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": "x-displayName: \"Trace Info\"\nx-example: \"value\"\ntrace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\nthe object modification. This can be used on the watch side to create subsequent spans.\nThis information can be used to co-relate activities across services (modulo state compression)\nfor a synchronous API.",
-                    "title": "trace_info"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": "x-displayName: \"UID\"\nx-example: \"d15f1fad-4d37-48c0-8706-df1824d76d31\"\nuid is the unique in time and space value for this object. It is generated by\nthe server on successful creation of an object and is not allowed to change on Replace\nAPI. The value of is taken from uid field of ObjectMetaType, if provided.",
-                    "title": "uid"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"VTRP ID\"\nIndicate origin of this object.",
-                    "title": "vtrp_id"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"VTRP Stale\"\nIndicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean"
-                }
-            }
-        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -3105,12 +2936,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/tenant_configurationObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -3183,33 +3008,6 @@ var APISwaggerJSON string = `{
                 },
                 "password_policy": {
                     "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
-                    "$ref": "#/definitions/tenant_configurationPasswordPolicy",
-                    "x-displayname": "Password Policy"
-                }
-            }
-        },
-        "tenant_configurationGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of the tenant configuration specification",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Specification",
-            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.GlobalSpecType",
-            "properties": {
-                "basic_configuration": {
-                    "description": " Basic configuration contains general parameters which can be adjusted within tenant.",
-                    "title": "Basic Configuration",
-                    "$ref": "#/definitions/tenant_configurationBasicConfiguration",
-                    "x-displayname": "Basic Configuration"
-                },
-                "brute_force_detection_settings": {
-                    "description": " Our brute force detection system uses temporary lockout algorithm.\n Temporary lockout will disable a user’s account for a time period after an attack is detected;\n the time period for which the account is disabled increases the longer the attack continues.\n You can adjust some parameters of the brute force detection system.",
-                    "title": "Brute Force Detection Settings",
-                    "$ref": "#/definitions/tenant_configurationBruteForceDetectionSettings",
-                    "x-displayname": "Brute Force Detection Settings"
-                },
-                "password_policy": {
-                    "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
-                    "title": "Password Policy",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
                 }
@@ -3300,12 +3098,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/tenant_configurationObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -3340,21 +3132,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "tenant_configurationObject": {
-            "type": "object",
-            "description": "Tenant configuration view object",
-            "title": "Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.Object",
-            "properties": {
-                "spec": {
-                    "description": " Specification of the desired behavior of the tenant configuration",
-                    "title": "spec",
-                    "$ref": "#/definitions/tenant_configurationSpecType",
-                    "x-displayname": "Spec"
                 }
             }
         },
@@ -3489,17 +3266,6 @@ var APISwaggerJSON string = `{
                     "description": " Password policy allows you to configure your own password policy within tenant.\n Each user within tenant will have to comply with the configured policy when they set or update the password.",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
-                }
-            }
-        },
-        "tenant_configurationSpecType": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/tenant_configurationGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         },

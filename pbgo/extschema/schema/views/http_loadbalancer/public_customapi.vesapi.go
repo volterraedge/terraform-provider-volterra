@@ -699,27 +699,27 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) AssignAPIDefinition(ctx context.Context, in *AssignAPIDefinitionReq, opts ...grpc.CallOption) (*AssignAPIDefinitionResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition")
 	return c.CustomAPIServer.AssignAPIDefinition(ctx, in)
 }
 func (c *customAPIInprocClient) DeleteDoSAutoMitigationRule(ctx context.Context, in *DeleteDoSAutoMitigationRuleReq, opts ...grpc.CallOption) (*DeleteDoSAutoMitigationRuleRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule")
 	return c.CustomAPIServer.DeleteDoSAutoMitigationRule(ctx, in)
 }
 func (c *customAPIInprocClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo")
 	return c.CustomAPIServer.GetDnsInfo(ctx, in)
 }
 func (c *customAPIInprocClient) GetDoSAutoMitigationRules(ctx context.Context, in *GetDoSAutoMitigationRulesReq, opts ...grpc.CallOption) (*GetDoSAutoMitigationRulesRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules")
 	return c.CustomAPIServer.GetDoSAutoMitigationRules(ctx, in)
 }
 func (c *customAPIInprocClient) GetSecurityConfig(ctx context.Context, in *GetSecurityConfigReq, opts ...grpc.CallOption) (*GetSecurityConfigRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig")
 	return c.CustomAPIServer.GetSecurityConfig(ctx, in)
 }
 func (c *customAPIInprocClient) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions")
 	return c.CustomAPIServer.ListAvailableAPIDefinitions(ctx, in)
 }
 
@@ -2307,8 +2307,8 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 256,
+                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 1024,
                     "items": {
                         "type": "string"
                     },
@@ -2316,7 +2316,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },

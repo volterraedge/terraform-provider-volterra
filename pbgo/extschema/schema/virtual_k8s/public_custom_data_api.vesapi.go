@@ -221,7 +221,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) PVCMetrics(ctx context.Context, in *PVCMetricsRequest, opts ...grpc.CallOption) (*PVCMetricsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_k8s.CustomDataAPI.PVCMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_k8s.CustomDataAPI.PVCMetrics")
 	return c.CustomDataAPIServer.PVCMetrics(ctx, in)
 }
 

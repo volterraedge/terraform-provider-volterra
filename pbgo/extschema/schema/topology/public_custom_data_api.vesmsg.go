@@ -1373,14 +1373,6 @@ func (m *Node) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *Node) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetNodeTypeSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodeType() == nil {
@@ -1388,6 +1380,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetNodeType().(type) {
 	case *Node_Site:
+
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -1399,6 +1392,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *Node_TransitGateway:
+
 		drInfos, err := m.GetTransitGateway().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTransitGateway().GetDRefInfo() FAILED")
@@ -1410,6 +1404,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *Node_Network:
+
 		drInfos, err := m.GetNetwork().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetwork().GetDRefInfo() FAILED")
@@ -1421,6 +1416,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *Node_Subnet:
+
 		drInfos, err := m.GetSubnet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSubnet().GetDRefInfo() FAILED")
@@ -1432,6 +1428,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *Node_Instance:
+
 		drInfos, err := m.GetInstance().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInstance().GetDRefInfo() FAILED")
@@ -1443,6 +1440,7 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *Node_SiteMeshGroup:
+
 		drInfos, err := m.GetSiteMeshGroup().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteMeshGroup().GetDRefInfo() FAILED")
@@ -1452,55 +1450,6 @@ func (m *Node) GetNodeTypeDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "site_mesh_group." + dri.DRField
 		}
 		return drInfos, err
-
-	case *Node_DcClusterGroup:
-
-		return nil, nil
-
-	default:
-		return nil, nil
-	}
-
-}
-
-// GetNodeTypeSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *Node) GetNodeTypeSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetNodeType() == nil {
-		return nil, nil
-	}
-	switch m.NodeType.(type) {
-	case *Node_Site:
-
-		return nil, nil
-
-	case *Node_TransitGateway:
-
-		return nil, nil
-
-	case *Node_Network:
-
-		return nil, nil
-
-	case *Node_Subnet:
-
-		return nil, nil
-
-	case *Node_Instance:
-
-		return nil, nil
-
-	case *Node_SiteMeshGroup:
-		srInfos, err := m.GetSiteMeshGroup().GetSRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetSiteMeshGroup().GetSRefInfo() FAILED")
-		}
-		for i := range srInfos {
-			sri := &srInfos[i]
-			// Convert IpsecType.objone_refs to ipsec.objone_refs i.e. convert field-type to field-name
-			sl := strings.Split(sri.Name, ".")
-			sri.Name = "node_type.site_mesh_group." + strings.Join(sl[1:], ".")
-		}
-		return srInfos, err
 
 	case *Node_DcClusterGroup:
 
@@ -2291,14 +2240,6 @@ func (m *NodeTypeSiteMeshGroup) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *NodeTypeSiteMeshGroup) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetInfoSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *NodeTypeSiteMeshGroup) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetInfo() == nil {
@@ -2314,27 +2255,6 @@ func (m *NodeTypeSiteMeshGroup) GetInfoDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "info." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetInfoSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *NodeTypeSiteMeshGroup) GetInfoSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetInfo() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetInfo().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetInfo().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "info." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 
@@ -3564,14 +3484,6 @@ func (m *TopologyResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *TopologyResponse) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetNodesSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *TopologyResponse) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNodes() == nil {
@@ -3591,31 +3503,6 @@ func (m *TopologyResponse) GetNodesDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
-}
-
-// GetNodesSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *TopologyResponse) GetNodesSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetNodes() == nil {
-		return nil, nil
-	}
-
-	var srInfos []db.SelrFldInfo
-	for _, e := range m.GetNodes() {
-		sris, err := e.GetSRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetNodes() GetSRefInfo() FAILED")
-		}
-		srInfos = append(srInfos, sris...)
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "nodes." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 

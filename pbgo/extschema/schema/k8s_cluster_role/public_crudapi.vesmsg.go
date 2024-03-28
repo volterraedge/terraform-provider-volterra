@@ -507,9 +507,7 @@ func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	var drInfos []db.DRefInfo
-
-	return drInfos, nil
+	return nil, nil
 
 }
 
@@ -664,15 +662,6 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["object"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("object"))
-		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["referring_objects"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("referring_objects"))
@@ -739,8 +728,6 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGetResponseValidator = func() *ValidateGetResponse {
 	v := &ValidateGetResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["object"] = ObjectValidator().Validate
 
 	v.FldValidators["create_form"] = CreateRequestValidator().Validate
 
@@ -1071,9 +1058,7 @@ func (m *ListResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	var drInfos []db.DRefInfo
-
-	return drInfos, nil
+	return nil, nil
 
 }
 
@@ -1202,15 +1187,6 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 
 	}
 
-	if fv, exists := v.FldValidators["object"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("object"))
-		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["owner_view"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("owner_view"))
@@ -1265,8 +1241,6 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 // Well-known symbol for default validator implementation
 var DefaultListResponseItemValidator = func() *ValidateListResponseItem {
 	v := &ValidateListResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["object"] = ObjectValidator().Validate
 
 	v.FldValidators["get_spec"] = GetSpecTypeValidator().Validate
 

@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_dns_load_balancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -152,8 +153,9 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"nxdomain": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"pool": {
@@ -174,6 +176,70 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+											},
+										},
+									},
+
+									"asn_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"as_numbers": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeInt,
+													},
+												},
+											},
+										},
+									},
+
+									"asn_matcher": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"asn_sets": {
+
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:       schema.TypeString,
+																Computed:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
 												},
 											},
 										},
@@ -456,14 +522,86 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 					}
 
-					geoLocationChoiceTypeFound := false
+					clientChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !geoLocationChoiceTypeFound {
+					if v, ok := rulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
-						geoLocationChoiceTypeFound = true
-						geoLocationChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
-						geoLocationChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].GeoLocationChoice = geoLocationChoiceInt
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnList{}
+						clientChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+								ls := make([]uint32, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = uint32(v.(int))
+								}
+								clientChoiceInt.AsnList.AsNumbers = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnMatcher{}
+						clientChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								clientChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+								for i, ps := range sl {
+
+									asMapToStrVal := ps.(map[string]interface{})
+									asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									asnSetsInt[i].Kind = "bgp_asn_set"
+
+									if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
+						clientChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
+						rules[i].ClientChoice = clientChoiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
@@ -475,7 +613,7 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 								for i, v := range v.([]interface{}) {
 									ls[i] = v.(string)
 								}
-								geoLocationChoiceInt.GeoLocationLabelSelector.Expressions = ls
+								clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
 
 							}
 
@@ -483,12 +621,12 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 					}
 
-					if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !geoLocationChoiceTypeFound {
+					if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
-						geoLocationChoiceTypeFound = true
-						geoLocationChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
-						geoLocationChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].GeoLocationChoice = geoLocationChoiceInt
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
+						clientChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
+						rules[i].ClientChoice = clientChoiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
@@ -496,19 +634,19 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-								geoLocationChoiceInt.GeoLocationSet.Name = v.(string)
+								clientChoiceInt.GeoLocationSet.Name = v.(string)
 
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-								geoLocationChoiceInt.GeoLocationSet.Namespace = v.(string)
+								clientChoiceInt.GeoLocationSet.Namespace = v.(string)
 
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-								geoLocationChoiceInt.GeoLocationSet.Tenant = v.(string)
+								clientChoiceInt.GeoLocationSet.Tenant = v.(string)
 
 							}
 
@@ -584,6 +722,7 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -789,14 +928,86 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 					}
 
-					geoLocationChoiceTypeFound := false
+					clientChoiceTypeFound := false
 
-					if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !geoLocationChoiceTypeFound {
+					if v, ok := rulesMapStrToI["asn_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
-						geoLocationChoiceTypeFound = true
-						geoLocationChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
-						geoLocationChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
-						rules[i].GeoLocationChoice = geoLocationChoiceInt
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnList{}
+						clientChoiceInt.AsnList = &ves_io_schema_policy.AsnMatchList{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
+
+								ls := make([]uint32, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = uint32(v.(int))
+								}
+								clientChoiceInt.AsnList.AsNumbers = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["asn_matcher"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_AsnMatcher{}
+						clientChoiceInt.AsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								clientChoiceInt.AsnMatcher.AsnSets = asnSetsInt
+								for i, ps := range sl {
+
+									asMapToStrVal := ps.(map[string]interface{})
+									asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									asnSetsInt[i].Kind = "bgp_asn_set"
+
+									if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										asnSetsInt[i].Uid = v.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["geo_location_label_selector"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationLabelSelector{}
+						clientChoiceInt.GeoLocationLabelSelector = &ves_io_schema.LabelSelectorType{}
+						rules[i].ClientChoice = clientChoiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
@@ -808,7 +1019,7 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 								for i, v := range v.([]interface{}) {
 									ls[i] = v.(string)
 								}
-								geoLocationChoiceInt.GeoLocationLabelSelector.Expressions = ls
+								clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
 
 							}
 
@@ -816,12 +1027,12 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 					}
 
-					if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !geoLocationChoiceTypeFound {
+					if v, ok := rulesMapStrToI["geo_location_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
-						geoLocationChoiceTypeFound = true
-						geoLocationChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
-						geoLocationChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
-						rules[i].GeoLocationChoice = geoLocationChoiceInt
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_GeoLocationSet{}
+						clientChoiceInt.GeoLocationSet = &ves_io_schema_views.ObjectRefType{}
+						rules[i].ClientChoice = clientChoiceInt
 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
@@ -829,19 +1040,19 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 							if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
-								geoLocationChoiceInt.GeoLocationSet.Name = v.(string)
+								clientChoiceInt.GeoLocationSet.Name = v.(string)
 
 							}
 
 							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
 
-								geoLocationChoiceInt.GeoLocationSet.Namespace = v.(string)
+								clientChoiceInt.GeoLocationSet.Namespace = v.(string)
 
 							}
 
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
-								geoLocationChoiceInt.GeoLocationSet.Tenant = v.(string)
+								clientChoiceInt.GeoLocationSet.Tenant = v.(string)
 
 							}
 

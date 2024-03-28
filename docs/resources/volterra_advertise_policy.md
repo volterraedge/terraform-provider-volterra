@@ -61,17 +61,87 @@ Argument Reference
 
 `where` - (Optional) * site Advertised on site local network in case of customer sites and Public network in case of regional sites. See [Where ](#where) below for details.
 
-### Blindfold Secret Info
+### Tls Parameters
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+Optional. TLS parameters to use. If not specified, will take from Virtual Host configuration..
 
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+`common_params` - (Optional) Common TLS parameters used in both upstream and downstream connections. See [Tls Parameters Common Params ](#tls-parameters-common-params) below for details.
 
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+`crl` - (Optional) Used to ensure that the client presented certificate is not revoked as per the CRL. See [ref](#ref) below for details.(Deprecated)
 
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+`require_client_certificate` - (Optional) certificate. (`Bool`).
 
-### Blindfold Secret Info Internal
+`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
+
+### Where
+
+-	site Advertised on site local network in case of customer sites and Public network in case of regional sites.
+
+###### One of the arguments from this list "virtual_network, site, virtual_site" must be set
+
+`site` - (Optional) Direct reference to site object. See [Ref Or Selector Site ](#ref-or-selector-site) below for details.
+
+`virtual_network` - (Optional) Direct reference to virtual network object. See [Ref Or Selector Virtual Network ](#ref-or-selector-virtual-network) below for details.
+
+`virtual_site` - (Optional) Direct reference to virtual site object. See [Ref Or Selector Virtual Site ](#ref-or-selector-virtual-site) below for details.
+
+### Common Params Tls Certificates
+
+Set of TLS certificates.
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
+
+### Common Params Validation Params
+
+and list of Subject Alt Names for verification.
+
+`skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
+
+###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
+
+`trusted_ca` - (Optional) Root CA Certificate. See [Trusted Ca Choice Trusted Ca ](#trusted-ca-choice-trusted-ca) below for details.
+
+`trusted_ca_url` - (Optional) Inline Root CA Certificate (`String`).
+
+`use_volterra_trusted_ca_url` - (Optional) Use the F5XC default Root CA URL from the global config for hostname verification. (`Bool`).(Deprecated)
+
+`verify_subject_alt_names` - (Optional) the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`String`).
+
+### Internet Vip Choice Disable Internet Vip
+
+Do not enable advertise on external internet vip..
+
+### Internet Vip Choice Enable Internet Vip
+
+Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
+
+### Ocsp Stapling Choice Custom Hash Algorithms
+
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Ocsp Stapling Choice Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
+
+### Ocsp Stapling Choice Use System Defaults
+
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+
+### Private Key Blindfold Secret Info Internal
 
 Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
@@ -80,64 +150,6 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Clear Secret Info
-
-Clear Secret is used for the secrets that are not encrypted.
-
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Common Params
-
-Common TLS parameters used in both upstream and downstream connections.
-
-`cipher_suites` - (Optional) will be used. (`String`).
-
-`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
-
-`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
-
-`tls_certificates` - (Optional) Set of TLS certificates. See [Tls Certificates ](#tls-certificates) below for details.
-
-`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
-
-`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
-
-### Custom Hash Algorithms
-
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
-
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
-
-### Disable Internet Vip
-
-Do not enable advertise on external internet vip..
-
-### Disable Ocsp Stapling
-
-This is the default behavior if no choice is selected..
-
-### Enable Internet Vip
-
-Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
-
-### Private Key
-
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
 
 ### Ref
 
@@ -149,93 +161,63 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Segment
-
-Reference to Segment.
-
-`ref` - (Required) A segment reference. See [ref](#ref) below for details.
-
-### Segment Site
-
-Reference to Segment object.
-
-`segment` - (Required) Segment in the site. See [ref](#ref) below for details.
-
-`site` - (Required) Reference to a site. See [ref](#ref) below for details.
-
-### Segment Vsite
-
-Reference to Segment in a virtual site.
-
-`segment` - (Required) Segment in the virtual site. See [ref](#ref) below for details.
-
-`vsite` - (Required) Reference to a virtual site. See [ref](#ref) below for details.
-
-### Site
+### Ref Or Selector Site
 
 Direct reference to site object.
 
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+###### One of the arguments from this list "enable_internet_vip, disable_internet_vip" must be set
 
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
-### Tls Certificates
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
-Set of TLS certificates.
+### Ref Or Selector Virtual Network
 
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+Direct reference to virtual network object.
 
-`description` - (Optional) Description for the certificate (`String`).
+`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+### Ref Or Selector Virtual Site
 
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+Direct reference to virtual site object.
 
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
 
-### Tls Parameters
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
 
-Optional. TLS parameters to use. If not specified, will take from Virtual Host configuration..
+`network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
-`common_params` - (Optional) Common TLS parameters used in both upstream and downstream connections. See [Common Params ](#common-params) below for details.
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
-`crl` - (Optional) Used to ensure that the client presented certificate is not revoked as per the CRL. See [ref](#ref) below for details.
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
-`require_client_certificate` - (Optional) certificate. (`Bool`).
+### Secret Info Oneof Blindfold Secret Info
 
-`xfcc_header_elements` - (Optional) If none are defined, the header will not be added. (`List of Strings`).
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
-### Trusted Ca
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-Trusted CA List.
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
-`trusted_ca_list` - (Optional) Reference to Trusted CA List. See [ref](#ref) below for details.
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Use System Defaults
+### Secret Info Oneof Clear Secret Info
 
-F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+Clear Secret is used for the secrets that are not encrypted.
 
-### Validation Params
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-and list of Subject Alt Names for verification.
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-`skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
-
-`trusted_ca` - (Optional) Trusted CA List. See [Trusted Ca ](#trusted-ca) below for details.
-
-`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
-
-`use_volterra_trusted_ca_url` - (Optional) Ignore the trusted CA URL and use the volterra trusted CA URL from the global config for verification. (`Bool`).
-
-`verify_subject_alt_names` - (Optional) the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`String`).
-
-### Vault Secret Info
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -249,45 +231,51 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Virtual Network
-
-Direct reference to virtual network object.
-
-`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
-
-### Virtual Site
-
-Direct reference to virtual site object.
-
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
-
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
-
-`network_type` - (Optional) The type of network on the referred virtual_site (`String`).
-
-`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
-
-### Where
-
--	site Advertised on site local network in case of customer sites and Public network in case of regional sites.
-
-`segment` - (Optional) Reference to Segment. See [Segment ](#segment) below for details.
-
-`segment_site` - (Optional) Reference to Segment object. See [Segment Site ](#segment-site) below for details.
-
-`segment_vsite` - (Optional) Reference to Segment in a virtual site. See [Segment Vsite ](#segment-vsite) below for details.
-
-`site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
-
-`virtual_network` - (Optional) Direct reference to virtual network object. See [Virtual Network ](#virtual-network) below for details.
-
-`virtual_site` - (Optional) Direct reference to virtual site object. See [Virtual Site ](#virtual-site) below for details.
-
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Tls Certificates Private Key
+
+TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tls Parameters Common Params
+
+Common TLS parameters used in both upstream and downstream connections.
+
+`cipher_suites` - (Optional) will be used. (`String`).
+
+`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
+
+`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+`tls_certificates` - (Optional) Set of TLS certificates. See [Common Params Tls Certificates ](#common-params-tls-certificates) below for details.
+
+`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).(Deprecated)
+
+`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Common Params Validation Params ](#common-params-validation-params) below for details.
+
+### Trusted Ca Choice Trusted Ca
+
+Root CA Certificate.
+
+`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.(Deprecated)
 
 Attribute Reference
 -------------------

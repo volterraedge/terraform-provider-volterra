@@ -1582,15 +1582,13 @@ func (m *ExpressRouteCircuitInfo) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.AuthorizationKeyBlindfolded = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *ExpressRouteCircuitInfo) GoString() string {
 	copy := m.DeepCopy()
-	copy.AuthorizationKeyBlindfolded = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 

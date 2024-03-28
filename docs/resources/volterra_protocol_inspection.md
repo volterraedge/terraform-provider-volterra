@@ -32,7 +32,7 @@ resource "volterra_protocol_inspection" "example" {
 
   enable_disable_signatures {
     // One of the arguments from this list "enable_signature disable_signature" must be set
-    enable_signature = true
+    disable_signature = true
   }
 }
 
@@ -63,19 +63,13 @@ Argument Reference
 
 `enable_disable_signatures` - (Required) Confirmation of applying IPS. See [Enable Disable Signatures ](#enable-disable-signatures) below for details.
 
-### Disable Compliance Checks
-
-x-displayName: "Disable".
-
-### Disable Signature
-
-x-displayName: "Disable".
-
 ### Enable Disable Compliance Checks
 
 Enable or Disable Compliance Checks.
 
-`disable_compliance_checks` - (Optional) x-displayName: "Disable" (bool).
+###### One of the arguments from this list "enable_compliance_checks, disable_compliance_checks" must be set
+
+`disable_compliance_checks` - (Optional) x-displayName: "Disable" (`Bool`).
 
 `enable_compliance_checks` - (Optional) Enabling compliance checks and selecting a type by default (right now this enables dns_compliance_checks). See [ref](#ref) below for details.
 
@@ -83,13 +77,15 @@ Enable or Disable Compliance Checks.
 
 Confirmation of applying IPS.
 
-`disable_signature` - (Optional) x-displayName: "Disable" (bool).
+###### One of the arguments from this list "enable_signature, disable_signature" must be set
 
-`enable_signature` - (Optional) x-displayName: "Enable" (bool).
+`disable_signature` - (Optional) x-displayName: "Disable" (`Bool`).
 
-### Enable Signature
+`enable_signature` - (Optional) x-displayName: "Enable" (`Bool`).
 
-x-displayName: "Enable".
+### Compliance Check Choice Disable Compliance Checks
+
+x-displayName: "Disable".
 
 ### Ref
 
@@ -100,6 +96,14 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Signature Choice Disable Signature
+
+x-displayName: "Disable".
+
+### Signature Choice Enable Signature
+
+x-displayName: "Enable".
 
 Attribute Reference
 -------------------

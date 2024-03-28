@@ -869,7 +869,7 @@ var DefaultL7AclRuleValidator = func() *ValidateL7AclRule {
 	vrhIpPrefix := v.IpPrefixValidationRuleHandler
 	rulesIpPrefix := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "256",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhIpPrefix(rulesIpPrefix)

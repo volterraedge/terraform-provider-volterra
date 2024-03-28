@@ -117,6 +117,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -575,6 +576,7 @@ func (m *EnhancedFirewallPolicyRuleType) GetActionChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *EnhancedFirewallPolicyRuleType_InsertService:
+
 		drInfos, err := m.GetInsertService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsertService().GetDRefInfo() FAILED")
@@ -606,6 +608,7 @@ func (m *EnhancedFirewallPolicyRuleType) GetDestinationChoiceDRefInfo() ([]db.DR
 		return nil, nil
 
 	case *EnhancedFirewallPolicyRuleType_DestinationIpPrefixSet:
+
 		drInfos, err := m.GetDestinationIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDestinationIpPrefixSet().GetDRefInfo() FAILED")
@@ -665,6 +668,7 @@ func (m *EnhancedFirewallPolicyRuleType) GetSourceChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *EnhancedFirewallPolicyRuleType_SourceIpPrefixSet:
+
 		drInfos, err := m.GetSourceIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSourceIpPrefixSet().GetDRefInfo() FAILED")
@@ -1348,6 +1352,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -1663,6 +1668,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -2168,6 +2174,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")

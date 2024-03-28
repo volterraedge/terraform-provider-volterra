@@ -80,6 +80,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2"] = "ves.io.schema.signup.CreateV2Request"
 
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.signup.CustomPrivateAPIEywaprime.RestrictedCreateV2"] = "ves.io.schema.signup.CreateV2Request"
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

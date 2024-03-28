@@ -65,6 +65,48 @@ type ValidateCustomCreateRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomCreateRequest) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for api_groups")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_groups")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_groups")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_groups")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomCreateRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CustomCreateRequest)
 	if !ok {
@@ -80,13 +122,9 @@ func (v *ValidateCustomCreateRequest) Validate(ctx context.Context, pm interface
 	}
 
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
-		for idx, item := range m.GetApiGroups() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetApiGroups(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -124,6 +162,26 @@ func (v *ValidateCustomCreateRequest) Validate(ctx context.Context, pm interface
 // Well-known symbol for default validator implementation
 var DefaultCustomCreateRequestValidator = func() *ValidateCustomCreateRequest {
 	v := &ValidateCustomCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiGroups := v.ApiGroupsValidationRuleHandler
+	rulesApiGroups := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhApiGroups(rulesApiGroups)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomCreateRequest.api_groups: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_groups"] = vFn
 
 	v.FldValidators["metadata"] = ves_io_schema.ObjectCreateMetaTypeValidator().Validate
 
@@ -557,6 +615,48 @@ type ValidateCustomReplaceRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCustomReplaceRequest) ApiGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for api_groups")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_groups")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_groups")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_groups")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCustomReplaceRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CustomReplaceRequest)
 	if !ok {
@@ -572,13 +672,9 @@ func (v *ValidateCustomReplaceRequest) Validate(ctx context.Context, pm interfac
 	}
 
 	if fv, exists := v.FldValidators["api_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("api_groups"))
-		for idx, item := range m.GetApiGroups() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetApiGroups(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -616,6 +712,26 @@ func (v *ValidateCustomReplaceRequest) Validate(ctx context.Context, pm interfac
 // Well-known symbol for default validator implementation
 var DefaultCustomReplaceRequestValidator = func() *ValidateCustomReplaceRequest {
 	v := &ValidateCustomReplaceRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiGroups := v.ApiGroupsValidationRuleHandler
+	rulesApiGroups := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhApiGroups(rulesApiGroups)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomReplaceRequest.api_groups: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_groups"] = vFn
 
 	v.FldValidators["spec"] = ReplaceSpecTypeValidator().Validate
 

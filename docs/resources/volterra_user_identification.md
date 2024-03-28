@@ -21,8 +21,8 @@ resource "volterra_user_identification" "example" {
   namespace = "staging"
 
   rules {
-    // One of the arguments from this list "none jwt_claim_name tls_fingerprint ip_and_http_header_name ip_and_tls_fingerprint client_ip http_header_name client_asn client_region query_param_key cookie_name client_country client_city" must be set
-    jwt_claim_name = "jwt_claim_name"
+    // One of the arguments from this list "client_city http_header_name none client_country client_asn client_region ip_and_tls_fingerprint jwt_claim_name client_ip cookie_name ip_and_http_header_name query_param_key tls_fingerprint" must be set
+    client_ip = true
   }
 }
 
@@ -49,47 +49,21 @@ Argument Reference
 
 `rules` - (Required) Evaluation of the rules is terminated once a user identifier has been extracted.. See [Rules ](#rules) below for details.
 
-### Client Asn
-
-The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB..
-
-### Client City
-
-The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB..
-
-### Client Country
-
-The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB..
-
-### Client Ip
-
-Use client IP address as user identifier..
-
-### Client Region
-
-The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB..
-
-### Ip And Tls Fingerprint
-
-Use the combination of Client IP and TLS Fingerprint as user identifier..
-
-### None
-
-Do not use any user identifier..
-
 ### Rules
 
 Evaluation of the rules is terminated once a user identifier has been extracted..
 
-`client_asn` - (Optional) The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
+###### One of the arguments from this list "client_ip, cookie_name, ip_and_http_header_name, ip_and_tls_fingerprint, jwt_claim_name, query_param_key, tls_fingerprint, http_header_name, none, client_country, client_city, client_asn, client_region" must be set
 
-`client_city` - (Optional) The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
+`client_asn` - (Optional) The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB. (`Bool`).
 
-`client_country` - (Optional) The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
+`client_city` - (Optional) The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB. (`Bool`).
 
-`client_ip` - (Optional) Use client IP address as user identifier. (bool).
+`client_country` - (Optional) The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB. (`Bool`).
 
-`client_region` - (Optional) The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB. (bool).
+`client_ip` - (Optional) Use client IP address as user identifier. (`Bool`).
+
+`client_region` - (Optional) The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB. (`Bool`).
 
 `cookie_name` - (Optional) Use the HTTP cookie value for the given name as user identifier. (`String`).
 
@@ -97,17 +71,45 @@ Evaluation of the rules is terminated once a user identifier has been extracted.
 
 `ip_and_http_header_name` - (Optional) Name of HTTP header from which the value should be extracted. (`String`).
 
-`ip_and_tls_fingerprint` - (Optional) Use the combination of Client IP and TLS Fingerprint as user identifier. (bool).
+`ip_and_tls_fingerprint` - (Optional) Use the combination of Client IP and TLS Fingerprint as user identifier. (`Bool`).
 
 `jwt_claim_name` - (Optional) Use the JWT claim value as user identifier. (`String`).
 
-`none` - (Optional) Do not use any user identifier. (bool).
+`none` - (Optional) Do not use any user identifier. (`Bool`).
 
 `query_param_key` - (Optional) Use the query parameter value for the given key as user identifier. (`String`).
 
-`tls_fingerprint` - (Optional) Use TLS Fingerprint as user identifier. (bool).
+`tls_fingerprint` - (Optional) Use TLS Fingerprint as user identifier. (`Bool`).
 
-### Tls Fingerprint
+### Identifier Client Asn
+
+The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB..
+
+### Identifier Client City
+
+The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB..
+
+### Identifier Client Country
+
+The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB..
+
+### Identifier Client Ip
+
+Use client IP address as user identifier..
+
+### Identifier Client Region
+
+The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB..
+
+### Identifier Ip And Tls Fingerprint
+
+Use the combination of Client IP and TLS Fingerprint as user identifier..
+
+### Identifier None
+
+Do not use any user identifier..
+
+### Identifier Tls Fingerprint
 
 Use TLS Fingerprint as user identifier..
 

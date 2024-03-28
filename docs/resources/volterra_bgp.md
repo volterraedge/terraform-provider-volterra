@@ -31,33 +31,40 @@ resource "volterra_bgp" "example" {
       }
     }
 
-    bgp_router_id_key  = "value"
+    bgp_router_id_key = "value"
+
     bgp_router_id_type = "bgp_router_id_type"
 
-    // One of the arguments from this list "from_site ip_address local_address" must be set
-    ip_address = "ip_address"
+    // One of the arguments from this list "local_address from_site ip_address" must be set
+    local_address = true
   }
 
   peers {
     metadata {
       description = "Virtual Host for acmecorp website"
-      disable     = true
-      name        = "acmecorp-web"
+
+      disable = true
+
+      name = "acmecorp-web"
     }
 
     // One of the arguments from this list "passive_mode_disabled passive_mode_enabled" must be set
     passive_mode_disabled = true
-    target_service        = "value"
 
-    // One of the arguments from this list "internal external" must be set
+    target_service = "value"
+
+    // One of the arguments from this list "external internal" must be set
 
     external {
-      // One of the arguments from this list "address_ipv6 subnet_begin_offset subnet_end_offset from_site default_gateway address" must be set
-      address = "address"
+      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway disable" must be set
+      from_site = true
+
+      // One of the arguments from this list "default_gateway_v6 disable_v6 address_ipv6 subnet_begin_offset_v6 subnet_end_offset_v6 from_site_v6" must be set
+      subnet_end_offset_v6 = "subnet_end_offset_v6"
 
       asn = "64512"
 
-      // One of the arguments from this list "no_authentication md5_auth_key" must be set
+      // One of the arguments from this list "md5_auth_key no_authentication" must be set
       no_authentication = true
 
       family_inet {
@@ -65,13 +72,14 @@ resource "volterra_bgp" "example" {
         enable = true
       }
 
-      // One of the arguments from this list "interface_list inside_interfaces outside_interfaces interface" must be set
-
-      interface {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+      family_inet_v6 {
+        // One of the arguments from this list "enable disable" must be set
+        enable = true
       }
+
+      // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
+      outside_interfaces = true
+
       port = "179"
     }
   }
@@ -82,9 +90,16 @@ resource "volterra_bgp" "example" {
     site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
       disable_internet_vip = true
-      network_type         = "network_type"
+
+      network_type = "network_type"
 
       ref {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      refs {
         name      = "test1"
         namespace = "staging"
         tenant    = "acmecorp"
@@ -126,223 +141,213 @@ BGP parameters for local site.
 
 `asn` - (Required) Autonomous System Number (`Int`).
 
-`bgp_router_id` - (Optional) If Router ID Type is set to "From IP Address", this is used as Router ID. Else, this is ignored.. See [Bgp Router Id ](#bgp-router-id) below for details.
+`bgp_router_id` - (Optional) If Router ID Type is set to "From IP Address", this is used as Router ID. Else, this is ignored.. See [Bgp Parameters Bgp Router Id ](#bgp-parameters-bgp-router-id) below for details.(Deprecated)
 
-`bgp_router_id_key` - (Optional) from site template parameters map in site object. Else, this is ignored. (`String`).
+`bgp_router_id_key` - (Optional) from site template parameters map in site object. Else, this is ignored. (`String`).(Deprecated)
 
-`bgp_router_id_type` - (Optional) Decides how BGP router id is derived (`String`).
+`bgp_router_id_type` - (Optional) Decides how BGP router id is derived (`String`).(Deprecated)
 
-`from_site` - (Optional) Use the Router ID field from the site object. (bool).
+###### One of the arguments from this list "local_address, from_site, ip_address" must be set
+
+`from_site` - (Optional) Use the Router ID field from the site object. (`Bool`).
 
 `ip_address` - (Optional) Use the configured IPv4 Address as Router ID. (`String`).
 
-`local_address` - (Optional) Use an interface address of the site as the Router ID. (bool).
-
-### Bgp Router Id
-
-If Router ID Type is set to "From IP Address", this is used as Router ID. Else, this is ignored..
-
-`ipv4` - (Optional) IPv4 Address. See [Ipv4 ](#ipv4) below for details.
-
-`ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
-
-### Default Gateway
-
-Use the default gateway address..
-
-### Disable
-
-Disable the IPv4 Unicast family..
-
-### Disable Internet Vip
-
-Do not enable advertise on external internet vip..
-
-### Disable Mtls
-
-Disable MTLS.
-
-### Enable
-
-Enable the IPv4 Unicast family..
-
-### Enable Internet Vip
-
-Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
-
-### Enable Mtls
-
-Enable MTLS.
-
-### External
-
-External BGP peer..
-
-`address` - (Optional) Specify peer address. (`String`).
-
-`address_ipv6` - (Optional) Specify peer ipv6 address. (`String`).
-
-`default_gateway` - (Optional) Use the default gateway address. (bool).
-
-`from_site` - (Optional) Use the address specified in the site object. (bool).
-
-`subnet_begin_offset` - (Optional) Calculate peer address using offset from the beginning of the subnet. (`Int`).
-
-`subnet_end_offset` - (Optional) Calculate peer address using offset from the end of the subnet. (`Int`).
-
-`asn` - (Required) Autonomous System Number for BGP peer (`Int`).
-
-`md5_auth_key` - (Optional) MD5 key for protecting BGP Sessions (RFC 2385) (`String`).
-
-`no_authentication` - (Optional) No Authentication of BGP session (bool).
-
-`family_inet` - (Optional) Parameters for IPv4 Unicast family.. See [Family Inet ](#family-inet) below for details.
-
-`inside_interfaces` - (Optional) All interfaces in the site local inside network. (bool).
-
-`interface` - (Optional) Specify interface.. See [ref](#ref) below for details.
-
-`interface_list` - (Optional) List of network interfaces.. See [Interface List ](#interface-list) below for details.
-
-`outside_interfaces` - (Optional) All interfaces in the site local outside network. (bool).
-
-`port` - (Optional) Peer TCP port number. (`Int`).
-
-### Family Inet
-
-Parameters for IPv4 Unicast family..
-
-`disable` - (Optional) Disable the IPv4 Unicast family. (bool).
-
-`enable` - (Optional) Enable the IPv4 Unicast family. (bool).
-
-### Family Inet6vpn
-
-Parameters for IPv6 VPN Unicast family..
-
-`disable` - (Optional) Disable the IPv6 Unicast family. (bool).
-
-`enable` - (Optional) Enable the IPv6 Unicast family. (bool).
-
-### Family Inetvpn
-
-Parameters for IPv4 VPN Unicast family..
-
-`disable` - (Optional) Disable the IPv4 Unicast family. (bool).
-
-`enable` - (Optional) Enable the IPv4 Unicast family.. See [Enable ](#enable) below for details.
-
-### Family Rtarget
-
-Parameters for Route Target family..
-
-`disable` - (Optional) Disable the Route Target family. (bool).
-
-`enable` - (Optional) Enable the Route Target family. (bool).
-
-### Family Uuidvpn
-
-Parameters for UUID VPN Unicast family..
-
-`disable` - (Optional) Disable the UUID Unicast family. (bool).
-
-`enable` - (Optional) Enable the UUID Unicast family. (bool).
-
-### From Site
-
-Use the Router ID field from the site object..
-
-### Inside Interfaces
-
-All interfaces in the site local inside network..
-
-### Interface List
-
-List of network interfaces..
-
-`interfaces` - (Required) List of network interfaces.. See [ref](#ref) below for details.
-
-### Internal
-
-Internal BGP peer..
-
-`address` - (Optional) Specify peer address. (`String`).
-
-`dns_name` - (Optional) Use the addresse by resolving the given DNS name. (`String`).
-
-`from_site` - (Optional) Use the address specified in the site object. (bool).
-
-`family_inet6vpn` - (Optional) Parameters for IPv6 VPN Unicast family.. See [Family Inet6vpn ](#family-inet6vpn) below for details.
-
-`family_inetvpn` - (Optional) Parameters for IPv4 VPN Unicast family.. See [Family Inetvpn ](#family-inetvpn) below for details.
-
-`family_rtarget` - (Optional) Parameters for Route Target family.. See [Family Rtarget ](#family-rtarget) below for details.
-
-`family_uuidvpn` - (Optional) Parameters for UUID VPN Unicast family.. See [Family Uuidvpn ](#family-uuidvpn) below for details.
-
-`disable_mtls` - (Optional) Disable MTLS (bool).
-
-`enable_mtls` - (Optional) Enable MTLS (bool).
-
-`port` - (Optional) Local Peer TCP Port Number. (`Int`).
-
-### Ipv4
-
-IPv4 Address.
-
-`addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
-
-### Ipv6
-
-IPv6 Address.
-
-`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
-
-### Local Address
-
-Use an interface address of the site as the Router ID..
-
-### Metadata
-
-Common attributes for the peer including name and description..
-
-`description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
-
-`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
-### No Authentication
-
-No Authentication of BGP session.
-
-### Outside Interfaces
-
-All interfaces in the site local outside network..
-
-### Passive Mode Disabled
-
-x-displayName: "Disabled".
-
-### Passive Mode Enabled
-
-x-displayName: "Enabled".
+`local_address` - (Optional) Use an interface address of the site as the Router ID. (`Bool`).
 
 ### Peers
 
 List of peers.
 
-`metadata` - (Required) Common attributes for the peer including name and description.. See [Metadata ](#metadata) below for details.
+`metadata` - (Required) Common attributes for the peer including name and description.. See [Peers Metadata ](#peers-metadata) below for details.
 
-`passive_mode_disabled` - (Optional) x-displayName: "Disabled" (bool).
+###### One of the arguments from this list "passive_mode_disabled, passive_mode_enabled" must be set
 
-`passive_mode_enabled` - (Optional) x-displayName: "Enabled" (bool).
+`passive_mode_disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
 
-`target_service` - (Optional) Specify whether this peer should be configured in "phobos" or "frr". (`String`).
+`passive_mode_enabled` - (Optional) x-displayName: "Enabled" (`Bool`).
 
-`external` - (Optional) External BGP peer.. See [External ](#external) below for details.
+`target_service` - (Optional) Specify whether this peer should be configured in "phobos" or "frr". (`String`).(Deprecated)
 
-`internal` - (Optional) Internal BGP peer.. See [Internal ](#internal) below for details.
+###### One of the arguments from this list "external, internal" must be set
+
+`external` - (Optional) External BGP peer.. See [Type Choice External ](#type-choice-external) below for details.
+
+`internal` - (Optional) Internal BGP peer.. See [Type Choice Internal ](#type-choice-internal) below for details.(Deprecated)
+
+### Where
+
+Site or virtual site where this BGP configuration should be applied..
+
+###### One of the arguments from this list "site, virtual_site" must be set
+
+`site` - (Optional) Direct reference to site object. See [Ref Or Selector Site ](#ref-or-selector-site) below for details.
+
+`virtual_site` - (Optional) Direct reference to virtual site object. See [Ref Or Selector Virtual Site ](#ref-or-selector-virtual-site) below for details.
+
+### Address Choice Default Gateway
+
+Use the default gateway address..
+
+### Address Choice Disable
+
+No Peer Ipv4 Address..
+
+### Address Choice From Site
+
+Use the address specified in the site object..
+
+### Address Choice V6 Default Gateway V6
+
+Use the default gateway address..
+
+### Address Choice V6 Disable V6
+
+No Peer IPv6 Address..
+
+### Address Choice V6 From Site V6
+
+Use the address specified in the site object..
+
+### Auth Choice No Authentication
+
+No Authentication of BGP session.
+
+### Bgp Parameters Bgp Router Id
+
+If Router ID Type is set to "From IP Address", this is used as Router ID. Else, this is ignored..
+
+###### One of the arguments from this list "ipv4, ipv6" can be set
+
+`ipv4` - (Optional) IPv4 Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
+
+`ipv6` - (Optional) IPv6 Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
+
+### Enable Choice Disable
+
+Disable IPv4 family Route Exchange..
+
+### Enable Choice Enable
+
+Enable IPv4 family Route Exchange..
+
+### Enable Choice Enable
+
+Enable the IPv4 Unicast family..
+
+###### One of the arguments from this list "enable, disable" must be set
+
+`disable` - (Optional) Disable the IPv4 Unicast family. (`Bool`).(Deprecated)
+
+`enable` - (Optional) Enable the IPv4 Unicast family. (`Bool`).
+
+### External Family Inet
+
+Enable/Disable Ipv4 family of routes exchange with peer.
+
+###### One of the arguments from this list "enable, disable" must be set
+
+`disable` - (Optional) Disable IPv4 family Route Exchange. (`Bool`).
+
+`enable` - (Optional) Enable IPv4 family Route Exchange. (`Bool`).
+
+### External Family Inet V6
+
+Enable/Disable IPv6 family of routes exchange with peer.
+
+###### One of the arguments from this list "enable, disable" must be set
+
+`disable` - (Optional) Disable IPv6 family Route Exchange. (`Bool`).
+
+`enable` - (Optional) Enable IPv6 family Route Exchange. (`Bool`).
+
+### Interface Choice Inside Interfaces
+
+All interfaces in the site local inside network..
+
+### Interface Choice Interface List
+
+List of network interfaces..
+
+`interfaces` - (Required) List of network interfaces.. See [ref](#ref) below for details.
+
+### Interface Choice Outside Interfaces
+
+All interfaces in the site local outside network..
+
+### Internal Family Inet6vpn
+
+Parameters for IPv6 VPN Unicast family..
+
+###### One of the arguments from this list "disable, enable" must be set
+
+`disable` - (Optional) Disable the IPv6 Unicast family. (`Bool`).(Deprecated)
+
+`enable` - (Optional) Enable the IPv6 Unicast family. (`Bool`).
+
+### Internal Family Inetvpn
+
+Parameters for IPv4 VPN Unicast family..
+
+###### One of the arguments from this list "enable, disable" must be set
+
+`disable` - (Optional) Disable the IPv4 Unicast family. (`Bool`).(Deprecated)
+
+`enable` - (Optional) Enable the IPv4 Unicast family.. See [Enable Choice Enable ](#enable-choice-enable) below for details.
+
+### Internal Family Rtarget
+
+Parameters for Route Target family..
+
+###### One of the arguments from this list "enable, disable" must be set
+
+`disable` - (Optional) Disable the Route Target family. (`Bool`).
+
+`enable` - (Optional) Enable the Route Target family. (`Bool`).
+
+### Internal Family Uuidvpn
+
+Parameters for UUID VPN Unicast family..
+
+###### One of the arguments from this list "enable, disable" must be set
+
+`disable` - (Optional) Disable the UUID Unicast family. (`Bool`).(Deprecated)
+
+`enable` - (Optional) Enable the UUID Unicast family. (`Bool`).
+
+### Internet Vip Choice Disable Internet Vip
+
+Do not enable advertise on external internet vip..
+
+### Internet Vip Choice Enable Internet Vip
+
+Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
+
+### Mtls Choice Disable Mtls
+
+Disable mTLS.
+
+### Mtls Choice Enable Mtls
+
+Enable mTLS.
+
+### Passive Choice Passive Mode Disabled
+
+x-displayName: "Disabled".
+
+### Passive Choice Passive Mode Enabled
+
+x-displayName: "Enabled".
+
+### Peers Metadata
+
+Common attributes for the peer including name and description..
+
+`description` - (Optional) Human readable description. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Ref
 
@@ -354,37 +359,149 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Site
+### Ref Or Selector Site
 
 Direct reference to site object.
 
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
-### Virtual Site
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
+
+### Ref Or Selector Virtual Site
 
 Direct reference to virtual site object.
 
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
 `ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
-### Where
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
-Site or virtual site where this BGP configuration should be applied..
+### Router Id Choice From Site
 
-`site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
+Use the Router ID field from the site object..
 
-`virtual_site` - (Optional) Direct reference to virtual site object. See [Virtual Site ](#virtual-site) below for details.
+### Router Id Choice Local Address
+
+Use an interface address of the site as the Router ID..
+
+### Sr Choice Disable
+
+Disable the IPv4 Unicast family..
+
+### Sr Choice Enable
+
+Enable the IPv4 Unicast family..
+
+### Type Choice External
+
+External BGP peer..
+
+###### One of the arguments from this list "default_gateway, disable, address, subnet_begin_offset, subnet_end_offset, from_site" must be set
+
+`address` - (Optional) Specify IPV4 peer address. (`String`).
+
+`default_gateway` - (Optional) Use the default gateway address. (`Bool`).
+
+`disable` - (Optional) No Peer Ipv4 Address. (`Bool`).
+
+`from_site` - (Optional) Use the address specified in the site object. (`Bool`).
+
+`subnet_begin_offset` - (Optional) Calculate peer address using offset from the beginning of the subnet. (`Int`).
+
+`subnet_end_offset` - (Optional) Calculate peer address using offset from the end of the subnet. (`Int`).
+
+###### One of the arguments from this list "from_site_v6, default_gateway_v6, disable_v6, address_ipv6, subnet_begin_offset_v6, subnet_end_offset_v6" must be set
+
+`address_ipv6` - (Optional) Specify peer IPv6 address. (`String`).
+
+`default_gateway_v6` - (Optional) Use the default gateway address. (`Bool`).
+
+`disable_v6` - (Optional) No Peer IPv6 Address. (`Bool`).
+
+`from_site_v6` - (Optional) Use the address specified in the site object. (`Bool`).
+
+`subnet_begin_offset_v6` - (Optional) Calculate peer address using offset from the beginning of the subnet. (`Int`).
+
+`subnet_end_offset_v6` - (Optional) Calculate peer address using offset from the end of the subnet. (`Int`).
+
+`asn` - (Required) Autonomous System Number for BGP peer (`Int`).
+
+###### One of the arguments from this list "no_authentication, md5_auth_key" can be set
+
+`md5_auth_key` - (Optional) MD5 key for protecting BGP Sessions (RFC 2385) (`String`).
+
+`no_authentication` - (Optional) No Authentication of BGP session (`Bool`).
+
+`family_inet` - (Optional) Enable/Disable Ipv4 family of routes exchange with peer. See [External Family Inet ](#external-family-inet) below for details.
+
+`family_inet_v6` - (Optional) Enable/Disable IPv6 family of routes exchange with peer. See [External Family Inet V6 ](#external-family-inet-v6) below for details.
+
+###### One of the arguments from this list "interface, interface_list, inside_interfaces, outside_interfaces" must be set
+
+`inside_interfaces` - (Optional) All interfaces in the site local inside network. (`Bool`).(Deprecated)
+
+`interface` - (Optional) Specify interface.. See [ref](#ref) below for details.
+
+`interface_list` - (Optional) List of network interfaces.. See [Interface Choice Interface List ](#interface-choice-interface-list) below for details.
+
+`outside_interfaces` - (Optional) All interfaces in the site local outside network. (`Bool`).(Deprecated)
+
+`port` - (Optional) Peer TCP port number. (`Int`).
+
+### Type Choice Internal
+
+Internal BGP peer..
+
+###### One of the arguments from this list "address, from_site, dns_name" must be set
+
+`address` - (Optional) Specify peer address. (`String`).
+
+`dns_name` - (Optional) Use the addresse by resolving the given DNS name. (`String`).(Deprecated)
+
+`from_site` - (Optional) Use the address specified in the site object. (`Bool`).
+
+`family_inet6vpn` - (Optional) Parameters for IPv6 VPN Unicast family.. See [Internal Family Inet6vpn ](#internal-family-inet6vpn) below for details.
+
+`family_inetvpn` - (Optional) Parameters for IPv4 VPN Unicast family.. See [Internal Family Inetvpn ](#internal-family-inetvpn) below for details.
+
+`family_rtarget` - (Optional) Parameters for Route Target family.. See [Internal Family Rtarget ](#internal-family-rtarget) below for details.
+
+`family_uuidvpn` - (Optional) Parameters for UUID VPN Unicast family.. See [Internal Family Uuidvpn ](#internal-family-uuidvpn) below for details.
+
+###### One of the arguments from this list "disable_mtls, enable_mtls" can be set
+
+`disable_mtls` - (Optional) Disable mTLS (`Bool`).(Deprecated)
+
+`enable_mtls` - (Optional) Enable mTLS (`Bool`).(Deprecated)
+
+`port` - (Optional) Local Peer TCP Port Number. (`Int`).
+
+### Ver Ipv4
+
+IPv4 Address.
+
+`addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
+
+### Ver Ipv6
+
+IPv6 Address.
+
+`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
 Attribute Reference
 -------------------

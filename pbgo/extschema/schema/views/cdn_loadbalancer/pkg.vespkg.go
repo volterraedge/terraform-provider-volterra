@@ -171,28 +171,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.origin_pool.origin_servers.#.public_ip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.origin_pool.origin_servers.#.public_ip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
 		},
 	}
 
@@ -205,7 +189,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"create_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"create_form.spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"create_form.spec.more_option.cache_ttl_options",
-		"object",
 		"replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
 		"replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
 		"replace_form.spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
@@ -226,48 +209,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "create_form.spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "create_form.spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.origin_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "replace_form.spec.origin_pool.origin_servers.#.public_ip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "replace_form.spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
 			FieldPath:           "spec.origin_pool.origin_servers.#.public_ip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
 		},
 	}
 
@@ -278,38 +225,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.get_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"items.#.get_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"items.#.get_spec.more_option.cache_ttl_options",
-		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.hostname_uri",
-		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"items.#.object.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
-		"items.#.object.spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
-		"items.#.object.spec.gc_spec.more_option.cache_ttl_options",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.origin_pool.origin_servers.#.public_ip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.origin_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
 		},
 	}
 
@@ -354,14 +275,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.origin_pool.origin_servers.#.public_ip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_mtls_obj",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.origin_pool.use_tls.use_server_verification.trusted_ca",
-			AllowedEnvironments: []string{"test"},
 		},
 	}
 

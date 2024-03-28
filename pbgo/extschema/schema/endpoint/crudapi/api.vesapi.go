@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.endpoint.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.endpoint.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.endpoint.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.endpoint.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.endpoint.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.endpoint.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.endpoint.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.endpoint.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.endpoint.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.endpoint.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.endpoint.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.endpoint.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.endpoint.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.endpoint.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.endpoint.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3667,41 +3682,23 @@ var APISwaggerJSON string = `{
             "description": "NetworkSiteRefSelector defines a union of reference to site or reference to virtual_network  or reference to virtual_site\nIt is used to determine virtual network using following rules\n * Direct reference to virtual_network object\n * Site local network when refering to site object\n * All site local networks for sites selected by refering to virtual_site object",
             "title": "NetworkSiteRefSelector",
             "x-displayname": "Network or Site Reference",
-            "x-ves-oneof-field-ref_or_selector": "[\"segment\",\"segment_site\",\"segment_vsite\",\"site\",\"virtual_network\",\"virtual_site\"]",
+            "x-ves-oneof-field-ref_or_selector": "[\"site\",\"virtual_network\",\"virtual_site\"]",
             "x-ves-proto-message": "ves.io.schema.NetworkSiteRefSelector",
             "properties": {
-                "segment": {
-                    "description": "Exclusive with [segment_site segment_vsite site virtual_network virtual_site]\n Reference to Segment",
-                    "title": "segment",
-                    "$ref": "#/definitions/schemaSegementRefType",
-                    "x-displayname": "Segment"
-                },
-                "segment_site": {
-                    "description": "Exclusive with [segment segment_vsite site virtual_network virtual_site]\n Reference to Segment object",
-                    "title": "segment",
-                    "$ref": "#/definitions/schemaSiteSegmentRefType",
-                    "x-displayname": "Segment on a Site"
-                },
-                "segment_vsite": {
-                    "description": "Exclusive with [segment segment_site site virtual_network virtual_site]\n Reference to Segment in a virtual site",
-                    "title": "segment in virtual site",
-                    "$ref": "#/definitions/schemaVSiteSegmentRefType",
-                    "x-displayname": "Segment in a Virtual Site"
-                },
                 "site": {
-                    "description": "Exclusive with [segment segment_site segment_vsite virtual_network virtual_site]\n Direct reference to site object",
+                    "description": "Exclusive with [virtual_network virtual_site]\n Direct reference to site object",
                     "title": "site",
                     "$ref": "#/definitions/schemaSiteRefType",
                     "x-displayname": "Site"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [segment segment_site segment_vsite site virtual_site]\n Direct reference to virtual network object",
+                    "description": "Exclusive with [site virtual_site]\n Direct reference to virtual network object",
                     "title": "virtual_network",
                     "$ref": "#/definitions/schemaNetworkRefType",
                     "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [segment segment_site segment_vsite site virtual_network]\n Direct reference to virtual site object",
+                    "description": "Exclusive with [site virtual_network]\n Direct reference to virtual site object",
                     "title": "virtual_site",
                     "$ref": "#/definitions/schemaVSiteRefType",
                     "x-displayname": "Virtual Site"
@@ -3777,30 +3774,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSegementRefType": {
-            "type": "object",
-            "description": "This specifies a direct reference to a segment object",
-            "title": "SegementRefType",
-            "x-displayname": "Segment Reference",
-            "x-ves-proto-message": "ves.io.schema.SegementRefType",
-            "properties": {
-                "ref": {
-                    "type": "array",
-                    "description": " A segment reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "ref",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Reference",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                }
-            }
-        },
         "schemaSiteRefType": {
             "type": "object",
             "description": "This specifies a direct reference to a site configuration object",
@@ -3836,45 +3809,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Reference",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                }
-            }
-        },
-        "schemaSiteSegmentRefType": {
-            "type": "object",
-            "description": "Reference to a segment in a site",
-            "title": "SiteSegmentRefType",
-            "x-displayname": "Segment in Site",
-            "x-ves-proto-message": "ves.io.schema.SiteSegmentRefType",
-            "properties": {
-                "segment": {
-                    "type": "array",
-                    "description": " Segment in the site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "segment",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "site": {
-                    "type": "array",
-                    "description": " Reference to a site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "site",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Site",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -4166,45 +4100,6 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Reference",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                }
-            }
-        },
-        "schemaVSiteSegmentRefType": {
-            "type": "object",
-            "description": "Reference to a segment in a virtual site",
-            "title": "VSiteSegmentRefType",
-            "x-displayname": "Segment in Virtual Site",
-            "x-ves-proto-message": "ves.io.schema.VSiteSegmentRefType",
-            "properties": {
-                "segment": {
-                    "type": "array",
-                    "description": " Segment in the virtual site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "segment",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "vsite": {
-                    "type": "array",
-                    "description": " Reference to a virtual site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "vsite",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Virtual Site",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

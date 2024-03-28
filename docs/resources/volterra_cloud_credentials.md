@@ -28,18 +28,20 @@ resource "volterra_cloud_credentials" "example" {
     secret_key {
       blindfold_secret_info_internal {
         decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+
+        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+        store_provider = "value"
       }
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
 
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
+      clear_secret_info {
+        provider = "box-provider"
+
+        url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
       }
     }
   }
@@ -66,79 +68,71 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`aws_assume_role` - (Optional) F5XC will assume role designated by customer. See [Aws Assume Role ](#aws-assume-role) below for details.
+`aws_assume_role` - (Optional) F5XC will assume role designated by customer. See [Cloud Aws Assume Role ](#cloud-aws-assume-role) below for details.
 
-`aws_secret_key` - (Optional) AWS authentication using access keys. See [Aws Secret Key ](#aws-secret-key) below for details.
+`aws_secret_key` - (Optional) AWS authentication using access keys. See [Cloud Aws Secret Key ](#cloud-aws-secret-key) below for details.
 
-`azure_client_secret` - (Optional) Azure authentication using a service principal account with client secret. See [Azure Client Secret ](#azure-client-secret) below for details.
+`azure_client_secret` - (Optional) Azure authentication using a service principal account with client secret. See [Cloud Azure Client Secret ](#cloud-azure-client-secret) below for details.
 
-`azure_pfx_certificate` - (Optional) Azure authentication using a service principal account with client certificate. See [Azure Pfx Certificate ](#azure-pfx-certificate) below for details.
+`azure_pfx_certificate` - (Optional) Azure authentication using a service principal account with client certificate. See [Cloud Azure Pfx Certificate ](#cloud-azure-pfx-certificate) below for details.
 
-`gcp_cred_file` - (Optional) Google authentication using content of Google Credentials File. See [Gcp Cred File ](#gcp-cred-file) below for details.
+`gcp_cred_file` - (Optional) Google authentication using content of Google Credentials File. See [Cloud Gcp Cred File ](#cloud-gcp-cred-file) below for details.
 
-### Aws Assume Role
+### Aws Secret Key Secret Key
 
-F5XC will assume role designated by customer.
+Secret Access Key for your AWS account.
 
-`duration_seconds` - (Optional) The duration, in seconds of the role session. (`Int`).
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Secret Key Blindfold Secret Info Internal ](#secret-key-blindfold-secret-info-internal) below for details.(Deprecated)
 
-`custom_external_id` - (Optional) External ID is Custom ID (`String`).
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-`external_id_is_optional` - (Optional) External ID is Optional (bool).
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
-`external_id_is_tenant_id` - (Optional) External ID is Tenant ID (bool).
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
-`role_arn` - (Required) IAM Role ARN to assume the role (`String`).
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
-`session_name` - (Required) be used for deploy, monitor from F5XC console (`String`).
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
-`session_tags` - (Optional) Session tags are key-value pair attributes that you pass when you assume an IAM role (`String`).
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
-### Aws Secret Key
+### Azure Client Secret Client Secret
 
-AWS authentication using access keys.
+Client Secret (alias password) for your Azure service principal.
 
-`access_key` - (Required) Access key ID for your AWS account (`String`).
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Client Secret Blindfold Secret Info Internal ](#client-secret-blindfold-secret-info-internal) below for details.(Deprecated)
 
-`secret_key` - (Required) Secret Access Key for your AWS account. See [Secret Key ](#secret-key) below for details.
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-### Azure Client Secret
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
-Azure authentication using a service principal account with client secret.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
-`client_id` - (Required) Client ID for your Azure service principal (`String`).
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
-`client_secret` - (Required) Client Secret (alias password) for your Azure service principal. See [Client Secret ](#client-secret) below for details.
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
-`subscription_id` - (Required) Subscription ID for your Azure service principal (`String`).
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
-`tenant_id` - (Required) Tenant ID for your Azure service principal (`String`).
+### Azure Pfx Certificate Password
 
-### Azure Pfx Certificate
+Password for your '.p12' or '.pfx' file whose certificate is linked to service principal object.
 
-Azure authentication using a service principal account with client certificate.
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
 
-`certificate_url` - (Required) Here <Base64 of certificate> is base64 of '.pfx' or '.p12' binary file (`String`).
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-`client_id` - (Required) Client ID for your Azure service principal (`String`).
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
-`password` - (Required) Password for your '.p12' or '.pfx' file whose certificate is linked to service principal object. See [Password ](#password) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
-`subscription_id` - (Required) Subscription ID for your Azure service principal (`String`).
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
-`tenant_id` - (Required) Tenant ID for your Azure service principal (`String`).
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
-### Blindfold Secret Info
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Blindfold Secret Info Internal
+### Client Secret Blindfold Secret Info Internal
 
 Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
@@ -148,7 +142,123 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Clear Secret Info
+### Cloud Aws Assume Role
+
+F5XC will assume role designated by customer.
+
+`duration_seconds` - (Optional) The duration, in seconds of the role session. (`Int`).
+
+###### One of the arguments from this list "external_id_is_optional, external_id_is_tenant_id, custom_external_id" must be set
+
+`custom_external_id` - (Optional) External ID is Custom ID (`String`).(Deprecated)
+
+`external_id_is_optional` - (Optional) External ID is Optional (`Bool`).(Deprecated)
+
+`external_id_is_tenant_id` - (Optional) External ID is Tenant ID (`Bool`).(Deprecated)
+
+`role_arn` - (Required) IAM Role ARN to assume the role (`String`).
+
+`session_name` - (Required) be used for deploy, monitor from F5XC console (`String`).
+
+`session_tags` - (Optional) Session tags are key-value pair attributes that you pass when you assume an IAM role (`String`).
+
+### Cloud Aws Secret Key
+
+AWS authentication using access keys.
+
+`access_key` - (Required) Access key ID for your AWS account (`String`).
+
+`secret_key` - (Required) Secret Access Key for your AWS account. See [Aws Secret Key Secret Key ](#aws-secret-key-secret-key) below for details.
+
+### Cloud Azure Client Secret
+
+Azure authentication using a service principal account with client secret.
+
+`client_id` - (Required) Client ID for your Azure service principal (`String`).
+
+`client_secret` - (Required) Client Secret (alias password) for your Azure service principal. See [Azure Client Secret Client Secret ](#azure-client-secret-client-secret) below for details.
+
+`subscription_id` - (Required) Subscription ID for your Azure service principal (`String`).
+
+`tenant_id` - (Required) Tenant ID for your Azure service principal (`String`).
+
+### Cloud Azure Pfx Certificate
+
+Azure authentication using a service principal account with client certificate.
+
+`certificate_url` - (Required) Here <Base64 of certificate> is base64 of '.pfx' or '.p12' binary file (`String`).
+
+`client_id` - (Required) Client ID for your Azure service principal (`String`).
+
+`password` - (Required) Password for your '.p12' or '.pfx' file whose certificate is linked to service principal object. See [Azure Pfx Certificate Password ](#azure-pfx-certificate-password) below for details.
+
+`subscription_id` - (Required) Subscription ID for your Azure service principal (`String`).
+
+`tenant_id` - (Required) Tenant ID for your Azure service principal (`String`).
+
+### Cloud Gcp Cred File
+
+Google authentication using content of Google Credentials File.
+
+`credential_file` - (Required) Content of Credential File for your GCP account. See [Gcp Cred File Credential File ](#gcp-cred-file-credential-file) below for details.
+
+### Credential File Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### External Id External Id Is Optional
+
+External ID is Optional.
+
+### External Id External Id Is Tenant Id
+
+External ID is Tenant ID.
+
+### Gcp Cred File Credential File
+
+Content of Credential File for your GCP account.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Credential File Blindfold Secret Info Internal ](#credential-file-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Secret Info Oneof Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Secret Info Oneof Clear Secret Info
 
 Clear Secret is used for the secrets that are not encrypted.
 
@@ -156,85 +266,7 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Client Secret
-
-Client Secret (alias password) for your Azure service principal.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Credential File
-
-Content of Credential File for your GCP account.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### External Id Is Optional
-
-External ID is Optional.
-
-### External Id Is Tenant Id
-
-External ID is Tenant ID.
-
-### Gcp Cred File
-
-Google authentication using content of Google Credentials File.
-
-`credential_file` - (Required) Content of Credential File for your GCP account. See [Credential File ](#credential-file) below for details.
-
-### Password
-
-Password for your '.p12' or '.pfx' file whose certificate is linked to service principal object.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Secret Key
-
-Secret Access Key for your AWS account.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Vault Secret Info
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -248,11 +280,21 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Secret Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 Attribute Reference
 -------------------

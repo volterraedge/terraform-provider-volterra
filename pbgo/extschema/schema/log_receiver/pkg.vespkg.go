@@ -84,10 +84,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.log_receiver.API.Create"] = "ves.io.schema.log_receiver.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.log_receiver.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.log_receiver.API.Replace"] = []string{
 		"spec.data_dog.datadog_api_key.blindfold_secret_info_internal",
 		"spec.data_dog.datadog_api_key.secret_encoding_type",

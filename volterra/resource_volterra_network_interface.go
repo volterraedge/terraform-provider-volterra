@@ -2491,21 +2491,24 @@ func resourceVolterraNetworkInterfaceCreate(d *schema.ResourceData, meta interfa
 
 			if v, ok := cs["tunnel"]; ok && !isIntfNil(v) {
 
+				sl := v.(*schema.Set).List()
 				tunnelInt := &ves_io_schema_views.ObjectRefType{}
 				interfaceChoiceInt.TunnelInterface.Tunnel = tunnelInt
 
-				tMapToStrVal := v.(map[string]interface{})
-				if val, ok := tMapToStrVal["name"]; ok && !isIntfNil(v) {
-					tunnelInt.Name = val.(string)
-				}
-				if val, ok := tMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-					tunnelInt.Namespace = val.(string)
-				}
+				for _, set := range sl {
 
-				if val, ok := tMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-					tunnelInt.Tenant = val.(string)
-				}
+					tMapToStrVal := set.(map[string]interface{})
+					if val, ok := tMapToStrVal["name"]; ok && !isIntfNil(v) {
+						tunnelInt.Name = val.(string)
+					}
+					if val, ok := tMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						tunnelInt.Namespace = val.(string)
+					}
 
+					if val, ok := tMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						tunnelInt.Tenant = val.(string)
+					}
+				}
 			}
 
 		}
@@ -4036,21 +4039,24 @@ func resourceVolterraNetworkInterfaceUpdate(d *schema.ResourceData, meta interfa
 
 			if v, ok := cs["tunnel"]; ok && !isIntfNil(v) {
 
+				sl := v.(*schema.Set).List()
 				tunnelInt := &ves_io_schema_views.ObjectRefType{}
 				interfaceChoiceInt.TunnelInterface.Tunnel = tunnelInt
 
-				tMapToStrVal := v.(map[string]interface{})
-				if val, ok := tMapToStrVal["name"]; ok && !isIntfNil(v) {
-					tunnelInt.Name = val.(string)
-				}
-				if val, ok := tMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-					tunnelInt.Namespace = val.(string)
-				}
+				for _, set := range sl {
 
-				if val, ok := tMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-					tunnelInt.Tenant = val.(string)
-				}
+					tMapToStrVal := set.(map[string]interface{})
+					if val, ok := tMapToStrVal["name"]; ok && !isIntfNil(v) {
+						tunnelInt.Name = val.(string)
+					}
+					if val, ok := tMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						tunnelInt.Namespace = val.(string)
+					}
 
+					if val, ok := tMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						tunnelInt.Tenant = val.(string)
+					}
+				}
 			}
 
 		}

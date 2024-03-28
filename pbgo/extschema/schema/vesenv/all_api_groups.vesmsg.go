@@ -1464,6 +1464,17 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *APIGroupChoice_F5XcInternal:
+		if fv, exists := v.FldValidators["choice.f5xc_internal"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcInternal).F5XcInternal
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_internal"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *APIGroupChoice_F5XcConsoleBaseMonitor:
 		if fv, exists := v.FldValidators["choice.f5xc_console_base_monitor"]; exists {
 			val := m.GetChoice().(*APIGroupChoice_F5XcConsoleBaseMonitor).F5XcConsoleBaseMonitor
@@ -2383,6 +2394,61 @@ func (v *ValidateAPIGroupChoice) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_application_infrastructure_protection_application"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcNginxOneApplicationRead:
+		if fv, exists := v.FldValidators["choice.f5xc_nginx_one_application_read"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcNginxOneApplicationRead).F5XcNginxOneApplicationRead
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_nginx_one_application_read"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcNginxOneApplicationWrite:
+		if fv, exists := v.FldValidators["choice.f5xc_nginx_one_application_write"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcNginxOneApplicationWrite).F5XcNginxOneApplicationWrite
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_nginx_one_application_write"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcClearviewMonitor:
+		if fv, exists := v.FldValidators["choice.f5xc_clearview_monitor"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcClearviewMonitor).F5XcClearviewMonitor
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_clearview_monitor"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcClearviewUser:
+		if fv, exists := v.FldValidators["choice.f5xc_clearview_user"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcClearviewUser).F5XcClearviewUser
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_clearview_user"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIGroupChoice_F5XcClearviewAdmin:
+		if fv, exists := v.FldValidators["choice.f5xc_clearview_admin"]; exists {
+			val := m.GetChoice().(*APIGroupChoice_F5XcClearviewAdmin).F5XcClearviewAdmin
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_clearview_admin"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

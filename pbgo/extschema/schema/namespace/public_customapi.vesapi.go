@@ -52,6 +52,15 @@ func (c *CustomAPIGrpcClient) doRPCEvaluateAPIAccess(ctx context.Context, yamlRe
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCEvaluateBatchAPIAccess(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &EvaluateBatchAPIAccessReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.EvaluateBatchAPIAccessReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.EvaluateBatchAPIAccess(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCLookupUserRoles(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &LookupUserRolesReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -103,6 +112,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
 
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
+
+	rpcFns["EvaluateBatchAPIAccess"] = ccl.doRPCEvaluateBatchAPIAccess
 
 	rpcFns["LookupUserRoles"] = ccl.doRPCLookupUserRoles
 
@@ -281,6 +292,91 @@ func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOp
 	pbRsp := &EvaluateAPIAccessResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.EvaluateAPIAccessResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCEvaluateBatchAPIAccess(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &EvaluateBatchAPIAccessReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.EvaluateBatchAPIAccessReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		for _, item := range req.BatchNamespaceApiList {
+			q.Add("batch_namespace_api_list", fmt.Sprintf("%v", item))
+		}
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &EvaluateBatchAPIAccessResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.EvaluateBatchAPIAccessResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -487,6 +583,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["EvaluateAPIAccess"] = ccl.doRPCEvaluateAPIAccess
 
+	rpcFns["EvaluateBatchAPIAccess"] = ccl.doRPCEvaluateBatchAPIAccess
+
 	rpcFns["LookupUserRoles"] = ccl.doRPCLookupUserRoles
 
 	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
@@ -504,19 +602,23 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.CascadeDelete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.CustomAPI.CascadeDelete")
 	return c.CustomAPIServer.CascadeDelete(ctx, in)
 }
 func (c *customAPIInprocClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess")
 	return c.CustomAPIServer.EvaluateAPIAccess(ctx, in)
 }
+func (c *customAPIInprocClient) EvaluateBatchAPIAccess(ctx context.Context, in *EvaluateBatchAPIAccessReq, opts ...grpc.CallOption) (*EvaluateBatchAPIAccessResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.CustomAPI.EvaluateBatchAPIAccess")
+	return c.CustomAPIServer.EvaluateBatchAPIAccess(ctx, in)
+}
 func (c *customAPIInprocClient) LookupUserRoles(ctx context.Context, in *LookupUserRolesReq, opts ...grpc.CallOption) (*LookupUserRolesResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.LookupUserRoles", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.CustomAPI.LookupUserRoles")
 	return c.CustomAPIServer.LookupUserRoles(ctx, in)
 }
 func (c *customAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.CustomAPI.SuggestValues", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.CustomAPI.SuggestValues")
 	return c.CustomAPIServer.SuggestValues(ctx, in)
 }
 
@@ -636,6 +738,55 @@ func (s *customAPISrv) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAcc
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.EvaluateAPIAccessResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) EvaluateBatchAPIAccess(ctx context.Context, in *EvaluateBatchAPIAccessReq) (*EvaluateBatchAPIAccessResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *EvaluateBatchAPIAccessResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.EvaluateBatchAPIAccessReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.EvaluateBatchAPIAccess' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.CustomAPI.EvaluateBatchAPIAccess"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.EvaluateBatchAPIAccess(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.EvaluateBatchAPIAccessResp", rsp)...)
 
 	return rsp, nil
 }
@@ -840,6 +991,90 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-evaluateapiaccess"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"
+            },
+            "x-displayname": "CustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/evaluate-batch-api-access": {
+            "post": {
+                "summary": "Evaluate Batch API Access",
+                "description": "EvaluateBatchAPIAccess can evaluate multiple lists of API url, method under a batch of namespaces for a given user of a tenant.",
+                "operationId": "ves.io.schema.namespace.CustomAPI.EvaluateBatchAPIAccess",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceEvaluateBatchAPIAccessResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceEvaluateBatchAPIAccessReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-evaluatebatchapiaccess"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.EvaluateBatchAPIAccess"
             },
             "x-displayname": "CustomAPI",
             "x-ves-proto-service": "ves.io.schema.namespace.CustomAPI",
@@ -1291,6 +1526,46 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceEvaluateBatchAPIAccessReq": {
+            "type": "object",
+            "description": "Request body of EvaluateBatchAPIAccess request",
+            "title": "EvaluateBatchAPIAccessReq",
+            "x-displayname": "Request for EvaluateBatchAPIAccess",
+            "x-ves-proto-message": "ves.io.schema.namespace.EvaluateBatchAPIAccessReq",
+            "properties": {
+                "batch_namespace_api_list": {
+                    "type": "array",
+                    "description": " List of namespaces and associated api list entries\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "batch_namespace_api_list",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/namespaceNamespaceAPIList"
+                    },
+                    "x-displayname": "BatchNamespaceApiList",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                }
+            }
+        },
+        "namespaceEvaluateBatchAPIAccessResp": {
+            "type": "object",
+            "description": "Response body of EvaluateBatchAPIAccess request",
+            "title": "EvaluateBatchAPIAccessResp",
+            "x-displayname": "Response for EvaluateBatchAPIAccess",
+            "x-ves-proto-message": "ves.io.schema.namespace.EvaluateBatchAPIAccessResp",
+            "properties": {
+                "batch_namespace_api_list": {
+                    "type": "array",
+                    "description": " List of namespaces and associated api list entries",
+                    "title": "batch_namespace_api_list",
+                    "items": {
+                        "$ref": "#/definitions/namespaceNamespaceAPIList"
+                    },
+                    "x-displayname": "BatchNamespaceApiList"
+                }
+            }
+        },
         "namespaceLookupUserRolesReq": {
             "type": "object",
             "description": "Request body of LookupUserRoles request",
@@ -1322,6 +1597,35 @@ var CustomAPISwaggerJSON string = `{
                         "type": "string"
                     },
                     "x-displayname": "Roles"
+                }
+            }
+        },
+        "namespaceNamespaceAPIList": {
+            "type": "object",
+            "description": "NamespaceAPIList holds the namespace and its associated APIs",
+            "title": "NamespaceAPIList",
+            "x-displayname": "NamespaceAPIList",
+            "x-ves-proto-message": "ves.io.schema.namespace.NamespaceAPIList",
+            "properties": {
+                "item_lists": {
+                    "type": "array",
+                    "description": " List of APIItemList entries\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "item_lists",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemList"
+                    },
+                    "x-displayname": "Item Lists",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of the namespace under which all the URLs in APIItems will be evaluated\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
                 }
             }
         },

@@ -158,8 +158,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"presence": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
@@ -297,8 +298,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 			},
 
 			"challenge_action": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:       schema.TypeString,
+				Required:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"any_client": {
@@ -385,14 +387,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"client_role": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"match": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -400,29 +404,34 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"content_rewrite_action": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"element_selector": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"insert_content": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"inserted_types": {
-							Type:     schema.TypeMap,
-							Optional: true,
+							Type:       schema.TypeMap,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"position": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -494,8 +503,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"presence": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
@@ -538,14 +548,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"any_dst_asn": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"dst_asn_list": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -553,7 +565,8 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeInt,
 							},
@@ -564,34 +577,40 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"dst_asn_matcher": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"asn_sets": {
 
-							Type:     schema.TypeList,
-							Required: true,
+							Type:       schema.TypeList,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"kind": {
-										Type:     schema.TypeString,
-										Computed: true,
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -602,45 +621,53 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"any_dst_ip": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"dst_ip_matcher": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"invert_matcher": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"prefix_sets": {
 
-							Type:     schema.TypeList,
-							Required: true,
+							Type:       schema.TypeList,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"kind": {
-										Type:     schema.TypeString,
-										Computed: true,
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -651,31 +678,24 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"dst_ip_prefix_list": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"invert_match": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"ip_prefixes": {
 
 							Type: schema.TypeList,
 
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-
-						"ipv6_prefixes": {
-
-							Type: schema.TypeList,
-
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -691,27 +711,32 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"goto_policy": {
 
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:       schema.TypeList,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:       schema.TypeString,
+							Computed:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -783,8 +808,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"presence": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
@@ -890,45 +916,38 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 								Type: schema.TypeString,
 							},
 						},
-
-						"ipv6_prefixes": {
-
-							Type: schema.TypeList,
-
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
 					},
 				},
 			},
 
 			"ip_reputation_action": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"default": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"skip_processing": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
 			},
 
-			"l4_dest_matcher": {
+			"jwt_claims": {
 
-				Type:     schema.TypeSet,
+				Type:     schema.TypeList,
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
@@ -938,23 +957,100 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Optional: true,
 						},
 
+						"check_not_present": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"check_present": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"item": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"exact_values": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"regex_values": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"transformers": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"name": {
+							Type:     schema.TypeString,
+							Required: true,
+						},
+					},
+				},
+			},
+
+			"l4_dest_matcher": {
+
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"invert_matcher": {
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
 						"l4_dests": {
 
-							Type:     schema.TypeList,
-							Required: true,
+							Type:       schema.TypeList,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"port_ranges": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"prefixes": {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -1009,8 +1105,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 			},
 
 			"origin_server_subsets_action": {
-				Type:     schema.TypeMap,
-				Optional: true,
+				Type:       schema.TypeMap,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"path": {
@@ -1028,6 +1125,11 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
+						},
+
+						"invert_matcher": {
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"prefix_values": {
@@ -1169,8 +1271,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"presence": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1178,27 +1281,32 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"rate_limiter": {
 
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:       schema.TypeList,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:       schema.TypeString,
+							Computed:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1374,7 +1482,8 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 				Type: schema.TypeList,
 
-				Optional: true,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -1382,8 +1491,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"server_selector": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -1391,7 +1501,8 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -1402,53 +1513,62 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"shape_protected_endpoint_action": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"allow_goodbot": {
-							Type:     schema.TypeBool,
-							Required: true,
+							Type:       schema.TypeBool,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"app_traffic_type": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"flow_label": {
-							Type:     schema.TypeString,
-							Required: true,
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"mitigation": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"block": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"body": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"body_hash": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"status": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1456,26 +1576,30 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 									"flag": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"append_headers": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"auto_type_header_name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"inference_header_name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1483,8 +1607,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 												"no_headers": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1492,20 +1617,23 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 									"none": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"redirect": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"uri": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1516,36 +1644,41 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"transaction_result": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"failure_conditions": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"regex_values": {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
 												},
 
 												"status": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1553,29 +1686,33 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 									"success_conditions": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"regex_values": {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
 												},
 
 												"status": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1585,8 +1722,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						},
 
 						"web_scraping": {
-							Type:     schema.TypeBool,
-							Required: true,
+							Type:       schema.TypeBool,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1634,51 +1772,59 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"url_matcher": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"invert_matcher": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"url_items": {
 
-							Type:     schema.TypeList,
-							Required: true,
+							Type:       schema.TypeList,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"domain_regex": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"domain_value": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"path_prefix": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"path_regex": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"path_value": {
 
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1689,8 +1835,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 			"virtual_host_matcher": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -1698,7 +1845,8 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -1708,7 +1856,8 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -1737,6 +1886,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"context": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"context_name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
 
 												"exclude_attack_type": {
 													Type:     schema.TypeString,
@@ -1816,14 +1975,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"data_guard_control": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"policy_name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1831,14 +1992,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"jwt_claims_validation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"jwt_validation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"none": {
@@ -1849,8 +2012,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"waf_in_monitoring_mode": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"waf_skip_processing": {
@@ -2708,16 +2872,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
-			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
-
-			}
-
 		}
 
 	}
@@ -2993,16 +3147,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 			}
 
-			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-			}
-
 		}
 
 	}
@@ -3040,6 +3184,99 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					ipReputationAction.ActionType = actionTypeInt
 				}
 
+			}
+
+		}
+
+	}
+
+	//jwt_claims
+	if v, ok := d.GetOk("jwt_claims"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+		createSpec.JwtClaims = jwtClaims
+		for i, set := range sl {
+			jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+			jwtClaimsMapStrToI := set.(map[string]interface{})
+
+			if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+				jwtClaims[i].InvertMatcher = w.(bool)
+			}
+
+			matchTypeFound := false
+
+			if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+				matchTypeFound = true
+
+				if v.(bool) {
+					matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+					matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+					jwtClaims[i].Match = matchInt
+				}
+
+			}
+
+			if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+				matchTypeFound = true
+
+				if v.(bool) {
+					matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+					matchInt.CheckPresent = &ves_io_schema.Empty{}
+					jwtClaims[i].Match = matchInt
+				}
+
+			}
+
+			if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+				matchTypeFound = true
+				matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+				matchInt.Item = &ves_io_schema_policy.MatcherType{}
+				jwtClaims[i].Match = matchInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						matchInt.Item.ExactValues = ls
+
+					}
+
+					if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						matchInt.Item.RegexValues = ls
+
+					}
+
+					if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+						transformersList := []ves_io_schema_policy.Transformer{}
+						for _, j := range v.([]interface{}) {
+							transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+						}
+						matchInt.Item.Transformers = transformersList
+
+					}
+
+				}
+
+			}
+
+			if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+				jwtClaims[i].Name = w.(string)
 			}
 
 		}
@@ -3173,6 +3410,10 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					ls[i] = v.(string)
 				}
 				path.ExactValues = ls
+			}
+
+			if w, ok := pathMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+				path.InvertMatcher = w.(bool)
 			}
 
 			if w, ok := pathMapStrToI["prefix_values"]; ok && !isIntfNil(w) {
@@ -4174,6 +4415,16 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
 							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
 
+							if v, ok := excludeAttackTypeContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
+
+							if w, ok := excludeAttackTypeContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeAttackTypeContexts[i].ContextName = w.(string)
+							}
+
 							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
 
 								excludeAttackTypeContexts[i].ExcludeAttackType = ves_io_schema_app_firewall.AttackType(ves_io_schema_app_firewall.AttackType_value[v.(string)])
@@ -4402,6 +4653,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -5216,16 +5468,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
-			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
-
-			}
-
 		}
 
 	}
@@ -5495,16 +5737,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 			}
 
-			if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-			}
-
 		}
 
 	}
@@ -5541,6 +5773,98 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					ipReputationAction.ActionType = actionTypeInt
 				}
 
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("jwt_claims"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+		updateSpec.JwtClaims = jwtClaims
+		for i, set := range sl {
+			jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+			jwtClaimsMapStrToI := set.(map[string]interface{})
+
+			if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+				jwtClaims[i].InvertMatcher = w.(bool)
+			}
+
+			matchTypeFound := false
+
+			if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+				matchTypeFound = true
+
+				if v.(bool) {
+					matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+					matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+					jwtClaims[i].Match = matchInt
+				}
+
+			}
+
+			if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+				matchTypeFound = true
+
+				if v.(bool) {
+					matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+					matchInt.CheckPresent = &ves_io_schema.Empty{}
+					jwtClaims[i].Match = matchInt
+				}
+
+			}
+
+			if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+				matchTypeFound = true
+				matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+				matchInt.Item = &ves_io_schema_policy.MatcherType{}
+				jwtClaims[i].Match = matchInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						matchInt.Item.ExactValues = ls
+
+					}
+
+					if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+						ls := make([]string, len(v.([]interface{})))
+						for i, v := range v.([]interface{}) {
+							ls[i] = v.(string)
+						}
+						matchInt.Item.RegexValues = ls
+
+					}
+
+					if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+						transformersList := []ves_io_schema_policy.Transformer{}
+						for _, j := range v.([]interface{}) {
+							transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+						}
+						matchInt.Item.Transformers = transformersList
+
+					}
+
+				}
+
+			}
+
+			if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+				jwtClaims[i].Name = w.(string)
 			}
 
 		}
@@ -5669,6 +5993,10 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					ls[i] = v.(string)
 				}
 				path.ExactValues = ls
+			}
+
+			if w, ok := pathMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+				path.InvertMatcher = w.(bool)
 			}
 
 			if w, ok := pathMapStrToI["prefix_values"]; ok && !isIntfNil(w) {
@@ -6658,6 +6986,16 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 						for i, set := range sl {
 							excludeAttackTypeContexts[i] = &ves_io_schema_policy.AppFirewallAttackTypeContext{}
 							excludeAttackTypeContextsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludeAttackTypeContextsMapStrToI["context"]; ok && !isIntfNil(v) {
+
+								excludeAttackTypeContexts[i].Context = ves_io_schema_policy.DetectionContext(ves_io_schema_policy.DetectionContext_value[v.(string)])
+
+							}
+
+							if w, ok := excludeAttackTypeContextsMapStrToI["context_name"]; ok && !isIntfNil(w) {
+								excludeAttackTypeContexts[i].ContextName = w.(string)
+							}
 
 							if v, ok := excludeAttackTypeContextsMapStrToI["exclude_attack_type"]; ok && !isIntfNil(v) {
 

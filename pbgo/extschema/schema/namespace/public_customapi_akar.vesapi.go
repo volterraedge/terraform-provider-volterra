@@ -1670,67 +1670,67 @@ type namespaceCustomAPIInprocClient struct {
 }
 
 func (c *namespaceCustomAPIInprocClient) AllApplicationInventory(ctx context.Context, in *AllApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory")
 	return c.NamespaceCustomAPIServer.AllApplicationInventory(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) AllApplicationInventoryWaf(ctx context.Context, in *AllApplicationInventoryWafFilterRequest, opts ...grpc.CallOption) (*AllApplicationInventoryWafFilterResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventoryWaf", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventoryWaf")
 	return c.NamespaceCustomAPIServer.AllApplicationInventoryWaf(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) ApplicationInventory(ctx context.Context, in *ApplicationInventoryRequest, opts ...grpc.CallOption) (*ApplicationInventoryResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory")
 	return c.NamespaceCustomAPIServer.ApplicationInventory(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete")
 	return c.NamespaceCustomAPIServer.CascadeDelete(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetActiveAlertPolicies(ctx context.Context, in *GetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*GetActiveAlertPoliciesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies")
 	return c.NamespaceCustomAPIServer.GetActiveAlertPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetActiveNetworkPolicies(ctx context.Context, in *GetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*GetActiveNetworkPoliciesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies")
 	return c.NamespaceCustomAPIServer.GetActiveNetworkPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetActiveServicePolicies(ctx context.Context, in *GetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*GetActiveServicePoliciesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies")
 	return c.NamespaceCustomAPIServer.GetActiveServicePolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) GetFastACLsForInternetVIPs(ctx context.Context, in *GetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*GetFastACLsForInternetVIPsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs")
 	return c.NamespaceCustomAPIServer.GetFastACLsForInternetVIPs(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) NetworkingInventory(ctx context.Context, in *NetworkingInventoryRequest, opts ...grpc.CallOption) (*NetworkingInventoryResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory")
 	return c.NamespaceCustomAPIServer.NetworkingInventory(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetActiveAlertPolicies(ctx context.Context, in *SetActiveAlertPoliciesRequest, opts ...grpc.CallOption) (*SetActiveAlertPoliciesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies")
 	return c.NamespaceCustomAPIServer.SetActiveAlertPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetActiveNetworkPolicies(ctx context.Context, in *SetActiveNetworkPoliciesRequest, opts ...grpc.CallOption) (*SetActiveNetworkPoliciesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies")
 	return c.NamespaceCustomAPIServer.SetActiveNetworkPolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetActiveServicePolicies(ctx context.Context, in *SetActiveServicePoliciesRequest, opts ...grpc.CallOption) (*SetActiveServicePoliciesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies")
 	return c.NamespaceCustomAPIServer.SetActiveServicePolicies(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SetFastACLsForInternetVIPs(ctx context.Context, in *SetFastACLsForInternetVIPsRequest, opts ...grpc.CallOption) (*SetFastACLsForInternetVIPsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs")
 	return c.NamespaceCustomAPIServer.SetFastACLsForInternetVIPs(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues")
 	return c.NamespaceCustomAPIServer.SuggestValues(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) UpdateAllowAdvertiseOnPublic(ctx context.Context, in *UpdateAllowAdvertiseOnPublicReq, opts ...grpc.CallOption) (*UpdateAllowAdvertiseOnPublicResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic")
 	return c.NamespaceCustomAPIServer.UpdateAllowAdvertiseOnPublic(ctx, in)
 }
 func (c *namespaceCustomAPIInprocClient) ValidateRules(ctx context.Context, in *ValidateRulesReq, opts ...grpc.CallOption) (*ValidateRulesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.ValidateRules", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceCustomAPI.ValidateRules")
 	return c.NamespaceCustomAPIServer.ValidateRules(ctx, in)
 }
 
@@ -4347,6 +4347,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "API Definition"
                 },
+                "api_discovery": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with API Discovery",
+                    "title": "API Discovery",
+                    "format": "boolean",
+                    "x-displayname": "API Discovery"
+                },
                 "api_protection": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with API Protection configured",
@@ -4475,10 +4482,10 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "mutual_tls": {
                     "type": "boolean",
-                    "description": " Filter results with HTTP loadbalancers with Mutual TLS",
-                    "title": "Mutual TLS",
+                    "description": " Filter results with HTTP loadbalancers with mTLS",
+                    "title": "mTLS",
                     "format": "boolean",
-                    "x-displayname": "Mutual TLS"
+                    "x-displayname": "mTLS"
                 },
                 "namespace_service_policy": {
                     "type": "boolean",
@@ -4566,6 +4573,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Inventory of HTTP Loadbalancers",
             "x-ves-proto-message": "ves.io.schema.namespace.HTTPLoadbalancerInventoryType",
             "properties": {
+                "api_discovery": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with API Discovery enabled",
+                    "title": "API Discovery",
+                    "format": "int64",
+                    "x-displayname": "API Discovery"
+                },
                 "api_protection": {
                     "type": "integer",
                     "description": " Number of HTTP loadbalancers with API Protection configured",
@@ -4673,6 +4687,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "API Definition Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "API Definition Enabled or Disabled"
+                },
+                "api_discovery_enabled": {
+                    "description": " API Discovery configured ",
+                    "title": "API Discovery Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "API Discovery Enabled or Disabled"
                 },
                 "api_protection_enabled": {
                     "description": " API Protection configured",
@@ -4837,10 +4857,10 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Malicious User Mitigation Enabled or Disabled"
                 },
                 "mutual_tls_enabled": {
-                    "description": " Mutual TLS configured ",
-                    "title": "Mutual TLS Status",
+                    "description": " mTLS configured",
+                    "title": "mTLS Status",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Mutual TLS Enabled or Disabled"
+                    "x-displayname": "mTLS Enabled or Disabled"
                 },
                 "name": {
                     "type": "string",
@@ -4938,11 +4958,18 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "WAF Exclusion Enabled or Disabled"
                 },
-                "waf_policy_name": {
-                    "type": "string",
-                    "description": " Name of the WAF policy (if applicable)",
-                    "title": "WAF Policy Name",
-                    "x-displayname": "WAF Policy Name"
+                "waf_policy_ref": {
+                    "type": "array",
+                    "description": " Reference to the WAF policy (if applicable)\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "WAF Policy Reference",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "WAF Policy Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -5001,6 +5028,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Global Networks",
                     "format": "int64",
                     "x-displayname": "Global Networks"
+                },
+                "segments": {
+                    "type": "integer",
+                    "description": " Number of Segments",
+                    "title": "Segments",
+                    "format": "int64",
+                    "x-displayname": "Segments"
                 },
                 "site_mesh_groups": {
                     "type": "integer",

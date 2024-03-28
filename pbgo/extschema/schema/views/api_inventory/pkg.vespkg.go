@@ -14,6 +14,10 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.api_inventory.GetPathSuggestionsReq"] = GetPathSuggestionsReqValidator()
+	vr["ves.io.schema.views.api_inventory.UpdateApiDefinitionRefReq"] = UpdateApiDefinitionRefReqValidator()
+	vr["ves.io.schema.views.api_inventory.UpdateApiDefinitionRefResp"] = UpdateApiDefinitionRefRespValidator()
+	vr["ves.io.schema.views.api_inventory.UpdateApiInventoryListsReq"] = UpdateApiInventoryListsReqValidator()
+	vr["ves.io.schema.views.api_inventory.UpdateApiInventoryListsResp"] = UpdateApiInventoryListsRespValidator()
 
 	vr["ves.io.schema.views.api_inventory.SpecType"] = SpecTypeValidator()
 

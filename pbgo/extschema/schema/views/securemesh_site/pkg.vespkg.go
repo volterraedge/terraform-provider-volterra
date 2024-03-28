@@ -120,10 +120,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.securemesh_site.API.Create"] = "ves.io.schema.views.securemesh_site.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.securemesh_site.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.securemesh_site.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
@@ -143,26 +139,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "create_form.spec.custom_network_config.slo_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.sli_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.slo_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -226,26 +202,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "items.#.get_spec.custom_network_config.slo_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.sli_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.slo_config.static_v6_route_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}

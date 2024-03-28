@@ -345,6 +345,7 @@ func resourceVolterraProtocolInspectionUpdate(d *schema.ResourceData, meta inter
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

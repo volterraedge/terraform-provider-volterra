@@ -61,10 +61,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.verification_only",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_domain.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_domain.API.Replace"] = []string{
 		"spec.route53",
 		"spec.verification_only",

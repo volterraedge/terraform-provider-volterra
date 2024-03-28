@@ -17,9 +17,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.infraprotect_firewall_ruleset.Object"] = ObjectValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.infraprotect_firewall_ruleset.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.infraprotect_firewall_ruleset.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.infraprotect_firewall_ruleset.DeleteRequest"] = DeleteRequestValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.ListRequest"] = ListRequestValidator()
@@ -28,7 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.infraprotect_firewall_ruleset.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.ReplaceResponse"] = ReplaceResponseValidator()
 
-	vr["ves.io.schema.infraprotect_firewall_ruleset.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.infraprotect_firewall_ruleset.ReplaceSpecType"] = ReplaceSpecTypeValidator()
@@ -48,10 +44,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.infraprotect_firewall_ruleset.API.Get"] = []string{
-		"object",
-	}
 
 }
 

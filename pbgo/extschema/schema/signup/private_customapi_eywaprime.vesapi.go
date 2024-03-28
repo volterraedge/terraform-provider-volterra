@@ -43,6 +43,15 @@ func (c *CustomPrivateAPIEywaprimeGrpcClient) doRPCCreateV2(ctx context.Context,
 	return rsp, err
 }
 
+func (c *CustomPrivateAPIEywaprimeGrpcClient) doRPCRestrictedCreateV2(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateV2Request{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.signup.CreateV2Request", yamlReq)
+	}
+	rsp, err := c.grpcClient.RestrictedCreateV2(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomPrivateAPIEywaprimeGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -75,6 +84,8 @@ func NewCustomPrivateAPIEywaprimeGrpcClient(cc *grpc.ClientConn) server.CustomCl
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CreateV2"] = ccl.doRPCCreateV2
 
+	rpcFns["RestrictedCreateV2"] = ccl.doRPCRestrictedCreateV2
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -89,6 +100,93 @@ type CustomPrivateAPIEywaprimeRestClient struct {
 }
 
 func (c *CustomPrivateAPIEywaprimeRestClient) doRPCCreateV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CreateV2Request{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.signup.CreateV2Request: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("account_details", fmt.Sprintf("%v", req.AccountDetails))
+		q.Add("billing_details", fmt.Sprintf("%v", req.BillingDetails))
+		q.Add("company_details", fmt.Sprintf("%v", req.CompanyDetails))
+		q.Add("source_choice", fmt.Sprintf("%v", req.SourceChoice))
+		q.Add("user_details", fmt.Sprintf("%v", req.UserDetails))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CreateV2Response{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.signup.CreateV2Response", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomPrivateAPIEywaprimeRestClient) doRPCRestrictedCreateV2(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -201,6 +299,8 @@ func NewCustomPrivateAPIEywaprimeRestClient(baseURL string, hc http.Client) serv
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CreateV2"] = ccl.doRPCCreateV2
 
+	rpcFns["RestrictedCreateV2"] = ccl.doRPCRestrictedCreateV2
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -214,8 +314,12 @@ type customPrivateAPIEywaprimeInprocClient struct {
 }
 
 func (c *customPrivateAPIEywaprimeInprocClient) CreateV2(ctx context.Context, in *CreateV2Request, opts ...grpc.CallOption) (*CreateV2Response, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2")
 	return c.CustomPrivateAPIEywaprimeServer.CreateV2(ctx, in)
+}
+func (c *customPrivateAPIEywaprimeInprocClient) RestrictedCreateV2(ctx context.Context, in *CreateV2Request, opts ...grpc.CallOption) (*CreateV2Response, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.signup.CustomPrivateAPIEywaprime.RestrictedCreateV2")
+	return c.CustomPrivateAPIEywaprimeServer.RestrictedCreateV2(ctx, in)
 }
 
 func NewCustomPrivateAPIEywaprimeInprocClient(svc svcfw.Service) CustomPrivateAPIEywaprimeClient {
@@ -272,6 +376,39 @@ func (s *customPrivateAPIEywaprimeSrv) CreateV2(ctx context.Context, in *CreateV
 
 	return rsp, nil
 }
+func (s *customPrivateAPIEywaprimeSrv) RestrictedCreateV2(ctx context.Context, in *CreateV2Request) (*CreateV2Response, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.signup.CustomPrivateAPIEywaprime")
+	cah, ok := ah.(CustomPrivateAPIEywaprimeServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPIEywaprimeServer", ah)
+	}
+
+	var (
+		rsp *CreateV2Response
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.signup.CustomPrivateAPIEywaprime.RestrictedCreateV2"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.RestrictedCreateV2(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
 
 func NewCustomPrivateAPIEywaprimeServer(svc svcfw.Service) CustomPrivateAPIEywaprimeServer {
 	return &customPrivateAPIEywaprimeSrv{svc: svc}
@@ -296,10 +433,95 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/ves.io.schema/introspect/restricted/write/v2/signup": {
+            "post": {
+                "summary": "Restricted Create V2",
+                "description": "CreateV2 creates a new v2 signup request, this will trigger the signup flow and eventually result in a new customer tenant. This is meant to be used in production deployments and by all the services using the signup API.",
+                "operationId": "ves.io.schema.signup.CustomPrivateAPIEywaprime.RestrictedCreateV2",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/signupCreateV2Response"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/signupCreateV2Request"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPIEywaprime"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customprivateapieywaprime-restrictedcreatev2"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.signup.CustomPrivateAPIEywaprime.RestrictedCreateV2"
+            },
+            "x-displayname": "Custom Private API Eywaprime",
+            "x-ves-proto-service": "ves.io.schema.signup.CustomPrivateAPIEywaprime",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
         "/ves.io.schema/introspect/write/v2/signup": {
             "post": {
                 "summary": "Create V2",
-                "description": "CreateV2 creates a new v2 signup request, this will trigger the signup flow and eventually result in a new customer tenant.",
+                "description": "CreateV2 creates a new v2 signup request, this will trigger the signup flow and eventually result in a new customer tenant. This api is meant to be used for testing environments only.",
                 "operationId": "ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2",
                 "responses": {
                     "200": {
@@ -802,28 +1024,20 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.signup.CompanyMeta",
             "properties": {
                 "mailing_address": {
-                    "description": " mailing address of the company\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " mailing address of the company",
                     "title": "Mailing Address",
                     "$ref": "#/definitions/signupContactMeta",
-                    "x-displayname": "Mailing Address",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Mailing Address"
                 },
                 "name": {
                     "type": "string",
-                    "description": " name of the company\n\nExample: - \"F5 Networks, Inc\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 5\n",
+                    "description": " name of the company\n\nExample: - \"F5 Networks, Inc\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Name",
-                    "minLength": 5,
                     "maxLength": 256,
                     "x-displayname": "Name",
                     "x-ves-example": "F5 Networks, Inc",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "5"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
             }
@@ -928,14 +1142,10 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     }
                 },
                 "company_details": {
-                    "description": " details of the company\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " details of the company",
                     "title": "Company Details",
                     "$ref": "#/definitions/signupCompanyMeta",
-                    "x-displayname": "Company Details",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Company Details"
                 },
                 "source_internal_sre": {
                     "description": "Exclusive with []\n For internal use ONLY\n payload for the request made internally, probably via SRE",
@@ -944,14 +1154,10 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "x-displayname": "Source Internal SRE"
                 },
                 "user_details": {
-                    "description": " details of the user\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " details of the user",
                     "title": "User Details",
                     "$ref": "#/definitions/signupUserMeta",
-                    "x-displayname": "User Details",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "User Details"
                 }
             }
         },
@@ -1038,16 +1244,6 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64"
                     }
-                },
-                "tenant_id": {
-                    "type": "string",
-                    "description": " tenant id to be used while creating a tenant instead of generating a new one.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
-                    "title": "tenant_id",
-                    "maxLength": 64,
-                    "x-displayname": "Tenant Id",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
-                    }
                 }
             }
         },
@@ -1106,34 +1302,24 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
             "properties": {
                 "contact_number": {
                     "type": "string",
-                    "description": " contact number of the user\n\nExample: - \"+14084004001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.phone_number: true\n",
+                    "description": " contact number of the user\n\nExample: - \"+14084004001\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Contact Number",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Contact Number",
                     "x-ves-example": "+14084004001",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.phone_number": "true"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "email": {
                     "type": "string",
-                    "description": " email of the user\n\nExample: - \"jane.doe@gmail.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.email: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " email of the user\n\nExample: - \"jane.doe@gmail.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "E-mail",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "E-mail",
                     "x-ves-example": "jane.doe@gmail.com",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.email": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "first_name": {
@@ -1149,17 +1335,13 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                 },
                 "last_name": {
                     "type": "string",
-                    "description": " last name of the user\n\nExample: - \"Doe\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " last name of the user\n\nExample: - \"Doe\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Last Name",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Last Name",
                     "x-ves-example": "Doe",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
             }

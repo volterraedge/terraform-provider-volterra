@@ -157,15 +157,6 @@ func (m *GetResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) erro
 	return GetResponseValidator().Validate(ctx, m, opts...)
 }
 
-func (m *GetResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return nil, nil
-
-}
-
 type ValidateGetResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -217,15 +208,6 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["object"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("object"))
-		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["referring_objects"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("referring_objects"))
@@ -271,8 +253,6 @@ func (v *ValidateGetResponse) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGetResponseValidator = func() *ValidateGetResponse {
 	v := &ValidateGetResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["object"] = ObjectValidator().Validate
 
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
 
@@ -433,37 +413,6 @@ func (m *ListResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) err
 	return ListResponseValidator().Validate(ctx, m, opts...)
 }
 
-func (m *ListResponse) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return m.GetItemsDRefInfo()
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ListResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetItems() == nil {
-		return nil, nil
-	}
-
-	var drInfos []db.DRefInfo
-	for idx, e := range m.GetItems() {
-		driSet, err := e.GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetItems() GetDRefInfo() FAILED")
-		}
-		for i := range driSet {
-			dri := &driSet[i]
-			dri.DRField = fmt.Sprintf("items[%v].%s", idx, dri.DRField)
-		}
-		drInfos = append(drInfos, driSet...)
-	}
-	return drInfos, nil
-
-}
-
 type ValidateListResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -557,15 +506,6 @@ func (m *ListResponseItem) DeepCopyProto() proto.Message {
 
 func (m *ListResponseItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return ListResponseItemValidator().Validate(ctx, m, opts...)
-}
-
-func (m *ListResponseItem) GetDRefInfo() ([]db.DRefInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-
-	return nil, nil
-
 }
 
 type ValidateListResponseItem struct {
@@ -664,15 +604,6 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 
 	}
 
-	if fv, exists := v.FldValidators["object"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("object"))
-		if err := fv(ctx, m.GetObject(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["owner_view"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("owner_view"))
@@ -715,8 +646,6 @@ func (v *ValidateListResponseItem) Validate(ctx context.Context, pm interface{},
 // Well-known symbol for default validator implementation
 var DefaultListResponseItemValidator = func() *ValidateListResponseItem {
 	v := &ValidateListResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["object"] = ObjectValidator().Validate
 
 	v.FldValidators["get_spec"] = GetSpecTypeValidator().Validate
 

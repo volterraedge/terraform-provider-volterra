@@ -84,14 +84,6 @@ func (m *ObjectCreateReq) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *ObjectCreateReq) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetSpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *ObjectCreateReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
@@ -125,27 +117,6 @@ func (m *ObjectCreateReq) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *ObjectCreateReq) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 
@@ -273,14 +244,6 @@ func (m *ObjectCreateRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *ObjectCreateRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetSpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *ObjectCreateRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
@@ -314,27 +277,6 @@ func (m *ObjectCreateRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *ObjectCreateRsp) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 
@@ -744,14 +686,6 @@ func (m *ObjectGetRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *ObjectGetRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetSpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *ObjectGetRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
@@ -785,27 +719,6 @@ func (m *ObjectGetRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *ObjectGetRsp) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 
@@ -1100,14 +1013,6 @@ func (m *ObjectListRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *ObjectListRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetItemsSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *ObjectListRsp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
@@ -1127,31 +1032,6 @@ func (m *ObjectListRsp) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, driSet...)
 	}
 	return drInfos, nil
-
-}
-
-// GetItemsSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *ObjectListRsp) GetItemsSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetItems() == nil {
-		return nil, nil
-	}
-
-	var srInfos []db.SelrFldInfo
-	for _, e := range m.GetItems() {
-		sris, err := e.GetSRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetItems() GetSRefInfo() FAILED")
-		}
-		srInfos = append(srInfos, sris...)
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "items." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 
@@ -1299,14 +1179,6 @@ func (m *ObjectListRspItem) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *ObjectListRspItem) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetSpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *ObjectListRspItem) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
@@ -1340,27 +1212,6 @@ func (m *ObjectListRspItem) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *ObjectListRspItem) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 
@@ -1523,14 +1374,6 @@ func (m *ObjectReplaceReq) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *ObjectReplaceReq) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetSpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *ObjectReplaceReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
@@ -1546,27 +1389,6 @@ func (m *ObjectReplaceReq) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "spec." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *ObjectReplaceReq) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 
@@ -1701,14 +1523,6 @@ func (m *ObjectReplaceRsp) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *ObjectReplaceRsp) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetSpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *ObjectReplaceRsp) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
@@ -1742,27 +1556,6 @@ func (m *ObjectReplaceRsp) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *ObjectReplaceRsp) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 

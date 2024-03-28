@@ -84,12 +84,12 @@ func (v *ValidateApiGroupBuilder) IncludedOperationsValidationRuleHandler(rules 
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for included_operations")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -101,9 +101,9 @@ func (v *ValidateApiGroupBuilder) IncludedOperationsValidationRuleHandler(rules 
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -132,12 +132,12 @@ func (v *ValidateApiGroupBuilder) ExcludedOperationsValidationRuleHandler(rules 
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for excluded_operations")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -149,9 +149,9 @@ func (v *ValidateApiGroupBuilder) ExcludedOperationsValidationRuleHandler(rules 
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -468,154 +468,6 @@ func ApiGroupSummaryValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *ApiOperation) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *ApiOperation) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *ApiOperation) DeepCopy() *ApiOperation {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &ApiOperation{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *ApiOperation) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *ApiOperation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return ApiOperationValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateApiOperation struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateApiOperation) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	var conv db.EnumConvFn
-	conv = func(v interface{}) int32 {
-		i := v.(ves_io_schema.HttpMethod)
-		return int32(i)
-	}
-	// ves_io_schema.HttpMethod_name is generated in .pb.go
-	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.HttpMethod_name, conv)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for method")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateApiOperation) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateApiOperation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*ApiOperation)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *ApiOperation got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["method"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("method"))
-		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["path"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("path"))
-		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultApiOperationValidator = func() *ValidateApiOperation {
-	v := &ValidateApiOperation{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhMethod := v.MethodValidationRuleHandler
-	rulesMethod := map[string]string{
-		"ves.io.schema.rules.enum.defined_only": "true",
-		"ves.io.schema.rules.enum.not_in":       "0",
-		"ves.io.schema.rules.message.required":  "true",
-	}
-	vFn, err = vrhMethod(rulesMethod)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiOperation.method: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["method"] = vFn
-
-	vrhPath := v.PathValidationRuleHandler
-	rulesPath := map[string]string{
-		"ves.io.schema.rules.message.required":           "true",
-		"ves.io.schema.rules.string.max_bytes":           "1024",
-		"ves.io.schema.rules.string.min_bytes":           "1",
-		"ves.io.schema.rules.string.templated_http_path": "true",
-	}
-	vFn, err = vrhPath(rulesPath)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiOperation.path: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["path"] = vFn
-
-	return v
-}()
-
-func ApiOperationValidator() db.Validator {
-	return DefaultApiOperationValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -653,6 +505,14 @@ func (m *CreateSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) e
 
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSpecType) SchemaUpdatesStrategyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for schema_updates_strategy")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateCreateSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -704,12 +564,12 @@ func (v *ValidateCreateSpecType) ApiInventoryInclusionListValidationRuleHandler(
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_inclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -721,9 +581,9 @@ func (v *ValidateCreateSpecType) ApiInventoryInclusionListValidationRuleHandler(
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -752,12 +612,12 @@ func (v *ValidateCreateSpecType) ApiInventoryExclusionListValidationRuleHandler(
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_exclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -769,9 +629,9 @@ func (v *ValidateCreateSpecType) ApiInventoryExclusionListValidationRuleHandler(
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -800,12 +660,12 @@ func (v *ValidateCreateSpecType) NonApiEndpointsValidationRuleHandler(rules map[
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for non_api_endpoints")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -817,9 +677,9 @@ func (v *ValidateCreateSpecType) NonApiEndpointsValidationRuleHandler(rules map[
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -879,6 +739,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
+		val := m.GetSchemaUpdatesStrategy()
+		vOpts := append(opts,
+			db.WithValidateField("schema_updates_strategy"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSchemaUpdatesStrategy().(type) {
+	case *CreateSpecType_StrictSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.strict_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*CreateSpecType_StrictSchemaOrigin).StrictSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("strict_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_MixedSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.mixed_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*CreateSpecType_MixedSchemaOrigin).MixedSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("mixed_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["swagger_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("swagger_specs"))
 		if err := fv(ctx, m.GetSwaggerSpecs(), vOpts...); err != nil {
@@ -901,6 +797,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
+	rulesSchemaUpdatesStrategy := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSchemaUpdatesStrategy(rulesSchemaUpdatesStrategy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.schema_updates_strategy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["schema_updates_strategy"] = vFn
 
 	vrhSwaggerSpecs := v.SwaggerSpecsValidationRuleHandler
 	rulesSwaggerSpecs := map[string]string{
@@ -1000,6 +907,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) SchemaUpdatesStrategyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for schema_updates_strategy")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1049,12 +964,12 @@ func (v *ValidateGetSpecType) ApiInventoryInclusionListValidationRuleHandler(rul
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_inclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1066,9 +981,9 @@ func (v *ValidateGetSpecType) ApiInventoryInclusionListValidationRuleHandler(rul
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1097,12 +1012,12 @@ func (v *ValidateGetSpecType) ApiInventoryExclusionListValidationRuleHandler(rul
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_exclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1114,9 +1029,9 @@ func (v *ValidateGetSpecType) ApiInventoryExclusionListValidationRuleHandler(rul
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1145,12 +1060,12 @@ func (v *ValidateGetSpecType) NonApiEndpointsValidationRuleHandler(rules map[str
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for non_api_endpoints")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1162,9 +1077,9 @@ func (v *ValidateGetSpecType) NonApiEndpointsValidationRuleHandler(rules map[str
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1179,48 +1094,6 @@ func (v *ValidateGetSpecType) NonApiEndpointsValidationRuleHandler(rules map[str
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items non_api_endpoints")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) ApiInventoryOpenapiSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for api_inventory_openapi_spec")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_inventory_openapi_spec")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated api_inventory_openapi_spec")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items api_inventory_openapi_spec")
 		}
 		return nil
 	}
@@ -1270,14 +1143,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["api_inventory_openapi_spec"]; exists {
-		vOpts := append(opts, db.WithValidateField("api_inventory_openapi_spec"))
-		if err := fv(ctx, m.GetApiInventoryOpenapiSpec(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["default_api_groups_builders"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("default_api_groups_builders"))
@@ -1294,6 +1159,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("non_api_endpoints"))
 		if err := fv(ctx, m.GetNonApiEndpoints(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
+		val := m.GetSchemaUpdatesStrategy()
+		vOpts := append(opts,
+			db.WithValidateField("schema_updates_strategy"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSchemaUpdatesStrategy().(type) {
+	case *GetSpecType_StrictSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.strict_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*GetSpecType_StrictSchemaOrigin).StrictSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("strict_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_MixedSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.mixed_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*GetSpecType_MixedSchemaOrigin).MixedSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("mixed_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1320,6 +1221,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
+	rulesSchemaUpdatesStrategy := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSchemaUpdatesStrategy(rulesSchemaUpdatesStrategy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.schema_updates_strategy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["schema_updates_strategy"] = vFn
 
 	vrhSwaggerSpecs := v.SwaggerSpecsValidationRuleHandler
 	rulesSwaggerSpecs := map[string]string{
@@ -1370,20 +1282,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["non_api_endpoints"] = vFn
-
-	vrhApiInventoryOpenapiSpec := v.ApiInventoryOpenapiSpecValidationRuleHandler
-	rulesApiInventoryOpenapiSpec := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.max_bytes": "512",
-		"ves.io.schema.rules.repeated.items.string.pattern":   "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
-		"ves.io.schema.rules.repeated.max_items":              "10",
-		"ves.io.schema.rules.repeated.unique":                 "true",
-	}
-	vFn, err = vrhApiInventoryOpenapiSpec(rulesApiInventoryOpenapiSpec)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.api_inventory_openapi_spec: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["api_inventory_openapi_spec"] = vFn
 
 	v.FldValidators["default_api_groups_builders"] = ApiGroupBuilderValidator().Validate
 
@@ -1495,6 +1393,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) SchemaUpdatesStrategyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for schema_updates_strategy")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1544,12 +1450,12 @@ func (v *ValidateGlobalSpecType) ApiInventoryInclusionListValidationRuleHandler(
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_inclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1561,9 +1467,9 @@ func (v *ValidateGlobalSpecType) ApiInventoryInclusionListValidationRuleHandler(
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1592,12 +1498,12 @@ func (v *ValidateGlobalSpecType) ApiInventoryExclusionListValidationRuleHandler(
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_exclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1609,9 +1515,9 @@ func (v *ValidateGlobalSpecType) ApiInventoryExclusionListValidationRuleHandler(
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1640,12 +1546,12 @@ func (v *ValidateGlobalSpecType) NonApiEndpointsValidationRuleHandler(rules map[
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for non_api_endpoints")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -1657,9 +1563,9 @@ func (v *ValidateGlobalSpecType) NonApiEndpointsValidationRuleHandler(rules map[
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -1793,6 +1699,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
+		val := m.GetSchemaUpdatesStrategy()
+		vOpts := append(opts,
+			db.WithValidateField("schema_updates_strategy"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSchemaUpdatesStrategy().(type) {
+	case *GlobalSpecType_StrictSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.strict_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*GlobalSpecType_StrictSchemaOrigin).StrictSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("strict_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_MixedSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.mixed_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*GlobalSpecType_MixedSchemaOrigin).MixedSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("mixed_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["swagger_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("swagger_specs"))
 		if err := fv(ctx, m.GetSwaggerSpecs(), vOpts...); err != nil {
@@ -1824,6 +1766,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
+	rulesSchemaUpdatesStrategy := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSchemaUpdatesStrategy(rulesSchemaUpdatesStrategy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.schema_updates_strategy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["schema_updates_strategy"] = vFn
 
 	vrhSwaggerSpecs := v.SwaggerSpecsValidationRuleHandler
 	rulesSwaggerSpecs := map[string]string{
@@ -1877,10 +1830,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhApiInventoryOpenapiSpec := v.ApiInventoryOpenapiSpecValidationRuleHandler
 	rulesApiInventoryOpenapiSpec := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.max_bytes": "512",
-		"ves.io.schema.rules.repeated.items.string.pattern":   "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
-		"ves.io.schema.rules.repeated.max_items":              "10",
-		"ves.io.schema.rules.repeated.unique":                 "true",
+		"ves.io.schema.rules.repeated.max_items": "10",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryOpenapiSpec(rulesApiInventoryOpenapiSpec)
 	if err != nil {
@@ -1943,6 +1894,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) SchemaUpdatesStrategyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for schema_updates_strategy")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) SwaggerSpecsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1992,12 +1951,12 @@ func (v *ValidateReplaceSpecType) ApiInventoryInclusionListValidationRuleHandler
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_inclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -2009,9 +1968,9 @@ func (v *ValidateReplaceSpecType) ApiInventoryInclusionListValidationRuleHandler
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -2040,12 +1999,12 @@ func (v *ValidateReplaceSpecType) ApiInventoryExclusionListValidationRuleHandler
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_exclusion_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -2057,9 +2016,9 @@ func (v *ValidateReplaceSpecType) ApiInventoryExclusionListValidationRuleHandler
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -2088,12 +2047,12 @@ func (v *ValidateReplaceSpecType) NonApiEndpointsValidationRuleHandler(rules map
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for non_api_endpoints")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ApiOperation, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -2105,9 +2064,9 @@ func (v *ValidateReplaceSpecType) NonApiEndpointsValidationRuleHandler(rules map
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ApiOperation)
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ApiOperation, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -2167,6 +2126,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["schema_updates_strategy"]; exists {
+		val := m.GetSchemaUpdatesStrategy()
+		vOpts := append(opts,
+			db.WithValidateField("schema_updates_strategy"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSchemaUpdatesStrategy().(type) {
+	case *ReplaceSpecType_StrictSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.strict_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*ReplaceSpecType_StrictSchemaOrigin).StrictSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("strict_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_MixedSchemaOrigin:
+		if fv, exists := v.FldValidators["schema_updates_strategy.mixed_schema_origin"]; exists {
+			val := m.GetSchemaUpdatesStrategy().(*ReplaceSpecType_MixedSchemaOrigin).MixedSchemaOrigin
+			vOpts := append(opts,
+				db.WithValidateField("schema_updates_strategy"),
+				db.WithValidateField("mixed_schema_origin"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["swagger_specs"]; exists {
 		vOpts := append(opts, db.WithValidateField("swagger_specs"))
 		if err := fv(ctx, m.GetSwaggerSpecs(), vOpts...); err != nil {
@@ -2189,6 +2184,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhSchemaUpdatesStrategy := v.SchemaUpdatesStrategyValidationRuleHandler
+	rulesSchemaUpdatesStrategy := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSchemaUpdatesStrategy(rulesSchemaUpdatesStrategy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.schema_updates_strategy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["schema_updates_strategy"] = vFn
 
 	vrhSwaggerSpecs := v.SwaggerSpecsValidationRuleHandler
 	rulesSwaggerSpecs := map[string]string{
@@ -2247,6 +2253,41 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetSchemaUpdatesStrategyToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SchemaUpdatesStrategy.(type) {
+	case nil:
+		o.SchemaUpdatesStrategy = nil
+
+	case *CreateSpecType_MixedSchemaOrigin:
+		o.SchemaUpdatesStrategy = &GlobalSpecType_MixedSchemaOrigin{MixedSchemaOrigin: of.MixedSchemaOrigin}
+
+	case *CreateSpecType_StrictSchemaOrigin:
+		o.SchemaUpdatesStrategy = &GlobalSpecType_StrictSchemaOrigin{StrictSchemaOrigin: of.StrictSchemaOrigin}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetSchemaUpdatesStrategyFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SchemaUpdatesStrategy.(type) {
+	case nil:
+		r.SchemaUpdatesStrategy = nil
+
+	case *GlobalSpecType_MixedSchemaOrigin:
+		r.SchemaUpdatesStrategy = &CreateSpecType_MixedSchemaOrigin{MixedSchemaOrigin: of.MixedSchemaOrigin}
+
+	case *GlobalSpecType_StrictSchemaOrigin:
+		r.SchemaUpdatesStrategy = &CreateSpecType_StrictSchemaOrigin{StrictSchemaOrigin: of.StrictSchemaOrigin}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -2254,6 +2295,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.ApiInventoryExclusionList = f.GetApiInventoryExclusionList()
 	m.ApiInventoryInclusionList = f.GetApiInventoryInclusionList()
 	m.NonApiEndpoints = f.GetNonApiEndpoints()
+	m.GetSchemaUpdatesStrategyFromGlobalSpecType(f)
 	m.SwaggerSpecs = f.GetSwaggerSpecs()
 }
 
@@ -2275,6 +2317,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.ApiInventoryExclusionList = m1.ApiInventoryExclusionList
 	f.ApiInventoryInclusionList = m1.ApiInventoryInclusionList
 	f.NonApiEndpoints = m1.NonApiEndpoints
+	m1.SetSchemaUpdatesStrategyToGlobalSpecType(f)
 	f.SwaggerSpecs = m1.SwaggerSpecs
 }
 
@@ -2286,6 +2329,41 @@ func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetSchemaUpdatesStrategyToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SchemaUpdatesStrategy.(type) {
+	case nil:
+		o.SchemaUpdatesStrategy = nil
+
+	case *GetSpecType_MixedSchemaOrigin:
+		o.SchemaUpdatesStrategy = &GlobalSpecType_MixedSchemaOrigin{MixedSchemaOrigin: of.MixedSchemaOrigin}
+
+	case *GetSpecType_StrictSchemaOrigin:
+		o.SchemaUpdatesStrategy = &GlobalSpecType_StrictSchemaOrigin{StrictSchemaOrigin: of.StrictSchemaOrigin}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetSchemaUpdatesStrategyFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SchemaUpdatesStrategy.(type) {
+	case nil:
+		r.SchemaUpdatesStrategy = nil
+
+	case *GlobalSpecType_MixedSchemaOrigin:
+		r.SchemaUpdatesStrategy = &GetSpecType_MixedSchemaOrigin{MixedSchemaOrigin: of.MixedSchemaOrigin}
+
+	case *GlobalSpecType_StrictSchemaOrigin:
+		r.SchemaUpdatesStrategy = &GetSpecType_StrictSchemaOrigin{StrictSchemaOrigin: of.StrictSchemaOrigin}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -2293,9 +2371,9 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.ApiGroups = f.GetApiGroups()
 	m.ApiInventoryExclusionList = f.GetApiInventoryExclusionList()
 	m.ApiInventoryInclusionList = f.GetApiInventoryInclusionList()
-	m.ApiInventoryOpenapiSpec = f.GetApiInventoryOpenapiSpec()
 	m.DefaultApiGroupsBuilders = f.GetDefaultApiGroupsBuilders()
 	m.NonApiEndpoints = f.GetNonApiEndpoints()
+	m.GetSchemaUpdatesStrategyFromGlobalSpecType(f)
 	m.SwaggerSpecs = f.GetSwaggerSpecs()
 }
 
@@ -2317,9 +2395,9 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.ApiGroups = m1.ApiGroups
 	f.ApiInventoryExclusionList = m1.ApiInventoryExclusionList
 	f.ApiInventoryInclusionList = m1.ApiInventoryInclusionList
-	f.ApiInventoryOpenapiSpec = m1.ApiInventoryOpenapiSpec
 	f.DefaultApiGroupsBuilders = m1.DefaultApiGroupsBuilders
 	f.NonApiEndpoints = m1.NonApiEndpoints
+	m1.SetSchemaUpdatesStrategyToGlobalSpecType(f)
 	f.SwaggerSpecs = m1.SwaggerSpecs
 }
 
@@ -2331,6 +2409,41 @@ func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetSchemaUpdatesStrategyToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SchemaUpdatesStrategy.(type) {
+	case nil:
+		o.SchemaUpdatesStrategy = nil
+
+	case *ReplaceSpecType_MixedSchemaOrigin:
+		o.SchemaUpdatesStrategy = &GlobalSpecType_MixedSchemaOrigin{MixedSchemaOrigin: of.MixedSchemaOrigin}
+
+	case *ReplaceSpecType_StrictSchemaOrigin:
+		o.SchemaUpdatesStrategy = &GlobalSpecType_StrictSchemaOrigin{StrictSchemaOrigin: of.StrictSchemaOrigin}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetSchemaUpdatesStrategyFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SchemaUpdatesStrategy.(type) {
+	case nil:
+		r.SchemaUpdatesStrategy = nil
+
+	case *GlobalSpecType_MixedSchemaOrigin:
+		r.SchemaUpdatesStrategy = &ReplaceSpecType_MixedSchemaOrigin{MixedSchemaOrigin: of.MixedSchemaOrigin}
+
+	case *GlobalSpecType_StrictSchemaOrigin:
+		r.SchemaUpdatesStrategy = &ReplaceSpecType_StrictSchemaOrigin{StrictSchemaOrigin: of.StrictSchemaOrigin}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -2338,6 +2451,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.ApiInventoryExclusionList = f.GetApiInventoryExclusionList()
 	m.ApiInventoryInclusionList = f.GetApiInventoryInclusionList()
 	m.NonApiEndpoints = f.GetNonApiEndpoints()
+	m.GetSchemaUpdatesStrategyFromGlobalSpecType(f)
 	m.SwaggerSpecs = f.GetSwaggerSpecs()
 }
 
@@ -2359,6 +2473,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.ApiInventoryExclusionList = m1.ApiInventoryExclusionList
 	f.ApiInventoryInclusionList = m1.ApiInventoryInclusionList
 	f.NonApiEndpoints = m1.NonApiEndpoints
+	m1.SetSchemaUpdatesStrategyToGlobalSpecType(f)
 	f.SwaggerSpecs = m1.SwaggerSpecs
 }
 

@@ -130,32 +130,37 @@ func resourceVolterraCertificate() *schema.Resource {
 
 						"blindfold_secret_info_internal": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"decryption_provider": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"location": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"store_provider": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 
 						"secret_encoding_type": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"blindfold_secret_info": {
@@ -205,34 +210,40 @@ func resourceVolterraCertificate() *schema.Resource {
 
 						"vault_secret_info": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"key": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"location": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"provider": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"secret_encoding": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"version": {
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -240,14 +251,16 @@ func resourceVolterraCertificate() *schema.Resource {
 
 						"wingman_secret_info": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -623,6 +636,7 @@ func resourceVolterraCertificateUpdate(d *schema.ResourceData, meta interface{})
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

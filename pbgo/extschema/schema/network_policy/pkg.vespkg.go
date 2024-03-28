@@ -103,10 +103,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.network_policy.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.network_policy.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.endpoint.prefix_list.ipv6_prefixes.#",
@@ -118,22 +114,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "create_form.spec.rules.ingress_rules.#.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.endpoint.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.prefix.ipv6_prefix.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.rules.egress_rules.#.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.rules.ingress_rules.#.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -173,22 +153,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "items.#.get_spec.rules.ingress_rules.#.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.endpoint.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.prefix.ipv6_prefix.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.rules.egress_rules.#.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.rules.ingress_rules.#.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}

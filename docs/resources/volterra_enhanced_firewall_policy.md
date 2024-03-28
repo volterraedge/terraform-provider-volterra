@@ -20,37 +20,8 @@ resource "volterra_enhanced_firewall_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "allow_all allowed_sources allowed_destinations deny_all denied_sources denied_destinations rule_list" must be set
-
-  rule_list {
-    rules {
-      // One of the arguments from this list "deny allow insert_service" must be set
-      deny = true
-
-      advanced_action {
-        action = "action"
-      }
-
-      // One of the arguments from this list "inside_destinations all_slo_vips all_sli_vips destination_aws_subnet_ids destination_label_selector destination_aws_vpc_ids all_destinations destination_prefix_list destination_ip_prefix_set outside_destinations destination_namespace" must be set
-      destination_namespace = "destination_namespace"
-
-      label_matcher {
-        keys = ["['environment', 'location', 'deployment']"]
-      }
-
-      metadata {
-        description = "Virtual Host for acmecorp website"
-        disable     = true
-        name        = "acmecorp-web"
-      }
-
-      // One of the arguments from this list "all_sources source_prefix_list outside_sources source_aws_subnet_ids source_ip_prefix_set inside_sources source_namespace source_label_selector source_aws_vpc_ids" must be set
-      all_sources = true
-
-      // One of the arguments from this list "all_traffic all_tcp_traffic all_udp_traffic applications protocol_port_range" must be set
-      all_traffic = true
-    }
-  }
+  // One of the arguments from this list "denied_destinations rule_list allow_all allowed_sources allowed_destinations deny_all denied_sources" must be set
+  allow_all = true
 }
 
 ```
@@ -74,127 +45,71 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`allow_all` - (Optional) Allow all connections from any source to any destination (bool).
+`allow_all` - (Optional) Allow all connections from any source to any destination (`Bool`).
 
-`allowed_destinations` - (Optional) Allow all connections to list of destinations from any source. See [Allowed Destinations ](#allowed-destinations) below for details.
+`allowed_destinations` - (Optional) Allow all connections to list of destinations from any source. See [Rule Choice Allowed Destinations ](#rule-choice-allowed-destinations) below for details.
 
-`allowed_sources` - (Optional) Allow all connections from list of sources to any destination. See [Allowed Sources ](#allowed-sources) below for details.
+`allowed_sources` - (Optional) Allow all connections from list of sources to any destination. See [Rule Choice Allowed Sources ](#rule-choice-allowed-sources) below for details.
 
-`denied_destinations` - (Optional) Deny all connections to list of destinations from any source. See [Denied Destinations ](#denied-destinations) below for details.
+`denied_destinations` - (Optional) Deny all connections to list of destinations from any source. See [Rule Choice Denied Destinations ](#rule-choice-denied-destinations) below for details.
 
-`denied_sources` - (Optional) Deny all connections from list of sources to any destination. See [Denied Sources ](#denied-sources) below for details.
+`denied_sources` - (Optional) Deny all connections from list of sources to any destination. See [Rule Choice Denied Sources ](#rule-choice-denied-sources) below for details.
 
-`deny_all` - (Optional) Deny all connections from any source to any destination (bool).
+`deny_all` - (Optional) Deny all connections from any source to any destination (`Bool`).
 
-`rule_list` - (Optional) Custom Enhanced Firewall Policy Rule Selection. See [Rule List ](#rule-list) below for details.
+`rule_list` - (Optional) Custom Enhanced Firewall Policy Rule Selection. See [Rule Choice Rule List ](#rule-choice-rule-list) below for details.
 
-`segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Segment Policy ](#segment-policy) below for details.
-
-### Advanced Action
-
-Log any connection matching the rule.
-
-`action` - (Optional) Enable or disable logging. (`String`).
-
-### All Destinations
-
-Any address that matches 0/0 ip prefix.
-
-### All Sli Vips
-
-Destination is virtual-ip of all loadbalancer on site-local-inside network.
-
-### All Slo Vips
-
-Destination is virtual-ip of all loadbalancer on site-local-outside network.
-
-### All Sources
-
-Any address that matches 0/0 ip prefix.
-
-### All Tcp Traffic
-
-Select all TCP traffic to match.
-
-### All Traffic
-
-Select all traffic to match.
-
-### All Udp Traffic
-
-Select all UDP traffic to match.
-
-### Allow
+### Action Choice Allow
 
 Allow any connection matching the rule.
 
-### Allowed Destinations
-
-Allow all connections to list of destinations from any source.
-
-`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-### Allowed Sources
-
-Allow all connections from list of sources to any destination.
-
-`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-### Applications
-
-Select Application traffic to match.
-
-`applications` - (Optional) Application protocols like HTTP, SNMP (`List of Strings`).
-
-### Denied Destinations
-
-Deny all connections to list of destinations from any source.
-
-`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-### Denied Sources
-
-Deny all connections from list of sources to any destination.
-
-`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-### Deny
+### Action Choice Deny
 
 Deny any connection matching the rule.
 
-### Destination Aws Subnet Ids
+### Action Choice Insert Service
+
+Send selected traffic to NFV Service of type Palo Alto Networks VM-Series Firewall for inspection.
+
+`nfv_service` - (Required) Select External Service, to which the traffic should be forwarded to. Forwarding to Palo Alto Networks external service is supported.. See [ref](#ref) below for details.
+
+### Destination Choice All Destinations
+
+Any address that matches 0/0 ip prefix.
+
+### Destination Choice All Sli Vips
+
+Destination is virtual-ip of all loadbalancer on site-local-inside network.
+
+### Destination Choice All Slo Vips
+
+Destination is virtual-ip of all loadbalancer on site-local-outside network.
+
+### Destination Choice Destination Aws Subnet Ids
 
 Destination is any address in list of AWS Subnets.
 
 `subnet_id` - (Required) List of Subnet Identifiers in AWS (`String`).
 
-### Destination Aws Vpc Ids
+### Destination Choice Destination Aws Vpc Ids
 
 Destination is any address in list of AWS VPCs.
 
 `vpc_id` - (Required) List of VPC Identifiers in AWS (`String`).
 
-### Destination Ip Prefix Set
+### Destination Choice Destination Ip Prefix Set
 
 Addresses that match one of the prefix in the ip-prefix-set.
 
 `ref` - (Optional) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
 
-### Destination Label Selector
+### Destination Choice Destination Label Selector
 
 These labels can be cloud tags defined on the vpc resource, labels on the global network or others..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
-### Destination Prefix List
+### Destination Choice Destination Prefix List
 
 Addresses that match one of the prefix in the list.
 
@@ -202,65 +117,13 @@ Addresses that match one of the prefix in the list.
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
-### Dst Any
-
-Traffic is not matched against any segment.
-
-### Dst Segments
-
-Traffic is matched against destination segment in selected segments.
-
-`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
-
-### Insert Service
-
-Send selected traffic to NFV Service of type Palo Alto Networks VM-Series Firewall for inspection.
-
-`nfv_service` - (Required) Select External Service, to which the traffic should be forwarded to. Forwarding to Palo Alto Networks external service is supported.. See [ref](#ref) below for details.
-
-### Inside Destinations
+### Destination Choice Inside Destinations
 
 All addresses reachable in site-local inside interfaces.
 
-### Inside Sources
-
-All addresses reachable in site-local inside interfaces.
-
-### Intra Segment
-
-Traffic is matched for source and destination on the same segment.
-
-### Label Matcher
-
-not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location..
-
-`keys` - (Optional) The list of label key names that have to match (`String`).
-
-### Metadata
-
-Common attributes for the rule including name and description..
-
-`description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
-
-`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
-### Outside Destinations
+### Destination Choice Outside Destinations
 
 All addresses reachable in site-local outside interfaces.
-
-### Outside Sources
-
-All addresses reachable in site-local outside interfaces.
-
-### Protocol Port Range
-
-Select specific protocol and port ranges traffic to match.
-
-`port_ranges` - (Optional) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
-
-`protocol` - (Optional) Values are tcp, udp, and icmp (`String`).
 
 ### Ref
 
@@ -272,117 +135,177 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Rule List
+### Rule Choice Allowed Destinations
+
+Allow all connections to list of destinations from any source.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+### Rule Choice Allowed Sources
+
+Allow all connections from list of sources to any destination.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+### Rule Choice Denied Destinations
+
+Deny all connections to list of destinations from any source.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+### Rule Choice Denied Sources
+
+Deny all connections from list of sources to any destination.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+### Rule Choice Rule List
 
 Custom Enhanced Firewall Policy Rule Selection.
 
-`rules` - (Required) Ordered List of Enhanced Firewall Policy Rules. See [Rules ](#rules) below for details.
+`rules` - (Required) Ordered List of Enhanced Firewall Policy Rules. See [Rule List Rules ](#rule-list-rules) below for details.
 
-### Rules
+### Rule List Rules
 
 Ordered List of Enhanced Firewall Policy Rules.
 
-`allow` - (Optional) Allow any connection matching the rule (bool).
+###### One of the arguments from this list "deny, allow, insert_service" must be set
 
-`deny` - (Optional) Deny any connection matching the rule (bool).
+`allow` - (Optional) Allow any connection matching the rule (`Bool`).
 
-`insert_service` - (Optional) Send selected traffic to NFV Service of type Palo Alto Networks VM-Series Firewall for inspection. See [Insert Service ](#insert-service) below for details.
+`deny` - (Optional) Deny any connection matching the rule (`Bool`).
 
-`advanced_action` - (Optional) Log any connection matching the rule. See [Advanced Action ](#advanced-action) below for details.
+`insert_service` - (Optional) Send selected traffic to NFV Service of type Palo Alto Networks VM-Series Firewall for inspection. See [Action Choice Insert Service ](#action-choice-insert-service) below for details.
 
-`all_destinations` - (Optional) Any address that matches 0/0 ip prefix (bool).
+`advanced_action` - (Optional) Log any connection matching the rule. See [Rules Advanced Action ](#rules-advanced-action) below for details.
 
-`all_sli_vips` - (Optional) Destination is virtual-ip of all loadbalancer on site-local-inside network (bool).
+###### One of the arguments from this list "destination_aws_vpc_ids, destination_aws_subnet_ids, all_destinations, inside_destinations, all_sli_vips, destination_namespace, destination_label_selector, all_slo_vips, destination_prefix_list, destination_ip_prefix_set, outside_destinations" must be set
 
-`all_slo_vips` - (Optional) Destination is virtual-ip of all loadbalancer on site-local-outside network (bool).
+`all_destinations` - (Optional) Any address that matches 0/0 ip prefix (`Bool`).
 
-`destination_aws_subnet_ids` - (Optional) Destination is any address in list of AWS Subnets. See [Destination Aws Subnet Ids ](#destination-aws-subnet-ids) below for details.
+`all_sli_vips` - (Optional) Destination is virtual-ip of all loadbalancer on site-local-inside network (`Bool`).
 
-`destination_aws_vpc_ids` - (Optional) Destination is any address in list of AWS VPCs. See [Destination Aws Vpc Ids ](#destination-aws-vpc-ids) below for details.
+`all_slo_vips` - (Optional) Destination is virtual-ip of all loadbalancer on site-local-outside network (`Bool`).
 
-`destination_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Destination Ip Prefix Set ](#destination-ip-prefix-set) below for details.
+`destination_aws_subnet_ids` - (Optional) Destination is any address in list of AWS Subnets. See [Destination Choice Destination Aws Subnet Ids ](#destination-choice-destination-aws-subnet-ids) below for details.
 
-`destination_label_selector` - (Optional) These labels can be cloud tags defined on the vpc resource, labels on the global network or others.. See [Destination Label Selector ](#destination-label-selector) below for details.
+`destination_aws_vpc_ids` - (Optional) Destination is any address in list of AWS VPCs. See [Destination Choice Destination Aws Vpc Ids ](#destination-choice-destination-aws-vpc-ids) below for details.
 
-`destination_namespace` - (Optional) All addresses in a namespace (`String`).
+`destination_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Destination Choice Destination Ip Prefix Set ](#destination-choice-destination-ip-prefix-set) below for details.
 
-`destination_prefix_list` - (Optional) Addresses that match one of the prefix in the list. See [Destination Prefix List ](#destination-prefix-list) below for details.
+`destination_label_selector` - (Optional) These labels can be cloud tags defined on the vpc resource, labels on the global network or others.. See [Destination Choice Destination Label Selector ](#destination-choice-destination-label-selector) below for details.
 
-`inside_destinations` - (Optional) All addresses reachable in site-local inside interfaces (bool).
+`destination_namespace` - (Optional) All addresses in a namespace (`String`).(Deprecated)
 
-`outside_destinations` - (Optional) All addresses reachable in site-local outside interfaces (bool).
+`destination_prefix_list` - (Optional) Addresses that match one of the prefix in the list. See [Destination Choice Destination Prefix List ](#destination-choice-destination-prefix-list) below for details.
 
-`label_matcher` - (Optional) not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.. See [Label Matcher ](#label-matcher) below for details.
+`inside_destinations` - (Optional) All addresses reachable in site-local inside interfaces (`Bool`).
 
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+`outside_destinations` - (Optional) All addresses reachable in site-local outside interfaces (`Bool`).
 
-`all_sources` - (Optional) Any address that matches 0/0 ip prefix (bool).
+`label_matcher` - (Optional) not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.. See [Rules Label Matcher ](#rules-label-matcher) below for details.
 
-`inside_sources` - (Optional) All addresses reachable in site-local inside interfaces (bool).
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Rules Metadata ](#rules-metadata) below for details.
 
-`outside_sources` - (Optional) All addresses reachable in site-local outside interfaces (bool).
+###### One of the arguments from this list "all_sources, source_namespace, source_label_selector, source_aws_vpc_ids, source_prefix_list, source_ip_prefix_set, inside_sources, outside_sources, source_aws_subnet_ids" must be set
 
-`source_aws_subnet_ids` - (Optional) Source is any address in list of AWS Subnets. See [Source Aws Subnet Ids ](#source-aws-subnet-ids) below for details.
+`all_sources` - (Optional) Any address that matches 0/0 ip prefix (`Bool`).
 
-`source_aws_vpc_ids` - (Optional) Source is any address in list of AWS VPCs. See [Source Aws Vpc Ids ](#source-aws-vpc-ids) below for details.
+`inside_sources` - (Optional) All addresses reachable in site-local inside interfaces (`Bool`).
 
-`source_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Source Ip Prefix Set ](#source-ip-prefix-set) below for details.
+`outside_sources` - (Optional) All addresses reachable in site-local outside interfaces (`Bool`).
 
-`source_label_selector` - (Optional) These labels can be cloud tags defined on the vpc resource, labels on the global network or others.. See [Source Label Selector ](#source-label-selector) below for details.
+`source_aws_subnet_ids` - (Optional) Source is any address in list of AWS Subnets. See [Source Choice Source Aws Subnet Ids ](#source-choice-source-aws-subnet-ids) below for details.
 
-`source_namespace` - (Optional) All addresses in a namespace (`String`).
+`source_aws_vpc_ids` - (Optional) Source is any address in list of AWS VPCs. See [Source Choice Source Aws Vpc Ids ](#source-choice-source-aws-vpc-ids) below for details.
 
-`source_prefix_list` - (Optional) Addresses that match one of the prefix in the list. See [Source Prefix List ](#source-prefix-list) below for details.
+`source_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Source Choice Source Ip Prefix Set ](#source-choice-source-ip-prefix-set) below for details.
 
-`all_tcp_traffic` - (Optional) Select all TCP traffic to match (bool).
+`source_label_selector` - (Optional) These labels can be cloud tags defined on the vpc resource, labels on the global network or others.. See [Source Choice Source Label Selector ](#source-choice-source-label-selector) below for details.
 
-`all_traffic` - (Optional) Select all traffic to match (bool).
+`source_namespace` - (Optional) All addresses in a namespace (`String`).(Deprecated)
 
-`all_udp_traffic` - (Optional) Select all UDP traffic to match (bool).
+`source_prefix_list` - (Optional) Addresses that match one of the prefix in the list. See [Source Choice Source Prefix List ](#source-choice-source-prefix-list) below for details.
 
-`applications` - (Optional) Select Application traffic to match. See [Applications ](#applications) below for details.
+###### One of the arguments from this list "all_traffic, all_tcp_traffic, all_udp_traffic, applications, protocol_port_range" must be set
 
-`protocol_port_range` - (Optional) Select specific protocol and port ranges traffic to match. See [Protocol Port Range ](#protocol-port-range) below for details.
+`all_tcp_traffic` - (Optional) Select all TCP traffic to match (`Bool`).
 
-### Segment Policy
+`all_traffic` - (Optional) Select all traffic to match (`Bool`).
 
-Skip the configuration or set option as Any to ignore corresponding segment match.
+`all_udp_traffic` - (Optional) Select all UDP traffic to match (`Bool`).
 
-`dst_any` - (Optional) Traffic is not matched against any segment (bool).
+`applications` - (Optional) Select Application traffic to match. See [Traffic Choice Applications ](#traffic-choice-applications) below for details.
 
-`dst_segments` - (Optional) Traffic is matched against destination segment in selected segments. See [Dst Segments ](#dst-segments) below for details.
+`protocol_port_range` - (Optional) Select specific protocol and port ranges traffic to match. See [Traffic Choice Protocol Port Range ](#traffic-choice-protocol-port-range) below for details.
 
-`intra_segment` - (Optional) Traffic is matched for source and destination on the same segment (bool).
+### Rules Advanced Action
 
-`src_any` - (Optional) Traffic is not matched against any segment (bool).
+Log any connection matching the rule.
 
-`src_segments` - (Optional) Source traffic is matched against selected segments. See [Src Segments ](#src-segments) below for details.
+`action` - (Optional) Enable or disable logging. (`String`).
 
-### Source Aws Subnet Ids
+### Rules Label Matcher
+
+not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location..
+
+`keys` - (Optional) The list of label key names that have to match (`String`).
+
+### Rules Metadata
+
+Common attributes for the rule including name and description..
+
+`description` - (Optional) Human readable description. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
+
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+### Source Choice All Sources
+
+Any address that matches 0/0 ip prefix.
+
+### Source Choice Inside Sources
+
+All addresses reachable in site-local inside interfaces.
+
+### Source Choice Outside Sources
+
+All addresses reachable in site-local outside interfaces.
+
+### Source Choice Source Aws Subnet Ids
 
 Source is any address in list of AWS Subnets.
 
 `subnet_id` - (Required) List of Subnet Identifiers in AWS (`String`).
 
-### Source Aws Vpc Ids
+### Source Choice Source Aws Vpc Ids
 
 Source is any address in list of AWS VPCs.
 
 `vpc_id` - (Required) List of VPC Identifiers in AWS (`String`).
 
-### Source Ip Prefix Set
+### Source Choice Source Ip Prefix Set
 
 Addresses that match one of the prefix in the ip-prefix-set.
 
 `ref` - (Optional) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
 
-### Source Label Selector
+### Source Choice Source Label Selector
 
 These labels can be cloud tags defined on the vpc resource, labels on the global network or others..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
-### Source Prefix List
+### Source Choice Source Prefix List
 
 Addresses that match one of the prefix in the list.
 
@@ -390,15 +313,31 @@ Addresses that match one of the prefix in the list.
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
-### Src Any
+### Traffic Choice All Tcp Traffic
 
-Traffic is not matched against any segment.
+Select all TCP traffic to match.
 
-### Src Segments
+### Traffic Choice All Traffic
 
-Source traffic is matched against selected segments.
+Select all traffic to match.
 
-`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
+### Traffic Choice All Udp Traffic
+
+Select all UDP traffic to match.
+
+### Traffic Choice Applications
+
+Select Application traffic to match.
+
+`applications` - (Optional) Application protocols like HTTP, SNMP (`List of Strings`).
+
+### Traffic Choice Protocol Port Range
+
+Select specific protocol and port ranges traffic to match.
+
+`port_ranges` - (Optional) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
+
+`protocol` - (Optional) Values are tcp, udp, and icmp (`String`).
 
 Attribute Reference
 -------------------

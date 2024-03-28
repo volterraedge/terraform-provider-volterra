@@ -69,10 +69,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rules.#",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.secret_policy.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.secret_policy.API.Replace"] = []string{
 		"spec.algo",
 		"spec.rule_list.rules.#.metadata.disable",

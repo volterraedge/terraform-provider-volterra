@@ -64,7 +64,8 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 				Type: schema.TypeList,
 
-				Optional: true,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 				},
@@ -72,27 +73,32 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 			"app_type_refs": {
 
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:       schema.TypeList,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:       schema.TypeString,
+							Computed:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -224,51 +230,59 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"bola_detection_automatic": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"bola_detection_manual": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"threshold_level_1": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"threshold_level_2": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"threshold_level_3": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"threshold_level_4": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"threshold_level_5": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"threshold_level_6": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -276,8 +290,9 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"exclude_bola_detection": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"exclude_bot_defense_activity": {
@@ -354,33 +369,38 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"exclude_non_existent_url_activity": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"include_non_existent_url_activity_automatic": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"high": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"low": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"medium": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -388,14 +408,16 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 												"include_non_existent_url_activity_custom": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"nonexistent_requests_threshold": {
-																Type:     schema.TypeInt,
-																Required: true,
+																Type:       schema.TypeInt,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1172,6 +1194,7 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

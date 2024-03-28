@@ -212,7 +212,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) TokenState(ctx context.Context, in *StateReq, opts ...grpc.CallOption) (*ObjectChangeResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.token.CustomAPI.TokenState", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.token.CustomAPI.TokenState")
 	return c.CustomAPIServer.TokenState(ctx, in)
 }
 

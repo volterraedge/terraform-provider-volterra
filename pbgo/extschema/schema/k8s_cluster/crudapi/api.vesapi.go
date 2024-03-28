@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.k8s_cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.k8s_cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.k8s_cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.k8s_cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.k8s_cluster.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.k8s_cluster.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.k8s_cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.k8s_cluster.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3026,6 +3041,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-global_access_choice": "[\"global_access_enable\",\"no_global_access\"]",
             "x-ves-oneof-field-insecure_registries_choice": "[\"insecure_registry_list\",\"no_insecure_registries\"]",
             "x-ves-oneof-field-local_access_choice": "[\"local_access_config\",\"no_local_access\"]",
+            "x-ves-oneof-field-pod_security_admission_choice": "[\"use_custom_pod_security_admission\",\"use_default_pod_security_admission\"]",
             "x-ves-oneof-field-pod_security_policy_choice": "[\"use_custom_psp_list\",\"use_default_psp\"]",
             "x-ves-oneof-field-vk8s_namespace_access_choice": "[\"vk8s_namespace_access_deny\",\"vk8s_namespace_access_permit\"]",
             "x-ves-proto-message": "ves.io.schema.k8s_cluster.GlobalSpecType",
@@ -3075,6 +3091,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "34",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "final_pod_security_admission": {
+                    "description": " Internal Pod Security Admission is default or custom",
+                    "title": "Internal Pod Security Admission",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Internal Pod Security Admission"
                 },
                 "final_pod_security_policies": {
                     "type": "array",
@@ -3144,6 +3166,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/k8s_clusterClusterRoleListType",
                     "x-displayname": "Custom K8s Cluster Roles"
                 },
+                "use_custom_pod_security_admission": {
+                    "description": "Exclusive with [use_default_pod_security_admission]\n Select Custom Pod Security Admission",
+                    "title": "Custom Pod Security Admission",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Custom Pod Security Admission"
+                },
                 "use_custom_psp_list": {
                     "description": "Exclusive with [use_default_psp]\n Select custom pod security policies for this K8s cluster",
                     "title": "Custom Pod Security Policies",
@@ -3161,6 +3189,12 @@ var APISwaggerJSON string = `{
                     "title": "Default K8s Cluster Roles",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default K8s Cluster Roles"
+                },
+                "use_default_pod_security_admission": {
+                    "description": "Exclusive with [use_custom_pod_security_admission]\n Select Default Pod Security Admission",
+                    "title": "Default Pod Security Admission",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Pod Security Admission"
                 },
                 "use_default_psp": {
                     "description": "Exclusive with [use_custom_psp_list]\n Select default pod security policies for this K8s cluster",

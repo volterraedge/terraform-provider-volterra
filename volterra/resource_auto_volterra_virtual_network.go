@@ -87,33 +87,38 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 			"srv6_network": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"access_network_rtargets": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"asn2byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -121,19 +126,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"asn4byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -141,19 +149,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"ipv4_addr_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"address": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -164,35 +175,41 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"anycast_vip": {
 
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"fleet_vip": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"vip_allocator": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -203,32 +220,37 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"interface_ip_vip": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"enterprise_network_rtargets": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"asn2byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -236,19 +258,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"asn4byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -256,19 +281,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"ipv4_addr_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"address": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -279,26 +307,30 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"export_rtargets": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"asn2byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -306,19 +338,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"asn4byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -326,19 +361,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"ipv4_addr_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"address": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -349,22 +387,26 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"fleets": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -372,26 +414,30 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"internet_rtargets": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"asn2byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -399,19 +445,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"asn4byte_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"as_number": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -419,19 +468,22 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 									"ipv4_addr_rtarget": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"address": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
-													Type:     schema.TypeInt,
-													Required: true,
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -442,48 +494,56 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"no_namespace_network": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"srv6_network_ns_params": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"namespace": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 
 						"remote_sid_stats_plen": {
-							Type:     schema.TypeInt,
-							Optional: true,
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"slice": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -491,29 +551,34 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"fleet_snat_pool": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"snat_pool_allocator": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -524,31 +589,36 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 						"interface_ip_snat_pool": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"site_snat_pool": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"node_snat_pool": {
 
-										Type:     schema.TypeSet,
-										Required: true,
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"value": {
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -556,7 +626,8 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -566,7 +637,8 @@ func resourceVolterraVirtualNetwork() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -1447,11 +1519,11 @@ func resourceVolterraVirtualNetworkCreate(d *schema.ResourceData, meta interface
 									nodeSnatPoolStaticMap := intVal.(map[string]interface{})
 
 									if w, ok := nodeSnatPoolStaticMap["ipv4_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv4Prefixes = nil
+										nodeSnatPool[key.(string)].Ipv4Prefixes = w.([]string)
 									}
 
 									if w, ok := nodeSnatPoolStaticMap["ipv6_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv6Prefixes = nil
+										nodeSnatPool[key.(string)].Ipv6Prefixes = w.([]string)
 									}
 
 									// break after one loop
@@ -1706,6 +1778,7 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -2435,11 +2508,11 @@ func resourceVolterraVirtualNetworkUpdate(d *schema.ResourceData, meta interface
 									nodeSnatPoolStaticMap := intVal.(map[string]interface{})
 
 									if w, ok := nodeSnatPoolStaticMap["ipv4_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv4Prefixes = nil
+										nodeSnatPool[key.(string)].Ipv4Prefixes = w.([]string)
 									}
 
 									if w, ok := nodeSnatPoolStaticMap["ipv6_prefixes"]; ok && !isIntfNil(w) {
-										nodeSnatPool[key.(string)].Ipv6Prefixes = nil
+										nodeSnatPool[key.(string)].Ipv6Prefixes = w.([]string)
 									}
 
 									// break after one loop

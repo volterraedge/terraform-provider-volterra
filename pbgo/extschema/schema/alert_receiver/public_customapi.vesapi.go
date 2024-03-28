@@ -43,6 +43,15 @@ func (c *CustomAPIGrpcClient) doRPCConfirmAlertReceiver(ctx context.Context, yam
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetAlertPolicyMatch(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &AlertPolicyMatchRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.alert_receiver.AlertPolicyMatchRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAlertPolicyMatch(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCTestAlertReceiver(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &TestAlertReceiverRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,6 +101,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["ConfirmAlertReceiver"] = ccl.doRPCConfirmAlertReceiver
+
+	rpcFns["GetAlertPolicyMatch"] = ccl.doRPCGetAlertPolicyMatch
 
 	rpcFns["TestAlertReceiver"] = ccl.doRPCTestAlertReceiver
 
@@ -186,6 +197,90 @@ func (c *CustomAPIRestClient) doRPCConfirmAlertReceiver(ctx context.Context, cal
 	pbRsp := &ConfirmAlertReceiverResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetAlertPolicyMatch(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &AlertPolicyMatchRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.alert_receiver.AlertPolicyMatchRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("labels", fmt.Sprintf("%v", req.Labels))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &AlertPolicyMatchResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.alert_receiver.AlertPolicyMatchResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -389,6 +484,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["ConfirmAlertReceiver"] = ccl.doRPCConfirmAlertReceiver
 
+	rpcFns["GetAlertPolicyMatch"] = ccl.doRPCGetAlertPolicyMatch
+
 	rpcFns["TestAlertReceiver"] = ccl.doRPCTestAlertReceiver
 
 	rpcFns["VerifyAlertReceiver"] = ccl.doRPCVerifyAlertReceiver
@@ -406,15 +503,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) ConfirmAlertReceiver(ctx context.Context, in *ConfirmAlertReceiverRequest, opts ...grpc.CallOption) (*ConfirmAlertReceiverResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver")
 	return c.CustomAPIServer.ConfirmAlertReceiver(ctx, in)
 }
+func (c *customAPIInprocClient) GetAlertPolicyMatch(ctx context.Context, in *AlertPolicyMatchRequest, opts ...grpc.CallOption) (*AlertPolicyMatchResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.alert_receiver.CustomAPI.GetAlertPolicyMatch")
+	return c.CustomAPIServer.GetAlertPolicyMatch(ctx, in)
+}
 func (c *customAPIInprocClient) TestAlertReceiver(ctx context.Context, in *TestAlertReceiverRequest, opts ...grpc.CallOption) (*TestAlertReceiverResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver")
 	return c.CustomAPIServer.TestAlertReceiver(ctx, in)
 }
 func (c *customAPIInprocClient) VerifyAlertReceiver(ctx context.Context, in *VerifyAlertReceiverRequest, opts ...grpc.CallOption) (*VerifyAlertReceiverResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver")
 	return c.CustomAPIServer.VerifyAlertReceiver(ctx, in)
 }
 
@@ -485,6 +586,55 @@ func (s *customAPISrv) ConfirmAlertReceiver(ctx context.Context, in *ConfirmAler
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetAlertPolicyMatch(ctx context.Context, in *AlertPolicyMatchRequest) (*AlertPolicyMatchResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.alert_receiver.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *AlertPolicyMatchResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.AlertPolicyMatchRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetAlertPolicyMatch' operation on 'alert_receiver'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.alert_receiver.CustomAPI.GetAlertPolicyMatch"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAlertPolicyMatch(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.alert_receiver.AlertPolicyMatchResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -610,6 +760,98 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/{namespace}/alert_policy/match": {
+            "post": {
+                "summary": "Get Alert Policy Match",
+                "description": "Get Alert Policies that match to a set of alert labels for a namespace.",
+                "operationId": "ves.io.schema.alert_receiver.CustomAPI.GetAlertPolicyMatch",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/alert_receiverAlertPolicyMatchResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-required\nx-example: \"ns1\"\nThe namespace in which the configuration object is present",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/alert_receiverAlertPolicyMatchRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-customapi-getalertpolicymatch"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.alert_receiver.CustomAPI.GetAlertPolicyMatch"
+            },
+            "x-displayname": "Alert Receiver Custom API",
+            "x-ves-proto-service": "ves.io.schema.alert_receiver.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/alert_receivers/{name}/confirm": {
             "post": {
                 "summary": "Confirm Alert Receiver",
@@ -912,6 +1154,75 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "alert_receiverAlertPolicyMatch": {
+            "type": "object",
+            "description": "Alert Policy info that matches AlertPolicyMatchRequest giving\n  alert policy name,\n  alert policy activation state",
+            "title": "Alert Policy Match",
+            "x-displayname": "Alert Policy Match",
+            "x-ves-proto-message": "ves.io.schema.alert_receiver.AlertPolicyMatch",
+            "properties": {
+                "policy_active": {
+                    "description": "\n\nExample: - 1, ACTIVE-",
+                    "title": "policy_active",
+                    "$ref": "#/definitions/alert_receiverPolicyStatus",
+                    "x-displayname": "Policy Active"
+                },
+                "policy_name": {
+                    "type": "string",
+                    "description": "\n\nExample: - samplepolicy-",
+                    "title": "policy_name",
+                    "x-displayname": "Policy Name"
+                }
+            }
+        },
+        "alert_receiverAlertPolicyMatchRequest": {
+            "type": "object",
+            "description": "Request message for GetAlertPolicyMatch RPC,\ndescribing alert to match against alert policies",
+            "title": "Alert Policy Match Request",
+            "x-displayname": "Alert Policy Match Request",
+            "x-ves-proto-message": "ves.io.schema.alert_receiver.AlertPolicyMatchRequest",
+            "properties": {
+                "labels": {
+                    "type": "object",
+                    "description": "                 \"namespace\": \"system\",\n                 \"tenant\" :\"tenant2\",\n                 \"alertname\": \"podXcrash\",\n                 \"group\": \"IaaS\",\n                 \"severity\": \"critical\"\n               },\n Alert labels to find match against alert policies\n requires tenant and namespace to be defined labels map\n\nExample: -   \"labels\"{-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "labels",
+                    "x-displayname": "Labels",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The namespace in which the configuration object is present\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "alert_receiverAlertPolicyMatchResponse": {
+            "type": "object",
+            "description": "Response of matching Alert Policies from Get Alert Policy Match request",
+            "title": "Alert Policy Match Response",
+            "x-displayname": "Alert Policy Match Response",
+            "x-ves-proto-message": "ves.io.schema.alert_receiver.AlertPolicyMatchResponse",
+            "properties": {
+                "alert_match": {
+                    "type": "array",
+                    "description": " x-example:{\"alert_match\":[{\"policy_name\":\"policy1\",\"policy_active\":1},{\"policy_name\":\"policy4\"}]}\n List of Alert Policies that match given requested namespace,labels.",
+                    "title": "alert_match",
+                    "items": {
+                        "$ref": "#/definitions/alert_receiverAlertPolicyMatch"
+                    },
+                    "x-displayname": "Alert Match"
+                }
+            }
+        },
         "alert_receiverConfirmAlertReceiverRequest": {
             "type": "object",
             "description": "Request to confirm the Alert Receiver",
@@ -955,6 +1266,18 @@ var CustomAPISwaggerJSON string = `{
             "title": "Confirm Alert Receiver Response",
             "x-displayname": "Confirm Alert Receiver Response",
             "x-ves-proto-message": "ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse"
+        },
+        "alert_receiverPolicyStatus": {
+            "type": "string",
+            "description": "Indicates if Alert Policy is in Alert Policy Set, PolicyStatus is ACTIVE or INACTIVE.\n\nINACTIVE means Alert Policy is not in Alert Policy Set, and will\nnot be used to send Alerts to Alert Receivers.\nACTIVE means Alert Policy is in Alert Policy Set, and is used\nto send out Alert to Alert Receivers.",
+            "title": "PolicyStatus",
+            "enum": [
+                "INACTIVE",
+                "ACTIVE"
+            ],
+            "default": "INACTIVE",
+            "x-displayname": "PolicyStatus",
+            "x-ves-proto-enum": "ves.io.schema.alert_receiver.PolicyStatus"
         },
         "alert_receiverTestAlertReceiverRequest": {
             "type": "object",

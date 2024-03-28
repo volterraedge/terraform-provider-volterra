@@ -941,6 +941,7 @@ func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_ActiveFastAcls:
+
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -953,7 +954,21 @@ func (m *CreateSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *CreateSpecType_FastAclSet:
 
-		return nil, nil
+		vref := m.GetFastAclSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "fast_acl_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acl_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -972,6 +987,7 @@ func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *CreateSpecType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -984,7 +1000,21 @@ func (m *CreateSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 
 	case *CreateSpecType_ForwardProxyPolicySet:
 
-		return nil, nil
+		vref := m.GetForwardProxyPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "service_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -1003,6 +1033,7 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *CreateSpecType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -1015,9 +1046,24 @@ func (m *CreateSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 
 	case *CreateSpecType_NetworkPolicySet:
 
-		return nil, nil
+		vref := m.GetNetworkPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	case *CreateSpecType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -1414,6 +1460,7 @@ func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_ActiveFastAcls:
+
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -1426,7 +1473,21 @@ func (m *GetSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *GetSpecType_FastAclSet:
 
-		return nil, nil
+		vref := m.GetFastAclSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "fast_acl_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acl_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -1445,6 +1506,7 @@ func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, erro
 		return nil, nil
 
 	case *GetSpecType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -1457,7 +1519,21 @@ func (m *GetSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, erro
 
 	case *GetSpecType_ForwardProxyPolicySet:
 
-		return nil, nil
+		vref := m.GetForwardProxyPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "service_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -1476,6 +1552,7 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -1488,9 +1565,24 @@ func (m *GetSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *GetSpecType_NetworkPolicySet:
 
-		return nil, nil
+		vref := m.GetNetworkPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	case *GetSpecType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -1962,6 +2054,7 @@ func (m *GlobalSpecType) GetFastAclConfigModeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_ActiveFastAcls:
+
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -2038,6 +2131,7 @@ func (m *GlobalSpecType) GetForwardProxyPolicyConfigModeDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *GlobalSpecType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -2114,6 +2208,7 @@ func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *GlobalSpecType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -2129,6 +2224,7 @@ func (m *GlobalSpecType) GetNetworkPolicyConfigModeDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *GlobalSpecType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -2841,6 +2937,7 @@ func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_ActiveFastAcls:
+
 		drInfos, err := m.GetActiveFastAcls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveFastAcls().GetDRefInfo() FAILED")
@@ -2853,7 +2950,21 @@ func (m *ReplaceSpecType) GetFastAclChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *ReplaceSpecType_FastAclSet:
 
-		return nil, nil
+		vref := m.GetFastAclSet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("fast_acl_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "fast_acl_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "fast_acl_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -2872,6 +2983,7 @@ func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *ReplaceSpecType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -2884,7 +2996,21 @@ func (m *ReplaceSpecType) GetForwardProxyPolicyChoiceDRefInfo() ([]db.DRefInfo, 
 
 	case *ReplaceSpecType_ForwardProxyPolicySet:
 
-		return nil, nil
+		vref := m.GetForwardProxyPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("service_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "service_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "forward_proxy_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -2903,6 +3029,7 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *ReplaceSpecType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -2915,9 +3042,24 @@ func (m *ReplaceSpecType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 
 	case *ReplaceSpecType_NetworkPolicySet:
 
-		return nil, nil
+		vref := m.GetNetworkPolicySet()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("network_policy_set.Object")
+		dri := db.DRefInfo{
+			RefdType:   "network_policy_set.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "network_policy_set",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	case *ReplaceSpecType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")

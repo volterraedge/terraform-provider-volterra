@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.voltstack_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.voltstack_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.voltstack_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.voltstack_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.voltstack_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.voltstack_site.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2643,18 +2658,45 @@ var APISwaggerJSON string = `{
     "definitions": {
         "bgpFamilyInet": {
             "type": "object",
-            "description": "x-displayName: \"BGP Family Inet\"\nParameters for inet family.",
+            "description": "Parameters for inet family.",
             "title": "FamilyInet",
+            "x-displayname": "BGP Family Inet",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet",
             "properties": {
                 "disable": {
-                    "description": "x-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
+                    "description": "Exclusive with [enable]\n Disable IPv4 family Route Exchange.",
                     "title": "disable",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable IPv4 Unicast"
                 },
                 "enable": {
-                    "description": "x-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
+                    "description": "Exclusive with [disable]\n Enable IPv4 family Route Exchange.",
                     "title": "enable",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable IPv4 Unicast"
+                }
+            }
+        },
+        "bgpFamilyInet6": {
+            "type": "object",
+            "description": "Parameters for inet6 family.",
+            "title": "FamilyInet6",
+            "x-displayname": "BGP Family Inet6",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.FamilyInet6",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\n Disable IPv6 family Route Exchange.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable IPv6 Unicast"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\n Enable IPv6 family Route Exchange.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable IPv6 Unicast"
                 }
             }
         },
@@ -2815,15 +2857,16 @@ var APISwaggerJSON string = `{
             "description": "External BGP Peer parameters.",
             "title": "PeerExternal",
             "x-displayname": "External BGP Peer",
-            "x-ves-displayorder": "1,2,10,11,20",
-            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-displayorder": "1,2,29,10,11,12,20,25",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"disable\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-oneof-field-address_choice_v6": "[\"default_gateway_v6\",\"disable_v6\",\"from_site_v6\",\"subnet_begin_offset_v6\",\"subnet_end_offset_v6\"]",
             "x-ves-oneof-field-auth_choice": "[\"md5_auth_key\",\"no_authentication\"]",
             "x-ves-oneof-field-interface_choice": "[\"interface\",\"interface_list\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.PeerExternal",
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway from_site subnet_begin_offset subnet_end_offset]\n Specify peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway disable from_site subnet_begin_offset subnet_end_offset]\n Specify IPV4 peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "address",
                     "x-displayname": "Peer Address",
                     "x-ves-validation-rules": {
@@ -2832,9 +2875,9 @@ var APISwaggerJSON string = `{
                 },
                 "address_ipv6": {
                     "type": "string",
-                    "description": " Specify peer ipv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPV6 address",
-                    "x-displayname": "Peer IPV6 Address",
+                    "description": " Specify peer IPv6 address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "address_ipv6",
+                    "x-displayname": "Peer IPv6 Address",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6": "true"
                     }
@@ -2853,14 +2896,50 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
+                    "description": "Exclusive with [address disable from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
+                "default_gateway_v6": {
+                    "description": "Exclusive with [disable_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the default gateway address.",
+                    "title": "default_gateway_v6",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Gateway"
+                },
+                "disable": {
+                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset subnet_end_offset]\n No Peer Ipv4 Address.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_v6": {
+                    "description": "Exclusive with [default_gateway_v6 from_site_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n No Peer IPv6 Address.",
+                    "title": "disable_v6",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "family_inet": {
+                    "description": " Enable/Disable Ipv4 family of routes exchange with peer",
+                    "title": "family_inet",
+                    "$ref": "#/definitions/bgpFamilyInet",
+                    "x-displayname": "Family IPv4 Unicast"
+                },
+                "family_inet_v6": {
+                    "description": " Enable/Disable IPv6 family of routes exchange with peer",
+                    "title": "family_inet_v6",
+                    "$ref": "#/definitions/bgpFamilyInet6",
+                    "x-displayname": "Family IPv6 Unicast"
+                },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
+                    "description": "Exclusive with [address default_gateway disable subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
                     "title": "from_site",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Address From Site Object"
+                },
+                "from_site_v6": {
+                    "description": "Exclusive with [default_gateway_v6 disable_v6 subnet_begin_offset_v6 subnet_end_offset_v6]\n Use the address specified in the site object.",
+                    "title": "from_site_v6",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Address From Site Object"
                 },
@@ -2902,8 +2981,19 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address default_gateway disable from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset",
+                    "format": "int64",
+                    "x-displayname": "Offset From Beginning Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                },
+                "subnet_begin_offset_v6": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_gateway_v6 disable_v6 from_site_v6 subnet_end_offset_v6]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "subnet_begin_offset_v6",
                     "format": "int64",
                     "x-displayname": "Offset From Beginning Of Subnet",
                     "x-ves-validation-rules": {
@@ -2913,8 +3003,19 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address default_gateway disable from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset",
+                    "format": "int64",
+                    "x-displayname": "Offset From End Of Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                },
+                "subnet_end_offset_v6": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_gateway_v6 disable_v6 from_site_v6 subnet_begin_offset_v6]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "subnet_end_offset_v6",
                     "format": "int64",
                     "x-displayname": "Offset From End Of Subnet",
                     "x-ves-validation-rules": {
@@ -2935,7 +3036,7 @@ var APISwaggerJSON string = `{
                     "title": "address"
                 },
                 "disable_mtls": {
-                    "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
+                    "description": "x-displayName: \"Disable mTLS\"\nDisable mTLS",
                     "title": "disable_mtls",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2945,7 +3046,7 @@ var APISwaggerJSON string = `{
                     "title": "dns_name"
                 },
                 "enable_mtls": {
-                    "description": "x-displayName: \"Enable MTLS\"\nEnable MTLS",
+                    "description": "x-displayName: \"Enable mTLS\"\nEnable mTLS",
                     "title": "enable_mtls",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -7080,8 +7181,8 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Custom Trusted CA List\"\nCustom trusted CA certificates for validating upstream server certificate",
-                    "title": "Custom List"
+                    "description": "x-displayName: \"Custom Root CA Certificate\"\nCustom Root CA Certificate for validating upstream server certificate",
+                    "title": "Custom Root CA Certificate"
                 },
                 "volterra_certificate": {
                     "description": "x-displayName: \"F5XC Signing Certificate\"\nF5XC certificates for generating intermediate certificate for TLS interception.",
@@ -7089,7 +7190,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "volterra_trusted_ca": {
-                    "description": "x-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
+                    "description": "x-displayName: \"F5XC Default Root CA Certificate\"\nF5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -7358,6 +7459,55 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsCustomDNS": {
+            "type": "object",
+            "description": "Custom DNS is the configured for specify CE site",
+            "title": "Custom DNS",
+            "x-displayname": "Custom DNS",
+            "x-ves-proto-message": "ves.io.schema.views.CustomDNS",
+            "properties": {
+                "inside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "inside_nameserver",
+                    "x-displayname": "DNS Server for Inside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "inside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "inside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "outside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "outside_nameserver",
+                    "x-displayname": "DNS Server for Outside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "outside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "outside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
         "viewsGlobalConnectorType": {
             "type": "object",
             "description": "Global network reference for direct connection",
@@ -7579,6 +7729,12 @@ var APISwaggerJSON string = `{
                     "title": "coordinates",
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Coordinates"
+                },
+                "custom_dns": {
+                    "description": " custom dns configure to the CE site",
+                    "title": "custom_dns",
+                    "$ref": "#/definitions/viewsCustomDNS",
+                    "x-displayname": "Custom DNS"
                 },
                 "custom_network_config": {
                     "description": "Exclusive with [default_network_config]\n Use custom networking configuration",
@@ -8312,6 +8468,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "bgp_peer_address_v6": {
+                    "type": "string",
+                    "description": " Optional bgp peer IPv6  address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer IPv6  address from site Object. This can be used to change peer IPv6  address per site in fleet.\n\nExample: - \"3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "bgp_peer_address_v6",
+                    "x-displayname": "BGP Peer IPv6 Address",
+                    "x-ves-example": "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "bgp_router_id": {

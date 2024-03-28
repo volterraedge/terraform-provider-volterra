@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.service_policy.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.service_policy.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.service_policy.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.service_policy.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.service_policy.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2958,6 +2973,27 @@ var APISwaggerJSON string = `{
             "x-displayname": "App Firewall Attack Type Context",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
+                "context": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Context",
+                    "$ref": "#/definitions/policyDetectionContext",
+                    "x-displayname": "Context",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "context_name": {
+                    "type": "string",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Context Name",
+                    "maxLength": 64,
+                    "x-displayname": "Context Name",
+                    "x-ves-example": "example: user-agent for Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
                 "exclude_attack_type": {
                     "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
@@ -3066,7 +3102,7 @@ var APISwaggerJSON string = `{
                 },
                 "signature_id": {
                     "type": "integer",
-                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": " The allowed values for signature id are 0 and in the range of 200000001-299999999.\n 0 implies that all signatures will be excluded for the specified context.\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 299999999\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -3074,8 +3110,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "10000000",
-                        "ves.io.schema.rules.uint32.lte": "300000000"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "299999999"
                     }
                 }
             }
@@ -3649,7 +3685,7 @@ var APISwaggerJSON string = `{
         },
         "policyDetectionContext": {
             "type": "string",
-            "description": "The available contexts for Signature and Violation Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nSignature ID or Violation will be excluded in all contexts.\n - CONTEXT_BODY: CONTEXT_BODY\n\nSignature ID or Violation will be excluded for the request body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nSignature ID or Violation will be excluded for the request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nSignature ID or Violation will be excluded for one or more parameters. The parameter name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all parameters.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nSignature ID or Violation will be excluded for one or more headers. The header name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all headers.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nSignature ID or Violation will be excluded for one or more cookies. The cookie name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all cookies.\n - CONTEXT_URL: CONTEXT_URL\n\nSignature ID or Violation will be excluded for the request URL.\n - CONTEXT_URI: CONTEXT_URI\n",
+            "description": "The available contexts for Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nDetection will be excluded for all contexts.\n - CONTEXT_BODY: CONTEXT_BODY\n\nDetection will be excluded for the request body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nDetection will be excluded for the request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nDetection will be excluded for the parameters. The parameter name is required in the Context name field. If the field is left empty, the detection will be excluded for all parameters.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nDetection will be excluded for the headers. The header name is required in the Context name field. If the field is left empty, the detection will be excluded for all headers.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nDetection will be excluded for the cookies. The cookie name is required in the Context name field. If the field is left empty, the detection will be excluded for all cookies.\n - CONTEXT_URL: CONTEXT_URL\n\nDetection will be excluded for the request URL.\n - CONTEXT_URI: CONTEXT_URI\n",
             "title": "Detection Context",
             "enum": [
                 "CONTEXT_ANY",
@@ -4093,7 +4129,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ip prefixes",
                     "maxItems": 128,
                     "items": {
@@ -4103,13 +4139,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "192.168.20.0/24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "ipv6_prefixes": {
                     "type": "array",
-                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv6 prefixes",
                     "maxItems": 128,
                     "items": {
@@ -4119,6 +4156,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "fd48:fa09:d9d4::/48",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -5691,6 +5729,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Path Matcher"
+                },
                 "prefix_values": {
                     "type": "array",
                     "description": " A list of path prefix values to match the input HTTP path against.\n\nExample: - \"['/api/web/namespaces/project179/users/', '/api/config/namespaces/', '/api/data/namespaces/']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -6618,6 +6663,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Shape Protected Endpoint Action\"\nShape Protected Endpoint Action that include application traffic type and mitigation",
                     "title": "Shape Protected Endpoint Action",
                     "$ref": "#/definitions/policyShapeProtectedEndpointAction"
+                },
+                "threat_intelligence_action": {
+                    "description": "x-displayName: \"Threat Intelligence Action\"\nSpecifies how Threat Intelligence is handled",
+                    "title": "Threat Intelligence Action",
+                    "$ref": "#/definitions/policyModifyAction"
                 },
                 "tls_fingerprint_matcher": {
                     "description": "x-displayName: \"TLS Fingerprint Matcher\"\nTLS JA3 fingerprints to be matched.\nThe predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",

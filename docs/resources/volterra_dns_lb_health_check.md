@@ -22,10 +22,12 @@ resource "volterra_dns_lb_health_check" "example" {
 
   // One of the arguments from this list "http_health_check tcp_health_check udp_health_check icmp_health_check https_health_check tcp_hex_health_check" must be set
 
-  tcp_hex_health_check {
+  http_health_check {
     health_check_port = "80"
-    receive           = "00000034"
-    send              = "000000FF"
+
+    receive = "HTTP/1"
+
+    send = "HEAD / HTTP/1.0"
   }
 }
 
@@ -50,19 +52,19 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`http_health_check` - (Optional) HTTP Health Check. See [Http Health Check ](#http-health-check) below for details.
+`http_health_check` - (Optional) HTTP Health Check. See [Health Check Http Health Check ](#health-check-http-health-check) below for details.
 
-`https_health_check` - (Optional) HTTPS Health Check. See [Https Health Check ](#https-health-check) below for details.
+`https_health_check` - (Optional) HTTPS Health Check. See [Health Check Https Health Check ](#health-check-https-health-check) below for details.
 
-`icmp_health_check` - (Optional) ICMP Health Check (bool).
+`icmp_health_check` - (Optional) ICMP Health Check (`Bool`).
 
-`tcp_health_check` - (Optional) TCP Health Check. See [Tcp Health Check ](#tcp-health-check) below for details.
+`tcp_health_check` - (Optional) TCP Health Check. See [Health Check Tcp Health Check ](#health-check-tcp-health-check) below for details.
 
-`tcp_hex_health_check` - (Optional) TCP Health Check with Hex Encoded Payload. See [Tcp Hex Health Check ](#tcp-hex-health-check) below for details.
+`tcp_hex_health_check` - (Optional) TCP Health Check with Hex Encoded Payload. See [Health Check Tcp Hex Health Check ](#health-check-tcp-hex-health-check) below for details.
 
-`udp_health_check` - (Optional) UDP Health Check. See [Udp Health Check ](#udp-health-check) below for details.
+`udp_health_check` - (Optional) UDP Health Check. See [Health Check Udp Health Check ](#health-check-udp-health-check) below for details.
 
-### Http Health Check
+### Health Check Http Health Check
 
 HTTP Health Check.
 
@@ -72,7 +74,7 @@ HTTP Health Check.
 
 `send` - (Optional) HTTP payload to send to the target (`String`).
 
-### Https Health Check
+### Health Check Https Health Check
 
 HTTPS Health Check.
 
@@ -82,7 +84,7 @@ HTTPS Health Check.
 
 `send` - (Optional) HTTP payload to send to the target (`String`).
 
-### Tcp Health Check
+### Health Check Tcp Health Check
 
 TCP Health Check.
 
@@ -92,7 +94,7 @@ TCP Health Check.
 
 `send` - (Optional) Send this string to target (default empty. When send and receive are both empty, monitor just tests 3WHS) (`String`).
 
-### Tcp Hex Health Check
+### Health Check Tcp Hex Health Check
 
 TCP Health Check with Hex Encoded Payload.
 
@@ -102,7 +104,7 @@ TCP Health Check with Hex Encoded Payload.
 
 `send` - (Optional) Hex encoded raw bytes sent in the request. Empty payloads imply a connect-only health check. (`String`).
 
-### Udp Health Check
+### Health Check Udp Health Check
 
 UDP Health Check.
 

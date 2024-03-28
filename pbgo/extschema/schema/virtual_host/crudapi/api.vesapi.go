@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.virtual_host.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3223,7 +3238,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 },
                 "xfcc_header_elements": {
                     "type": "array",
@@ -3716,6 +3731,11 @@ var APISwaggerJSON string = `{
                     "title": "Default header transformation",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "preserve_case_header_transformation": {
+                    "description": "x-displayName: \"Preserve Case\"\nPreserves the original case of headers without any modifications.",
+                    "title": "Preserve case header transformation",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "proper_case_header_transformation": {
                     "description": "x-displayName: \"Proper Case\"\nNormalize the headers to proper case words. The fist character and any character\nfollowing a special character will be capitalized if it’s an alpha character.\nFor example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
                     "title": "Proper case header transformation",
@@ -3921,10 +3941,10 @@ var APISwaggerJSON string = `{
                 },
                 "retry_condition": {
                     "type": "array",
-                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\n \"reset\"           : Retry is done if the upstream server does not respond at all\n                     (disconnect/reset/read timeout.)\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\",\\\"reset\\\"]\n  ves.io.schema.rules.repeated.max_items: 7\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "retry_condition",
                     "minItems": 1,
-                    "maxItems": 6,
+                    "maxItems": 7,
                     "items": {
                         "type": "string"
                     },
@@ -3933,8 +3953,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]",
-                        "ves.io.schema.rules.repeated.max_items": "6",
+                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\",\\\"reset\\\"]",
+                        "ves.io.schema.rules.repeated.max_items": "7",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4371,10 +4391,10 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [volterra_trusted_ca]\n Custom trusted CA certificates for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Custom List",
+                    "description": "Exclusive with [volterra_trusted_ca]\n Custom Root CA Certificate for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Custom Root CA Certificate",
                     "maxLength": 131072,
-                    "x-displayname": "Custom Trusted CA List",
+                    "x-displayname": "Custom Root CA Certificate",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.uri_ref": "true"
@@ -4387,10 +4407,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5XC Signing Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Default volterra trusted CA list for validating upstream server certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n F5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Default Trusted CA List"
+                    "x-displayname": "F5XC Default Root CA Certificate"
                 }
             }
         },
@@ -4441,7 +4461,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 }
             }
         },
@@ -4465,7 +4485,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -4476,17 +4496,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Skip verification of hostname"
                 },
                 "trusted_ca": {
-                    "description": " Trusted CA List",
+                    "description": "Exclusive with [trusted_ca_url]\n Root CA Certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaTrustedCAList",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA Certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -4506,9 +4526,9 @@ var APISwaggerJSON string = `{
         },
         "schemaTrustedCAList": {
             "type": "object",
-            "description": "Reference to Trusted CA List",
-            "title": "Trusted CA List",
-            "x-displayname": "Trusted CA List Reference",
+            "description": "Reference to Root CA Certificate",
+            "title": "Root CA Certificate",
+            "x-displayname": "Root CA Certificate Reference",
             "x-ves-proto-message": "ves.io.schema.TrustedCAList"
         },
         "schemaVaultSecretInfoType": {
@@ -5008,7 +5028,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "JWT Config"
                 },
                 "l7_ddos_action_default": {
-                    "description": "Exclusive with [block ddos_js_challenge]\n Block suspicious sources and serve JavaScript challenge to rest of traffic",
+                    "description": "Exclusive with [block ddos_js_challenge]\n Block suspicious sources",
                     "title": "Default",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
@@ -5474,7 +5494,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostCertificationState": {
             "type": "string",
-            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate",
+            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate\n - AutoCertAccountRateLimited: Auto Cert Account Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertDomainRateLimited: Auto Cert Domain Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - CertificateExpired: Certificate Expired\n\nCertificate has expired",
             "title": "Certification State",
             "enum": [
                 "AutoCertDisabled",
@@ -5491,7 +5511,10 @@ var APISwaggerJSON string = `{
                 "AutoCertError",
                 "PreDomainChallengePending",
                 "DomainChallengeStarted",
-                "AutoCertInitialize"
+                "AutoCertInitialize",
+                "AutoCertAccountRateLimited",
+                "AutoCertDomainRateLimited",
+                "CertificateExpired"
             ],
             "default": "AutoCertDisabled",
             "x-displayname": "Certification State",

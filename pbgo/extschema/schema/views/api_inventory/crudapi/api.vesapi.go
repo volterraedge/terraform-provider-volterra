@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_inventory.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_inventory.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_inventory.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_inventory.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_inventory.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_inventory.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2651,7 +2666,7 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Excluded Operations\"\nList of operations matched by the filters to be excluded from a group.\nThe list should only include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
                     "title": "excluded_operations",
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     }
                 },
                 "included_operations": {
@@ -2659,7 +2674,7 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Included Operations\"\nList of operations not matched by the filters to be included in a group.\nThe list should not include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
                     "title": "included_operations",
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     }
                 },
                 "label_filter": {
@@ -2676,23 +2691,6 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Path Filter\"\nx-example: \"/api/config/.*/path[123]/$\"\nRegular expression to match the input request API path against.\nThe match is considered to succeed if the input request API path matches the specified path regex.",
                     "title": "path_filter"
-                }
-            }
-        },
-        "api_definitionApiOperation": {
-            "type": "object",
-            "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
-            "title": "ApiOperation",
-            "properties": {
-                "method": {
-                    "description": "x-displayName: \"HTTP Method\"\nx-required\nx-example: 'POST'\nMethod to match the input request API method against.",
-                    "title": "method",
-                    "$ref": "#/definitions/schemaHttpMethod"
-                },
-                "path": {
-                    "type": "string",
-                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/api/users/{userid}\"\nAn endpoint path, as specified in OpenAPI, including parameters.\nThe path should comply with RFC 3986 and may have parameters according to OpenAPI specification",
-                    "title": "path"
                 }
             }
         },
@@ -3546,6 +3544,23 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
                     "title": "tenant"
+                }
+            }
+        },
+        "viewsApiOperation": {
+            "type": "object",
+            "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
+            "title": "ApiOperation",
+            "properties": {
+                "method": {
+                    "description": "x-displayName: \"HTTP Method\"\nx-required\nx-example: 'POST'\nMethod to match the input request API method against.",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/api/users/{userid}\"\nAn endpoint path, as specified in OpenAPI, including parameters.\nThe path should comply with RFC 3986 and may have parameters according to OpenAPI specification",
+                    "title": "path"
                 }
             }
         },

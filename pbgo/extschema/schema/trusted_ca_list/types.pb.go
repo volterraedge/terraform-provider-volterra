@@ -31,11 +31,11 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Global Specification
 //
 // x-displayName: "Global Specification"
-// Trusted CA List specification
+// Root CA Certificate specification
 type GlobalSpecType struct {
 	// Trusted CA URL
 	//
-	// x-displayName: "Trusted CA List"
+	// x-displayName: "Root CA Certificate"
 	// x-example: "cert"
 	// Trusted CA certificates for validating certificates
 	TrustedCaUrl string `protobuf:"bytes,1,opt,name=trusted_ca_url,json=trustedCaUrl,proto3" json:"trusted_ca_url,omitempty"`
@@ -88,10 +88,10 @@ func (m *GlobalSpecType) GetInfos() []*schema.CertInfoType {
 	return nil
 }
 
-// Create Trusted CA List
+// Create Root CA Certificate
 //
-// x-displayName: "Create Trusted CA List"
-// Shape of the Trusted CA List specification
+// x-displayName: "Create Root CA Certificate"
+// Shape of the Root CA Certificate specification
 type CreateSpecType struct {
 	TrustedCaUrl string `protobuf:"bytes,1,opt,name=trusted_ca_url,json=trustedCaUrl,proto3" json:"trusted_ca_url,omitempty"`
 }
@@ -131,10 +131,10 @@ func (m *CreateSpecType) GetTrustedCaUrl() string {
 	return ""
 }
 
-// Replace Trusted CA List
+// Replace Root CA Certificate
 //
-// x-displayName: "Replace Trusted CA List"
-// Shape of the Trusted CA List specification
+// x-displayName: "Replace Root CA Certificate"
+// Shape of the Root CA Certificate specification
 type ReplaceSpecType struct {
 	TrustedCaUrl string `protobuf:"bytes,1,opt,name=trusted_ca_url,json=trustedCaUrl,proto3" json:"trusted_ca_url,omitempty"`
 }
@@ -174,10 +174,10 @@ func (m *ReplaceSpecType) GetTrustedCaUrl() string {
 	return ""
 }
 
-// Get Trusted CA List
+// Get Root CA Certificate
 //
-// x-displayName: "Get Trusted CA List"
-// Shape of the Trusted CA List specification
+// x-displayName: "Get Root CA Certificate"
+// Shape of the Root CA Certificate specification
 type GetSpecType struct {
 	TrustedCaUrl string                 `protobuf:"bytes,1,opt,name=trusted_ca_url,json=trustedCaUrl,proto3" json:"trusted_ca_url,omitempty"`
 	Infos        []*schema.CertInfoType `protobuf:"bytes,1000,rep,name=infos,proto3" json:"infos,omitempty"`

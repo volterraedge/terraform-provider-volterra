@@ -311,11 +311,11 @@ type customActionAPIInprocClient struct {
 }
 
 func (c *customActionAPIInprocClient) ForceDelete(ctx context.Context, in *ForceDeleteRequest, opts ...grpc.CallOption) (*ForceDeleteResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete")
 	return c.CustomActionAPIServer.ForceDelete(ctx, in)
 }
 func (c *customActionAPIInprocClient) Run(ctx context.Context, in *RunRequest, opts ...grpc.CallOption) (*RunResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.terraform_parameters.CustomActionAPI.Run", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.terraform_parameters.CustomActionAPI.Run")
 	return c.CustomActionAPIServer.Run(ctx, in)
 }
 

@@ -134,6 +134,12 @@ func resourceVolterraOriginPool() *schema.Resource {
 										Optional: true,
 									},
 
+									"preserve_case_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
 									"proper_case_header_transformation": {
 
 										Type:     schema.TypeBool,
@@ -177,14 +183,16 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 						"disable_lb_source_ip_persistance": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"enable_lb_source_ip_persistance": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"disable_outlier_detection": {
@@ -517,8 +525,9 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 									"service_selector": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -526,7 +535,8 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Required: true,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -844,282 +854,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 							},
 						},
 
-						"segment_ip": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"ip": {
-
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"ipv6": {
-
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"segment": {
-
-										Type:     schema.TypeSet,
-										Required: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"site_locator": {
-
-										Type:     schema.TypeSet,
-										Required: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"cloud_re_region": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"site": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"virtual_site": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"segment_name": {
-
-							Type:     schema.TypeSet,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"dns_name": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-
-									"refresh_interval": {
-										Type:     schema.TypeInt,
-										Optional: true,
-									},
-
-									"segment": {
-
-										Type:     schema.TypeSet,
-										Required: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"site_locator": {
-
-										Type:     schema.TypeSet,
-										Required: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"cloud_re_region": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"site": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"virtual_site": {
-
-													Type:     schema.TypeSet,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
 						"vn_private_ip": {
 
 							Type:     schema.TypeSet,
@@ -1319,32 +1053,37 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -1394,34 +1133,40 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1429,14 +1174,16 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1761,6 +1508,18 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 						if v.(bool) {
 							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
 							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+							headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
 							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
 						}
 
@@ -2806,342 +2565,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			if v, ok := originServersMapStrToI["segment_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-				choiceTypeFound = true
-				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_SegmentIp{}
-				choiceInt.SegmentIp = &ves_io_schema_views_origin_pool.OriginServerSegmentIP{}
-				originServers[i].Choice = choiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					ipChoiceTypeFound := false
-
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
-
-						ipChoiceTypeFound = true
-						ipChoiceInt := &ves_io_schema_views_origin_pool.OriginServerSegmentIP_Ip{}
-
-						choiceInt.SegmentIp.IpChoice = ipChoiceInt
-
-						ipChoiceInt.Ip = v.(string)
-
-					}
-
-					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
-
-						ipChoiceTypeFound = true
-						ipChoiceInt := &ves_io_schema_views_origin_pool.OriginServerSegmentIP_Ipv6{}
-
-						choiceInt.SegmentIp.IpChoice = ipChoiceInt
-
-						ipChoiceInt.Ipv6 = v.(string)
-
-					}
-
-					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						segmentInt := &ves_io_schema_views.ObjectRefType{}
-						choiceInt.SegmentIp.Segment = segmentInt
-
-						for _, set := range sl {
-							sMapToStrVal := set.(map[string]interface{})
-							if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentInt.Name = val.(string)
-							}
-							if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentInt.Namespace = val.(string)
-							}
-
-							if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentInt.Tenant = val.(string)
-							}
-						}
-
-					}
-
-					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						siteLocator := &ves_io_schema_views.SiteRegionLocator{}
-						choiceInt.SegmentIp.SiteLocator = siteLocator
-						for _, set := range sl {
-							siteLocatorMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := siteLocatorMapStrToI["cloud_re_region"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_CloudReRegion{}
-								choiceInt.CloudReRegion = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_Site{}
-								choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_VirtualSite{}
-								choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := originServersMapStrToI["segment_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-				choiceTypeFound = true
-				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_SegmentName{}
-				choiceInt.SegmentName = &ves_io_schema_views_origin_pool.OriginServerSegmentName{}
-				originServers[i].Choice = choiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
-
-						choiceInt.SegmentName.DnsName = v.(string)
-
-					}
-
-					if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
-
-						choiceInt.SegmentName.RefreshInterval = uint32(v.(int))
-
-					}
-
-					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						segmentInt := &ves_io_schema_views.ObjectRefType{}
-						choiceInt.SegmentName.Segment = segmentInt
-
-						for _, set := range sl {
-							sMapToStrVal := set.(map[string]interface{})
-							if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentInt.Name = val.(string)
-							}
-							if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentInt.Namespace = val.(string)
-							}
-
-							if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentInt.Tenant = val.(string)
-							}
-						}
-
-					}
-
-					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						siteLocator := &ves_io_schema_views.SiteRegionLocator{}
-						choiceInt.SegmentName.SiteLocator = siteLocator
-						for _, set := range sl {
-							siteLocatorMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := siteLocatorMapStrToI["cloud_re_region"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_CloudReRegion{}
-								choiceInt.CloudReRegion = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_Site{}
-								choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_VirtualSite{}
-								choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 			if v, ok := originServersMapStrToI["vn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 				choiceTypeFound = true
@@ -3393,16 +2816,22 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
 							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {
@@ -3887,6 +3316,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -4029,6 +3459,18 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 						if v.(bool) {
 							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
 							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+							headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
 							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
 						}
 
@@ -5068,342 +4510,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			if v, ok := originServersMapStrToI["segment_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-				choiceTypeFound = true
-				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_SegmentIp{}
-				choiceInt.SegmentIp = &ves_io_schema_views_origin_pool.OriginServerSegmentIP{}
-				originServers[i].Choice = choiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					ipChoiceTypeFound := false
-
-					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
-
-						ipChoiceTypeFound = true
-						ipChoiceInt := &ves_io_schema_views_origin_pool.OriginServerSegmentIP_Ip{}
-
-						choiceInt.SegmentIp.IpChoice = ipChoiceInt
-
-						ipChoiceInt.Ip = v.(string)
-
-					}
-
-					if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !ipChoiceTypeFound {
-
-						ipChoiceTypeFound = true
-						ipChoiceInt := &ves_io_schema_views_origin_pool.OriginServerSegmentIP_Ipv6{}
-
-						choiceInt.SegmentIp.IpChoice = ipChoiceInt
-
-						ipChoiceInt.Ipv6 = v.(string)
-
-					}
-
-					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						segmentInt := &ves_io_schema_views.ObjectRefType{}
-						choiceInt.SegmentIp.Segment = segmentInt
-
-						for _, set := range sl {
-							sMapToStrVal := set.(map[string]interface{})
-							if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentInt.Name = val.(string)
-							}
-							if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentInt.Namespace = val.(string)
-							}
-
-							if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentInt.Tenant = val.(string)
-							}
-						}
-
-					}
-
-					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						siteLocator := &ves_io_schema_views.SiteRegionLocator{}
-						choiceInt.SegmentIp.SiteLocator = siteLocator
-						for _, set := range sl {
-							siteLocatorMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := siteLocatorMapStrToI["cloud_re_region"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_CloudReRegion{}
-								choiceInt.CloudReRegion = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_Site{}
-								choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_VirtualSite{}
-								choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			if v, ok := originServersMapStrToI["segment_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-				choiceTypeFound = true
-				choiceInt := &ves_io_schema_views_origin_pool.OriginServerType_SegmentName{}
-				choiceInt.SegmentName = &ves_io_schema_views_origin_pool.OriginServerSegmentName{}
-				originServers[i].Choice = choiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					if v, ok := cs["dns_name"]; ok && !isIntfNil(v) {
-
-						choiceInt.SegmentName.DnsName = v.(string)
-
-					}
-
-					if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
-
-						choiceInt.SegmentName.RefreshInterval = uint32(v.(int))
-
-					}
-
-					if v, ok := cs["segment"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						segmentInt := &ves_io_schema_views.ObjectRefType{}
-						choiceInt.SegmentName.Segment = segmentInt
-
-						for _, set := range sl {
-							sMapToStrVal := set.(map[string]interface{})
-							if val, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-								segmentInt.Name = val.(string)
-							}
-							if val, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-								segmentInt.Namespace = val.(string)
-							}
-
-							if val, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-								segmentInt.Tenant = val.(string)
-							}
-						}
-
-					}
-
-					if v, ok := cs["site_locator"]; ok && !isIntfNil(v) {
-
-						sl := v.(*schema.Set).List()
-						siteLocator := &ves_io_schema_views.SiteRegionLocator{}
-						choiceInt.SegmentName.SiteLocator = siteLocator
-						for _, set := range sl {
-							siteLocatorMapStrToI := set.(map[string]interface{})
-
-							choiceTypeFound := false
-
-							if v, ok := siteLocatorMapStrToI["cloud_re_region"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_CloudReRegion{}
-								choiceInt.CloudReRegion = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.CloudReRegion.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_Site{}
-								choiceInt.Site = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.Site.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-							if v, ok := siteLocatorMapStrToI["virtual_site"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-								choiceTypeFound = true
-								choiceInt := &ves_io_schema_views.SiteRegionLocator_VirtualSite{}
-								choiceInt.VirtualSite = &ves_io_schema_views.ObjectRefType{}
-								siteLocator.Choice = choiceInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Name = v.(string)
-
-									}
-
-									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Namespace = v.(string)
-
-									}
-
-									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-										choiceInt.VirtualSite.Tenant = v.(string)
-
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
 			if v, ok := originServersMapStrToI["vn_private_ip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 				choiceTypeFound = true
@@ -5651,16 +4757,22 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+								ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
-							if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+							if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 								ocspStaplingChoiceTypeFound = true
-								_ = v
+								ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+								ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+								tlsCertificates[i].OcspStaplingChoice = ocspStaplingChoiceInt
+
 							}
 
 							if v, ok := tlsCertificatesMapStrToI["private_key"]; ok && !isIntfNil(v) {

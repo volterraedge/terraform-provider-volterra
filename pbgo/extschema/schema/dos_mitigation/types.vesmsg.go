@@ -518,7 +518,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "256",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
@@ -1442,7 +1442,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "256",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
@@ -2005,7 +2005,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "256",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)
@@ -2559,7 +2559,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-		"ves.io.schema.rules.repeated.max_items":                "256",
+		"ves.io.schema.rules.repeated.max_items":                "1024",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhIpPrefixes(rulesIpPrefixes)

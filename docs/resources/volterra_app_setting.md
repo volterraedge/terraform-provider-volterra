@@ -34,7 +34,8 @@ resource "volterra_app_setting" "example" {
 
     timeseries_analyses_setting {
       metric_selectors {
-        metric         = ["metric"]
+        metric = ["metric"]
+
         metrics_source = "metrics_source"
       }
     }
@@ -43,7 +44,7 @@ resource "volterra_app_setting" "example" {
       // One of the arguments from this list "enable_learning disable_learning" must be set
       enable_learning = true
 
-      // One of the arguments from this list "enable_detection disable_detection" must be set
+      // One of the arguments from this list "disable_detection enable_detection" must be set
 
       enable_detection {
         // One of the arguments from this list "exclude_bola_detection bola_detection_manual bola_detection_automatic" must be set
@@ -60,17 +61,16 @@ resource "volterra_app_setting" "example" {
         include_failed_login_activity {
           login_failures_threshold = "10"
         }
+
         // One of the arguments from this list "include_forbidden_activity exclude_forbidden_activity" must be set
-        exclude_forbidden_activity = true
+
+        include_forbidden_activity {
+          forbidden_requests_threshold = "10"
+        }
         // One of the arguments from this list "include_ip_reputation exclude_ip_reputation" must be set
         include_ip_reputation = true
-
         // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_custom include_non_existent_url_activity_automatic" must be set
-
-        include_non_existent_url_activity_automatic {
-          // One of the arguments from this list "low medium high" must be set
-          high = true
-        }
+        exclude_non_existent_url_activity = true
         // One of the arguments from this list "include_rate_limit exclude_rate_limit" must be set
         include_rate_limit = true
         // One of the arguments from this list "include_waf_activity exclude_waf_activity" must be set
@@ -101,9 +101,9 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`anomaly_types` - (Optional) List of Anomaly algorithms that need to be enabled (`List of Strings`).
+`anomaly_types` - (Optional) List of Anomaly algorithms that need to be enabled (`List of Strings`).(Deprecated)
 
-`app_type_refs` - (Optional) List of references to app_type for which monitoring needs to enabled. See [ref](#ref) below for details.
+`app_type_refs` - (Optional) List of references to app_type for which monitoring needs to enabled. See [ref](#ref) below for details.(Deprecated)
 
 `app_type_settings` - (Required) List of settings to enable for each AppType, given instance of AppType Exist in this Namespace. See [App Type Settings ](#app-type-settings) below for details.
 
@@ -113,197 +113,215 @@ List of settings to enable for each AppType, given instance of AppType Exist in 
 
 `app_type_ref` - (Required) Associating an AppType reference, will enable analysis on this instance's generated data. See [ref](#ref) below for details.
 
-`business_logic_markup_setting` - (Optional) Setting specifying how API Discovery will be performed.. See [Business Logic Markup Setting ](#business-logic-markup-setting) below for details.
+`business_logic_markup_setting` - (Optional) Setting specifying how API Discovery will be performed.. See [App Type Settings Business Logic Markup Setting ](#app-type-settings-business-logic-markup-setting) below for details.
 
-`timeseries_analyses_setting` - (Optional) The clients are flagged if anomalies are observed. See [Timeseries Analyses Setting ](#timeseries-analyses-setting) below for details.
+`timeseries_analyses_setting` - (Optional) The clients are flagged if anomalies are observed. See [App Type Settings Timeseries Analyses Setting ](#app-type-settings-timeseries-analyses-setting) below for details.
 
-`user_behavior_analysis_setting` - (Optional) The risk score of the user decays over time, if no further suspicious activity is noted. See [User Behavior Analysis Setting ](#user-behavior-analysis-setting) below for details.
+`user_behavior_analysis_setting` - (Optional) The risk score of the user decays over time, if no further suspicious activity is noted. See [App Type Settings User Behavior Analysis Setting ](#app-type-settings-user-behavior-analysis-setting) below for details.
 
-### Bola Detection Automatic
-
-Detect Enumeration attack automatically..
-
-### Bola Detection Manual
-
-Detect Enumeration attack using user defined threshold..
-
-`threshold_level_1` - (Optional) Detected in range: 10 - 150 (bool).
-
-`threshold_level_2` - (Optional) Detected in range: 25 - 400 (bool).
-
-`threshold_level_3` - (Optional) Detected in range: 50 - 800 (bool).
-
-`threshold_level_4` - (Optional) Detected in range: 100 - 1500 (bool).
-
-`threshold_level_5` - (Optional) Detected in range: 200 - 3000 (bool).
-
-`threshold_level_6` - (Optional) Detected in range: 500 - 8000 (bool).
-
-### Business Logic Markup Setting
+### App Type Settings Business Logic Markup Setting
 
 Setting specifying how API Discovery will be performed..
 
-`disable` - (Optional) API Endpoints are not discovered in this namespace (bool).
+###### One of the arguments from this list "enable, disable" can be set
 
-`enable` - (Optional) API Endpoints are discovered in this namespace (bool).
+`disable` - (Optional) API Endpoints are not discovered in this namespace (`Bool`).
 
-### Disable
+`enable` - (Optional) API Endpoints are discovered in this namespace (`Bool`).
 
-API Endpoints are not discovered in this namespace.
+### App Type Settings Timeseries Analyses Setting
 
-### Disable Detection
+The clients are flagged if anomalies are observed.
 
-Disable malicious user detection.
+`metric_selectors` - (Optional) be included in the detection logic. See [Timeseries Analyses Setting Metric Selectors ](#timeseries-analyses-setting-metric-selectors) below for details.
 
-### Disable Learning
+### App Type Settings User Behavior Analysis Setting
 
-Disable learning user behavior patterns from this namespace.
+The risk score of the user decays over time, if no further suspicious activity is noted.
 
-### Enable
+###### One of the arguments from this list "enable_learning, disable_learning" must be set
 
-API Endpoints are discovered in this namespace.
+`disable_learning` - (Optional) Disable learning user behavior patterns from this namespace (`Bool`).
 
-### Enable Detection
+`enable_learning` - (Optional) Enable learning user behavior patterns from this namespace (`Bool`).
 
-Enable AI based malicious user detection.
+###### One of the arguments from this list "enable_detection, disable_detection" must be set
 
-`bola_detection_automatic` - (Optional) Detect Enumeration attack automatically. (bool).
+`disable_detection` - (Optional) Disable malicious user detection (`Bool`).
 
-`bola_detection_manual` - (Optional) Detect Enumeration attack using user defined threshold.. See [Bola Detection Manual ](#bola-detection-manual) below for details.
+`enable_detection` - (Optional) Enable AI based malicious user detection. See [Malicious User Detection Enable Detection ](#malicious-user-detection-enable-detection) below for details.
 
-`exclude_bola_detection` - (Optional) Disable Enumeration attack detection (bool).
+### Bola Activity Choice Bola Detection Automatic
 
-`exclude_bot_defense_activity` - (Optional) Exclude Bot Defense activity in malicious user detection (bool).
+Detect Enumeration attack automatically..
 
-`include_bot_defense_activity` - (Optional) Include Bot Defense activity in malicious user detection (bool).
+### Bola Activity Choice Bola Detection Manual
 
-`cooling_off_period` - (Optional) a high to medium or medium to low or low to none. (`Int`).
+Detect Enumeration attack using user defined threshold..
 
-`exclude_failed_login_activity` - (Optional) Exclude persistent login failures activity (401 response code) in malicious user detection (bool).
+###### One of the arguments from this list "threshold_level_1, threshold_level_2, threshold_level_3, threshold_level_4, threshold_level_5, threshold_level_6" must be set
 
-`include_failed_login_activity` - (Optional) Include persistent login failures activity (401 response code) in malicious user detection. See [Include Failed Login Activity ](#include-failed-login-activity) below for details.
+`threshold_level_1` - (Optional) Detected in range: 10 - 150 (`Bool`).
 
-`exclude_forbidden_activity` - (Optional) Exclude forbidden activity by policy in malicious user detection (bool).
+`threshold_level_2` - (Optional) Detected in range: 25 - 400 (`Bool`).
 
-`include_forbidden_activity` - (Optional) Include forbidden activity by policy in malicious user detection. See [Include Forbidden Activity ](#include-forbidden-activity) below for details.
+`threshold_level_3` - (Optional) Detected in range: 50 - 800 (`Bool`).
 
-`exclude_ip_reputation` - (Optional) Exclude IP Reputation in malicious user detection (bool).
+`threshold_level_4` - (Optional) Detected in range: 100 - 1500 (`Bool`).
 
-`include_ip_reputation` - (Optional) Include IP Reputation in malicious user detection (bool).
+`threshold_level_5` - (Optional) Detected in range: 200 - 3000 (`Bool`).
 
-`exclude_non_existent_url_activity` - (Optional) Exclude Non-Existent URL activity in malicious user detection (bool).
+`threshold_level_6` - (Optional) Detected in range: 500 - 8000 (`Bool`).
 
-`include_non_existent_url_activity_automatic` - (Optional) Include Non-Existent URL Activity using automatic threshold in malicious user detection. See [Include Non Existent Url Activity Automatic ](#include-non-existent-url-activity-automatic) below for details.
-
-`include_non_existent_url_activity_custom` - (Optional) Include Non-Existent URL Activity using custom threshold in malicious user detection. See [Include Non Existent Url Activity Custom ](#include-non-existent-url-activity-custom) below for details.
-
-`exclude_rate_limit` - (Optional) Exclude Rate Limiting in malicious user detection (bool).
-
-`include_rate_limit` - (Optional) Include Rate Limiting in malicious user detection (bool).
-
-`exclude_waf_activity` - (Optional) Exclude WAF activity in malicious user detection (bool).
-
-`include_waf_activity` - (Optional) Include WAF activity in malicious user detection (bool).
-
-### Enable Learning
-
-Enable learning user behavior patterns from this namespace.
-
-### Exclude Bola Detection
+### Bola Activity Choice Exclude Bola Detection
 
 Disable Enumeration attack detection.
 
-### Exclude Bot Defense Activity
+### Bot Defense Activity Choice Exclude Bot Defense Activity
 
 Exclude Bot Defense activity in malicious user detection.
 
-### Exclude Failed Login Activity
-
-Exclude persistent login failures activity (401 response code) in malicious user detection.
-
-### Exclude Forbidden Activity
-
-Exclude forbidden activity by policy in malicious user detection.
-
-### Exclude Ip Reputation
-
-Exclude IP Reputation in malicious user detection.
-
-### Exclude Non Existent Url Activity
-
-Exclude Non-Existent URL activity in malicious user detection.
-
-### Exclude Rate Limit
-
-Exclude Rate Limiting in malicious user detection.
-
-### Exclude Waf Activity
-
-Exclude WAF activity in malicious user detection.
-
-### High
-
-Use auto-calculated threshold decreased by margin for more sensitive detection.
-
-### Include Bot Defense Activity
+### Bot Defense Activity Choice Include Bot Defense Activity
 
 Include Bot Defense activity in malicious user detection.
 
-### Include Failed Login Activity
+### Failed Login Activity Choice Exclude Failed Login Activity
+
+Exclude persistent login failures activity (401 response code) in malicious user detection.
+
+### Failed Login Activity Choice Include Failed Login Activity
 
 Include persistent login failures activity (401 response code) in malicious user detection.
 
 `login_failures_threshold` - (Required) The number of failed logins beyond which the system will flag this user as malicious (`Int`).
 
-### Include Forbidden Activity
+### Forbidden Activity Choice Exclude Forbidden Activity
+
+Exclude forbidden activity by policy in malicious user detection.
+
+### Forbidden Activity Choice Include Forbidden Activity
 
 Include forbidden activity by policy in malicious user detection.
 
 `forbidden_requests_threshold` - (Required) The number of forbidden requests beyond which the system will flag this user as malicious (`Int`).
 
-### Include Ip Reputation
+### Ip Reputation Choice Exclude Ip Reputation
+
+Exclude IP Reputation in malicious user detection.
+
+### Ip Reputation Choice Include Ip Reputation
 
 Include IP Reputation in malicious user detection.
 
-### Include Non Existent Url Activity Automatic
+### Learn From Namespace Disable
+
+API Endpoints are not discovered in this namespace.
+
+### Learn From Namespace Disable Learning
+
+Disable learning user behavior patterns from this namespace.
+
+### Learn From Namespace Enable
+
+API Endpoints are discovered in this namespace.
+
+### Learn From Namespace Enable Learning
+
+Enable learning user behavior patterns from this namespace.
+
+### Malicious User Detection Disable Detection
+
+Disable malicious user detection.
+
+### Malicious User Detection Enable Detection
+
+Enable AI based malicious user detection.
+
+###### One of the arguments from this list "exclude_bola_detection, bola_detection_manual, bola_detection_automatic" can be set
+
+`bola_detection_automatic` - (Optional) Detect Enumeration attack automatically. (`Bool`).(Deprecated)
+
+`bola_detection_manual` - (Optional) Detect Enumeration attack using user defined threshold.. See [Bola Activity Choice Bola Detection Manual ](#bola-activity-choice-bola-detection-manual) below for details.(Deprecated)
+
+`exclude_bola_detection` - (Optional) Disable Enumeration attack detection (`Bool`).(Deprecated)
+
+###### One of the arguments from this list "include_bot_defense_activity, exclude_bot_defense_activity" must be set
+
+`exclude_bot_defense_activity` - (Optional) Exclude Bot Defense activity in malicious user detection (`Bool`).
+
+`include_bot_defense_activity` - (Optional) Include Bot Defense activity in malicious user detection (`Bool`).
+
+###### One of the arguments from this list "cooling_off_period" must be set
+
+`cooling_off_period` - (Optional) a high to medium or medium to low or low to none. (`Int`).
+
+###### One of the arguments from this list "include_failed_login_activity, exclude_failed_login_activity" must be set
+
+`exclude_failed_login_activity` - (Optional) Exclude persistent login failures activity (401 response code) in malicious user detection (`Bool`).
+
+`include_failed_login_activity` - (Optional) Include persistent login failures activity (401 response code) in malicious user detection. See [Failed Login Activity Choice Include Failed Login Activity ](#failed-login-activity-choice-include-failed-login-activity) below for details.
+
+###### One of the arguments from this list "include_forbidden_activity, exclude_forbidden_activity" must be set
+
+`exclude_forbidden_activity` - (Optional) Exclude forbidden activity by policy in malicious user detection (`Bool`).
+
+`include_forbidden_activity` - (Optional) Include forbidden activity by policy in malicious user detection. See [Forbidden Activity Choice Include Forbidden Activity ](#forbidden-activity-choice-include-forbidden-activity) below for details.
+
+###### One of the arguments from this list "exclude_ip_reputation, include_ip_reputation" must be set
+
+`exclude_ip_reputation` - (Optional) Exclude IP Reputation in malicious user detection (`Bool`).
+
+`include_ip_reputation` - (Optional) Include IP Reputation in malicious user detection (`Bool`).
+
+###### One of the arguments from this list "include_non_existent_url_activity_automatic, exclude_non_existent_url_activity, include_non_existent_url_activity_custom" can be set
+
+`exclude_non_existent_url_activity` - (Optional) Exclude Non-Existent URL activity in malicious user detection (`Bool`).(Deprecated)
+
+`include_non_existent_url_activity_automatic` - (Optional) Include Non-Existent URL Activity using automatic threshold in malicious user detection. See [Non Existent Url Activity Choice Include Non Existent Url Activity Automatic ](#non-existent-url-activity-choice-include-non-existent-url-activity-automatic) below for details.(Deprecated)
+
+`include_non_existent_url_activity_custom` - (Optional) Include Non-Existent URL Activity using custom threshold in malicious user detection. See [Non Existent Url Activity Choice Include Non Existent Url Activity Custom ](#non-existent-url-activity-choice-include-non-existent-url-activity-custom) below for details.(Deprecated)
+
+###### One of the arguments from this list "include_rate_limit, exclude_rate_limit" must be set
+
+`exclude_rate_limit` - (Optional) Exclude Rate Limiting in malicious user detection (`Bool`).
+
+`include_rate_limit` - (Optional) Include Rate Limiting in malicious user detection (`Bool`).
+
+###### One of the arguments from this list "include_waf_activity, exclude_waf_activity" must be set
+
+`exclude_waf_activity` - (Optional) Exclude WAF activity in malicious user detection (`Bool`).
+
+`include_waf_activity` - (Optional) Include WAF activity in malicious user detection (`Bool`).
+
+### Non Existent Url Activity Choice Exclude Non Existent Url Activity
+
+Exclude Non-Existent URL activity in malicious user detection.
+
+### Non Existent Url Activity Choice Include Non Existent Url Activity Automatic
 
 Include Non-Existent URL Activity using automatic threshold in malicious user detection.
 
-`high` - (Optional) Use auto-calculated threshold decreased by margin for more sensitive detection (bool).
+###### One of the arguments from this list "low, medium, high" must be set
 
-`low` - (Optional) Use auto-calculated threshold with margin for less sensitive detection (bool).
+`high` - (Optional) Use auto-calculated threshold decreased by margin for more sensitive detection (`Bool`).
 
-`medium` - (Optional) Use auto-calculated threshold learnt from statistics per given application (bool).
+`low` - (Optional) Use auto-calculated threshold with margin for less sensitive detection (`Bool`).
 
-### Include Non Existent Url Activity Custom
+`medium` - (Optional) Use auto-calculated threshold learnt from statistics per given application (`Bool`).
+
+### Non Existent Url Activity Choice Include Non Existent Url Activity Custom
 
 Include Non-Existent URL Activity using custom threshold in malicious user detection.
 
 `nonexistent_requests_threshold` - (Required) The percentage of non-existent requests beyond which the system will flag this user as malicious (`Int`).
 
-### Include Rate Limit
+### Rate Limit Choice Exclude Rate Limit
+
+Exclude Rate Limiting in malicious user detection.
+
+### Rate Limit Choice Include Rate Limit
 
 Include Rate Limiting in malicious user detection.
-
-### Include Waf Activity
-
-Include WAF activity in malicious user detection.
-
-### Low
-
-Use auto-calculated threshold with margin for less sensitive detection.
-
-### Medium
-
-Use auto-calculated threshold learnt from statistics per given application.
-
-### Metric Selectors
-
-be included in the detection logic.
-
-`metric` - (Optional) Choose one or more metrics to be included in the detection logic (`List of Strings`).
-
-`metrics_source` - (Optional) Choose the source for the metrics to be included in the detection logic (`String`).
 
 ### Ref
 
@@ -315,47 +333,57 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Threshold Level 1
+### Sensitivity High
+
+Use auto-calculated threshold decreased by margin for more sensitive detection.
+
+### Sensitivity Low
+
+Use auto-calculated threshold with margin for less sensitive detection.
+
+### Sensitivity Medium
+
+Use auto-calculated threshold learnt from statistics per given application.
+
+### Threshold Levels Threshold Level 1
 
 Detected in range: 10 - 150.
 
-### Threshold Level 2
+### Threshold Levels Threshold Level 2
 
 Detected in range: 25 - 400.
 
-### Threshold Level 3
+### Threshold Levels Threshold Level 3
 
 Detected in range: 50 - 800.
 
-### Threshold Level 4
+### Threshold Levels Threshold Level 4
 
 Detected in range: 100 - 1500.
 
-### Threshold Level 5
+### Threshold Levels Threshold Level 5
 
 Detected in range: 200 - 3000.
 
-### Threshold Level 6
+### Threshold Levels Threshold Level 6
 
 Detected in range: 500 - 8000.
 
-### Timeseries Analyses Setting
+### Timeseries Analyses Setting Metric Selectors
 
-The clients are flagged if anomalies are observed.
+be included in the detection logic.
 
-`metric_selectors` - (Optional) be included in the detection logic. See [Metric Selectors ](#metric-selectors) below for details.
+`metric` - (Optional) Choose one or more metrics to be included in the detection logic (`List of Strings`).
 
-### User Behavior Analysis Setting
+`metrics_source` - (Optional) Choose the source for the metrics to be included in the detection logic (`String`).
 
-The risk score of the user decays over time, if no further suspicious activity is noted.
+### Waf Activity Choice Exclude Waf Activity
 
-`disable_learning` - (Optional) Disable learning user behavior patterns from this namespace (bool).
+Exclude WAF activity in malicious user detection.
 
-`enable_learning` - (Optional) Enable learning user behavior patterns from this namespace (bool).
+### Waf Activity Choice Include Waf Activity
 
-`disable_detection` - (Optional) Disable malicious user detection (bool).
-
-`enable_detection` - (Optional) Enable AI based malicious user detection. See [Enable Detection ](#enable-detection) below for details.
+Include WAF activity in malicious user detection.
 
 Attribute Reference
 -------------------

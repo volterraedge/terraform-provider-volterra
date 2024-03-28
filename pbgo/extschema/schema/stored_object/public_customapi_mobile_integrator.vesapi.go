@@ -313,11 +313,11 @@ type mobileIntegratorCustomAPIInprocClient struct {
 }
 
 func (c *mobileIntegratorCustomAPIInprocClient) GetMobileIntegrator(ctx context.Context, in *GetObjectRequest, opts ...grpc.CallOption) (*GetObjectResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.MobileIntegratorCustomAPI.GetMobileIntegrator", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.stored_object.MobileIntegratorCustomAPI.GetMobileIntegrator")
 	return c.MobileIntegratorCustomAPIServer.GetMobileIntegrator(ctx, in)
 }
 func (c *mobileIntegratorCustomAPIInprocClient) ListMobileIntegrators(ctx context.Context, in *ListObjectsRequest, opts ...grpc.CallOption) (*ListObjectsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.MobileIntegratorCustomAPI.ListMobileIntegrators", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.stored_object.MobileIntegratorCustomAPI.ListMobileIntegrators")
 	return c.MobileIntegratorCustomAPIServer.ListMobileIntegrators(ctx, in)
 }
 

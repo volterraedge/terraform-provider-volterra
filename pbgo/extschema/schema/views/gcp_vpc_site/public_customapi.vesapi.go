@@ -20,6 +20,8 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
+
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -40,6 +42,15 @@ func (c *CustomAPIGrpcClient) doRPCSetCloudSiteInfo(ctx context.Context, yamlReq
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.gcp_vpc_site.SetCloudSiteInfoRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.SetCloudSiteInfo(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCValidateConfig(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ves_io_schema_views.ValidateConfigRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.ValidateConfigRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ValidateConfig(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -74,6 +85,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
+
+	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
 
 	ccl.rpcFns = rpcFns
 
@@ -173,6 +186,90 @@ func (c *CustomAPIRestClient) doRPCSetCloudSiteInfo(ctx context.Context, callOpt
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCValidateConfig(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ves_io_schema_views.ValidateConfigRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.ValidateConfigRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ves_io_schema_views.ValidateConfigResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.ValidateConfigResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -199,6 +296,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["SetCloudSiteInfo"] = ccl.doRPCSetCloudSiteInfo
 
+	rpcFns["ValidateConfig"] = ccl.doRPCValidateConfig
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -212,8 +311,12 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInfoRequest, opts ...grpc.CallOption) (*SetCloudSiteInfoResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.gcp_vpc_site.CustomAPI.SetCloudSiteInfo", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.gcp_vpc_site.CustomAPI.SetCloudSiteInfo")
 	return c.CustomAPIServer.SetCloudSiteInfo(ctx, in)
+}
+func (c *customAPIInprocClient) ValidateConfig(ctx context.Context, in *ves_io_schema_views.ValidateConfigRequest, opts ...grpc.CallOption) (*ves_io_schema_views.ValidateConfigResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.gcp_vpc_site.CustomAPI.ValidateConfig")
+	return c.CustomAPIServer.ValidateConfig(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -283,6 +386,55 @@ func (s *customAPISrv) SetCloudSiteInfo(ctx context.Context, in *SetCloudSiteInf
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.gcp_vpc_site.SetCloudSiteInfoResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ValidateConfig(ctx context.Context, in *ves_io_schema_views.ValidateConfigRequest) (*ves_io_schema_views.ValidateConfigResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.gcp_vpc_site.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ves_io_schema_views.ValidateConfigResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.ValidateConfigRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ValidateConfig' operation on 'gcp_vpc_site'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.gcp_vpc_site.CustomAPI.ValidateConfig"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ValidateConfig(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.ValidateConfigResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -409,6 +561,106 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Custom API for GCP VPC Site",
             "x-ves-proto-service": "ves.io.schema.views.gcp_vpc_site.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/gcp_vpc_site/{name}/validate_config": {
+            "post": {
+                "summary": "Validate GCP VPC Site Config",
+                "description": "Validate GCP VPC Site Config",
+                "operationId": "ves.io.schema.views.gcp_vpc_site.CustomAPI.ValidateConfig",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/viewsValidateConfigResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nNamespace for the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"aws-vpc-site-1\"\nName of the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/viewsValidateConfigRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-gcp_vpc_site-customapi-validateconfig"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.gcp_vpc_site.CustomAPI.ValidateConfig"
+            },
+            "x-displayname": "Custom API for GCP VPC Site",
+            "x-ves-proto-service": "ves.io.schema.views.gcp_vpc_site.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -490,6 +742,35 @@ var CustomAPISwaggerJSON string = `{
             "title": "Response to configure Cloud Site Information",
             "x-displayname": "Response to configure Cloud Site Information",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.SetCloudSiteInfoResponse"
+        },
+        "viewsValidateConfigRequest": {
+            "type": "object",
+            "description": "Request to validate AWS VPC site configuration",
+            "title": "Request to validate AWS VPC site configuration",
+            "x-displayname": "Request to validate AWS VPC site configuration",
+            "x-ves-proto-message": "ves.io.schema.views.ValidateConfigRequest",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the object to be configured\n\nExample: - \"aws-vpc-site-1\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "aws-vpc-site-1"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace for the object to be configured\n\nExample: - \"default\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                }
+            }
+        },
+        "viewsValidateConfigResponse": {
+            "type": "object",
+            "title": "Response to validate AWS VPC site configuration",
+            "x-displayname": "Response to validate AWS VPC site configuration",
+            "x-ves-proto-message": "ves.io.schema.views.ValidateConfigResponse"
         }
     },
     "x-displayname": "Configure GCP VPC Site",

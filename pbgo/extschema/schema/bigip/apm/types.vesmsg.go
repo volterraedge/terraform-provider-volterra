@@ -1156,6 +1156,7 @@ func (m *CreateSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *CreateSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -1179,6 +1180,7 @@ func (m *CreateSpecType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteTypeChoice().(type) {
 	case *CreateSpecType_AwsSiteTypeChoice:
+
 		drInfos, err := m.GetAwsSiteTypeChoice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsSiteTypeChoice().GetDRefInfo() FAILED")
@@ -1190,6 +1192,7 @@ func (m *CreateSpecType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_BaremetalSiteTypeChoice:
+
 		drInfos, err := m.GetBaremetalSiteTypeChoice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBaremetalSiteTypeChoice().GetDRefInfo() FAILED")
@@ -2332,6 +2335,7 @@ func (m *GetSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *GetSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -2355,6 +2359,7 @@ func (m *GetSpecType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteTypeChoice().(type) {
 	case *GetSpecType_AwsSiteTypeChoice:
+
 		drInfos, err := m.GetAwsSiteTypeChoice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsSiteTypeChoice().GetDRefInfo() FAILED")
@@ -2366,6 +2371,7 @@ func (m *GetSpecType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_BaremetalSiteTypeChoice:
+
 		drInfos, err := m.GetBaremetalSiteTypeChoice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBaremetalSiteTypeChoice().GetDRefInfo() FAILED")
@@ -2626,6 +2632,7 @@ func (m *GlobalSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *GlobalSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -2694,6 +2701,7 @@ func (m *GlobalSpecType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteTypeChoice().(type) {
 	case *GlobalSpecType_AwsSiteTypeChoice:
+
 		drInfos, err := m.GetAwsSiteTypeChoice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsSiteTypeChoice().GetDRefInfo() FAILED")
@@ -2705,6 +2713,7 @@ func (m *GlobalSpecType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_BaremetalSiteTypeChoice:
+
 		drInfos, err := m.GetBaremetalSiteTypeChoice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBaremetalSiteTypeChoice().GetDRefInfo() FAILED")
@@ -3012,6 +3021,7 @@ func (m *ReplaceSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetHttpManagementChoice().(type) {
 	case *ReplaceSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")

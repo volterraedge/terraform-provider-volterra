@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.instance_management.v2_signup.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.instance_management.v2_signup.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.instance_management.v2_signup.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.instance_management.v2_signup.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.instance_management.v2_signup.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.instance_management.v2_signup.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3706,28 +3721,20 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.signup.CompanyMeta",
             "properties": {
                 "mailing_address": {
-                    "description": " mailing address of the company\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " mailing address of the company",
                     "title": "Mailing Address",
                     "$ref": "#/definitions/signupContactMeta",
-                    "x-displayname": "Mailing Address",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Mailing Address"
                 },
                 "name": {
                     "type": "string",
-                    "description": " name of the company\n\nExample: - \"F5 Networks, Inc\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 5\n",
+                    "description": " name of the company\n\nExample: - \"F5 Networks, Inc\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Name",
-                    "minLength": 5,
                     "maxLength": 256,
                     "x-displayname": "Name",
                     "x-ves-example": "F5 Networks, Inc",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "5"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
             }
@@ -3909,16 +3916,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64"
                     }
-                },
-                "tenant_id": {
-                    "type": "string",
-                    "description": " tenant id to be used while creating a tenant instead of generating a new one.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
-                    "title": "tenant_id",
-                    "maxLength": 64,
-                    "x-displayname": "Tenant Id",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64"
-                    }
                 }
             }
         },
@@ -3988,34 +3985,24 @@ var APISwaggerJSON string = `{
             "properties": {
                 "contact_number": {
                     "type": "string",
-                    "description": " contact number of the user\n\nExample: - \"+14084004001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.phone_number: true\n",
+                    "description": " contact number of the user\n\nExample: - \"+14084004001\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Contact Number",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Contact Number",
                     "x-ves-example": "+14084004001",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.phone_number": "true"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "email": {
                     "type": "string",
-                    "description": " email of the user\n\nExample: - \"jane.doe@gmail.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.email: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " email of the user\n\nExample: - \"jane.doe@gmail.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "E-mail",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "E-mail",
                     "x-ves-example": "jane.doe@gmail.com",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.email": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 },
                 "first_name": {
@@ -4031,17 +4018,13 @@ var APISwaggerJSON string = `{
                 },
                 "last_name": {
                     "type": "string",
-                    "description": " last name of the user\n\nExample: - \"Doe\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "description": " last name of the user\n\nExample: - \"Doe\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Last Name",
-                    "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Last Name",
                     "x-ves-example": "Doe",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
             }

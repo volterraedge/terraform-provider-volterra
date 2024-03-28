@@ -21,12 +21,17 @@ resource "volterra_usb_policy" "example" {
   namespace = "staging"
 
   allowed_devices {
-    b_device_class     = "hub"
-    b_device_protocol  = "0002"
+    b_device_class = "hub"
+
+    b_device_protocol = "0002"
+
     b_device_sub_class = "hub"
-    i_serial           = "0000:00:14.0"
-    id_product         = "0x0002"
-    id_vendor          = "0x1d6b"
+
+    i_serial = "0000:00:14.0"
+
+    id_product = "0x0002"
+
+    id_vendor = "0x1d6b"
   }
 }
 

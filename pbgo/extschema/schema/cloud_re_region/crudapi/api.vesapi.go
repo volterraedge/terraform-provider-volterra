@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_re_region.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_re_region.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_re_region.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_re_region.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_re_region.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_re_region.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_re_region.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_re_region.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -1599,7 +1614,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Get"
             },
             "delete": {
@@ -1675,7 +1689,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Delete"
             },
             "put": {
@@ -1759,7 +1772,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1907,7 +1919,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.List"
             },
             "post": {
@@ -1985,7 +1996,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2133,7 +2143,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2241,7 +2250,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2389,7 +2397,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2472,7 +2479,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Delete"
             },
             "put": {
@@ -2556,7 +2562,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2641,7 +2646,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_re_region-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_re_region.crudapi.API.Create"
             },
             "x-displayname": "",

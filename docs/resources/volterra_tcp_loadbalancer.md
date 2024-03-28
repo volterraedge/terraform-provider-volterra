@@ -21,26 +21,25 @@ resource "volterra_tcp_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+  advertise_on_public_default_vip = true
 
-  advertise_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
   retract_cluster = true
+
   // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
-  hash_policy_choice_least_active = true
+  hash_policy_choice_source_ip_stickiness = true
+
   // One of the arguments from this list "tcp tls_tcp_auto_cert tls_tcp" must be set
   tcp = true
+
   // One of the arguments from this list "listen_port port_ranges" must be set
   listen_port = "0"
+
   // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
-  no_service_policies = true
-  // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
-  sni = true
+  service_policies_from_namespace = true
+
+  // One of the arguments from this list "no_sni sni default_lb_with_sni" must be set
+  no_sni = true
 }
 
 ```
@@ -64,37 +63,37 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`advertise_custom` - (Optional) Advertise this VIP on specific sites. See [Advertise Custom ](#advertise-custom) below for details.
+`advertise_custom` - (Optional) Advertise this VIP on specific sites. See [Advertise Choice Advertise Custom ](#advertise-choice-advertise-custom) below for details.
 
-`advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Advertise On Public ](#advertise-on-public) below for details.
+`advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Advertise Choice Advertise On Public ](#advertise-choice-advertise-on-public) below for details.
 
-`advertise_on_public_default_vip` - (Optional) Advertise this load balancer on public network with default VIP (bool).
+`advertise_on_public_default_vip` - (Optional) Advertise this load balancer on public network with default VIP (`Bool`).
 
-`do_not_advertise` - (Optional) Do not advertise this load balancer (bool).
+`do_not_advertise` - (Optional) Do not advertise this load balancer (`Bool`).
 
-`do_not_retract_cluster` - (Optional) configuration. (bool).
+`do_not_retract_cluster` - (Optional) configuration. (`Bool`).
 
-`retract_cluster` - (Optional) for route (bool).
+`retract_cluster` - (Optional) for route (`Bool`).
 
 `dns_volterra_managed` - (Optional) This requires the domain to be delegated to F5XC using the Delegated Domain feature. (`Bool`).
 
 `domains` - (Optional) Domains also indicate the list of names for which DNS resolution will be done by VER (`List of String`).
 
-`hash_policy_choice_least_active` - (Optional) Connections are sent to origin server that has least active connections (bool).
+`hash_policy_choice_least_active` - (Optional) Connections are sent to origin server that has least active connections (`Bool`).
 
-`hash_policy_choice_random` - (Optional) Connections are sent to all eligible origin servers in random fashion (bool).
+`hash_policy_choice_random` - (Optional) Connections are sent to all eligible origin servers in random fashion (`Bool`).
 
-`hash_policy_choice_round_robin` - (Optional) Connections are sent to all eligible origin servers in round robin fashion (bool).
+`hash_policy_choice_round_robin` - (Optional) Connections are sent to all eligible origin servers in round robin fashion (`Bool`).
 
-`hash_policy_choice_source_ip_stickiness` - (Optional) Connections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server (bool).
+`hash_policy_choice_source_ip_stickiness` - (Optional) Connections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server (`Bool`).
 
 `idle_timeout` - (Optional) The amount of time that a stream can exist without upstream or downstream activity, in milliseconds. (`Int`).
 
-`tcp` - (Optional) TCP Load Balancer. (bool).
+`tcp` - (Optional) TCP Load Balancer. (`Bool`).
 
-`tls_tcp` - (Optional) User is responsible for managing DNS to this load balancer.. See [Tls Tcp ](#tls-tcp) below for details.
+`tls_tcp` - (Optional) User is responsible for managing DNS to this load balancer.. See [Loadbalancer Type Tls Tcp ](#loadbalancer-type-tls-tcp) below for details.
 
-`tls_tcp_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).. See [Tls Tcp Auto Cert ](#tls-tcp-auto-cert) below for details.
+`tls_tcp_auto_cert` - (Optional) or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).. See [Loadbalancer Type Tls Tcp Auto Cert ](#loadbalancer-type-tls-tcp-auto-cert) below for details.
 
 `origin_pools_weights` - (Optional) Origin pools and weights used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
 
@@ -102,153 +101,25 @@ Argument Reference
 
 `port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
-`active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Active Service Policies ](#active-service-policies) below for details.
+`active_service_policies` - (Optional) Apply the specified list of service policies and bypass the namespace service policy set. See [Service Policy Choice Active Service Policies ](#service-policy-choice-active-service-policies) below for details.
 
-`no_service_policies` - (Optional) Do not apply any service policies i.e. bypass the namespace service policy set (bool).
+`no_service_policies` - (Optional) Do not apply any service policies i.e. bypass the namespace service policy set (`Bool`).
 
-`service_policies_from_namespace` - (Optional) Apply the active service policies configured as part of the namespace service policy set (bool).
+`service_policies_from_namespace` - (Optional) Apply the active service policies configured as part of the namespace service policy set (`Bool`).
 
-`default_lb_with_sni` - (Optional) Also enables usage as Default LB for Non SNI Clients (bool).
+`default_lb_with_sni` - (Optional) Also enables usage as Default LB for Non SNI Clients (`Bool`).
 
-`no_sni` - (Optional) Loadbalancer without Server Name Indication support (bool).
+`no_sni` - (Optional) Loadbalancer without Server Name Indication support (`Bool`).
 
-`sni` - (Optional) Enables Server Name Indication for Loadbalancer (bool).
-
-### Active Service Policies
-
-Apply the specified list of service policies and bypass the namespace service policy set.
-
-`policies` - (Required) If all policies are evaluated and none match, then the request will be denied by default.. See [ref](#ref) below for details.
-
-### Advertise Custom
-
-Advertise this VIP on specific sites.
-
-`advertise_where` - (Required) Where should this load balancer be available. See [Advertise Where ](#advertise-where) below for details.
-
-### Advertise On Public
-
-Advertise this load balancer on public network.
-
-`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
-
-### Advertise Where
-
-Where should this load balancer be available.
-
-`cloud_edge_segment` - (Optional) Advertise on a segment on a Cloud Edge. See [Cloud Edge Segment ](#cloud-edge-segment) below for details.
-
-`segment` - (Optional) Advertise on a segment. See [Segment ](#segment) below for details.
-
-`site` - (Optional) Advertise on a customer site and a given network.. See [Site ](#site) below for details.
-
-`site_segment` - (Optional) Advertise on a segment on a site. See [Site Segment ](#site-segment) below for details.
-
-`virtual_network` - (Optional) Advertise on a virtual network. See [Virtual Network ](#virtual-network) below for details.
-
-`virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Virtual Site ](#virtual-site) below for details.
-
-`virtual_site_segment` - (Optional) Advertise on a segment on a virtual site. See [Virtual Site Segment ](#virtual-site-segment) below for details.
-
-`vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Vk8s Service ](#vk8s-service) below for details.
-
-`port` - (Optional) TCP port to Listen. (`Int`).
-
-`use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (bool).
-
-### Blindfold Secret Info
-
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Clear Secret Info
-
-Clear Secret is used for the secrets that are not encrypted.
-
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Cloud Edge Segment
-
-Advertise on a segment on a Cloud Edge.
-
-`cloud_edge` - (Required) x-required. See [ref](#ref) below for details.
-
-`ip` - (Required) Use given IP address as VIP on the Cloud Edge (`String`).
-
-`ipv6` - (Optional) Use given IPv6 address as VIP on the Cloud Edge (`String`).
-
-`segment` - (Required) x-required. See [ref](#ref) below for details.
-
-### Custom Hash Algorithms
-
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
-
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
-
-### Custom Security
-
-Custom selection of TLS versions and cipher suites.
-
-`cipher_suites` - (Required) The TLS listener will only support the specified cipher list. (`String`).
-
-`max_version` - (Optional) Maximum TLS protocol version. (`String`).
-
-`min_version` - (Optional) Minimum TLS protocol version. (`String`).
-
-### Default Security
-
-TLS v1.2+ with PFS ciphers and strong crypto algorithms..
-
-### Default V6 Vip
-
-Use the default VIP, system allocated or configured in the virtual network.
-
-### Default Vip
-
-Use the default VIP, system allocated or configured in the virtual network.
-
-### Disable Ocsp Stapling
-
-This is the default behavior if no choice is selected..
-
-### Low Security
-
-TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
-
-### Medium Security
-
-TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
-
-### No Crl
-
-Client certificate revocation status is not verified.
-
-### No Mtls
-
-x-displayName: "Disable".
+`sni` - (Optional) Enables Server Name Indication for Loadbalancer (`Bool`).
 
 ### Origin Pools Weights
 
 Origin pools and weights used for this load balancer..
 
 `endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
+
+###### One of the arguments from this list "pool, cluster" must be set
 
 `cluster` - (Optional) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
 
@@ -258,43 +129,61 @@ Origin pools and weights used for this load balancer..
 
 `weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
 
-### Private Key
+### Advertise Choice Advertise Custom
 
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+Advertise this VIP on specific sites.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+`advertise_where` - (Required) Where should this load balancer be available. See [Advertise Custom Advertise Where ](#advertise-custom-advertise-where) below for details.
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+### Advertise Choice Advertise On Public
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+Advertise this load balancer on public network.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+### Advertise Custom Advertise Where
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+Where should this load balancer be available.
 
-### Ref
+###### One of the arguments from this list "virtual_network, site_segment, virtual_site_segment, cloud_edge_segment, segment, site, virtual_site, vk8s_service" must be set
 
-Reference to another volterra object is shown like below
+`site` - (Optional) Advertise on a customer site and a given network.. See [Choice Site ](#choice-site) below for details.
 
-name - (Required) then name will hold the referred object's(e.g. route's) name. (String).
+`virtual_network` - (Optional) Advertise on a virtual network. See [Choice Virtual Network ](#choice-virtual-network) below for details.
 
-namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
+`virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Choice Virtual Site ](#choice-virtual-site) below for details.
 
-tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+`vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Choice Vk8s Service ](#choice-vk8s-service) below for details.
 
-### Segment
+###### One of the arguments from this list "use_default_port, port" must be set
 
-Advertise on a segment.
+`port` - (Optional) TCP port to Listen. (`Int`).
 
-`ipv4_vip` - (Required) Configure IPV4 VIP address (`String`).
+`use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (`Bool`).
 
-`ipv6_vip` - (Optional) Configure IPV6 VIP address (`String`).
+### Choice Custom Security
 
-`segment` - (Required) x-required. See [ref](#ref) below for details.
+Custom selection of TLS versions and cipher suites.
 
-### Site
+`cipher_suites` - (Required) The TLS listener will only support the specified cipher list. (`String`).
+
+`max_version` - (Optional) Maximum TLS protocol version. (`String`).
+
+`min_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+### Choice Default Security
+
+TLS v1.2+ with PFS ciphers and strong crypto algorithms..
+
+### Choice Low Security
+
+TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
+
+### Choice Medium Security
+
+TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
+
+### Choice Site
 
 Advertise on a customer site and a given network..
 
@@ -306,113 +195,151 @@ Advertise on a customer site and a given network..
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
-### Site Segment
+### Choice Virtual Network
 
-Advertise on a segment on a site.
+Advertise on a virtual network.
 
-`ip` - (Required) Use given IP address as VIP on the site (`String`).
+###### One of the arguments from this list "default_v6_vip, specific_v6_vip" can be set
 
-`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+`default_v6_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (`Bool`).
 
-`segment` - (Required) x-required. See [ref](#ref) below for details.
+`specific_v6_vip` - (Optional) Use given IPV6 address as VIP on virtual Network (`String`).
 
-`site` - (Required) x-required. See [ref](#ref) below for details.
+###### One of the arguments from this list "default_vip, specific_vip" can be set
 
-### Tls Cert Params
+`default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (`Bool`).
 
-Multiple domains with separate TLS certificates on this load balancer.
+`specific_vip` - (Optional) Use given IPV4 address as VIP on virtual Network (`String`).
 
-`certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
+`virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
 
-`no_mtls` - (Optional) x-displayName: "Disable" (bool).
+### Choice Virtual Site
 
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+Advertise on a customer virtual site and a given network..
 
-`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
+`network` - (Required) IP address of primary network interface in the network (`String`).
 
-### Tls Certificates
+`virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
 
-for example, domain.com and *.domain.com - but use different signature algorithms.
+### Choice Vk8s Service
 
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+Advertise on vK8s Service Network on RE..
 
-`description` - (Optional) Description for the certificate (`String`).
+###### One of the arguments from this list "site, virtual_site" must be set
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`site` - (Optional) Reference to site object. See [ref](#ref) below for details.
 
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+`virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
 
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+### Crl Choice No Crl
 
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
+Client certificate revocation status is not verified.
 
-### Tls Config
-
-Configuration of TLS settings such as min/max TLS version and ciphersuites.
-
-`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Custom Security ](#custom-security) below for details.
-
-`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (bool).
-
-`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (bool).
-
-`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (bool).
-
-### Tls Parameters
-
-Single RSA and/or ECDSA TLS certificate for all domains on this load balancer.
-
-`no_mtls` - (Optional) x-displayName: "Disable" (bool).
-
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
-
-`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
-
-`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
-
-### Tls Tcp
+### Loadbalancer Type Tls Tcp
 
 User is responsible for managing DNS to this load balancer..
 
-`tls_cert_params` - (Optional) Multiple domains with separate TLS certificates on this load balancer. See [Tls Cert Params ](#tls-cert-params) below for details.
+###### One of the arguments from this list "tls_cert_params, tls_parameters" must be set
 
-`tls_parameters` - (Optional) Single RSA and/or ECDSA TLS certificate for all domains on this load balancer. See [Tls Parameters ](#tls-parameters) below for details.
+`tls_cert_params` - (Optional) Select/Add one or more TLS Certificate objects to associate with this Load Balancer. See [Tls Certificates Choice Tls Cert Params ](#tls-certificates-choice-tls-cert-params) below for details.
 
-### Tls Tcp Auto Cert
+`tls_parameters` - (Optional) Upload a TLS certificate specifically for this Load Balancer (certificate must cover all Load Balancer domain names). See [Tls Certificates Choice Tls Parameters ](#tls-certificates-choice-tls-parameters) below for details.
+
+### Loadbalancer Type Tls Tcp Auto Cert
 
 or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud)..
 
-`no_mtls` - (Optional) x-displayName: "Disable" (bool).
+###### One of the arguments from this list "no_mtls, use_mtls" must be set
 
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
+`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
+`use_mtls` - (Optional) x-displayName: "Enable". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
 
-### Use Default Port
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Tcp Auto Cert Tls Config ](#tls-tcp-auto-cert-tls-config) below for details.
 
-For HTTP, default is 80. For HTTPS/SNI, default is 443..
+### Mtls Choice No Mtls
 
-### Use Mtls
+x-displayName: "Disable".
+
+### Mtls Choice Use Mtls
 
 x-displayName: "Enable".
 
+###### One of the arguments from this list "no_crl, crl" can be set
+
 `crl` - (Optional) Specify the CRL server information to download the certificate revocation list. See [ref](#ref) below for details.
 
-`no_crl` - (Optional) Client certificate revocation status is not verified (bool).
+`no_crl` - (Optional) Client certificate revocation status is not verified (`Bool`).
 
-`trusted_ca` - (Optional) Select/Add a Root CA certificate. See [ref](#ref) below for details.
+###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
 
-`trusted_ca_url` - (Optional) Inline Root CA certificate (`String`).
+`trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Load Balancer. See [ref](#ref) below for details.
 
-`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
+`trusted_ca_url` - (Optional) Upload a Root CA Certificate specifically for this Load Balancer (`String`).
 
-`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Options ](#xfcc-options) below for details.
+###### One of the arguments from this list "xfcc_disabled, xfcc_options" can be set
 
-### Use System Defaults
+`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (`Bool`).
+
+`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Header Xfcc Options ](#xfcc-header-xfcc-options) below for details.
+
+### Ocsp Stapling Choice Custom Hash Algorithms
+
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Ocsp Stapling Choice Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
+
+### Ocsp Stapling Choice Use System Defaults
 
 F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
-### Vault Secret Info
+### Port Choice Use Default Port
+
+For HTTP, default is 80. For HTTPS/SNI, default is 443..
+
+### Private Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Ref
+
+Reference to another volterra object is shown like below
+
+name - (Required) then name will hold the referred object's(e.g. route's) name. (String).
+
+namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
+
+tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Secret Info Oneof Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Secret Info Oneof Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted.
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -426,59 +353,137 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Virtual Network
-
-Advertise on a virtual network.
-
-`default_v6_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
-
-`specific_v6_vip` - (Optional) Use given IPV6 address as VIP on virtual Network (`String`).
-
-`default_vip` - (Optional) Use the default VIP, system allocated or configured in the virtual network (bool).
-
-`specific_vip` - (Optional) Use given IPV4 address as VIP on virtual Network (`String`).
-
-`virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
-
-### Virtual Site
-
-Advertise on a customer virtual site and a given network..
-
-`network` - (Required) IP address of primary network interface in the network (`String`).
-
-`virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
-
-### Virtual Site Segment
-
-Advertise on a segment on a virtual site.
-
-`ip` - (Required) Use given IP address as VIP on the site (`String`).
-
-`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
-
-`segment` - (Required) x-required. See [ref](#ref) below for details.
-
-`virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
-
-### Vk8s Service
-
-Advertise on vK8s Service Network on RE..
-
-`site` - (Optional) Reference to site object. See [ref](#ref) below for details.
-
-`virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
-
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 
-### Xfcc Disabled
+### Service Policy Choice Active Service Policies
+
+Apply the specified list of service policies and bypass the namespace service policy set.
+
+`policies` - (Required) If all policies are evaluated and none match, then the request will be denied by default.. See [ref](#ref) below for details.
+
+### Tls Cert Params Tls Config
+
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
+
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
+
+`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
+
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
+
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
+
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### Tls Certificates Private Key
+
+TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tls Certificates Choice Tls Cert Params
+
+Select/Add one or more TLS Certificate objects to associate with this Load Balancer.
+
+`certificates` - (Required) Select one or more certificates with any domain names.. See [ref](#ref) below for details.
+
+###### One of the arguments from this list "use_mtls, no_mtls" must be set
+
+`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Cert Params Tls Config ](#tls-cert-params-tls-config) below for details.
+
+### Tls Certificates Choice Tls Parameters
+
+Upload a TLS certificate specifically for this Load Balancer (certificate must cover all Load Balancer domain names).
+
+###### One of the arguments from this list "no_mtls, use_mtls" must be set
+
+`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
+
+`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Parameters Tls Certificates ](#tls-parameters-tls-certificates) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Parameters Tls Config ](#tls-parameters-tls-config) below for details.
+
+### Tls Parameters Tls Certificates
+
+for example, domain.com and *.domain.com - but use different signature algorithms.
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
+
+### Tls Parameters Tls Config
+
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
+
+###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
+
+`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
+
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
+
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
+
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### Tls Tcp Auto Cert Tls Config
+
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
+
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
+
+`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
+
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
+
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
+
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### V6 Vip Choice Default V6 Vip
+
+Use the default VIP, system allocated or configured in the virtual network.
+
+### Vip Choice Default Vip
+
+Use the default VIP, system allocated or configured in the virtual network.
+
+### Xfcc Header Xfcc Disabled
 
 No X-Forwarded-Client-Cert header will be added.
 
-### Xfcc Options
+### Xfcc Header Xfcc Options
 
 X-Forwarded-Client-Cert header will be added with the configured fields.
 
@@ -488,3 +493,4 @@ Attribute Reference
 -------------------
 
 -	`id` - This is the id of the configured tcp_loadbalancer.
+-	`cname` - This is the hostname of the configured tcp_loadbalancer.

@@ -2525,103 +2525,103 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) AssignDomainOwner(ctx context.Context, in *AssignDomainOwnerRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.AssignDomainOwner", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.AssignDomainOwner")
 	return c.CustomAPIServer.AssignDomainOwner(ctx, in)
 }
 func (c *customAPIInprocClient) CreateDebugUser(ctx context.Context, in *CreateDebugUserRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.CreateDebugUser", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.CreateDebugUser")
 	return c.CustomAPIServer.CreateDebugUser(ctx, in)
 }
 func (c *customAPIInprocClient) DeleteDebugUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.DeleteDebugUser", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.DeleteDebugUser")
 	return c.CustomAPIServer.DeleteDebugUser(ctx, in)
 }
 func (c *customAPIInprocClient) DeleteImage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.DeleteImage", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.DeleteImage")
 	return c.CustomAPIServer.DeleteImage(ctx, in)
 }
 func (c *customAPIInprocClient) DeleteTenant(ctx context.Context, in *DeleteTenantRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.DeleteTenant", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.DeleteTenant")
 	return c.CustomAPIServer.DeleteTenant(ctx, in)
 }
 func (c *customAPIInprocClient) DisableTenantLevelOTP(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.DisableTenantLevelOTP", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.DisableTenantLevelOTP")
 	return c.CustomAPIServer.DisableTenantLevelOTP(ctx, in)
 }
 func (c *customAPIInprocClient) EnableTenantLevelOTP(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.EnableTenantLevelOTP", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.EnableTenantLevelOTP")
 	return c.CustomAPIServer.EnableTenantLevelOTP(ctx, in)
 }
 func (c *customAPIInprocClient) GetDebugUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*DebugUser, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetDebugUser", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetDebugUser")
 	return c.CustomAPIServer.GetDebugUser(ctx, in)
 }
 func (c *customAPIInprocClient) GetFavIcon(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetFavIcon", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetFavIcon")
 	return c.CustomAPIServer.GetFavIcon(ctx, in)
 }
 func (c *customAPIInprocClient) GetIDMSettings(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ves_io_schema_views_tenant_configuration.GlobalSpecType, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetIDMSettings", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetIDMSettings")
 	return c.CustomAPIServer.GetIDMSettings(ctx, in)
 }
 func (c *customAPIInprocClient) GetImage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetImage", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetImage")
 	return c.CustomAPIServer.GetImage(ctx, in)
 }
 func (c *customAPIInprocClient) GetLastLoginMap(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*LastLoginMap, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetLastLoginMap", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetLastLoginMap")
 	return c.CustomAPIServer.GetLastLoginMap(ctx, in)
 }
 func (c *customAPIInprocClient) GetLoginEvents(ctx context.Context, in *GetLoginEventsRequest, opts ...grpc.CallOption) (*LoginEventsMap, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetLoginEvents", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetLoginEvents")
 	return c.CustomAPIServer.GetLoginEvents(ctx, in)
 }
 func (c *customAPIInprocClient) GetLoginEventsInTimeFrame(ctx context.Context, in *GetLoginEventsInTimeFrameRequest, opts ...grpc.CallOption) (*LoginEventsMap, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetLoginEventsInTimeFrame", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetLoginEventsInTimeFrame")
 	return c.CustomAPIServer.GetLoginEventsInTimeFrame(ctx, in)
 }
 func (c *customAPIInprocClient) GetLogo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetLogo", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetLogo")
 	return c.CustomAPIServer.GetLogo(ctx, in)
 }
 func (c *customAPIInprocClient) GetPasswordPolicy(ctx context.Context, in *GetPasswordPolicyRequest, opts ...grpc.CallOption) (*PasswordPolicyPublicAccess, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetPasswordPolicy", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetPasswordPolicy")
 	return c.CustomAPIServer.GetPasswordPolicy(ctx, in)
 }
 func (c *customAPIInprocClient) GetSupportInfo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SupportInfo, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetSupportInfo", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetSupportInfo")
 	return c.CustomAPIServer.GetSupportInfo(ctx, in)
 }
 func (c *customAPIInprocClient) GetTenantEscalationDoc(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetTenantEscalationDoc", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetTenantEscalationDoc")
 	return c.CustomAPIServer.GetTenantEscalationDoc(ctx, in)
 }
 func (c *customAPIInprocClient) GetTenantSettings(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*TenantSettingsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.GetTenantSettings", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetTenantSettings")
 	return c.CustomAPIServer.GetTenantSettings(ctx, in)
 }
 func (c *customAPIInprocClient) ListInactiveUsers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.ListInactiveUsers", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.ListInactiveUsers")
 	return c.CustomAPIServer.ListInactiveUsers(ctx, in)
 }
 func (c *customAPIInprocClient) LookupCname(ctx context.Context, in *LookupCnameRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.LookupCname", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.LookupCname")
 	return c.CustomAPIServer.LookupCname(ctx, in)
 }
 func (c *customAPIInprocClient) UnassignDomainOwner(ctx context.Context, in *UnassignDomainOwnerRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.UnassignDomainOwner", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.UnassignDomainOwner")
 	return c.CustomAPIServer.UnassignDomainOwner(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateIDMSettings(ctx context.Context, in *ves_io_schema_views_tenant_configuration.GlobalSpecType, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.UpdateIDMSettings", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.UpdateIDMSettings")
 	return c.CustomAPIServer.UpdateIDMSettings(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateImage(ctx context.Context, in *UpdateImageRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.UpdateImage", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.UpdateImage")
 	return c.CustomAPIServer.UpdateImage(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateTenantSettings(ctx context.Context, in *UpdateTenantSettingsRequest, opts ...grpc.CallOption) (*UpdateTenantSettingsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.tenant.CustomAPI.UpdateTenantSettings", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.UpdateTenantSettings")
 	return c.CustomAPIServer.UpdateTenantSettings(ctx, in)
 }
 

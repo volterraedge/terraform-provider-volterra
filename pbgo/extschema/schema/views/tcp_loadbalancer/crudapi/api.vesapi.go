@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3742,16 +3757,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCP",
             "properties": {
                 "tls_cert_params": {
-                    "description": "Exclusive with [tls_parameters]\n Multiple domains with separate TLS certificates on this load balancer",
-                    "title": "TLS Parameters With Certificates",
+                    "description": "Exclusive with [tls_parameters]\n Select/Add one or more TLS Certificate objects to associate with this Load Balancer",
+                    "title": "TLS Certificates",
                     "$ref": "#/definitions/viewsDownstreamTLSCertsParams",
-                    "x-displayname": "Multiple Certificates"
+                    "x-displayname": "TLS Certificates"
                 },
                 "tls_parameters": {
-                    "description": "Exclusive with [tls_cert_params]\n Single RSA and/or ECDSA TLS certificate for all domains on this load balancer",
-                    "title": "TLS Parameters With Inline Certificates",
+                    "description": "Exclusive with [tls_cert_params]\n Upload a TLS certificate specifically for this Load Balancer (certificate must cover all Load Balancer domain names)",
+                    "title": "Inline TLS Parameters (legacy)",
                     "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
-                    "x-displayname": "Single Certificate"
+                    "x-displayname": "Inline Certificate (legacy)"
                 }
             }
         },
@@ -3841,6 +3856,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "virtual_host_status": {
+                    "description": " DNS related Virtual Host status",
+                    "title": "DNS Virtual Host Status",
+                    "$ref": "#/definitions/virtual_hostDNSVHostStatusType",
+                    "x-displayname": "DNS Virtual Host Status"
                 }
             }
         },
@@ -3990,7 +4011,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -4007,18 +4028,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": " Select/Add a Root CA certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA Certificate object to associate with this Load Balancer",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select a Root CA certificate"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Upload a Root CA Certificate specifically for this Load Balancer\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Upload a new Root CA certificate",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
@@ -4795,6 +4816,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostAutoCertInfoType",
                     "x-displayname": "Auto Cert Information"
                 },
+                "cert_state": {
+                    "description": " State of Custom certificate or Auto certificate generation.",
+                    "title": "Cert State",
+                    "$ref": "#/definitions/virtual_hostCertificationState",
+                    "x-displayname": "Cert State"
+                },
                 "default_lb_with_sni": {
                     "description": "Exclusive with [no_sni sni]\n Enables Server Name Indication for Loadbalancer\n Also enables usage as Default LB for Non SNI Clients",
                     "title": "SNI and Default LB",
@@ -5048,7 +5075,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostCertificationState": {
             "type": "string",
-            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate",
+            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate\n - AutoCertAccountRateLimited: Auto Cert Account Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertDomainRateLimited: Auto Cert Domain Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - CertificateExpired: Certificate Expired\n\nCertificate has expired",
             "title": "Certification State",
             "enum": [
                 "AutoCertDisabled",
@@ -5065,7 +5092,10 @@ var APISwaggerJSON string = `{
                 "AutoCertError",
                 "PreDomainChallengePending",
                 "DomainChallengeStarted",
-                "AutoCertInitialize"
+                "AutoCertInitialize",
+                "AutoCertAccountRateLimited",
+                "AutoCertDomainRateLimited",
+                "CertificateExpired"
             ],
             "default": "AutoCertDisabled",
             "x-displayname": "Certification State",
@@ -5098,6 +5128,66 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Value"
                 }
             }
+        },
+        "virtual_hostDNSVHostStatusType": {
+            "type": "object",
+            "description": "DNS related Virtual Host status",
+            "title": "DNS Virtual Host Status Type",
+            "x-displayname": "DNS Virtual Host Status",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.DNSVHostStatusType",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": " Description of error during DNS configuration\n\nExample: - \"value\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "value"
+                },
+                "existing_certificate_state": {
+                    "type": "string",
+                    "description": " Status of Existing Auto Certficate\n\nExample: - \"Certificate Valid or Certificate Expired or Certificate Invalid\"-",
+                    "title": "Existing Certificate Status",
+                    "x-displayname": "Existing Certificate Status",
+                    "x-ves-example": "Certificate Valid or Certificate Expired or Certificate Invalid"
+                },
+                "renew_certificate_state": {
+                    "description": " State of auto certificate generation.",
+                    "title": "Certificate Renewal Status",
+                    "$ref": "#/definitions/virtual_hostCertificationState",
+                    "x-displayname": "Certificate Renewal Status"
+                },
+                "state": {
+                    "description": " State of the virtual host",
+                    "title": "Virtual Host state",
+                    "$ref": "#/definitions/virtual_hostVirtualHostState",
+                    "x-displayname": "Virtual Host State"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "virtual_hostVirtualHostState": {
+            "type": "string",
+            "description": "State of the virtual host\n\n - VIRTUAL_HOST_READY: VIRTUAL_HOST_READY\n\nVirtual host is ready to install\n - VIRTUAL_HOST_PENDING_VERIFICATION: VIRTUAL_HOST_PENDING_VERIFICATION\n\nVirtual host is verfication pending for some or all of its domains\n - VIRTUAL_HOST_VERIFICATION_FAILED: VIRTUAL_HOST_VERIFICATION_FAILED\n\nVirtual host has one or more domains for which verification failed\n - VIRTUAL_HOST_PENDING_DNS_DELEGATION: VIRTUAL_HOST_PENDING_DNS_DELEGATION\n\nVirtual host is pending DNS delegation\n - VIRTUAL_HOST_PENDING_A_RECORD: VIRTUAL_HOST_PENDING_A_RECORD\n\nVirtual host is waiting for one or more A records to be created\n - VIRTUAL_HOST_DNS_A_RECORD_ADDED: VIRTUAL_HOST_DNS_A_RECORD_ADDED\n\nDNS A record has been added for this Virtual host\n - VIRTUAL_HOST_INTERNET_NLB_PENDING_CREATION: VIRTUAL_HOST_INTERNET_NLB_PENDING_CREATION\n\nInternet facing NLB, is being created on the site/sites belonging to the virtual site\n - VIRTUAL_HOST_INTERNET_NLB_CREATION_FAILED: VIRTUAL_HOST_INTERNET_NLB_CREATION_FAILED\n\nInternet NLB creation failed on the site/sites. InternetNLBVIPStatus will have more information.",
+            "title": "VirtualHostState",
+            "enum": [
+                "VIRTUAL_HOST_READY",
+                "VIRTUAL_HOST_PENDING_VERIFICATION",
+                "VIRTUAL_HOST_VERIFICATION_FAILED",
+                "VIRTUAL_HOST_PENDING_DNS_DELEGATION",
+                "VIRTUAL_HOST_PENDING_A_RECORD",
+                "VIRTUAL_HOST_DNS_A_RECORD_ADDED",
+                "VIRTUAL_HOST_INTERNET_NLB_PENDING_CREATION",
+                "VIRTUAL_HOST_INTERNET_NLB_CREATION_FAILED"
+            ],
+            "default": "VIRTUAL_HOST_READY",
+            "x-displayname": "Virtual Host State",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host.VirtualHostState"
         },
         "virtual_host_dns_infoDnsInfo": {
             "type": "object",

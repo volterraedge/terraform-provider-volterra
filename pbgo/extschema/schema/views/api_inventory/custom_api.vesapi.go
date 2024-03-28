@@ -45,6 +45,24 @@ func (c *CustomAPIPrivateGrpcClient) doRPCGetPathSuggestions(ctx context.Context
 	return rsp, err
 }
 
+func (c *CustomAPIPrivateGrpcClient) doRPCUpdateApiDefinitionReference(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UpdateApiDefinitionRefReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_inventory.UpdateApiDefinitionRefReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.UpdateApiDefinitionReference(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIPrivateGrpcClient) doRPCUpdateApiInventoryLists(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UpdateApiInventoryListsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_inventory.UpdateApiInventoryListsReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.UpdateApiInventoryLists(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIPrivateGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -76,6 +94,10 @@ func NewCustomAPIPrivateGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetPathSuggestions"] = ccl.doRPCGetPathSuggestions
+
+	rpcFns["UpdateApiDefinitionReference"] = ccl.doRPCUpdateApiDefinitionReference
+
+	rpcFns["UpdateApiInventoryLists"] = ccl.doRPCUpdateApiInventoryLists
 
 	ccl.rpcFns = rpcFns
 
@@ -175,6 +197,197 @@ func (c *CustomAPIPrivateRestClient) doRPCGetPathSuggestions(ctx context.Context
 	return pbRsp, nil
 }
 
+func (c *CustomAPIPrivateRestClient) doRPCUpdateApiDefinitionReference(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UpdateApiDefinitionRefReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_inventory.UpdateApiDefinitionRefReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("api_definition", fmt.Sprintf("%v", req.ApiDefinition))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &UpdateApiDefinitionRefResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.UpdateApiDefinitionRefResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIPrivateRestClient) doRPCUpdateApiInventoryLists(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UpdateApiInventoryListsReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.api_inventory.UpdateApiInventoryListsReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		for _, item := range req.ApiInventoryExclusionListDeltaAdded {
+			q.Add("api_inventory_exclusion_list_delta_added", fmt.Sprintf("%v", item))
+		}
+		for _, item := range req.ApiInventoryExclusionListDeltaRemoved {
+			q.Add("api_inventory_exclusion_list_delta_removed", fmt.Sprintf("%v", item))
+		}
+		for _, item := range req.ApiInventoryInclusionListDeltaAdded {
+			q.Add("api_inventory_inclusion_list_delta_added", fmt.Sprintf("%v", item))
+		}
+		for _, item := range req.ApiInventoryInclusionListDeltaRemoved {
+			q.Add("api_inventory_inclusion_list_delta_removed", fmt.Sprintf("%v", item))
+		}
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("new_api_definition_hash", fmt.Sprintf("%v", req.NewApiDefinitionHash))
+		q.Add("new_api_definition_timestamp", fmt.Sprintf("%v", req.NewApiDefinitionTimestamp))
+		for _, item := range req.NonApiEndpointsDeltaAdded {
+			q.Add("non_api_endpoints_delta_added", fmt.Sprintf("%v", item))
+		}
+		for _, item := range req.NonApiEndpointsDeltaRemoved {
+			q.Add("non_api_endpoints_delta_removed", fmt.Sprintf("%v", item))
+		}
+		q.Add("old_api_definition_hash", fmt.Sprintf("%v", req.OldApiDefinitionHash))
+		q.Add("old_api_definition_timestamp", fmt.Sprintf("%v", req.OldApiDefinitionTimestamp))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &UpdateApiInventoryListsResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.api_inventory.UpdateApiInventoryListsResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIPrivateRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -201,6 +414,10 @@ func NewCustomAPIPrivateRestClient(baseURL string, hc http.Client) server.Custom
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetPathSuggestions"] = ccl.doRPCGetPathSuggestions
 
+	rpcFns["UpdateApiDefinitionReference"] = ccl.doRPCUpdateApiDefinitionReference
+
+	rpcFns["UpdateApiInventoryLists"] = ccl.doRPCUpdateApiInventoryLists
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -214,8 +431,16 @@ type customAPIPrivateInprocClient struct {
 }
 
 func (c *customAPIPrivateInprocClient) GetPathSuggestions(ctx context.Context, in *GetPathSuggestionsReq, opts ...grpc.CallOption) (*ves_io_schema.SuggestValuesResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_inventory.CustomAPIPrivate.GetPathSuggestions", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.CustomAPIPrivate.GetPathSuggestions")
 	return c.CustomAPIPrivateServer.GetPathSuggestions(ctx, in)
+}
+func (c *customAPIPrivateInprocClient) UpdateApiDefinitionReference(ctx context.Context, in *UpdateApiDefinitionRefReq, opts ...grpc.CallOption) (*UpdateApiDefinitionRefResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiDefinitionReference")
+	return c.CustomAPIPrivateServer.UpdateApiDefinitionReference(ctx, in)
+}
+func (c *customAPIPrivateInprocClient) UpdateApiInventoryLists(ctx context.Context, in *UpdateApiInventoryListsReq, opts ...grpc.CallOption) (*UpdateApiInventoryListsResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiInventoryLists")
+	return c.CustomAPIPrivateServer.UpdateApiInventoryLists(ctx, in)
 }
 
 func NewCustomAPIPrivateInprocClient(svc svcfw.Service) CustomAPIPrivateClient {
@@ -272,6 +497,72 @@ func (s *customAPIPrivateSrv) GetPathSuggestions(ctx context.Context, in *GetPat
 
 	return rsp, nil
 }
+func (s *customAPIPrivateSrv) UpdateApiDefinitionReference(ctx context.Context, in *UpdateApiDefinitionRefReq) (*UpdateApiDefinitionRefResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.api_inventory.CustomAPIPrivate")
+	cah, ok := ah.(CustomAPIPrivateServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIPrivateServer", ah)
+	}
+
+	var (
+		rsp *UpdateApiDefinitionRefResp
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiDefinitionReference"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UpdateApiDefinitionReference(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
+func (s *customAPIPrivateSrv) UpdateApiInventoryLists(ctx context.Context, in *UpdateApiInventoryListsReq) (*UpdateApiInventoryListsResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.api_inventory.CustomAPIPrivate")
+	cah, ok := ah.(CustomAPIPrivateServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIPrivateServer", ah)
+	}
+
+	var (
+		rsp *UpdateApiInventoryListsResp
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiInventoryLists"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UpdateApiInventoryLists(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
 
 func NewCustomAPIPrivateServer(svc svcfw.Service) CustomAPIPrivateServer {
 	return &customAPIPrivateSrv{svc: svc}
@@ -295,6 +586,206 @@ var CustomAPIPrivateSwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/private/namespaces/{namespace}/api_definitions/{name}/api_inventory_lists": {
+            "post": {
+                "summary": "Update API Inventory Lists",
+                "description": "Updates the API Inventory lists, which are part of API Definition object.\nThe purpose of this private method is to synchronize API Inventory actions across akar and asterix.",
+                "operationId": "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiInventoryLists",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_inventoryUpdateApiInventoryListsResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nNamespace for the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"all-api\"\nName of the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_inventoryUpdateApiInventoryListsReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPIPrivate"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-updateapiinventorylists"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiInventoryLists"
+            },
+            "x-displayname": "API Inventory Private APIs",
+            "x-ves-proto-service": "ves.io.schema.views.api_inventory.CustomAPIPrivate",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/private/namespaces/{namespace}/api_inventories/{name}/api_definition_reference": {
+            "post": {
+                "summary": "Update API Definition Reference",
+                "description": "Updates the reference to API Definition, effectively updates the API Inventory for the Loadbalancer.\nThe purpose of this private method is to synchronize API Inventory actions across akar and asterix.",
+                "operationId": "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiDefinitionReference",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_inventoryUpdateApiDefinitionRefResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nNamespace for the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"all-api\"\nName of the object to be configured",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_inventoryUpdateApiDefinitionRefReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPIPrivate"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-updateapidefinitionreference"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiDefinitionReference"
+            },
+            "x-displayname": "API Inventory Private APIs",
+            "x-ves-proto-service": "ves.io.schema.views.api_inventory.CustomAPIPrivate",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
         "/private/namespaces/{namespace}/api_inventories/{name}/api_endpoint_path/suggestion": {
             "post": {
                 "summary": "Get Path Suggestions",
@@ -431,6 +922,202 @@ var CustomAPIPrivateSwaggerJSON string = `{
                 }
             }
         },
+        "api_inventoryUpdateApiDefinitionRefReq": {
+            "type": "object",
+            "description": "Request shape of the 'UpdateApiDefinitionRef' RPC",
+            "title": "Update API Definition Reference Request",
+            "x-displayname": "Update API Definition Reference Request",
+            "x-ves-proto-message": "ves.io.schema.views.api_inventory.UpdateApiDefinitionRefReq",
+            "properties": {
+                "api_definition": {
+                    "description": " A reference to an API Definition object",
+                    "title": "api_definition",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "API Definition Reference"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the object to be configured\n\nExample: - \"all-api\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "all-api"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace for the object to be configured\n\nExample: - \"default\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                }
+            }
+        },
+        "api_inventoryUpdateApiDefinitionRefResp": {
+            "type": "object",
+            "description": "Response shape of the 'UpdateApiDefinitionRef' RPC",
+            "title": "Update API Definition Reference Response",
+            "x-displayname": "Update API Definition Reference Response",
+            "x-ves-proto-message": "ves.io.schema.views.api_inventory.UpdateApiDefinitionRefResp"
+        },
+        "api_inventoryUpdateApiInventoryListsReq": {
+            "type": "object",
+            "description": "Request shape of the 'UpdateApiInventoryLists' RPC",
+            "title": "Update API Inventory Lists Request",
+            "x-displayname": "Update API Inventory Lists Request",
+            "x-ves-proto-message": "ves.io.schema.views.api_inventory.UpdateApiInventoryListsReq",
+            "properties": {
+                "api_inventory_exclusion_list_delta_added": {
+                    "type": "array",
+                    "description": " List of API Endpoints that were added to the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_exclusion_list_delta_added",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Inventory Exclusion List Delta Added",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_exclusion_list_delta_removed": {
+                    "type": "array",
+                    "description": " List of API Endpoints that were removed from the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_exclusion_list_delta_removed",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Inventory Exclusion List Delta Removed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_inclusion_list_delta_added": {
+                    "type": "array",
+                    "description": " List of API Endpoints that were added to the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_inclusion_list_delta_added",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Inventory Inclusion List Delta Added",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_inclusion_list_delta_removed": {
+                    "type": "array",
+                    "description": " List of API Endpoints that were removed from the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_inclusion_list_delta_removed",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Inventory Inclusion List Delta Removed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the object to be configured\n\nExample: - \"all-api\"-",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "all-api"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace for the object to be configured\n\nExample: - \"default\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default"
+                },
+                "new_api_definition_hash": {
+                    "type": "string",
+                    "description": " The hash of the API Definition object after the inventory lists update",
+                    "title": "new_api_definition_timestamp",
+                    "x-displayname": "New API Definition Hash"
+                },
+                "new_api_definition_timestamp": {
+                    "type": "string",
+                    "description": " The timestamp of the API Definition object after the inventory lists update",
+                    "title": "new_api_definition_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "New API Definition Timestamp"
+                },
+                "non_api_endpoints_delta_added": {
+                    "type": "array",
+                    "description": " List of Non-API Endpoints that were added to the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "non_api_endpoints_delta_added",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Discovery Exclusion List Delta Added",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "non_api_endpoints_delta_removed": {
+                    "type": "array",
+                    "description": " List of Non-API Endpoints that were removed from the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "non_api_endpoints_delta_removed",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Discovery Exclusion List Delta Removed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "old_api_definition_hash": {
+                    "type": "string",
+                    "description": " The hash of the API Definition object before the inventory lists update",
+                    "title": "old_api_definition_hash",
+                    "x-displayname": "Old API Definition Hash"
+                },
+                "old_api_definition_timestamp": {
+                    "type": "string",
+                    "description": " The timestamp of the API Definition object before the inventory lists update",
+                    "title": "old_api_definition_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Old API Definition Timestamp"
+                }
+            }
+        },
+        "api_inventoryUpdateApiInventoryListsResp": {
+            "type": "object",
+            "description": "Response shape of the 'UpdateApiInventoryLists' RPC",
+            "title": "Update API Inventory Lists Response",
+            "x-displayname": "Update API Inventory Lists Response",
+            "x-ves-proto-message": "ves.io.schema.views.api_inventory.UpdateApiInventoryListsResp"
+        },
+        "schemaHttpMethod": {
+            "type": "string",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
+            "title": "HttpMethod",
+            "enum": [
+                "ANY",
+                "GET",
+                "HEAD",
+                "POST",
+                "PUT",
+                "DELETE",
+                "CONNECT",
+                "OPTIONS",
+                "TRACE",
+                "PATCH"
+            ],
+            "default": "ANY",
+            "x-displayname": "HTTP Method",
+            "x-ves-proto-enum": "ves.io.schema.HttpMethod"
+        },
         "schemaSuggestValuesResp": {
             "type": "object",
             "description": "Response body of SuggestValues request",
@@ -467,6 +1154,89 @@ var CustomAPIPrivateSwaggerJSON string = `{
                     "description": " Suggested value for the field.",
                     "title": "value",
                     "x-displayname": "Value"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
+        "viewsApiOperation": {
+            "type": "object",
+            "description": "API operation according to OpenAPI specification.",
+            "title": "ApiOperation",
+            "x-displayname": "API Operation",
+            "x-ves-proto-message": "ves.io.schema.views.ApiOperation",
+            "properties": {
+                "method": {
+                    "description": " Method to match the input request API method against.\n\nExample: - 'POST'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "HTTP Method",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "type": "string",
+                    "description": " An endpoint path, as specified in OpenAPI, including parameters.\n The path should comply with RFC 3986 and may have parameters according to OpenAPI specification\n\nExample: - \"/api/users/{userid}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "title": "path",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/users/{userid}",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.templated_http_path": "true"
+                    }
                 }
             }
         }

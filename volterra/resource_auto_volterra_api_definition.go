@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 )
 
@@ -120,6 +121,18 @@ func resourceVolterraApiDefinition() *schema.Resource {
 				},
 			},
 
+			"mixed_schema_origin": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"strict_schema_origin": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"swagger_specs": {
 
 				Type: schema.TypeList,
@@ -190,10 +203,10 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("api_inventory_exclusion_list"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		apiInventoryExclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		apiInventoryExclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		createSpec.ApiInventoryExclusionList = apiInventoryExclusionList
 		for i, set := range sl {
-			apiInventoryExclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryExclusionList[i] = &ves_io_schema_views.ApiOperation{}
 			apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
 
 			if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -214,10 +227,10 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("api_inventory_inclusion_list"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		apiInventoryInclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		apiInventoryInclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		createSpec.ApiInventoryInclusionList = apiInventoryInclusionList
 		for i, set := range sl {
-			apiInventoryInclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryInclusionList[i] = &ves_io_schema_views.ApiOperation{}
 			apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
 
 			if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -238,10 +251,10 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("non_api_endpoints"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		nonApiEndpoints := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		nonApiEndpoints := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		createSpec.NonApiEndpoints = nonApiEndpoints
 		for i, set := range sl {
-			nonApiEndpoints[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			nonApiEndpoints[i] = &ves_io_schema_views.ApiOperation{}
 			nonApiEndpointsMapStrToI := set.(map[string]interface{})
 
 			if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -254,6 +267,34 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 				nonApiEndpoints[i].Path = w.(string)
 			}
 
+		}
+
+	}
+
+	//schema_updates_strategy
+
+	schemaUpdatesStrategyTypeFound := false
+
+	if v, ok := d.GetOk("mixed_schema_origin"); ok && !schemaUpdatesStrategyTypeFound {
+
+		schemaUpdatesStrategyTypeFound = true
+
+		if v.(bool) {
+			schemaUpdatesStrategyInt := &ves_io_schema_views_api_definition.CreateSpecType_MixedSchemaOrigin{}
+			schemaUpdatesStrategyInt.MixedSchemaOrigin = &ves_io_schema.Empty{}
+			createSpec.SchemaUpdatesStrategy = schemaUpdatesStrategyInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("strict_schema_origin"); ok && !schemaUpdatesStrategyTypeFound {
+
+		schemaUpdatesStrategyTypeFound = true
+
+		if v.(bool) {
+			schemaUpdatesStrategyInt := &ves_io_schema_views_api_definition.CreateSpecType_StrictSchemaOrigin{}
+			schemaUpdatesStrategyInt.StrictSchemaOrigin = &ves_io_schema.Empty{}
+			createSpec.SchemaUpdatesStrategy = schemaUpdatesStrategyInt
 		}
 
 	}
@@ -325,6 +366,7 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -370,10 +412,10 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("api_inventory_exclusion_list"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		apiInventoryExclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		apiInventoryExclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		updateSpec.ApiInventoryExclusionList = apiInventoryExclusionList
 		for i, set := range sl {
-			apiInventoryExclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryExclusionList[i] = &ves_io_schema_views.ApiOperation{}
 			apiInventoryExclusionListMapStrToI := set.(map[string]interface{})
 
 			if v, ok := apiInventoryExclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -393,10 +435,10 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("api_inventory_inclusion_list"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		apiInventoryInclusionList := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		apiInventoryInclusionList := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		updateSpec.ApiInventoryInclusionList = apiInventoryInclusionList
 		for i, set := range sl {
-			apiInventoryInclusionList[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			apiInventoryInclusionList[i] = &ves_io_schema_views.ApiOperation{}
 			apiInventoryInclusionListMapStrToI := set.(map[string]interface{})
 
 			if v, ok := apiInventoryInclusionListMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -416,10 +458,10 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 	if v, ok := d.GetOk("non_api_endpoints"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		nonApiEndpoints := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+		nonApiEndpoints := make([]*ves_io_schema_views.ApiOperation, len(sl))
 		updateSpec.NonApiEndpoints = nonApiEndpoints
 		for i, set := range sl {
-			nonApiEndpoints[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+			nonApiEndpoints[i] = &ves_io_schema_views.ApiOperation{}
 			nonApiEndpointsMapStrToI := set.(map[string]interface{})
 
 			if v, ok := nonApiEndpointsMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -432,6 +474,32 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 				nonApiEndpoints[i].Path = w.(string)
 			}
 
+		}
+
+	}
+
+	schemaUpdatesStrategyTypeFound := false
+
+	if v, ok := d.GetOk("mixed_schema_origin"); ok && !schemaUpdatesStrategyTypeFound {
+
+		schemaUpdatesStrategyTypeFound = true
+
+		if v.(bool) {
+			schemaUpdatesStrategyInt := &ves_io_schema_views_api_definition.ReplaceSpecType_MixedSchemaOrigin{}
+			schemaUpdatesStrategyInt.MixedSchemaOrigin = &ves_io_schema.Empty{}
+			updateSpec.SchemaUpdatesStrategy = schemaUpdatesStrategyInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("strict_schema_origin"); ok && !schemaUpdatesStrategyTypeFound {
+
+		schemaUpdatesStrategyTypeFound = true
+
+		if v.(bool) {
+			schemaUpdatesStrategyInt := &ves_io_schema_views_api_definition.ReplaceSpecType_StrictSchemaOrigin{}
+			schemaUpdatesStrategyInt.StrictSchemaOrigin = &ves_io_schema.Empty{}
+			updateSpec.SchemaUpdatesStrategy = schemaUpdatesStrategyInt
 		}
 
 	}

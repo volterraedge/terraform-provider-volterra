@@ -55,10 +55,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rules.#.metadata.disable",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = []string{
 		"spec.rules.#.metadata.disable",
 	}

@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.securemesh_site.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.securemesh_site.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.securemesh_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.securemesh_site.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.securemesh_site.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.securemesh_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.securemesh_site.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.securemesh_site.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.securemesh_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.securemesh_site.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.securemesh_site.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.securemesh_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.securemesh_site.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.securemesh_site.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -3909,75 +3892,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -4300,149 +4214,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "x-displayName: \"TLS Certificate\"\nHandle to fetch certificate and key",
@@ -4539,8 +4310,8 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Custom Trusted CA List\"\nCustom trusted CA certificates for validating upstream server certificate",
-                    "title": "Custom List"
+                    "description": "x-displayName: \"Custom Root CA Certificate\"\nCustom Root CA Certificate for validating upstream server certificate",
+                    "title": "Custom Root CA Certificate"
                 },
                 "volterra_certificate": {
                     "description": "x-displayName: \"F5XC Signing Certificate\"\nF5XC certificates for generating intermediate certificate for TLS interception.",
@@ -4548,7 +4319,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "volterra_trusted_ca": {
-                    "description": "x-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
+                    "description": "x-displayName: \"F5XC Default Root CA Certificate\"\nF5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
@@ -4830,12 +4601,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/securemesh_siteObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -5067,12 +4832,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/securemesh_siteObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -5107,33 +4866,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "securemesh_siteObject": {
-            "type": "object",
-            "description": "Secure Mesh site object",
-            "title": "Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.views.securemesh_site.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the tenant",
-                    "title": "spec",
-                    "$ref": "#/definitions/securemesh_siteSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -5288,17 +5020,6 @@ var APISwaggerJSON string = `{
                     "title": "vip_vrrp_mode",
                     "$ref": "#/definitions/schemaVipVrrpType",
                     "x-displayname": "VIP Advertisement Mode"
-                }
-            }
-        },
-        "securemesh_siteSpecType": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.securemesh_site.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/viewssecuremesh_siteGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -6002,175 +5723,6 @@ var APISwaggerJSON string = `{
                 "worker_nodes": {
                     "type": "array",
                     "description": " Names of worker nodes\n\nExample: - \"worker-0\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 128,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Worker Nodes",
-                    "x-ves-example": "worker-0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
-        "viewssecuremesh_siteGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of the Secure Mesh site specification",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Specification",
-            "x-ves-oneof-field-blocked_services_choice": "[\"blocked_services\",\"default_blocked_services\"]",
-            "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
-            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-network_cfg_choice": "[\"custom_network_config\",\"default_network_config\"]",
-            "x-ves-proto-message": "ves.io.schema.views.securemesh_site.GlobalSpecType",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "address",
-                    "maxLength": 256,
-                    "x-displayname": "Geographical Address",
-                    "x-ves-example": "123 Street, city, country, postal code",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "blocked_services": {
-                    "description": "Exclusive with [default_blocked_services]\n Use custom blocked services configuration",
-                    "title": "Custom Blocked Services Configuration",
-                    "$ref": "#/definitions/fleetBlockedServicesListType",
-                    "x-displayname": "Custom Blocked Services Configuration"
-                },
-                "bond_device_list": {
-                    "description": "Exclusive with [no_bond_devices]\n Configure Bond Devices for this Secure Mesh site",
-                    "title": "Configure Bond Devices",
-                    "$ref": "#/definitions/fleetFleetBondDevicesListType",
-                    "x-displayname": "Configure Bond Interfaces"
-                },
-                "coordinates": {
-                    "description": " Coordinates of the site, longitude and latitude",
-                    "title": "coordinates",
-                    "$ref": "#/definitions/siteCoordinates",
-                    "x-displayname": "Coordinates"
-                },
-                "custom_network_config": {
-                    "description": "Exclusive with [default_network_config]\n Use custom networking configuration",
-                    "title": "Custom Network Configuration",
-                    "$ref": "#/definitions/securemesh_siteSmsNetworkConfiguration",
-                    "x-displayname": "Custom Network Configuration"
-                },
-                "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
-                    "title": "Default Blocked Service Configuration",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default Blocked Service Configuration"
-                },
-                "default_network_config": {
-                    "description": "Exclusive with [custom_network_config]\n Use default networking configuration based on certified hardware.",
-                    "title": "Default Network Configuration",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default Network Configuration"
-                },
-                "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
-                    "title": "Disable Logs Streaming",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable Logs Streaming"
-                },
-                "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
-                    "title": "Disable Logs Receiver",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Logs Streaming"
-                },
-                "master_node_configuration": {
-                    "type": "array",
-                    "description": " Configuration of master nodes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
-                    "title": "Master Nodes",
-                    "maxItems": 3,
-                    "items": {
-                        "$ref": "#/definitions/viewsMasterNode"
-                    },
-                    "x-displayname": "Master Nodes",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "3",
-                        "ves.io.schema.rules.repeated.num_items": "1,3"
-                    }
-                },
-                "no_bond_devices": {
-                    "description": "Exclusive with [bond_device_list]\n No Bond Devices configured for this Secure Mesh site",
-                    "title": "No Bond Devices",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Bond Devices"
-                },
-                "offline_survivability_mode": {
-                    "description": " Enable/Disable offline survivability mode",
-                    "title": "Offline Survivability Mode",
-                    "$ref": "#/definitions/viewsOfflineSurvivabilityModeType",
-                    "x-displayname": "Offline Survivability Mode"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version that should be installed on the site\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "Operating System Version",
-                    "maxLength": 256,
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "os": {
-                    "description": " Operating System Details",
-                    "title": "Operating System",
-                    "$ref": "#/definitions/viewsOperatingSystemType",
-                    "x-displayname": "Operating System"
-                },
-                "performance_enhancement_mode": {
-                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
-                    "title": "Performance Enhancement Choice",
-                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
-                    "x-displayname": "Performance Enhancement Mode"
-                },
-                "sw": {
-                    "description": " F5XC Software Details",
-                    "title": "F5XC Software",
-                    "$ref": "#/definitions/viewsVolterraSoftwareType",
-                    "x-displayname": "F5XC Software"
-                },
-                "volterra_certified_hw": {
-                    "type": "string",
-                    "description": " Name for generic server certified hardware to form this Secure Mesh site.\n\nExample: - \"isv-8000-series-voltmesh\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
-                    "title": "Generic Server Certified Hardware",
-                    "minLength": 1,
-                    "x-displayname": "Generic Server Certified Hardware",
-                    "x-ves-example": "isv-8000-series-voltmesh",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.ves_object_name": "true"
-                    }
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired volterra software version that should be installed on the site\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "Software Version",
-                    "maxLength": 256,
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "worker_nodes": {
-                    "type": "array",
-                    "description": " Names of worker nodes\n\nExample: - \"worker-0\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Worker Nodes",
                     "maxItems": 128,
                     "items": {
                         "type": "string"

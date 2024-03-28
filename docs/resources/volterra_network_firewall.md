@@ -29,18 +29,18 @@ resource "volterra_network_firewall" "example" {
       tenant    = "acmecorp"
     }
   }
-
   // One of the arguments from this list "disable_forward_proxy_policy active_forward_proxy_policies forward_proxy_policy_set" must be set
+  disable_forward_proxy_policy = true
 
-  active_forward_proxy_policies {
-    forward_proxy_policies {
+  // One of the arguments from this list "disable_network_policy active_network_policies network_policy_set active_enhanced_firewall_policies" must be set
+
+  active_network_policies {
+    network_policies {
       name      = "test1"
       namespace = "staging"
       tenant    = "acmecorp"
     }
   }
-  // One of the arguments from this list "disable_network_policy active_network_policies network_policy_set active_enhanced_firewall_policies" must be set
-  disable_network_policy = true
 }
 
 ```
@@ -64,45 +64,45 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`active_fast_acls` - (Optional) Fast ACL Active for ths network firewall.. See [Active Fast Acls ](#active-fast-acls) below for details.
+`active_fast_acls` - (Optional) Fast ACL Active for ths network firewall.. See [Fast Acl Choice Active Fast Acls ](#fast-acl-choice-active-fast-acls) below for details.
 
-`disable_fast_acl` - (Optional) Fast ACL is disabled for this network firewall (bool).
+`disable_fast_acl` - (Optional) Fast ACL is disabled for this network firewall (`Bool`).
 
-`fast_acl_set` - (Optional) The list of Virtual Networks / Interfaces is selected by the Fast ACL set object. See [ref](#ref) below for details.
+`fast_acl_set` - (Optional) The list of Virtual Networks / Interfaces is selected by the Fast ACL set object. See [ref](#ref) below for details.(Deprecated)
 
-`active_forward_proxy_policies` - (Optional) L7 firewall for forward proxy.. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
+`active_forward_proxy_policies` - (Optional) L7 firewall for forward proxy.. See [Forward Proxy Policy Choice Active Forward Proxy Policies ](#forward-proxy-policy-choice-active-forward-proxy-policies) below for details.
 
-`disable_forward_proxy_policy` - (Optional) Forward Proxy Policy is disabled for this network firewall (bool).
+`disable_forward_proxy_policy` - (Optional) Forward Proxy Policy is disabled for this network firewall (`Bool`).
 
-`forward_proxy_policy_set` - (Optional) L7 firewall for forward proxy. Assign service_policy_set to be used for forward proxies in this firewall.. See [ref](#ref) below for details.
+`forward_proxy_policy_set` - (Optional) L7 firewall for forward proxy. Assign service_policy_set to be used for forward proxies in this firewall.. See [ref](#ref) below for details.(Deprecated)
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
 
-`active_network_policies` - (Optional) Active firewall policies for this network firewall(L3/L4 firewall).. See [Active Network Policies ](#active-network-policies) below for details.
+`active_network_policies` - (Optional) Active firewall policies for this network firewall(L3/L4 firewall).. See [Network Policy Choice Active Network Policies ](#network-policy-choice-active-network-policies) below for details.
 
-`disable_network_policy` - (Optional) Firewall Policy is disabled for this network firewall (bool).
+`disable_network_policy` - (Optional) Firewall Policy is disabled for this network firewall (`Bool`).
 
-`network_policy_set` - (Optional) - Site Local. See [ref](#ref) below for details.
+`network_policy_set` - (Optional) - Site Local. See [ref](#ref) below for details.(Deprecated)
 
-### Active Enhanced Firewall Policies
-
-with an additional option for service insertion..
-
-`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
-
-### Active Fast Acls
+### Fast Acl Choice Active Fast Acls
 
 Fast ACL Active for ths network firewall..
 
 `fast_acls` - (Required) Ordered List of Fast ACL(s) active for this network firewall. See [ref](#ref) below for details.
 
-### Active Forward Proxy Policies
+### Forward Proxy Policy Choice Active Forward Proxy Policies
 
 L7 firewall for forward proxy..
 
 `forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
 
-### Active Network Policies
+### Network Policy Choice Active Enhanced Firewall Policies
+
+with an additional option for service insertion..
+
+`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
+
+### Network Policy Choice Active Network Policies
 
 Active firewall policies for this network firewall(L3/L4 firewall)..
 

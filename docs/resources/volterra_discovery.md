@@ -20,29 +20,34 @@ resource "volterra_discovery" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "cluster_id no_cluster_id" must be set
+  // One of the arguments from this list "no_cluster_id cluster_id" must be set
   no_cluster_id = true
 
   // One of the arguments from this list "discovery_k8s discovery_consul" must be set
 
   discovery_k8s {
     access_info {
-      // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
+      // One of the arguments from this list "connection_info in_cluster kubeconfig_url" must be set
 
       kubeconfig_url {
         blindfold_secret_info_internal {
           decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
+
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+          store_provider = "value"
         }
 
         secret_encoding_type = "secret_encoding_type"
 
-        // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
+        // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-        clear_secret_info {
-          provider = "box-provider"
-          url      = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+        blindfold_secret_info {
+          decryption_provider = "value"
+
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+          store_provider = "value"
         }
       }
 
@@ -51,16 +56,12 @@ resource "volterra_discovery" "example" {
     }
 
     publish_info {
-      // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
-
-      dns_delegation {
-        dns_mode  = "dns_mode"
-        subdomain = "value"
-      }
+      // One of the arguments from this list "dns_delegation disable publish publish_fqdns" must be set
+      disable = true
     }
   }
   where {
-    // One of the arguments from this list "virtual_site segment_site segment_vsite segment virtual_network site" must be set
+    // One of the arguments from this list "virtual_network site virtual_site" must be set
 
     virtual_network {
       ref {
@@ -95,35 +96,43 @@ Argument Reference
 
 `cluster_id` - (Optional) specified in endpoint object to discover only from this discovery object. (`String`).
 
-`no_cluster_id` - (Optional) of the site will discover from this discovery object. (bool).
+`no_cluster_id` - (Optional) of the site will discover from this discovery object. (`Bool`).
 
-`discovery_consul` - (Optional) Discovery configuration for Hashicorp Consul. See [Discovery Consul ](#discovery-consul) below for details.
+`discovery_consul` - (Optional) Discovery configuration for Hashicorp Consul. See [Discovery Choice Discovery Consul ](#discovery-choice-discovery-consul) below for details.
 
-`discovery_k8s` - (Optional) Discovery configuration for K8s.. See [Discovery K8s ](#discovery-k8s) below for details.
+`discovery_k8s` - (Optional) Discovery configuration for K8s.. See [Discovery Choice Discovery K8s ](#discovery-choice-discovery-k8s) below for details.
 
 `where` - (Required) All the sites where this discovery config is valid.. See [Where ](#where) below for details.
 
-### Access Info
+### Where
 
-Credentials to access Hashicorp Consul service discovery.
+All the sites where this discovery config is valid..
 
-`connection_info` - (Optional) Configuration details to access Hashicorp Consul API service using REST.. See [Connection Info ](#connection-info) below for details.
+###### One of the arguments from this list "virtual_network, site, virtual_site" must be set
 
-`http_basic_auth_info` - (Optional) Username and password used for HTTP/HTTPS access. See [Http Basic Auth Info ](#http-basic-auth-info) below for details.
+`site` - (Optional) Direct reference to site object. See [Ref Or Selector Site ](#ref-or-selector-site) below for details.
 
-`scheme` - (Optional) scheme (`String`).
+`virtual_network` - (Optional) Direct reference to virtual network object. See [Ref Or Selector Virtual Network ](#ref-or-selector-virtual-network) below for details.
 
-### Blindfold Secret Info
+`virtual_site` - (Optional) Direct reference to virtual site object. See [Ref Or Selector Virtual Site ](#ref-or-selector-virtual-site) below for details.
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+### Access Info Connection Info
 
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+Configuration details to access Hashicorp Consul API service using REST..
 
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+`api_server` - (Required) API server must be a fully qualified domain string and port specified as host:port pair (`String`).
 
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+`tls_info` - (Optional) TLS settings to enable transport layer security. See [Connection Info Tls Info ](#connection-info-tls-info) below for details.
 
-### Blindfold Secret Info Internal
+### Access Info Http Basic Auth Info
+
+Username and password used for HTTP/HTTPS access.
+
+`passwd_url` - (Optional) F5XC Secret. URL for password, needs to be fetched from this path. See [Http Basic Auth Info Passwd Url ](#http-basic-auth-info-passwd-url) below for details.
+
+`user_name` - (Optional) username in consul (`String`).
+
+### Ca Certificate Url Blindfold Secret Info Internal
 
 Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
@@ -133,133 +142,215 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Ca Certificate Url
+### Certificate Url Blindfold Secret Info Internal
 
-F5XC Secret. URL to fetch the server CA certificate file.
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+### Config Type Connection Info
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Certificate Url
-
-F5XC Secret. URL to fetch the client certificate file.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Clear Secret Info
-
-Clear Secret is used for the secrets that are not encrypted.
-
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Connection Info
-
-Configuration details to access Hashicorp Consul API service using REST..
+Provide API server access details (endpoint and TLS parameters).
 
 `api_server` - (Required) API server must be a fully qualified domain string and port specified as host:port pair (`String`).
 
-`tls_info` - (Optional) TLS settings to enable transport layer security. See [Tls Info ](#tls-info) below for details.
+`tls_info` - (Optional) TLS settings to enable transport layer security. See [Connection Info Tls Info ](#connection-info-tls-info) below for details.
 
-### Disable
+### Config Type Kubeconfig Url
 
-Disable VIP Publishing.
+Provide kubeconfig file to connect to K8s cluster.
 
-### Disable Internet Vip
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Kubeconfig Url Blindfold Secret Info Internal ](#kubeconfig-url-blindfold-secret-info-internal) below for details.(Deprecated)
 
-Do not enable advertise on external internet vip..
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-### Discovery Consul
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Connection Info Tls Info
+
+TLS settings to enable transport layer security.
+
+`ca_certificate_url` - (Optional) F5XC Secret. URL to fetch the server CA certificate file. See [Tls Info Ca Certificate Url ](#tls-info-ca-certificate-url) below for details.(Deprecated)
+
+`certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
+
+`certificate_url` - (Optional) F5XC Secret. URL to fetch the client certificate file. See [Tls Info Certificate Url ](#tls-info-certificate-url) below for details.(Deprecated)
+
+`key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Tls Info Key Url ](#tls-info-key-url) below for details.
+
+`server_name` - (Optional) server is used (`String`).
+
+`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
+
+### Discovery Choice Discovery Consul
 
 Discovery configuration for Hashicorp Consul.
 
-`access_info` - (Required) Credentials to access Hashicorp Consul service discovery. See [Access Info ](#access-info) below for details.
+`access_info` - (Required) Credentials to access Hashicorp Consul service discovery. See [Discovery Consul Access Info ](#discovery-consul-access-info) below for details.
 
-`publish_info` - (Required) Configuration to publish VIPs. See [Publish Info ](#publish-info) below for details.
+`publish_info` - (Required) Configuration to publish VIPs. See [Discovery Consul Publish Info ](#discovery-consul-publish-info) below for details.
 
-### Discovery K8s
+### Discovery Choice Discovery K8s
 
 Discovery configuration for K8s..
 
-`access_info` - (Required) Credentials can be kubeconfig file or mutual TLS using PKI certificates. See [Access Info ](#access-info) below for details.
+`access_info` - (Required) Credentials can be kubeconfig file or mTLS using PKI certificates. See [Discovery K8s Access Info ](#discovery-k8s-access-info) below for details.
 
-`publish_info` - (Required) Configuration to publish VIPs. See [Publish Info ](#publish-info) below for details.
+`publish_info` - (Required) Configuration to publish VIPs. See [Discovery K8s Publish Info ](#discovery-k8s-publish-info) below for details.
 
-### Enable Internet Vip
+### Discovery Consul Access Info
 
-Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
+Credentials to access Hashicorp Consul service discovery.
 
-### Http Basic Auth Info
+`connection_info` - (Optional) Configuration details to access Hashicorp Consul API service using REST.. See [Access Info Connection Info ](#access-info-connection-info) below for details.
 
-Username and password used for HTTP/HTTPS access.
+`http_basic_auth_info` - (Optional) Username and password used for HTTP/HTTPS access. See [Access Info Http Basic Auth Info ](#access-info-http-basic-auth-info) below for details.
 
-`passwd_url` - (Optional) F5XC Secret. URL for password, needs to be fetched from this path. See [Passwd Url ](#passwd-url) below for details.
+`scheme` - (Optional) scheme (`String`).(Deprecated)
 
-`user_name` - (Optional) username in consul (`String`).
-
-### Key Url
-
-The data may be optionally secured using BlindFold..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Passwd Url
-
-F5XC Secret. URL for password, needs to be fetched from this path.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Publish
-
-Publish domain to VIP mapping..
-
-### Publish Info
+### Discovery Consul Publish Info
 
 Configuration to publish VIPs.
 
-`disable` - (Optional) Disable VIP Publishing (bool).
+###### One of the arguments from this list "disable, publish" must be set
 
-`publish` - (Optional) Publish domain to VIP mapping. (bool).
+`disable` - (Optional) Disable VIP Publishing (`Bool`).
+
+`publish` - (Optional) Publish domain to VIP mapping. (`Bool`).
+
+### Discovery K8s Access Info
+
+Credentials can be kubeconfig file or mTLS using PKI certificates.
+
+###### One of the arguments from this list "kubeconfig_url, connection_info, in_cluster" must be set
+
+`connection_info` - (Optional) Provide API server access details (endpoint and TLS parameters). See [Config Type Connection Info ](#config-type-connection-info) below for details.
+
+`in_cluster` - (Optional) VER is POD running in the same K8s cluster. (`Bool`).(Deprecated)
+
+`kubeconfig_url` - (Optional) Provide kubeconfig file to connect to K8s cluster. See [Config Type Kubeconfig Url ](#config-type-kubeconfig-url) below for details.
+
+###### One of the arguments from this list "reachable, isolated" must be set
+
+`isolated` - (Optional) discovered when Kubernetes cluster is in InCluster mode. (`Bool`).
+
+`reachable` - (Optional) always discovers POD IP Address for configured endpoints. (`Bool`).
+
+### Discovery K8s Publish Info
+
+Configuration to publish VIPs.
+
+###### One of the arguments from this list "disable, publish, publish_fqdns, dns_delegation" must be set
+
+`disable` - (Optional) Disable VIP Publishing and DNS Delegation (`Bool`).
+
+`dns_delegation` - (Optional) Program DNS delegation for a sub-domain in external cluster. See [Publish Choice Dns Delegation ](#publish-choice-dns-delegation) below for details.
+
+`publish` - (Optional) Publish domain to VIP mapping.. See [Publish Choice Publish ](#publish-choice-publish) below for details.
+
+`publish_fqdns` - (Optional) Use this option to publish domain to VIP mapping when all domains are expected to be fully qualified i.e. they include the namesapce. (`Bool`).
+
+### Http Basic Auth Info Passwd Url
+
+F5XC Secret. URL for password, needs to be fetched from this path.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Passwd Url Blindfold Secret Info Internal ](#passwd-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Internet Vip Choice Disable Internet Vip
+
+Do not enable advertise on external internet vip..
+
+### Internet Vip Choice Enable Internet Vip
+
+Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
+
+### K8s Pod Network Choice Isolated
+
+discovered when Kubernetes cluster is in InCluster mode..
+
+### K8s Pod Network Choice Reachable
+
+always discovers POD IP Address for configured endpoints..
+
+### Key Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Kubeconfig Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Passwd Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Publish Choice Disable
+
+Disable VIP Publishing.
+
+### Publish Choice Dns Delegation
+
+Program DNS delegation for a sub-domain in external cluster.
+
+`dns_mode` - (Required) Indicates whether external K8S is running core DNS or kube DNS (`String`).
+
+`subdomain` - (Required) The DNS subdomain for which F5XC will respond to DNS queries. (`String`).
+
+### Publish Choice Publish
+
+Publish domain to VIP mapping..
+
+### Publish Choice Publish
+
+Publish domain to VIP mapping..
+
+`namespace` - (Required) The external K8S administrator needs to ensure that the namespace exists. (`String`).
+
+### Publish Choice Publish Fqdns
+
+Use this option to publish domain to VIP mapping when all domains are expected to be fully qualified i.e. they include the namesapce..
 
 ### Ref
 
@@ -271,57 +362,63 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Segment
-
-Reference to Segment.
-
-`ref` - (Required) A segment reference. See [ref](#ref) below for details.
-
-### Segment Site
-
-Reference to Segment object.
-
-`segment` - (Required) Segment in the site. See [ref](#ref) below for details.
-
-`site` - (Required) Reference to a site. See [ref](#ref) below for details.
-
-### Segment Vsite
-
-Reference to Segment in a virtual site.
-
-`segment` - (Required) Segment in the virtual site. See [ref](#ref) below for details.
-
-`vsite` - (Required) Reference to a virtual site. See [ref](#ref) below for details.
-
-### Site
+### Ref Or Selector Site
 
 Direct reference to site object.
 
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
-### Tls Info
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
-TLS settings to enable transport layer security.
+### Ref Or Selector Virtual Network
 
-`ca_certificate_url` - (Optional) F5XC Secret. URL to fetch the server CA certificate file. See [Ca Certificate Url ](#ca-certificate-url) below for details.
+Direct reference to virtual network object.
 
-`certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
+`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
-`certificate_url` - (Optional) F5XC Secret. URL to fetch the client certificate file. See [Certificate Url ](#certificate-url) below for details.
+### Ref Or Selector Virtual Site
 
-`key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Key Url ](#key-url) below for details.
+Direct reference to virtual site object.
 
-`server_name` - (Optional) server is used (`String`).
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
-`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
 
-### Vault Secret Info
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
+
+`network_type` - (Optional) The type of network on the referred virtual_site (`String`).
+
+`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
+
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
+
+### Secret Info Oneof Blindfold Secret Info
+
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Secret Info Oneof Clear Secret Info
+
+Clear Secret is used for the secrets that are not encrypted.
+
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -335,45 +432,65 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Virtual Network
-
-Direct reference to virtual network object.
-
-`ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
-
-### Virtual Site
-
-Direct reference to virtual site object.
-
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
-
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
-
-`network_type` - (Optional) The type of network on the referred virtual_site (`String`).
-
-`ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
-
-### Where
-
-All the sites where this discovery config is valid..
-
-`segment` - (Optional) Reference to Segment. See [Segment ](#segment) below for details.
-
-`segment_site` - (Optional) Reference to Segment object. See [Segment Site ](#segment-site) below for details.
-
-`segment_vsite` - (Optional) Reference to Segment in a virtual site. See [Segment Vsite ](#segment-vsite) below for details.
-
-`site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
-
-`virtual_network` - (Optional) Direct reference to virtual network object. See [Virtual Network ](#virtual-network) below for details.
-
-`virtual_site` - (Optional) Direct reference to virtual site object. See [Virtual Site ](#virtual-site) below for details.
-
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Tls Info Ca Certificate Url
+
+F5XC Secret. URL to fetch the server CA certificate file.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Ca Certificate Url Blindfold Secret Info Internal ](#ca-certificate-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tls Info Certificate Url
+
+F5XC Secret. URL to fetch the client certificate file.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Certificate Url Blindfold Secret Info Internal ](#certificate-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tls Info Key Url
+
+The data may be optionally secured using BlindFold..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Key Url Blindfold Secret Info Internal ](#key-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 Attribute Reference
 -------------------

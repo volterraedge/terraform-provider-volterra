@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -1019,8 +1020,8 @@ func (m *LoadBalancingRule) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetGeoLocationChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetGeoLocationChoiceDRefInfo() FAILED")
+	if fdrInfos, err := m.GetClientChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetClientChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1094,8 +1095,12 @@ func (m *LoadBalancingRule) GetActionChoiceDBEntries(ctx context.Context, d db.I
 	return entries, nil
 }
 
-func (m *LoadBalancingRule) GetGeoLocationChoiceDRefInfo() ([]db.DRefInfo, error) {
-	switch m.GetGeoLocationChoice().(type) {
+// GetDRefInfo for the field's type
+func (m *LoadBalancingRule) GetClientChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetClientChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetClientChoice().(type) {
 	case *LoadBalancingRule_GeoLocationLabelSelector:
 
 		return nil, nil
@@ -1118,45 +1123,26 @@ func (m *LoadBalancingRule) GetGeoLocationChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		return []db.DRefInfo{dri}, nil
 
+	case *LoadBalancingRule_AsnList:
+
+		return nil, nil
+
+	case *LoadBalancingRule_AsnMatcher:
+
+		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "asn_matcher." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
-}
 
-// GetGeoLocationChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *LoadBalancingRule) GetGeoLocationChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetGeoLocationChoice().(type) {
-	case *LoadBalancingRule_GeoLocationLabelSelector:
-
-	case *LoadBalancingRule_GeoLocationSet:
-		refdType, err := d.TypeForEntryKind("", "", "geo_location_set.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: geo_location_set")
-		}
-
-		vref := m.GetGeoLocationSet()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "geo_location_set.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	}
-
-	return entries, nil
 }
 
 type ValidateLoadBalancingRule struct {
@@ -1171,10 +1157,10 @@ func (v *ValidateLoadBalancingRule) ActionChoiceValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
-func (v *ValidateLoadBalancingRule) GeoLocationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateLoadBalancingRule) ClientChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for geo_location_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_choice")
 	}
 	return validatorFn, nil
 }
@@ -1239,22 +1225,22 @@ func (v *ValidateLoadBalancingRule) Validate(ctx context.Context, pm interface{}
 
 	}
 
-	if fv, exists := v.FldValidators["geo_location_choice"]; exists {
-		val := m.GetGeoLocationChoice()
+	if fv, exists := v.FldValidators["client_choice"]; exists {
+		val := m.GetClientChoice()
 		vOpts := append(opts,
-			db.WithValidateField("geo_location_choice"),
+			db.WithValidateField("client_choice"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetGeoLocationChoice().(type) {
+	switch m.GetClientChoice().(type) {
 	case *LoadBalancingRule_GeoLocationLabelSelector:
-		if fv, exists := v.FldValidators["geo_location_choice.geo_location_label_selector"]; exists {
-			val := m.GetGeoLocationChoice().(*LoadBalancingRule_GeoLocationLabelSelector).GeoLocationLabelSelector
+		if fv, exists := v.FldValidators["client_choice.geo_location_label_selector"]; exists {
+			val := m.GetClientChoice().(*LoadBalancingRule_GeoLocationLabelSelector).GeoLocationLabelSelector
 			vOpts := append(opts,
-				db.WithValidateField("geo_location_choice"),
+				db.WithValidateField("client_choice"),
 				db.WithValidateField("geo_location_label_selector"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
@@ -1262,11 +1248,33 @@ func (v *ValidateLoadBalancingRule) Validate(ctx context.Context, pm interface{}
 			}
 		}
 	case *LoadBalancingRule_GeoLocationSet:
-		if fv, exists := v.FldValidators["geo_location_choice.geo_location_set"]; exists {
-			val := m.GetGeoLocationChoice().(*LoadBalancingRule_GeoLocationSet).GeoLocationSet
+		if fv, exists := v.FldValidators["client_choice.geo_location_set"]; exists {
+			val := m.GetClientChoice().(*LoadBalancingRule_GeoLocationSet).GeoLocationSet
 			vOpts := append(opts,
-				db.WithValidateField("geo_location_choice"),
+				db.WithValidateField("client_choice"),
 				db.WithValidateField("geo_location_set"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoadBalancingRule_AsnList:
+		if fv, exists := v.FldValidators["client_choice.asn_list"]; exists {
+			val := m.GetClientChoice().(*LoadBalancingRule_AsnList).AsnList
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("asn_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoadBalancingRule_AsnMatcher:
+		if fv, exists := v.FldValidators["client_choice.asn_matcher"]; exists {
+			val := m.GetClientChoice().(*LoadBalancingRule_AsnMatcher).AsnMatcher
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("asn_matcher"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1310,16 +1318,16 @@ var DefaultLoadBalancingRuleValidator = func() *ValidateLoadBalancingRule {
 	}
 	v.FldValidators["action_choice"] = vFn
 
-	vrhGeoLocationChoice := v.GeoLocationChoiceValidationRuleHandler
-	rulesGeoLocationChoice := map[string]string{
+	vrhClientChoice := v.ClientChoiceValidationRuleHandler
+	rulesClientChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhGeoLocationChoice(rulesGeoLocationChoice)
+	vFn, err = vrhClientChoice(rulesClientChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for LoadBalancingRule.geo_location_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LoadBalancingRule.client_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["geo_location_choice"] = vFn
+	v.FldValidators["client_choice"] = vFn
 
 	vrhScore := v.ScoreValidationRuleHandler
 	rulesScore := map[string]string{
@@ -1335,8 +1343,10 @@ var DefaultLoadBalancingRuleValidator = func() *ValidateLoadBalancingRule {
 
 	v.FldValidators["action_choice.pool"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
-	v.FldValidators["geo_location_choice.geo_location_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
-	v.FldValidators["geo_location_choice.geo_location_set"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["client_choice.geo_location_label_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+	v.FldValidators["client_choice.geo_location_set"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["client_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
+	v.FldValidators["client_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 
 	return v
 }()

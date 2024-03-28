@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nfv_service.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nfv_service.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nfv_service.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nfv_service.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.nfv_service")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nfv_service.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nfv_service.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2288,59 +2271,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.k8s_manifest_params.DeployStatus"
         },
-        "nfv_serviceBMNodeMemorySize": {
-            "type": "string",
-            "description": "x-displayName: \"Bare Metal ServiceNode Memory Size\"\nEnum to define amount of memory to be assigned to the node\n\n - BM_8_GB_MEMORY: 8 GB\n\nx-displayName: \"8 GB\"\n - BM_16_GB_MEMORY: 16 GB\n\nx-displayName: \"16 GB\"\n - BM_32_GB_MEMORY: 32 GB\n\nx-displayName: \"32 GB\"",
-            "title": "Option to select amount of memory",
-            "enum": [
-                "BM_8_GB_MEMORY",
-                "BM_16_GB_MEMORY",
-                "BM_32_GB_MEMORY"
-            ],
-            "default": "BM_8_GB_MEMORY"
-        },
-        "nfv_serviceBMNodeVirtualCpuCount": {
-            "type": "string",
-            "description": "x-displayName: \"Bare Metal ServiceNode Virtual CPU Count\"\nEnum to define number of virtual CPU's to be assigned to the node\n\n - BM_4_VCPU: 4 virtual CPUs\n\nx-displayName: \"4 vCPU\"\n - BM_8_VCPU: 8 virtual CPUs\n\nx-displayName: \"8 vCPU\"",
-            "title": "Option to select number of virtual CPUs",
-            "enum": [
-                "BM_4_VCPU",
-                "BM_8_VCPU"
-            ],
-            "default": "BM_4_VCPU"
-        },
-        "nfv_serviceBigIqInstanceType": {
-            "type": "object",
-            "description": "x-displayName: \"License Server Details\"\nSpecification for BIG-IQ Instance, where and what",
-            "title": "BIG-IQ Instance configured as License Server for BIG-IP License Activation",
-            "properties": {
-                "license_pool_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"License Pool Name\"\nx-example: \"apm_msp_license_pool1\"\nx-required\nName of Utility Pool on BIG-IQ",
-                    "title": "License Pool Name"
-                },
-                "license_server_ip": {
-                    "type": "string",
-                    "description": "x-displayName: \"License Server IP\"\nx-example: \"192.168.0.77\"\nx-required\nIP Address from the TCP Load Balancer which is configured to communicate with License Server",
-                    "title": "TCP Load Balancer IP Address"
-                },
-                "password": {
-                    "description": "x-displayName: \"Password\"\nx-example: \"admin123\"\nx-required\nPassword of the user used to access BIG-IQ to activate the license",
-                    "title": "Password",
-                    "$ref": "#/definitions/schemaSecretType"
-                },
-                "sku_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Offering Name\"\nx-example: \"F5-BIG-MSP-A-BT-1G-EXTHSM-1\"\nx-required\nLicense offering name aka SKU name",
-                    "title": "Offering Name"
-                },
-                "username": {
-                    "type": "string",
-                    "description": "x-displayName: \"User Name\"\nx-example: \"admin\"\nx-required\nUser Name used to access BIG-IQ to activate the license",
-                    "title": "User Name"
-                }
-            }
-        },
         "nfv_serviceCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2413,26 +2343,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
-                }
-            }
-        },
-        "nfv_serviceEndpointRefType": {
-            "type": "object",
-            "description": "x-displayName: \"Endpoint Ref type\"\nA reference from a node to a endpoint.",
-            "title": "EndpointRefType",
-            "properties": {
-                "endpoint": {
-                    "type": "array",
-                    "description": "x-displayName: \"Reference to endpoint for https management\"\npolicy set that is internally converted from traffic selector choice",
-                    "title": "Reference to endpoint for https management",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    }
-                },
-                "node_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Node Name\"\nx-example: \"node1\"\nNode Name will be used to assign as hostname to the service",
-                    "title": "Node Name"
                 }
             }
         },
@@ -2595,31 +2505,6 @@ var APISwaggerJSON string = `{
                     "title": "No UDP Ports",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No UDP Ports"
-                }
-            }
-        },
-        "nfv_serviceExternalNLBInfo": {
-            "type": "object",
-            "description": "x-displayName: \"External NLB Info\"\nProperties needed to create external NLB",
-            "title": "ExternalNLBInfo",
-            "properties": {
-                "aws_subnet_info": {
-                    "type": "array",
-                    "description": "x-displayName: \"AWS Subnet Info\"\nAWS Subnet Info",
-                    "title": "AWS Subnet Info",
-                    "items": {
-                        "$ref": "#/definitions/viewsAWSSubnetIdsType"
-                    }
-                },
-                "region": {
-                    "type": "string",
-                    "description": "x-displayName: \"Region\"\nRegion",
-                    "title": "Region"
-                },
-                "vpc_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"VPC ID\"\nVPC ID",
-                    "title": "VPC ID"
                 }
             }
         },
@@ -2828,50 +2713,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "nfv_serviceF5BigIpAppStackBareMetalType": {
-            "type": "object",
-            "description": "x-displayName: \"Virtual BIG-IP on App Stack bare metal\"\nVirtual BIG-IP specification for App Stack bare metal",
-            "title": "Virtual BIG-IP on App Stack bare metal",
-            "properties": {
-                "admin_password": {
-                    "description": "x-displayName: \"Admin Password\"\nx-required\nSecret admin password for BIG-IP",
-                    "title": "Admin Password",
-                    "$ref": "#/definitions/schemaSecretType"
-                },
-                "admin_username": {
-                    "type": "string",
-                    "description": "x-displayName: \"Admin Username\"\nx-example: \"admin\"\nx-required\nAdmin Username for BIG-IP",
-                    "title": "Admin Username"
-                },
-                "bare_metal_site": {
-                    "description": "x-displayName: \"App Stack Bare Metal Site\"\nx-required\nReference to bare metal site on which BIG-IP should be deployed",
-                    "title": "App Stack Bare Metal Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "bigiq_instance": {
-                    "description": "x-displayName: \"License Server Details\"\nx-required\nDetails of BIG-IQ Instance used for activating licenses.",
-                    "title": "BIG-IQ Instance configured as License Server for BIG-IP License Activation",
-                    "$ref": "#/definitions/nfv_serviceBigIqInstanceType"
-                },
-                "nodes": {
-                    "type": "array",
-                    "description": "x-displayName: \"Service Nodes\"\nx-required\nSpecify how and where the service nodes are spawned",
-                    "title": "Service Nodes",
-                    "items": {
-                        "$ref": "#/definitions/nfv_serviceServiceNodesBareMetalType"
-                    }
-                },
-                "public_download_url": {
-                    "type": "string",
-                    "description": "public URL where BIG-IP image is hosted.\n\nx-displayName: \"Image URL\"\nx-example: \"https://imagepath.com/bigip_ve\"\nx-required\nPublic URL where BIG-IP VE image (qcow2) is hosted"
-                },
-                "ssh_key": {
-                    "type": "string",
-                    "description": "x-displayName: \"Public SSH key\"\nx-example: \"ssh-rsa AAAAB...\"\nx-required\nPublic SSH key for accessing the BIG-IP nodes.",
-                    "title": "Public SSH key"
-                }
-            }
-        },
         "nfv_serviceForwardingServiceType": {
             "type": "object",
             "description": "Forwarding Service is a type of NFV service that processes the original packet as received from source and forwards it to the original\ndestination without modifying the destination addresses. The traffic is attracted to NFV using set of traffic selector\nrules.",
@@ -2915,12 +2756,6 @@ var APISwaggerJSON string = `{
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
-                },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/nfv_serviceObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
                 },
                 "referring_objects": {
                     "type": "array",
@@ -2974,28 +2809,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "nfv_serviceInterfaceDetails": {
-            "type": "object",
-            "description": "x-displayName: \"Interface\"\nx-required\nBIG-IP interface details",
-            "title": "BIG-IP interface details",
-            "properties": {
-                "interface": {
-                    "description": "x-displayName: \"L2 Interface\"\nx-required\nL2 Interface on Site to be connected as interface on BIG-IP",
-                    "title": "L2 Interface on Site to be connected as interface on BIG-IP",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "network_gateway": {
-                    "type": "string",
-                    "description": "x-displayName: \"Default Gateway\"\nx-example: \"10.2.3.0\"",
-                    "title": "BIG-IP Network Default Gateway"
-                },
-                "network_self_ip": {
-                    "type": "string",
-                    "description": "x-displayName: \"Self IP\"\nx-example: \"10.2.3.0/24\"\nx-required\nSelf IP CIDR",
-                    "title": "BIG-IP Network Self IP"
-                }
-            }
         },
         "nfv_serviceListResponse": {
             "type": "object",
@@ -3082,12 +2895,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/nfv_serviceObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -3132,38 +2939,17 @@ var APISwaggerJSON string = `{
             "x-displayname": "Per Node Information",
             "x-ves-proto-message": "ves.io.schema.nfv_service.NodeInfo",
             "properties": {
+                "node_name": {
+                    "type": "string",
+                    "description": " The name of the Node which corresponds to the ssh command",
+                    "title": "Node Name",
+                    "x-displayname": "Node Name"
+                },
                 "ssh_command": {
                     "type": "string",
                     "description": " Example ssh command string for users to ssh into individual node",
                     "title": "SSH Command",
                     "x-displayname": "SSH Command Help String"
-                }
-            }
-        },
-        "nfv_serviceObject": {
-            "type": "object",
-            "description": "NFV Service object",
-            "title": "NFV Service Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.nfv_service.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the NFV service",
-                    "title": "spec",
-                    "$ref": "#/definitions/nfv_serviceSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -3606,29 +3392,23 @@ var APISwaggerJSON string = `{
             "description": "SSH based configuration",
             "title": "SSH based management",
             "x-displayname": "SSH based management",
-            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_sli\",\"advertise_on_slo\",\"advertise_on_slo_internet_vip\",\"advertise_on_slo_sli\"]",
+            "x-ves-oneof-field-advertise_choice": "[\"advertise_on_sli\",\"advertise_on_slo\",\"advertise_on_slo_sli\"]",
             "x-ves-proto-message": "ves.io.schema.nfv_service.SSHManagementType",
             "properties": {
                 "advertise_on_sli": {
-                    "description": "Exclusive with [advertise_on_slo advertise_on_slo_internet_vip advertise_on_slo_sli]\n Enable on Site local inside network, default VIP will be used",
+                    "description": "Exclusive with [advertise_on_slo advertise_on_slo_sli]\n Enable on Site local inside network, default VIP will be used",
                     "title": "Enable On Site Local Inside",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable On Site Local Inside"
                 },
                 "advertise_on_slo": {
-                    "description": "Exclusive with [advertise_on_sli advertise_on_slo_internet_vip advertise_on_slo_sli]\n Enable on Site local outside network, default VIP will be used",
+                    "description": "Exclusive with [advertise_on_sli advertise_on_slo_sli]\n Enable on Site local outside network, default VIP will be used",
                     "title": "Enable On Site Local Outside",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable On Site Local Outside"
                 },
-                "advertise_on_slo_internet_vip": {
-                    "description": "Exclusive with [advertise_on_sli advertise_on_slo advertise_on_slo_sli]\n Enable On Site Local Outside Internet VIP",
-                    "title": "Enable On Site Local Outside Internet VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable On Site Local Outside Internet VIP"
-                },
                 "advertise_on_slo_sli": {
-                    "description": "Exclusive with [advertise_on_sli advertise_on_slo advertise_on_slo_internet_vip]\n Enable on Site local inside and outside network, default VIP will be used",
+                    "description": "Exclusive with [advertise_on_sli advertise_on_slo]\n Enable on Site local inside and outside network, default VIP will be used",
                     "title": "Enable On Site Local Inside and Outside",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable On Site Local Inside and Outside"
@@ -3803,52 +3583,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4_prefix": "true"
                     }
-                }
-            }
-        },
-        "nfv_serviceServiceNodesBareMetalType": {
-            "type": "object",
-            "description": "x-displayName: \"Service Nodes\"\nSpecification for service nodes, how and where",
-            "title": "Service Nodes in App Stack Bare Metal",
-            "properties": {
-                "bm_node_memory_size": {
-                    "description": "x-displayName: \"Memory Size\"\nx-required",
-                    "title": "Amount of memory to assign to the Node",
-                    "$ref": "#/definitions/nfv_serviceBMNodeMemorySize"
-                },
-                "bm_virtual_cpu_count": {
-                    "description": "x-displayName: \"Number of Virtual CPUs\"\nx-required",
-                    "title": "Number of Virtual CPUs to assign to the Node",
-                    "$ref": "#/definitions/nfv_serviceBMNodeVirtualCpuCount"
-                },
-                "external_interface": {
-                    "description": "x-displayName: \"External Interface\"",
-                    "title": "BIG-IP External interface details",
-                    "$ref": "#/definitions/nfv_serviceInterfaceDetails"
-                },
-                "internal_interface": {
-                    "description": "x-displayName: \"Internal Interface\"",
-                    "title": "BIG-IP Internal interface details",
-                    "$ref": "#/definitions/nfv_serviceInterfaceDetails"
-                },
-                "node_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Node Name\"\nx-example: \"node1\"\nx-required\nNode Name will be used to assign as hostname to the service",
-                    "title": "Node Name"
-                }
-            }
-        },
-        "nfv_serviceSpecType": {
-            "type": "object",
-            "description": "Shape of the NFV Service specification",
-            "title": "Specification for NFV Service",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.nfv_service.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/schemanfv_serviceGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -4322,75 +4056,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -4709,149 +4374,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "Handle to fetch certificate and key",
@@ -5114,85 +4636,9 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/nfv_serviceServiceHttpsManagementType",
                     "x-displayname": "HTTPS Based Management"
                 },
-                "palo_alto_fw_service": {
-                    "description": "Exclusive with [f5_big_ip_aws_service]\n Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud",
-                    "$ref": "#/definitions/nfv_servicePaloAltoFWAWSType",
-                    "x-displayname": "Palo Alto Networks VM-Series Firewall on AWS"
-                },
-                "transparent_service": {
-                    "description": "Exclusive with [endpoint_service forwarding_service]\n Transparent NFV Service",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Transparent Service NFV"
-                }
-            }
-        },
-        "schemanfv_serviceGlobalSpecType": {
-            "type": "object",
-            "description": "Desired state for NFV Service",
-            "title": "NFV Service specification",
-            "x-displayname": "Specification",
-            "x-ves-oneof-field-http_management_choice": "[\"disable_https_management\",\"https_management\"]",
-            "x-ves-oneof-field-service_provider_choice": "[\"f5_big_ip_aws_service\",\"palo_alto_fw_service\"]",
-            "x-ves-oneof-field-service_type_choice": "[\"endpoint_service\",\"forwarding_service\",\"transparent_service\"]",
-            "x-ves-oneof-field-ssh_management_choice": "[\"disable_ssh_access\",\"enabled_ssh_access\"]",
-            "x-ves-proto-message": "ves.io.schema.nfv_service.GlobalSpecType",
-            "properties": {
-                "disable_https_management": {
-                    "description": "Exclusive with [https_management]\n HTTPS based management is not enabled",
-                    "title": "Disable HTTPS Based Management",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable HTTPS Based Management"
-                },
-                "disable_ssh_access": {
-                    "description": "Exclusive with [enabled_ssh_access]\n SSH based access is disabled",
-                    "title": "Disable SSH access",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable SSH access"
-                },
-                "enabled_ssh_access": {
-                    "description": "Exclusive with [disable_ssh_access]\n Enable SSH access to nodes",
-                    "title": "Enable SSH access to nodes",
-                    "$ref": "#/definitions/nfv_serviceSSHManagementType",
-                    "x-displayname": "Enable SSH access to nodes"
-                },
-                "endpoint_service": {
-                    "description": "Exclusive with [forwarding_service transparent_service]\n NFV service type is Endpoint NFV service",
-                    "title": "Endpoint Service",
-                    "$ref": "#/definitions/nfv_serviceEndpointServiceType",
-                    "x-displayname": "Endpoint Service NFV"
-                },
-                "f5_big_ip_aws_service": {
-                    "description": "Exclusive with [palo_alto_fw_service]\n Virtual BIG-IP service to be deployed on AWS",
-                    "title": "Virtual BIG-IP on AWS",
-                    "$ref": "#/definitions/nfv_serviceF5BigIpAWSType",
-                    "x-displayname": "Virtual BIG-IP on AWS"
-                },
-                "forwarding_service": {
-                    "description": "Exclusive with [endpoint_service transparent_service]\n NFV service type is Forwarding NFV service",
-                    "title": "Forwarding Service",
-                    "$ref": "#/definitions/nfv_serviceForwardingServiceType",
-                    "x-displayname": "Forwarding Service NFV"
-                },
-                "https_management": {
-                    "description": "Exclusive with [disable_https_management]\n Enable HTTPS based management",
-                    "title": "HTTPS Based Management",
-                    "$ref": "#/definitions/nfv_serviceServiceHttpsManagementType",
-                    "x-displayname": "HTTPS Based Management"
-                },
-                "inside_vip": {
-                    "type": "string",
-                    "description": " VIP address resolved for the inside VIP\n\nExample: - \"10.1.2.6/32\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "Inside VIP",
-                    "x-displayname": "Inside VIP",
-                    "x-ves-example": "10.1.2.6/32",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
                 "node_info": {
                     "type": "array",
                     "description": " Node level information like, ssh command ex strings are populated here",
-                    "title": "Node Information",
                     "items": {
                         "$ref": "#/definitions/nfv_serviceNodeInfo"
                     },
@@ -5200,13 +4646,11 @@ var APISwaggerJSON string = `{
                 },
                 "palo_alto_fw_service": {
                     "description": "Exclusive with [f5_big_ip_aws_service]\n Palo Alto Networks VM-Series Firewall to be deployed on AWS Cloud",
-                    "title": "Palo Alto Networks VM-Series Firewall on AWS",
                     "$ref": "#/definitions/nfv_servicePaloAltoFWAWSType",
                     "x-displayname": "Palo Alto Networks VM-Series Firewall on AWS"
                 },
                 "transparent_service": {
                     "description": "Exclusive with [endpoint_service forwarding_service]\n Transparent NFV Service",
-                    "title": "Transparent Service",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Transparent Service NFV"
                 }
@@ -5253,16 +4697,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Palo Alto Networks VM-Series Firewall on AWS"
                 }
             }
-        },
-        "schemanfv_serviceServiceType": {
-            "type": "string",
-            "description": "x-displayName: \"Service Type\"\nEnum to define the service types that have used the NFV service as child object, for internal use\n\n - NONE: none\n\nx-displayName: \"None\"\nServiceType is set to None for NFV Services by default\n - BIGIP_APM: BIG-IP APM\n\nx-displayName: \"BIG-IP APM\"\nServiceType will be set to this value when APM object is created with NFV as it's child object",
-            "title": "Service Type",
-            "enum": [
-                "NONE",
-                "BIGIP_APM"
-            ],
-            "default": "NONE"
         },
         "schemaviewsObjectRefType": {
             "type": "object",
@@ -5438,70 +4872,6 @@ var APISwaggerJSON string = `{
             ],
             "default": "UPGRADE_SUCCESSFUL"
         },
-        "viewsAWSSubnetIdsType": {
-            "type": "object",
-            "description": "x-displayName: \"AWS Subnets Ids\"\nAWS Subnet Ids used by volterra site",
-            "title": "AWS Subnets Ids",
-            "properties": {
-                "az_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"AZ Name\"\nx-example: \"us-west-2a\"\nAWS availability zone, must be consistent with the selected AWS region.",
-                    "title": "AZ Name"
-                },
-                "inside_subnet": {
-                    "description": "x-displayName: \"Inside Subnet Info\"\nInside subnet Info",
-                    "title": "Inside Subnet Info",
-                    "$ref": "#/definitions/viewsAWSSubnetInfoType"
-                },
-                "inside_subnet_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"Inside Subnet ID\"\nx-example: \"subnet-12345678901234567\"\nInside subnet ID used by volterra site",
-                    "title": "Inside Subnet ID"
-                },
-                "outside_subnet": {
-                    "description": "x-displayName: \"Outside Subnet Info\"\nOutside subnet Info",
-                    "title": "Outside Subnet Info",
-                    "$ref": "#/definitions/viewsAWSSubnetInfoType"
-                },
-                "outside_subnet_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"Outside Subnet ID\"\nx-example: \"subnet-12345678901234567\"\nOutside subnet ID used by volterra site",
-                    "title": "Outside Subnet ID"
-                },
-                "workload_subnet": {
-                    "description": "x-displayName: \"Workload Subnet Info\"\nWorkload subnet Info",
-                    "title": "Workload Subnet Info",
-                    "$ref": "#/definitions/viewsAWSSubnetInfoType"
-                },
-                "workload_subnet_id": {
-                    "type": "string",
-                    "description": "x-displayName: \"Workload Subnet ID\"\nx-example: \"subnet-12345678901234567\"\nWorkload subnet ID used by volterra site",
-                    "title": "Workload Subnet ID"
-                }
-            }
-        },
-        "viewsAWSSubnetInfoType": {
-            "type": "object",
-            "description": "x-displayName: \"AWS Subnets Info Type\"\nAWS Subnets Info Type",
-            "title": "AWS Subnets Info Type",
-            "properties": {
-                "az_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"AZ Name\"\nx-required\nx-example: \"us-west-2a\"\nAWS availability zone, must be consistent with the selected AWS region.",
-                    "title": "AZ Name"
-                },
-                "id": {
-                    "type": "string",
-                    "description": "x-displayName: \"Subnet ID\"\nx-example: \"subnet-12345678901234567\"\nSubnet ID",
-                    "title": "Subnet ID"
-                },
-                "ipv4_prefix": {
-                    "type": "string",
-                    "description": "x-displayName: \"Subnet CIDR block\"\nx-required\nx-example: \"10.1.0.0/16\"\nSubnet CIDR block. It has to be private address space.",
-                    "title": "Subnet CIDR block"
-                }
-            }
-        },
         "viewsAdvertisePublic": {
             "type": "object",
             "description": "This defines a way to advertise a load balancer on public. If optional public_ip is provided, it will only be advertised on RE sites where that public_ip is available",
@@ -5671,7 +5041,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -5688,18 +5058,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": " Select/Add a Root CA certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA Certificate object to associate with this Load Balancer",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select a Root CA certificate"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Upload a Root CA Certificate specifically for this Load Balancer\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Upload a new Root CA certificate",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",

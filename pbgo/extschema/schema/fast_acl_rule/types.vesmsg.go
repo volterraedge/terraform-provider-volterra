@@ -112,6 +112,7 @@ func (m *CreateSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_IpPrefixSet:
+
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -384,6 +385,7 @@ func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAction().(type) {
 	case *FastAclRuleAction_PolicerAction:
+
 		drInfos, err := m.GetPolicerAction().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicerAction().GetDRefInfo() FAILED")
@@ -395,6 +397,7 @@ func (m *FastAclRuleAction) GetActionDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *FastAclRuleAction_ProtocolPolicerAction:
+
 		drInfos, err := m.GetProtocolPolicerAction().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetProtocolPolicerAction().GetDRefInfo() FAILED")
@@ -571,6 +574,7 @@ func (m *GetSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_IpPrefixSet:
+
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -878,6 +882,7 @@ func (m *GlobalSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_IpPrefixSet:
+
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -1185,6 +1190,7 @@ func (m *ReplaceSpecType) GetSourceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_IpPrefixSet:
+
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")

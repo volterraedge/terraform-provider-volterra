@@ -9,6 +9,7 @@
 package dns_zone
 
 import (
+	bytes "bytes"
 	context "context"
 	fmt "fmt"
 	_ "github.com/gogo/googleapis/google/api"
@@ -810,6 +811,331 @@ func (m *CloneResp) GetFailedZones() []string {
 	return nil
 }
 
+// Import BIND Validate Request
+//
+// x-displayName: "Import BIND Validate Request"
+type ImportBINDValidateRequest struct {
+	// BIND Zip File
+	//
+	// x-displayName: "BIND Zip File"
+	// x-required
+	File []byte `protobuf:"bytes,1,opt,name=file,proto3" json:"file,omitempty"`
+	// Description
+	//
+	// x-displayName: "Description for each zone"
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+}
+
+func (m *ImportBINDValidateRequest) Reset()      { *m = ImportBINDValidateRequest{} }
+func (*ImportBINDValidateRequest) ProtoMessage() {}
+func (*ImportBINDValidateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{12}
+}
+func (m *ImportBINDValidateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ImportBINDValidateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ImportBINDValidateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ImportBINDValidateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportBINDValidateRequest.Merge(m, src)
+}
+func (m *ImportBINDValidateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ImportBINDValidateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImportBINDValidateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ImportBINDValidateRequest proto.InternalMessageInfo
+
+func (m *ImportBINDValidateRequest) GetFile() []byte {
+	if m != nil {
+		return m.File
+	}
+	return nil
+}
+
+func (m *ImportBINDValidateRequest) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+// Import BIND Create Request
+//
+// x-displayName: "Import BIND Create Request"
+type ImportBINDCreateRequest struct {
+	// BIND Zip File
+	//
+	// x-displayName: "BIND Zip File"
+	// x-required
+	File []byte `protobuf:"bytes,1,opt,name=file,proto3" json:"file,omitempty"`
+	// Description
+	//
+	// x-displayName: "Description for each zone"
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// Ignore Zone List
+	//
+	// x-displayName: "Ignore Zone List"
+	// Zones in this list will be ignored when parsing the zip file to avoid invalid zone errors.
+	IgnoreZoneList []string `protobuf:"bytes,3,rep,name=ignore_zone_list,json=ignoreZoneList,proto3" json:"ignore_zone_list,omitempty"`
+}
+
+func (m *ImportBINDCreateRequest) Reset()      { *m = ImportBINDCreateRequest{} }
+func (*ImportBINDCreateRequest) ProtoMessage() {}
+func (*ImportBINDCreateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{13}
+}
+func (m *ImportBINDCreateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ImportBINDCreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ImportBINDCreateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ImportBINDCreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportBINDCreateRequest.Merge(m, src)
+}
+func (m *ImportBINDCreateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *ImportBINDCreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImportBINDCreateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ImportBINDCreateRequest proto.InternalMessageInfo
+
+func (m *ImportBINDCreateRequest) GetFile() []byte {
+	if m != nil {
+		return m.File
+	}
+	return nil
+}
+
+func (m *ImportBINDCreateRequest) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *ImportBINDCreateRequest) GetIgnoreZoneList() []string {
+	if m != nil {
+		return m.IgnoreZoneList
+	}
+	return nil
+}
+
+// Import BIND Response
+//
+// x-displayName: "Import BIND Response"
+type ImportBINDResponse struct {
+	// Valid Zone List
+	//
+	// x-displayName: "Valid Zone List"
+	ValidZoneList []*ValidZone `protobuf:"bytes,1,rep,name=valid_zone_list,json=validZoneList,proto3" json:"valid_zone_list,omitempty"`
+	// Invalid Zone List
+	//
+	// x-displayName: "Invalid Zone List"
+	InvalidZoneList []*InvalidZone `protobuf:"bytes,2,rep,name=invalid_zone_list,json=invalidZoneList,proto3" json:"invalid_zone_list,omitempty"`
+	// Success Created Zone Count
+	//
+	// x-displayName: "Success Created Zone Count"
+	SuccessCreatedZoneCount uint32 `protobuf:"varint,3,opt,name=success_created_zone_count,json=successCreatedZoneCount,proto3" json:"success_created_zone_count,omitempty"`
+}
+
+func (m *ImportBINDResponse) Reset()      { *m = ImportBINDResponse{} }
+func (*ImportBINDResponse) ProtoMessage() {}
+func (*ImportBINDResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{14}
+}
+func (m *ImportBINDResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ImportBINDResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ImportBINDResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ImportBINDResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ImportBINDResponse.Merge(m, src)
+}
+func (m *ImportBINDResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *ImportBINDResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ImportBINDResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ImportBINDResponse proto.InternalMessageInfo
+
+func (m *ImportBINDResponse) GetValidZoneList() []*ValidZone {
+	if m != nil {
+		return m.ValidZoneList
+	}
+	return nil
+}
+
+func (m *ImportBINDResponse) GetInvalidZoneList() []*InvalidZone {
+	if m != nil {
+		return m.InvalidZoneList
+	}
+	return nil
+}
+
+func (m *ImportBINDResponse) GetSuccessCreatedZoneCount() uint32 {
+	if m != nil {
+		return m.SuccessCreatedZoneCount
+	}
+	return 0
+}
+
+// Valid Zone
+//
+// x-displayName: "Valid Zone"
+type ValidZone struct {
+	// Zone Name
+	//
+	// x-displayName: "Zone Name"
+	ZoneName string `protobuf:"bytes,1,opt,name=zone_name,json=zoneName,proto3" json:"zone_name,omitempty"`
+	// Record Count
+	//
+	// x-displayName: "Record Count"
+	RecordCount uint32 `protobuf:"varint,2,opt,name=record_count,json=recordCount,proto3" json:"record_count,omitempty"`
+}
+
+func (m *ValidZone) Reset()      { *m = ValidZone{} }
+func (*ValidZone) ProtoMessage() {}
+func (*ValidZone) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{15}
+}
+func (m *ValidZone) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ValidZone) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ValidZone.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ValidZone) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ValidZone.Merge(m, src)
+}
+func (m *ValidZone) XXX_Size() int {
+	return m.Size()
+}
+func (m *ValidZone) XXX_DiscardUnknown() {
+	xxx_messageInfo_ValidZone.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ValidZone proto.InternalMessageInfo
+
+func (m *ValidZone) GetZoneName() string {
+	if m != nil {
+		return m.ZoneName
+	}
+	return ""
+}
+
+func (m *ValidZone) GetRecordCount() uint32 {
+	if m != nil {
+		return m.RecordCount
+	}
+	return 0
+}
+
+// Invalid Zone
+//
+// x-displayName: "Invalid Zone"
+type InvalidZone struct {
+	// Zone Name
+	//
+	// x-displayName: "Zone Name"
+	ZoneName string `protobuf:"bytes,1,opt,name=zone_name,json=zoneName,proto3" json:"zone_name,omitempty"`
+	// Validation Error
+	//
+	// x-displayName: "Validation Error"
+	ValidationError string `protobuf:"bytes,2,opt,name=validation_error,json=validationError,proto3" json:"validation_error,omitempty"`
+}
+
+func (m *InvalidZone) Reset()      { *m = InvalidZone{} }
+func (*InvalidZone) ProtoMessage() {}
+func (*InvalidZone) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8810baad339dc204, []int{16}
+}
+func (m *InvalidZone) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *InvalidZone) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_InvalidZone.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *InvalidZone) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InvalidZone.Merge(m, src)
+}
+func (m *InvalidZone) XXX_Size() int {
+	return m.Size()
+}
+func (m *InvalidZone) XXX_DiscardUnknown() {
+	xxx_messageInfo_InvalidZone.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InvalidZone proto.InternalMessageInfo
+
+func (m *InvalidZone) GetZoneName() string {
+	if m != nil {
+		return m.ZoneName
+	}
+	return ""
+}
+
+func (m *InvalidZone) GetValidationError() string {
+	if m != nil {
+		return m.ValidationError
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*ImportF5CSZoneRequest)(nil), "ves.io.schema.dns_zone.ImportF5CSZoneRequest")
 	golang_proto.RegisterType((*ImportF5CSZoneRequest)(nil), "ves.io.schema.dns_zone.ImportF5CSZoneRequest")
@@ -835,6 +1161,16 @@ func init() {
 	golang_proto.RegisterType((*CloneReq)(nil), "ves.io.schema.dns_zone.CloneReq")
 	proto.RegisterType((*CloneResp)(nil), "ves.io.schema.dns_zone.CloneResp")
 	golang_proto.RegisterType((*CloneResp)(nil), "ves.io.schema.dns_zone.CloneResp")
+	proto.RegisterType((*ImportBINDValidateRequest)(nil), "ves.io.schema.dns_zone.ImportBINDValidateRequest")
+	golang_proto.RegisterType((*ImportBINDValidateRequest)(nil), "ves.io.schema.dns_zone.ImportBINDValidateRequest")
+	proto.RegisterType((*ImportBINDCreateRequest)(nil), "ves.io.schema.dns_zone.ImportBINDCreateRequest")
+	golang_proto.RegisterType((*ImportBINDCreateRequest)(nil), "ves.io.schema.dns_zone.ImportBINDCreateRequest")
+	proto.RegisterType((*ImportBINDResponse)(nil), "ves.io.schema.dns_zone.ImportBINDResponse")
+	golang_proto.RegisterType((*ImportBINDResponse)(nil), "ves.io.schema.dns_zone.ImportBINDResponse")
+	proto.RegisterType((*ValidZone)(nil), "ves.io.schema.dns_zone.ValidZone")
+	golang_proto.RegisterType((*ValidZone)(nil), "ves.io.schema.dns_zone.ValidZone")
+	proto.RegisterType((*InvalidZone)(nil), "ves.io.schema.dns_zone.InvalidZone")
+	golang_proto.RegisterType((*InvalidZone)(nil), "ves.io.schema.dns_zone.InvalidZone")
 }
 
 func init() {
@@ -845,91 +1181,111 @@ func init() {
 }
 
 var fileDescriptor_8810baad339dc204 = []byte{
-	// 1340 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0xcf, 0x6f, 0x13, 0xc7,
-	0x17, 0xf7, 0xd8, 0x4e, 0x62, 0x4f, 0x7e, 0xe0, 0xcc, 0x57, 0x5f, 0x30, 0x86, 0xef, 0x7e, 0xc3,
-	0x22, 0x55, 0x80, 0xe2, 0xdd, 0x00, 0x42, 0x45, 0x11, 0x45, 0xca, 0x8f, 0x26, 0xc4, 0x40, 0x40,
-	0x6b, 0x84, 0x2a, 0x5a, 0xd5, 0x1a, 0xaf, 0xc7, 0x9b, 0x2d, 0xbb, 0x3b, 0xdb, 0x99, 0xb1, 0x89,
-	0x41, 0x48, 0x88, 0xfe, 0x38, 0x57, 0xea, 0xad, 0xa7, 0x1e, 0xab, 0xaa, 0x7f, 0x41, 0x51, 0x25,
-	0x6e, 0x54, 0x3d, 0x54, 0x69, 0x7b, 0xe1, 0x58, 0x1c, 0x0e, 0xed, 0x0d, 0xf5, 0x8c, 0xaa, 0x6a,
-	0x67, 0xd7, 0x8e, 0xbd, 0xb1, 0x43, 0x4a, 0x7b, 0xca, 0x7a, 0xe6, 0xf3, 0x3e, 0xef, 0x7d, 0xde,
-	0xbc, 0xf7, 0x66, 0x02, 0x8b, 0x4d, 0xc2, 0x35, 0x9b, 0xea, 0xdc, 0xdc, 0x20, 0x2e, 0xd6, 0x6b,
-	0x1e, 0xaf, 0xdc, 0xa5, 0x1e, 0xd1, 0xfd, 0x46, 0xd5, 0xb1, 0xcd, 0x8a, 0xd9, 0xe0, 0x82, 0xba,
-	0xd8, 0xb7, 0x35, 0x9f, 0x51, 0x41, 0xd1, 0xc1, 0x10, 0xae, 0x85, 0x70, 0xad, 0x03, 0x2f, 0x14,
-	0x2d, 0x5b, 0x6c, 0x34, 0xaa, 0x9a, 0x49, 0x5d, 0xdd, 0xa2, 0x16, 0xd5, 0x25, 0xbc, 0xda, 0xa8,
-	0xcb, 0x5f, 0xf2, 0x87, 0xfc, 0x0a, 0x69, 0x0a, 0x47, 0x2d, 0x4a, 0x2d, 0x87, 0xe8, 0xd8, 0xb7,
-	0x75, 0xec, 0x79, 0x54, 0x60, 0x61, 0x53, 0x8f, 0xc7, 0x76, 0xbb, 0x1c, 0x5c, 0xb0, 0x86, 0x29,
-	0xa2, 0xdd, 0xff, 0xc7, 0x77, 0x85, 0xed, 0x12, 0x2e, 0xb0, 0xeb, 0x47, 0x80, 0xe3, 0x43, 0x24,
-	0xd1, 0xea, 0x07, 0xa4, 0xcb, 0xa2, 0x0e, 0x01, 0x89, 0x96, 0x4f, 0x3a, 0x71, 0x1c, 0xe9, 0xc7,
-	0x50, 0xbf, 0x37, 0xc8, 0xc3, 0xfd, 0x9b, 0xbd, 0x76, 0x47, 0xfb, 0xb7, 0x9a, 0xd8, 0xb1, 0x6b,
-	0x58, 0x90, 0xc1, 0x9e, 0x9b, 0x84, 0x13, 0xaf, 0x19, 0x23, 0x9f, 0x89, 0x61, 0x6c, 0x72, 0xa7,
-	0xd2, 0x87, 0x50, 0x29, 0xfc, 0xef, 0x9a, 0xeb, 0x53, 0x26, 0x56, 0xce, 0x2d, 0x95, 0x6f, 0x51,
-	0x8f, 0x18, 0xe4, 0xc3, 0x06, 0xe1, 0x02, 0xdd, 0x84, 0x93, 0x26, 0xf5, 0xea, 0xb6, 0xd5, 0x60,
-	0x32, 0xa9, 0x79, 0x30, 0x03, 0x4e, 0x8c, 0x9f, 0x99, 0xd3, 0x06, 0x9f, 0x9c, 0x16, 0xd8, 0x2f,
-	0xaf, 0x4b, 0x8a, 0xa5, 0x5e, 0x3b, 0xa3, 0x9f, 0x46, 0x7d, 0x09, 0xe0, 0xc1, 0xb8, 0x47, 0xee,
-	0x53, 0x8f, 0x13, 0x74, 0x01, 0x66, 0x5c, 0x22, 0x70, 0x0d, 0x0b, 0x1c, 0x79, 0x9b, 0x89, 0x79,
-	0xbb, 0x26, 0x53, 0xbf, 0x4a, 0xc4, 0x55, 0x22, 0xf0, 0x8d, 0x96, 0x4f, 0x8c, 0xae, 0x05, 0xba,
-	0x06, 0x0f, 0xf0, 0x16, 0x17, 0xc4, 0xad, 0x74, 0x49, 0x52, 0x92, 0xe4, 0x8d, 0x18, 0x49, 0x59,
-	0xa2, 0x76, 0x53, 0x4d, 0x85, 0xe6, 0x57, 0x3b, 0x84, 0x97, 0x60, 0x9a, 0xfb, 0xc4, 0xcc, 0x27,
-	0x25, 0xcb, 0xf1, 0x61, 0xc2, 0x57, 0x89, 0x28, 0xfb, 0xc4, 0x0c, 0x28, 0x16, 0x0f, 0x7c, 0x71,
-	0x7f, 0x22, 0xb0, 0xd1, 0x2c, 0xb3, 0x12, 0xfc, 0x35, 0x24, 0xc3, 0x7c, 0xf6, 0x87, 0x8b, 0xa3,
-	0xa1, 0x3f, 0xf5, 0x1b, 0x00, 0xf3, 0xc3, 0x52, 0x85, 0xe6, 0xe1, 0x78, 0x40, 0xcb, 0x09, 0x6b,
-	0xda, 0x26, 0x89, 0x1c, 0x1f, 0xd2, 0xc2, 0x42, 0xd5, 0x3a, 0x85, 0xaa, 0x95, 0x65, 0x19, 0x5f,
-	0x4a, 0x18, 0xb0, 0xe6, 0xf1, 0x72, 0x08, 0x46, 0x17, 0xe0, 0x04, 0xee, 0x35, 0x4e, 0xbd, 0xca,
-	0x78, 0x1c, 0xef, 0x58, 0x2f, 0xe6, 0x60, 0x26, 0x30, 0x0e, 0xaa, 0x0f, 0xa5, 0xb7, 0x1e, 0x01,
-	0x50, 0x4a, 0x67, 0x40, 0x2e, 0xa9, 0xfe, 0x09, 0xe0, 0x74, 0x78, 0x5a, 0x0b, 0xef, 0xac, 0x18,
-	0x9d, 0xda, 0x98, 0x83, 0x53, 0x3e, 0xb3, 0x5d, 0xcc, 0x5a, 0xd2, 0x1d, 0x61, 0xd2, 0x5b, 0x76,
-	0x31, 0xfb, 0xed, 0xef, 0x8f, 0x53, 0x69, 0x96, 0xdc, 0x04, 0xc6, 0x64, 0x04, 0x28, 0xcb, 0x7d,
-	0xa4, 0xc3, 0xf1, 0x1a, 0x75, 0xb1, 0xed, 0x55, 0x3c, 0xec, 0x92, 0xfc, 0x98, 0x84, 0x4f, 0x05,
-	0xf0, 0x2c, 0x1b, 0xcb, 0x81, 0xfc, 0x83, 0xe4, 0x06, 0x30, 0x60, 0x08, 0x59, 0xc7, 0x2e, 0x41,
-	0xef, 0x43, 0x24, 0xb8, 0x6d, 0x55, 0xfa, 0x6b, 0x30, 0x23, 0x45, 0x9d, 0x1c, 0x76, 0x14, 0x37,
-	0xca, 0x6b, 0xab, 0x7d, 0x19, 0x5d, 0x94, 0x5a, 0x8c, 0xe9, 0x80, 0xaa, 0x6f, 0x63, 0x3e, 0xf3,
-	0xc7, 0xc5, 0x91, 0x37, 0x67, 0xcf, 0xce, 0x9e, 0x0f, 0x85, 0x96, 0xd2, 0x99, 0x64, 0x2e, 0x55,
-	0x4a, 0x67, 0xd2, 0xb9, 0x91, 0x52, 0x3a, 0x33, 0x92, 0x1b, 0x2d, 0xa5, 0x33, 0xa3, 0xb9, 0x31,
-	0xf5, 0x39, 0x80, 0xd3, 0xbb, 0x68, 0xd1, 0x1c, 0x9c, 0x94, 0xd1, 0xdd, 0x26, 0xad, 0x50, 0x10,
-	0x90, 0x82, 0x26, 0x02, 0x41, 0x63, 0x6c, 0x24, 0x94, 0x33, 0x1e, 0x40, 0x2e, 0x93, 0x96, 0xd4,
-	0x73, 0x33, 0xd2, 0x13, 0x58, 0x60, 0xc7, 0xa2, 0xcc, 0x16, 0x1b, 0xae, 0x3c, 0xe1, 0xa9, 0x33,
-	0x27, 0xf6, 0xd2, 0x73, 0x99, 0xb4, 0x16, 0x3a, 0x78, 0x23, 0x17, 0x51, 0x76, 0x57, 0xd0, 0xdb,
-	0x70, 0xaa, 0xcb, 0xdb, 0xc4, 0x4e, 0xa3, 0x73, 0xf0, 0x87, 0xe3, 0x45, 0x4f, 0x4c, 0x46, 0x84,
-	0x2c, 0xd2, 0x30, 0x27, 0x13, 0x11, 0xd5, 0xcd, 0xc0, 0x48, 0xb5, 0x21, 0xea, 0x3d, 0xe6, 0xa8,
-	0x21, 0xcb, 0x83, 0x67, 0x40, 0x71, 0x58, 0xbc, 0xd7, 0xc3, 0x33, 0x5f, 0x5e, 0x2f, 0xf7, 0x34,
-	0x45, 0x7c, 0x00, 0xbc, 0x07, 0xf3, 0xab, 0x44, 0x18, 0xc4, 0xa5, 0x82, 0x04, 0x2d, 0xb0, 0x62,
-	0x3b, 0xdd, 0xa1, 0x73, 0x14, 0x66, 0x83, 0x74, 0x72, 0x1f, 0x9b, 0x51, 0x4e, 0x8d, 0x9d, 0x05,
-	0xa4, 0xc2, 0xc9, 0x8e, 0xab, 0x30, 0xeb, 0x49, 0x89, 0x08, 0x7a, 0x26, 0x20, 0x0a, 0xf2, 0xac,
-	0x9e, 0x87, 0x87, 0x07, 0xb0, 0x47, 0x7a, 0x8e, 0xc0, 0xac, 0x34, 0xae, 0xdb, 0x4e, 0x87, 0x3e,
-	0x73, 0x37, 0x02, 0xa9, 0xef, 0xc2, 0x43, 0xab, 0x44, 0x5c, 0xa1, 0x26, 0x76, 0xfe, 0xfd, 0xb0,
-	0x3e, 0x02, 0x52, 0x75, 0x8c, 0x3d, 0x0a, 0xab, 0x04, 0xff, 0xe3, 0x60, 0x2e, 0x2a, 0x78, 0xb3,
-	0xce, 0x2a, 0xdd, 0x5b, 0x28, 0x9f, 0x95, 0xc9, 0x2e, 0xec, 0xea, 0xe0, 0x1b, 0x1d, 0x84, 0x31,
-	0x1d, 0x98, 0x2d, 0x6c, 0xd6, 0x59, 0x77, 0xa9, 0x5f, 0x62, 0x32, 0x26, 0x11, 0xc2, 0xcc, 0x92,
-	0x13, 0xce, 0x78, 0xb5, 0x0c, 0xb3, 0xd1, 0x37, 0xf7, 0xd1, 0x71, 0x38, 0xc9, 0x1b, 0xa6, 0x49,
-	0x78, 0x28, 0x83, 0xe7, 0xc1, 0x4c, 0xea, 0x44, 0xd6, 0x98, 0x88, 0x16, 0x83, 0x88, 0x39, 0x3a,
-	0x06, 0x27, 0xea, 0xd8, 0x76, 0x48, 0x2d, 0xc2, 0x24, 0x25, 0x66, 0x3c, 0x5c, 0x93, 0x90, 0x33,
-	0x5f, 0x67, 0x61, 0x76, 0x49, 0x5e, 0xf5, 0x0b, 0xd7, 0xd7, 0xd0, 0x53, 0x00, 0xa7, 0xfa, 0x47,
-	0x3d, 0x1a, 0x5a, 0x3a, 0x03, 0x2f, 0xa1, 0x82, 0xb6, 0x5f, 0x78, 0x98, 0x49, 0xd5, 0x6a, 0x3f,
-	0xc9, 0x07, 0x37, 0x61, 0xd1, 0xa6, 0x45, 0xdb, 0xab, 0x33, 0x1c, 0xde, 0xf8, 0x0d, 0x46, 0x8a,
-	0x77, 0x98, 0x2d, 0xc8, 0x6c, 0xfd, 0xdc, 0xa6, 0x59, 0xac, 0x79, 0xbc, 0x58, 0xc5, 0xdc, 0x36,
-	0x8b, 0x0d, 0x4e, 0xd8, 0xc3, 0x5f, 0x9e, 0x7f, 0x9e, 0xd4, 0xd4, 0x93, 0xd1, 0x53, 0x45, 0xef,
-	0x1e, 0x2c, 0xd7, 0xc3, 0x0b, 0x61, 0xe7, 0x52, 0xb7, 0xa5, 0xd7, 0x79, 0x70, 0x0a, 0xfd, 0x04,
-	0x20, 0xdc, 0x69, 0x18, 0x74, 0x72, 0xef, 0x38, 0x7b, 0x66, 0x67, 0xe1, 0xd4, 0x7e, 0xa0, 0x91,
-	0x1c, 0xe7, 0x75, 0xe5, 0x9c, 0x55, 0xb5, 0x7d, 0xcb, 0x91, 0x65, 0x17, 0x68, 0x7a, 0x90, 0x84,
-	0xd3, 0xbb, 0x7a, 0x07, 0xcd, 0xed, 0x71, 0xef, 0x0d, 0x6c, 0xe2, 0xc2, 0xe9, 0xbf, 0x61, 0x11,
-	0x09, 0xfd, 0x04, 0xb4, 0x9f, 0xe4, 0x4f, 0x0f, 0x56, 0xca, 0x08, 0xae, 0xc5, 0x85, 0xba, 0xd4,
-	0xb3, 0x05, 0x0d, 0xb5, 0x96, 0xd0, 0xa5, 0x01, 0x5a, 0xef, 0x75, 0xbf, 0xef, 0xef, 0x08, 0xbe,
-	0xd7, 0xd7, 0xa7, 0xf7, 0x75, 0x26, 0xa3, 0xa9, 0x74, 0x1b, 0x06, 0xbd, 0x04, 0x30, 0x17, 0x6f,
-	0x53, 0xa4, 0xef, 0xa1, 0x67, 0xd0, 0xb8, 0x28, 0xcc, 0xed, 0xdf, 0x20, 0xd2, 0xff, 0xf1, 0x3f,
-	0xd0, 0xbf, 0x86, 0x56, 0x5f, 0x57, 0xbf, 0x13, 0x04, 0xd3, 0x23, 0xff, 0x3b, 0x00, 0x91, 0x1c,
-	0x0a, 0x2b, 0x8c, 0xba, 0xcb, 0xeb, 0xe5, 0x65, 0x79, 0x1f, 0xa3, 0x99, 0x61, 0x7a, 0x3a, 0xc3,
-	0xa4, 0x70, 0xec, 0x15, 0x08, 0xee, 0xab, 0xd5, 0xf6, 0x93, 0xfc, 0x91, 0x3d, 0x6a, 0x59, 0x6a,
-	0x79, 0x4b, 0x3d, 0xbf, 0x8f, 0xba, 0x35, 0x1d, 0x19, 0x31, 0xa3, 0x6e, 0x25, 0x58, 0x0b, 0x5f,
-	0x0d, 0xf3, 0xe0, 0x54, 0x61, 0xf6, 0xf1, 0x23, 0x90, 0xfa, 0xf9, 0x11, 0xf8, 0xdf, 0x90, 0x68,
-	0xc2, 0x37, 0xd8, 0xc3, 0x1f, 0xf3, 0xa9, 0x2f, 0x01, 0x58, 0xfc, 0x14, 0x6c, 0x3d, 0x53, 0x12,
-	0x4f, 0x9f, 0x29, 0x89, 0x17, 0xcf, 0x14, 0xf0, 0xa0, 0xad, 0x80, 0xaf, 0xda, 0x0a, 0xf8, 0xbe,
-	0xad, 0x80, 0xad, 0xb6, 0x02, 0x7e, 0x6d, 0x2b, 0xe0, 0xb7, 0xb6, 0x92, 0x78, 0xd1, 0x56, 0xc0,
-	0x67, 0xdb, 0x4a, 0xe2, 0xf1, 0xb6, 0x02, 0xb6, 0xb6, 0x95, 0xc4, 0xd3, 0x6d, 0x25, 0x71, 0xeb,
-	0x8a, 0x45, 0xfd, 0xdb, 0x96, 0xd6, 0xa4, 0x8e, 0x20, 0x8c, 0x61, 0xad, 0xc1, 0x75, 0xf9, 0x51,
-	0xa7, 0xcc, 0x2d, 0xfa, 0x8c, 0x36, 0xed, 0x1a, 0x61, 0xc5, 0xce, 0xb6, 0xee, 0x57, 0x2d, 0xaa,
-	0x93, 0x4d, 0x11, 0x3d, 0xc3, 0x63, 0xff, 0x2b, 0x54, 0x47, 0xe5, 0x68, 0x3f, 0xfb, 0x57, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0x23, 0x1a, 0x39, 0x77, 0x44, 0x0d, 0x00, 0x00,
+	// 1655 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0xcd, 0x4f, 0x23, 0xc9,
+	0x15, 0xa7, 0x6c, 0x03, 0x76, 0xd9, 0x06, 0xd3, 0x51, 0x16, 0xe3, 0x9d, 0x38, 0xd0, 0x48, 0x11,
+	0x8c, 0x70, 0x1b, 0x18, 0x8d, 0x76, 0x44, 0x26, 0x2b, 0xf1, 0xb1, 0x30, 0x30, 0xb3, 0xcc, 0xaa,
+	0x3d, 0x41, 0xd1, 0x26, 0x8a, 0xd5, 0x6e, 0x97, 0x4d, 0x65, 0xbb, 0xbb, 0x3a, 0x55, 0x65, 0x0f,
+	0xcc, 0x86, 0x08, 0x6d, 0x3e, 0x0e, 0x39, 0x45, 0xca, 0x2d, 0xa7, 0x5c, 0x22, 0xe5, 0x90, 0x3f,
+	0x20, 0xca, 0x5c, 0xe6, 0x36, 0xab, 0x1c, 0x22, 0xb2, 0xb9, 0xcc, 0x31, 0x63, 0xf6, 0x90, 0x1c,
+	0x56, 0x5a, 0x25, 0xd7, 0x55, 0xb4, 0xea, 0xaa, 0xee, 0xb6, 0xdd, 0xd8, 0x0c, 0xf3, 0x71, 0xa2,
+	0xa9, 0xfa, 0xbd, 0x5f, 0xbd, 0xdf, 0xab, 0x57, 0xef, 0x3d, 0x80, 0xa5, 0x36, 0x62, 0x1a, 0x26,
+	0x65, 0x66, 0x1e, 0x22, 0xdb, 0x28, 0xd7, 0x1d, 0x56, 0x7d, 0x44, 0x1c, 0x54, 0x76, 0x5b, 0x35,
+	0x0b, 0x9b, 0x55, 0xb3, 0xc5, 0x38, 0xb1, 0x0d, 0x17, 0x6b, 0x2e, 0x25, 0x9c, 0x28, 0x6f, 0x49,
+	0xb8, 0x26, 0xe1, 0x5a, 0x00, 0x2f, 0x94, 0x9a, 0x98, 0x1f, 0xb6, 0x6a, 0x9a, 0x49, 0xec, 0x72,
+	0x93, 0x34, 0x49, 0x59, 0xc0, 0x6b, 0xad, 0x86, 0xf8, 0x4d, 0xfc, 0x22, 0xbe, 0x24, 0x4d, 0xe1,
+	0x5a, 0x93, 0x90, 0xa6, 0x85, 0xca, 0x86, 0x8b, 0xcb, 0x86, 0xe3, 0x10, 0x6e, 0x70, 0x4c, 0x1c,
+	0x16, 0xd9, 0x0d, 0x39, 0x18, 0xa7, 0x2d, 0x93, 0xfb, 0xbb, 0xdf, 0x8e, 0xee, 0x72, 0x6c, 0x23,
+	0xc6, 0x0d, 0xdb, 0xf5, 0x01, 0xf3, 0x43, 0x24, 0x91, 0xda, 0x4f, 0x50, 0xc8, 0xa2, 0x0e, 0x01,
+	0xf1, 0x63, 0x17, 0x05, 0x7e, 0xbc, 0xdd, 0x8f, 0x21, 0x6e, 0xaf, 0x93, 0x33, 0xfd, 0x9b, 0xbd,
+	0x76, 0xd7, 0xfa, 0xb7, 0xda, 0x86, 0x85, 0xeb, 0x06, 0x47, 0x83, 0x4f, 0x6e, 0x23, 0x86, 0x9c,
+	0x76, 0x84, 0x7c, 0x36, 0x82, 0xc1, 0xe8, 0x61, 0xb5, 0x0f, 0xa1, 0x12, 0xf8, 0xcd, 0x5d, 0xdb,
+	0x25, 0x94, 0x6f, 0xdf, 0xdc, 0xac, 0x7c, 0x48, 0x1c, 0xa4, 0xa3, 0x9f, 0xb6, 0x10, 0xe3, 0xca,
+	0x01, 0xcc, 0x9a, 0xc4, 0x69, 0xe0, 0x66, 0x8b, 0x8a, 0xa0, 0xe6, 0xc1, 0x2c, 0x58, 0x48, 0xaf,
+	0x2e, 0x6b, 0x83, 0x6f, 0x4e, 0xf3, 0xec, 0xb7, 0xf6, 0x05, 0xc5, 0x66, 0xaf, 0x9d, 0xde, 0x4f,
+	0xa3, 0x7e, 0x05, 0xe0, 0x5b, 0xd1, 0x13, 0x99, 0x4b, 0x1c, 0x86, 0x94, 0xdb, 0x30, 0x69, 0x23,
+	0x6e, 0xd4, 0x0d, 0x6e, 0xf8, 0xa7, 0xcd, 0x46, 0x4e, 0xbb, 0x2f, 0x42, 0xbf, 0x83, 0xf8, 0xfb,
+	0x88, 0x1b, 0x0f, 0x8e, 0x5d, 0xa4, 0x87, 0x16, 0xca, 0x7d, 0x38, 0xc9, 0x8e, 0x19, 0x47, 0x76,
+	0x35, 0x24, 0x89, 0x0b, 0x92, 0xef, 0x44, 0x48, 0x2a, 0x02, 0x75, 0x91, 0x6a, 0x42, 0x9a, 0xbf,
+	0x1f, 0x10, 0xde, 0x81, 0x09, 0xe6, 0x22, 0x33, 0x1f, 0x13, 0x2c, 0xf3, 0xc3, 0x84, 0xef, 0x20,
+	0x5e, 0x71, 0x91, 0xe9, 0x51, 0x6c, 0x4c, 0xfe, 0xfe, 0x24, 0xe3, 0xd9, 0x68, 0x4d, 0xb3, 0xea,
+	0xfd, 0xd4, 0x05, 0xc3, 0x5a, 0xea, 0x6f, 0xef, 0x8e, 0xc9, 0xf3, 0xd4, 0x3f, 0x03, 0x98, 0x1f,
+	0x16, 0x2a, 0x65, 0x0d, 0xa6, 0x3d, 0x5a, 0x86, 0x68, 0x1b, 0x9b, 0xc8, 0x3f, 0x78, 0x5a, 0x93,
+	0x89, 0xaa, 0x05, 0x89, 0xaa, 0x55, 0x44, 0x1a, 0xdf, 0x19, 0xd1, 0x61, 0xdd, 0x61, 0x15, 0x09,
+	0x56, 0x6e, 0xc3, 0x8c, 0xd1, 0x6b, 0x1c, 0x7f, 0x91, 0x71, 0xda, 0xe8, 0x5a, 0x6f, 0xe4, 0x60,
+	0xd2, 0x33, 0xf6, 0xb2, 0x4f, 0x49, 0x9c, 0x3d, 0x06, 0x60, 0x2f, 0x91, 0x04, 0xb9, 0x98, 0xfa,
+	0x7f, 0x00, 0xa7, 0xe4, 0x6d, 0xad, 0xff, 0x60, 0x5b, 0x0f, 0x72, 0x63, 0x19, 0x4e, 0xb8, 0x14,
+	0xdb, 0x06, 0x3d, 0x16, 0xc7, 0x21, 0x2a, 0x4e, 0x4b, 0x6d, 0xa4, 0xfe, 0xfa, 0x9f, 0x27, 0xf1,
+	0x04, 0x8d, 0x1d, 0x01, 0x3d, 0xeb, 0x03, 0x2a, 0x62, 0x5f, 0x29, 0xc3, 0x74, 0x9d, 0xd8, 0x06,
+	0x76, 0xaa, 0x8e, 0x61, 0xa3, 0xfc, 0xb8, 0x80, 0x4f, 0x78, 0xf0, 0x14, 0x1d, 0xcf, 0x81, 0xfc,
+	0x69, 0xec, 0x10, 0xe8, 0x50, 0x42, 0xf6, 0x0d, 0x1b, 0x29, 0x3f, 0x86, 0x0a, 0x67, 0xb8, 0x59,
+	0xed, 0xcf, 0xc1, 0xa4, 0x10, 0xb5, 0x38, 0xec, 0x2a, 0x1e, 0x54, 0x76, 0x77, 0xfa, 0x22, 0xba,
+	0x21, 0xb4, 0xe8, 0x53, 0x1e, 0x55, 0xdf, 0xc6, 0x5a, 0xf2, 0xbf, 0xef, 0x8e, 0xbe, 0xb3, 0x74,
+	0x63, 0xe9, 0x96, 0x14, 0xba, 0x97, 0x48, 0xc6, 0x72, 0xf1, 0xbd, 0x44, 0x32, 0x91, 0x1b, 0xdd,
+	0x4b, 0x24, 0x47, 0x73, 0x63, 0x7b, 0x89, 0xe4, 0x58, 0x6e, 0x5c, 0xfd, 0x1c, 0xc0, 0xa9, 0x0b,
+	0xb4, 0xca, 0x32, 0xcc, 0x0a, 0xef, 0x3e, 0x42, 0xc7, 0x52, 0x10, 0x10, 0x82, 0x32, 0x9e, 0xa0,
+	0x71, 0x3a, 0x2a, 0xe5, 0xa4, 0x3d, 0xc8, 0x5d, 0x74, 0x2c, 0xf4, 0x1c, 0xf8, 0x7a, 0x3c, 0x0b,
+	0xc3, 0x6a, 0x12, 0x8a, 0xf9, 0xa1, 0x2d, 0x6e, 0x78, 0x62, 0x75, 0xe1, 0x32, 0x3d, 0x77, 0xd1,
+	0xf1, 0x7a, 0x80, 0xd7, 0x73, 0x3e, 0x65, 0xb8, 0xa2, 0xbc, 0x07, 0x27, 0x42, 0xde, 0xb6, 0x61,
+	0xb5, 0x82, 0x8b, 0x9f, 0x89, 0x26, 0x3d, 0x32, 0x29, 0xe2, 0x22, 0x49, 0x65, 0x4c, 0x32, 0x3e,
+	0xd5, 0x81, 0x67, 0xa4, 0x62, 0xa8, 0xf4, 0x5e, 0xb3, 0xff, 0x20, 0x2b, 0x83, 0x6b, 0x40, 0x69,
+	0x98, 0xbf, 0x1f, 0xc8, 0x3b, 0xdf, 0xda, 0xaf, 0xf4, 0x3c, 0x8a, 0x68, 0x01, 0xf8, 0x11, 0xcc,
+	0xef, 0x20, 0xae, 0x23, 0x9b, 0x70, 0xe4, 0x3d, 0x81, 0x6d, 0x6c, 0x85, 0x45, 0xe7, 0x1a, 0x4c,
+	0x79, 0xe1, 0x64, 0xae, 0x61, 0xfa, 0x31, 0xd5, 0xbb, 0x0b, 0x8a, 0x0a, 0xb3, 0xc1, 0x51, 0x32,
+	0xea, 0x31, 0x81, 0xf0, 0xde, 0x8c, 0x47, 0xe4, 0xc5, 0x59, 0xbd, 0x05, 0x67, 0x06, 0xb0, 0xfb,
+	0x7a, 0xde, 0x86, 0x29, 0x61, 0xdc, 0xc0, 0x56, 0x40, 0x9f, 0x7c, 0xe4, 0x83, 0xd4, 0x1f, 0xc2,
+	0xe9, 0x1d, 0xc4, 0xef, 0x11, 0xd3, 0xb0, 0xde, 0xbc, 0x5b, 0xbf, 0x00, 0x42, 0x75, 0x84, 0xdd,
+	0x77, 0x6b, 0x0f, 0x7e, 0xc3, 0x32, 0x18, 0xaf, 0x1a, 0x47, 0x0d, 0x5a, 0x0d, 0xbb, 0x50, 0x3e,
+	0x25, 0x82, 0x5d, 0xb8, 0xf0, 0x82, 0x1f, 0x04, 0x08, 0x7d, 0xca, 0x33, 0x5b, 0x3f, 0x6a, 0xd0,
+	0x70, 0xa9, 0x5f, 0x62, 0x2c, 0x22, 0x11, 0xc2, 0xe4, 0xa6, 0x25, 0x6b, 0xbc, 0x5a, 0x81, 0x29,
+	0xff, 0x9b, 0xb9, 0xca, 0x3c, 0xcc, 0xb2, 0x96, 0x69, 0x22, 0x26, 0x65, 0xb0, 0x3c, 0x98, 0x8d,
+	0x2f, 0xa4, 0xf4, 0x8c, 0xbf, 0xe8, 0x79, 0xcc, 0x94, 0x39, 0x98, 0x69, 0x18, 0xd8, 0x42, 0x75,
+	0x1f, 0x13, 0x13, 0x98, 0xb4, 0x5c, 0x13, 0x10, 0xb5, 0x06, 0x67, 0x64, 0x1a, 0x6d, 0xec, 0xee,
+	0x6f, 0x1d, 0xf8, 0xfd, 0x2a, 0x88, 0xe2, 0x3c, 0x4c, 0x84, 0x81, 0xcf, 0x6c, 0x4c, 0x7e, 0x7a,
+	0x02, 0xc4, 0x73, 0x79, 0x34, 0x9a, 0x3f, 0x3d, 0x3d, 0x05, 0xba, 0xd8, 0x54, 0x66, 0x61, 0xba,
+	0x8e, 0x98, 0x49, 0xb1, 0xe8, 0x52, 0x61, 0x28, 0xbb, 0x4b, 0xea, 0x6f, 0x00, 0x9c, 0xee, 0x1e,
+	0xb2, 0x49, 0xd1, 0x1b, 0x3f, 0x42, 0x59, 0x80, 0x39, 0xdc, 0x74, 0x08, 0x45, 0xf2, 0x52, 0x2d,
+	0xcc, 0x78, 0x3e, 0x2e, 0xd4, 0x4e, 0xc8, 0x75, 0x4f, 0xed, 0x3d, 0xcc, 0xb8, 0xfa, 0x05, 0x08,
+	0x1e, 0x8e, 0xe7, 0x4c, 0x78, 0xa3, 0xbb, 0x70, 0x52, 0x74, 0xeb, 0x1e, 0x7b, 0x2f, 0xa2, 0xe9,
+	0xd5, 0xb9, 0x61, 0x4f, 0x47, 0x04, 0x4b, 0x74, 0xc3, 0x6c, 0x3b, 0xf8, 0xf4, 0x4e, 0x50, 0xee,
+	0xc3, 0x29, 0xec, 0x44, 0xc9, 0x62, 0x82, 0x6c, 0x68, 0x4b, 0xda, 0x75, 0x42, 0x0e, 0x7d, 0x12,
+	0x3b, 0xfd, 0x84, 0xdf, 0x85, 0x85, 0xe0, 0xae, 0x4d, 0x11, 0x3c, 0x9f, 0xd8, 0x24, 0x2d, 0x87,
+	0x8b, 0xea, 0x91, 0xd5, 0xa7, 0x7d, 0x84, 0x8c, 0x6e, 0x5d, 0x76, 0xaa, 0x96, 0xc3, 0xd5, 0xbb,
+	0x30, 0x15, 0x7a, 0x1a, 0xe6, 0x5a, 0xb7, 0x02, 0xca, 0x5c, 0x13, 0x05, 0x6f, 0x0e, 0x66, 0x28,
+	0x32, 0x09, 0xad, 0xfb, 0xc4, 0x31, 0x41, 0x9c, 0x96, 0x6b, 0x92, 0xec, 0xfb, 0x30, 0xdd, 0xe3,
+	0xe9, 0xe5, 0x74, 0x8b, 0x30, 0xe7, 0xcf, 0x3f, 0x98, 0x38, 0x55, 0x44, 0x29, 0xa1, 0xfe, 0xcd,
+	0x4d, 0x76, 0xd7, 0xdf, 0xf3, 0x96, 0x57, 0xff, 0x98, 0x85, 0xa9, 0x4d, 0x31, 0x6f, 0xae, 0x7f,
+	0xb0, 0xab, 0x3c, 0x03, 0x70, 0xa2, 0x7f, 0xde, 0x50, 0x86, 0xd6, 0xaf, 0x81, 0x93, 0x50, 0x41,
+	0xbb, 0x2a, 0x5c, 0x5e, 0xbe, 0xda, 0xec, 0x3c, 0xcd, 0x7b, 0xe3, 0x58, 0x09, 0x93, 0x12, 0x76,
+	0x1a, 0xd4, 0x90, 0x63, 0x67, 0x8b, 0xa2, 0xd2, 0x43, 0x8a, 0x39, 0x5a, 0x6a, 0xdc, 0x3c, 0x32,
+	0x4b, 0x75, 0x87, 0x95, 0x6a, 0x06, 0xc3, 0x66, 0xa9, 0xc5, 0x10, 0xfd, 0xe4, 0x9f, 0x9f, 0xff,
+	0x2e, 0xa6, 0xa9, 0x8b, 0xfe, 0xbc, 0x5c, 0x0e, 0xab, 0x0b, 0x2b, 0xcb, 0xa9, 0xa4, 0x3b, 0x59,
+	0x62, 0x71, 0xea, 0x1a, 0xb8, 0xae, 0xfc, 0x03, 0x40, 0xd8, 0xad, 0xda, 0xca, 0xe2, 0xe5, 0x7e,
+	0xf6, 0x34, 0xf0, 0xc2, 0xf5, 0xab, 0x40, 0x7d, 0x39, 0xd6, 0xab, 0xca, 0xb9, 0xa1, 0x6a, 0x57,
+	0x96, 0x23, 0x6a, 0x9f, 0xa7, 0xe9, 0x34, 0x06, 0xa7, 0x2e, 0x14, 0x70, 0x65, 0xf9, 0x92, 0xe1,
+	0x6b, 0x60, 0x27, 0x29, 0xac, 0xbc, 0x84, 0x85, 0x2f, 0xf4, 0x57, 0xa0, 0xf3, 0x34, 0xbf, 0x32,
+	0x58, 0x29, 0x45, 0x46, 0x3d, 0x2a, 0xd4, 0x26, 0x0e, 0xe6, 0x44, 0x6a, 0xdd, 0x53, 0xee, 0x0c,
+	0xd0, 0xfa, 0x71, 0xf8, 0x7d, 0xd2, 0x15, 0xfc, 0x71, 0x5f, 0xb3, 0x38, 0x29, 0x53, 0xe1, 0x4d,
+	0x35, 0xac, 0xda, 0xca, 0x57, 0x00, 0xe6, 0xa2, 0xbd, 0x42, 0x29, 0x5f, 0xa2, 0x67, 0x50, 0xcf,
+	0x2a, 0x2c, 0x5f, 0xdd, 0xc0, 0xd7, 0xff, 0xcb, 0xd7, 0xd0, 0xbf, 0xab, 0xec, 0xbc, 0xaa, 0x7e,
+	0xcb, 0x73, 0xa6, 0x47, 0xfe, 0x67, 0x00, 0x2a, 0xa2, 0x33, 0x6d, 0x53, 0x62, 0x6f, 0xed, 0x57,
+	0xb6, 0xc4, 0x50, 0xa8, 0xcc, 0x0e, 0xd3, 0x13, 0x74, 0xb4, 0xc2, 0xdc, 0x0b, 0x10, 0xcc, 0x55,
+	0x1f, 0x76, 0x9e, 0xe6, 0x97, 0x2f, 0xcb, 0xe5, 0xd9, 0x61, 0xc9, 0xfc, 0x3d, 0xf5, 0xd6, 0x15,
+	0x92, 0xd9, 0xb4, 0x84, 0x0c, 0x4a, 0xec, 0xaa, 0xb7, 0x26, 0xe7, 0x59, 0x2f, 0xad, 0xff, 0xd7,
+	0xd7, 0x27, 0x82, 0xce, 0xa8, 0xac, 0x5c, 0xfe, 0x0e, 0x07, 0x74, 0xd1, 0x17, 0x3d, 0xdd, 0xde,
+	0x36, 0xa4, 0xfe, 0xbc, 0xf3, 0x97, 0xd8, 0x68, 0x1d, 0xd9, 0x64, 0xe5, 0x55, 0xdf, 0xf0, 0x6d,
+	0xf5, 0x9d, 0xab, 0xbf, 0xe1, 0x1a, 0x76, 0xea, 0xd5, 0xe0, 0xaf, 0x54, 0x4f, 0xf5, 0x17, 0x00,
+	0xe6, 0xa2, 0xad, 0x7a, 0x78, 0x26, 0x0f, 0x69, 0xea, 0x2f, 0xa5, 0xf8, 0x67, 0xaf, 0xad, 0x78,
+	0x4d, 0xbd, 0xf9, 0x92, 0x8a, 0x65, 0x17, 0x5d, 0x03, 0xd7, 0x0b, 0x4b, 0x4f, 0x1e, 0x83, 0xf8,
+	0x67, 0x8f, 0xc1, 0xb7, 0x86, 0x38, 0x2c, 0xff, 0x06, 0xfc, 0xe4, 0xef, 0xf9, 0xf8, 0x1f, 0x00,
+	0xd8, 0xf8, 0x35, 0x38, 0x7b, 0x5e, 0x1c, 0x79, 0xf6, 0xbc, 0x38, 0xf2, 0xe5, 0xf3, 0x22, 0x38,
+	0xed, 0x14, 0xc1, 0x9f, 0x3a, 0x45, 0xf0, 0x69, 0xa7, 0x08, 0xce, 0x3a, 0x45, 0xf0, 0xaf, 0x4e,
+	0x11, 0xfc, 0xbb, 0x53, 0x1c, 0xf9, 0xb2, 0x53, 0x04, 0xbf, 0x3d, 0x2f, 0x8e, 0x3c, 0x39, 0x2f,
+	0x82, 0xb3, 0xf3, 0xe2, 0xc8, 0xb3, 0xf3, 0xe2, 0xc8, 0x87, 0xf7, 0x9a, 0xc4, 0xfd, 0xa8, 0xa9,
+	0xb5, 0x89, 0xc5, 0x11, 0xa5, 0x86, 0xd6, 0x62, 0x65, 0xf1, 0xd1, 0x20, 0xd4, 0x2e, 0xb9, 0x94,
+	0xb4, 0x71, 0x1d, 0xd1, 0x52, 0xb0, 0x5d, 0x76, 0x6b, 0x4d, 0x52, 0x46, 0x47, 0xdc, 0xff, 0x37,
+	0x40, 0xe4, 0x7f, 0x15, 0xb5, 0x31, 0x31, 0x5a, 0xde, 0xf8, 0x3a, 0x00, 0x00, 0xff, 0xff, 0xf6,
+	0xde, 0xb8, 0xf9, 0xc4, 0x11, 0x00, 0x00,
 }
 
 func (this *ImportF5CSZoneRequest) Equal(that interface{}) bool {
@@ -1311,6 +1667,162 @@ func (this *CloneResp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ImportBINDValidateRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ImportBINDValidateRequest)
+	if !ok {
+		that2, ok := that.(ImportBINDValidateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !bytes.Equal(this.File, that1.File) {
+		return false
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	return true
+}
+func (this *ImportBINDCreateRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ImportBINDCreateRequest)
+	if !ok {
+		that2, ok := that.(ImportBINDCreateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !bytes.Equal(this.File, that1.File) {
+		return false
+	}
+	if this.Description != that1.Description {
+		return false
+	}
+	if len(this.IgnoreZoneList) != len(that1.IgnoreZoneList) {
+		return false
+	}
+	for i := range this.IgnoreZoneList {
+		if this.IgnoreZoneList[i] != that1.IgnoreZoneList[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *ImportBINDResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ImportBINDResponse)
+	if !ok {
+		that2, ok := that.(ImportBINDResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.ValidZoneList) != len(that1.ValidZoneList) {
+		return false
+	}
+	for i := range this.ValidZoneList {
+		if !this.ValidZoneList[i].Equal(that1.ValidZoneList[i]) {
+			return false
+		}
+	}
+	if len(this.InvalidZoneList) != len(that1.InvalidZoneList) {
+		return false
+	}
+	for i := range this.InvalidZoneList {
+		if !this.InvalidZoneList[i].Equal(that1.InvalidZoneList[i]) {
+			return false
+		}
+	}
+	if this.SuccessCreatedZoneCount != that1.SuccessCreatedZoneCount {
+		return false
+	}
+	return true
+}
+func (this *ValidZone) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ValidZone)
+	if !ok {
+		that2, ok := that.(ValidZone)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ZoneName != that1.ZoneName {
+		return false
+	}
+	if this.RecordCount != that1.RecordCount {
+		return false
+	}
+	return true
+}
+func (this *InvalidZone) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*InvalidZone)
+	if !ok {
+		that2, ok := that.(InvalidZone)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ZoneName != that1.ZoneName {
+		return false
+	}
+	if this.ValidationError != that1.ValidationError {
+		return false
+	}
+	return true
+}
 func (this *ImportF5CSZoneRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1474,6 +1986,67 @@ func (this *CloneResp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *ImportBINDValidateRequest) goString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.ImportBINDValidateRequest{")
+	s = append(s, "File: "+fmt.Sprintf("%#v", this.File)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ImportBINDCreateRequest) goString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&dns_zone.ImportBINDCreateRequest{")
+	s = append(s, "File: "+fmt.Sprintf("%#v", this.File)+",\n")
+	s = append(s, "Description: "+fmt.Sprintf("%#v", this.Description)+",\n")
+	s = append(s, "IgnoreZoneList: "+fmt.Sprintf("%#v", this.IgnoreZoneList)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ImportBINDResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&dns_zone.ImportBINDResponse{")
+	if this.ValidZoneList != nil {
+		s = append(s, "ValidZoneList: "+fmt.Sprintf("%#v", this.ValidZoneList)+",\n")
+	}
+	if this.InvalidZoneList != nil {
+		s = append(s, "InvalidZoneList: "+fmt.Sprintf("%#v", this.InvalidZoneList)+",\n")
+	}
+	s = append(s, "SuccessCreatedZoneCount: "+fmt.Sprintf("%#v", this.SuccessCreatedZoneCount)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ValidZone) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.ValidZone{")
+	s = append(s, "ZoneName: "+fmt.Sprintf("%#v", this.ZoneName)+",\n")
+	s = append(s, "RecordCount: "+fmt.Sprintf("%#v", this.RecordCount)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *InvalidZone) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&dns_zone.InvalidZone{")
+	s = append(s, "ZoneName: "+fmt.Sprintf("%#v", this.ZoneName)+",\n")
+	s = append(s, "ValidationError: "+fmt.Sprintf("%#v", this.ValidationError)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -1520,6 +2093,16 @@ type CustomAPIClient interface {
 	// x-displayName: "Clone from DNSDomain"
 	// cloning dns domain to DNSZone.
 	CloneFromDNSDomain(ctx context.Context, in *CloneReq, opts ...grpc.CallOption) (*CloneResp, error)
+	// Validate BIND Files
+	//
+	// x-displayName: "Validate BIND Files"
+	// Validate BIND Files for Import
+	ImportBINDValidate(ctx context.Context, in *ImportBINDValidateRequest, opts ...grpc.CallOption) (*ImportBINDResponse, error)
+	// Import BIND Files
+	//
+	// x-displayName: "Import BIND Files"
+	// Import BIND Files to Create DNS Zones
+	ImportBINDCreate(ctx context.Context, in *ImportBINDCreateRequest, opts ...grpc.CallOption) (*ImportBINDResponse, error)
 }
 
 type customAPIClient struct {
@@ -1575,6 +2158,24 @@ func (c *customAPIClient) CloneFromDNSDomain(ctx context.Context, in *CloneReq, 
 	return out, nil
 }
 
+func (c *customAPIClient) ImportBINDValidate(ctx context.Context, in *ImportBINDValidateRequest, opts ...grpc.CallOption) (*ImportBINDResponse, error) {
+	out := new(ImportBINDResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.dns_zone.CustomAPI/ImportBINDValidate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIClient) ImportBINDCreate(ctx context.Context, in *ImportBINDCreateRequest, opts ...grpc.CallOption) (*ImportBINDResponse, error) {
+	out := new(ImportBINDResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.dns_zone.CustomAPI/ImportBINDCreate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Import F5 Cloud Services DNS Zone
@@ -1602,6 +2203,16 @@ type CustomAPIServer interface {
 	// x-displayName: "Clone from DNSDomain"
 	// cloning dns domain to DNSZone.
 	CloneFromDNSDomain(context.Context, *CloneReq) (*CloneResp, error)
+	// Validate BIND Files
+	//
+	// x-displayName: "Validate BIND Files"
+	// Validate BIND Files for Import
+	ImportBINDValidate(context.Context, *ImportBINDValidateRequest) (*ImportBINDResponse, error)
+	// Import BIND Files
+	//
+	// x-displayName: "Import BIND Files"
+	// Import BIND Files to Create DNS Zones
+	ImportBINDCreate(context.Context, *ImportBINDCreateRequest) (*ImportBINDResponse, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -1622,6 +2233,12 @@ func (*UnimplementedCustomAPIServer) GetLocalZoneFile(ctx context.Context, req *
 }
 func (*UnimplementedCustomAPIServer) CloneFromDNSDomain(ctx context.Context, req *CloneReq) (*CloneResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CloneFromDNSDomain not implemented")
+}
+func (*UnimplementedCustomAPIServer) ImportBINDValidate(ctx context.Context, req *ImportBINDValidateRequest) (*ImportBINDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportBINDValidate not implemented")
+}
+func (*UnimplementedCustomAPIServer) ImportBINDCreate(ctx context.Context, req *ImportBINDCreateRequest) (*ImportBINDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ImportBINDCreate not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -1718,6 +2335,42 @@ func _CustomAPI_CloneFromDNSDomain_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_ImportBINDValidate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportBINDValidateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).ImportBINDValidate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.dns_zone.CustomAPI/ImportBINDValidate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).ImportBINDValidate(ctx, req.(*ImportBINDValidateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_ImportBINDCreate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ImportBINDCreateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).ImportBINDCreate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.dns_zone.CustomAPI/ImportBINDCreate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).ImportBINDCreate(ctx, req.(*ImportBINDCreateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.dns_zone.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -1741,6 +2394,14 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CloneFromDNSDomain",
 			Handler:    _CustomAPI_CloneFromDNSDomain_Handler,
+		},
+		{
+			MethodName: "ImportBINDValidate",
+			Handler:    _CustomAPI_ImportBINDValidate_Handler,
+		},
+		{
+			MethodName: "ImportBINDCreate",
+			Handler:    _CustomAPI_ImportBINDCreate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -2256,6 +2917,217 @@ func (m *CloneResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ImportBINDValidateRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ImportBINDValidateRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImportBINDValidateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.File) > 0 {
+		i -= len(m.File)
+		copy(dAtA[i:], m.File)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.File)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ImportBINDCreateRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ImportBINDCreateRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImportBINDCreateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.IgnoreZoneList) > 0 {
+		for iNdEx := len(m.IgnoreZoneList) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.IgnoreZoneList[iNdEx])
+			copy(dAtA[i:], m.IgnoreZoneList[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.IgnoreZoneList[iNdEx])))
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.File) > 0 {
+		i -= len(m.File)
+		copy(dAtA[i:], m.File)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.File)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ImportBINDResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ImportBINDResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ImportBINDResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.SuccessCreatedZoneCount != 0 {
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.SuccessCreatedZoneCount))
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.InvalidZoneList) > 0 {
+		for iNdEx := len(m.InvalidZoneList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.InvalidZoneList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.ValidZoneList) > 0 {
+		for iNdEx := len(m.ValidZoneList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ValidZoneList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ValidZone) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ValidZone) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ValidZone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.RecordCount != 0 {
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.RecordCount))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.ZoneName) > 0 {
+		i -= len(m.ZoneName)
+		copy(dAtA[i:], m.ZoneName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ZoneName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *InvalidZone) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *InvalidZone) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InvalidZone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ValidationError) > 0 {
+		i -= len(m.ValidationError)
+		copy(dAtA[i:], m.ValidationError)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ValidationError)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ZoneName) > 0 {
+		i -= len(m.ZoneName)
+		copy(dAtA[i:], m.ZoneName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ZoneName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -2485,6 +3357,103 @@ func (m *CloneResp) Size() (n int) {
 	return n
 }
 
+func (m *ImportBINDValidateRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.File)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *ImportBINDCreateRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.File)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.IgnoreZoneList) > 0 {
+		for _, s := range m.IgnoreZoneList {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ImportBINDResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.ValidZoneList) > 0 {
+		for _, e := range m.ValidZoneList {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if len(m.InvalidZoneList) > 0 {
+		for _, e := range m.InvalidZoneList {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if m.SuccessCreatedZoneCount != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.SuccessCreatedZoneCount))
+	}
+	return n
+}
+
+func (m *ValidZone) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ZoneName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.RecordCount != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.RecordCount))
+	}
+	return n
+}
+
+func (m *InvalidZone) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ZoneName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.ValidationError)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -2636,6 +3605,73 @@ func (this *CloneResp) String() string {
 	s := strings.Join([]string{`&CloneResp{`,
 		`SuccessZones:` + fmt.Sprintf("%v", this.SuccessZones) + `,`,
 		`FailedZones:` + fmt.Sprintf("%v", this.FailedZones) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ImportBINDValidateRequest) string() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ImportBINDValidateRequest{`,
+		`File:` + fmt.Sprintf("%v", this.File) + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ImportBINDCreateRequest) string() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ImportBINDCreateRequest{`,
+		`File:` + fmt.Sprintf("%v", this.File) + `,`,
+		`Description:` + fmt.Sprintf("%v", this.Description) + `,`,
+		`IgnoreZoneList:` + fmt.Sprintf("%v", this.IgnoreZoneList) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ImportBINDResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValidZoneList := "[]*ValidZone{"
+	for _, f := range this.ValidZoneList {
+		repeatedStringForValidZoneList += strings.Replace(f.String(), "ValidZone", "ValidZone", 1) + ","
+	}
+	repeatedStringForValidZoneList += "}"
+	repeatedStringForInvalidZoneList := "[]*InvalidZone{"
+	for _, f := range this.InvalidZoneList {
+		repeatedStringForInvalidZoneList += strings.Replace(f.String(), "InvalidZone", "InvalidZone", 1) + ","
+	}
+	repeatedStringForInvalidZoneList += "}"
+	s := strings.Join([]string{`&ImportBINDResponse{`,
+		`ValidZoneList:` + repeatedStringForValidZoneList + `,`,
+		`InvalidZoneList:` + repeatedStringForInvalidZoneList + `,`,
+		`SuccessCreatedZoneCount:` + fmt.Sprintf("%v", this.SuccessCreatedZoneCount) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ValidZone) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ValidZone{`,
+		`ZoneName:` + fmt.Sprintf("%v", this.ZoneName) + `,`,
+		`RecordCount:` + fmt.Sprintf("%v", this.RecordCount) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *InvalidZone) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&InvalidZone{`,
+		`ZoneName:` + fmt.Sprintf("%v", this.ZoneName) + `,`,
+		`ValidationError:` + fmt.Sprintf("%v", this.ValidationError) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3988,6 +5024,637 @@ func (m *CloneResp) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.FailedZones = append(m.FailedZones, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ImportBINDValidateRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ImportBINDValidateRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ImportBINDValidateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field File", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.File = append(m.File[:0], dAtA[iNdEx:postIndex]...)
+			if m.File == nil {
+				m.File = []byte{}
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ImportBINDCreateRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ImportBINDCreateRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ImportBINDCreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field File", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				byteLen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.File = append(m.File[:0], dAtA[iNdEx:postIndex]...)
+			if m.File == nil {
+				m.File = []byte{}
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IgnoreZoneList", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IgnoreZoneList = append(m.IgnoreZoneList, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ImportBINDResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ImportBINDResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ImportBINDResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidZoneList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ValidZoneList = append(m.ValidZoneList, &ValidZone{})
+			if err := m.ValidZoneList[len(m.ValidZoneList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InvalidZoneList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.InvalidZoneList = append(m.InvalidZoneList, &InvalidZone{})
+			if err := m.InvalidZoneList[len(m.InvalidZoneList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SuccessCreatedZoneCount", wireType)
+			}
+			m.SuccessCreatedZoneCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SuccessCreatedZoneCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ValidZone) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ValidZone: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ValidZone: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ZoneName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ZoneName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RecordCount", wireType)
+			}
+			m.RecordCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RecordCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InvalidZone) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InvalidZone: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InvalidZone: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ZoneName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ZoneName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ValidationError", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ValidationError = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -37,15 +37,13 @@ func (m *Auth) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.ClientSecret = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *Auth) GoString() string {
 	copy := m.DeepCopy()
-	copy.ClientSecret = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -237,17 +235,13 @@ func (m *Session) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.HmacKey = ""
-	copy.HmacKeySecondary = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *Session) GoString() string {
 	copy := m.DeepCopy()
-	copy.HmacKey = ""
-	copy.HmacKeySecondary = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -259,6 +253,7 @@ func (m *Session) Redact(ctx context.Context) error {
 	}
 
 	m.HmacKey = ""
+
 	m.HmacKeySecondary = ""
 
 	return nil

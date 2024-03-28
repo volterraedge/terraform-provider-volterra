@@ -71,10 +71,66 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.gcp_vpc_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.gcp_vpc_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.gcp_vpc_site.API.Create"] = "ves.io.schema.views.gcp_vpc_site.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.gcp_vpc_site.API.Get"] = []string{
-		"object",
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.gcp_vpc_site.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.gcp_vpc_site.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.gcp_vpc_site.API.Replace"] = []string{
@@ -86,6 +142,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.secret_encoding_type",
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.vault_secret_info",
 		"spec.voltstack_cluster.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.wingman_secret_info",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.gcp_vpc_site.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.gcp_vpc_site.API.Replace"] = "ves.io.schema.views.gcp_vpc_site.ReplaceRequest"
@@ -113,6 +180,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
+
+	customCSR = mdr.PvtCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.views.gcp_vpc_site.Object"] = PrivateCustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.views.gcp_vpc_site.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.views.gcp_vpc_site.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.views.gcp_vpc_site.PrivateCustomAPI"] = RegisterPrivateCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.views.gcp_vpc_site.PrivateCustomAPI"] = RegisterGwPrivateCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.views.gcp_vpc_site.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewPrivateCustomAPIServer(svc)
+		}
+
+	}()
 
 	csr = mdr.PubCRUDServiceRegistry
 

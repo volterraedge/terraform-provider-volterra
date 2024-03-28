@@ -4,7 +4,7 @@
 package api_definition
 
 import (
-	bytes "bytes"
+	"bytes"
 	"context"
 	"fmt"
 	io "io"
@@ -611,23 +611,23 @@ type publicConfigCustomAPIInprocClient struct {
 }
 
 func (c *publicConfigCustomAPIInprocClient) GetReferencingHttpLoadbalancers(ctx context.Context, in *GetReferencingLoadbalancersReq, opts ...grpc.CallOption) (*GetReferencingLoadbalancersResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingHttpLoadbalancers", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingHttpLoadbalancers")
 	return c.PublicConfigCustomAPIServer.GetReferencingHttpLoadbalancers(ctx, in)
 }
 func (c *publicConfigCustomAPIInprocClient) MarkAsNonAPI(ctx context.Context, in *APInventoryReq, opts ...grpc.CallOption) (*APInventoryResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.MarkAsNonAPI", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.MarkAsNonAPI")
 	return c.PublicConfigCustomAPIServer.MarkAsNonAPI(ctx, in)
 }
 func (c *publicConfigCustomAPIInprocClient) MoveToAPInventory(ctx context.Context, in *APInventoryReq, opts ...grpc.CallOption) (*APInventoryResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.MoveToAPInventory", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.MoveToAPInventory")
 	return c.PublicConfigCustomAPIServer.MoveToAPInventory(ctx, in)
 }
 func (c *publicConfigCustomAPIInprocClient) RemoveFromAPInventory(ctx context.Context, in *APInventoryReq, opts ...grpc.CallOption) (*APInventoryResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.RemoveFromAPInventory", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.RemoveFromAPInventory")
 	return c.PublicConfigCustomAPIServer.RemoveFromAPInventory(ctx, in)
 }
 func (c *publicConfigCustomAPIInprocClient) UnmarkAsNonAPI(ctx context.Context, in *APInventoryReq, opts ...grpc.CallOption) (*APInventoryResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.UnmarkAsNonAPI", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PublicConfigCustomAPI.UnmarkAsNonAPI")
 	return c.PublicConfigCustomAPIServer.UnmarkAsNonAPI(ctx, in)
 }
 
@@ -1429,7 +1429,7 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                     "minItems": 1,
                     "maxItems": 100,
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Endpoints",
                     "x-ves-required": "true",
@@ -1467,46 +1467,9 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                     "description": " The list of API endpoints which were successfully proceeded by the API Inventory request.",
                     "title": "Updated API Endpoints",
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "Updated API Endpoints"
-                }
-            }
-        },
-        "api_definitionApiOperation": {
-            "type": "object",
-            "description": "API operation according to OpenAPI specification.",
-            "title": "ApiOperation",
-            "x-displayname": "API Operation",
-            "x-ves-proto-message": "ves.io.schema.views.api_definition.ApiOperation",
-            "properties": {
-                "method": {
-                    "description": " Method to match the input request API method against.\n\nExample: - 'POST'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "method",
-                    "$ref": "#/definitions/schemaHttpMethod",
-                    "x-displayname": "HTTP Method",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.defined_only": "true",
-                        "ves.io.schema.rules.enum.not_in": "0",
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "path": {
-                    "type": "string",
-                    "description": " An endpoint path, as specified in OpenAPI, including parameters.\n The path should comply with RFC 3986 and may have parameters according to OpenAPI specification\n\nExample: - \"/api/users/{userid}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.templated_http_path: true\n",
-                    "title": "path",
-                    "minLength": 1,
-                    "maxLength": 1024,
-                    "x-displayname": "Path",
-                    "x-ves-example": "/api/users/{userid}",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "1024",
-                        "ves.io.schema.rules.string.min_bytes": "1",
-                        "ves.io.schema.rules.string.templated_http_path": "true"
-                    }
                 }
             }
         },
@@ -1590,6 +1553,43 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                     "x-ves-example": "acmecorp",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
+        "viewsApiOperation": {
+            "type": "object",
+            "description": "API operation according to OpenAPI specification.",
+            "title": "ApiOperation",
+            "x-displayname": "API Operation",
+            "x-ves-proto-message": "ves.io.schema.views.ApiOperation",
+            "properties": {
+                "method": {
+                    "description": " Method to match the input request API method against.\n\nExample: - 'POST'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "HTTP Method",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "type": "string",
+                    "description": " An endpoint path, as specified in OpenAPI, including parameters.\n The path should comply with RFC 3986 and may have parameters according to OpenAPI specification\n\nExample: - \"/api/users/{userid}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "title": "path",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/users/{userid}",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.templated_http_path": "true"
                     }
                 }
             }

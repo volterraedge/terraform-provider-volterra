@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.fleet.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.fleet.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.fleet.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.fleet.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.fleet.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2647,12 +2662,29 @@ var APISwaggerJSON string = `{
             "title": "FamilyInet",
             "properties": {
                 "disable": {
-                    "description": "x-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Disable IPv4 Unicast\"\nDisable IPv4 family Route Exchange.",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable": {
-                    "description": "x-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
+                    "description": "x-displayName: \"Enable IPv4 Unicast\"\nEnable IPv4 family Route Exchange.",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "bgpFamilyInet6": {
+            "type": "object",
+            "description": "x-displayName: \"BGP Family Inet6\"\nParameters for inet6 family.",
+            "title": "FamilyInet6",
+            "properties": {
+                "disable": {
+                    "description": "x-displayName: \"Disable IPv6 Unicast\"\nDisable IPv6 family Route Exchange.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable": {
+                    "description": "x-displayName: \"Enable IPv6 Unicast\"\nEnable IPv6 family Route Exchange.",
                     "title": "enable",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -2802,13 +2834,13 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
+                    "description": "x-displayName: \"Peer Address\"\nSpecify IPV4 peer address.",
                     "title": "address"
                 },
                 "address_ipv6": {
                     "type": "string",
-                    "description": "x-displayName: \"Peer IPV6 Address\"\nSpecify peer ipv6 address.",
-                    "title": "IPV6 address"
+                    "description": "x-displayName: \"Peer IPv6 Address\"\nSpecify peer IPv6 address.",
+                    "title": "address_ipv6"
                 },
                 "asn": {
                     "type": "integer",
@@ -2821,14 +2853,39 @@ var APISwaggerJSON string = `{
                     "title": "default_gateway",
                     "$ref": "#/definitions/schemaEmpty"
                 },
+                "default_gateway_v6": {
+                    "description": "x-displayName: \"Default Gateway\"\nUse the default gateway address.",
+                    "title": "default_gateway_v6",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable": {
+                    "description": "x-displayName: \"Disable\"\nNo Peer Ipv4 Address.",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_v6": {
+                    "description": "x-displayName: \"Disable\"\nNo Peer IPv6 Address.",
+                    "title": "disable_v6",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "family_inet": {
-                    "description": "x-displayName: \"Family IPv4 Unicast\"\nParameters for IPv4 Unicast family.",
+                    "description": "x-displayName: \"Family IPv4 Unicast\"\nEnable/Disable Ipv4 family of routes exchange with peer",
                     "title": "family_inet",
                     "$ref": "#/definitions/bgpFamilyInet"
+                },
+                "family_inet_v6": {
+                    "description": "x-displayName: \"Family IPv6 Unicast\"\nEnable/Disable IPv6 family of routes exchange with peer",
+                    "title": "family_inet_v6",
+                    "$ref": "#/definitions/bgpFamilyInet6"
                 },
                 "from_site": {
                     "description": "x-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
                     "title": "from_site",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "from_site_v6": {
+                    "description": "x-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
+                    "title": "from_site_v6",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "inside_interfaces": {
@@ -2873,10 +2930,22 @@ var APISwaggerJSON string = `{
                     "title": "subnet_begin_offset",
                     "format": "int64"
                 },
+                "subnet_begin_offset_v6": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
+                    "title": "subnet_begin_offset_v6",
+                    "format": "int64"
+                },
                 "subnet_end_offset": {
                     "type": "integer",
                     "description": "x-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
                     "title": "subnet_end_offset",
+                    "format": "int64"
+                },
+                "subnet_end_offset_v6": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
+                    "title": "subnet_end_offset_v6",
                     "format": "int64"
                 }
             }
@@ -2892,7 +2961,7 @@ var APISwaggerJSON string = `{
                     "title": "address"
                 },
                 "disable_mtls": {
-                    "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
+                    "description": "x-displayName: \"Disable mTLS\"\nDisable mTLS",
                     "title": "disable_mtls",
                     "$ref": "#/definitions/schemaEmpty"
                 },
@@ -2902,7 +2971,7 @@ var APISwaggerJSON string = `{
                     "title": "dns_name"
                 },
                 "enable_mtls": {
-                    "description": "x-displayName: \"Enable MTLS\"\nEnable MTLS",
+                    "description": "x-displayName: \"Enable mTLS\"\nEnable mTLS",
                     "title": "enable_mtls",
                     "$ref": "#/definitions/schemaEmpty"
                 },

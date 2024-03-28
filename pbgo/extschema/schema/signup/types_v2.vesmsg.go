@@ -257,15 +257,13 @@ func (m *BillingMeta) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.PaymentProviderToken = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *BillingMeta) GoString() string {
 	copy := m.DeepCopy()
-	copy.PaymentProviderToken = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -526,23 +524,6 @@ func (v *ValidateCompanyMeta) NameValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
-func (v *ValidateCompanyMeta) MailingAddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for mailing_address")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCompanyMeta) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CompanyMeta)
 	if !ok {
@@ -592,9 +573,7 @@ var DefaultCompanyMetaValidator = func() *ValidateCompanyMeta {
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "256",
-		"ves.io.schema.rules.string.min_len":   "5",
+		"ves.io.schema.rules.string.max_len": "256",
 	}
 	vFn, err = vrhName(rulesName)
 	if err != nil {
@@ -602,17 +581,6 @@ var DefaultCompanyMetaValidator = func() *ValidateCompanyMeta {
 		panic(errMsg)
 	}
 	v.FldValidators["name"] = vFn
-
-	vrhMailingAddress := v.MailingAddressValidationRuleHandler
-	rulesMailingAddress := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhMailingAddress(rulesMailingAddress)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CompanyMeta.mailing_address: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["mailing_address"] = vFn
 
 	return v
 }()
@@ -1475,16 +1443,6 @@ func (v *ValidateSourceInternalSre) KcInstanceNameValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateSourceInternalSre) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSourceInternalSre) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SourceInternalSre)
 	if !ok {
@@ -1535,15 +1493,6 @@ func (v *ValidateSourceInternalSre) Validate(ctx context.Context, pm interface{}
 
 	}
 
-	if fv, exists := v.FldValidators["tenant_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("tenant_id"))
-		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -1580,17 +1529,6 @@ var DefaultSourceInternalSreValidator = func() *ValidateSourceInternalSre {
 		panic(errMsg)
 	}
 	v.FldValidators["kc_instance_name"] = vFn
-
-	vrhTenantId := v.TenantIdValidationRuleHandler
-	rulesTenantId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhTenantId(rulesTenantId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceInternalSre.tenant_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tenant_id"] = vFn
 
 	v.FldValidators["crm_info"] = CrmInfoV2Validator().Validate
 
@@ -2193,9 +2131,7 @@ var DefaultUserMetaValidator = func() *ValidateUserMeta {
 
 	vrhLastName := v.LastNameValidationRuleHandler
 	rulesLastName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "256",
-		"ves.io.schema.rules.string.min_len":   "1",
+		"ves.io.schema.rules.string.max_len": "256",
 	}
 	vFn, err = vrhLastName(rulesLastName)
 	if err != nil {
@@ -2206,10 +2142,7 @@ var DefaultUserMetaValidator = func() *ValidateUserMeta {
 
 	vrhEmail := v.EmailValidationRuleHandler
 	rulesEmail := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.email":     "true",
-		"ves.io.schema.rules.string.max_len":   "256",
-		"ves.io.schema.rules.string.min_len":   "1",
+		"ves.io.schema.rules.string.max_len": "256",
 	}
 	vFn, err = vrhEmail(rulesEmail)
 	if err != nil {
@@ -2220,10 +2153,7 @@ var DefaultUserMetaValidator = func() *ValidateUserMeta {
 
 	vrhContactNumber := v.ContactNumberValidationRuleHandler
 	rulesContactNumber := map[string]string{
-		"ves.io.schema.rules.message.required":    "true",
-		"ves.io.schema.rules.string.max_len":      "256",
-		"ves.io.schema.rules.string.min_len":      "1",
-		"ves.io.schema.rules.string.phone_number": "true",
+		"ves.io.schema.rules.string.max_len": "256",
 	}
 	vFn, err = vrhContactNumber(rulesContactNumber)
 	if err != nil {

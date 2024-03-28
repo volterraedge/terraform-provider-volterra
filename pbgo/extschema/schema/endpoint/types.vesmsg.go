@@ -1181,6 +1181,7 @@ func (m *GlobalSpecType) GetProximityChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_SitePreferences:
+
 		drInfos, err := m.GetSitePreferences().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSitePreferences().GetDRefInfo() FAILED")

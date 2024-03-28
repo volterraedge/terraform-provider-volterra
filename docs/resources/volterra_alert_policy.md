@@ -30,34 +30,22 @@ resource "volterra_alert_policy" "example" {
     // One of the arguments from this list "send dont_send" must be set
     send = true
 
-    // One of the arguments from this list "any severity group alertname alertname_regex custom" must be set
+    // One of the arguments from this list "severity group alertname alertname_regex custom any" must be set
 
-    custom {
-      alertlabel {
-        // One of the arguments from this list "exact_match regex_match" must be set
-        exact_match = "Major"
-      }
-
-      alertname {
-        // One of the arguments from this list "exact_match regex_match" must be set
-        exact_match = "Major"
-      }
-
-      group {
-        // One of the arguments from this list "exact_match regex_match" must be set
-        exact_match = "Major"
-      }
-
-      severity {
-        // One of the arguments from this list "regex_match exact_match" must be set
-        exact_match = "Major"
-      }
+    group {
+      groups = ["groups"]
     }
     notification_parameters {
-      // One of the arguments from this list "individual ves_io_group custom default" must be set
-      default         = true
-      group_interval  = "1m"
-      group_wait      = "30s"
+      // One of the arguments from this list "default individual ves_io_group custom" must be set
+
+      custom {
+        labels = ["value"]
+      }
+
+      group_interval = "1m"
+
+      group_wait = "30s"
+
       repeat_interval = "4h"
     }
   }
@@ -90,51 +78,145 @@ Argument Reference
 
 `routes` - (Required) The routes are evaluated in the specified order and terminates on the first match.. See [Routes ](#routes) below for details.
 
-### Any
-
-Matches all alerts in the namespace.
-
-### Custom
-
-Specify set of labels for grouping the alerts.
-
-`labels` - (Optional) Name of labels to group/aggregate the alerts (`String`).
-
-### Default
-
-Group the alerts by severity, group name and alert name.
-
-### Dont Send
-
-Do not send the alert.
-
-### Group
-
-Matches the group name of the alert.
-
-`groups` - (Optional) Name of groups to match the alert (`List of Strings`).
-
-### Individual
-
-This option disables grouping of alerts.
-
 ### Notification Parameters
 
 Notification parameters to decide how and when the alerts should be sent to the receivers..
 
-`custom` - (Optional) Specify set of labels for grouping the alerts. See [Custom ](#custom) below for details.
+###### One of the arguments from this list "ves_io_group, custom, default, individual" must be set
 
-`default` - (Optional) Group the alerts by severity, group name and alert name (bool).
+`custom` - (Optional) Specify set of labels for grouping the alerts. See [Group By Custom ](#group-by-custom) below for details.
 
-`individual` - (Optional) This option disables grouping of alerts (bool).
+`default` - (Optional) Group the alerts by severity, group name and alert name (`Bool`).
 
-`ves_io_group` - (Optional) Group the alerts by severity, group name and alert name (bool).
+`individual` - (Optional) This option disables grouping of alerts (`Bool`).
+
+`ves_io_group` - (Optional) Group the alerts by severity, group name and alert name (`Bool`).
 
 `group_interval` - (Optional) If not specified, group_interval defaults to "1m" (`String`).
 
 `group_wait` - (Optional) If not specified, group_wait defaults to "30s" (`String`).
 
 `repeat_interval` - (Optional) If not specified, group_interval defaults to "4h" (`String`).
+
+### Routes
+
+The routes are evaluated in the specified order and terminates on the first match..
+
+###### One of the arguments from this list "send, dont_send" must be set
+
+`dont_send` - (Optional) Do not send the alert (`Bool`).
+
+`send` - (Optional) Send the alert (`Bool`).
+
+###### One of the arguments from this list "any, severity, group, alertname, alertname_regex, custom" can be set
+
+`alertname` - (Optional) Matches the alertname of the alert (`String`).
+
+`alertname_regex` - (Optional) Regular Expression match for the alertname (`String`).
+
+`any` - (Optional) Matches all alerts in the namespace (`Bool`).
+
+`custom` - (Optional) A set of custom equality/regex matchers an alert has to fulfill to match the route.. See [Matcher Custom ](#matcher-custom) below for details.
+
+`group` - (Optional) Matches the group name of the alert. See [Matcher Group ](#matcher-group) below for details.
+
+`severity` - (Optional) Matches the severity level of the alert. See [Matcher Severity ](#matcher-severity) below for details.
+
+`notification_parameters` - (Optional) notification_config defined in the policy.. See [Routes Notification Parameters ](#routes-notification-parameters) below for details.
+
+### Action Dont Send
+
+Do not send the alert.
+
+### Action Send
+
+Send the alert.
+
+### Custom Alertlabel
+
+AlertLabel to configure the alert policy rule.
+
+###### One of the arguments from this list "exact_match, regex_match" must be set
+
+`exact_match` - (Optional) Equality match value for the label (`String`).
+
+`regex_match` - (Optional) Regular expression match value for the label (`String`).
+
+### Custom Alertname
+
+Alertname Matcher.
+
+###### One of the arguments from this list "regex_match, exact_match" must be set
+
+`exact_match` - (Optional) Equality match value for the label (`String`).
+
+`regex_match` - (Optional) Regular expression match value for the label (`String`).
+
+### Custom Group
+
+Group Matcher.
+
+###### One of the arguments from this list "exact_match, regex_match" must be set
+
+`exact_match` - (Optional) Equality match value for the label (`String`).
+
+`regex_match` - (Optional) Regular expression match value for the label (`String`).
+
+### Custom Severity
+
+Severity Matcher.
+
+###### One of the arguments from this list "exact_match, regex_match" must be set
+
+`exact_match` - (Optional) Equality match value for the label (`String`).
+
+`regex_match` - (Optional) Regular expression match value for the label (`String`).
+
+### Group By Custom
+
+Specify set of labels for grouping the alerts.
+
+`labels` - (Optional) Name of labels to group/aggregate the alerts (`String`).
+
+### Group By Default
+
+Group the alerts by severity, group name and alert name.
+
+### Group By Individual
+
+This option disables grouping of alerts.
+
+### Group By Ves Io Group
+
+Group the alerts by severity, group name and alert name.
+
+### Matcher Any
+
+Matches all alerts in the namespace.
+
+### Matcher Custom
+
+A set of custom equality/regex matchers an alert has to fulfill to match the route..
+
+`alertlabel` - (Optional) AlertLabel to configure the alert policy rule. See [Custom Alertlabel ](#custom-alertlabel) below for details.
+
+`alertname` - (Optional) Alertname Matcher. See [Custom Alertname ](#custom-alertname) below for details.
+
+`group` - (Optional) Group Matcher. See [Custom Group ](#custom-group) below for details.
+
+`severity` - (Optional) Severity Matcher. See [Custom Severity ](#custom-severity) below for details.
+
+### Matcher Group
+
+Matches the group name of the alert.
+
+`groups` - (Optional) Name of groups to match the alert (`List of Strings`).
+
+### Matcher Severity
+
+Matches the severity level of the alert.
+
+`severities` - (Optional) List of severity levels (`List of Strings`).
 
 ### Ref
 
@@ -146,41 +228,25 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Routes
+### Routes Notification Parameters
 
-The routes are evaluated in the specified order and terminates on the first match..
+notification_config defined in the policy..
 
-`dont_send` - (Optional) Do not send the alert (bool).
+###### One of the arguments from this list "default, individual, ves_io_group, custom" must be set
 
-`send` - (Optional) Send the alert (bool).
+`custom` - (Optional) Specify set of labels for grouping the alerts. See [Group By Custom ](#group-by-custom) below for details.
 
-`alertname` - (Optional) Matches the alertname of the alert (`String`).
+`default` - (Optional) Group the alerts by severity, group name and alert name (`Bool`).
 
-`alertname_regex` - (Optional) Regular Expression match for the alertname (`String`).
+`individual` - (Optional) This option disables grouping of alerts (`Bool`).
 
-`any` - (Optional) Matches all alerts in the namespace (bool).
+`ves_io_group` - (Optional) Group the alerts by severity, group name and alert name (`Bool`).
 
-`custom` - (Optional) A set of custom equality/regex matchers an alert has to fulfill to match the route.. See [Custom ](#custom) below for details.
+`group_interval` - (Optional) If not specified, group_interval defaults to "1m" (`String`).
 
-`group` - (Optional) Matches the group name of the alert. See [Group ](#group) below for details.
+`group_wait` - (Optional) If not specified, group_wait defaults to "30s" (`String`).
 
-`severity` - (Optional) Matches the severity level of the alert. See [Severity ](#severity) below for details.
-
-`notification_parameters` - (Optional) notification_config defined in the policy.. See [Notification Parameters ](#notification-parameters) below for details.
-
-### Send
-
-Send the alert.
-
-### Severity
-
-Matches the severity level of the alert.
-
-`severities` - (Optional) List of severity levels (`List of Strings`).
-
-### Ves Io Group
-
-Group the alerts by severity, group name and alert name.
+`repeat_interval` - (Optional) If not specified, group_interval defaults to "4h" (`String`).
 
 Attribute Reference
 -------------------

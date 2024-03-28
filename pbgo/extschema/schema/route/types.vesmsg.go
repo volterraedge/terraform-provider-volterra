@@ -2443,6 +2443,14 @@ func (v *ValidateRouteDestinationList) HostRewriteParamsValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteDestinationList) RouteDestinationRewritePrefixRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PrefixRewrite, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix_rewrite")
+	}
+	return oValidatorFn_PrefixRewrite, nil
+}
+
 func (v *ValidateRouteDestinationList) DestinationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -2486,16 +2494,6 @@ func (v *ValidateRouteDestinationList) DestinationsValidationRuleHandler(rules m
 			return errors.Wrap(err, "items destinations")
 		}
 		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateRouteDestinationList) PrefixRewriteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for prefix_rewrite")
 	}
 
 	return validatorFn, nil
@@ -2730,15 +2728,6 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 
 	}
 
-	if fv, exists := v.FldValidators["prefix_rewrite"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("prefix_rewrite"))
-		if err := fv(ctx, m.GetPrefixRewrite(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["priority"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("priority"))
@@ -2753,6 +2742,32 @@ func (v *ValidateRouteDestinationList) Validate(ctx context.Context, pm interfac
 		vOpts := append(opts, db.WithValidateField("retry_policy"))
 		if err := fv(ctx, m.GetRetryPolicy(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetRouteDestinationRewrite().(type) {
+	case *RouteDestinationList_PrefixRewrite:
+		if fv, exists := v.FldValidators["route_destination_rewrite.prefix_rewrite"]; exists {
+			val := m.GetRouteDestinationRewrite().(*RouteDestinationList_PrefixRewrite).PrefixRewrite
+			vOpts := append(opts,
+				db.WithValidateField("route_destination_rewrite"),
+				db.WithValidateField("prefix_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteDestinationList_RegexRewrite:
+		if fv, exists := v.FldValidators["route_destination_rewrite.regex_rewrite"]; exists {
+			val := m.GetRouteDestinationRewrite().(*RouteDestinationList_RegexRewrite).RegexRewrite
+			vOpts := append(opts,
+				db.WithValidateField("route_destination_rewrite"),
+				db.WithValidateField("regex_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2810,6 +2825,19 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 	}
 	v.FldValidators["host_rewrite_params"] = vFn
 
+	vrhRouteDestinationRewritePrefixRewrite := v.RouteDestinationRewritePrefixRewriteValidationRuleHandler
+	rulesRouteDestinationRewritePrefixRewrite := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFnMap["route_destination_rewrite.prefix_rewrite"], err = vrhRouteDestinationRewritePrefixRewrite(rulesRouteDestinationRewritePrefixRewrite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteDestinationList.route_destination_rewrite_prefix_rewrite: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["route_destination_rewrite.prefix_rewrite"] = vFnMap["route_destination_rewrite.prefix_rewrite"]
+
 	vrhDestinations := v.DestinationsValidationRuleHandler
 	rulesDestinations := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
@@ -2821,18 +2849,6 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 		panic(errMsg)
 	}
 	v.FldValidators["destinations"] = vFn
-
-	vrhPrefixRewrite := v.PrefixRewriteValidationRuleHandler
-	rulesPrefixRewrite := map[string]string{
-		"ves.io.schema.rules.string.http_path": "true",
-		"ves.io.schema.rules.string.max_len":   "256",
-	}
-	vFn, err = vrhPrefixRewrite(rulesPrefixRewrite)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDestinationList.prefix_rewrite: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["prefix_rewrite"] = vFn
 
 	vrhEndpointSubsets := v.EndpointSubsetsValidationRuleHandler
 	rulesEndpointSubsets := map[string]string{
@@ -2855,6 +2871,8 @@ var DefaultRouteDestinationListValidator = func() *ValidateRouteDestinationList 
 		panic(errMsg)
 	}
 	v.FldValidators["hash_policy"] = vFn
+
+	v.FldValidators["route_destination_rewrite.regex_rewrite"] = ves_io_schema.RegexMatchRewriteValidator().Validate
 
 	v.FldValidators["retry_policy"] = ves_io_schema.RetryPolicyTypeValidator().Validate
 
@@ -3561,6 +3579,7 @@ func (m *RouteType) GetRouteActionDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRouteAction().(type) {
 	case *RouteType_RouteDestination:
+
 		drInfos, err := m.GetRouteDestination().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRouteDestination().GetDRefInfo() FAILED")

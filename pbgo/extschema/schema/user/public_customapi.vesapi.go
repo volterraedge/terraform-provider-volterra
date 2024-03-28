@@ -1495,59 +1495,59 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) AcceptTOS(ctx context.Context, in *AcceptTOSRequest, opts ...grpc.CallOption) (*AcceptTOSResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.AcceptTOS", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.AcceptTOS")
 	return c.CustomAPIServer.AcceptTOS(ctx, in)
 }
 func (c *customAPIInprocClient) AddUserToGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*UserGroupResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.AddUserToGroup", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.AddUserToGroup")
 	return c.CustomAPIServer.AddUserToGroup(ctx, in)
 }
 func (c *customAPIInprocClient) AssignRole(ctx context.Context, in *AssignRoleRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.AssignRole", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.AssignRole")
 	return c.CustomAPIServer.AssignRole(ctx, in)
 }
 func (c *customAPIInprocClient) CascadeDelete(ctx context.Context, in *CascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.CascadeDelete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.CascadeDelete")
 	return c.CustomAPIServer.CascadeDelete(ctx, in)
 }
 func (c *customAPIInprocClient) Create(ctx context.Context, in *UserRoleRequest, opts ...grpc.CallOption) (*Object, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.Create")
 	return c.CustomAPIServer.Create(ctx, in)
 }
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.Get")
 	return c.CustomAPIServer.Get(ctx, in)
 }
 func (c *customAPIInprocClient) GetTOS(ctx context.Context, in *GetTOSRequest, opts ...grpc.CallOption) (*GetTOSResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.GetTOS", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.GetTOS")
 	return c.CustomAPIServer.GetTOS(ctx, in)
 }
 func (c *customAPIInprocClient) List(ctx context.Context, in *ListUserRoleRequest, opts ...grpc.CallOption) (*ListUserRoleResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.List")
 	return c.CustomAPIServer.List(ctx, in)
 }
 func (c *customAPIInprocClient) RemoveUserFromGroup(ctx context.Context, in *UserGroupRequest, opts ...grpc.CallOption) (*UserGroupResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.RemoveUserFromGroup", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.RemoveUserFromGroup")
 	return c.CustomAPIServer.RemoveUserFromGroup(ctx, in)
 }
 func (c *customAPIInprocClient) Replace(ctx context.Context, in *UserRoleRequest, opts ...grpc.CallOption) (*Object, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.Replace")
 	return c.CustomAPIServer.Replace(ctx, in)
 }
 func (c *customAPIInprocClient) ResetPassword(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.ResetPassword", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.ResetPassword")
 	return c.CustomAPIServer.ResetPassword(ctx, in)
 }
 func (c *customAPIInprocClient) ResetPasswordByAdmin(ctx context.Context, in *ResetPasswordByAdminRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin")
 	return c.CustomAPIServer.ResetPasswordByAdmin(ctx, in)
 }
 func (c *customAPIInprocClient) SendPasswordEmail(ctx context.Context, in *SendPasswordEmailRequest, opts ...grpc.CallOption) (*SendPasswordEmailResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.SendPasswordEmail", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.SendPasswordEmail")
 	return c.CustomAPIServer.SendPasswordEmail(ctx, in)
 }
 func (c *customAPIInprocClient) SyncUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomAPI.SyncUser", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomAPI.SyncUser")
 	return c.CustomAPIServer.SyncUser(ctx, in)
 }
 

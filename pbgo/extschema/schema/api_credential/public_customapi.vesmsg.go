@@ -39,15 +39,13 @@ func (m *ApiCertificateType) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Password = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *ApiCertificateType) GoString() string {
 	copy := m.DeepCopy()
-	copy.Password = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -309,8 +307,11 @@ func (m *CreateResponse) Redact(ctx context.Context) error {
 	}
 
 	m.Data = ""
+
 	m.Name = ""
+
 	m.Active = false
+
 	m.ExpirationTimestamp = nil
 
 	return nil
@@ -426,15 +427,13 @@ func (m *CreateServiceCredentialsRequest) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Password = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *CreateServiceCredentialsRequest) GoString() string {
 	copy := m.DeepCopy()
-	copy.Password = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -713,15 +712,13 @@ func (m *CustomCreateSpecType) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Password = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *CustomCreateSpecType) GoString() string {
 	copy := m.DeepCopy()
-	copy.Password = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 

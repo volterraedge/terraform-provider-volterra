@@ -508,19 +508,19 @@ type privateCustomAPIInprocClient struct {
 }
 
 func (c *privateCustomAPIInprocClient) ListCloudNetworkTagKeys(ctx context.Context, in *ListCloudNetworkTagKeysRequest, opts ...grpc.CallOption) (*ListCloudNetworkTagKeysResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagKeys", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagKeys")
 	return c.PrivateCustomAPIServer.ListCloudNetworkTagKeys(ctx, in)
 }
 func (c *privateCustomAPIInprocClient) ListCloudNetworkTagValues(ctx context.Context, in *ListCloudNetworkTagValuesRequest, opts ...grpc.CallOption) (*ListCloudNetworkTagValuesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagValues", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagValues")
 	return c.PrivateCustomAPIServer.ListCloudNetworkTagValues(ctx, in)
 }
 func (c *privateCustomAPIInprocClient) ListCloudSubnetTagKeys(ctx context.Context, in *ListCloudSubnetTagKeysRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagKeysResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys")
 	return c.PrivateCustomAPIServer.ListCloudSubnetTagKeys(ctx, in)
 }
 func (c *privateCustomAPIInprocClient) ListCloudSubnetTagValues(ctx context.Context, in *ListCloudSubnetTagValuesRequest, opts ...grpc.CallOption) (*ListCloudSubnetTagValuesResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues")
 	return c.PrivateCustomAPIServer.ListCloudSubnetTagValues(ctx, in)
 }
 

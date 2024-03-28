@@ -14,6 +14,7 @@ import (
 	_ "github.com/gogo/googleapis/google/api"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	golang_proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
@@ -24,6 +25,7 @@ import (
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -38,6 +40,37 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// PolicyStatus
+//
+// x-displayName: "PolicyStatus"
+// Indicates if Alert Policy is in Alert Policy Set, PolicyStatus is ACTIVE or INACTIVE.
+type PolicyStatus int32
+
+const (
+	// x-displayName: "INACTIVE"
+	// INACTIVE means Alert Policy is not in Alert Policy Set, and will
+	// not be used to send Alerts to Alert Receivers.
+	INACTIVE PolicyStatus = 0
+	// x-displayName: "ACTIVE"
+	// ACTIVE means Alert Policy is in Alert Policy Set, and is used
+	// to send out Alert to Alert Receivers.
+	ACTIVE PolicyStatus = 1
+)
+
+var PolicyStatus_name = map[int32]string{
+	0: "INACTIVE",
+	1: "ACTIVE",
+}
+
+var PolicyStatus_value = map[string]int32{
+	"INACTIVE": 0,
+	"ACTIVE":   1,
+}
+
+func (PolicyStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_d91e62fa21ec8069, []int{0}
+}
 
 // Verify Alert Receiver Request
 //
@@ -370,7 +403,202 @@ func (m *TestAlertReceiverResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TestAlertReceiverResponse proto.InternalMessageInfo
 
+// Alert Policy Match Request
+//
+// x-displayName: "Alert Policy Match Request"
+// Request message for GetAlertPolicyMatch RPC,
+// describing alert to match against alert policies
+type AlertPolicyMatchRequest struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-required
+	// x-example: "ns1"
+	// The namespace in which the configuration object is present
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// labels
+	//
+	// x-displayName: "Labels"
+	// x-required
+	// x-example:   "labels": {
+	//                 "namespace": "system",
+	//                 "tenant" :"tenant2",
+	//                 "alertname": "podXcrash",
+	//                 "group": "IaaS",
+	//                 "severity": "critical"
+	//               },
+	// Alert labels to find match against alert policies
+	// requires tenant and namespace to be defined labels map
+	Labels map[string]string `protobuf:"bytes,2,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+}
+
+func (m *AlertPolicyMatchRequest) Reset()      { *m = AlertPolicyMatchRequest{} }
+func (*AlertPolicyMatchRequest) ProtoMessage() {}
+func (*AlertPolicyMatchRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d91e62fa21ec8069, []int{6}
+}
+func (m *AlertPolicyMatchRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AlertPolicyMatchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AlertPolicyMatchRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AlertPolicyMatchRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AlertPolicyMatchRequest.Merge(m, src)
+}
+func (m *AlertPolicyMatchRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *AlertPolicyMatchRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AlertPolicyMatchRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AlertPolicyMatchRequest proto.InternalMessageInfo
+
+func (m *AlertPolicyMatchRequest) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *AlertPolicyMatchRequest) GetLabels() map[string]string {
+	if m != nil {
+		return m.Labels
+	}
+	return nil
+}
+
+// Alert Policy Match
+//
+// x-displayName: "Alert Policy Match"
+// Alert Policy info that matches AlertPolicyMatchRequest giving
+//
+//	alert policy name,
+//	alert policy activation state
+type AlertPolicyMatch struct {
+	// policy_name
+	//
+	// x-displayName: "Policy Name"
+	// x-example: samplepolicy
+	PolicyName string `protobuf:"bytes,1,opt,name=policy_name,json=policyName,proto3" json:"policy_name,omitempty"`
+	// policy_active
+	//
+	// x-displayName: "Policy Active"
+	// x-example: 1, ACTIVE
+	PolicyActive PolicyStatus `protobuf:"varint,2,opt,name=policy_active,json=policyActive,proto3,enum=ves.io.schema.alert_receiver.PolicyStatus" json:"policy_active,omitempty"`
+}
+
+func (m *AlertPolicyMatch) Reset()      { *m = AlertPolicyMatch{} }
+func (*AlertPolicyMatch) ProtoMessage() {}
+func (*AlertPolicyMatch) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d91e62fa21ec8069, []int{7}
+}
+func (m *AlertPolicyMatch) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AlertPolicyMatch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AlertPolicyMatch.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AlertPolicyMatch) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AlertPolicyMatch.Merge(m, src)
+}
+func (m *AlertPolicyMatch) XXX_Size() int {
+	return m.Size()
+}
+func (m *AlertPolicyMatch) XXX_DiscardUnknown() {
+	xxx_messageInfo_AlertPolicyMatch.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AlertPolicyMatch proto.InternalMessageInfo
+
+func (m *AlertPolicyMatch) GetPolicyName() string {
+	if m != nil {
+		return m.PolicyName
+	}
+	return ""
+}
+
+func (m *AlertPolicyMatch) GetPolicyActive() PolicyStatus {
+	if m != nil {
+		return m.PolicyActive
+	}
+	return INACTIVE
+}
+
+// Alert Policy Match Response
+//
+// x-displayName: "Alert Policy Match Response"
+// Response of matching Alert Policies from Get Alert Policy Match request
+type AlertPolicyMatchResponse struct {
+	// alert_match
+	//
+	// x-displayName: "Alert Match"
+	// x-example:{"alert_match":[{"policy_name":"policy1","policy_active":1},{"policy_name":"policy4"}]}
+	// List of Alert Policies that match given requested namespace,labels.
+	AlertMatch []*AlertPolicyMatch `protobuf:"bytes,1,rep,name=alert_match,json=alertMatch,proto3" json:"alert_match,omitempty"`
+}
+
+func (m *AlertPolicyMatchResponse) Reset()      { *m = AlertPolicyMatchResponse{} }
+func (*AlertPolicyMatchResponse) ProtoMessage() {}
+func (*AlertPolicyMatchResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d91e62fa21ec8069, []int{8}
+}
+func (m *AlertPolicyMatchResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AlertPolicyMatchResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AlertPolicyMatchResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AlertPolicyMatchResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AlertPolicyMatchResponse.Merge(m, src)
+}
+func (m *AlertPolicyMatchResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *AlertPolicyMatchResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AlertPolicyMatchResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AlertPolicyMatchResponse proto.InternalMessageInfo
+
+func (m *AlertPolicyMatchResponse) GetAlertMatch() []*AlertPolicyMatch {
+	if m != nil {
+		return m.AlertMatch
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("ves.io.schema.alert_receiver.PolicyStatus", PolicyStatus_name, PolicyStatus_value)
+	golang_proto.RegisterEnum("ves.io.schema.alert_receiver.PolicyStatus", PolicyStatus_name, PolicyStatus_value)
 	proto.RegisterType((*VerifyAlertReceiverRequest)(nil), "ves.io.schema.alert_receiver.VerifyAlertReceiverRequest")
 	golang_proto.RegisterType((*VerifyAlertReceiverRequest)(nil), "ves.io.schema.alert_receiver.VerifyAlertReceiverRequest")
 	proto.RegisterType((*VerifyAlertReceiverResponse)(nil), "ves.io.schema.alert_receiver.VerifyAlertReceiverResponse")
@@ -383,6 +611,14 @@ func init() {
 	golang_proto.RegisterType((*TestAlertReceiverRequest)(nil), "ves.io.schema.alert_receiver.TestAlertReceiverRequest")
 	proto.RegisterType((*TestAlertReceiverResponse)(nil), "ves.io.schema.alert_receiver.TestAlertReceiverResponse")
 	golang_proto.RegisterType((*TestAlertReceiverResponse)(nil), "ves.io.schema.alert_receiver.TestAlertReceiverResponse")
+	proto.RegisterType((*AlertPolicyMatchRequest)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatchRequest")
+	golang_proto.RegisterType((*AlertPolicyMatchRequest)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatchRequest")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatchRequest.LabelsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatchRequest.LabelsEntry")
+	proto.RegisterType((*AlertPolicyMatch)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatch")
+	golang_proto.RegisterType((*AlertPolicyMatch)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatch")
+	proto.RegisterType((*AlertPolicyMatchResponse)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatchResponse")
+	golang_proto.RegisterType((*AlertPolicyMatchResponse)(nil), "ves.io.schema.alert_receiver.AlertPolicyMatchResponse")
 }
 
 func init() {
@@ -393,50 +629,72 @@ func init() {
 }
 
 var fileDescriptor_d91e62fa21ec8069 = []byte{
-	// 650 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x55, 0xbf, 0x6f, 0xd3, 0x4e,
-	0x14, 0xcf, 0x25, 0xdf, 0x6f, 0xa1, 0x37, 0x51, 0xc3, 0x90, 0x3a, 0xe1, 0x54, 0x99, 0x05, 0x55,
-	0xb5, 0x2d, 0xa8, 0xa0, 0x10, 0x81, 0x50, 0xdb, 0x09, 0x81, 0x00, 0x45, 0x88, 0x81, 0xa5, 0xba,
-	0x38, 0x2f, 0xee, 0x81, 0xed, 0x33, 0x77, 0x67, 0xab, 0x15, 0xaa, 0x84, 0x3a, 0x31, 0x30, 0x20,
-	0x81, 0x60, 0x60, 0x41, 0x62, 0x80, 0x81, 0xbf, 0x80, 0x2e, 0xdd, 0x60, 0x42, 0x15, 0x2c, 0x1d,
-	0x89, 0xc3, 0x00, 0x5b, 0xff, 0x04, 0x14, 0xc7, 0x2d, 0x4d, 0x71, 0x83, 0x88, 0xda, 0xed, 0x3d,
-	0x7f, 0xee, 0xf3, 0x7e, 0x7c, 0xde, 0xbb, 0x33, 0x9e, 0x8e, 0x41, 0x5a, 0x8c, 0xdb, 0xd2, 0x59,
-	0x04, 0x9f, 0xda, 0xd4, 0x03, 0xa1, 0x16, 0x04, 0x38, 0xc0, 0x62, 0x10, 0x76, 0x18, 0x35, 0x3c,
-	0xe6, 0x2c, 0x38, 0x91, 0x54, 0xdc, 0xa7, 0x21, 0xb3, 0x42, 0xc1, 0x15, 0xd7, 0xaa, 0x3d, 0x92,
-	0xd5, 0x23, 0x59, 0xfd, 0x24, 0xdd, 0x74, 0x99, 0x5a, 0x8c, 0x1a, 0x96, 0xc3, 0x7d, 0xdb, 0xe5,
-	0x2e, 0xb7, 0x53, 0x52, 0x23, 0x6a, 0xa5, 0x5e, 0xea, 0xa4, 0x56, 0x2f, 0x98, 0x5e, 0x75, 0x39,
-	0x77, 0x3d, 0xb0, 0x69, 0xc8, 0x6c, 0x1a, 0x04, 0x5c, 0x51, 0xc5, 0x78, 0x20, 0x33, 0xb4, 0xd2,
-	0x5f, 0x1f, 0x0f, 0x77, 0x83, 0xe3, 0xfd, 0xa0, 0x5a, 0x0e, 0x61, 0x1b, 0xaa, 0xf6, 0x43, 0x31,
-	0xf5, 0x58, 0x93, 0x2a, 0xc8, 0x50, 0x63, 0x0f, 0x0a, 0x12, 0x82, 0xb8, 0x3f, 0xb8, 0x71, 0x03,
-	0xeb, 0x77, 0x40, 0xb0, 0xd6, 0xf2, 0x6c, 0xb7, 0xbd, 0x7a, 0xd6, 0x5d, 0x1d, 0x1e, 0x44, 0x20,
-	0x95, 0x56, 0xc5, 0xa3, 0x01, 0xf5, 0x41, 0x86, 0xd4, 0x81, 0x32, 0x9a, 0x40, 0xa7, 0x47, 0xeb,
-	0xbf, 0x3f, 0x68, 0x1a, 0xfe, 0xaf, 0xeb, 0x94, 0x8b, 0x29, 0x90, 0xda, 0xc6, 0x49, 0x5c, 0xc9,
-	0x8d, 0x27, 0x43, 0x1e, 0x48, 0x30, 0x1e, 0x23, 0x5c, 0x99, 0xe7, 0x41, 0x8b, 0x09, 0xff, 0x60,
-	0x12, 0x6a, 0x33, 0x78, 0x2c, 0xee, 0x26, 0x64, 0x4e, 0xaa, 0xe8, 0x82, 0xc3, 0x9b, 0x50, 0x2e,
-	0x75, 0x0f, 0xcc, 0xe1, 0x0f, 0x3f, 0xd7, 0x4b, 0xff, 0x8b, 0xd2, 0x6b, 0x34, 0x52, 0x3f, 0xb6,
-	0xfb, 0xd0, 0x3c, 0x6f, 0x82, 0x41, 0x70, 0x35, 0xbf, 0x92, 0xac, 0xd4, 0xeb, 0xb8, 0x7c, 0x1b,
-	0xa4, 0x3a, 0x20, 0x5d, 0x2a, 0x78, 0x3c, 0x27, 0x5a, 0x2f, 0xd5, 0xd9, 0xf7, 0x47, 0xf0, 0xe8,
-	0x7c, 0xba, 0x7d, 0xb3, 0xb7, 0xae, 0x6a, 0x6f, 0x8a, 0xf8, 0x78, 0x8e, 0x86, 0xda, 0x05, 0x6b,
-	0xd0, 0x42, 0x5a, 0xfb, 0x8f, 0x51, 0xbf, 0x38, 0x04, 0x33, 0x53, 0xe1, 0x05, 0x4a, 0x3e, 0x96,
-	0xaf, 0xb5, 0xce, 0x2d, 0x39, 0x26, 0x8d, 0x9a, 0x4c, 0x99, 0x1e, 0x77, 0xa5, 0x99, 0x06, 0x90,
-	0xa6, 0xcf, 0x03, 0xa6, 0xb8, 0x98, 0x9a, 0xc8, 0xc7, 0xa7, 0x26, 0x62, 0x90, 0x26, 0xe3, 0xa6,
-	0x0b, 0x01, 0x08, 0xea, 0x99, 0x02, 0x68, 0x73, 0xf5, 0xeb, 0xf7, 0x67, 0xc5, 0x59, 0xe3, 0x52,
-	0x76, 0xeb, 0xec, 0x1d, 0xd9, 0xa4, 0xfd, 0x70, 0xc7, 0x5e, 0xd9, 0x73, 0x45, 0x33, 0x6c, 0xc5,
-	0x4e, 0xa7, 0xb8, 0x5c, 0x43, 0x93, 0xda, 0xdb, 0x22, 0x3e, 0x91, 0x37, 0x3f, 0xed, 0x2f, 0xcd,
-	0x0e, 0xd8, 0x3e, 0xbd, 0x36, 0x0c, 0x35, 0x13, 0xea, 0xe5, 0xa1, 0x08, 0x35, 0x67, 0x5c, 0x1e,
-	0x4e, 0x28, 0xa7, 0x57, 0x6b, 0x57, 0xa9, 0x57, 0x45, 0x3c, 0xf6, 0xc7, 0xee, 0x69, 0xe7, 0x07,
-	0xf7, 0xba, 0xdf, 0xea, 0xeb, 0x33, 0xff, 0xcc, 0xcb, 0x04, 0x7a, 0x7e, 0x28, 0x02, 0x5d, 0x31,
-	0x6a, 0xc3, 0x09, 0xa4, 0x40, 0xaa, 0x1a, 0x9a, 0xd4, 0xcf, 0xac, 0xaf, 0xa1, 0xd2, 0x97, 0x35,
-	0x74, 0x6a, 0x60, 0x5b, 0x37, 0x1b, 0xf7, 0xc0, 0x51, 0xab, 0x9f, 0xcb, 0xc5, 0xa3, 0x68, 0xee,
-	0x09, 0xda, 0x68, 0x93, 0xc2, 0x66, 0x9b, 0x14, 0xb6, 0xda, 0x04, 0x3d, 0x4a, 0x08, 0x7a, 0x97,
-	0x10, 0xf4, 0x29, 0x21, 0x68, 0x23, 0x21, 0xe8, 0x5b, 0x42, 0xd0, 0x8f, 0x84, 0x14, 0xb6, 0x12,
-	0x82, 0x9e, 0x76, 0x48, 0x61, 0xbd, 0x43, 0xd0, 0x46, 0x87, 0x14, 0x36, 0x3b, 0xa4, 0x70, 0xb7,
-	0xee, 0xf2, 0xf0, 0xbe, 0x6b, 0xc5, 0xdc, 0x53, 0x20, 0x04, 0xb5, 0x22, 0x69, 0xa7, 0x46, 0x8b,
-	0x0b, 0xdf, 0x0c, 0x05, 0x8f, 0x59, 0x13, 0x84, 0xb9, 0x0d, 0xdb, 0x61, 0xc3, 0xe5, 0x36, 0x2c,
-	0xa9, 0xec, 0x05, 0xcf, 0xfd, 0x7d, 0x35, 0x46, 0xd2, 0x97, 0x7c, 0xfa, 0x57, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x5b, 0x64, 0x52, 0x42, 0xe5, 0x06, 0x00, 0x00,
+	// 885 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x41, 0x6f, 0xdc, 0x44,
+	0x14, 0xde, 0xf1, 0xd2, 0xa8, 0x99, 0x04, 0x94, 0xba, 0x95, 0x70, 0x9d, 0xc5, 0x44, 0xe6, 0x12,
+	0x45, 0xb5, 0xad, 0xa6, 0x6a, 0xda, 0xae, 0x40, 0x68, 0x13, 0x55, 0x28, 0xa2, 0x24, 0xd5, 0x52,
+	0x55, 0x82, 0x4b, 0x34, 0xeb, 0x7d, 0xeb, 0x0c, 0xf1, 0x7a, 0x8c, 0x67, 0x6c, 0x75, 0x85, 0x2a,
+	0xa1, 0x8a, 0x03, 0x48, 0x1c, 0x2a, 0x81, 0xe0, 0xc0, 0x05, 0x89, 0x03, 0xfc, 0x06, 0x7a, 0x20,
+	0x37, 0xb8, 0x80, 0x22, 0xb8, 0xf4, 0x48, 0x1c, 0x0e, 0x70, 0xeb, 0x4f, 0x40, 0x1e, 0x4f, 0xda,
+	0xdd, 0x64, 0x77, 0xdb, 0xac, 0xda, 0xdb, 0x9b, 0xf9, 0xe6, 0x7d, 0xef, 0xbd, 0xcf, 0x9e, 0x4f,
+	0x83, 0x2f, 0x65, 0xc0, 0x5d, 0xca, 0x3c, 0xee, 0x6f, 0x43, 0x97, 0x78, 0x24, 0x84, 0x44, 0x6c,
+	0x25, 0xe0, 0x03, 0xcd, 0x20, 0xf1, 0xe2, 0xb4, 0x15, 0x52, 0x7f, 0xcb, 0x4f, 0xb9, 0x60, 0x5d,
+	0x12, 0x53, 0x37, 0x4e, 0x98, 0x60, 0x7a, 0xad, 0x4c, 0x72, 0xcb, 0x24, 0x77, 0x30, 0xc9, 0x74,
+	0x02, 0x2a, 0xb6, 0xd3, 0x96, 0xeb, 0xb3, 0xae, 0x17, 0xb0, 0x80, 0x79, 0x32, 0xa9, 0x95, 0x76,
+	0xe4, 0x4a, 0x2e, 0x64, 0x54, 0x92, 0x99, 0xb5, 0x80, 0xb1, 0x20, 0x04, 0x8f, 0xc4, 0xd4, 0x23,
+	0x51, 0xc4, 0x04, 0x11, 0x94, 0x45, 0x5c, 0xa1, 0xf3, 0x83, 0xfd, 0xb1, 0xb8, 0x1f, 0x3c, 0x3f,
+	0x08, 0x8a, 0x5e, 0x0c, 0x87, 0x50, 0x6d, 0x10, 0xca, 0x48, 0x48, 0xdb, 0x44, 0x80, 0x42, 0xed,
+	0x23, 0x28, 0x70, 0x88, 0xb2, 0x41, 0x72, 0x7b, 0x03, 0x9b, 0xb7, 0x21, 0xa1, 0x9d, 0x5e, 0xa3,
+	0x18, 0xaf, 0xa9, 0xa6, 0x6b, 0xc2, 0xc7, 0x29, 0x70, 0xa1, 0xd7, 0xf0, 0x74, 0x44, 0xba, 0xc0,
+	0x63, 0xe2, 0x83, 0x81, 0x16, 0xd0, 0xe2, 0x74, 0xf3, 0xc9, 0x86, 0xae, 0xe3, 0x97, 0x8a, 0x85,
+	0xa1, 0x49, 0x40, 0xc6, 0xf6, 0x6b, 0x78, 0x7e, 0x28, 0x1f, 0x8f, 0x59, 0xc4, 0xc1, 0xfe, 0x1c,
+	0xe1, 0xf9, 0x35, 0x16, 0x75, 0x68, 0xd2, 0x7d, 0x3e, 0x05, 0xf5, 0x2b, 0xf8, 0x4c, 0x56, 0x14,
+	0xa4, 0xbe, 0x54, 0x74, 0xcb, 0x67, 0x6d, 0x30, 0xaa, 0xc5, 0x81, 0x55, 0xfc, 0xf3, 0x7f, 0xbb,
+	0xd5, 0x53, 0x49, 0xf5, 0x7b, 0x34, 0xd5, 0x9c, 0xeb, 0x3f, 0xb4, 0xc6, 0xda, 0x60, 0x5b, 0xb8,
+	0x36, 0xbc, 0x13, 0xd5, 0xea, 0x0d, 0x6c, 0xdc, 0x02, 0x2e, 0x9e, 0x93, 0x2e, 0xf3, 0xf8, 0xfc,
+	0x10, 0x36, 0x55, 0xea, 0x77, 0x84, 0x5f, 0x95, 0xc8, 0x4d, 0x16, 0x52, 0xbf, 0xf7, 0x1e, 0x11,
+	0xfe, 0xf6, 0xb3, 0x95, 0xfa, 0x00, 0x4f, 0x85, 0xa4, 0x05, 0x21, 0x37, 0xb4, 0x85, 0xea, 0xe2,
+	0xcc, 0x72, 0xc3, 0x1d, 0xf7, 0xd3, 0xba, 0x23, 0x8a, 0xb8, 0x37, 0x24, 0xc7, 0xf5, 0x48, 0x24,
+	0xbd, 0xa6, 0x22, 0x34, 0xaf, 0xe1, 0x99, 0xbe, 0x6d, 0x7d, 0x0e, 0x57, 0x77, 0xa0, 0xa7, 0x3a,
+	0x28, 0x42, 0xfd, 0x1c, 0x3e, 0x95, 0x91, 0x30, 0x3d, 0x9c, 0xb3, 0x5c, 0xd4, 0xb5, 0xab, 0xc8,
+	0xfe, 0x0c, 0xe1, 0xb9, 0xa3, 0xa5, 0xf4, 0xd7, 0xf1, 0x4c, 0x2c, 0x97, 0x5b, 0x52, 0x9c, 0x92,
+	0x08, 0x97, 0x5b, 0x1b, 0xc5, 0x97, 0xdc, 0xc4, 0x2f, 0xab, 0x03, 0xc4, 0x17, 0x34, 0x2b, 0x79,
+	0x5f, 0x59, 0x5e, 0x1a, 0x3f, 0x52, 0x59, 0xe2, 0x7d, 0x41, 0x44, 0xca, 0x9b, 0xb3, 0x25, 0x41,
+	0x43, 0xe6, 0xdb, 0x3b, 0xd8, 0x38, 0x3e, 0x70, 0x29, 0xb9, 0xbe, 0x89, 0x67, 0x4a, 0xa2, 0x6e,
+	0xb1, 0x6d, 0x20, 0xa9, 0x9e, 0x7b, 0x42, 0xf5, 0xb0, 0x3c, 0x20, 0xe3, 0xa5, 0x45, 0x3c, 0xdb,
+	0xdf, 0x8a, 0x3e, 0x8b, 0x4f, 0xaf, 0x6f, 0x34, 0xd6, 0x6e, 0xad, 0xdf, 0xbe, 0x3e, 0x57, 0xd1,
+	0x31, 0x9e, 0x52, 0x31, 0x5a, 0xfe, 0x65, 0x1a, 0x4f, 0xaf, 0x49, 0xaf, 0x69, 0xdc, 0x5c, 0xd7,
+	0x7f, 0xd0, 0xf0, 0xd9, 0x21, 0x37, 0x46, 0xbf, 0x3a, 0xbe, 0x97, 0xd1, 0x97, 0xd6, 0xbc, 0x36,
+	0x41, 0xa6, 0xfa, 0x11, 0xbf, 0x41, 0xf9, 0xaf, 0xc6, 0xbb, 0x9d, 0xcb, 0x77, 0x7c, 0x87, 0xa4,
+	0x6d, 0x2a, 0x9c, 0x90, 0x05, 0xdc, 0x91, 0x04, 0xdc, 0xe9, 0xb2, 0x88, 0x0a, 0x96, 0x5c, 0x58,
+	0x18, 0x8e, 0x5f, 0x58, 0xc8, 0x80, 0x3b, 0x94, 0x39, 0x01, 0x44, 0x90, 0x90, 0xd0, 0x49, 0x80,
+	0xb4, 0xef, 0xfd, 0xf5, 0xcf, 0x57, 0x5a, 0xc3, 0x7e, 0x53, 0x79, 0xac, 0xf7, 0xf8, 0xcf, 0xe5,
+	0xde, 0x27, 0x8f, 0xe3, 0xbb, 0x47, 0x0c, 0x59, 0x61, 0x77, 0x3d, 0x79, 0x67, 0x7b, 0x75, 0xb4,
+	0xa4, 0xff, 0xa8, 0xe1, 0x73, 0xc3, 0x6e, 0xab, 0xfe, 0x94, 0x61, 0xc7, 0x78, 0x8d, 0x59, 0x9f,
+	0x24, 0x55, 0x09, 0xf5, 0xed, 0x0b, 0x11, 0x6a, 0xd5, 0x7e, 0x6b, 0x32, 0xa1, 0xfc, 0xb2, 0xd7,
+	0x42, 0xa9, 0xef, 0x34, 0x7c, 0xe6, 0x98, 0xd3, 0xe8, 0x2b, 0xe3, 0x67, 0x1d, 0x65, 0x74, 0xe6,
+	0x95, 0x13, 0xe7, 0x29, 0x81, 0xbe, 0x7e, 0x21, 0x02, 0xbd, 0x6d, 0xd7, 0x27, 0x13, 0x48, 0x00,
+	0x17, 0x85, 0x3a, 0xf7, 0x35, 0x7c, 0xf6, 0x1d, 0x10, 0xc7, 0xcc, 0xe9, 0xf2, 0x44, 0xbe, 0x69,
+	0xae, 0x9c, 0x34, 0x4d, 0xa9, 0xf3, 0x45, 0xa1, 0xce, 0xfa, 0x53, 0xd4, 0x19, 0x21, 0xce, 0x28,
+	0x6d, 0x56, 0xec, 0x8b, 0xcf, 0xa4, 0x4d, 0x69, 0x91, 0x9e, 0xf4, 0xbd, 0x3a, 0x5a, 0x32, 0x2f,
+	0xee, 0x3e, 0x40, 0xd5, 0x3f, 0x1f, 0xa0, 0x37, 0xc6, 0x8e, 0xb2, 0xd9, 0xfa, 0x08, 0x7c, 0x71,
+	0xef, 0x0f, 0x43, 0x3b, 0x8d, 0x56, 0xbf, 0x44, 0x7b, 0xfb, 0x56, 0xe5, 0xe1, 0xbe, 0x55, 0x79,
+	0xb4, 0x6f, 0xa1, 0x4f, 0x73, 0x0b, 0xfd, 0x94, 0x5b, 0xe8, 0xb7, 0xdc, 0x42, 0x7b, 0xb9, 0x85,
+	0xfe, 0xce, 0x2d, 0xf4, 0x6f, 0x6e, 0x55, 0x1e, 0xe5, 0x16, 0xba, 0x7f, 0x60, 0x55, 0x76, 0x0f,
+	0x2c, 0xb4, 0x77, 0x60, 0x55, 0x1e, 0x1e, 0x58, 0x95, 0x0f, 0x9b, 0x01, 0x8b, 0x77, 0x02, 0x37,
+	0x63, 0xa1, 0x80, 0x24, 0x21, 0x6e, 0xca, 0x3d, 0x19, 0x74, 0x58, 0xd2, 0x75, 0xe2, 0x84, 0x65,
+	0xb4, 0x0d, 0x89, 0x73, 0x08, 0x7b, 0x71, 0x2b, 0x60, 0x1e, 0xdc, 0x11, 0xea, 0x09, 0x33, 0xf4,
+	0xfd, 0xd6, 0x9a, 0x92, 0x4f, 0x99, 0x4b, 0xff, 0x07, 0x00, 0x00, 0xff, 0xff, 0x2f, 0x11, 0xb1,
+	0xcf, 0xe6, 0x09, 0x00, 0x00,
 }
 
+func (x PolicyStatus) String() string {
+	s, ok := PolicyStatus_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *VerifyAlertReceiverRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -584,6 +842,94 @@ func (this *TestAlertReceiverResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AlertPolicyMatchRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AlertPolicyMatchRequest)
+	if !ok {
+		that2, ok := that.(AlertPolicyMatchRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if len(this.Labels) != len(that1.Labels) {
+		return false
+	}
+	for i := range this.Labels {
+		if this.Labels[i] != that1.Labels[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *AlertPolicyMatch) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AlertPolicyMatch)
+	if !ok {
+		that2, ok := that.(AlertPolicyMatch)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PolicyName != that1.PolicyName {
+		return false
+	}
+	if this.PolicyActive != that1.PolicyActive {
+		return false
+	}
+	return true
+}
+func (this *AlertPolicyMatchResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AlertPolicyMatchResponse)
+	if !ok {
+		that2, ok := that.(AlertPolicyMatchResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AlertMatch) != len(that1.AlertMatch) {
+		return false
+	}
+	for i := range this.AlertMatch {
+		if !this.AlertMatch[i].Equal(that1.AlertMatch[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *VerifyAlertReceiverRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -645,6 +991,52 @@ func (this *TestAlertReceiverResponse) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *AlertPolicyMatchRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&alert_receiver.AlertPolicyMatchRequest{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	keysForLabels := make([]string, 0, len(this.Labels))
+	for k, _ := range this.Labels {
+		keysForLabels = append(keysForLabels, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+	mapStringForLabels := "map[string]string{"
+	for _, k := range keysForLabels {
+		mapStringForLabels += fmt.Sprintf("%#v: %#v,", k, this.Labels[k])
+	}
+	mapStringForLabels += "}"
+	if this.Labels != nil {
+		s = append(s, "Labels: "+mapStringForLabels+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AlertPolicyMatch) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&alert_receiver.AlertPolicyMatch{")
+	s = append(s, "PolicyName: "+fmt.Sprintf("%#v", this.PolicyName)+",\n")
+	s = append(s, "PolicyActive: "+fmt.Sprintf("%#v", this.PolicyActive)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AlertPolicyMatchResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&alert_receiver.AlertPolicyMatchResponse{")
+	if this.AlertMatch != nil {
+		s = append(s, "AlertMatch: "+fmt.Sprintf("%#v", this.AlertMatch)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func valueToGoStringPublicCustomapi(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
 	if rv.IsNil() {
@@ -681,6 +1073,11 @@ type CustomAPIClient interface {
 	// x-displayName: "Test Alert Receiver"
 	// API to send test alert
 	TestAlertReceiver(ctx context.Context, in *TestAlertReceiverRequest, opts ...grpc.CallOption) (*TestAlertReceiverResponse, error)
+	// GetAlertPolicyMatch
+	//
+	// x-displayName: "Get Alert Policy Match"
+	// Get Alert Policies that match to a set of alert labels for a namespace.
+	GetAlertPolicyMatch(ctx context.Context, in *AlertPolicyMatchRequest, opts ...grpc.CallOption) (*AlertPolicyMatchResponse, error)
 }
 
 type customAPIClient struct {
@@ -718,6 +1115,15 @@ func (c *customAPIClient) TestAlertReceiver(ctx context.Context, in *TestAlertRe
 	return out, nil
 }
 
+func (c *customAPIClient) GetAlertPolicyMatch(ctx context.Context, in *AlertPolicyMatchRequest, opts ...grpc.CallOption) (*AlertPolicyMatchResponse, error) {
+	out := new(AlertPolicyMatchResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.alert_receiver.CustomAPI/GetAlertPolicyMatch", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// Verify Alert Receiver
@@ -735,6 +1141,11 @@ type CustomAPIServer interface {
 	// x-displayName: "Test Alert Receiver"
 	// API to send test alert
 	TestAlertReceiver(context.Context, *TestAlertReceiverRequest) (*TestAlertReceiverResponse, error)
+	// GetAlertPolicyMatch
+	//
+	// x-displayName: "Get Alert Policy Match"
+	// Get Alert Policies that match to a set of alert labels for a namespace.
+	GetAlertPolicyMatch(context.Context, *AlertPolicyMatchRequest) (*AlertPolicyMatchResponse, error)
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -749,6 +1160,9 @@ func (*UnimplementedCustomAPIServer) ConfirmAlertReceiver(ctx context.Context, r
 }
 func (*UnimplementedCustomAPIServer) TestAlertReceiver(ctx context.Context, req *TestAlertReceiverRequest) (*TestAlertReceiverResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TestAlertReceiver not implemented")
+}
+func (*UnimplementedCustomAPIServer) GetAlertPolicyMatch(ctx context.Context, req *AlertPolicyMatchRequest) (*AlertPolicyMatchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAlertPolicyMatch not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -809,6 +1223,24 @@ func _CustomAPI_TestAlertReceiver_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPI_GetAlertPolicyMatch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AlertPolicyMatchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).GetAlertPolicyMatch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.alert_receiver.CustomAPI/GetAlertPolicyMatch",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).GetAlertPolicyMatch(ctx, req.(*AlertPolicyMatchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.alert_receiver.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
@@ -824,6 +1256,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "TestAlertReceiver",
 			Handler:    _CustomAPI_TestAlertReceiver_Handler,
+		},
+		{
+			MethodName: "GetAlertPolicyMatch",
+			Handler:    _CustomAPI_GetAlertPolicyMatch_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1017,6 +1453,127 @@ func (m *TestAlertReceiverResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
+func (m *AlertPolicyMatchRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AlertPolicyMatchRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AlertPolicyMatchRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Labels) > 0 {
+		for k := range m.Labels {
+			v := m.Labels[k]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(k)
+			copy(dAtA[i:], k)
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(k)))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AlertPolicyMatch) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AlertPolicyMatch) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AlertPolicyMatch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PolicyActive != 0 {
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.PolicyActive))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.PolicyName) > 0 {
+		i -= len(m.PolicyName)
+		copy(dAtA[i:], m.PolicyName)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.PolicyName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AlertPolicyMatchResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AlertPolicyMatchResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AlertPolicyMatchResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AlertMatch) > 0 {
+		for iNdEx := len(m.AlertMatch) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AlertMatch[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicCustomapi(v)
 	base := offset
@@ -1110,6 +1667,58 @@ func (m *TestAlertReceiverResponse) Size() (n int) {
 	return n
 }
 
+func (m *AlertPolicyMatchRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.Labels) > 0 {
+		for k, v := range m.Labels {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovPublicCustomapi(uint64(len(k))) + 1 + len(v) + sovPublicCustomapi(uint64(len(v)))
+			n += mapEntrySize + 1 + sovPublicCustomapi(uint64(mapEntrySize))
+		}
+	}
+	return n
+}
+
+func (m *AlertPolicyMatch) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PolicyName)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if m.PolicyActive != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.PolicyActive))
+	}
+	return n
+}
+
+func (m *AlertPolicyMatchResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AlertMatch) > 0 {
+		for _, e := range m.AlertMatch {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func sovPublicCustomapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -1173,6 +1782,53 @@ func (this *TestAlertReceiverResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&TestAlertReceiverResponse{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AlertPolicyMatchRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	keysForLabels := make([]string, 0, len(this.Labels))
+	for k, _ := range this.Labels {
+		keysForLabels = append(keysForLabels, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForLabels)
+	mapStringForLabels := "map[string]string{"
+	for _, k := range keysForLabels {
+		mapStringForLabels += fmt.Sprintf("%v: %v,", k, this.Labels[k])
+	}
+	mapStringForLabels += "}"
+	s := strings.Join([]string{`&AlertPolicyMatchRequest{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Labels:` + mapStringForLabels + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AlertPolicyMatch) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AlertPolicyMatch{`,
+		`PolicyName:` + fmt.Sprintf("%v", this.PolicyName) + `,`,
+		`PolicyActive:` + fmt.Sprintf("%v", this.PolicyActive) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AlertPolicyMatchResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForAlertMatch := "[]*AlertPolicyMatch{"
+	for _, f := range this.AlertMatch {
+		repeatedStringForAlertMatch += strings.Replace(f.String(), "AlertPolicyMatch", "AlertPolicyMatch", 1) + ","
+	}
+	repeatedStringForAlertMatch += "}"
+	s := strings.Join([]string{`&AlertPolicyMatchResponse{`,
+		`AlertMatch:` + repeatedStringForAlertMatch + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1703,6 +2359,409 @@ func (m *TestAlertReceiverResponse) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: TestAlertReceiverResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AlertPolicyMatchRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AlertPolicyMatchRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AlertPolicyMatchRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Labels == nil {
+				m.Labels = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowPublicCustomapi
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowPublicCustomapi
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthPublicCustomapi
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Labels[mapkey] = mapvalue
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AlertPolicyMatch) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AlertPolicyMatch: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AlertPolicyMatch: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PolicyName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PolicyName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PolicyActive", wireType)
+			}
+			m.PolicyActive = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PolicyActive |= PolicyStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AlertPolicyMatchResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AlertPolicyMatchResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AlertPolicyMatchResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AlertMatch", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AlertMatch = append(m.AlertMatch, &AlertPolicyMatch{})
+			if err := m.AlertMatch[len(m.AlertMatch)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])

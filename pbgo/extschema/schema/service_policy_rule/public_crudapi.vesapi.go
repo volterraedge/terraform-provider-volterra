@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy_rule.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy_rule.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.service_policy_rule")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy_rule.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy_rule.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.service_policy_rule")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy_rule.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy_rule.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.service_policy_rule")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy_rule.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy_rule.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.service_policy_rule")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy_rule.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy_rule.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2355,6 +2338,27 @@ var APISwaggerJSON string = `{
             "x-displayname": "App Firewall Attack Type Context",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
+                "context": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Context",
+                    "$ref": "#/definitions/policyDetectionContext",
+                    "x-displayname": "Context",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "context_name": {
+                    "type": "string",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Context Name",
+                    "maxLength": 64,
+                    "x-displayname": "Context Name",
+                    "x-ves-example": "example: user-agent for Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
                 "exclude_attack_type": {
                     "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
@@ -2463,7 +2467,7 @@ var APISwaggerJSON string = `{
                 },
                 "signature_id": {
                     "type": "integer",
-                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": " The allowed values for signature id are 0 and in the range of 200000001-299999999.\n 0 implies that all signatures will be excluded for the specified context.\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 299999999\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -2471,8 +2475,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "10000000",
-                        "ves.io.schema.rules.uint32.lte": "300000000"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "299999999"
                     }
                 }
             }
@@ -2754,7 +2758,7 @@ var APISwaggerJSON string = `{
         },
         "policyDetectionContext": {
             "type": "string",
-            "description": "The available contexts for Signature and Violation Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nSignature ID or Violation will be excluded in all contexts.\n - CONTEXT_BODY: CONTEXT_BODY\n\nSignature ID or Violation will be excluded for the request body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nSignature ID or Violation will be excluded for the request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nSignature ID or Violation will be excluded for one or more parameters. The parameter name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all parameters.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nSignature ID or Violation will be excluded for one or more headers. The header name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all headers.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nSignature ID or Violation will be excluded for one or more cookies. The cookie name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all cookies.\n - CONTEXT_URL: CONTEXT_URL\n\nSignature ID or Violation will be excluded for the request URL.\n - CONTEXT_URI: CONTEXT_URI\n",
+            "description": "The available contexts for Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nDetection will be excluded for all contexts.\n - CONTEXT_BODY: CONTEXT_BODY\n\nDetection will be excluded for the request body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nDetection will be excluded for the request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nDetection will be excluded for the parameters. The parameter name is required in the Context name field. If the field is left empty, the detection will be excluded for all parameters.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nDetection will be excluded for the headers. The header name is required in the Context name field. If the field is left empty, the detection will be excluded for all headers.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nDetection will be excluded for the cookies. The cookie name is required in the Context name field. If the field is left empty, the detection will be excluded for all cookies.\n - CONTEXT_URL: CONTEXT_URL\n\nDetection will be excluded for the request URL.\n - CONTEXT_URI: CONTEXT_URI\n",
             "title": "Detection Context",
             "enum": [
                 "CONTEXT_ANY",
@@ -2770,52 +2774,6 @@ var APISwaggerJSON string = `{
             "default": "CONTEXT_ANY",
             "x-displayname": "WAF Exclusion Context Options",
             "x-ves-proto-enum": "ves.io.schema.policy.DetectionContext"
-        },
-        "policyGraphQLSettingsType": {
-            "type": "object",
-            "description": "x-displayName: \"GraphQL Settings\"\nGraphQL configuration.",
-            "title": "GraphQL Settings",
-            "properties": {
-                "disable_introspection": {
-                    "description": "x-displayName: \"Disable\"\nDisable introspection queries for the load balancer.",
-                    "title": "Disable Introspection Queries",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable_introspection": {
-                    "description": "x-displayName: \"Enable\"\nEnable introspection queries for the load balancer.",
-                    "title": "Enable Introspection Queries",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "max_batched_queries": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Maximum Batched Queries\"\nx-example: \"10\"\nx-required\nSpecify maximum number of queries in a single batched request.",
-                    "title": "Max Batched Queries",
-                    "format": "int64"
-                },
-                "max_depth": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Maximum Structure Depth\"\nx-example: \"10\"\nx-required\nSpecify maximum depth for the GraphQL query.",
-                    "title": "Max Depth",
-                    "format": "int64"
-                },
-                "max_total_length": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Maximum Total Length\"\nx-example: \"5000\"\nx-required\nSpecify maximum length in bytes for the GraphQL query.",
-                    "title": "Max Total Length",
-                    "format": "int64"
-                },
-                "max_value_length": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Maximum Value Length\"\nx-example: \"1024\"\nx-required\nSpecify maximum value length in bytes for the GraphQL query.",
-                    "title": "Max Value Length",
-                    "format": "int64"
-                },
-                "policy_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Policy Name\"\nx-example: \"graphql\"\nSets the BD Policy to use",
-                    "title": "Set BD Policy name"
-                }
-            }
         },
         "policyHTMLPosition": {
             "type": "string",
@@ -3136,52 +3094,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "policyOasValidationActionType": {
-            "type": "string",
-            "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI Validation Action Type\n\n - OAS_NONE: OAS_NONE\n\nx-displayName: \"No Operation\"\nAllow the request/response (don't validate OpenAPI specification)\n - OAS_REPORT_VIOLATION: OAS_REPORT_VIOLATION\n\nx-displayName: \"Report Violation\"\nIf OpenAPI violation occurs, allow the request/response and report it (API security event)\n - OAS_BLOCK_VIOLATION: OAS_BLOCK_VIOLATION\n\nx-displayName: \"Block Violation\"\nIf OpenAPI violation occurs, block the request/response and report it (API security event)\n - OAS_BLOCK: OAS_BLOCK\n\nx-displayName: \"Block\"\nblock the request/response and report it (API security event)\n - OAS_REPORT: OAS_REPORT\n\nx-displayName: \"Report\"\nallow the request/response and report it (API security event)",
-            "title": "OpenAPI Validation Action",
-            "enum": [
-                "OAS_NONE",
-                "OAS_REPORT_VIOLATION",
-                "OAS_BLOCK_VIOLATION",
-                "OAS_BLOCK",
-                "OAS_REPORT"
-            ],
-            "default": "OAS_NONE"
-        },
-        "policyOpenApiValidationAction": {
-            "type": "object",
-            "description": "x-displayName: \"OpenAPI Validation Action\"\nOpenAPI Validation configuration",
-            "title": "OpenAPI Validation Action",
-            "properties": {
-                "oas_response_validation_action": {
-                    "description": "x-displayName: \"OpenAPI Response Validation Action\"\nx-required\nThe action to perform if OpenAPI response validation fails",
-                    "title": "OpenApi Response Validation Action",
-                    "$ref": "#/definitions/policyOasValidationActionType"
-                },
-                "oas_validation_action": {
-                    "description": "x-displayName: \"OpenAPI Request Validation Action\"\nx-required\nThe action to perform if OpenAPI request validation fails (or if set by fall through rule)",
-                    "title": "OpenApi Request Validation Action",
-                    "$ref": "#/definitions/policyOasValidationActionType"
-                },
-                "request_properties_selection": {
-                    "type": "array",
-                    "description": "x-displayName: \"Request Properties Selection\"\nList of properties of the request to validate according to the OpenAPI specification file (a.k.a. swagger)",
-                    "title": "Request Properties Selection",
-                    "items": {
-                        "$ref": "#/definitions/schemaOpenApiValidationProperties"
-                    }
-                },
-                "response_properties_selection": {
-                    "type": "array",
-                    "description": "x-displayName: \"Response Properties Selection\"\nList of properties of the response to validate according to the OpenAPI specification file (a.k.a. swagger)",
-                    "title": "Response Properties Selection",
-                    "items": {
-                        "$ref": "#/definitions/schemaOpenApiValidationProperties"
-                    }
-                }
-            }
-        },
         "policyPrefixMatchList": {
             "type": "object",
             "description": "List of IP Prefix strings to match against.",
@@ -3198,7 +3110,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ip prefixes",
                     "maxItems": 128,
                     "items": {
@@ -3208,13 +3120,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "192.168.20.0/24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "ipv6_prefixes": {
                     "type": "array",
-                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv6 prefixes",
                     "maxItems": 128,
                     "items": {
@@ -3224,6 +3137,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "fd48:fa09:d9d4::/48",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4325,75 +4239,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -4453,22 +4298,6 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "staging"
                 }
             }
-        },
-        "schemaOpenApiValidationProperties": {
-            "type": "string",
-            "description": "x-displayName: \"OpenAPI Validation Properties\"\nList of required properties to validate against the OpenAPI spec\n\n - PROPERTY_QUERY_PARAMETERS: x-displayName: \"Query Parameters\"\nValidate that all query parameters are according to the OpenAPI specification\n - PROPERTY_PATH_PARAMETERS: x-displayName: \"Path Parameters\"\nValidate that all path parameters are according to the OpenAPI specification\n - PROPERTY_CONTENT_TYPE: x-displayName: \"Content-type\"\nValidate that the content type of the request is according to the OpenAPI specification\n - PROPERTY_COOKIE_PARAMETERS: x-displayName: \"Cookie Parameters\"\nValidate that all cookies are according to the OpenAPI specification\n - PROPERTY_HTTP_HEADERS: x-displayName: \"HTTP Headers\"\nValidate that all HTTP headers are according to the OpenAPI specification\n - PROPERTY_HTTP_BODY: x-displayName: \"HTTP Body\"\nValidate that the body is according to the OpenAPI specification\n - PROPERTY_SECURITY_SCHEMA: x-displayName: \"Security Schema\"\nValidate that the security schema is according to the OpenAPI specification\n - PROPERTY_RESPONSE_CODE: x-displayName: \"Response Code\"\nValidate that the response code is according to the OpenAPI specification",
-            "title": "OpenApiValidationProperties",
-            "enum": [
-                "PROPERTY_QUERY_PARAMETERS",
-                "PROPERTY_PATH_PARAMETERS",
-                "PROPERTY_CONTENT_TYPE",
-                "PROPERTY_COOKIE_PARAMETERS",
-                "PROPERTY_HTTP_HEADERS",
-                "PROPERTY_HTTP_BODY",
-                "PROPERTY_SECURITY_SCHEMA",
-                "PROPERTY_RESPONSE_CODE"
-            ],
-            "default": "PROPERTY_QUERY_PARAMETERS"
         },
         "schemaStatusMetaType": {
             "type": "object",
@@ -4670,149 +4499,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaViewRefType": {
             "type": "object",
             "description": "ViewRefType represents a reference to a view",
@@ -4947,6 +4633,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Path Matcher"
                 },
                 "prefix_values": {
                     "type": "array",
@@ -5252,6 +4945,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
+                "jwt_claims": {
+                    "type": "array",
+                    "description": " A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\n instances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\n Note that all specified JWT claim predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/policyJWTClaimMatcherType"
+                    },
+                    "x-displayname": "JWT Claims",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
+                },
                 "label_matcher": {
                     "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
                     "$ref": "#/definitions/schemaLabelMatcherType",
@@ -5455,234 +5160,9 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
-                "label_matcher": {
-                    "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
-                    "$ref": "#/definitions/schemaLabelMatcherType",
-                    "x-displayname": "Label Matcher",
-                    "x-ves-example": "['environment', 'location', 'deployment']"
-                },
-                "mum_action": {
-                    "description": " Specifies how Malicious User Mitigation is handled",
-                    "$ref": "#/definitions/policyModifyAction",
-                    "x-displayname": "Malicious User Mitigation Action"
-                },
-                "path": {
-                    "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
-                    "$ref": "#/definitions/schemapolicyPathMatcherType",
-                    "x-displayname": "HTTP Path"
-                },
-                "port_matcher": {
-                    "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
-                    "$ref": "#/definitions/schemapolicyPortMatcherType",
-                    "x-displayname": "Port Matcher"
-                },
-                "query_params": {
-                    "type": "array",
-                    "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/schemapolicyQueryParameterMatcherType"
-                    },
-                    "x-displayname": "HTTP Query Parameters",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16"
-                    }
-                },
-                "request_constraints": {
-                    "description": " Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.",
-                    "$ref": "#/definitions/policyRequestConstraintType",
-                    "x-displayname": "Request Constraints"
-                },
-                "tls_fingerprint_matcher": {
-                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
-                    "$ref": "#/definitions/policyTlsFingerprintMatcherType",
-                    "x-displayname": "TLS Fingerprint Matcher"
-                },
-                "waf_action": {
-                    "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/policyWafAction",
-                    "x-displayname": "App Firewall Action",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "schemaservice_policy_ruleGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of service_policy_rule in the storage backend.",
-            "title": "GlobalSpecType",
-            "x-displayname": "Specification",
-            "x-ves-oneof-field-asn_choice": "[\"any_asn\",\"asn_list\",\"asn_matcher\"]",
-            "x-ves-oneof-field-client_choice": "[\"any_client\",\"client_name\",\"client_name_matcher\",\"client_selector\",\"ip_threat_category_list\"]",
-            "x-ves-oneof-field-dst_asn_choice": "[]",
-            "x-ves-oneof-field-dst_ip_choice": "[]",
-            "x-ves-oneof-field-ip_choice": "[\"any_ip\",\"ip_matcher\",\"ip_prefix_list\"]",
-            "x-ves-proto-message": "ves.io.schema.service_policy_rule.GlobalSpecType",
-            "properties": {
-                "action": {
-                    "description": " Action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "action",
-                    "$ref": "#/definitions/policyRuleAction",
-                    "x-displayname": "Action",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "any_asn": {
-                    "description": "Exclusive with [asn_list asn_matcher]\n Any origin ASN.",
-                    "title": "any asn",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Any Source ASN"
-                },
-                "any_client": {
-                    "description": "Exclusive with [client_name client_name_matcher client_selector ip_threat_category_list]\n Any Client",
-                    "title": "any ip",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Any Client"
-                },
-                "any_ip": {
-                    "description": "Exclusive with [ip_matcher ip_prefix_list]\n Any Source IP",
-                    "title": "any ip",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Any Source IP"
-                },
-                "api_group_matcher": {
-                    "description": " The list of expected API group names to which the request API belongs. The actual list of API group names for the request API is determined from the api\n group and api group element configuration objects using the HTTP method and the HTTP path as inputs.\n The predicate evaluates to true if any of the actual API group names for the request is equal to any of the values in the api group matcher.",
-                    "title": "api group matcher",
-                    "$ref": "#/definitions/policyStringMatcherType",
-                    "x-displayname": "API Group Matcher"
-                },
-                "arg_matchers": {
-                    "type": "array",
-                    "description": " A list of predicates for all POST args that need to be matched. The criteria for matching each arg are described in individual instances\n of ArgMatcherType. The actual arg values are extracted from the request API as a list of strings for each arg selector name.\n Note that all specified arg matcher predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
-                    "title": "arg matchers",
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/policyArgMatcherType"
-                    },
-                    "x-displayname": "Argument Matchers",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16"
-                    }
-                },
-                "asn_list": {
-                    "description": "Exclusive with [any_asn asn_matcher]\n List of 4-byte ASN values.\n The predicate evaluates to true if the origin ASN is present in the ASN list.",
-                    "title": "asn list",
-                    "$ref": "#/definitions/policyAsnMatchList",
-                    "x-displayname": "ASN List"
-                },
-                "asn_matcher": {
-                    "description": "Exclusive with [any_asn asn_list]\n List of references to BGP ASN Set objects.\n The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.",
-                    "title": "asn matcher",
-                    "$ref": "#/definitions/policyAsnMatcherType",
-                    "x-displayname": "BGP ASN Sets"
-                },
-                "body_matcher": {
-                    "description": " Predicate for matching the request body string. The criteria for matching the request body is described in MatcherType.\n The actual request body value is extracted from the request API as a string.",
-                    "title": "request body matcher",
-                    "$ref": "#/definitions/policyMatcherType",
-                    "x-displayname": "Request Body Matcher"
-                },
-                "bot_action": {
-                    "description": " Bot action to be enforced if the input request matches the rule.",
-                    "title": "Bot Action",
-                    "$ref": "#/definitions/schemapolicyBotAction",
-                    "x-displayname": "Bot Action"
-                },
-                "client_name": {
-                    "type": "string",
-                    "description": "Exclusive with [any_client client_name_matcher client_selector ip_threat_category_list]\n The expected name of the client invoking the request API.\n The predicate evaluates to true if any of the actual names is the same as the expected client name.\n\nExample: - \"backend.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
-                    "title": "client name",
-                    "maxLength": 256,
-                    "x-displayname": "Client Name",
-                    "x-ves-example": "backend.production.customer.volterra.us",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256"
-                    }
-                },
-                "client_name_matcher": {
-                    "description": "Exclusive with [any_client client_name client_selector ip_threat_category_list]\n A list of exact values and/or regular expressions for the expected name of the client.\n This is a generalized version of the client name predicate that allows the same rule to be applicable to a set of clients rather than a single client.\n The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.",
-                    "title": "client name matcher",
-                    "$ref": "#/definitions/policyMatcherType",
-                    "x-displayname": "Group of Clients by Name"
-                },
-                "client_selector": {
-                    "description": "Exclusive with [any_client client_name client_name_matcher ip_threat_category_list]\n A label selector that describes the expected set of clients. The labels associated with the client making the API request are used to evaluate the label\n expressions in the selector. These labels can be derived from the client TLS certificate or from the volterra internal control plane.\n This is a more flexible and powerful version of the client name matcher predicate that allows a given rule to be applicable to a set of clients based on the\n client labels rather than being limited to relying on patterns in the client name.\n The predicate evaluates to true if the expressions in the label selector are true for the client labels.",
-                    "title": "client selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType",
-                    "x-displayname": "Group of Clients by Label Selector"
-                },
-                "cookie_matchers": {
-                    "type": "array",
-                    "description": " A list of predicates for all cookies that need to be matched. The criteria for matching each cookie is described in individual instances\n of CookieMatcherType. The actual cookie values are extracted from the request API as a list of strings for each cookie name.\n Note that all specified cookie matcher predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
-                    "title": "cookie matchers",
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/policyCookieMatcherType"
-                    },
-                    "x-displayname": "Cookie Matchers",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16"
-                    }
-                },
-                "domain_matcher": {
-                    "description": " A list of exact values and/or regular expressions for the expected name of the domain. The actual value of domain is the host component\n from the URL. The predicate evaluates to true if the domain value matches any of the exact values or regular expressions in the domain\n matcher.",
-                    "title": "domain matcher",
-                    "$ref": "#/definitions/policyMatcherType",
-                    "x-displayname": "Domain Matcher"
-                },
-                "expiration_timestamp": {
-                    "type": "string",
-                    "description": " The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in\n the configuration but is not applied anymore.\n\nExample: - \"2019-12-31:44:34.171543432Z\"-",
-                    "title": "expiration timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Expiration Timestamp",
-                    "x-ves-example": "2019-12-31:44:34.171543432Z"
-                },
-                "headers": {
-                    "type": "array",
-                    "description": " A list of predicates for various HTTP headers that need to match. The criteria for matching each HTTP header are described in individual HeaderMatcherType\n instances. The actual HTTP header values are extracted from the request API as a list of strings for each HTTP header type.\n Note that all specified header predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
-                    "title": "headers",
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/schemapolicyHeaderMatcherType"
-                    },
-                    "x-displayname": "HTTP Headers",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16"
-                    }
-                },
-                "http_method": {
-                    "description": " The list of expected values for the HTTP method in the request API. The actual value of the HTTP method is extracted from the HTTP request.\n The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.",
-                    "title": "method",
-                    "$ref": "#/definitions/policyHttpMethodMatcherType",
-                    "x-displayname": "HTTP Method"
-                },
-                "ip_matcher": {
-                    "description": "Exclusive with [any_ip ip_prefix_list]\n List of references to IP Prefix Set objects.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes in the IP Prefix Sets.",
-                    "title": "ip matcher",
-                    "$ref": "#/definitions/policyIpMatcherType",
-                    "x-displayname": "IP Prefix Sets"
-                },
-                "ip_prefix_list": {
-                    "description": "Exclusive with [any_ip ip_matcher]\n List of IP Prefixes values.\n The predicate evaluates to true if the client IP Address is covered by one or more of the IP Prefixes from the list.",
-                    "title": "ip prefix list",
-                    "$ref": "#/definitions/policyPrefixMatchList",
-                    "x-displayname": "IP Prefix List"
-                },
-                "ip_threat_category_list": {
-                    "description": "Exclusive with [any_client client_name client_name_matcher client_selector]\n IP threat categories to choose from",
-                    "title": "IP Threat Category List",
-                    "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
-                    "x-displayname": "List of IP Threat Categories"
-                },
                 "jwt_claims": {
                     "type": "array",
                     "description": " A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\n instances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\n Note that all specified JWT claim predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
-                    "title": "JWT claims",
                     "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/policyJWTClaimMatcherType"
@@ -5694,33 +5174,28 @@ var APISwaggerJSON string = `{
                 },
                 "label_matcher": {
                     "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
-                    "title": "label matcher",
                     "$ref": "#/definitions/schemaLabelMatcherType",
                     "x-displayname": "Label Matcher",
                     "x-ves-example": "['environment', 'location', 'deployment']"
                 },
                 "mum_action": {
                     "description": " Specifies how Malicious User Mitigation is handled",
-                    "title": "Malicious User Mitigation Action",
                     "$ref": "#/definitions/policyModifyAction",
                     "x-displayname": "Malicious User Mitigation Action"
                 },
                 "path": {
                     "description": " A list of exact values, prefixes and regular expressions for the expected value of the HTTP path. The actual value of the HTTP path is the unescaped path\n value extracted from the HTTP URL Resource, excluding any query and fragment information.\n The predicate evaluates to true if the actual path value matches any of the exact or prefix values or regular expressions in the path matcher.",
-                    "title": "path",
                     "$ref": "#/definitions/schemapolicyPathMatcherType",
                     "x-displayname": "HTTP Path"
                 },
                 "port_matcher": {
                     "description": " The list of port ranges to which the destination port should belong. In case of an HTTP Connect, the port is extracted from the desired destination.",
-                    "title": "port matcher",
                     "$ref": "#/definitions/schemapolicyPortMatcherType",
                     "x-displayname": "Port Matcher"
                 },
                 "query_params": {
                     "type": "array",
                     "description": " A list of predicates for all query parameters that need to be matched. The criteria for matching each query parameter are described in individual instances\n of QueryParameterMatcherType. The actual query parameter values are extracted from the request API as a list of strings for each query parameter name.\n Note that all specified query parameter predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
-                    "title": "query params",
                     "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemapolicyQueryParameterMatcherType"
@@ -5732,26 +5207,16 @@ var APISwaggerJSON string = `{
                 },
                 "request_constraints": {
                     "description": " Place limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.",
-                    "title": "request constraints",
                     "$ref": "#/definitions/policyRequestConstraintType",
                     "x-displayname": "Request Constraints"
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
-                    "title": "TLS JA3 fingerprint matcher",
                     "$ref": "#/definitions/policyTlsFingerprintMatcherType",
                     "x-displayname": "TLS Fingerprint Matcher"
                 },
-                "user_identity_matcher": {
-                    "description": " Match the specified user identity. The format is prefixed by the type.\n\nExample: - \"IP-x.x.x.x\"-",
-                    "title": "user identity matcher",
-                    "$ref": "#/definitions/policyMatcherTypeBasic",
-                    "x-displayname": "User Identity Matcher",
-                    "x-ves-example": "IP-x.x.x.x"
-                },
                 "waf_action": {
                     "description": " App Firewall action to be enforced if the input request matches the rule.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "App Firewall Action",
                     "$ref": "#/definitions/policyWafAction",
                     "x-displayname": "App Firewall Action",
                     "x-ves-required": "true",
@@ -5935,6 +5400,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaservice_policy_ruleIPThreatCategoryListType",
                     "x-displayname": "List of IP Threat Categories"
                 },
+                "jwt_claims": {
+                    "type": "array",
+                    "description": " A list of predicates for various JWT claims that need to match. The criteria for matching each JWT claim are described in individual JWTClaimMatcherType\n instances. The actual JWT claims values are extracted from the JWT payload as a list of strings.\n Note that all specified JWT claim predicates must evaluate to true.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/policyJWTClaimMatcherType"
+                    },
+                    "x-displayname": "JWT Claims",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16"
+                    }
+                },
                 "label_matcher": {
                     "description": " A list of label keys that identify the label values that need to be the same for the client and server. Note that the actual label values are not specified\n here, just the label keys. This predicate facilitates reuse of rules and policies across multiple dimensions such as deployment, environment, and location.\n The predicate evaluates to true if the values of the client and server labels for all the keys specified in the label matcher are equal. The values of any\n other labels do not matter.\n\nExample: - \"['environment', 'location', 'deployment']\"-",
                     "$ref": "#/definitions/schemaLabelMatcherType",
@@ -6101,12 +5578,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/service_policy_ruleObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -6245,12 +5716,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/service_policy_ruleObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -6288,33 +5753,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "service_policy_ruleObject": {
-            "type": "object",
-            "description": "Service Policy Rule object",
-            "title": "Service Policy Rule object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.service_policy_rule.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the service_policy_rule",
-                    "title": "spec",
-                    "$ref": "#/definitions/service_policy_ruleSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
-        },
         "service_policy_ruleReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -6339,20 +5777,6 @@ var APISwaggerJSON string = `{
         "service_policy_ruleReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.service_policy_rule.ReplaceResponse"
-        },
-        "service_policy_ruleSpecType": {
-            "type": "object",
-            "description": "Shape of the service policy rule specification",
-            "title": "Specification for service policy rule",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.service_policy_rule.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/schemaservice_policy_ruleGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
         },
         "service_policy_ruleStatusObject": {
             "type": "object",

@@ -183,8 +183,9 @@ func resourceVolterraDnsZone() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"value": {
@@ -382,33 +383,38 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"dlv_record": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"values": {
 
-													Type:     schema.TypeList,
-													Required: true,
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"sha1_digest": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"digest": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -416,14 +422,16 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha256_digest": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"digest": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -431,27 +439,31 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 															"sha384_digest": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"digest": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"ds_key_algorithm": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"key_tag": {
-																Type:     schema.TypeInt,
-																Required: true,
+																Type:       schema.TypeInt,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -913,8 +925,9 @@ func resourceVolterraDnsZone() *schema.Resource {
 															},
 
 															"fingerprint": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"sha1_fingerprint": {
@@ -948,8 +961,9 @@ func resourceVolterraDnsZone() *schema.Resource {
 															},
 
 															"fingerprinttype": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1076,8 +1090,9 @@ func resourceVolterraDnsZone() *schema.Resource {
 												},
 
 												"disable": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
@@ -1198,8 +1213,9 @@ func resourceVolterraDnsZone() *schema.Resource {
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"value": {
@@ -1397,33 +1413,38 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 												"dlv_record": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"values": {
 
-																Type:     schema.TypeList,
-																Required: true,
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"sha1_digest": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"digest": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -1431,14 +1452,16 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha256_digest": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"digest": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -1446,27 +1469,31 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 																		"sha384_digest": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"digest": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
 																		},
 
 																		"ds_key_algorithm": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"key_tag": {
-																			Type:     schema.TypeInt,
-																			Required: true,
+																			Type:       schema.TypeInt,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1928,8 +1955,9 @@ func resourceVolterraDnsZone() *schema.Resource {
 																		},
 
 																		"fingerprint": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"sha1_fingerprint": {
@@ -1963,8 +1991,9 @@ func resourceVolterraDnsZone() *schema.Resource {
 																		},
 
 																		"fingerprinttype": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2129,32 +2158,37 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"blindfold_secret_info_internal": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"decryption_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"store_provider": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
 									},
 
 									"secret_encoding_type": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"blindfold_secret_info": {
@@ -2204,34 +2238,40 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"vault_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"key": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"location": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"provider": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"secret_encoding": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"version": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2239,14 +2279,16 @@ func resourceVolterraDnsZone() *schema.Resource {
 
 									"wingman_secret_info": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3543,10 +3585,13 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
-					if v, ok := dnssecModeMapStrToI["enable"]; ok && !isIntfNil(v) && !modeTypeFound {
+					if _, ok := dnssecModeMapStrToI["enable"]; ok && !modeTypeFound {
 
 						modeTypeFound = true
-						_ = v
+						modeInt := &ves_io_schema_dns_zone.DNSSECMode_Enable{}
+						modeInt.Enable = &ves_io_schema_dns_zone.DNSSECModeEnable{}
+						dnssecMode.Mode = modeInt
+
 					}
 
 				}
@@ -5102,6 +5147,7 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -6371,10 +6417,13 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 					}
 
-					if v, ok := dnssecModeMapStrToI["enable"]; ok && !isIntfNil(v) && !modeTypeFound {
+					if _, ok := dnssecModeMapStrToI["enable"]; ok && !modeTypeFound {
 
 						modeTypeFound = true
-						_ = v
+						modeInt := &ves_io_schema_dns_zone.DNSSECMode_Enable{}
+						modeInt.Enable = &ves_io_schema_dns_zone.DNSSECModeEnable{}
+						dnssecMode.Mode = modeInt
+
 					}
 
 				}

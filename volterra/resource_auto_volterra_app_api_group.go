@@ -65,26 +65,30 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 			"api_group_builder": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"excluded_operations": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"method": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"path": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -92,19 +96,22 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 						"included_operations": {
 
-							Type:     schema.TypeList,
-							Optional: true,
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"method": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"path": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -112,8 +119,9 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 						"label_filter": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
@@ -121,7 +129,8 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -132,32 +141,37 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 						"metadata": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"description": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"disable": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 
 						"path_filter": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -190,29 +204,34 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 			"api_definition": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"api_definition": {
 
-							Type:     schema.TypeSet,
-							Required: true,
+							Type:       schema.TypeSet,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"name": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"namespace": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 									"tenant": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -223,8 +242,9 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 
 			"generic": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"http_loadbalancer": {
@@ -328,10 +348,10 @@ func resourceVolterraAppApiGroupCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := apiGroupBuilderMapStrToI["excluded_operations"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				excludedOperations := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+				excludedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
 				apiGroupBuilder.ExcludedOperations = excludedOperations
 				for i, set := range sl {
-					excludedOperations[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+					excludedOperations[i] = &ves_io_schema_views.ApiOperation{}
 					excludedOperationsMapStrToI := set.(map[string]interface{})
 
 					if v, ok := excludedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -351,10 +371,10 @@ func resourceVolterraAppApiGroupCreate(d *schema.ResourceData, meta interface{})
 			if v, ok := apiGroupBuilderMapStrToI["included_operations"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				includedOperations := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+				includedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
 				apiGroupBuilder.IncludedOperations = includedOperations
 				for i, set := range sl {
-					includedOperations[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+					includedOperations[i] = &ves_io_schema_views.ApiOperation{}
 					includedOperationsMapStrToI := set.(map[string]interface{})
 
 					if v, ok := includedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -597,6 +617,7 @@ func resourceVolterraAppApiGroupUpdate(d *schema.ResourceData, meta interface{})
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -650,10 +671,10 @@ func resourceVolterraAppApiGroupUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := apiGroupBuilderMapStrToI["excluded_operations"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				excludedOperations := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+				excludedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
 				apiGroupBuilder.ExcludedOperations = excludedOperations
 				for i, set := range sl {
-					excludedOperations[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+					excludedOperations[i] = &ves_io_schema_views.ApiOperation{}
 					excludedOperationsMapStrToI := set.(map[string]interface{})
 
 					if v, ok := excludedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {
@@ -673,10 +694,10 @@ func resourceVolterraAppApiGroupUpdate(d *schema.ResourceData, meta interface{})
 			if v, ok := apiGroupBuilderMapStrToI["included_operations"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				includedOperations := make([]*ves_io_schema_views_api_definition.ApiOperation, len(sl))
+				includedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
 				apiGroupBuilder.IncludedOperations = includedOperations
 				for i, set := range sl {
-					includedOperations[i] = &ves_io_schema_views_api_definition.ApiOperation{}
+					includedOperations[i] = &ves_io_schema_views.ApiOperation{}
 					includedOperationsMapStrToI := set.(map[string]interface{})
 
 					if v, ok := includedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {

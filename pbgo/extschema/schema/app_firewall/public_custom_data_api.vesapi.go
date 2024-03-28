@@ -222,7 +222,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) Metrics(ctx context.Context, in *MetricsRequest, opts ...grpc.CallOption) (*MetricsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.app_firewall.CustomDataAPI.Metrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_firewall.CustomDataAPI.Metrics")
 	return c.CustomDataAPIServer.Metrics(ctx, in)
 }
 

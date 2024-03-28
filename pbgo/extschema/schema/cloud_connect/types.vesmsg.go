@@ -1288,12 +1288,6 @@ func (m *AWSTGWSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetCloudLinksDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetCloudLinksDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetCredDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetCredDRefInfo() FAILED")
 	} else {
@@ -1307,24 +1301,6 @@ func (m *AWSTGWSiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *AWSTGWSiteType) GetCloudLinksDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetCloudLinks() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetCloudLinks().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetCloudLinks().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "cloud_links." + dri.DRField
-	}
-	return drInfos, err
 
 }
 
@@ -1507,15 +1483,6 @@ func (v *ValidateAWSTGWSiteType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["cloud_links"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("cloud_links"))
-		if err := fv(ctx, m.GetCloudLinks(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["cred"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cred"))
@@ -1590,8 +1557,6 @@ var DefaultAWSTGWSiteTypeValidator = func() *ValidateAWSTGWSiteType {
 		panic(errMsg)
 	}
 	v.FldValidators["vpc_attachments"] = vFn
-
-	v.FldValidators["cloud_links"] = CloudLinkListTypeValidator().Validate
 
 	return v
 }()
@@ -2282,6 +2247,7 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *CreateSpecType_AwsRe:
+
 		drInfos, err := m.GetAwsRe().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsRe().GetDRefInfo() FAILED")
@@ -2293,6 +2259,7 @@ func (m *CreateSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_AwsTgwSite:
+
 		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
@@ -2367,6 +2334,27 @@ func (v *ValidateCreateSpecType) CloudValidationRuleHandler(rules map[string]str
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud")
 	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
 	return validatorFn, nil
 }
 
@@ -2455,10 +2443,19 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = AWSTGWSiteTypeValidator().Validate
-
-	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2630,6 +2627,7 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *GetSpecType_AwsRe:
+
 		drInfos, err := m.GetAwsRe().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsRe().GetDRefInfo() FAILED")
@@ -2641,6 +2639,7 @@ func (m *GetSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_AwsTgwSite:
+
 		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
@@ -2718,6 +2717,27 @@ func (v *ValidateGetSpecType) CloudValidationRuleHandler(rules map[string]string
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -2777,6 +2797,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2803,10 +2832,19 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = AWSTGWSiteTypeValidator().Validate
-
-	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -2893,6 +2931,7 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *GlobalSpecType_AwsRe:
+
 		drInfos, err := m.GetAwsRe().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsRe().GetDRefInfo() FAILED")
@@ -2904,6 +2943,7 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_AwsTgwSite:
+
 		drInfos, err := m.GetAwsTgwSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSite().GetDRefInfo() FAILED")
@@ -3079,6 +3119,27 @@ func (v *ValidateGlobalSpecType) CloudValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -3175,6 +3236,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["virtual_network"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("virtual_network"))
@@ -3224,10 +3294,19 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
 	v.FldValidators["cloud.aws_re"] = AWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = AWSTGWSiteTypeValidator().Validate
-
-	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -3637,6 +3716,27 @@ func (v *ValidateReplaceSpecType) CloudValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) SegmentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for segment")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -3722,10 +3822,19 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["cloud"] = vFn
 
+	vrhSegment := v.SegmentValidationRuleHandler
+	rulesSegment := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSegment(rulesSegment)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.segment: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment"] = vFn
+
 	v.FldValidators["cloud.aws_re"] = ReplaceAWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = ReplaceAWSTGWSiteTypeValidator().Validate
-
-	v.FldValidators["segment"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -3968,6 +4077,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.GetCloudFromGlobalSpecType(f)
 	m.Segment = f.GetSegment()
+	m.State = f.GetState()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3987,6 +4097,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m1.SetCloudToGlobalSpecType(f)
 	f.Segment = m1.Segment
+	f.State = m1.State
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {

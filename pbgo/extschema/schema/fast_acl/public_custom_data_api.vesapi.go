@@ -219,7 +219,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) FastACLHits(ctx context.Context, in *FastACLHitsRequest, opts ...grpc.CallOption) (*FastACLHitsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fast_acl.CustomDataAPI.FastACLHits", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fast_acl.CustomDataAPI.FastACLHits")
 	return c.CustomDataAPIServer.FastACLHits(ctx, in)
 }
 

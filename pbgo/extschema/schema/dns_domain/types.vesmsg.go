@@ -220,6 +220,7 @@ func (m *CreateSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_Route53:
+
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
@@ -414,6 +415,7 @@ func (m *GetSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_Route53:
+
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
@@ -626,6 +628,7 @@ func (m *GlobalSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_Route53:
+
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")
@@ -829,6 +832,7 @@ func (m *ReplaceSpecType) GetDomainChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_Route53:
+
 		drInfos, err := m.GetRoute53().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRoute53().GetDRefInfo() FAILED")

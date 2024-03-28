@@ -94,10 +94,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_network.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
@@ -105,14 +101,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "create_form.spec.static_v6_routes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -132,14 +120,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_network.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.srv6_network.site_snat_pool.node_snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}

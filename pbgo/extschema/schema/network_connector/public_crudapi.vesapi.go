@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.network_connector")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.network_connector")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.network_connector")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.network_connector")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.network_connector.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.network_connector.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2414,12 +2397,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/network_connectorObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -2531,108 +2508,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "network_connectorGlobalSpecType": {
-            "type": "object",
-            "description": "Specification of Network connector",
-            "title": "Network Connector Specification",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.network_connector.GlobalSpecType",
-            "properties": {
-                "connector_type": {
-                    "description": " Type of connector to use between inside virtual network and outside virtual network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,2]\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Network Connector Type",
-                    "$ref": "#/definitions/network_connectorNetworkConnectorType",
-                    "x-displayname": "Network Connector Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,2]",
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "dynamic_reverse_proxy": {
-                    "type": "array",
-                    "description": " Vhost to be used for dynamic reverse proxy configuration\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Dynamic Reverse Proxy",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Dynamic Reverse Proxy",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "forward_proxy": {
-                    "description": " Configuration, applicable only for forward proxy, fine tunes the forward proxy behavior",
-                    "title": "Forward Proxy Configuration",
-                    "$ref": "#/definitions/schemaForwardProxyConfigType",
-                    "x-displayname": "Forward Proxy Configuration"
-                },
-                "inside_network": {
-                    "type": "array",
-                    "description": " Reference to inside network. Reference is valid only when the network type is per site virtual network or\n global virtual network. It is ignored for all other network types. public virtual network is not allowed\n as inside network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Inside VN",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Inside Virtual Network",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "inside_network_type": {
-                    "description": " Type of the inside network. The network can be well known virtual network like site local inside / site local. If the virtual network\n is well known virtual network, the inside_network ref need not be present and will be auto derived. If virtual network\n is not well known like per site virtual network inside_network reference need to be specified\n\n inside_network_type can be one of type VIRTUAL_NETWORK_SITE_LOCAL, VIRTUAL_NETWORK_SITE_LOCAL_INSIDE or VIRTUAL_NETWORK_PER_SITE\n When inside_network_type is VIRTUAL_NETWORK_SITE_LOCAL outside_network_type can only be VIRTUAL_NETWORK_GLOBAL\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Inside VN Type",
-                    "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Inside Virtual Network Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1,2]",
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "outside_network": {
-                    "type": "array",
-                    "description": " Reference to outside network. Reference is valid only when the network type is per site virtual network or\n global virtual network. It is ignored for all other network types\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Outside VN",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Outside Virtual Network",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "outside_network_type": {
-                    "description": " Type of the outside network. The network can be well known virtual network like site local inside / site local/ public etc. If the  virtual network\n is well known virtual network, the outside_network ref need not be present and will be auto derived. If virtual network\n is not well known like per site virtual network outside_network reference need to be specified\n\n outside_network_type can be one of type VIRTUAL_NETWORK_SITE_LOCAL, VIRTUAL_NETWORK_SITE_LOCAL_INSIDE, VIRTUAL_NETWORK_PER_SITE, VIRTUAL_NETWORK_PUBLIC or VIRTUAL_NETWORK_GLOBAL\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2,3,4]\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Outside VN type",
-                    "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Outside Virtual Network Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1,2,3,4]",
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "proxy_type": {
-                    "description": " Forward proxy or dynamic reverse proxy for this connector\n If network-connector type is NETWORK_CONNECTOR_TYPE_DEFAULT_GATEWAY_SNAT, then proxy-type can be\n     - NETWORK_CONNECTOR_NO_PROXY\n     - NETWORK_CONNECTOR_DYNAMIC_REVERSE_PROXY\n     - NETWORK_CONNECTOR_FORWARD_PROXY\n If network-connector type is NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY, then proxy-type must be NETWORK_CONNECTOR_NO_PROXY",
-                    "title": "Proxy Type",
-                    "$ref": "#/definitions/network_connectorNetworkConnectorProxyType",
-                    "x-displayname": "Proxy Type"
-                },
-                "snat_pool_type": {
-                    "description": " SNAT setting not valid when  network connector type is Dynamic Gateway without SNAT.\n Type of Snat configuration to be used.\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0]\n",
-                    "title": "Snat Pool Type",
-                    "$ref": "#/definitions/network_connectorNetworkConnectorSNATPoolType",
-                    "x-displayname": "Snat Pool Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0]"
-                    }
-                }
-            }
-        },
         "network_connectorListResponse": {
             "type": "object",
             "description": "This is the output message of 'List' RPC.",
@@ -2718,12 +2593,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/network_connectorObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -2761,31 +2630,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "network_connectorNetworkConnectorProxyType": {
-            "type": "string",
-            "description": "Type of Proxy to be used while connecting from one virtual network to another\n\nThere is no proxy and only Snat is applied\nVirtualHosts are configured in the inside network and traffic is attracted to these Vhosts. DNS query is performed in\nthe outside network to forward the packets to actual IPs\nDevices in the inside network perform DNS queries to know the actual IPs and all session are terminated to by Ver in\ninside network and re-originated in outside network to original IPs",
-            "title": "Network Connector Proxy Type",
-            "enum": [
-                "NETWORK_CONNECTOR_NO_PROXY",
-                "NETWORK_CONNECTOR_DYNAMIC_REVERSE_PROXY",
-                "NETWORK_CONNECTOR_FORWARD_PROXY"
-            ],
-            "default": "NETWORK_CONNECTOR_NO_PROXY",
-            "x-displayname": "Network Connector Proxy Type",
-            "x-ves-proto-enum": "ves.io.schema.network_connector.NetworkConnectorProxyType"
-        },
-        "network_connectorNetworkConnectorSNATPoolType": {
-            "type": "string",
-            "description": "If the type of network connector is NETWORK_CONNECTOR_TYPE_DEFAULT_GATEWAY_SNAT or NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY_SNAT\npackets will be subjected to Snat when they traverse from one network to other. While doing the Source Nat, the Source IP that gets\nchosen for packet can be controlled using Network Connector Snat Pool Type\n\nUse IP address of interface belonging to remote virtual network while doing the source nat of the packet\nUse explicit nat pool of IP's to nat source IP of the packet",
-            "title": "Network Connector Snat Pool Type",
-            "enum": [
-                "NETWORK_CONNECTOR_SNAT_SIP_USE_INTERFACE",
-                "NETWORK_CONNECTOR_SNAT_SIP_USE_POOL"
-            ],
-            "default": "NETWORK_CONNECTOR_SNAT_SIP_USE_INTERFACE",
-            "x-displayname": "Network Connector Snat Pool Type",
-            "x-ves-proto-enum": "ves.io.schema.network_connector.NetworkConnectorSNATPoolType"
-        },
         "network_connectorNetworkConnectorStatus": {
             "type": "object",
             "description": "Status object corresponding to a network connector. It gives the latest status of Network connector",
@@ -2798,46 +2642,6 @@ var APISwaggerJSON string = `{
                     "description": " Installed will be set to 'true' if the connector is installed",
                     "title": "Network Connector Install Status",
                     "x-displayname": "Network Connector Install status"
-                }
-            }
-        },
-        "network_connectorNetworkConnectorType": {
-            "type": "string",
-            "description": "There are three different types of network connectors\n\nDefault route in inside Network is towards outside network\nDynamic routing will be used and routes from outside network are progated in inside\nnetwork. If dynamic routing is configured on customer edge these routes will be advertised\nto attarct traffic to this CE.\nTwo networks conected bidirectionally with dynamic routing without SNAT.",
-            "title": "Network Connector Types",
-            "enum": [
-                "NETWORK_CONNECTOR_TYPE_DEFAULT_GATEWAY_SNAT",
-                "NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY_SNAT",
-                "NETWORK_CONNECTOR_TYPE_DYNAMIC_GATEWAY"
-            ],
-            "default": "NETWORK_CONNECTOR_TYPE_DEFAULT_GATEWAY_SNAT",
-            "x-displayname": "Network Connector Types",
-            "x-ves-proto-enum": "ves.io.schema.network_connector.NetworkConnectorType"
-        },
-        "network_connectorObject": {
-            "type": "object",
-            "description": "network_connector object",
-            "title": "Network Connector Object",
-            "x-displayname": "Network Connector Object",
-            "x-ves-proto-message": "ves.io.schema.network_connector.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the certified_hardware",
-                    "title": "spec",
-                    "$ref": "#/definitions/network_connectorSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -2927,20 +2731,6 @@ var APISwaggerJSON string = `{
                     "title": "Interface IP",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Interface IP"
-                }
-            }
-        },
-        "network_connectorSpecType": {
-            "type": "object",
-            "description": "Shape of the network_connector specification",
-            "title": "Network Connector Object Specification",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.network_connector.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/network_connectorGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -3374,24 +3164,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaIpv4SubnetType": {
-            "type": "object",
-            "description": "x-displayName: \"IPv4 Subnet\"\nIPv4 subnets specified as prefix and prefix-length. Prefix length must be \u003c= 32",
-            "title": "IPv4 Subnet",
-            "properties": {
-                "plen": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Prefix Length\"\nx-example: \"24\"\nPrefix-length of the IPv4 subnet. Must be \u003c= 32",
-                    "title": "Prefix Length",
-                    "format": "int64"
-                },
-                "prefix": {
-                    "type": "string",
-                    "description": "x-displayName: \"Prefix\"\nx-example: \"192.168.1.0\"\nPrefix part of the IPv4 subnet in string form with dot-decimal notation",
-                    "title": "Prefix"
-                }
-            }
-        },
         "schemaObjectCreateMetaType": {
             "type": "object",
             "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
@@ -3510,75 +3282,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
-                }
-            }
-        },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -3874,149 +3577,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "Handle to fetch certificate and key",
@@ -4167,10 +3727,10 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [volterra_trusted_ca]\n Custom trusted CA certificates for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Custom List",
+                    "description": "Exclusive with [volterra_trusted_ca]\n Custom Root CA Certificate for validating upstream server certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "Custom Root CA Certificate",
                     "maxLength": 131072,
-                    "x-displayname": "Custom Trusted CA List",
+                    "x-displayname": "Custom Root CA Certificate",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.uri_ref": "true"
@@ -4183,10 +3743,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "F5XC Signing Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [trusted_ca_url]\n Default volterra trusted CA list for validating upstream server certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n F5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default Trusted CA List"
+                    "x-displayname": "F5XC Default Root CA Certificate"
                 }
             }
         },
@@ -4259,29 +3819,6 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
                 }
             }
-        },
-        "schemaVirtualNetworkType": {
-            "type": "string",
-            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
-            "title": "VirtualNetworkType",
-            "enum": [
-                "VIRTUAL_NETWORK_SITE_LOCAL",
-                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE",
-                "VIRTUAL_NETWORK_PER_SITE",
-                "VIRTUAL_NETWORK_PUBLIC",
-                "VIRTUAL_NETWORK_GLOBAL",
-                "VIRTUAL_NETWORK_SITE_SERVICE",
-                "VIRTUAL_NETWORK_VER_INTERNAL",
-                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
-                "VIRTUAL_NETWORK_IP_AUTO",
-                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
-                "VIRTUAL_NETWORK_SRV6_NETWORK",
-                "VIRTUAL_NETWORK_IP_FABRIC",
-                "VIRTUAL_NETWORK_SEGMENT"
-            ],
-            "default": "VIRTUAL_NETWORK_SITE_LOCAL",
-            "x-displayname": "Virtual Network Type",
-            "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
         },
         "schemaWingmanSecretInfoType": {
             "type": "object",
