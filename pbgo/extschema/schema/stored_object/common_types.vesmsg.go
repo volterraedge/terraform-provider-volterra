@@ -37,15 +37,13 @@ func (m *CreateObjectRequest) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Contents = nil
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *CreateObjectRequest) GoString() string {
 	copy := m.DeepCopy()
-	copy.Contents = nil
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -56,7 +54,14 @@ func (m *CreateObjectRequest) Redact(ctx context.Context) error {
 		return nil
 	}
 
-	m.Contents = nil
+	switch x := m.Contents.(type) {
+	case *CreateObjectRequest_StringValue:
+		x.StringValue = ""
+
+	case *CreateObjectRequest_BytesValue:
+		x.BytesValue = []byte{}
+
+	}
 
 	return nil
 }

@@ -52,11 +52,11 @@ Argument Reference
 
 `protocol` - (Optional) Values are tcp, udp, and icmp (`String`).
 
-`ip_prefix_set` - (Optional) Reference to object which represents list of IP prefixes that will be referred as remote endpoint. See [Ip Prefix Set ](#ip-prefix-set) below for details.
+`ip_prefix_set` - (Optional) Reference to object which represents list of IP prefixes that will be referred as remote endpoint. See [Remote Endpoint Ip Prefix Set ](#remote-endpoint-ip-prefix-set) below for details.
 
-`prefix` - (Optional) these IP prefixes are destination. See [Prefix ](#prefix) below for details.
+`prefix` - (Optional) these IP prefixes are destination. See [Remote Endpoint Prefix ](#remote-endpoint-prefix) below for details.
 
-`prefix_selector` - (Optional) Only first expression is selected even though LabelSelectorType can provide multiple. See [Prefix Selector ](#prefix-selector) below for details.
+`prefix_selector` - (Optional) Only first expression is selected even though LabelSelectorType can provide multiple. See [Remote Endpoint Prefix Selector ](#remote-endpoint-prefix-selector) below for details.
 
 ### Advanced Action
 
@@ -64,31 +64,11 @@ Enable or disable logging..
 
 `action` - (Optional) Enable or disable logging. (`String`).
 
-### Ip Prefix Set
-
-Reference to object which represents list of IP prefixes that will be referred as remote endpoint.
-
-`ref` - (Optional) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
-
 ### Label Matcher
 
 List of label keys to be matched in prefix_selector configured in remote_endpoint.
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
-
-### Prefix
-
-these IP prefixes are destination.
-
-`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
-
-### Prefix Selector
-
-Only first expression is selected even though LabelSelectorType can provide multiple.
-
-`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
 ### Ref
 
@@ -99,6 +79,26 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Remote Endpoint Ip Prefix Set
+
+Reference to object which represents list of IP prefixes that will be referred as remote endpoint.
+
+`ref` - (Optional) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
+
+### Remote Endpoint Prefix
+
+these IP prefixes are destination.
+
+`ipv6_prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+`prefix` - (Optional) IP Address prefix in string format. String must contain both prefix and prefix-length (`String`).
+
+### Remote Endpoint Prefix Selector
+
+Only first expression is selected even though LabelSelectorType can provide multiple.
+
+`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
 Attribute Reference
 -------------------

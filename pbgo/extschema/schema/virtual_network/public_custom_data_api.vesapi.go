@@ -221,7 +221,7 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) SIDCounters(ctx context.Context, in *SIDCounterRequest, opts ...grpc.CallOption) (*SIDCounterResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_network.CustomDataAPI.SIDCounters", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_network.CustomDataAPI.SIDCounters")
 	return c.CustomDataAPIServer.SIDCounters(ctx, in)
 }
 

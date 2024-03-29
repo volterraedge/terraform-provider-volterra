@@ -324,11 +324,11 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) ServicePolicyHits(ctx context.Context, in *ServicePolicyHitsRequest, opts ...grpc.CallOption) (*ServicePolicyHitsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHits", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHits")
 	return c.CustomDataAPIServer.ServicePolicyHits(ctx, in)
 }
 func (c *customDataAPIInprocClient) ServicePolicyHitsLatency(ctx context.Context, in *ServicePolicyHitsRequest, opts ...grpc.CallOption) (*ServicePolicyHitsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHitsLatency", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.service_policy.CustomDataAPI.ServicePolicyHitsLatency")
 	return c.CustomDataAPIServer.ServicePolicyHitsLatency(ctx, in)
 }
 

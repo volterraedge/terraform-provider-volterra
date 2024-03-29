@@ -363,24 +363,6 @@ func (e *DBObject) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (e *DBObject) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if e == nil {
-		return nil, nil
-	}
-	srInfos, err := e.GetSpecSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpecSRefInfo() FAILED")
-	}
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
-		sri.Name = "ves.io.schema.topology.topology_site_mesh_group.Object." + sri.Name
-	}
-
-	return srInfos, err
-
-}
-
 func (e *DBObject) ToStore() store.Entry {
 	return e.Object
 }
@@ -454,26 +436,6 @@ func (e *DBObject) GetSystemMetadataDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "system_metadata." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (e *DBObject) GetSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if e.GetSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := e.GetSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert LcSpec.vnRefs to Spec.LcSpec.vnRefs
-		sri.Name = "spec." + sri.Name
-	}
-	return srInfos, nil
 
 }
 

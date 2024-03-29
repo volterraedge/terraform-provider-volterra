@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.fleet")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.fleet")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.fleet")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.fleet")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.fleet.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.fleet.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2210,325 +2193,6 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "bgpFamilyInet": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Family Inet\"\nParameters for inet family.",
-            "title": "FamilyInet",
-            "properties": {
-                "disable": {
-                    "description": "x-displayName: \"Disable IPv4 Unicast\"\nDisable the IPv4 Unicast family.",
-                    "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable": {
-                    "description": "x-displayName: \"Enable IPv4 Unicast\"\nEnable the IPv4 Unicast family.",
-                    "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
-        "bgpFamilyInet6vpn": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Family Inet6vpn\"\nParameters for inet6vpn family.",
-            "title": "FamilyInet6vpn",
-            "properties": {
-                "disable": {
-                    "description": "x-displayName: \"Disable IPv6 VPN Unicast\"\nDisable the IPv6 Unicast family.",
-                    "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable": {
-                    "description": "x-displayName: \"Enable IPv6 VPN Unicast\"\nEnable the IPv6 Unicast family.",
-                    "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
-        "bgpFamilyInetvpn": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Family Inetvpn\"\nParameters for inetvpn family.",
-            "title": "FamilyInetvpn",
-            "properties": {
-                "disable": {
-                    "description": "x-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
-                    "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable": {
-                    "description": "x-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
-                    "title": "enable",
-                    "$ref": "#/definitions/bgpFamilyInetvpnParameters"
-                }
-            }
-        },
-        "bgpFamilyInetvpnParameters": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Family Inetvpn\"\nParameters for inetvpn family.",
-            "title": "FamilyInetvpnParameters",
-            "properties": {
-                "disable": {
-                    "description": "x-displayName: \"Disable IPv4 VPN Unicast\"\nDisable the IPv4 Unicast family.",
-                    "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable": {
-                    "description": "x-displayName: \"Enable IPv4 VPN Unicast\"\nEnable the IPv4 Unicast family.",
-                    "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
-        "bgpFamilyRtarget": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Family Route Target\"\nParameters for rtarget family.",
-            "title": "FamilyRtarget",
-            "properties": {
-                "disable": {
-                    "description": "x-displayName: \"Disable Route Target\"\nDisable the Route Target family.",
-                    "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable": {
-                    "description": "x-displayName: \"Enable Route Target\"\nEnable the Route Target family.",
-                    "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
-        "bgpFamilyUuidvpn": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Family Uuidvpn\"\nParameters for uuidvpn family.",
-            "title": "FamilyUuidvpn",
-            "properties": {
-                "disable": {
-                    "description": "x-displayName: \"Disable UUID VPN Unicast\"\nDisable the UUID Unicast family.",
-                    "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "enable": {
-                    "description": "x-displayName: \"Enable UUID VPN Unicast\"\nEnable the UUID Unicast family.",
-                    "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                }
-            }
-        },
-        "bgpInterfaceList": {
-            "type": "object",
-            "description": "x-displayName: \"Interface List\"\nList of network interfaces.",
-            "title": "InterfaceList",
-            "properties": {
-                "interfaces": {
-                    "type": "array",
-                    "description": "x-displayName: \"Interface List\"\nx-required\nList of network interfaces.",
-                    "title": "interface_list",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    }
-                }
-            }
-        },
-        "bgpPeer": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Peer\"\nBGP Peer parameters",
-            "title": "Peer",
-            "properties": {
-                "external": {
-                    "description": "x-displayName: \"External\"\nExternal BGP peer.",
-                    "title": "external",
-                    "$ref": "#/definitions/bgpPeerExternal"
-                },
-                "internal": {
-                    "description": "x-displayName: \"Internal\"\nInternal BGP peer.",
-                    "title": "internal",
-                    "$ref": "#/definitions/bgpPeerInternal"
-                },
-                "metadata": {
-                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the peer including name and description.",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType"
-                },
-                "passive_mode_disabled": {
-                    "description": "x-displayName: \"Disabled\"",
-                    "title": "passive_mode_disabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "passive_mode_enabled": {
-                    "description": "x-displayName: \"Enabled\"",
-                    "title": "passive_mode_enabled",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "target_service": {
-                    "type": "string",
-                    "description": "x-displayName: \"Target Service\"\nx-example: \"value\"\nSpecify whether this peer should be configured in \"phobos\" or \"frr\".",
-                    "title": "target_service"
-                }
-            }
-        },
-        "bgpPeerExternal": {
-            "type": "object",
-            "description": "x-displayName: \"External BGP Peer\"\nExternal BGP Peer parameters.",
-            "title": "PeerExternal",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
-                    "title": "address"
-                },
-                "address_ipv6": {
-                    "type": "string",
-                    "description": "x-displayName: \"Peer IPV6 Address\"\nSpecify peer ipv6 address.",
-                    "title": "IPV6 address"
-                },
-                "asn": {
-                    "type": "integer",
-                    "description": "x-displayName: \"ASN\"\nx-example: \"64512\"\nx-required\nAutonomous System Number for BGP peer",
-                    "title": "ASN",
-                    "format": "int64"
-                },
-                "default_gateway": {
-                    "description": "x-displayName: \"Default Gateway\"\nUse the default gateway address.",
-                    "title": "default_gateway",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "family_inet": {
-                    "description": "x-displayName: \"Family IPv4 Unicast\"\nParameters for IPv4 Unicast family.",
-                    "title": "family_inet",
-                    "$ref": "#/definitions/bgpFamilyInet"
-                },
-                "from_site": {
-                    "description": "x-displayName: \"Address From Site Object\"\nUse the address specified in the site object.",
-                    "title": "from_site",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "inside_interfaces": {
-                    "description": "x-displayName: \"Site Local Inside Interfaces\"\nAll interfaces in the site local inside network.",
-                    "title": "inside_interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "interface": {
-                    "description": "x-displayName: \"Interface\"\nSpecify interface.",
-                    "title": "interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType"
-                },
-                "interface_list": {
-                    "description": "x-displayName: \"Interface List\"\nList of network interfaces.",
-                    "title": "interface_list",
-                    "$ref": "#/definitions/bgpInterfaceList"
-                },
-                "md5_auth_key": {
-                    "type": "string",
-                    "description": "x-displayName: \"MD5 Authentication Key\"\nMD5 key for protecting BGP Sessions (RFC 2385)",
-                    "title": "md5_auth_key"
-                },
-                "no_authentication": {
-                    "description": "x-displayName: \"No Authentication\"\nNo Authentication of BGP session",
-                    "title": "no_authentication",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "outside_interfaces": {
-                    "description": "x-displayName: \"Site Local Interfaces\"\nAll interfaces in the site local outside network.",
-                    "title": "outside_interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "port": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nPeer TCP port number.",
-                    "title": "Peer Port",
-                    "format": "int64"
-                },
-                "subnet_begin_offset": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Offset From Beginning Of Subnet\"\nCalculate peer address using offset from the beginning of the subnet.",
-                    "title": "subnet_begin_offset",
-                    "format": "int64"
-                },
-                "subnet_end_offset": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Offset From End Of Subnet\"\nCalculate peer address using offset from the end of the subnet.",
-                    "title": "subnet_end_offset",
-                    "format": "int64"
-                }
-            }
-        },
-        "bgpPeerInternal": {
-            "type": "object",
-            "description": "x-displayName: \"Internal BGP Peer\"\nInternal BGP Peer parameters.",
-            "title": "PeerInternal",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "description": "x-displayName: \"Peer Address\"\nSpecify peer address.",
-                    "title": "address"
-                },
-                "disable_mtls": {
-                    "description": "x-displayName: \"Disable MTLS\"\nDisable MTLS",
-                    "title": "disable_mtls",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "dns_name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Use address for DNS name\"\nUse the addresse by resolving the given DNS name.",
-                    "title": "dns_name"
-                },
-                "enable_mtls": {
-                    "description": "x-displayName: \"Enable MTLS\"\nEnable MTLS",
-                    "title": "enable_mtls",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "family_inet6vpn": {
-                    "description": "x-displayName: \"Family IPv6 VPN Unicast\"\nParameters for IPv6 VPN Unicast family.",
-                    "title": "family_inet6vpn",
-                    "$ref": "#/definitions/bgpFamilyInet6vpn"
-                },
-                "family_inetvpn": {
-                    "description": "x-displayName: \"Family IPv4 VPN Unicast\"\nParameters for IPv4 VPN Unicast family.",
-                    "title": "family_inetvpn",
-                    "$ref": "#/definitions/bgpFamilyInetvpn"
-                },
-                "family_rtarget": {
-                    "description": "x-displayName: \"Family Route Target\"\nParameters for Route Target family.",
-                    "title": "family_rtarget",
-                    "$ref": "#/definitions/bgpFamilyRtarget"
-                },
-                "family_uuidvpn": {
-                    "description": "x-displayName: \"Family UUID VPN Unicast\"\nParameters for UUID VPN Unicast family.",
-                    "title": "family_inetvpn",
-                    "$ref": "#/definitions/bgpFamilyUuidvpn"
-                },
-                "from_site": {
-                    "description": "x-displayName: \"Use address from site object\"\nUse the address specified in the site object.",
-                    "title": "from_site",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "port": {
-                    "type": "integer",
-                    "description": "x-displayName: \"Peer Port\"\nx-example: \"179\"\nLocal Peer TCP Port Number.",
-                    "title": "port",
-                    "format": "int64"
-                }
-            }
-        },
-        "fleetBGPConfiguration": {
-            "type": "object",
-            "description": "x-displayName: \"BGP Configuration\"\nBGP configuration parameters",
-            "title": "BGP Configuration",
-            "properties": {
-                "asn": {
-                    "type": "integer",
-                    "description": "x-displayName: \"ASN\"\nx-example: \"64512\"\nx-required\nAutonomous System Number",
-                    "title": "ASN",
-                    "format": "int64"
-                },
-                "peers": {
-                    "type": "array",
-                    "description": "x-displayName: \"Peers\"\nBGP parameters for peer",
-                    "title": "BGP Peers",
-                    "items": {
-                        "$ref": "#/definitions/bgpPeer"
-                    }
-                }
-            }
-        },
         "fleetBlockedServices": {
             "type": "object",
             "description": "Blocked Services configured explicitly\nBy default all services are allowed and get blocked when config is updated",
@@ -2629,42 +2293,6 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "fleetCustomAllowedServiceList": {
-            "type": "object",
-            "description": "x-displayName: \"Custom Allowed Services List\"\nServices to be allowed are placed as a combination of IP and port",
-            "title": "CustomAllowedServiceList Custom service list to be allowed internally for accessing services",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "description": "x-displayName: \"Items\"\nSet of allowed IP and port for services",
-                    "title": "Items",
-                    "items": {
-                        "$ref": "#/definitions/fleetCustomServiceItem"
-                    }
-                }
-            }
-        },
-        "fleetCustomServiceItem": {
-            "type": "object",
-            "description": "x-displayName: \"Custom Service Item\"\nAllowed Service is identified by IP and port combination which is defined as item",
-            "title": "CustomServiceItem Defines the identification for allowed service",
-            "properties": {
-                "port": {
-                    "type": "integer",
-                    "description": "x-displayName: \"port\"\nx-required\nx-example: \"9400\"\nTraffic to this on configured IPis is allowed to access services",
-                    "title": "Port",
-                    "format": "int64"
-                },
-                "prefix_list": {
-                    "type": "array",
-                    "description": "x-displayName: \"Prefixes\"\nx-required\nx-example: \"[10.1.1.0/28, 11.1.1.1/32]\"\nIP Prefixes to allow to access services on the configured port",
-                    "title": "IP prefixes",
-                    "items": {
-                        "type": "string"
-                    }
                 }
             }
         },
@@ -2792,17 +2420,6 @@ var APISwaggerJSON string = `{
             "default": "DEVICE_OWNER_INVALID",
             "x-displayname": "Device Owner Type",
             "x-ves-proto-enum": "ves.io.schema.fleet.DeviceOwnerType"
-        },
-        "fleetEtcdClusterNetworkType": {
-            "type": "string",
-            "description": "x-displayName: \"Etcd Clustering Network\"\nDecided which network is used for etcd clustering\n\n - ETCD_CLUSTER_SITE_LOCAL_NETWORK: x-displayName: \"Site Local (Outside) Network\"\nEtcd clustering happens over Site local network\n - ETCD_CLUSTER_SITE_LOCAL_INSIDE_NETWORK: x-displayName: \"Site Local Inside Network\"\nEtcd clustering happens over Site local inside network\n - ETCD_CLUSTER_SITE_MANAGEMENT_NETWORK: x-displayName: \"Site Management Network\"\nEtcd clustering happens over Site management network, requires redundant dedicated management interfaces",
-            "title": "Etcd Clustering Network",
-            "enum": [
-                "ETCD_CLUSTER_SITE_LOCAL_NETWORK",
-                "ETCD_CLUSTER_SITE_LOCAL_INSIDE_NETWORK",
-                "ETCD_CLUSTER_SITE_MANAGEMENT_NETWORK"
-            ],
-            "default": "ETCD_CLUSTER_SITE_LOCAL_NETWORK"
         },
         "fleetFlashArrayEndpoint": {
             "type": "object",
@@ -3499,16 +3116,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "fleetFleetType": {
-            "type": "string",
-            "description": "x-displayName: \"Fleet Type\"\nDefines fleet type. We have different constraints per each type.\n\n - MULTIPLE_SITE: x-displayName: \"Multiple Site Fleet\"\nDefault fleet type.\n - SINGLE_SITE: x-displayName: \"Single Site Fleet\"\nInternally created site by single fleet such as AWS/Azure/GCP etc.",
-            "title": "Fleet Type",
-            "enum": [
-                "MULTIPLE_SITE",
-                "SINGLE_SITE"
-            ],
-            "default": "MULTIPLE_SITE"
-        },
         "fleetGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -3545,12 +3152,6 @@ var APISwaggerJSON string = `{
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
-                },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/fleetObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
                 },
                 "referring_objects": {
                     "type": "array",
@@ -3690,12 +3291,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/fleetObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -3730,28 +3325,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "fleetLocalControlPlaneType": {
-            "type": "object",
-            "description": "x-displayName: \"Local Control Plane\"\nEnable local control plane for L3VPN, SRV6, EVPN etc",
-            "title": "Local Control Plane",
-            "properties": {
-                "bgp_config": {
-                    "description": "x-displayName: \"BGP Configuration\"\nBGP configuration for local control plane",
-                    "title": "BGP configuration",
-                    "$ref": "#/definitions/fleetBGPConfiguration"
-                },
-                "inside_vn": {
-                    "description": "x-displayName: \"Inside Network\"\nLocal control plane will work on inside network",
-                    "title": "Inside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "outside_vn": {
-                    "description": "x-displayName: \"Outside Network\"\nLocal control plane will work on outside network",
-                    "title": "Outside Network",
-                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },
@@ -3801,33 +3374,6 @@ var APISwaggerJSON string = `{
             "default": "NETWORK_INTERFACE_USE_REGULAR",
             "x-displayname": "Network Device Use",
             "x-ves-proto-enum": "ves.io.schema.fleet.NetworkingDeviceInstanceUseType"
-        },
-        "fleetObject": {
-            "type": "object",
-            "description": "Fleet object",
-            "title": "Fleet Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.fleet.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the fleet",
-                    "title": "spec",
-                    "$ref": "#/definitions/fleetSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
         },
         "fleetOntapVirtualStoragePoolType": {
             "type": "object",
@@ -4026,20 +3572,6 @@ var APISwaggerJSON string = `{
         "fleetReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.fleet.ReplaceResponse"
-        },
-        "fleetSpecType": {
-            "type": "object",
-            "description": "Shape of the fleet specification",
-            "title": "Fleet Specification",
-            "x-displayname": "Fleet Specification",
-            "x-ves-proto-message": "ves.io.schema.fleet.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/schemafleetGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
         },
         "fleetSriovInterface": {
             "type": "object",
@@ -5478,29 +5010,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaMessageMetaType": {
-            "type": "object",
-            "description": "x-displayName: \"Message Metadata\"\nMessageMetaType is metadata (common attributes) of a message that only certain messages\nhave. This information is propagated to the metadata of a child object that gets created\nfrom the containing message during view processing.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "MessageMetaType",
-            "properties": {
-                "description": {
-                    "type": "string",
-                    "description": "x-displayName: \"Description\"\nx-example: \"Virtual Host for acmecorp website\"\nHuman readable description.",
-                    "title": "description"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": "x-displayName: \"Disable\"\nx-example: \"true\"\nA value of true will administratively disable the object that corresponds to the containing message.",
-                    "title": "disable",
-                    "format": "boolean"
-                },
-                "name": {
-                    "type": "string",
-                    "description": "x-displayName: \"Name\"\nx-example: \"acmecorp-web\"\nx-required\nThis is the name of the message.\nThe value of name has to follow DNS-1035 format.",
-                    "title": "name"
-                }
-            }
-        },
         "schemaNextHopType": {
             "type": "object",
             "description": "Identifies the next-hop for a route",
@@ -5666,75 +5175,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
-                }
-            }
-        },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -6093,149 +5533,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -6876,327 +6173,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemafleetGlobalSpecType": {
-            "type": "object",
-            "description": "Fleet specifications",
-            "title": "Global Specifications",
-            "x-displayname": "Global Specifications",
-            "x-ves-oneof-field-bond_choice": "[\"bond_device_list\",\"no_bond_devices\"]",
-            "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"dc_cluster_group_inside\",\"no_dc_cluster_group\"]",
-            "x-ves-oneof-field-flow_exporter_choice": "[\"disable_flow_export\"]",
-            "x-ves-oneof-field-gpu_choice": "[\"disable_gpu\",\"enable_gpu\",\"enable_vgpu\"]",
-            "x-ves-oneof-field-interface_choice": "[\"default_interfaces\",\"interface_list\",\"legacy_devices\"]",
-            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-oneof-field-sriov_interface_choice": "[\"default_sriov_interface\",\"sriov_interfaces\"]",
-            "x-ves-oneof-field-storage_class_choice": "[\"default_storage_class\",\"storage_class_list\"]",
-            "x-ves-oneof-field-storage_device_choice": "[\"no_storage_device\",\"storage_device_list\"]",
-            "x-ves-oneof-field-storage_interface_choice": "[\"no_storage_interfaces\",\"storage_interface_list\"]",
-            "x-ves-oneof-field-storage_static_routes_choice": "[\"no_storage_static_routes\",\"storage_static_routes\"]",
-            "x-ves-oneof-field-usb_policy_choice": "[\"allow_all_usb\",\"deny_all_usb\",\"usb_policy\"]",
-            "x-ves-oneof-field-vm_choice": "[\"disable_vm\",\"enable_vm\"]",
-            "x-ves-proto-message": "ves.io.schema.fleet.GlobalSpecType",
-            "properties": {
-                "allow_all_usb": {
-                    "description": "Exclusive with [deny_all_usb usb_policy]\n All USB devices are allowed",
-                    "title": "Allow All USB Devices",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow All USB Devices"
-                },
-                "blocked_services": {
-                    "type": "array",
-                    "description": " Configuration to block the default services allowed by the platform\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 6\n",
-                    "title": "Blocked Services",
-                    "maxItems": 6,
-                    "items": {
-                        "$ref": "#/definitions/fleetBlockedServices"
-                    },
-                    "x-displayname": "Blocked Services",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "6"
-                    }
-                },
-                "bond_device_list": {
-                    "description": "Exclusive with [no_bond_devices]\n Configure Bond Devices for this fleet",
-                    "title": "Configure Bond Devices",
-                    "$ref": "#/definitions/fleetFleetBondDevicesListType",
-                    "x-displayname": "Configure Bond Interfaces"
-                },
-                "dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group_inside no_dc_cluster_group]\n This fleet is member of dc cluster group via site local network",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Member of DC cluster Group, Site Local"
-                },
-                "dc_cluster_group_inside": {
-                    "description": "Exclusive with [dc_cluster_group no_dc_cluster_group]\n This fleet is member of dc cluster group via site local inside network",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Member of DC cluster Group, Inside Network"
-                },
-                "default_interfaces": {
-                    "description": "Exclusive with [interface_list legacy_devices]\n Use default configuration for interfaces belonging to this fleet",
-                    "title": "No Interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default Interface Config"
-                },
-                "default_sriov_interface": {
-                    "description": "Exclusive with [sriov_interfaces]\n Disable Single Root I/O Virtualization interfaces",
-                    "title": "Default SR-IOV interfaces Configuration",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable SR-IOV interfaces"
-                },
-                "default_storage_class": {
-                    "description": "Exclusive with [storage_class_list]\n Use only default storage class in kubernetes",
-                    "title": "Default Storage Class",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default Storage Class"
-                },
-                "deny_all_usb": {
-                    "description": "Exclusive with [allow_all_usb usb_policy]\n All USB devices are denied",
-                    "title": "Deny All USB Devices",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Deny All USB Devices"
-                },
-                "devices": {
-                    "type": "array",
-                    "description": " Configuration for all devices in the fleet.\n Examples of devices are - network interfaces, cameras, scanners etc.\n Configuration a device is applied on VER node if the VER node is member of this fleet and\n has an corresponding interface/device. The mapping from device configured in fleet with\n interface/device in VER node depends on the type of device and is documented in\n device instance specific sections\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
-                    "title": "Devices",
-                    "maxItems": 128,
-                    "items": {
-                        "$ref": "#/definitions/fleetDeviceInstanceType"
-                    },
-                    "x-displayname": "Devices",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "128"
-                    }
-                },
-                "disable_flow_export": {
-                    "description": "Exclusive with []\n Flows are not exported",
-                    "title": "Disable Flow Export",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Flow Export"
-                },
-                "disable_gpu": {
-                    "description": "Exclusive with [enable_gpu enable_vgpu]\n GPU is not enabled for this fleet",
-                    "title": "GPU Disabled",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "GPU Disabled"
-                },
-                "disable_vm": {
-                    "description": "Exclusive with [enable_vm]\n VMs support is not enabled for this fleet",
-                    "title": "VMs support Disabled",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "VMs support Disabled"
-                },
-                "enable_default_fleet_config_download": {
-                    "type": "boolean",
-                    "description": " Enable default fleet config, It must be set for storage config and gpu config",
-                    "title": "Enable default fleet config download",
-                    "format": "boolean",
-                    "x-displayname": "Enable Default Fleet Config Download"
-                },
-                "enable_gpu": {
-                    "description": "Exclusive with [disable_gpu enable_vgpu]\n GPU is enabled for this fleet",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "GPU Enabled"
-                },
-                "enable_vgpu": {
-                    "description": "Exclusive with [disable_gpu enable_gpu]\n Enable NVIDIA vGPU hosted on VMware",
-                    "title": "vGPU Enabled",
-                    "$ref": "#/definitions/fleetVGPUConfiguration",
-                    "x-displayname": "vGPU Enabled"
-                },
-                "enable_vm": {
-                    "description": "Exclusive with [disable_vm]\n VMs support is enabled for this fleet",
-                    "title": "Member of DC cluster Group",
-                    "$ref": "#/definitions/fleetVMConfiguration",
-                    "x-displayname": "VMs support Enabled"
-                },
-                "fleet_label": {
-                    "type": "string",
-                    "description": " fleet_label value is used to create known_label \"ves.io/fleet=\u003cfleet_label\u003e\"\n The known_label is created in the \"shared\" namespace for the tenant.\n\n A virtual_site object with name \u003cfleet_label\u003e is also created in \"shared\" namespace for tenant.\n The virtual_site object will select all sites configured with the known_label above\n fleet_label with \"sfo\" will create a known_label \"ves.io/fleet=sfo\" in tenant for the fleet\n\nExample: - \"sfo\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.k8s_label_value: true\n",
-                    "title": "fleet_label",
-                    "x-displayname": "Fleet Label Value",
-                    "x-ves-example": "sfo",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.k8s_label_value": "true"
-                    }
-                },
-                "inside_virtual_network": {
-                    "type": "array",
-                    "description": " Default inside (site local) virtual network for the fleet\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Inside Virtual Network",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Site Local Inside Virtual Network",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "interface_list": {
-                    "description": "Exclusive with [default_interfaces legacy_devices]\n Add all interfaces belonging to this fleet",
-                    "title": "List of Interfaces",
-                    "$ref": "#/definitions/fleetFleetInterfaceListType",
-                    "x-displayname": "List of Interfaces"
-                },
-                "legacy_devices": {
-                    "description": "Exclusive with [default_interfaces interface_list]\n Add device for all interfaces belonging to this fleet",
-                    "title": "Legacy Device Config",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Legacy Device List"
-                },
-                "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
-                    "title": "Disable Logs Streaming",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable Logs Streaming"
-                },
-                "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
-                    "title": "Disable Logs Receiver",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Logs Streaming"
-                },
-                "network_connectors": {
-                    "type": "array",
-                    "description": " Network Connector defines connection between two virtual networks in a given site.\n Fleet defines one or more such network connectors.\n The network connectors configuration is applied on all sites that are member of the fleet.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
-                    "title": "Network Connectors",
-                    "maxItems": 8,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Network Connectors",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8"
-                    }
-                },
-                "network_firewall": {
-                    "type": "array",
-                    "description": " Network Firewall defines firewall to be applied for the virtual networks in the fleet.\n The network firewall configuration is applied on all sites that are member of the fleet.\n\n Constraints\n The Network Firewall is applied on Virtual Networks of type site local network and site local inside network\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Network Firewall",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Network Firewall",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "no_bond_devices": {
-                    "description": "Exclusive with [bond_device_list]\n No Bond Devices configured for this Fleet",
-                    "title": "No Bond Devices",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Bond Devices"
-                },
-                "no_dc_cluster_group": {
-                    "description": "Exclusive with [dc_cluster_group dc_cluster_group_inside]\n This fleet is not a member of a DC cluster group",
-                    "title": "Not a Member",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Not a Member"
-                },
-                "no_storage_device": {
-                    "description": "Exclusive with [storage_device_list]\n This fleet does not have any storage devices",
-                    "title": "No Storage Devices",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Storage Devices"
-                },
-                "no_storage_interfaces": {
-                    "description": "Exclusive with [storage_interface_list]\n This fleet does not have any storage interfaces",
-                    "title": "No Storage Interfaces",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Storage Interfaces"
-                },
-                "no_storage_static_routes": {
-                    "description": "Exclusive with [storage_static_routes]\n This fleet does not have any storage static routes",
-                    "title": "No Storage Static Routes",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Storage Static Routes"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version that is applied to all sites that are member of the fleet.\n Current Operating System version can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "Operating System Version",
-                    "maxLength": 256,
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "outside_virtual_network": {
-                    "type": "array",
-                    "description": " Default outside (site local) virtual network for the fleet\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Outside Virtual Network",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Outside (Site Local) Virtual Network",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "performance_enhancement_mode": {
-                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
-                    "title": "Performance Enhancement Choice",
-                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
-                    "x-displayname": "Performance Enhancement Mode"
-                },
-                "sriov_interfaces": {
-                    "description": "Exclusive with [default_sriov_interface]\n Use custom Single Root I/O Virtualization interfaces",
-                    "title": "Custom SR-IOV interfaces Configuration",
-                    "$ref": "#/definitions/fleetSriovInterfacesListType",
-                    "x-displayname": "Custom SR-IOV interfaces Configuration"
-                },
-                "storage_class_list": {
-                    "description": "Exclusive with [default_storage_class]\n Add additional custom storage classes in kubernetes for this fleet",
-                    "title": "Custom Storage Class",
-                    "$ref": "#/definitions/fleetFleetStorageClassListType",
-                    "x-displayname": "Add Custom Storage Class"
-                },
-                "storage_device_list": {
-                    "description": "Exclusive with [no_storage_device]\n Add all storage devices belonging to this fleet",
-                    "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/fleetFleetStorageDeviceListType",
-                    "x-displayname": "List of Storage Devices"
-                },
-                "storage_interface_list": {
-                    "description": "Exclusive with [no_storage_interfaces]\n Add all storage interfaces belonging to this fleet",
-                    "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/fleetFleetInterfaceListType",
-                    "x-displayname": "List of Storage Interface"
-                },
-                "storage_static_routes": {
-                    "description": "Exclusive with [no_storage_static_routes]\n Add all storage storage static routes",
-                    "title": "List of Storage Interfaces",
-                    "$ref": "#/definitions/fleetFleetStorageStaticRoutesListType",
-                    "x-displayname": "List of Storage Static Routes"
-                },
-                "usb_policy": {
-                    "description": "Exclusive with [allow_all_usb deny_all_usb]\n Allow only specific USB devices",
-                    "title": "USB Device Policy",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "USB Device Policy"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " F5XC software version is human readable string matching released set of version components.\n The given software version is applied to all sites that are member of the fleet.\n Current software installed can be overridden via site config.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "Software Version",
-                    "maxLength": 256,
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                }
-            }
-        },
         "schemafleetReplaceSpecType": {
             "type": "object",
             "description": "Replace fleet will replace the contents of given fleet object",
@@ -7518,23 +6494,6 @@ var APISwaggerJSON string = `{
                     "title": "L3 Mode Enhanced Performance with no jumbo frame support",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"
-                }
-            }
-        },
-        "viewsOfflineSurvivabilityModeType": {
-            "type": "object",
-            "description": "x-displayName: \"Offline Survivability Mode\"\nOffline Survivability Mode",
-            "title": "Offline Survivability Mode",
-            "properties": {
-                "enable_offline_survivability_mode": {
-                    "description": "x-displayName: \"Enable Offline Survivability Mode\"\nEnable Offline Survivability Mode.\nWhen this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\nThe certificates needed to keep the services running on this site are signed using a local CA.\nSecrets would also be cached locally to handle the connectivity loss.\nWhen this feature is enabled on an existing site, the pods/services on this site will be restarted.",
-                    "title": "Enable Offline Survivability Mode",
-                    "$ref": "#/definitions/ioschemaEmpty"
-                },
-                "no_offline_survivability_mode": {
-                    "description": "x-displayName: \"Disable Offline Survivability Mode\"\nDisable Offline Survivability Mode.\nWhen this feature is disabled on an existing site, the pods/services on this site will be restarted.",
-                    "title": "Disable Offline Survivability Mode",
-                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

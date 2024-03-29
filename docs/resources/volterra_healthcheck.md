@@ -22,9 +22,18 @@ resource "volterra_healthcheck" "example" {
 
   // One of the arguments from this list "http_health_check tcp_health_check dns_proxy_tcp_health_check dns_proxy_udp_health_check dns_health_check dns_proxy_icmp_health_check" must be set
 
-  dns_proxy_udp_health_check {
-    expected_response = ".*"
-    send_payload      = "send_payload"
+  dns_health_check {
+    expected_rcode = "no-error"
+
+    expected_record_type = "REQUESTED_QUERY_TYPE"
+
+    expected_response = "10.0.0.1"
+
+    query_name = "www.example.com"
+
+    query_type = "A"
+
+    reverse = true
   }
   healthy_threshold   = ["2"]
   interval            = ["10"]
@@ -53,17 +62,17 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`dns_health_check` - (Optional) 4. Expected IP Address. See [Dns Health Check ](#dns-health-check) below for details.
+`dns_health_check` - (Optional) 4. Expected IP Address. See [Health Check Dns Health Check ](#health-check-dns-health-check) below for details.(Deprecated)
 
-`dns_proxy_icmp_health_check` - (Optional) Specifies ICMP HealthCheck (bool).
+`dns_proxy_icmp_health_check` - (Optional) Specifies ICMP HealthCheck (`Bool`).(Deprecated)
 
-`dns_proxy_tcp_health_check` - (Optional) Specifies send string and expected response payload pattern for TCP health Check. See [Dns Proxy Tcp Health Check ](#dns-proxy-tcp-health-check) below for details.
+`dns_proxy_tcp_health_check` - (Optional) Specifies send string and expected response payload pattern for TCP health Check. See [Health Check Dns Proxy Tcp Health Check ](#health-check-dns-proxy-tcp-health-check) below for details.(Deprecated)
 
-`dns_proxy_udp_health_check` - (Optional) Specifies send string and expected response payload pattern for UDP health Check. See [Dns Proxy Udp Health Check ](#dns-proxy-udp-health-check) below for details.
+`dns_proxy_udp_health_check` - (Optional) Specifies send string and expected response payload pattern for UDP health Check. See [Health Check Dns Proxy Udp Health Check ](#health-check-dns-proxy-udp-health-check) below for details.(Deprecated)
 
-`http_health_check` - (Optional) 4. Request headers to remove. See [Http Health Check ](#http-health-check) below for details.
+`http_health_check` - (Optional) 4. Request headers to remove. See [Health Check Http Health Check ](#health-check-http-health-check) below for details.
 
-`tcp_health_check` - (Optional) Specifies send payload and expected response payload. See [Tcp Health Check ](#tcp-health-check) below for details.
+`tcp_health_check` - (Optional) Specifies send payload and expected response payload. See [Health Check Tcp Health Check ](#health-check-tcp-health-check) below for details.
 
 `healthy_threshold` - (Required) required to mark a host healthy. (`Int`).
 
@@ -75,7 +84,7 @@ Argument Reference
 
 `unhealthy_threshold` - (Required) this threshold is ignored and the host is considered unhealthy immediately. (`Int`).
 
-### Dns Health Check
+### Health Check Dns Health Check
 
 1.	Expected IP Address.
 
@@ -91,7 +100,7 @@ Argument Reference
 
 `reverse` - (Optional) string match marks the monitored object down instead of up. (`Bool`).
 
-### Dns Proxy Tcp Health Check
+### Health Check Dns Proxy Tcp Health Check
 
 Specifies send string and expected response payload pattern for TCP health Check.
 
@@ -99,7 +108,7 @@ Specifies send string and expected response payload pattern for TCP health Check
 
 `send_payload` - (Required) Text string sent in the request (`String`).
 
-### Dns Proxy Udp Health Check
+### Health Check Dns Proxy Udp Health Check
 
 Specifies send string and expected response payload pattern for UDP health Check.
 
@@ -107,7 +116,7 @@ Specifies send string and expected response payload pattern for UDP health Check
 
 `send_payload` - (Required) Text string sent in the request (`String`).
 
-### Http Health Check
+### Health Check Http Health Check
 
 1.	Request headers to remove.
 
@@ -115,9 +124,11 @@ Specifies send string and expected response payload pattern for UDP health Check
 
 `headers` - (Optional) health checked cluster. This is a list of key-value pairs. (`String`).
 
+###### One of the arguments from this list "host_header, use_origin_server_name" must be set
+
 `host_header` - (Optional) The value of the host header. (`String`).
 
-`use_origin_server_name` - (Optional) Use the origin server name. (bool).
+`use_origin_server_name` - (Optional) Use the origin server name. (`Bool`).
 
 `path` - (Required) Specifies the HTTP path that will be requested during health checking. (`String`).
 
@@ -125,7 +136,7 @@ Specifies send string and expected response payload pattern for UDP health Check
 
 `use_http2` - (Optional) If set, health checks will be made using http/2. (`Bool`).
 
-### Tcp Health Check
+### Health Check Tcp Health Check
 
 Specifies send payload and expected response payload.
 
@@ -133,7 +144,7 @@ Specifies send payload and expected response payload.
 
 `send_payload` - (Optional) Hex encoded payload. (`String`).
 
-### Use Origin Server Name
+### Host Header Choice Use Origin Server Name
 
 Use the origin server name..
 

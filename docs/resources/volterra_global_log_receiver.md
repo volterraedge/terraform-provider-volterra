@@ -21,19 +21,25 @@ resource "volterra_global_log_receiver" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "ns_current ns_all ns_list ns_system" must be set
+  ns_system = true
 
-  ns_list {
-    namespaces = ["default"]
-  }
   // One of the arguments from this list "request_logs security_events audit_logs" must be set
   request_logs = true
 
-  // One of the arguments from this list "s3_receiver sumo_logic_receiver kafka_receiver new_relic_receiver qradar_receiver gcp_bucket_receiver aws_cloud_watch_receiver http_receiver datadog_receiver splunk_receiver elastic_receiver azure_receiver azure_event_hubs_receiver" must be set
+  // One of the arguments from this list "new_relic_receiver aws_cloud_watch_receiver kafka_receiver sumo_logic_receiver http_receiver splunk_receiver elastic_receiver gcp_bucket_receiver datadog_receiver azure_receiver azure_event_hubs_receiver qradar_receiver s3_receiver" must be set
 
-  azure_receiver {
+  s3_receiver {
+    aws_cred {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    aws_region = "us-east-1"
+
     batch {
-      // One of the arguments from this list "max_bytes_disabled max_bytes" must be set
-      max_bytes = "16384"
+      // One of the arguments from this list "max_bytes max_bytes_disabled" must be set
+      max_bytes_disabled = true
 
       // One of the arguments from this list "max_events_disabled max_events" must be set
       max_events_disabled = true
@@ -42,30 +48,12 @@ resource "volterra_global_log_receiver" "example" {
       timeout_seconds_default = true
     }
 
+    bucket = "my-log-bucket"
+
     compression {
-      // One of the arguments from this list "compression_none compression_gzip" must be set
-      compression_gzip = true
+      // One of the arguments from this list "compression_gzip compression_none" must be set
+      compression_none = true
     }
-
-    connection_string {
-      blindfold_secret_info_internal {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
-      }
-
-      secret_encoding_type = "secret_encoding_type"
-
-      // One of the arguments from this list "vault_secret_info clear_secret_info wingman_secret_info blindfold_secret_info" must be set
-
-      blindfold_secret_info {
-        decryption_provider = "value"
-        location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-        store_provider      = "value"
-      }
-    }
-
-    container_name = "logs"
   }
 }
 
@@ -90,145 +78,47 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`ns_all` - (Optional) x-displayName: "Select logs from all namespaces" (bool).
+`ns_all` - (Optional) x-displayName: "Select logs from all namespaces" (`Bool`).
 
-`ns_current` - (Optional) x-displayName: "Select logs from current namespace" (bool).
+`ns_current` - (Optional) x-displayName: "Select logs from current namespace" (`Bool`).
 
-`ns_list` - (Optional) x-displayName: "Select logs in specific namespaces". See [Ns List ](#ns-list) below for details.
+`ns_list` - (Optional) x-displayName: "Select logs in specific namespaces". See [Filter Choice Ns List ](#filter-choice-ns-list) below for details.
 
-`ns_system` - (Optional) x-displayName: "Select logs from System namespace" (bool).
+`ns_system` - (Optional) x-displayName: "Select logs from System namespace" (`Bool`).(Deprecated)
 
-`audit_logs` - (Optional) Send Audit Logs (corresponding to Public Audit and Authentication) (bool).
+`audit_logs` - (Optional) Send Audit Logs (corresponding to Public Audit and Authentication) (`Bool`).
 
-`request_logs` - (Optional) Send Request Logs (corresponding to Load Balancer access logs) (bool).
+`request_logs` - (Optional) Send Request Logs (corresponding to Load Balancer access logs) (`Bool`).
 
-`security_events` - (Optional) Send Security Events (corresponding to e.g. WAF blocked events or malicious requests) (bool).
+`security_events` - (Optional) Send Security Events (corresponding to e.g. WAF blocked events or malicious requests) (`Bool`).
 
-`aws_cloud_watch_receiver` - (Optional) Send logs to AWS Cloudwatch. See [Aws Cloud Watch Receiver ](#aws-cloud-watch-receiver) below for details.
+`aws_cloud_watch_receiver` - (Optional) Send logs to AWS Cloudwatch. See [Receiver Aws Cloud Watch Receiver ](#receiver-aws-cloud-watch-receiver) below for details.
 
-`azure_event_hubs_receiver` - (Optional) Send logs to Azure Event Hubs. See [Azure Event Hubs Receiver ](#azure-event-hubs-receiver) below for details.
+`azure_event_hubs_receiver` - (Optional) Send logs to Azure Event Hubs. See [Receiver Azure Event Hubs Receiver ](#receiver-azure-event-hubs-receiver) below for details.
 
-`azure_receiver` - (Optional) Send logs to Azure Blob Storage. See [Azure Receiver ](#azure-receiver) below for details.
+`azure_receiver` - (Optional) Send logs to Azure Blob Storage. See [Receiver Azure Receiver ](#receiver-azure-receiver) below for details.
 
-`datadog_receiver` - (Optional) Send logs to a Datadog service. See [Datadog Receiver ](#datadog-receiver) below for details.
+`datadog_receiver` - (Optional) Send logs to a Datadog service. See [Receiver Datadog Receiver ](#receiver-datadog-receiver) below for details.
 
-`elastic_receiver` - (Optional) Send logs to an Elasticsearch endpoint. See [Elastic Receiver ](#elastic-receiver) below for details.
+`elastic_receiver` - (Optional) Send logs to an Elasticsearch endpoint. See [Receiver Elastic Receiver ](#receiver-elastic-receiver) below for details.(Deprecated)
 
-`gcp_bucket_receiver` - (Optional) Send logs to a GCP Bucket. See [Gcp Bucket Receiver ](#gcp-bucket-receiver) below for details.
+`gcp_bucket_receiver` - (Optional) Send logs to a GCP Bucket. See [Receiver Gcp Bucket Receiver ](#receiver-gcp-bucket-receiver) below for details.
 
-`http_receiver` - (Optional) Send logs to a generic HTTP(s) server. See [Http Receiver ](#http-receiver) below for details.
+`http_receiver` - (Optional) Send logs to a generic HTTP(s) server. See [Receiver Http Receiver ](#receiver-http-receiver) below for details.
 
-`kafka_receiver` - (Optional) Send logs to a Kafka cluster. See [Kafka Receiver ](#kafka-receiver) below for details.
+`kafka_receiver` - (Optional) Send logs to a Kafka cluster. See [Receiver Kafka Receiver ](#receiver-kafka-receiver) below for details.
 
-`new_relic_receiver` - (Optional) Send logs to NewRelic. See [New Relic Receiver ](#new-relic-receiver) below for details.
+`new_relic_receiver` - (Optional) Send logs to NewRelic. See [Receiver New Relic Receiver ](#receiver-new-relic-receiver) below for details.
 
-`qradar_receiver` - (Optional) Send logs to IBM QRadar. See [Qradar Receiver ](#qradar-receiver) below for details.
+`qradar_receiver` - (Optional) Send logs to IBM QRadar. See [Receiver Qradar Receiver ](#receiver-qradar-receiver) below for details.
 
-`s3_receiver` - (Optional) Send logs to an AWS S3 bucket. See [S3 Receiver ](#s3-receiver) below for details.
+`s3_receiver` - (Optional) Send logs to an AWS S3 bucket. See [Receiver S3 Receiver ](#receiver-s3-receiver) below for details.
 
-`splunk_receiver` - (Optional) Send logs to a Splunk HEC Logs service. See [Splunk Receiver ](#splunk-receiver) below for details.
+`splunk_receiver` - (Optional) Send logs to a Splunk HEC Logs service. See [Receiver Splunk Receiver ](#receiver-splunk-receiver) below for details.
 
-`sumo_logic_receiver` - (Optional) Send logs to SumoLogic. See [Sumo Logic Receiver ](#sumo-logic-receiver) below for details.
+`sumo_logic_receiver` - (Optional) Send logs to SumoLogic. See [Receiver Sumo Logic Receiver ](#receiver-sumo-logic-receiver) below for details.
 
-### Api Key
-
-A New Relic License Key.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Auth Basic
-
-Basic Authentication specify that HTTP Basic Authentication should be used when connecting to the Elasticsearch endpoint.
-
-`password` - (Optional) HTTP Basic Auth Password. See [Password ](#password) below for details.
-
-`user_name` - (Optional) HTTP Basic Auth User Name (`String`).
-
-### Auth None
-
-No Authentication for the Elasticsearch endpoint.
-
-### Auth Token
-
-Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token).
-
-`token` - (Optional) F5XC Secret. URL for token, needs to be fetched from this path. See [Token ](#token) below for details.
-
-### Aws Cloud Watch Receiver
-
-Send logs to AWS Cloudwatch.
-
-`aws_cred` - (Required) Reference to AWS Cloud Credentials for access to the Cloudwatch Logs. See [ref](#ref) below for details.
-
-`aws_region` - (Required) AWS Region Name (`String`).
-
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
-
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
-
-`group_name` - (Required) The group name of the target Cloudwatch Logs stream (`String`).
-
-`stream_name` - (Required) Note that there can only be one writer to a log stream at a time (`String`).
-
-### Azure Event Hubs Receiver
-
-Send logs to Azure Event Hubs.
-
-`connection_string` - (Required) Azure Event Hubs Connection String.. See [Connection String ](#connection-string) below for details.
-
-`instance` - (Required) Event Hubs Instance name into which logs should be stored (`String`).
-
-`namespace` - (Required) Event Hubs Namespace is namespace with instance into which logs should be stored (`String`).
-
-### Azure Receiver
-
-Send logs to Azure Blob Storage.
-
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
-
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
-
-`connection_string` - (Required) Azure Blob Storate Connection String. Note that this field must contain: `AccountKey`, `AccountName` and should contain `DefaultEndpointsProtocol`. See [Connection String ](#connection-string) below for details.
-
-`container_name` - (Required) Container Name is the name of the container into which logs should be stored (`String`).
-
-### Batch
-
-Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
-
-`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
-
-`max_bytes_disabled` - (Optional) Batch Bytes Disabled (bool).
-
-`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
-
-`max_events_disabled` - (Optional) Max Events Disabled (bool).
-
-`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
-
-`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (bool).
-
-### Blindfold Secret Info
-
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Blindfold Secret Info Internal
+### Api Key Blindfold Secret Info Internal
 
 Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
@@ -238,257 +128,699 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Clear Secret Info
+### Auth Basic Password
 
-Clear Secret is used for the secrets that are not encrypted.
+HTTP Basic Auth Password.
 
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
 
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-### Compression
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Auth Choice Auth Basic
+
+Basic Authentication specify that HTTP Basic Authentication should be used when connecting to the Elasticsearch endpoint.
+
+`password` - (Optional) HTTP Basic Auth Password. See [Auth Basic Password ](#auth-basic-password) below for details.
+
+`user_name` - (Optional) HTTP Basic Auth User Name (`String`).
+
+### Auth Choice Auth None
+
+No Authentication for the Elasticsearch endpoint.
+
+### Auth Choice Auth Token
+
+Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token).
+
+`token` - (Optional) F5XC Secret. URL for token, needs to be fetched from this path. See [Auth Token Token ](#auth-token-token) below for details.
+
+### Auth Token Token
+
+F5XC Secret. URL for token, needs to be fetched from this path.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Token Blindfold Secret Info Internal ](#token-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Aws Cloud Watch Receiver Batch
+
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
+
+###### One of the arguments from this list "max_bytes, max_bytes_disabled" can be set
+
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
+
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
+
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
+
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
+
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
+
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Aws Cloud Watch Receiver Compression
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-`compression_gzip` - (Optional) Gzip Compression (bool).
+###### One of the arguments from this list "compression_gzip, compression_none" can be set
 
-`compression_none` - (Optional) No Compression (bool).
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
-### Compression Gzip
+`compression_none` - (Optional) No Compression (`Bool`).
 
-Gzip Compression.
-
-### Compression None
-
-No Compression.
-
-### Connection String
+### Azure Event Hubs Receiver Connection String
 
 Azure Event Hubs Connection String..
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Connection String Blindfold Secret Info Internal ](#connection-string-blindfold-secret-info-internal) below for details.(Deprecated)
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
-### Datadog Api Key
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
-Secret API key to access the datadog server.
+### Azure Receiver Batch
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
 
-### Datadog Receiver
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
 
-Send logs to a Datadog service.
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
 
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
 
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
 
-`datadog_api_key` - (Required) Secret API key to access the datadog server. See [Datadog Api Key ](#datadog-api-key) below for details.
+### Azure Receiver Compression
 
-`endpoint` - (Optional) Datadog Endpoint, example: `example.com:9000` (`String`).
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-`site` - (Optional) Datadog Site, example: `datadoghq.com` (`String`).
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
 
-`no_tls` - (Optional) Do not use TLS for the client connection (bool).
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
-`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
+`compression_none` - (Optional) No Compression (`Bool`).
 
-### Disable Verify Certificate
+### Azure Receiver Connection String
 
-x-displayName: "Skip Server Certificate Verification".
+Azure Blob Storate Connection String. Note that this field must contain: `AccountKey`, `AccountName` and should contain `DefaultEndpointsProtocol`.
 
-### Disable Verify Hostname
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Connection String Blindfold Secret Info Internal ](#connection-string-blindfold-secret-info-internal) below for details.(Deprecated)
 
-x-displayName: "Skip Server Hostname Verification".
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-### Elastic Receiver
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
-Send logs to an Elasticsearch endpoint.
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
-`auth_aws` - (Optional) Reference to AWS Cloud Credentials for Authentication when connecting to the Elasticsearch Endpoint. See [ref](#ref) below for details.
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
-`auth_basic` - (Optional) Basic Authentication specify that HTTP Basic Authentication should be used when connecting to the Elasticsearch endpoint. See [Auth Basic ](#auth-basic) below for details.
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
-`auth_none` - (Optional) No Authentication for the Elasticsearch endpoint (bool).
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
-
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
-
-`endpoint` - (Required) Elasticsearch Endpoint URL, example `http://10.9.8.7:9000` (`String`).
-
-`no_tls` - (Optional) Do not use TLS for the client connection (bool).
-
-`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
-
-### Enable Verify Certificate
-
-x-displayName: "Perform Server Certificate Verification".
-
-### Enable Verify Hostname
-
-x-displayName: "Enable Server Hostname Verification".
-
-### Eu
-
-EU Endpoint.
-
-### Gcp Bucket Receiver
-
-Send logs to a GCP Bucket.
-
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
-
-`bucket` - (Required) GCP Bucket Name (`String`).
-
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
-
-`gcp_cred` - (Required) Reference to GCP Cloud Credentials for access to the GCP bucket. See [ref](#ref) below for details.
-
-### Http Receiver
-
-Send logs to a generic HTTP(s) server.
-
-`auth_basic` - (Optional) Use HTTP Basic Auth for authentication to the HTPP(s) server. See [Auth Basic ](#auth-basic) below for details.
-
-`auth_none` - (Optional) No Authentication (bool).
-
-`auth_token` - (Optional) Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token). See [Auth Token ](#auth-token) below for details.
-
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
-
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
-
-`no_tls` - (Optional) Do not use TLS for the client connection (bool).
-
-`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
-
-`uri` - (Required) HTTP Uri is the Uri of the HTTP endpoint to send logs to, example: `http://example.com:9000/logs` (`String`).
-
-### Kafka Receiver
-
-Send logs to a Kafka cluster.
-
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
-
-`bootstrap_servers` - (Required) List of host:port pairs of the Kafka brokers (`String`).
-
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
-
-`kafka_topic` - (Required) The Kafka topic name to write events to (`String`).
-
-`no_tls` - (Optional) Do not use TLS for the client connection (bool).
-
-`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
-
-### Key Url
-
-The data may be optionally secured using BlindFold..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Max Bytes Disabled
+### Batch Bytes Max Bytes Disabled
 
 Batch Bytes Disabled.
 
-### Max Events Disabled
+### Batch Events Max Events Disabled
 
 Max Events Disabled.
 
-### Mtls Disabled
+### Batch Timeout Timeout Seconds Default
 
-mTLS is disabled.
+Use Default Timeout (300 seconds).
 
-### Mtls Enable
-
-Enable mTLS configuration.
-
-`certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
-
-`key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Key Url ](#key-url) below for details.
-
-### New Relic Receiver
-
-Send logs to NewRelic.
-
-`api_key` - (Required) A New Relic License Key. See [Api Key ](#api-key) below for details.
-
-`eu` - (Optional) EU Endpoint (bool).
-
-`us` - (Optional) US Endpoint (bool).
-
-### No Ca
+### Ca Choice No Ca
 
 Do not use a CA Certificate.
 
-### No Tls
+### Compression Choice Compression Gzip
 
-Do not use TLS for the client connection.
+Gzip Compression.
 
-### Ns List
+### Compression Choice Compression None
+
+No Compression.
+
+### Connection String Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Datadog Api Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Datadog Receiver Batch
+
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
+
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
+
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
+
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
+
+###### One of the arguments from this list "max_events, max_events_disabled" can be set
+
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
+
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
+
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Datadog Receiver Compression
+
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
+
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
+
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
+
+`compression_none` - (Optional) No Compression (`Bool`).
+
+### Datadog Receiver Datadog Api Key
+
+Secret API key to access the datadog server.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Datadog Api Key Blindfold Secret Info Internal ](#datadog-api-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Elastic Receiver Batch
+
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
+
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
+
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
+
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
+
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
+
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
+
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
+
+###### One of the arguments from this list "timeout_seconds, timeout_seconds_default" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Elastic Receiver Compression
+
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
+
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
+
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
+
+`compression_none` - (Optional) No Compression (`Bool`).
+
+### Endpoint Choice Eu
+
+EU Endpoint.
+
+### Endpoint Choice Us
+
+US Endpoint.
+
+### Filter Choice Ns List
 
 x-displayName: "Select logs in specific namespaces".
 
 `namespaces` - (Required) List of namespaces to stream logs for (`String`).
 
-### Password
+### Gcp Bucket Receiver Batch
 
-HTTP Basic Auth Password.
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
 
-### Qradar Receiver
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Gcp Bucket Receiver Compression
+
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
+
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
+
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
+
+`compression_none` - (Optional) No Compression (`Bool`).
+
+### Http Receiver Batch
+
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
+
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
+
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
+
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
+
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
+
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
+
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
+
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Http Receiver Compression
+
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
+
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
+
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
+
+`compression_none` - (Optional) No Compression (`Bool`).
+
+### Kafka Receiver Batch
+
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
+
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
+
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
+
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
+
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
+
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
+
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
+
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Kafka Receiver Compression
+
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
+
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
+
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
+
+`compression_none` - (Optional) No Compression (`Bool`).
+
+### Key Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Mtls Choice Mtls Disabled
+
+mTLS is disabled.
+
+### Mtls Choice Mtls Enable
+
+Enable mTLS configuration.
+
+`certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
+
+`key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Mtls Enable Key Url ](#mtls-enable-key-url) below for details.
+
+### Mtls Enable Key Url
+
+The data may be optionally secured using BlindFold..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Key Url Blindfold Secret Info Internal ](#key-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### New Relic Receiver Api Key
+
+A New Relic License Key.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Api Key Blindfold Secret Info Internal ](#api-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Qradar Receiver Batch
+
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
+
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
+
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
+
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
+
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
+
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
+
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
+
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Qradar Receiver Compression
+
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
+
+###### One of the arguments from this list "compression_gzip, compression_none" can be set
+
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
+
+`compression_none` - (Optional) No Compression (`Bool`).
+
+### Receiver Aws Cloud Watch Receiver
+
+Send logs to AWS Cloudwatch.
+
+`aws_cred` - (Required) Reference to AWS Cloud Credentials for access to the Cloudwatch Logs. See [ref](#ref) below for details.
+
+`aws_region` - (Required) AWS Region Name (`String`).
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Aws Cloud Watch Receiver Batch ](#aws-cloud-watch-receiver-batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Aws Cloud Watch Receiver Compression ](#aws-cloud-watch-receiver-compression) below for details.
+
+`group_name` - (Required) The group name of the target Cloudwatch Logs stream (`String`).
+
+`stream_name` - (Required) Note that there can only be one writer to a log stream at a time (`String`).
+
+### Receiver Azure Event Hubs Receiver
+
+Send logs to Azure Event Hubs.
+
+`connection_string` - (Required) Azure Event Hubs Connection String.. See [Azure Event Hubs Receiver Connection String ](#azure-event-hubs-receiver-connection-string) below for details.
+
+`instance` - (Required) Event Hubs Instance name into which logs should be stored (`String`).
+
+`namespace` - (Required) Event Hubs Namespace is namespace with instance into which logs should be stored (`String`).
+
+### Receiver Azure Receiver
+
+Send logs to Azure Blob Storage.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Azure Receiver Batch ](#azure-receiver-batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Azure Receiver Compression ](#azure-receiver-compression) below for details.
+
+`connection_string` - (Required) Azure Blob Storate Connection String. Note that this field must contain: `AccountKey`, `AccountName` and should contain `DefaultEndpointsProtocol`. See [Azure Receiver Connection String ](#azure-receiver-connection-string) below for details.
+
+`container_name` - (Required) Container Name is the name of the container into which logs should be stored (`String`).
+
+### Receiver Datadog Receiver
+
+Send logs to a Datadog service.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Datadog Receiver Batch ](#datadog-receiver-batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Datadog Receiver Compression ](#datadog-receiver-compression) below for details.
+
+`datadog_api_key` - (Required) Secret API key to access the datadog server. See [Datadog Receiver Datadog Api Key ](#datadog-receiver-datadog-api-key) below for details.
+
+###### One of the arguments from this list "site, endpoint" must be set
+
+`endpoint` - (Optional) Datadog Endpoint, example: `example.com:9000` (`String`).
+
+`site` - (Optional) Datadog Site, example: `datadoghq.com` (`String`).
+
+###### One of the arguments from this list "no_tls, use_tls" must be set
+
+`no_tls` - (Optional) Do not use TLS for the client connection (`Bool`).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Tls Choice Use Tls ](#tls-choice-use-tls) below for details.
+
+### Receiver Elastic Receiver
+
+Send logs to an Elasticsearch endpoint.
+
+###### One of the arguments from this list "auth_aws, auth_none, auth_basic" must be set
+
+`auth_aws` - (Optional) Reference to AWS Cloud Credentials for Authentication when connecting to the Elasticsearch Endpoint. See [ref](#ref) below for details.(Deprecated)
+
+`auth_basic` - (Optional) Basic Authentication specify that HTTP Basic Authentication should be used when connecting to the Elasticsearch endpoint. See [Auth Choice Auth Basic ](#auth-choice-auth-basic) below for details.
+
+`auth_none` - (Optional) No Authentication for the Elasticsearch endpoint (`Bool`).
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Elastic Receiver Batch ](#elastic-receiver-batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Elastic Receiver Compression ](#elastic-receiver-compression) below for details.
+
+`endpoint` - (Required) Elasticsearch Endpoint URL, example `http://10.9.8.7:9000` (`String`).
+
+###### One of the arguments from this list "use_tls, no_tls" must be set
+
+`no_tls` - (Optional) Do not use TLS for the client connection (`Bool`).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Tls Choice Use Tls ](#tls-choice-use-tls) below for details.
+
+### Receiver Gcp Bucket Receiver
+
+Send logs to a GCP Bucket.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Gcp Bucket Receiver Batch ](#gcp-bucket-receiver-batch) below for details.
+
+`bucket` - (Required) GCP Bucket Name (`String`).
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Gcp Bucket Receiver Compression ](#gcp-bucket-receiver-compression) below for details.
+
+`gcp_cred` - (Required) Reference to GCP Cloud Credentials for access to the GCP bucket. See [ref](#ref) below for details.
+
+### Receiver Http Receiver
+
+Send logs to a generic HTTP(s) server.
+
+###### One of the arguments from this list "auth_none, auth_basic, auth_token" must be set
+
+`auth_basic` - (Optional) Use HTTP Basic Auth for authentication to the HTPP(s) server. See [Auth Choice Auth Basic ](#auth-choice-auth-basic) below for details.
+
+`auth_none` - (Optional) No Authentication (`Bool`).
+
+`auth_token` - (Optional) Configure an Access Token for authentication to the HTTP(s) server (such as a Bearer Token). See [Auth Choice Auth Token ](#auth-choice-auth-token) below for details.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Http Receiver Batch ](#http-receiver-batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Http Receiver Compression ](#http-receiver-compression) below for details.
+
+###### One of the arguments from this list "no_tls, use_tls" must be set
+
+`no_tls` - (Optional) Do not use TLS for the client connection (`Bool`).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Tls Choice Use Tls ](#tls-choice-use-tls) below for details.
+
+`uri` - (Required) HTTP Uri is the Uri of the HTTP endpoint to send logs to, example: `http://example.com:9000/logs` (`String`).
+
+### Receiver Kafka Receiver
+
+Send logs to a Kafka cluster.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Kafka Receiver Batch ](#kafka-receiver-batch) below for details.
+
+`bootstrap_servers` - (Required) List of host:port pairs of the Kafka brokers (`String`).
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Kafka Receiver Compression ](#kafka-receiver-compression) below for details.
+
+`kafka_topic` - (Required) The Kafka topic name to write events to (`String`).
+
+###### One of the arguments from this list "no_tls, use_tls" must be set
+
+`no_tls` - (Optional) Do not use TLS for the client connection (`Bool`).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Tls Choice Use Tls ](#tls-choice-use-tls) below for details.
+
+### Receiver New Relic Receiver
+
+Send logs to NewRelic.
+
+`api_key` - (Required) A New Relic License Key. See [New Relic Receiver Api Key ](#new-relic-receiver-api-key) below for details.
+
+###### One of the arguments from this list "us, eu" must be set
+
+`eu` - (Optional) EU Endpoint (`Bool`).
+
+`us` - (Optional) US Endpoint (`Bool`).
+
+### Receiver Qradar Receiver
 
 Send logs to IBM QRadar.
 
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Qradar Receiver Batch ](#qradar-receiver-batch) below for details.
 
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Qradar Receiver Compression ](#qradar-receiver-compression) below for details.
 
-`no_tls` - (Optional) Do not use TLS for the client connection (bool).
+###### One of the arguments from this list "no_tls, use_tls" must be set
 
-`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
+`no_tls` - (Optional) Do not use TLS for the client connection (`Bool`).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Tls Choice Use Tls ](#tls-choice-use-tls) below for details.
 
 `uri` - (Required) Log Source Collector URL is the URL of the IBM QRadar Log Source Collector to send logs to, example: `http://example.com:9000` (`String`).
+
+### Receiver S3 Receiver
+
+Send logs to an AWS S3 bucket.
+
+`aws_cred` - (Required) Reference to AWS Cloud Credentials for access to the S3 bucket. See [ref](#ref) below for details.
+
+`aws_region` - (Required) AWS Region Name (`String`).
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [S3 Receiver Batch ](#s3-receiver-batch) below for details.
+
+`bucket` - (Required) S3 Bucket Name (`String`).
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [S3 Receiver Compression ](#s3-receiver-compression) below for details.
+
+### Receiver Splunk Receiver
+
+Send logs to a Splunk HEC Logs service.
+
+`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Splunk Receiver Batch ](#splunk-receiver-batch) below for details.
+
+`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Splunk Receiver Compression ](#splunk-receiver-compression) below for details.
+
+`endpoint` - (Required) Splunk HEC Logs Endpoint, example: `https://http-input-hec.splunkcloud.com` (`String`).
+
+`splunk_hec_token` - (Required) Splunk HEC Logs secret Token. See [Splunk Receiver Splunk Hec Token ](#splunk-receiver-splunk-hec-token) below for details.
+
+###### One of the arguments from this list "no_tls, use_tls" must be set
+
+`no_tls` - (Optional) Do not use TLS for the client connection (`Bool`).
+
+`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Tls Choice Use Tls ](#tls-choice-use-tls) below for details.
+
+### Receiver Sumo Logic Receiver
+
+Send logs to SumoLogic.
+
+`url` - (Required) The HTTP Source Address URL for the desired SumoLogic HTTP Collector. See [Sumo Logic Receiver Url ](#sumo-logic-receiver-url) below for details.
 
 ### Ref
 
@@ -500,119 +832,57 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### S3 Receiver
+### S3 Receiver Batch
 
-Send logs to an AWS S3 bucket.
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
 
-`aws_cred` - (Required) Reference to AWS Cloud Credentials for access to the S3 bucket. See [ref](#ref) below for details.
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
 
-`aws_region` - (Required) AWS Region Name (`String`).
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
 
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
 
-`bucket` - (Required) S3 Bucket Name (`String`).
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
 
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
 
-### Splunk Hec Token
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
 
-Splunk HEC Logs secret Token.
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+### S3 Receiver Compression
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
-### Splunk Receiver
+`compression_none` - (Optional) No Compression (`Bool`).
 
-Send logs to a Splunk HEC Logs service.
+### Secret Info Oneof Blindfold Secret Info
 
-`batch` - (Optional) Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint. See [Batch ](#batch) below for details.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
-`compression` - (Optional) Compression Options allows selection of how data should be compressed when sent to the endpoint. See [Compression ](#compression) below for details.
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-`endpoint` - (Required) Splunk HEC Logs Endpoint, example: `https://http-input-hec.splunkcloud.com` (`String`).
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
-`splunk_hec_token` - (Required) Splunk HEC Logs secret Token. See [Splunk Hec Token ](#splunk-hec-token) below for details.
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-`no_tls` - (Optional) Do not use TLS for the client connection (bool).
+### Secret Info Oneof Clear Secret Info
 
-`use_tls` - (Optional) Use TLS for client connections to the endpoint. See [Use Tls ](#use-tls) below for details.
+Clear Secret is used for the secrets that are not encrypted.
 
-### Sumo Logic Receiver
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-Send logs to SumoLogic.
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-`url` - (Required) The HTTP Source Address URL for the desired SumoLogic HTTP Collector. See [Url ](#url) below for details.
-
-### Timeout Seconds Default
-
-Use Default Timeout (300 seconds).
-
-### Token
-
-F5XC Secret. URL for token, needs to be fetched from this path.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Url
-
-The HTTP Source Address URL for the desired SumoLogic HTTP Collector.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Us
-
-US Endpoint.
-
-### Use Tls
-
-Use TLS for client connections to the endpoint.
-
-`no_ca` - (Optional) Do not use a CA Certificate (bool).
-
-`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
-
-`mtls_disabled` - (Optional) mTLS is disabled (bool).
-
-`mtls_enable` - (Optional) Enable mTLS configuration. See [Mtls Enable ](#mtls-enable) below for details.
-
-`disable_verify_certificate` - (Optional) x-displayName: "Skip Server Certificate Verification" (bool).
-
-`enable_verify_certificate` - (Optional) x-displayName: "Perform Server Certificate Verification" (bool).
-
-`disable_verify_hostname` - (Optional) x-displayName: "Skip Server Hostname Verification" (bool).
-
-`enable_verify_hostname` - (Optional) x-displayName: "Enable Server Hostname Verification" (bool).
-
-### Vault Secret Info
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -626,11 +896,157 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Splunk Hec Token Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Splunk Receiver Batch
+
+Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
+
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
+
+`max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
+
+`max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
+
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
+
+`max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
+
+`max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
+
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
+
+`timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
+
+`timeout_seconds_default` - (Optional) Use Default Timeout (300 seconds) (`Bool`).
+
+### Splunk Receiver Compression
+
+Compression Options allows selection of how data should be compressed when sent to the endpoint.
+
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
+
+`compression_gzip` - (Optional) Gzip Compression (`Bool`).
+
+`compression_none` - (Optional) No Compression (`Bool`).
+
+### Splunk Receiver Splunk Hec Token
+
+Splunk HEC Logs secret Token.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Splunk Hec Token Blindfold Secret Info Internal ](#splunk-hec-token-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Sumo Logic Receiver Url
+
+The HTTP Source Address URL for the desired SumoLogic HTTP Collector.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Url Blindfold Secret Info Internal ](#url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tls Choice No Tls
+
+Do not use TLS for the client connection.
+
+### Tls Choice Use Tls
+
+Use TLS for client connections to the endpoint.
+
+###### One of the arguments from this list "no_ca, trusted_ca_url" must be set
+
+`no_ca` - (Optional) Do not use a CA Certificate (`Bool`).
+
+`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
+
+###### One of the arguments from this list "mtls_disabled, mtls_enable" must be set
+
+`mtls_disabled` - (Optional) mTLS is disabled (`Bool`).
+
+`mtls_enable` - (Optional) Enable mTLS configuration. See [Mtls Choice Mtls Enable ](#mtls-choice-mtls-enable) below for details.
+
+###### One of the arguments from this list "disable_verify_certificate, enable_verify_certificate" can be set
+
+`disable_verify_certificate` - (Optional) x-displayName: "Skip Server Certificate Verification" (`Bool`).
+
+`enable_verify_certificate` - (Optional) x-displayName: "Perform Server Certificate Verification" (`Bool`).
+
+###### One of the arguments from this list "enable_verify_hostname, disable_verify_hostname" can be set
+
+`disable_verify_hostname` - (Optional) x-displayName: "Skip Server Hostname Verification" (`Bool`).
+
+`enable_verify_hostname` - (Optional) x-displayName: "Enable Server Hostname Verification" (`Bool`).
+
+### Token Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Verify Certificate Disable Verify Certificate
+
+x-displayName: "Skip Server Certificate Verification".
+
+### Verify Certificate Enable Verify Certificate
+
+x-displayName: "Perform Server Certificate Verification".
+
+### Verify Hostname Disable Verify Hostname
+
+x-displayName: "Skip Server Hostname Verification".
+
+### Verify Hostname Enable Verify Hostname
+
+x-displayName: "Enable Server Hostname Verification".
 
 Attribute Reference
 -------------------

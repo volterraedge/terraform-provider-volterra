@@ -96,8 +96,9 @@ func resourceVolterraCrl() *schema.Resource {
 			},
 
 			"verify_all_certs_with_crl": {
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 		},
 	}
@@ -277,6 +278,7 @@ func resourceVolterraCrlUpdate(d *schema.ResourceData, meta interface{}) error {
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

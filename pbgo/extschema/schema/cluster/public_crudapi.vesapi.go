@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.cluster")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.cluster")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.cluster")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.cluster")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2485,31 +2468,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "clusterDnsDiscoveryType": {
-            "type": "string",
-            "description": "Specifies whether to use the first address or all addresses returned by DNS resolver\n\nEach returned IP address in the DNS result will be considered an explicit host in the upstream cluster\nUses only the first IP address returned when a new connection needs to be initiated",
-            "title": "DnsDiscoveryType",
-            "enum": [
-                "STRICT_DNS",
-                "LOGICAL_DNS"
-            ],
-            "default": "STRICT_DNS",
-            "x-displayname": "DNS Discovery Type",
-            "x-ves-proto-enum": "ves.io.schema.cluster.DnsDiscoveryType"
-        },
-        "clusterDnsLookupType": {
-            "type": "string",
-            "description": "Address family in which DNS resolver should lookup for addresses\n\nDNS resolver will first perform a lookup for addresses in the IPv6 family\nand fallback to lookup for addresses in the IPv4 family\nDNS resolver will only perform a lookup for addresses in IPv4 family\nDNS resolver will only perform a lookup for addresses in IPv6 family",
-            "title": "DnsLookupType",
-            "enum": [
-                "AUTO",
-                "V4_ONLY",
-                "V6_ONLY"
-            ],
-            "default": "AUTO",
-            "x-displayname": "DNS Lookup Type",
-            "x-ves-proto-enum": "ves.io.schema.cluster.DnsLookupType"
-        },
         "clusterEndpointSelectionPolicy": {
             "type": "string",
             "description": "Policy for selection of endpoints from local site/remote site/both\n\nConsider both remote and local endpoints for load balancing\nLOCAL_ONLY: Consider only local endpoints for load balancing\nEnable this policy to load balance ONLY among locally discovered endpoints\nPrefer the local endpoints for load balancing. If local endpoints are not present\nremote endpoints will be considered.",
@@ -2585,12 +2543,6 @@ var APISwaggerJSON string = `{
                     "title": "metadata",
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
-                },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/clusterObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
                 },
                 "referring_objects": {
                     "type": "array",
@@ -2786,177 +2738,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "clusterGlobalSpecType": {
-            "type": "object",
-            "description": "Configuration specification for Cluster",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
-            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[]",
-            "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
-            "x-ves-proto-message": "ves.io.schema.cluster.GlobalSpecType",
-            "properties": {
-                "auto_http_config": {
-                    "description": "Exclusive with [http1_config http2_options]\n This allows switching on protocol based on ALPN. It can use either HTTP/1.1 or HTTP/2,\n and will use whichever protocol is negotiated by ALPN with the upstream.",
-                    "title": "auto_http_config",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Automatic"
-                },
-                "circuit_breaker": {
-                    "description": " CircuitBreaker provides a mechanism for watching failures in upstream connections or requests\n and if the failures reach a certain threshold, automatically fail subsequent requests which\n allows to apply back pressure on downstream quickly.",
-                    "title": "circuit_breaker",
-                    "$ref": "#/definitions/clusterCircuitBreaker",
-                    "x-displayname": "Circuit Breaker"
-                },
-                "connection_timeout": {
-                    "type": "integer",
-                    "description": " The timeout for new network connections to endpoints in the cluster.\n This is specified in milliseconds. The default value is 2 seconds\n\nExample: - \"4000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
-                    "title": "connection_timeout",
-                    "format": "int64",
-                    "x-displayname": "Connection Timeout",
-                    "x-ves-example": "4000",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "600000"
-                    }
-                },
-                "default_subset": {
-                    "type": "object",
-                    "description": " List of key-value pairs that define default subset. This subset can be referred in fallback_policy\n which gets used when route specifies no metadata or no subset matching the metadata exists.\n\nExample: - \"key:value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 32\n",
-                    "title": "default_subset",
-                    "x-displayname": "Default Subset",
-                    "x-ves-example": "key:value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.max_pairs": "32"
-                    }
-                },
-                "dns_discovery_type": {
-                    "description": " Specifies how DNS resolution has to be done on members of cluster",
-                    "title": "dns_discovery_type",
-                    "$ref": "#/definitions/clusterDnsDiscoveryType",
-                    "x-displayname": "DNS Discovery Type"
-                },
-                "dns_lookup_family": {
-                    "description": " IP address family within which the DNS resolution is attempted. Default is AUTO mode",
-                    "title": "dns_lookup_family",
-                    "$ref": "#/definitions/clusterDnsLookupType",
-                    "x-displayname": "DNS Lookup Family"
-                },
-                "endpoint_selection": {
-                    "description": " Policy for selection of endpoints from local site or remote site or both",
-                    "title": "endpoint_selection",
-                    "$ref": "#/definitions/clusterEndpointSelectionPolicy",
-                    "x-displayname": "Endpoint Selection"
-                },
-                "endpoint_subsets": {
-                    "type": "array",
-                    "description": " Cluster may be configured to divide its endpoints into subsets based on metadata\n attached to the endpoints. Routes may then specify the metadata that a endpoint must match in\n order to be selected by the load balancer.\n\n endpoint_subsets is list of subsets for this cluster. Each entry in this list has definition for a subset\n (which is collection of keys)\n\n During routing, the route’s metadata match configuration is used to find a specific subset.\n If there is a subset with the exact keys and values specified by the route, the subset is used\n for load balancing. Otherwise, the fallback policy is used. The cluster’s subset configuration must,\n therefore, contain a definition that has the same keys as a given route in order for subset load\n balancing to occur.\n\n Example:\n\n RouteConfig\n\n routes:\n - match:\n   - headers: []\n     path:\n       path: /1.log\n     query_params: []\n   routeDestination:\n     destinations:\n     - cluster:\n       - kind: cluster.Object\n         uid: 00000000-0000-0000-0001-000000000005\n     endpointSubsets:\n       site: india\n\n EndpointConfig\n\n metadata:\n labels:\n   deployment: debug\n   site: india\n name: end-1\n uid: end-1\n\n ClusterConfig\n\n gcSpec:\n  defaultSubset:\n    stage: production\n  fallbackPolicy: DEFAULT_SUBSET\n  endpointSubsets:\n  - keys:\n    - site\n  - keys:\n    - stage\n    - app\n\n Assume the below endpoints are defined and associated with the cluster.\n\n Endpoint   Labels\n --------   ------\n\n  ep1       stage: production, site: india\n  ep2       stage: deployment, site: us\n  ep3       stage: production, app: hr\n  ep4       site: india\n\n The following table describes some routes and the result of their application\n to the cluster. The subset definition for cluster is assumed to be same as given\n above in the ClusterConfig section\n\n RouteMatch Criteria             Subset        Reason\n -------------------             ------        ------\n\n  site: india                    ep1, ep4     Subset of endpoints selected\n  site: us                       ep2          Subset of endpoints selected\n  app: hr                        ep1, ep3     Fallback: No subset selector for \"app\" alone\n  stage: production, app: hr     ep3          Subset of endpoints selected\n  other: x                       ep1, ep3     Fallback: No subset selector for “other”\n  (none)                         ep1, ep3     Fallback: No subset requested\n\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
-                    "title": "endpoint_subsets",
-                    "maxItems": 32,
-                    "items": {
-                        "$ref": "#/definitions/clusterEndpointSubsetSelectorType"
-                    },
-                    "x-displayname": "Endpoint Subsets",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32"
-                    }
-                },
-                "endpoints": {
-                    "type": "array",
-                    "description": " List of references to all endpoint objects that belong to this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
-                    "title": "endpoints",
-                    "maxItems": 32,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Endpoints",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32"
-                    }
-                },
-                "fallback_policy": {
-                    "description": " If subsets are configured and a route specifies no metadata or no subset matching the metadata exists,\n the subset load balancer initiates its fallback policy. The default policy is NO_FALLBACK, in which case\n the request fails as if the cluster had no endpoints. Conversely, the ANY_ENDPOINT fallback policy\n load balances across all endpoints in the cluster, without regard to endpoint metadata.\n Finally, the DEFAULT_SUBSET causes fallback to load balance among endpoints that match a specific set of\n metadata defined as default_set",
-                    "title": "fallback_policy",
-                    "$ref": "#/definitions/clusterSubsetFallbackPolicy",
-                    "x-displayname": "Fallback Policy"
-                },
-                "header_transformation_type": {
-                    "description": " Settings to normalize the headers of upstream requests.",
-                    "title": "Header transformation",
-                    "$ref": "#/definitions/schemaHeaderTransformationType",
-                    "x-displayname": "Header Transformation Configuration"
-                },
-                "health_checks": {
-                    "type": "array",
-                    "description": " List of references to healthcheck object for this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
-                    "title": "health_checks",
-                    "maxItems": 4,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Health Checks",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "4"
-                    }
-                },
-                "http1_config": {
-                    "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
-                    "title": "http1_config",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "HTTP/1.1"
-                },
-                "http2_options": {
-                    "description": "Exclusive with [auto_http_config http1_config]\n Enable HTTP/2 for upstream connections",
-                    "title": "http2_options",
-                    "$ref": "#/definitions/clusterHttp2ProtocolOptions",
-                    "x-displayname": "HTTP/2 Protocol Configuration"
-                },
-                "http_idle_timeout": {
-                    "type": "integer",
-                    "description": " The idle timeout for upstream connection pool connections. The idle timeout is defined as the\n period in which there are no active requests. When the idle timeout is reached the connection\n will be closed. Note that request based timeouts mean that HTTP/2 PINGs will not keep the connection alive.\n This is specified in milliseconds. The default value is 5 minutes.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 600000\n",
-                    "title": "http_idle_timeout",
-                    "format": "int64",
-                    "x-displayname": "HTTP Idle Timeout",
-                    "x-ves-example": "60000",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "600000"
-                    }
-                },
-                "loadbalancer_algorithm": {
-                    "description": " When a connection to a endpoint in an upstream cluster is required, the loadbalancer uses\n loadbalancer_algorithm to determine which host is selected.",
-                    "title": "loadbalancer_algorithm",
-                    "$ref": "#/definitions/clusterLoadbalancerAlgorithm",
-                    "x-displayname": "LoadBalancer Algorithm"
-                },
-                "no_panic_threshold": {
-                    "description": "Exclusive with [panic_threshold]\n\n Disable panic threshold. Only healthy endpoints are considered for loadbalancing.",
-                    "title": "Disable panic threshold",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No Panic threshold"
-                },
-                "outlier_detection": {
-                    "description": " Outlier detection and ejection is the process of dynamically determining whether some number\n of hosts in an upstream cluster are performing unlike the others and removing them from the\n healthy load balancing set. Outlier detection is a form of passive health checking.",
-                    "title": "outlier_detection",
-                    "$ref": "#/definitions/clusterOutlierDetectionType",
-                    "x-displayname": "Outlier Detection"
-                },
-                "panic_threshold": {
-                    "type": "integer",
-                    "description": "Exclusive with [no_panic_threshold]\n\n Configure a threshold (percentage of unhealthy endpoints) below which\n all endpoints will be considered for loadbalancing ignoring its health status.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
-                    "title": "Panic threshold",
-                    "format": "int64",
-                    "x-displayname": "Panic threshold",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "100"
-                    }
-                },
-                "tls_parameters": {
-                    "description": " TLS parameters to access upstream endpoints for this cluster",
-                    "title": "tls_parameters",
-                    "$ref": "#/definitions/schemaUpstreamTlsParamsType",
-                    "x-displayname": "TLS Parameters"
-                }
-            }
-        },
         "clusterHttp2ProtocolOptions": {
             "type": "object",
             "description": "Http2 Protocol options for upstream connections",
@@ -3058,12 +2839,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/clusterObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -3115,33 +2890,6 @@ var APISwaggerJSON string = `{
             "default": "ROUND_ROBIN",
             "x-displayname": "Load Balancer Algorithm",
             "x-ves-proto-enum": "ves.io.schema.cluster.LoadbalancerAlgorithm"
-        },
-        "clusterObject": {
-            "type": "object",
-            "description": "Cluster object",
-            "title": "Cluster Object",
-            "x-displayname": "Cluster",
-            "x-ves-proto-message": "ves.io.schema.cluster.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the cluster",
-                    "title": "spec",
-                    "$ref": "#/definitions/clusterSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
         },
         "clusterOutlierDetectionType": {
             "type": "object",
@@ -3370,20 +3118,6 @@ var APISwaggerJSON string = `{
                     "description": " TLS parameters to access upstream endpoints for this cluster",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
-                }
-            }
-        },
-        "clusterSpecType": {
-            "type": "object",
-            "description": "Shape of the cluster specification",
-            "title": "Specification for Cluster",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.cluster.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/clusterGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -3670,17 +3404,23 @@ var APISwaggerJSON string = `{
             "title": "HeaderTransformationType",
             "x-displayname": "Header Transformation",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
             "properties": {
                 "default_header_transformation": {
-                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "description": "Exclusive with [preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
                     "title": "Default header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
+                "preserve_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
+                    "title": "Preserve case header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Preserve Case"
+                },
                 "proper_case_header_transformation": {
-                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
                     "title": "Proper case header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Proper Case"
@@ -3844,75 +3584,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
-                }
-            }
-        },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -4264,149 +3935,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "Handle to fetch certificate and key",
@@ -4515,7 +4043,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 }
             }
         },
@@ -4539,7 +4067,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -4550,17 +4078,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Skip verification of hostname"
                 },
                 "trusted_ca": {
-                    "description": " Trusted CA List",
+                    "description": "Exclusive with [trusted_ca_url]\n Root CA Certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaTrustedCAList",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA Certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -4580,9 +4108,9 @@ var APISwaggerJSON string = `{
         },
         "schemaTrustedCAList": {
             "type": "object",
-            "description": "Reference to Trusted CA List",
-            "title": "Trusted CA List",
-            "x-displayname": "Trusted CA List Reference",
+            "description": "Reference to Root CA Certificate",
+            "title": "Root CA Certificate",
+            "x-displayname": "Root CA Certificate Reference",
             "x-ves-proto-message": "ves.io.schema.TrustedCAList"
         },
         "schemaUpstreamCertificateParamsType": {
@@ -4640,7 +4168,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 }
             }
         },
@@ -4651,17 +4179,17 @@ var APISwaggerJSON string = `{
             "x-displayname": "Upstream TLS Parameters",
             "x-ves-displayorder": "5,6",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
-            "x-ves-oneof-field-tls_params_choice": "[\"common_params\"]",
+            "x-ves-oneof-field-tls_params_choice": "[\"cert_params\",\"common_params\"]",
             "x-ves-proto-message": "ves.io.schema.UpstreamTlsParamsType",
             "properties": {
                 "cert_params": {
-                    "description": " TLS certificate parameters for upstream connections",
+                    "description": "Exclusive with [common_params]\n TLS certificate parameters for upstream connections",
                     "title": "TLS Certificate Parameters",
                     "$ref": "#/definitions/schemaUpstreamCertificateParamsType",
                     "x-displayname": "TLS Certificate Parameters"
                 },
                 "common_params": {
-                    "description": "Exclusive with []\n Common TLS parameters used in upstream connections",
+                    "description": "Exclusive with [cert_params]\n Common TLS parameters used in upstream connections",
                     "title": "common_params",
                     "$ref": "#/definitions/schemaTlsParamsType",
                     "x-displayname": "Inline TLS Parameters"

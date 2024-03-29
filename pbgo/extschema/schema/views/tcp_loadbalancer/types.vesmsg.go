@@ -118,6 +118,7 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *CreateSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -129,6 +130,7 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -164,6 +166,7 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_TlsTcpAutoCert:
+
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -175,6 +178,7 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_TlsTcp:
+
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -228,6 +232,7 @@ func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *CreateSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -1062,6 +1067,7 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *GetSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -1073,6 +1079,7 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -1108,6 +1115,7 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_TlsTcpAutoCert:
+
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -1119,6 +1127,7 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_TlsTcp:
+
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -1227,6 +1236,7 @@ func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -1542,6 +1552,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
 		if err := fv(ctx, m.GetAutoCertInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cert_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_state"))
+		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2191,6 +2210,7 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *GlobalSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -2202,6 +2222,7 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -2237,6 +2258,7 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_TlsTcpAutoCert:
+
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -2248,6 +2270,7 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_TlsTcp:
+
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -2356,6 +2379,7 @@ func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *GlobalSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -2720,6 +2744,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
 		if err := fv(ctx, m.GetAutoCertInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cert_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_state"))
+		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3352,6 +3385,7 @@ func (m *ProxyTypeTLSTCP) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *ProxyTypeTLSTCP_TlsParameters:
+
 		drInfos, err := m.GetTlsParameters().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -3363,6 +3397,7 @@ func (m *ProxyTypeTLSTCP) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, err
 		return drInfos, err
 
 	case *ProxyTypeTLSTCP_TlsCertParams:
+
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
@@ -3383,6 +3418,14 @@ type ValidateProxyTypeTLSTCP struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateProxyTypeTLSTCP) TlsCertificatesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_certificates_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateProxyTypeTLSTCP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ProxyTypeTLSTCP)
 	if !ok {
@@ -3395,6 +3438,16 @@ func (v *ValidateProxyTypeTLSTCP) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["tls_certificates_choice"]; exists {
+		val := m.GetTlsCertificatesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_certificates_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetTlsCertificatesChoice().(type) {
@@ -3429,6 +3482,25 @@ func (v *ValidateProxyTypeTLSTCP) Validate(ctx context.Context, pm interface{}, 
 // Well-known symbol for default validator implementation
 var DefaultProxyTypeTLSTCPValidator = func() *ValidateProxyTypeTLSTCP {
 	v := &ValidateProxyTypeTLSTCP{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTlsCertificatesChoice := v.TlsCertificatesChoiceValidationRuleHandler
+	rulesTlsCertificatesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsCertificatesChoice(rulesTlsCertificatesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeTLSTCP.tls_certificates_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_certificates_choice"] = vFn
 
 	v.FldValidators["tls_certificates_choice.tls_parameters"] = ves_io_schema_views.DownstreamTlsParamsTypeValidator().Validate
 	v.FldValidators["tls_certificates_choice.tls_cert_params"] = ves_io_schema_views.DownstreamTLSCertsParamsValidator().Validate
@@ -3497,6 +3569,7 @@ func (m *ProxyTypeTLSTCPAutoCerts) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *ProxyTypeTLSTCPAutoCerts_UseMtls:
+
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
@@ -3719,6 +3792,7 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ReplaceSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -3730,6 +3804,7 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -3765,6 +3840,7 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_TlsTcpAutoCert:
+
 		drInfos, err := m.GetTlsTcpAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcpAutoCert().GetDRefInfo() FAILED")
@@ -3776,6 +3852,7 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_TlsTcp:
+
 		drInfos, err := m.GetTlsTcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsTcp().GetDRefInfo() FAILED")
@@ -3884,6 +3961,7 @@ func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *ReplaceSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -5532,6 +5610,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.GetAdvertiseChoiceFromGlobalSpecType(f)
 	m.AutoCertInfo = f.GetAutoCertInfo()
+	m.CertState = f.GetCertState()
 	m.GetClusterRetractChoiceFromGlobalSpecType(f)
 	m.DnsInfo = f.GetDnsInfo()
 	m.DnsVolterraManaged = f.GetDnsVolterraManaged()
@@ -5566,6 +5645,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m1.SetAdvertiseChoiceToGlobalSpecType(f)
 	f.AutoCertInfo = m1.AutoCertInfo
+	f.CertState = m1.CertState
 	m1.SetClusterRetractChoiceToGlobalSpecType(f)
 	f.DnsInfo = m1.DnsInfo
 	f.DnsVolterraManaged = m1.DnsVolterraManaged

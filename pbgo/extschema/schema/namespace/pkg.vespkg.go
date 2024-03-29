@@ -32,8 +32,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.APIItemList"] = APIItemListValidator()
 	vr["ves.io.schema.namespace.EvaluateAPIAccessReq"] = EvaluateAPIAccessReqValidator()
 	vr["ves.io.schema.namespace.EvaluateAPIAccessResp"] = EvaluateAPIAccessRespValidator()
+	vr["ves.io.schema.namespace.EvaluateBatchAPIAccessReq"] = EvaluateBatchAPIAccessReqValidator()
+	vr["ves.io.schema.namespace.EvaluateBatchAPIAccessResp"] = EvaluateBatchAPIAccessRespValidator()
 	vr["ves.io.schema.namespace.LookupUserRolesReq"] = LookupUserRolesReqValidator()
 	vr["ves.io.schema.namespace.LookupUserRolesResp"] = LookupUserRolesRespValidator()
+	vr["ves.io.schema.namespace.NamespaceAPIList"] = NamespaceAPIListValidator()
 
 	vr["ves.io.schema.namespace.AllApplicationInventoryRequest"] = AllApplicationInventoryRequestValidator()
 	vr["ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest"] = AllApplicationInventoryWafFilterRequestValidator()
@@ -100,10 +103,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.namespace.API.Get"] = []string{
-		"object",
-	}
 
 }
 

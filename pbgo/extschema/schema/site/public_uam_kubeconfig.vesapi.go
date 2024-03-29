@@ -406,15 +406,15 @@ type uamKubeConfigAPIInprocClient struct {
 }
 
 func (c *uamKubeConfigAPIInprocClient) CreateGlobalKubeConfig(ctx context.Context, in *CreateGlobalKubeConfigReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig")
 	return c.UamKubeConfigAPIServer.CreateGlobalKubeConfig(ctx, in)
 }
 func (c *uamKubeConfigAPIInprocClient) ListGlobalKubeConfig(ctx context.Context, in *ListGlobalKubeConfigReq, opts ...grpc.CallOption) (*ListKubeConfigRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig")
 	return c.UamKubeConfigAPIServer.ListGlobalKubeConfig(ctx, in)
 }
 func (c *uamKubeConfigAPIInprocClient) RevokeGlobalKubeConfig(ctx context.Context, in *RevokeKubeConfigReq, opts ...grpc.CallOption) (*KubeConfigStatusRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig")
 	return c.UamKubeConfigAPIServer.RevokeGlobalKubeConfig(ctx, in)
 }
 

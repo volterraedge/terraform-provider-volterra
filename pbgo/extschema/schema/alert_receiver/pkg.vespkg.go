@@ -29,6 +29,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_receiver.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.alert_receiver.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.alert_receiver.AlertPolicyMatch"] = AlertPolicyMatchValidator()
+	vr["ves.io.schema.alert_receiver.AlertPolicyMatchRequest"] = AlertPolicyMatchRequestValidator()
+	vr["ves.io.schema.alert_receiver.AlertPolicyMatchResponse"] = AlertPolicyMatchResponseValidator()
 	vr["ves.io.schema.alert_receiver.ConfirmAlertReceiverRequest"] = ConfirmAlertReceiverRequestValidator()
 	vr["ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse"] = ConfirmAlertReceiverResponseValidator()
 	vr["ves.io.schema.alert_receiver.TestAlertReceiverRequest"] = TestAlertReceiverRequestValidator()
@@ -98,10 +101,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.alert_receiver.API.Create"] = "ves.io.schema.alert_receiver.CreateRequest"
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.alert_receiver.API.Get"] = []string{
-		"object",
-	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.alert_receiver.API.Replace"] = []string{
 		"spec.opsgenie.api_key.blindfold_secret_info_internal",

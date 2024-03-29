@@ -91,10 +91,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.route.API.Create"] = "ves.io.schema.route.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.route.API.Replace"] = []string{
 		"spec.routes.#.bot_defense_javascript_injection_inline_mode",
 		"spec.routes.#.disable_custom_script",

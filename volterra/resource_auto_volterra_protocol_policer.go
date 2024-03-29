@@ -274,10 +274,13 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 
 					typeTypeFound := false
 
-					if v, ok := protocolMapStrToI["dns"]; ok && !isIntfNil(v) && !typeTypeFound {
+					if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
 
 						typeTypeFound = true
-						_ = v
+						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
+						typeInt.Dns = &ves_io_schema_protocol_policer.DnsType{}
+						protocol.Type = typeInt
+
 					}
 
 					if v, ok := protocolMapStrToI["icmp"]; ok && !isIntfNil(v) && !typeTypeFound {
@@ -330,10 +333,13 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 
 					}
 
-					if v, ok := protocolMapStrToI["udp"]; ok && !isIntfNil(v) && !typeTypeFound {
+					if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
 
 						typeTypeFound = true
-						_ = v
+						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
+						typeInt.Udp = &ves_io_schema_protocol_policer.UdpType{}
+						protocol.Type = typeInt
+
 					}
 
 				}
@@ -400,6 +406,7 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -493,10 +500,13 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 
 					typeTypeFound := false
 
-					if v, ok := protocolMapStrToI["dns"]; ok && !isIntfNil(v) && !typeTypeFound {
+					if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
 
 						typeTypeFound = true
-						_ = v
+						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
+						typeInt.Dns = &ves_io_schema_protocol_policer.DnsType{}
+						protocol.Type = typeInt
+
 					}
 
 					if v, ok := protocolMapStrToI["icmp"]; ok && !isIntfNil(v) && !typeTypeFound {
@@ -549,10 +559,13 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 
 					}
 
-					if v, ok := protocolMapStrToI["udp"]; ok && !isIntfNil(v) && !typeTypeFound {
+					if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
 
 						typeTypeFound = true
-						_ = v
+						typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
+						typeInt.Udp = &ves_io_schema_protocol_policer.UdpType{}
+						protocol.Type = typeInt
+
 					}
 
 				}

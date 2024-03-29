@@ -1854,6 +1854,16 @@ func (v *ValidateCreateSpecType) OutsideNameserverV6ValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) BgpPeerAddressV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -1881,6 +1891,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_address_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_address_v6"))
+		if err := fv(ctx, m.GetBgpPeerAddressV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2296,6 +2315,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_nameserver_v6"] = vFn
+
+	vrhBgpPeerAddressV6 := v.BgpPeerAddressV6ValidationRuleHandler
+	rulesBgpPeerAddressV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhBgpPeerAddressV6(rulesBgpPeerAddressV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.bgp_peer_address_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp_peer_address_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -4107,6 +4137,16 @@ func (v *ValidateGetSpecType) OutsideNameserverV6ValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) BgpPeerAddressV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -4134,6 +4174,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_address_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_address_v6"))
+		if err := fv(ctx, m.GetBgpPeerAddressV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4725,6 +4774,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_nameserver_v6"] = vFn
+
+	vrhBgpPeerAddressV6 := v.BgpPeerAddressV6ValidationRuleHandler
+	rulesBgpPeerAddressV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhBgpPeerAddressV6(rulesBgpPeerAddressV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.bgp_peer_address_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp_peer_address_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -5760,6 +5820,16 @@ func (v *ValidateGlobalSpecType) OutsideNameserverV6ValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) BgpPeerAddressV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -5811,6 +5881,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_address_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_address_v6"))
+		if err := fv(ctx, m.GetBgpPeerAddressV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6741,6 +6820,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_nameserver_v6"] = vFn
+
+	vrhBgpPeerAddressV6 := v.BgpPeerAddressV6ValidationRuleHandler
+	rulesBgpPeerAddressV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhBgpPeerAddressV6(rulesBgpPeerAddressV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.bgp_peer_address_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp_peer_address_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -9438,6 +9528,16 @@ func (v *ValidateReplaceSpecType) OutsideNameserverV6ValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) BgpPeerAddressV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -9465,6 +9565,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_address_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_address_v6"))
+		if err := fv(ctx, m.GetBgpPeerAddressV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9860,6 +9969,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["outside_nameserver_v6"] = vFn
+
+	vrhBgpPeerAddressV6 := v.BgpPeerAddressV6ValidationRuleHandler
+	rulesBgpPeerAddressV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhBgpPeerAddressV6(rulesBgpPeerAddressV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.bgp_peer_address_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp_peer_address_v6"] = vFn
 
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
@@ -11731,6 +11851,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	}
 	m.Address = f.GetAddress()
 	m.BgpPeerAddress = f.GetBgpPeerAddress()
+	m.BgpPeerAddressV6 = f.GetBgpPeerAddressV6()
 	m.BgpRouterId = f.GetBgpRouterId()
 	m.CeSiteMode = f.GetCeSiteMode()
 	m.Coordinates = f.GetCoordinates()
@@ -11773,6 +11894,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 
 	f.Address = m1.Address
 	f.BgpPeerAddress = m1.BgpPeerAddress
+	f.BgpPeerAddressV6 = m1.BgpPeerAddressV6
 	f.BgpRouterId = m1.BgpRouterId
 	f.CeSiteMode = m1.CeSiteMode
 	f.Coordinates = m1.Coordinates
@@ -11812,6 +11934,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.Address = f.GetAddress()
 	m.BgpPeerAddress = f.GetBgpPeerAddress()
+	m.BgpPeerAddressV6 = f.GetBgpPeerAddressV6()
 	m.BgpRouterId = f.GetBgpRouterId()
 	m.CeSiteMode = f.GetCeSiteMode()
 	m.ConnectedRe = f.GetConnectedRe()
@@ -11868,6 +11991,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.Address = m1.Address
 	f.BgpPeerAddress = m1.BgpPeerAddress
+	f.BgpPeerAddressV6 = m1.BgpPeerAddressV6
 	f.BgpRouterId = m1.BgpRouterId
 	f.CeSiteMode = m1.CeSiteMode
 	f.ConnectedRe = m1.ConnectedRe
@@ -11921,6 +12045,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	}
 	m.Address = f.GetAddress()
 	m.BgpPeerAddress = f.GetBgpPeerAddress()
+	m.BgpPeerAddressV6 = f.GetBgpPeerAddressV6()
 	m.BgpRouterId = f.GetBgpRouterId()
 	m.Coordinates = f.GetCoordinates()
 	m.DefaultUnderlayNetwork = f.GetDefaultUnderlayNetwork()
@@ -11962,6 +12087,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 
 	f.Address = m1.Address
 	f.BgpPeerAddress = m1.BgpPeerAddress
+	f.BgpPeerAddressV6 = m1.BgpPeerAddressV6
 	f.BgpRouterId = m1.BgpRouterId
 	f.Coordinates = m1.Coordinates
 	f.DefaultUnderlayNetwork = m1.DefaultUnderlayNetwork

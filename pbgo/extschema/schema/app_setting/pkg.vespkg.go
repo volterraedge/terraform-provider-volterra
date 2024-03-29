@@ -71,10 +71,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.app_type_settings.#.user_behavior_analysis_setting.enable_detection.bola_detection_manual",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.app_setting.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_setting.API.Replace"] = []string{
 		"spec.anomaly_types.#",
 		"spec.app_type_refs.#",

@@ -49,10 +49,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.infraprotect_deny_list_rule.API.Get"] = []string{
-		"object",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

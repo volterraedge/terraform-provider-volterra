@@ -22,8 +22,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -181,10 +179,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -196,10 +192,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -386,7 +380,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -428,7 +425,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -454,10 +454,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -469,10 +467,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -553,7 +549,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -605,7 +604,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -619,7 +618,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -634,7 +633,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -711,10 +710,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -726,10 +723,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1137,21 +1132,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1209,11 +1191,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2003,75 +1980,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -2129,38 +2037,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
-                }
-            }
-        },
-        "schemaServiceConnectionType": {
-            "type": "string",
-            "description": "Only added so codegeneration does not break\n\nOnly added so codegeneration does not break\nOnly added so codegeneration does not break",
-            "title": "Title",
-            "enum": [
-                "TLS",
-                "NoTLS"
-            ],
-            "default": "TLS",
-            "x-displayname": "displayname",
-            "x-ves-proto-enum": "ves.io.schema.ServiceConnectionType"
-        },
-        "schemaServiceParameters": {
-            "type": "object",
-            "description": "x-displayName \"displayname\"\nOnly added so codegeneration does not break\nServiceParam groups all parameters required for a client to connect to a server",
-            "title": "Title",
-            "x-ves-proto-message": "ves.io.schema.ServiceParameters",
-            "properties": {
-                "ctype": {
-                    "description": " Only added so codegeneration does not break",
-                    "title": "Title",
-                    "$ref": "#/definitions/schemaServiceConnectionType",
-                    "x-displayname": "displayname"
-                },
-                "url": {
-                    "type": "string",
-                    "description": " Only added so codegeneration does not break",
-                    "title": "Title",
-                    "x-displayname": "displayname"
                 }
             }
         },
@@ -2442,149 +2318,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaTunnelEncapsulationType": {
             "type": "string",
             "description": "Type of tunnel encapsulation\n\nIPSEC using public key infrastructure\nIPSEC using pre shared key\nSSL encapsulation\nGRE encapsulation",
@@ -2671,526 +2404,6 @@ var APISwaggerJSON string = `{
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
             "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
-        },
-        "schemasiteGlobalSpecType": {
-            "type": "object",
-            "description": "Global specification of Site object",
-            "title": "Global Specification",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.site.GlobalSpecType",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "address",
-                    "maxLength": 256,
-                    "x-displayname": "Geographical Address",
-                    "x-ves-example": "123 Street, city, country, postal code",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "ares_list": {
-                    "type": "array",
-                    "description": " List of Ares services in an RE site. This is used to create a full mesh of Ares services across all REs.",
-                    "title": "ares_list",
-                    "items": {
-                        "$ref": "#/definitions/schemaServiceParameters"
-                    },
-                    "x-displayname": "Ares Services"
-                },
-                "ares_vtrp_list": {
-                    "type": "array",
-                    "description": " List of Ares services in an RE site for use with VTRP. This is used to choose a redundant pair of Ares services for VTRP clients.",
-                    "title": "ares_vtrp_list",
-                    "items": {
-                        "$ref": "#/definitions/schemaServiceParameters"
-                    },
-                    "x-displayname": "Ares VTRP Services"
-                },
-                "bgp_peer_address": {
-                    "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "bgp_peer_address",
-                    "x-displayname": "BGP Peer Address",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "bgp_router_id": {
-                    "type": "string",
-                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configurred to\n fetch BGP router ID from site object. This can be used to change router id per site in a fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "bgp_router_id",
-                    "x-displayname": "BGP Router ID",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "ce_service_labels": {
-                    "type": "object",
-                    "description": " Defines the labels assigned for ip-fabric routes for the CE\n The labels can be used to allow the CE to access selected services in GC/RE\n Attribute used only on CEs",
-                    "title": "CE Service Labels",
-                    "x-displayname": "CE Service Labels"
-                },
-                "ce_site_mode": {
-                    "description": " Customer Eddge Mode. Defines how the CE is being deployed. Invalid for RE Site",
-                    "title": "CE Site Mode",
-                    "$ref": "#/definitions/siteCeSiteMode",
-                    "x-displayname": "CE Site Mode"
-                },
-                "cluster_ip": {
-                    "type": "string",
-                    "description": " VIP in the Fabric VN for accessing F5XC services like Ares etc\n constraint - used only in REs\n\nExample: - \"1.2.3.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "cluster_ip",
-                    "x-displayname": "Cluster IP",
-                    "x-ves-example": "1.2.3.4",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "connected_re": {
-                    "type": "array",
-                    "description": " Following fields are only for customer edge sites\n List of REs to which to which this CE initiates IPSec/SSL connection to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Connected REs",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Connected REs",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "connected_re_for_config": {
-                    "type": "array",
-                    "description": " This field is valid only for CE site object\n List of REs which can send config to this CE site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "connected_re_for_config",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "REs for Configuration",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "coordinates": {
-                    "description": " Site longitude and latitude co-ordinates",
-                    "title": "coordinates",
-                    "$ref": "#/definitions/siteCoordinates",
-                    "x-displayname": "Co-ordinates"
-                },
-                "default_underlay_network": {
-                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
-                    "title": "default_underlay_vn",
-                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
-                    "x-displayname": "Default Underlay Virtual Network"
-                },
-                "desired_pool_count": {
-                    "type": "integer",
-                    "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 64\n",
-                    "title": "desired_pool_count",
-                    "format": "int32",
-                    "x-displayname": "Desired Pool Count",
-                    "x-ves-example": "0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.int32.gte": "-1",
-                        "ves.io.schema.rules.int32.lte": "64"
-                    }
-                },
-                "inside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "inside_nameserver",
-                    "x-displayname": "DNS Server for Inside Network",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "inside_nameserver_v6": {
-                    "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "inside_nameserver_v6",
-                    "x-displayname": "DNS Server IPv6 for Inside Network",
-                    "x-ves-example": "1001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "inside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "inside_vip",
-                    "x-displayname": "Inside VIP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "inside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "inside_vip_v6",
-                    "x-displayname": "Inside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "ipsec_ssl_nodes_fqdn": {
-                    "type": "array",
-                    "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
-                    "title": "ipsec_ssl_nodes_fqdn",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "FQDN for IPSEC/SSL resolving to individual node IP",
-                    "x-ves-example": "re01-node.ves.io",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true"
-                    }
-                },
-                "ipsec_ssl_vip_fqdn": {
-                    "type": "string",
-                    "description": " FQDN resolves in public ip on public network and private ip on private network\n\nExample: - \"re01.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
-                    "title": "ipsec_ssl_vip_fqdn",
-                    "x-displayname": "FQDN for IPSEC/SSL VIP",
-                    "x-ves-example": "re01.ves.io",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true"
-                    }
-                },
-                "k8s_api_servers": {
-                    "type": "object",
-                    "description": " physical kubernetes API servers on this site.\n The index is kubernetes API server host name",
-                    "title": "k8s_api_servers",
-                    "x-displayname": "Kubernetes API Servers"
-                },
-                "launch_ike_in_namespace": {
-                    "type": "boolean",
-                    "description": " identify that the CE needs to run IKE in namespace",
-                    "title": "launch_ike_in_namespace",
-                    "format": "boolean",
-                    "x-displayname": "Identify if CE needs to run IKE in namespace"
-                },
-                "local_k8s_access_enabled": {
-                    "type": "boolean",
-                    "description": " Lets user know if this site has local k8s cluster enabled via fleet configuration.",
-                    "title": "Local K8s Cluster Access Enabled",
-                    "format": "boolean",
-                    "x-displayname": "Local K8s Cluster Access Enabled"
-                },
-                "main_nodes": {
-                    "type": "array",
-                    "description": " Connectivity information of main/master nodes to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
-                    "title": "main_nodes",
-                    "items": {
-                        "$ref": "#/definitions/schemasiteNode"
-                    },
-                    "x-displayname": "Main Nodes"
-                },
-                "mars_list": {
-                    "type": "array",
-                    "description": " List of Mars services in an RE site. This is used to create a full mesh of Mars services across all REs.",
-                    "title": "mars_list",
-                    "items": {
-                        "$ref": "#/definitions/schemaServiceParameters"
-                    },
-                    "x-displayname": "Mars Services"
-                },
-                "mars_vtrp_list": {
-                    "type": "array",
-                    "description": " List of Mars services in an RE site for use with VTRP. This is used to choose a redundant pair of Mars services for VTRP clients.",
-                    "title": "mars_vtrp_list",
-                    "items": {
-                        "$ref": "#/definitions/schemaServiceParameters"
-                    },
-                    "x-displayname": "Mars VTRP Services"
-                },
-                "multus_enabled": {
-                    "type": "boolean",
-                    "description": " Indicates that Multus cni is enabled on the site",
-                    "title": "Multus support enabled",
-                    "format": "boolean",
-                    "x-displayname": "Multus support enabled"
-                },
-                "obelix": {
-                    "description": " Obelix in the site",
-                    "title": "obelix",
-                    "$ref": "#/definitions/schemaServiceParameters",
-                    "x-displayname": "Obelix Parameters"
-                },
-                "opera": {
-                    "description": " opera in the site",
-                    "title": "opera",
-                    "$ref": "#/definitions/schemaServiceParameters",
-                    "x-displayname": "opera Parameters"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "title": "operating_system_version",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
-                "outside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "outside_nameserver",
-                    "x-displayname": "DNS Server for Outside Network",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "outside_nameserver_v6": {
-                    "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "outside_nameserver_v6",
-                    "x-displayname": "DNS Server IPv6 for Outside Network",
-                    "x-ves-example": "1001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "outside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "outside_vip",
-                    "x-displayname": "Outside VIP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "outside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "outside_vip_v6",
-                    "x-displayname": "Outside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "phobos_list": {
-                    "type": "array",
-                    "description": " Phobos services in a CE site. This is used to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
-                    "title": "phobos_list",
-                    "items": {
-                        "$ref": "#/definitions/schemaServiceParameters"
-                    },
-                    "x-displayname": "Phobos Services"
-                },
-                "private_connectivity": {
-                    "description": " Private Connectivity Information like ADN network name and cloud link information",
-                    "title": "Private Connectivity Type",
-                    "$ref": "#/definitions/viewsPrivateConnectivityType",
-                    "x-displayname": "Private Connectivity Information"
-                },
-                "private_ip": {
-                    "type": "string",
-                    "description": " VIP in the Private VN used for terminating IPSec/SSL tunnels\n The automatic tunnels between regional-edges and customer-edge sites use this VIP if private access is enabled\n\nExample: - \"1.2.3.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "private_ip",
-                    "x-displayname": "Private IP",
-                    "x-ves-example": "1.2.3.4",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "public_ip": {
-                    "type": "string",
-                    "description": " VIP in the Public VN used for terminating IPSec/SSL tunnels\n The automatic tunnels between regional-edges or between regional-edge and customer-edge sites use this VIP\n Note: Tunnels can also be configured via SiteMeshGroup. Public IP is not used for SiteMeshGroup tunnels\n\nExample: - \"1.2.3.4\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "public_ip",
-                    "x-displayname": "Public IP",
-                    "x-ves-example": "1.2.3.4",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "rakar": {
-                    "description": " Rakar in the site",
-                    "title": "rakar",
-                    "$ref": "#/definitions/schemaServiceParameters",
-                    "x-displayname": "Rakar Parameters"
-                },
-                "region": {
-                    "type": "string",
-                    "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
-                    "title": "region",
-                    "x-displayname": "Region",
-                    "x-ves-example": "east-us-2"
-                },
-                "site_state": {
-                    "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
-                    "title": "site_state",
-                    "$ref": "#/definitions/siteSiteState",
-                    "x-displayname": "Site State"
-                },
-                "site_subtype": {
-                    "description": " Site subtype",
-                    "title": "site_subtype",
-                    "$ref": "#/definitions/siteSiteSubtype",
-                    "x-displayname": "Site Subtype"
-                },
-                "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
-                    "title": "site_to_site_network_type",
-                    "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1]"
-                    }
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optionsl, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "title": "site_to_site_tunnel_ip",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "site_type": {
-                    "description": " Site type which specifies whether it is RE or CE\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n",
-                    "title": "site_type",
-                    "$ref": "#/definitions/siteSiteType",
-                    "x-displayname": "Site Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.not_in": "0"
-                    }
-                },
-                "static_routes": {
-                    "type": "array",
-                    "description": " List of Fabric VN subnets/addresses in this site\n\nExample: - \"10.1.1.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n",
-                    "title": "static_routes",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Static Routes",
-                    "x-ves-example": "10.1.1.0/24",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true"
-                    }
-                },
-                "template_parameters": {
-                    "type": "object",
-                    "description": " Optional\n Map of string keys and values that can be used to provide per site config parameters to various\n configurations objects that configure features on set of sites\n In the configuration object a key is provided and value for that key is provided in the\n template_parameters\n\nExample: - \"value\"-",
-                    "title": "template_parameters",
-                    "x-displayname": "Template Parameters",
-                    "x-ves-example": "value"
-                },
-                "tunnel_dead_timeout": {
-                    "type": "integer",
-                    "description": " Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected.\n When not set (== 0), a default value of 10000 msec will be used.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 180000\n",
-                    "title": "tunnel_dead_timeout",
-                    "format": "int64",
-                    "x-displayname": "Tunnel Dead Timeout (msec)",
-                    "x-ves-example": "0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "180000"
-                    }
-                },
-                "tunnel_type": {
-                    "description": " Tunnel type specifies type of tunnels enabled from this site. The tunnel type is used for automatic tunnels\n created between regional-edge sites or between regional-edge and customer-edge sites\n\n A tunnel connects two sites. The tunnel types enabled for tunnel results from intersection of tunnel types\n enabled for the two sites. IPSec gets priority over SSL when both are enabled\n\n Note: Tunnels can also be configured via SiteMeshGroup. Tunnel type is not used for SiteMeshGroup tunnels\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n",
-                    "title": "Site to site tunnel type",
-                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
-                    "x-displayname": "Site Tunnel Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1,2]"
-                    }
-                },
-                "vega": {
-                    "description": " Parameters to connect to this site {URL, type of TLS}",
-                    "title": "vega",
-                    "$ref": "#/definitions/schemaServiceParameters",
-                    "x-displayname": "Vega Parameters"
-                },
-                "vip_params_per_az": {
-                    "type": "array",
-                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,2,3\n",
-                    "title": "vip_params_per_az",
-                    "items": {
-                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
-                    },
-                    "x-displayname": "Publish VIP Params Per AZ",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "0,1,2,3"
-                    }
-                },
-                "vip_selection": {
-                    "description": " Optional VIP Selection to choose from the available type of addresses - IPv4/IPv6/both\n This selections impacts all the VIPs - like configured VIPs (inside and outside) or VIPs\n discovered through K8s.",
-                    "title": "vip_selection",
-                    "$ref": "#/definitions/siteVIPSelection",
-                    "x-displayname": "VIP Selection"
-                },
-                "vip_vrrp_mode": {
-                    "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
-                    "title": "vip_vrrp_mode",
-                    "$ref": "#/definitions/schemaVipVrrpType",
-                    "x-displayname": "VIP Advertisement Mode"
-                },
-                "vm_enabled": {
-                    "type": "boolean",
-                    "description": " Indicates that virtual machine support is enabled on the site",
-                    "title": "Virtual Machine support (VM) enabled",
-                    "format": "boolean",
-                    "x-displayname": "Virtual Machine support enabled"
-                },
-                "volterra_software_overide": {
-                    "description": " Policy to pick F5XC software version between verion given in site and corresponding fleet object.",
-                    "title": "volterra_software_override",
-                    "$ref": "#/definitions/siteSiteSoftwareOverrideType",
-                    "x-displayname": "Site Software Version Override"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired F5XC software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "title": "volterra_software_version",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
-                },
-                "vpm": {
-                    "description": " Vpm in the site",
-                    "title": "vpm",
-                    "$ref": "#/definitions/schemaServiceParameters",
-                    "x-displayname": "Vpm Parameters"
-                }
-            }
-        },
-        "schemasiteNode": {
-            "type": "object",
-            "description": "Node Information for connectivity across sites.",
-            "title": "Node",
-            "x-displayname": "Node",
-            "x-ves-proto-message": "ves.io.schema.site.Node",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " Name of the master/main node on the site.",
-                    "title": "name",
-                    "x-displayname": "Node name"
-                },
-                "sli_address": {
-                    "type": "string",
-                    "description": " Site Local Inside IP address.",
-                    "title": "sli_address",
-                    "x-displayname": "Site Local Inside IP addresses"
-                },
-                "slo_address": {
-                    "type": "string",
-                    "description": " Site Local Outside IP address.",
-                    "title": "slo_address",
-                    "x-displayname": "Site Local Outside IP addresses"
-                }
-            }
         },
         "siteActiveState": {
             "type": "string",
@@ -4052,12 +3265,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/siteObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -4134,6 +3341,15 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "bgp_peer_address_v6": {
+                    "type": "string",
+                    "description": " Optional bgp peer IPv6  address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer IPv6  address from site Object. This can be used to change peer IPv6  address per site in fleet.\n\nExample: - \"3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "BGP Peer IPv6 Address",
+                    "x-ves-example": "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "bgp_router_id": {
@@ -4502,11 +3718,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "siteK8SApiServerParameters": {
-            "type": "object",
-            "description": "x-displayName: \"K8s Api Server\"\nSite's Physical Kubernetes API server. The location of this server is in site specification",
-            "title": "K8sApiServer"
-        },
         "siteKernel": {
             "type": "object",
             "description": "Kernel information",
@@ -4652,12 +3863,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
-                },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/siteObject",
-                    "x-displayname": "Object"
                 },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
@@ -4858,33 +4063,6 @@ var APISwaggerJSON string = `{
                     "title": "version",
                     "x-displayname": "Version",
                     "x-ves-example": "1855.4.0"
-                }
-            }
-        },
-        "siteObject": {
-            "type": "object",
-            "description": "Site object specification",
-            "title": "Site Object",
-            "x-displayname": "Site Object",
-            "x-ves-proto-message": "ves.io.schema.site.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the site",
-                    "title": "spec",
-                    "$ref": "#/definitions/siteSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -5188,23 +4366,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "siteReMeshGroup": {
-            "type": "object",
-            "description": "x-displayName: \"RE Mesh Group\"\nConfigures how ip-fabric network is connected between the RE sites.\nRE sites in same group are connected using connection-type configured for the group\nDefault connection-type between RE sites is IPSec",
-            "title": "RE Mesh Group",
-            "properties": {
-                "ipsec_group": {
-                    "type": "string",
-                    "description": "x-displayName: \"IPSec Connection\"\nSites with same ipsec_group are connected using IPSec tunnels",
-                    "title": "IPSec Connection"
-                },
-                "l3vpn_group": {
-                    "type": "string",
-                    "description": "x-displayName: \"L3VPN Connection\"\nSites with same l3vpn_group are connected using L3VPN",
-                    "title": "L3VPN Connection"
-                }
-            }
-        },
         "siteReplaceRequest": {
             "type": "object",
             "description": "This is the input message of the 'Replace' RPC",
@@ -5255,6 +4416,15 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "10.1.1.1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "bgp_peer_address_v6": {
+                    "type": "string",
+                    "description": " Optional bgp peer IPv6  address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer IPv6  address from site Object. This can be used to change peer IPv6  address per site in fleet.\n\nExample: - \"3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "BGP Peer IPv6 Address",
+                    "x-ves-example": "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 },
                 "bgp_router_id": {
@@ -5617,20 +4787,6 @@ var APISwaggerJSON string = `{
             "default": "UPGRADE_INVALID",
             "x-displayname": "Software Upgrade Phase",
             "x-ves-proto-enum": "ves.io.schema.site.SoftwareUpgradePhase"
-        },
-        "siteSpecType": {
-            "type": "object",
-            "description": "Shape of the site specification",
-            "title": "Site Specification",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.site.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/schemasiteGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
         },
         "siteStatusObject": {
             "type": "object",

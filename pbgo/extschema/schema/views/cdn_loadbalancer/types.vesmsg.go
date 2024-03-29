@@ -3074,6 +3074,7 @@ func (m *CdnOriginPoolType) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CdnOriginPoolType_UseTls:
+
 		drInfos, err := m.GetUseTls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
@@ -4236,6 +4237,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["cert_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_state"))
+		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dns_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dns_info"))
@@ -4680,6 +4690,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_state"))
 		if err := fv(ctx, m.GetAutoCertState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cert_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_state"))
+		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7025,6 +7044,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.AddLocation = f.GetAddLocation()
 	m.AutoCertInfo = f.GetAutoCertInfo()
+	m.CertState = f.GetCertState()
 	m.DnsInfo = f.GetDnsInfo()
 	m.Domains = f.GetDomains()
 	m.HostName = f.GetHostName()
@@ -7052,6 +7072,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.AddLocation = m1.AddLocation
 	f.AutoCertInfo = m1.AutoCertInfo
+	f.CertState = m1.CertState
 	f.DnsInfo = m1.DnsInfo
 	f.Domains = m1.Domains
 	f.HostName = m1.HostName

@@ -51,10 +51,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.k8s_cluster_role_binding.API.Get"] = []string{
-		"object",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cluster.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cluster.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cluster.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3498,17 +3513,23 @@ var APISwaggerJSON string = `{
             "title": "HeaderTransformationType",
             "x-displayname": "Header Transformation",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
             "properties": {
                 "default_header_transformation": {
-                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "description": "Exclusive with [preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
                     "title": "Default header transformation",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
                 },
+                "preserve_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
+                    "title": "Preserve case header transformation",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Preserve Case"
+                },
                 "proper_case_header_transformation": {
-                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
                     "title": "Proper case header transformation",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Proper Case"
@@ -4074,7 +4095,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 }
             }
         },
@@ -4098,7 +4119,7 @@ var APISwaggerJSON string = `{
             "description": "This includes URL for a trust store, whether SAN verification is required\nand list of Subject Alt Names for verification",
             "title": "TlsValidationParamsType",
             "x-displayname": "TLS Certificate Validation Parameters",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.TlsValidationParamsType",
             "properties": {
                 "skip_hostname_verification": {
@@ -4109,17 +4130,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Skip verification of hostname"
                 },
                 "trusted_ca": {
-                    "description": " Trusted CA List",
+                    "description": "Exclusive with [trusted_ca_url]\n Root CA Certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaTrustedCAList",
-                    "x-displayname": "Trusted CA List"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Trusted CA List\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Inline Root CA Certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "maxLength": 131072,
-                    "x-displayname": "Inline Trusted CA List",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.truststore_url": "true"
@@ -4139,9 +4160,9 @@ var APISwaggerJSON string = `{
         },
         "schemaTrustedCAList": {
             "type": "object",
-            "description": "Reference to Trusted CA List",
-            "title": "Trusted CA List",
-            "x-displayname": "Trusted CA List Reference",
+            "description": "Reference to Root CA Certificate",
+            "title": "Root CA Certificate",
+            "x-displayname": "Root CA Certificate Reference",
             "x-ves-proto-message": "ves.io.schema.TrustedCAList"
         },
         "schemaUpstreamCertificateParamsType": {
@@ -4199,7 +4220,7 @@ var APISwaggerJSON string = `{
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
-                    "x-displayname": "Trusted CA Validation params"
+                    "x-displayname": "Root CA Validation parameters"
                 }
             }
         },
@@ -4210,17 +4231,17 @@ var APISwaggerJSON string = `{
             "x-displayname": "Upstream TLS Parameters",
             "x-ves-displayorder": "5,6",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
-            "x-ves-oneof-field-tls_params_choice": "[\"common_params\"]",
+            "x-ves-oneof-field-tls_params_choice": "[\"cert_params\",\"common_params\"]",
             "x-ves-proto-message": "ves.io.schema.UpstreamTlsParamsType",
             "properties": {
                 "cert_params": {
-                    "description": " TLS certificate parameters for upstream connections",
+                    "description": "Exclusive with [common_params]\n TLS certificate parameters for upstream connections",
                     "title": "TLS Certificate Parameters",
                     "$ref": "#/definitions/schemaUpstreamCertificateParamsType",
                     "x-displayname": "TLS Certificate Parameters"
                 },
                 "common_params": {
-                    "description": "Exclusive with []\n Common TLS parameters used in upstream connections",
+                    "description": "Exclusive with [cert_params]\n Common TLS parameters used in upstream connections",
                     "title": "common_params",
                     "$ref": "#/definitions/schemaTlsParamsType",
                     "x-displayname": "Inline TLS Parameters"

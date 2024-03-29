@@ -515,19 +515,19 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CreateObject(ctx context.Context, in *CreateObjectRequest, opts ...grpc.CallOption) (*CreateObjectResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.CreateObject", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.stored_object.CustomAPI.CreateObject")
 	return c.CustomAPIServer.CreateObject(ctx, in)
 }
 func (c *customAPIInprocClient) DeleteObject(ctx context.Context, in *DeleteObjectRequest, opts ...grpc.CallOption) (*DeleteObjectResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.DeleteObject", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.stored_object.CustomAPI.DeleteObject")
 	return c.CustomAPIServer.DeleteObject(ctx, in)
 }
 func (c *customAPIInprocClient) GetObject(ctx context.Context, in *GetObjectRequest, opts ...grpc.CallOption) (*GetObjectResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.GetObject", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.stored_object.CustomAPI.GetObject")
 	return c.CustomAPIServer.GetObject(ctx, in)
 }
 func (c *customAPIInprocClient) ListObjects(ctx context.Context, in *ListObjectsRequest, opts ...grpc.CallOption) (*ListObjectsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.stored_object.CustomAPI.ListObjects", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.stored_object.CustomAPI.ListObjects")
 	return c.CustomAPIServer.ListObjects(ctx, in)
 }
 

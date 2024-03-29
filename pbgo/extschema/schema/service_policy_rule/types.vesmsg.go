@@ -100,6 +100,7 @@ func (m *ChallengeRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ChallengeRuleSpec_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -131,6 +132,7 @@ func (m *ChallengeRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ChallengeRuleSpec_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -826,6 +828,7 @@ func (m *CreateSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *CreateSpecType_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -865,6 +868,7 @@ func (m *CreateSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_DstAsnMatcher:
+
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -896,6 +900,7 @@ func (m *CreateSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_DstIpMatcher:
+
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -964,6 +969,7 @@ func (m *CreateSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *CreateSpecType_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -1452,6 +1458,54 @@ func (v *ValidateCreateSpecType) GotoPolicyValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for jwt_claims")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.JWTClaimMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.JWTClaimMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for jwt_claims")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.JWTClaimMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.JWTClaimMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated jwt_claims")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items jwt_claims")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -1834,6 +1888,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["jwt_claims"]; exists {
+		vOpts := append(opts, db.WithValidateField("jwt_claims"))
+		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -2150,6 +2212,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["goto_policy"] = vFn
 
+	vrhJwtClaims := v.JwtClaimsValidationRuleHandler
+	rulesJwtClaims := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhJwtClaims(rulesJwtClaims)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.jwt_claims: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["jwt_claims"] = vFn
+
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
@@ -2301,6 +2374,7 @@ func (m *GetSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *GetSpecType_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -2340,6 +2414,7 @@ func (m *GetSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_DstAsnMatcher:
+
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -2371,6 +2446,7 @@ func (m *GetSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_DstIpMatcher:
+
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -2439,6 +2515,7 @@ func (m *GetSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *GetSpecType_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -2927,6 +3004,54 @@ func (v *ValidateGetSpecType) GotoPolicyValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for jwt_claims")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.JWTClaimMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.JWTClaimMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for jwt_claims")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.JWTClaimMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.JWTClaimMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated jwt_claims")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items jwt_claims")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -3309,6 +3434,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["jwt_claims"]; exists {
+		vOpts := append(opts, db.WithValidateField("jwt_claims"))
+		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -3625,6 +3758,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["goto_policy"] = vFn
 
+	vrhJwtClaims := v.JwtClaimsValidationRuleHandler
+	rulesJwtClaims := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhJwtClaims(rulesJwtClaims)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.jwt_claims: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["jwt_claims"] = vFn
+
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
@@ -3782,6 +3926,7 @@ func (m *GlobalSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *GlobalSpecType_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -3821,6 +3966,7 @@ func (m *GlobalSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_DstAsnMatcher:
+
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -3852,6 +3998,7 @@ func (m *GlobalSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_DstIpMatcher:
+
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -3965,6 +4112,7 @@ func (m *GlobalSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *GlobalSpecType_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -5129,6 +5277,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["threat_intelligence_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("threat_intelligence_action"))
+		if err := fv(ctx, m.GetThreatIntelligenceAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -5439,6 +5596,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["openapi_validation_action"] = ves_io_schema_policy.OpenApiValidationActionValidator().Validate
 
+	v.FldValidators["threat_intelligence_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
 	return v
 }()
 
@@ -5743,6 +5902,7 @@ func (m *RateLimiterRuleSpec) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *RateLimiterRuleSpec_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -5774,6 +5934,7 @@ func (m *RateLimiterRuleSpec) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *RateLimiterRuleSpec_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -6226,6 +6387,7 @@ func (m *ReplaceSpecType) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *ReplaceSpecType_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -6265,6 +6427,7 @@ func (m *ReplaceSpecType) GetDstAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_DstAsnMatcher:
+
 		drInfos, err := m.GetDstAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstAsnMatcher().GetDRefInfo() FAILED")
@@ -6296,6 +6459,7 @@ func (m *ReplaceSpecType) GetDstIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_DstIpMatcher:
+
 		drInfos, err := m.GetDstIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstIpMatcher().GetDRefInfo() FAILED")
@@ -6364,6 +6528,7 @@ func (m *ReplaceSpecType) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *ReplaceSpecType_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -6852,6 +7017,54 @@ func (v *ValidateReplaceSpecType) GotoPolicyValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) JwtClaimsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for jwt_claims")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.JWTClaimMatcherType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.JWTClaimMatcherTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for jwt_claims")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.JWTClaimMatcherType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.JWTClaimMatcherType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated jwt_claims")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items jwt_claims")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -7234,6 +7447,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["jwt_claims"]; exists {
+		vOpts := append(opts, db.WithValidateField("jwt_claims"))
+		if err := fv(ctx, m.GetJwtClaims(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["l4_dest_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("l4_dest_matcher"))
@@ -7549,6 +7770,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["goto_policy"] = vFn
+
+	vrhJwtClaims := v.JwtClaimsValidationRuleHandler
+	rulesJwtClaims := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+	}
+	vFn, err = vrhJwtClaims(rulesJwtClaims)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.jwt_claims: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["jwt_claims"] = vFn
 
 	v.FldValidators["asn_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 	v.FldValidators["asn_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
@@ -8079,6 +8311,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.IpReputationAction = f.GetIpReputationAction()
+	m.JwtClaims = f.GetJwtClaims()
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MumAction = f.GetMumAction()
@@ -8153,6 +8386,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.IpReputationAction = m1.IpReputationAction
+	f.JwtClaims = m1.JwtClaims
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MumAction = m1.MumAction
@@ -8450,6 +8684,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.IpReputationAction = f.GetIpReputationAction()
+	m.JwtClaims = f.GetJwtClaims()
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MumAction = f.GetMumAction()
@@ -8524,6 +8759,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.IpReputationAction = m1.IpReputationAction
+	f.JwtClaims = m1.JwtClaims
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MumAction = m1.MumAction
@@ -8968,6 +9204,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.HttpMethod = f.GetHttpMethod()
 	m.GetIpChoiceFromGlobalSpecType(f)
 	m.IpReputationAction = f.GetIpReputationAction()
+	m.JwtClaims = f.GetJwtClaims()
 	m.L4DestMatcher = f.GetL4DestMatcher()
 	m.LabelMatcher = f.GetLabelMatcher()
 	m.MumAction = f.GetMumAction()
@@ -9042,6 +9279,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.HttpMethod = m1.HttpMethod
 	m1.SetIpChoiceToGlobalSpecType(f)
 	f.IpReputationAction = m1.IpReputationAction
+	f.JwtClaims = m1.JwtClaims
 	f.L4DestMatcher = m1.L4DestMatcher
 	f.LabelMatcher = m1.LabelMatcher
 	f.MumAction = m1.MumAction

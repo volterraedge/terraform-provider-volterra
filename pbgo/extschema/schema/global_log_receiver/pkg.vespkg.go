@@ -138,10 +138,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.global_log_receiver.API.Create"] = "ves.io.schema.global_log_receiver.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.global_log_receiver.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.global_log_receiver.API.Replace"] = []string{
 		"spec.azure_event_hubs_receiver.connection_string.blindfold_secret_info_internal",
 		"spec.azure_event_hubs_receiver.connection_string.secret_encoding_type",

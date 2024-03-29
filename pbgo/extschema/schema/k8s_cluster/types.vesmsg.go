@@ -1308,6 +1308,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
@@ -1329,6 +1335,7 @@ func (m *CreateSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *CreateSpecType_UseCustomClusterRoleBindings:
+
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -1356,6 +1363,7 @@ func (m *CreateSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_UseCustomClusterRoleList:
+
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -1372,6 +1380,71 @@ func (m *CreateSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *CreateSpecType_UseDefaultPodSecurityAdmission:
+
+		return nil, nil
+
+	case *CreateSpecType_UseCustomPodSecurityAdmission:
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetPodSecurityAdmissionChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *CreateSpecType_UseDefaultPodSecurityAdmission:
+
+	case *CreateSpecType_UseCustomPodSecurityAdmission:
+		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
+		}
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "k8s_pod_security_admission.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPodSecurityPolicyChoice() == nil {
@@ -1383,6 +1456,7 @@ func (m *CreateSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *CreateSpecType_UseCustomPspList:
+
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -1455,6 +1529,14 @@ func (v *ValidateCreateSpecType) LocalAccessChoiceValidationRuleHandler(rules ma
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local_access_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pod_security_admission_choice")
 	}
 	return validatorFn, nil
 }
@@ -1741,6 +1823,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
+		val := m.GetPodSecurityAdmissionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("pod_security_admission_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *CreateSpecType_UseDefaultPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_default_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*CreateSpecType_UseDefaultPodSecurityAdmission).UseDefaultPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_default_pod_security_admission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_UseCustomPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*CreateSpecType_UseCustomPodSecurityAdmission).UseCustomPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_custom_pod_security_admission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["pod_security_policy_choice"]; exists {
 		val := m.GetPodSecurityPolicyChoice()
 		vOpts := append(opts,
@@ -1905,6 +2023,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["local_access_choice"] = vFn
 
+	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
+	rulesPodSecurityAdmissionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPodSecurityAdmissionChoice(rulesPodSecurityAdmissionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.pod_security_admission_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pod_security_admission_choice"] = vFn
+
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -1936,6 +2065,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
 
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
+
+	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
 
@@ -2015,6 +2146,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
@@ -2036,6 +2173,7 @@ func (m *GetSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, err
 		return nil, nil
 
 	case *GetSpecType_UseCustomClusterRoleBindings:
+
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -2063,6 +2201,7 @@ func (m *GetSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_UseCustomClusterRoleList:
+
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -2079,6 +2218,71 @@ func (m *GetSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+func (m *GetSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GetSpecType_UseDefaultPodSecurityAdmission:
+
+		return nil, nil
+
+	case *GetSpecType_UseCustomPodSecurityAdmission:
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetPodSecurityAdmissionChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GetSpecType_UseDefaultPodSecurityAdmission:
+
+	case *GetSpecType_UseCustomPodSecurityAdmission:
+		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
+		}
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "k8s_pod_security_admission.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPodSecurityPolicyChoice() == nil {
@@ -2090,6 +2294,7 @@ func (m *GetSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *GetSpecType_UseCustomPspList:
+
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -2162,6 +2367,14 @@ func (v *ValidateGetSpecType) LocalAccessChoiceValidationRuleHandler(rules map[s
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local_access_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pod_security_admission_choice")
 	}
 	return validatorFn, nil
 }
@@ -2448,6 +2661,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
+		val := m.GetPodSecurityAdmissionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("pod_security_admission_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GetSpecType_UseDefaultPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_default_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*GetSpecType_UseDefaultPodSecurityAdmission).UseDefaultPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_default_pod_security_admission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_UseCustomPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*GetSpecType_UseCustomPodSecurityAdmission).UseCustomPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_custom_pod_security_admission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["pod_security_policy_choice"]; exists {
 		val := m.GetPodSecurityPolicyChoice()
 		vOpts := append(opts,
@@ -2612,6 +2861,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["local_access_choice"] = vFn
 
+	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
+	rulesPodSecurityAdmissionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPodSecurityAdmissionChoice(rulesPodSecurityAdmissionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.pod_security_admission_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pod_security_admission_choice"] = vFn
+
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -2643,6 +2903,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
 
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
+
+	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
 
@@ -2734,8 +2996,20 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetFinalPodSecurityAdmissionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetFinalPodSecurityAdmissionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetFinalPodSecurityPoliciesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetFinalPodSecurityPoliciesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2767,6 +3041,7 @@ func (m *GlobalSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *GlobalSpecType_UseCustomClusterRoleBindings:
+
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -2794,6 +3069,7 @@ func (m *GlobalSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_UseCustomClusterRoleList:
+
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -2920,6 +3196,55 @@ func (m *GlobalSpecType) GetFinalClusterRolesDBEntries(ctx context.Context, d db
 	return entries, nil
 }
 
+func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetFinalPodSecurityAdmission()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("k8s_pod_security_admission.Object")
+	dri := db.DRefInfo{
+		RefdType:   "k8s_pod_security_admission.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "final_pod_security_admission",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetFinalPodSecurityAdmissionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetFinalPodSecurityAdmissionDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
+	}
+
+	vref := m.GetFinalPodSecurityAdmission()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "k8s_pod_security_admission.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
 func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDRefInfo() ([]db.DRefInfo, error) {
 	vrefs := m.GetFinalPodSecurityPolicies()
 	if len(vrefs) == 0 {
@@ -2975,6 +3300,71 @@ func (m *GlobalSpecType) GetFinalPodSecurityPoliciesDBEntries(ctx context.Contex
 	return entries, nil
 }
 
+func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
+
+		return nil, nil
+
+	case *GlobalSpecType_UseCustomPodSecurityAdmission:
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetPodSecurityAdmissionChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
+
+	case *GlobalSpecType_UseCustomPodSecurityAdmission:
+		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
+		}
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "k8s_pod_security_admission.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPodSecurityPolicyChoice() == nil {
@@ -2986,6 +3376,7 @@ func (m *GlobalSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *GlobalSpecType_UseCustomPspList:
+
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -3107,6 +3498,14 @@ func (v *ValidateGlobalSpecType) LocalAccessChoiceValidationRuleHandler(rules ma
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local_access_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pod_security_admission_choice")
 	}
 	return validatorFn, nil
 }
@@ -3445,6 +3844,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["final_pod_security_admission"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("final_pod_security_admission"))
+		if err := fv(ctx, m.GetFinalPodSecurityAdmission(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["final_pod_security_policies"]; exists {
 		vOpts := append(opts, db.WithValidateField("final_pod_security_policies"))
 		if err := fv(ctx, m.GetFinalPodSecurityPolicies(), vOpts...); err != nil {
@@ -3553,6 +3961,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("local_access_choice"),
 				db.WithValidateField("local_access_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
+		val := m.GetPodSecurityAdmissionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("pod_security_admission_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_default_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*GlobalSpecType_UseDefaultPodSecurityAdmission).UseDefaultPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_default_pod_security_admission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_UseCustomPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*GlobalSpecType_UseCustomPodSecurityAdmission).UseCustomPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_custom_pod_security_admission"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -3734,6 +4178,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["local_access_choice"] = vFn
 
+	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
+	rulesPodSecurityAdmissionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPodSecurityAdmissionChoice(rulesPodSecurityAdmissionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.pod_security_admission_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pod_security_admission_choice"] = vFn
+
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3802,9 +4257,13 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
 
+	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["final_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -4661,6 +5120,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetPodSecurityAdmissionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPodSecurityAdmissionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetPodSecurityPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetPodSecurityPolicyChoiceDRefInfo() FAILED")
 	} else {
@@ -4682,6 +5147,7 @@ func (m *ReplaceSpecType) GetClusterRoleBindingsChoiceDRefInfo() ([]db.DRefInfo,
 		return nil, nil
 
 	case *ReplaceSpecType_UseCustomClusterRoleBindings:
+
 		drInfos, err := m.GetUseCustomClusterRoleBindings().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleBindings().GetDRefInfo() FAILED")
@@ -4709,6 +5175,7 @@ func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *ReplaceSpecType_UseCustomClusterRoleList:
+
 		drInfos, err := m.GetUseCustomClusterRoleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomClusterRoleList().GetDRefInfo() FAILED")
@@ -4725,6 +5192,71 @@ func (m *ReplaceSpecType) GetClusterRoleChoiceDRefInfo() ([]db.DRefInfo, error) 
 
 }
 
+func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
+
+		return nil, nil
+
+	case *ReplaceSpecType_UseCustomPodSecurityAdmission:
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_pod_security_admission.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_pod_security_admission.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "use_custom_pod_security_admission",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetPodSecurityAdmissionChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetPodSecurityAdmissionChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
+
+	case *ReplaceSpecType_UseCustomPodSecurityAdmission:
+		refdType, err := d.TypeForEntryKind("", "", "k8s_pod_security_admission.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_pod_security_admission")
+		}
+
+		vref := m.GetUseCustomPodSecurityAdmission()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "k8s_pod_security_admission.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPodSecurityPolicyChoice() == nil {
@@ -4736,6 +5268,7 @@ func (m *ReplaceSpecType) GetPodSecurityPolicyChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *ReplaceSpecType_UseCustomPspList:
+
 		drInfos, err := m.GetUseCustomPspList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseCustomPspList().GetDRefInfo() FAILED")
@@ -4808,6 +5341,14 @@ func (v *ValidateReplaceSpecType) LocalAccessChoiceValidationRuleHandler(rules m
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for local_access_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) PodSecurityAdmissionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pod_security_admission_choice")
 	}
 	return validatorFn, nil
 }
@@ -5094,6 +5635,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["pod_security_admission_choice"]; exists {
+		val := m.GetPodSecurityAdmissionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("pod_security_admission_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPodSecurityAdmissionChoice().(type) {
+	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_default_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*ReplaceSpecType_UseDefaultPodSecurityAdmission).UseDefaultPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_default_pod_security_admission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_UseCustomPodSecurityAdmission:
+		if fv, exists := v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"]; exists {
+			val := m.GetPodSecurityAdmissionChoice().(*ReplaceSpecType_UseCustomPodSecurityAdmission).UseCustomPodSecurityAdmission
+			vOpts := append(opts,
+				db.WithValidateField("pod_security_admission_choice"),
+				db.WithValidateField("use_custom_pod_security_admission"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["pod_security_policy_choice"]; exists {
 		val := m.GetPodSecurityPolicyChoice()
 		vOpts := append(opts,
@@ -5258,6 +5835,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["local_access_choice"] = vFn
 
+	vrhPodSecurityAdmissionChoice := v.PodSecurityAdmissionChoiceValidationRuleHandler
+	rulesPodSecurityAdmissionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPodSecurityAdmissionChoice(rulesPodSecurityAdmissionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.pod_security_admission_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pod_security_admission_choice"] = vFn
+
 	vrhPodSecurityPolicyChoice := v.PodSecurityPolicyChoiceValidationRuleHandler
 	rulesPodSecurityPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5289,6 +5877,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["insecure_registries_choice.insecure_registry_list"] = InsecureRegistryListTypeValidator().Validate
 
 	v.FldValidators["local_access_choice.local_access_config"] = LocalAccessConfigTypeValidator().Validate
+
+	v.FldValidators["pod_security_admission_choice.use_custom_pod_security_admission"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["pod_security_policy_choice.use_custom_psp_list"] = PodSecurityPolicyListTypeValidator().Validate
 
@@ -5545,6 +6135,41 @@ func (r *CreateSpecType) GetLocalAccessChoiceFromGlobalSpecType(o *GlobalSpecTyp
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetPodSecurityAdmissionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PodSecurityAdmissionChoice.(type) {
+	case nil:
+		o.PodSecurityAdmissionChoice = nil
+
+	case *CreateSpecType_UseCustomPodSecurityAdmission:
+		o.PodSecurityAdmissionChoice = &GlobalSpecType_UseCustomPodSecurityAdmission{UseCustomPodSecurityAdmission: of.UseCustomPodSecurityAdmission}
+
+	case *CreateSpecType_UseDefaultPodSecurityAdmission:
+		o.PodSecurityAdmissionChoice = &GlobalSpecType_UseDefaultPodSecurityAdmission{UseDefaultPodSecurityAdmission: of.UseDefaultPodSecurityAdmission}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetPodSecurityAdmissionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PodSecurityAdmissionChoice.(type) {
+	case nil:
+		r.PodSecurityAdmissionChoice = nil
+
+	case *GlobalSpecType_UseCustomPodSecurityAdmission:
+		r.PodSecurityAdmissionChoice = &CreateSpecType_UseCustomPodSecurityAdmission{UseCustomPodSecurityAdmission: of.UseCustomPodSecurityAdmission}
+
+	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
+		r.PodSecurityAdmissionChoice = &CreateSpecType_UseDefaultPodSecurityAdmission{UseDefaultPodSecurityAdmission: of.UseDefaultPodSecurityAdmission}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetPodSecurityPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.PodSecurityPolicyChoice.(type) {
 	case nil:
@@ -5625,6 +6250,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
+	m.GetPodSecurityAdmissionChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
 	m.GetVk8SNamespaceAccessChoiceFromGlobalSpecType(f)
 }
@@ -5651,6 +6277,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
+	m1.SetPodSecurityAdmissionChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
 	m1.SetVk8SNamespaceAccessChoiceToGlobalSpecType(f)
 }
@@ -5909,6 +6536,41 @@ func (r *GetSpecType) GetLocalAccessChoiceFromGlobalSpecType(o *GlobalSpecType) 
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetPodSecurityAdmissionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PodSecurityAdmissionChoice.(type) {
+	case nil:
+		o.PodSecurityAdmissionChoice = nil
+
+	case *GetSpecType_UseCustomPodSecurityAdmission:
+		o.PodSecurityAdmissionChoice = &GlobalSpecType_UseCustomPodSecurityAdmission{UseCustomPodSecurityAdmission: of.UseCustomPodSecurityAdmission}
+
+	case *GetSpecType_UseDefaultPodSecurityAdmission:
+		o.PodSecurityAdmissionChoice = &GlobalSpecType_UseDefaultPodSecurityAdmission{UseDefaultPodSecurityAdmission: of.UseDefaultPodSecurityAdmission}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetPodSecurityAdmissionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PodSecurityAdmissionChoice.(type) {
+	case nil:
+		r.PodSecurityAdmissionChoice = nil
+
+	case *GlobalSpecType_UseCustomPodSecurityAdmission:
+		r.PodSecurityAdmissionChoice = &GetSpecType_UseCustomPodSecurityAdmission{UseCustomPodSecurityAdmission: of.UseCustomPodSecurityAdmission}
+
+	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
+		r.PodSecurityAdmissionChoice = &GetSpecType_UseDefaultPodSecurityAdmission{UseDefaultPodSecurityAdmission: of.UseDefaultPodSecurityAdmission}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetPodSecurityPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.PodSecurityPolicyChoice.(type) {
 	case nil:
@@ -5989,6 +6651,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
+	m.GetPodSecurityAdmissionChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
 	m.GetVk8SNamespaceAccessChoiceFromGlobalSpecType(f)
 }
@@ -6015,6 +6678,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
+	m1.SetPodSecurityAdmissionChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
 	m1.SetVk8SNamespaceAccessChoiceToGlobalSpecType(f)
 }
@@ -6273,6 +6937,41 @@ func (r *ReplaceSpecType) GetLocalAccessChoiceFromGlobalSpecType(o *GlobalSpecTy
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetPodSecurityAdmissionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.PodSecurityAdmissionChoice.(type) {
+	case nil:
+		o.PodSecurityAdmissionChoice = nil
+
+	case *ReplaceSpecType_UseCustomPodSecurityAdmission:
+		o.PodSecurityAdmissionChoice = &GlobalSpecType_UseCustomPodSecurityAdmission{UseCustomPodSecurityAdmission: of.UseCustomPodSecurityAdmission}
+
+	case *ReplaceSpecType_UseDefaultPodSecurityAdmission:
+		o.PodSecurityAdmissionChoice = &GlobalSpecType_UseDefaultPodSecurityAdmission{UseDefaultPodSecurityAdmission: of.UseDefaultPodSecurityAdmission}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetPodSecurityAdmissionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.PodSecurityAdmissionChoice.(type) {
+	case nil:
+		r.PodSecurityAdmissionChoice = nil
+
+	case *GlobalSpecType_UseCustomPodSecurityAdmission:
+		r.PodSecurityAdmissionChoice = &ReplaceSpecType_UseCustomPodSecurityAdmission{UseCustomPodSecurityAdmission: of.UseCustomPodSecurityAdmission}
+
+	case *GlobalSpecType_UseDefaultPodSecurityAdmission:
+		r.PodSecurityAdmissionChoice = &ReplaceSpecType_UseDefaultPodSecurityAdmission{UseDefaultPodSecurityAdmission: of.UseDefaultPodSecurityAdmission}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetPodSecurityPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.PodSecurityPolicyChoice.(type) {
 	case nil:
@@ -6353,6 +7052,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetGlobalAccessChoiceFromGlobalSpecType(f)
 	m.GetInsecureRegistriesChoiceFromGlobalSpecType(f)
 	m.GetLocalAccessChoiceFromGlobalSpecType(f)
+	m.GetPodSecurityAdmissionChoiceFromGlobalSpecType(f)
 	m.GetPodSecurityPolicyChoiceFromGlobalSpecType(f)
 	m.GetVk8SNamespaceAccessChoiceFromGlobalSpecType(f)
 }
@@ -6379,6 +7079,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetGlobalAccessChoiceToGlobalSpecType(f)
 	m1.SetInsecureRegistriesChoiceToGlobalSpecType(f)
 	m1.SetLocalAccessChoiceToGlobalSpecType(f)
+	m1.SetPodSecurityAdmissionChoiceToGlobalSpecType(f)
 	m1.SetPodSecurityPolicyChoiceToGlobalSpecType(f)
 	m1.SetVk8SNamespaceAccessChoiceToGlobalSpecType(f)
 }

@@ -13,6 +13,9 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -145,4 +148,837 @@ var DefaultGetPathSuggestionsReqValidator = func() *ValidateGetPathSuggestionsRe
 
 func GetPathSuggestionsReqValidator() db.Validator {
 	return DefaultGetPathSuggestionsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateApiDefinitionRefReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateApiDefinitionRefReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateApiDefinitionRefReq) DeepCopy() *UpdateApiDefinitionRefReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateApiDefinitionRefReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateApiDefinitionRefReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateApiDefinitionRefReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateApiDefinitionRefReqValidator().Validate(ctx, m, opts...)
+}
+
+func (m *UpdateApiDefinitionRefReq) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetApiDefinitionDRefInfo()
+
+}
+
+func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("api_definition.Object")
+	dri := db.DRefInfo{
+		RefdType:   "api_definition.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "api_definition",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetApiDefinitionDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *UpdateApiDefinitionRefReq) GetApiDefinitionDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "api_definition.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: api_definition")
+	}
+
+	vref := m.GetApiDefinition()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "api_definition.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateUpdateApiDefinitionRefReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateApiDefinitionRefReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateApiDefinitionRefReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateApiDefinitionRefReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_definition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_definition"))
+		if err := fv(ctx, m.GetApiDefinition(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateApiDefinitionRefReqValidator = func() *ValidateUpdateApiDefinitionRefReq {
+	v := &ValidateUpdateApiDefinitionRefReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["api_definition"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func UpdateApiDefinitionRefReqValidator() db.Validator {
+	return DefaultUpdateApiDefinitionRefReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateApiDefinitionRefResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateApiDefinitionRefResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateApiDefinitionRefResp) DeepCopy() *UpdateApiDefinitionRefResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateApiDefinitionRefResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateApiDefinitionRefResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateApiDefinitionRefResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateApiDefinitionRefRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateApiDefinitionRefResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateApiDefinitionRefResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateApiDefinitionRefResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateApiDefinitionRefResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateApiDefinitionRefRespValidator = func() *ValidateUpdateApiDefinitionRefResp {
+	v := &ValidateUpdateApiDefinitionRefResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateApiDefinitionRefRespValidator() db.Validator {
+	return DefaultUpdateApiDefinitionRefRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateApiInventoryListsReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateApiInventoryListsReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateApiInventoryListsReq) DeepCopy() *UpdateApiInventoryListsReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateApiInventoryListsReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateApiInventoryListsReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateApiInventoryListsReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateApiInventoryListsReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateApiInventoryListsReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryInclusionListDeltaAddedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_inclusion_list_delta_added")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_inventory_inclusion_list_delta_added")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_inventory_inclusion_list_delta_added")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_inventory_inclusion_list_delta_added")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryInclusionListDeltaRemovedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_inclusion_list_delta_removed")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_inventory_inclusion_list_delta_removed")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_inventory_inclusion_list_delta_removed")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_inventory_inclusion_list_delta_removed")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryExclusionListDeltaAddedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_exclusion_list_delta_added")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_inventory_exclusion_list_delta_added")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_inventory_exclusion_list_delta_added")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_inventory_exclusion_list_delta_added")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateApiInventoryListsReq) ApiInventoryExclusionListDeltaRemovedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_inventory_exclusion_list_delta_removed")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_inventory_exclusion_list_delta_removed")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_inventory_exclusion_list_delta_removed")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_inventory_exclusion_list_delta_removed")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateApiInventoryListsReq) NonApiEndpointsDeltaAddedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for non_api_endpoints_delta_added")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for non_api_endpoints_delta_added")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated non_api_endpoints_delta_added")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items non_api_endpoints_delta_added")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateApiInventoryListsReq) NonApiEndpointsDeltaRemovedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for non_api_endpoints_delta_removed")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ApiOperation, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ApiOperationValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for non_api_endpoints_delta_removed")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ApiOperation)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ApiOperation, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated non_api_endpoints_delta_removed")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items non_api_endpoints_delta_removed")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUpdateApiInventoryListsReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateApiInventoryListsReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateApiInventoryListsReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_inventory_exclusion_list_delta_added"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list_delta_added"))
+		if err := fv(ctx, m.GetApiInventoryExclusionListDeltaAdded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_inventory_exclusion_list_delta_removed"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_inventory_exclusion_list_delta_removed"))
+		if err := fv(ctx, m.GetApiInventoryExclusionListDeltaRemoved(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_inventory_inclusion_list_delta_added"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list_delta_added"))
+		if err := fv(ctx, m.GetApiInventoryInclusionListDeltaAdded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_inventory_inclusion_list_delta_removed"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_inventory_inclusion_list_delta_removed"))
+		if err := fv(ctx, m.GetApiInventoryInclusionListDeltaRemoved(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["new_api_definition_hash"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("new_api_definition_hash"))
+		if err := fv(ctx, m.GetNewApiDefinitionHash(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["new_api_definition_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("new_api_definition_timestamp"))
+		if err := fv(ctx, m.GetNewApiDefinitionTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["non_api_endpoints_delta_added"]; exists {
+		vOpts := append(opts, db.WithValidateField("non_api_endpoints_delta_added"))
+		if err := fv(ctx, m.GetNonApiEndpointsDeltaAdded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["non_api_endpoints_delta_removed"]; exists {
+		vOpts := append(opts, db.WithValidateField("non_api_endpoints_delta_removed"))
+		if err := fv(ctx, m.GetNonApiEndpointsDeltaRemoved(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["old_api_definition_hash"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("old_api_definition_hash"))
+		if err := fv(ctx, m.GetOldApiDefinitionHash(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["old_api_definition_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("old_api_definition_timestamp"))
+		if err := fv(ctx, m.GetOldApiDefinitionTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInventoryListsReq {
+	v := &ValidateUpdateApiInventoryListsReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiInventoryInclusionListDeltaAdded := v.ApiInventoryInclusionListDeltaAddedValidationRuleHandler
+	rulesApiInventoryInclusionListDeltaAdded := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhApiInventoryInclusionListDeltaAdded(rulesApiInventoryInclusionListDeltaAdded)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateApiInventoryListsReq.api_inventory_inclusion_list_delta_added: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_inventory_inclusion_list_delta_added"] = vFn
+
+	vrhApiInventoryInclusionListDeltaRemoved := v.ApiInventoryInclusionListDeltaRemovedValidationRuleHandler
+	rulesApiInventoryInclusionListDeltaRemoved := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhApiInventoryInclusionListDeltaRemoved(rulesApiInventoryInclusionListDeltaRemoved)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateApiInventoryListsReq.api_inventory_inclusion_list_delta_removed: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_inventory_inclusion_list_delta_removed"] = vFn
+
+	vrhApiInventoryExclusionListDeltaAdded := v.ApiInventoryExclusionListDeltaAddedValidationRuleHandler
+	rulesApiInventoryExclusionListDeltaAdded := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhApiInventoryExclusionListDeltaAdded(rulesApiInventoryExclusionListDeltaAdded)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateApiInventoryListsReq.api_inventory_exclusion_list_delta_added: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_inventory_exclusion_list_delta_added"] = vFn
+
+	vrhApiInventoryExclusionListDeltaRemoved := v.ApiInventoryExclusionListDeltaRemovedValidationRuleHandler
+	rulesApiInventoryExclusionListDeltaRemoved := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhApiInventoryExclusionListDeltaRemoved(rulesApiInventoryExclusionListDeltaRemoved)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateApiInventoryListsReq.api_inventory_exclusion_list_delta_removed: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_inventory_exclusion_list_delta_removed"] = vFn
+
+	vrhNonApiEndpointsDeltaAdded := v.NonApiEndpointsDeltaAddedValidationRuleHandler
+	rulesNonApiEndpointsDeltaAdded := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhNonApiEndpointsDeltaAdded(rulesNonApiEndpointsDeltaAdded)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateApiInventoryListsReq.non_api_endpoints_delta_added: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["non_api_endpoints_delta_added"] = vFn
+
+	vrhNonApiEndpointsDeltaRemoved := v.NonApiEndpointsDeltaRemovedValidationRuleHandler
+	rulesNonApiEndpointsDeltaRemoved := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhNonApiEndpointsDeltaRemoved(rulesNonApiEndpointsDeltaRemoved)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpdateApiInventoryListsReq.non_api_endpoints_delta_removed: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["non_api_endpoints_delta_removed"] = vFn
+
+	return v
+}()
+
+func UpdateApiInventoryListsReqValidator() db.Validator {
+	return DefaultUpdateApiInventoryListsReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpdateApiInventoryListsResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpdateApiInventoryListsResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpdateApiInventoryListsResp) DeepCopy() *UpdateApiInventoryListsResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpdateApiInventoryListsResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpdateApiInventoryListsResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpdateApiInventoryListsResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpdateApiInventoryListsRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpdateApiInventoryListsResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpdateApiInventoryListsResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpdateApiInventoryListsResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpdateApiInventoryListsResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpdateApiInventoryListsRespValidator = func() *ValidateUpdateApiInventoryListsResp {
+	v := &ValidateUpdateApiInventoryListsResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UpdateApiInventoryListsRespValidator() db.Validator {
+	return DefaultUpdateApiInventoryListsRespValidator
 }

@@ -62,55 +62,21 @@ Argument Reference
 
 `http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
 
-`auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (bool).
+`auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (`Bool`).
 
-`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (bool).
+`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (`Bool`).
 
-`http2_options` - (Optional) Enable HTTP/2 for upstream connections. See [Http2 Options ](#http2-options) below for details.
+`http2_options` - (Optional) Enable HTTP/2 for upstream connections. See [Http Protocol Type Http2 Options ](#http-protocol-type-http2-options) below for details.
 
 `loadbalancer_algorithm` - (Optional) loadbalancer_algorithm to determine which host is selected. (`String`).
 
 `outlier_detection` - (Optional) healthy load balancing set. Outlier detection is a form of passive health checking.. See [Outlier Detection ](#outlier-detection) below for details.
 
-`no_panic_threshold` - (Optional) Disable panic threshold. Only healthy endpoints are considered for loadbalancing. (bool).
+`no_panic_threshold` - (Optional) Disable panic threshold. Only healthy endpoints are considered for loadbalancing. (`Bool`).
 
 `panic_threshold` - (Optional) all endpoints will be considered for loadbalancing ignoring its health status. (`Int`).
 
 `tls_parameters` - (Optional) TLS parameters to access upstream endpoints for this cluster. See [Tls Parameters ](#tls-parameters) below for details.
-
-### Blindfold Secret Info
-
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Cert Params
-
-TLS certificate parameters for upstream connections.
-
-`certificates` - (Required) Client TLS Certificate required for mTLS authentication. See [ref](#ref) below for details.
-
-`cipher_suites` - (Optional) will be used. (`String`).
-
-`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
-
-`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
-
-`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
 
 ### Circuit Breaker
 
@@ -126,48 +92,6 @@ allows to apply back pressure on downstream quickly..
 
 `retries` - (Optional) Remove endpoint out of load balancing decision, if retries for request exceed this count. (`Int`).
 
-### Clear Secret Info
-
-Clear Secret is used for the secrets that are not encrypted.
-
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Common Params
-
-Common TLS parameters used in upstream connections.
-
-`cipher_suites` - (Optional) will be used. (`String`).
-
-`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
-
-`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
-
-`tls_certificates` - (Optional) Set of TLS certificates. See [Tls Certificates ](#tls-certificates) below for details.
-
-`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
-
-`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Validation Params ](#validation-params) below for details.
-
-### Custom Hash Algorithms
-
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
-
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
-
-### Default Header Transformation
-
-Normalize the headers to lower case.
-
-### Disable Ocsp Stapling
-
-This is the default behavior if no choice is selected..
-
-### Disable Sni
-
-Do not use SNI..
-
 ### Endpoint Subsets
 
 .
@@ -178,15 +102,13 @@ Do not use SNI..
 
 Settings to normalize the headers of upstream requests..
 
-`default_header_transformation` - (Optional) Normalize the headers to lower case (bool).
+###### One of the arguments from this list "default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
 
-`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (bool).
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
 
-### Http2 Options
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
-Enable HTTP/2 for upstream connections.
-
-`enabled` - (Optional) Enable/disable HTTP2 Protocol for upstream connections (`Bool`).
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
 
 ### Outlier Detection
 
@@ -202,25 +124,115 @@ healthy load balancing set. Outlier detection is a form of passive health checki
 
 `max_ejection_percent` - (Optional) detection. Defaults to 10% but will eject at least one host regardless of the value. (`Int`).
 
-### Private Key
+### Tls Parameters
 
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+TLS parameters to access upstream endpoints for this cluster.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+###### One of the arguments from this list "disable_sni, sni, use_host_header_as_sni" must be set
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`disable_sni` - (Optional) Do not use SNI.. See [Sni Choice Disable Sni ](#sni-choice-disable-sni) below for details.
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`sni` - (Optional) SNI value to be used. (`String`).
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+`use_host_header_as_sni` - (Optional) Use the host header as SNI. See [Sni Choice Use Host Header As Sni ](#sni-choice-use-host-header-as-sni) below for details.
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+###### One of the arguments from this list "common_params, cert_params" must be set
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`cert_params` - (Optional) TLS certificate parameters for upstream connections. See [Tls Params Choice Cert Params ](#tls-params-choice-cert-params) below for details.
 
-### Proper Case Header Transformation
+`common_params` - (Optional) Common TLS parameters used in upstream connections. See [Tls Params Choice Common Params ](#tls-params-choice-common-params) below for details.
+
+### Cert Params Validation Params
+
+and list of Subject Alt Names for verification.
+
+`skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
+
+###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
+
+`trusted_ca` - (Optional) Root CA Certificate. See [Trusted Ca Choice Trusted Ca ](#trusted-ca-choice-trusted-ca) below for details.
+
+`trusted_ca_url` - (Optional) Inline Root CA Certificate (`String`).
+
+`use_volterra_trusted_ca_url` - (Optional) Use the F5XC default Root CA URL from the global config for hostname verification. (`Bool`).(Deprecated)
+
+`verify_subject_alt_names` - (Optional) the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`String`).
+
+### Common Params Tls Certificates
+
+Set of TLS certificates.
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
+
+### Common Params Validation Params
+
+and list of Subject Alt Names for verification.
+
+`skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
+
+###### One of the arguments from this list "trusted_ca, trusted_ca_url" must be set
+
+`trusted_ca` - (Optional) Root CA Certificate. See [Trusted Ca Choice Trusted Ca ](#trusted-ca-choice-trusted-ca) below for details.
+
+`trusted_ca_url` - (Optional) Inline Root CA Certificate (`String`).
+
+`use_volterra_trusted_ca_url` - (Optional) Use the F5XC default Root CA URL from the global config for hostname verification. (`Bool`).(Deprecated)
+
+`verify_subject_alt_names` - (Optional) the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`String`).
+
+### Header Transformation Choice Default Header Transformation
+
+Normalize the headers to lower case.
+
+### Header Transformation Choice Preserve Case Header Transformation
+
+Preserves the original case of headers without any modifications..
+
+### Header Transformation Choice Proper Case Header Transformation
 
 For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
+
+### Http Protocol Type Http2 Options
+
+Enable HTTP/2 for upstream connections.
+
+`enabled` - (Optional) Enable/disable HTTP2 Protocol for upstream connections (`Bool`).
+
+### Ocsp Stapling Choice Custom Hash Algorithms
+
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Ocsp Stapling Choice Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
+
+### Ocsp Stapling Choice Use System Defaults
+
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+
+### Private Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Ref
 
@@ -232,65 +244,25 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Tls Certificates
+### Secret Info Oneof Blindfold Secret Info
 
-Set of TLS certificates.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-`description` - (Optional) Description for the certificate (`String`).
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+### Secret Info Oneof Clear Secret Info
 
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+Clear Secret is used for the secrets that are not encrypted.
 
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Tls Parameters
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-TLS parameters to access upstream endpoints for this cluster.
-
-`disable_sni` - (Optional) Do not use SNI.. See [Disable Sni ](#disable-sni) below for details.
-
-`sni` - (Optional) SNI value to be used. (`String`).
-
-`use_host_header_as_sni` - (Optional) Use the host header as SNI. See [Use Host Header As Sni ](#use-host-header-as-sni) below for details.
-
-`cert_params` - (Optional) TLS certificate parameters for upstream connections. See [Cert Params ](#cert-params) below for details.
-
-`common_params` - (Optional) Common TLS parameters used in upstream connections. See [Common Params ](#common-params) below for details.
-
-### Trusted Ca
-
-Trusted CA List.
-
-`trusted_ca_list` - (Optional) Reference to Trusted CA List. See [ref](#ref) below for details.
-
-### Use Host Header As Sni
-
-Use the host header as SNI.
-
-### Use System Defaults
-
-F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
-
-### Validation Params
-
-and list of Subject Alt Names for verification.
-
-`skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
-
-`trusted_ca` - (Optional) Trusted CA List. See [Trusted Ca ](#trusted-ca) below for details.
-
-`trusted_ca_url` - (Optional) Inline Trusted CA List (`String`).
-
-`use_volterra_trusted_ca_url` - (Optional) Ignore the trusted CA URL and use the volterra trusted CA URL from the global config for verification. (`Bool`).
-
-`verify_subject_alt_names` - (Optional) the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`String`).
-
-### Vault Secret Info
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -304,11 +276,73 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
+
+### Sni Choice Disable Sni
+
+Do not use SNI..
+
+### Sni Choice Use Host Header As Sni
+
+Use the host header as SNI.
+
+### Tls Certificates Private Key
+
+TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tls Params Choice Cert Params
+
+TLS certificate parameters for upstream connections.
+
+`certificates` - (Required) Client TLS Certificate required for mTLS authentication. See [ref](#ref) below for details.
+
+`cipher_suites` - (Optional) will be used. (`String`).
+
+`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
+
+`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Cert Params Validation Params ](#cert-params-validation-params) below for details.
+
+### Tls Params Choice Common Params
+
+Common TLS parameters used in upstream connections.
+
+`cipher_suites` - (Optional) will be used. (`String`).
+
+`maximum_protocol_version` - (Optional) Maximum TLS protocol version. (`String`).
+
+`minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
+
+`tls_certificates` - (Optional) Set of TLS certificates. See [Common Params Tls Certificates ](#common-params-tls-certificates) below for details.
+
+`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).(Deprecated)
+
+`validation_params` - (Optional) and list of Subject Alt Names for verification. See [Common Params Validation Params ](#common-params-validation-params) below for details.
+
+### Trusted Ca Choice Trusted Ca
+
+Root CA Certificate.
+
+`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.(Deprecated)
 
 Attribute Reference
 -------------------

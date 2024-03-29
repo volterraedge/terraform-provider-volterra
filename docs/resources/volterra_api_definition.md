@@ -19,6 +19,9 @@ Example Usage
 resource "volterra_api_definition" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
+
+  // One of the arguments from this list "strict_schema_origin mixed_schema_origin" must be set
+  strict_schema_origin = true
 }
 
 ```
@@ -42,17 +45,21 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`api_inventory_exclusion_list` - (Optional) note: hidden until full release of the API Inventory feature. See [Api Inventory Exclusion List ](#api-inventory-exclusion-list) below for details.
+`api_inventory_exclusion_list` - (Optional) List of API Endpoints excluded from the API Inventory.. See [Api Inventory Exclusion List ](#api-inventory-exclusion-list) below for details.
 
-`api_inventory_inclusion_list` - (Optional) note: hidden until full release of the API Inventory feature. See [Api Inventory Inclusion List ](#api-inventory-inclusion-list) below for details.
+`api_inventory_inclusion_list` - (Optional) Typically, discovered API endpoints are added to the API Inventory using this list.. See [Api Inventory Inclusion List ](#api-inventory-inclusion-list) below for details.
 
-`non_api_endpoints` - (Optional) note: hidden until full release of the API Inventory feature. See [Non Api Endpoints ](#non-api-endpoints) below for details.
+`non_api_endpoints` - (Optional) List of Non-API Endpoints.. See [Non Api Endpoints ](#non-api-endpoints) below for details.
+
+`mixed_schema_origin` - (Optional) The schema can be updated from all associated LBs (`Bool`).
+
+`strict_schema_origin` - (Optional) The origin of the schema update is stored and validated per API endpoint (`Bool`).
 
 `swagger_specs` - (Optional) Notice file versions. If OpenAPI file is updated, need to select a new version here to redefine the API. (`List of String`).
 
 ### Api Inventory Exclusion List
 
-note: hidden until full release of the API Inventory feature.
+List of API Endpoints excluded from the API Inventory..
 
 `method` - (Required) Method to match the input request API method against. (`String`).
 
@@ -60,7 +67,7 @@ note: hidden until full release of the API Inventory feature.
 
 ### Api Inventory Inclusion List
 
-note: hidden until full release of the API Inventory feature.
+Typically, discovered API endpoints are added to the API Inventory using this list..
 
 `method` - (Required) Method to match the input request API method against. (`String`).
 
@@ -68,7 +75,7 @@ note: hidden until full release of the API Inventory feature.
 
 ### Non Api Endpoints
 
-note: hidden until full release of the API Inventory feature.
+List of Non-API Endpoints..
 
 `method` - (Required) Method to match the input request API method against. (`String`).
 

@@ -50,61 +50,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.user_identification.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.user_identification.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.user_identification.API.Get"] = []string{
-		"object",
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.user_identification.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.user_identification.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.user_identification.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.rules.#.jwt_claim_name",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

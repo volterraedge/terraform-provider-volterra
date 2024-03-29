@@ -1283,6 +1283,7 @@ func (m *CreateSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *CreateSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -1573,6 +1574,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
 		val := m.GetDirectConnectChoice()
 		vOpts := append(opts,
@@ -1821,6 +1831,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
+
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 
 	return v
 }()
@@ -2123,6 +2135,7 @@ func (m *GetSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -2529,6 +2542,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
 		val := m.GetDirectConnectChoice()
 		vOpts := append(opts,
@@ -2657,6 +2679,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		for idx, item := range m.GetSiteErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
@@ -2713,6 +2747,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
 		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validation_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validation_state"))
+		if err := fv(ctx, m.GetValidationState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2906,6 +2949,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
 	return v
@@ -3045,6 +3090,7 @@ func (m *GlobalSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *GlobalSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -3503,6 +3549,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
 		val := m.GetDirectConnectChoice()
 		vOpts := append(opts,
@@ -3640,6 +3695,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		for idx, item := range m.GetSiteErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_state"))
@@ -3723,6 +3790,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("user_modification_timestamp"))
 		if err := fv(ctx, m.GetUserModificationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validation_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validation_state"))
+		if err := fv(ctx, m.GetValidationState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3940,6 +4016,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -4077,6 +4155,7 @@ func (m *ReplaceSpecType) GetDirectConnectChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *ReplaceSpecType_PrivateConnectivity:
+
 		drInfos, err := m.GetPrivateConnectivity().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPrivateConnectivity().GetDRefInfo() FAILED")
@@ -4322,6 +4401,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["custom_dns"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_dns"))
+		if err := fv(ctx, m.GetCustomDns(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["direct_connect_choice"]; exists {
 		val := m.GetDirectConnectChoice()
 		vOpts := append(opts,
@@ -4528,6 +4616,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
+	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
 	return v
 }()
 
@@ -4611,6 +4701,7 @@ func (m *SecurityConfigType) GetEastWestServicePolicyChoiceDRefInfo() ([]db.DRef
 		return nil, nil
 
 	case *SecurityConfigType_ActiveEastWestServicePolicies:
+
 		drInfos, err := m.GetActiveEastWestServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEastWestServicePolicies().GetDRefInfo() FAILED")
@@ -4642,6 +4733,7 @@ func (m *SecurityConfigType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, err
 		return nil, nil
 
 	case *SecurityConfigType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -4673,6 +4765,7 @@ func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *SecurityConfigType_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -4684,6 +4777,7 @@ func (m *SecurityConfigType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, er
 		return drInfos, err
 
 	case *SecurityConfigType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -6955,6 +7049,7 @@ func (m *VnConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *VnConfiguration_GlobalNetworkList:
+
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -6982,6 +7077,7 @@ func (m *VnConfiguration) GetInsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *VnConfiguration_InsideStaticRoutes:
+
 		drInfos, err := m.GetInsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInsideStaticRoutes().GetDRefInfo() FAILED")
@@ -7009,6 +7105,7 @@ func (m *VnConfiguration) GetOutsideStaticRouteChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *VnConfiguration_OutsideStaticRoutes:
+
 		drInfos, err := m.GetOutsideStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetOutsideStaticRoutes().GetDRefInfo() FAILED")
@@ -7049,14 +7146,6 @@ func (v *ValidateVnConfiguration) InsideStaticRouteChoiceValidationRuleHandler(r
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_static_route_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateVnConfiguration) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for internet_vip_choice")
 	}
 	return validatorFn, nil
 }
@@ -7228,42 +7317,6 @@ func (v *ValidateVnConfiguration) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
-		val := m.GetInternetVipChoice()
-		vOpts := append(opts,
-			db.WithValidateField("internet_vip_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetInternetVipChoice().(type) {
-	case *VnConfiguration_DisableInternetVip:
-		if fv, exists := v.FldValidators["internet_vip_choice.disable_internet_vip"]; exists {
-			val := m.GetInternetVipChoice().(*VnConfiguration_DisableInternetVip).DisableInternetVip
-			vOpts := append(opts,
-				db.WithValidateField("internet_vip_choice"),
-				db.WithValidateField("disable_internet_vip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *VnConfiguration_EnableInternetVip:
-		if fv, exists := v.FldValidators["internet_vip_choice.enable_internet_vip"]; exists {
-			val := m.GetInternetVipChoice().(*VnConfiguration_EnableInternetVip).EnableInternetVip
-			vOpts := append(opts,
-				db.WithValidateField("internet_vip_choice"),
-				db.WithValidateField("enable_internet_vip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["outside_static_route_choice"]; exists {
 		val := m.GetOutsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -7383,17 +7436,6 @@ var DefaultVnConfigurationValidator = func() *ValidateVnConfiguration {
 		panic(errMsg)
 	}
 	v.FldValidators["inside_static_route_choice"] = vFn
-
-	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
-	rulesInternetVipChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhInternetVipChoice(rulesInternetVipChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for VnConfiguration.internet_vip_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["internet_vip_choice"] = vFn
 
 	vrhOutsideStaticRouteChoice := v.OutsideStaticRouteChoiceValidationRuleHandler
 	rulesOutsideStaticRouteChoice := map[string]string{
@@ -7561,6 +7603,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.AwsParameters = f.GetAwsParameters()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -7591,6 +7634,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.AwsParameters = m1.AwsParameters
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -7735,6 +7779,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.AwsParameters = f.GetAwsParameters()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DirectConnectInfo = f.GetDirectConnectInfo()
 	m.ErrorDescription = f.GetErrorDescription()
@@ -7742,6 +7787,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
+	m.SiteErrors = f.GetSiteErrors()
 	m.SiteState = f.GetSiteState()
 	m.SuggestedAction = f.GetSuggestedAction()
 	m.Tags = f.GetTags()
@@ -7749,6 +7795,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.TgwSecurity = f.GetTgwSecurity()
 	m.Tunnels = f.GetTunnels()
 	m.UserModificationTimestamp = f.GetUserModificationTimestamp()
+	m.ValidationState = f.GetValidationState()
 	m.VipParamsPerAz = f.GetVipParamsPerAz()
 	m.VnConfig = f.GetVnConfig()
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
@@ -7774,6 +7821,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.AwsParameters = m1.AwsParameters
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DirectConnectInfo = m1.DirectConnectInfo
 	f.ErrorDescription = m1.ErrorDescription
@@ -7781,6 +7829,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
+	f.SiteErrors = m1.SiteErrors
 	f.SiteState = m1.SiteState
 	f.SuggestedAction = m1.SuggestedAction
 	f.Tags = m1.Tags
@@ -7788,6 +7837,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.TgwSecurity = m1.TgwSecurity
 	f.Tunnels = m1.Tunnels
 	f.UserModificationTimestamp = m1.UserModificationTimestamp
+	f.ValidationState = m1.ValidationState
 	f.VipParamsPerAz = m1.VipParamsPerAz
 	f.VnConfig = m1.VnConfig
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
@@ -7936,6 +7986,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
+	m.CustomDns = f.GetCustomDns()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -7974,6 +8025,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
+	f.CustomDns = m1.CustomDns
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode

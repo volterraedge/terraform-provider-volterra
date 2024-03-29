@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.http_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.http_loadbalancer.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -3137,13 +3120,13 @@ var APISwaggerJSON string = `{
         "http_loadbalancerAPIRateLimit": {
             "type": "object",
             "title": "APIRateLimit",
-            "x-displayname": "APIRateLimit",
-            "x-ves-oneof-field-ip_allowed_list_choice": "[\"custom_ip_allowed_list\",\"ip_allowed_list\",\"no_ip_allowed_list\"]",
+            "x-displayname": "API Rate Limit",
+            "x-ves-oneof-field-ip_allowed_list_choice": "[\"bypass_rate_limiting_rules\",\"custom_ip_allowed_list\",\"ip_allowed_list\",\"no_ip_allowed_list\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.APIRateLimit",
             "properties": {
                 "api_endpoint_rules": {
                     "type": "array",
-                    "description": " Sets of rules for a specific endpoints.\n Order is matter as it uses first match policy.\n For creating rule that contain a whole domain or group of endpoints, please use the server URL rules above.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n",
+                    "description": " Sets of rules for a specific endpoints.\n Order matters as it uses first match policy.\n For creating rule that contain a whole domain or group of endpoints, please use the server URL rules above.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n",
                     "title": "api_endpoint_policy",
                     "maxItems": 20,
                     "items": {
@@ -3154,33 +3137,39 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "20"
                     }
                 },
+                "bypass_rate_limiting_rules": {
+                    "description": "Exclusive with [custom_ip_allowed_list ip_allowed_list no_ip_allowed_list]\n This category defines rules per URL or API group. If request matches any of these rules, skip Rate Limiting.",
+                    "title": "bypass_rate_limiting_policy",
+                    "$ref": "#/definitions/http_loadbalancerBypassRateLimitingRules",
+                    "x-displayname": "Bypass Rate Limiting"
+                },
                 "custom_ip_allowed_list": {
-                    "description": "Exclusive with [ip_allowed_list no_ip_allowed_list]\n IP Allowed list using existing ip_prefix_set objects.",
+                    "description": "Exclusive with [bypass_rate_limiting_rules ip_allowed_list no_ip_allowed_list]\n IP Allowed list using existing ip_prefix_set objects.",
                     "title": "Custom IP list",
                     "$ref": "#/definitions/http_loadbalancerCustomIpAllowedList",
                     "x-displayname": "IP Allowed List using IP Prefix Set(s)"
                 },
                 "ip_allowed_list": {
-                    "description": "Exclusive with [custom_ip_allowed_list no_ip_allowed_list]\n List of IP(s) for which rate limiting will be disabled.",
+                    "description": "Exclusive with [bypass_rate_limiting_rules custom_ip_allowed_list no_ip_allowed_list]\n List of IP(s) for which rate limiting will be disabled.",
                     "title": "IP Allowed List",
                     "$ref": "#/definitions/viewsPrefixStringListType",
                     "x-displayname": "IP Allowed List"
                 },
                 "no_ip_allowed_list": {
-                    "description": "Exclusive with [custom_ip_allowed_list ip_allowed_list]\n There is no ip allowed list for rate limiting, all clients go through rate limiting.",
-                    "title": "No IP Allowed List",
+                    "description": "Exclusive with [bypass_rate_limiting_rules custom_ip_allowed_list ip_allowed_list]\n There is no skip rules for rate limiting, all clients go through rate limiting.",
+                    "title": "No Skip Rules",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No IP Allowed"
+                    "x-displayname": "No Skip Rules"
                 },
                 "server_url_rules": {
                     "type": "array",
-                    "description": " Set of rules for entire domain or base path that contain multiple endpoints.\n Order is matter as it uses first match policy.\n For matching also specific endpoints you can use the API endpoint rules set bellow.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n",
+                    "description": " Set of rules for entire domain or base path that contain multiple endpoints.\n Order matters as it uses first match policy.\n For matching also specific endpoints you can use the API endpoint rules set bellow.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n",
                     "title": "server_url_policy",
                     "maxItems": 20,
                     "items": {
                         "$ref": "#/definitions/http_loadbalancerServerUrlRule"
                     },
-                    "x-displayname": "Server URLs",
+                    "x-displayname": "Server URLs and API Groups",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "20"
                     }
@@ -3491,6 +3480,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.templated_http_path": "true"
                     }
                 },
+                "client_matcher": {
+                    "description": " Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.",
+                    "title": "client_matcher",
+                    "$ref": "#/definitions/policyClientMatcher",
+                    "x-displayname": "Clients"
+                },
                 "inline_rate_limiter": {
                     "description": "Exclusive with [ref_rate_limiter]\n Specify rate values for the rule.",
                     "title": "Inline Rate Limiter",
@@ -3502,6 +3497,12 @@ var APISwaggerJSON string = `{
                     "title": "External Rate Limiter",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "External Rate Limiter"
+                },
+                "request_matcher": {
+                    "description": " Conditions related to the request, such as query parameters, headers, etc.",
+                    "title": "request_matcher",
+                    "$ref": "#/definitions/policyRequestMatcher",
+                    "x-displayname": "Request"
                 },
                 "specific_domain": {
                     "type": "string",
@@ -3735,6 +3736,104 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "http_loadbalancerBypassRateLimitingRule": {
+            "type": "object",
+            "title": "BypassRateLimitingRule",
+            "x-displayname": "Bypass Rate Limiting Rule",
+            "x-ves-oneof-field-destination_type": "[\"any_url\",\"api_endpoint\",\"api_groups\",\"base_path\"]",
+            "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.BypassRateLimitingRule",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
+                    "title": "any domain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any Domain"
+                },
+                "any_url": {
+                    "description": "Exclusive with [api_endpoint api_groups base_path]\n Any URL ",
+                    "title": "any_url",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Any URL"
+                },
+                "api_endpoint": {
+                    "description": "Exclusive with [any_url api_groups base_path]\n The endpoint (path) of the request.\n\nExample: - \"/endpoint1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "api endpoint path",
+                    "$ref": "#/definitions/http_loadbalancerApiEndpointDetails",
+                    "x-displayname": "API Endpoint",
+                    "x-ves-example": "/endpoint1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "api_groups": {
+                    "description": "Exclusive with [any_url api_endpoint base_path]\n Validation will be performed for the endpoints mentioned in the API Groups",
+                    "title": "api group",
+                    "$ref": "#/definitions/http_loadbalancerAPIGroups",
+                    "x-displayname": "API Groups"
+                },
+                "base_path": {
+                    "type": "string",
+                    "description": "Exclusive with [any_url api_endpoint api_groups]\n The base path which this validation applies to\n\nExample: - \"/api/v1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "base path",
+                    "maxLength": 128,
+                    "x-displayname": "Base Path",
+                    "x-ves-example": "/api/v1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
+                },
+                "client_matcher": {
+                    "description": " Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.",
+                    "title": "client_matcher",
+                    "$ref": "#/definitions/policyClientMatcher",
+                    "x-displayname": "Clients"
+                },
+                "request_matcher": {
+                    "description": " Conditions related to the request, such as query parameters, headers, etc.",
+                    "title": "request_matcher",
+                    "$ref": "#/definitions/policyRequestMatcher",
+                    "x-displayname": "Request"
+                },
+                "specific_domain": {
+                    "type": "string",
+                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "title": "domain",
+                    "maxLength": 128,
+                    "x-displayname": "Specific Domain",
+                    "x-ves-example": "api.example.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128",
+                        "ves.io.schema.rules.string.vh_domain": "true"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerBypassRateLimitingRules": {
+            "type": "object",
+            "description": "This category defines rules per URL or API group. If request matches any of these rules, skip Rate Limiting.",
+            "title": "bypass_rate_limiting_policy",
+            "x-displayname": "Bypass Rate Limiting",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.BypassRateLimitingRules",
+            "properties": {
+                "bypass_rate_limiting_rules": {
+                    "type": "array",
+                    "description": " This category defines rules per URL or API group. If request matches any of these rules, skip Rate Limiting.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "bypass_rate_limiting_policy",
+                    "maxItems": 20,
+                    "items": {
+                        "$ref": "#/definitions/http_loadbalancerBypassRateLimitingRule"
+                    },
+                    "x-displayname": "Bypass Rate Limiting",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "20",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "http_loadbalancerCSDJavaScriptInsertAllWithExceptionsType": {
             "type": "object",
             "description": "Insert Client-Side Defense JavaScript in all pages  with the exceptions",
@@ -3957,7 +4056,8 @@ var APISwaggerJSON string = `{
                 "SKIP_PROCESSING_IP_REPUTATION",
                 "SKIP_PROCESSING_API_PROTECTION",
                 "SKIP_PROCESSING_OAS_VALIDATION",
-                "SKIP_PROCESSING_DDOS_PROTECTION"
+                "SKIP_PROCESSING_DDOS_PROTECTION",
+                "SKIP_PROCESSING_THREAT_INTELLIGENCE"
             ],
             "default": "SKIP_PROCESSING_WAF",
             "x-displayname": "Action",
@@ -4355,12 +4455,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/viewshttp_loadbalancerObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -4665,12 +4759,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
-                },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/viewshttp_loadbalancerObject",
-                    "x-displayname": "Object"
                 },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
@@ -5322,16 +5410,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tls_cert_params": {
-                    "description": "Exclusive with [tls_parameters]\n Multiple domains with separate TLS certificates on this load balancer",
-                    "title": "TLS Parameters With Certificates",
+                    "description": "Exclusive with [tls_parameters]\n Select/Add one or more TLS Certificate objects to associate with this Load Balancer",
+                    "title": "TLS Certificates",
                     "$ref": "#/definitions/viewsDownstreamTLSCertsParams",
-                    "x-displayname": "Multiple Certificates"
+                    "x-displayname": "TLS Certificates"
                 },
                 "tls_parameters": {
-                    "description": "Exclusive with [tls_cert_params]\n Single RSA and/or ECDSA TLS certificate for all domains on this load balancer",
-                    "title": "Inline TLS parameters",
+                    "description": "Exclusive with [tls_cert_params]\n Upload a TLS certificate covering all domain names for this Load Balancer",
+                    "title": "Inline TLS Parameters (legacy)",
                     "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
-                    "x-displayname": "Single Certificate"
+                    "x-displayname": "Inline Certificate (legacy)"
                 }
             }
         },
@@ -5721,10 +5809,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disable Mirroring"
                 },
                 "disable_prefix_rewrite": {
-                    "description": "Exclusive with [prefix_rewrite]\n Do not rewrite the path prefix.",
-                    "title": "Disable Prefix Rewrite",
+                    "description": "Exclusive with [prefix_rewrite]\n Do not rewrite any path portion.",
+                    "title": "Disable Rewrite",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Prefix Rewrite"
+                    "x-displayname": "Disable Rewrite"
                 },
                 "disable_spdy": {
                     "description": "Exclusive with [enable_spdy]\n SPDY upgrade is disabled",
@@ -6126,7 +6214,7 @@ var APISwaggerJSON string = `{
         "http_loadbalancerServerUrlRule": {
             "type": "object",
             "title": "ServerUrlRule",
-            "x-displayname": "Server URL",
+            "x-displayname": "Server URLs and API Groups",
             "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
             "x-ves-oneof-field-rate_limiter_choice": "[\"inline_rate_limiter\",\"ref_rate_limiter\"]",
             "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.ServerUrlRule",
@@ -6136,6 +6224,17 @@ var APISwaggerJSON string = `{
                     "title": "any domain",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Any Domain"
+                },
+                "api_group": {
+                    "type": "string",
+                    "description": " API groups derived from API Definition swaggers.\n For example oas-all-operations including all paths and methods from the swaggers, oas-base-urls covering all requests under base-paths from the swaggers.\n Custom groups can be created if user tags paths or operations with \"x-volterra-api-group\" extensions inside swaggers.\n\nExample: - \"oas-all-operations\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "api_group",
+                    "maxLength": 128,
+                    "x-displayname": "API Group",
+                    "x-ves-example": "oas-all-operations",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
                 },
                 "base_path": {
                     "type": "string",
@@ -6151,6 +6250,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
+                "client_matcher": {
+                    "description": " Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.",
+                    "title": "client_matcher",
+                    "$ref": "#/definitions/policyClientMatcher",
+                    "x-displayname": "Clients"
+                },
                 "inline_rate_limiter": {
                     "description": "Exclusive with [ref_rate_limiter]\n Specify rate values for the rule.",
                     "title": "Inline Rate Limiter",
@@ -6162,6 +6267,12 @@ var APISwaggerJSON string = `{
                     "title": "External Rate Limiter",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "External Rate Limiter"
+                },
+                "request_matcher": {
+                    "description": " Conditions related to the request, such as query parameters, headers, etc.",
+                    "title": "request_matcher",
+                    "$ref": "#/definitions/policyRequestMatcher",
+                    "x-displayname": "Request"
                 },
                 "specific_domain": {
                     "type": "string",
@@ -6613,6 +6724,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "virtual_host_status": {
+                    "description": " DNS related Virtual Host status",
+                    "title": "DNS Virtual Host Status",
+                    "$ref": "#/definitions/virtual_hostDNSVHostStatusType",
+                    "x-displayname": "DNS Virtual Host Status"
                 }
             }
         },
@@ -7729,26 +7846,26 @@ var APISwaggerJSON string = `{
         },
         "origin_poolTlsCertificatesType": {
             "type": "object",
-            "description": "TLS Certificates",
+            "description": "mTLS Client Certificate",
             "title": "TlsCertificatesType",
-            "x-displayname": "TLS Certificates",
+            "x-displayname": "mTLS Certificate",
             "x-ves-displayorder": "1",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.TlsCertificatesType",
             "properties": {
                 "tls_certificates": {
                     "type": "array",
-                    "description": " TLS Certificates\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "TLS certificates",
+                    "description": " mTLS Client Certificate\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "mTLS certificate",
                     "minItems": 1,
-                    "maxItems": 16,
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaTlsCertificateType"
                     },
-                    "x-displayname": "TLS Certificates",
+                    "x-displayname": "mTLS Client Certificate",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.max_items": "1",
                         "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 }
@@ -7760,7 +7877,7 @@ var APISwaggerJSON string = `{
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
             "x-ves-displayorder": "10,2,8,9",
-            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\"]",
+            "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
@@ -7772,8 +7889,8 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No SNI"
                 },
                 "no_mtls": {
-                    "description": "Exclusive with [use_mtls]\n",
-                    "title": "No MTLS",
+                    "description": "Exclusive with [use_mtls use_mtls_obj]\n",
+                    "title": "No mTLS",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
@@ -7811,25 +7928,26 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Header"
                 },
                 "use_mtls": {
-                    "description": "Exclusive with [no_mtls]\n",
-                    "title": "Enable MTLS With Inline Certificate",
+                    "description": "Exclusive with [no_mtls use_mtls_obj]\n",
+                    "title": "Inline Certificate (legacy)",
                     "$ref": "#/definitions/origin_poolTlsCertificatesType",
-                    "x-displayname": "Enable by uploading a new certificate"
+                    "x-displayname": "Upload a client authentication certificate specifically for this Origin Pool"
                 },
                 "use_mtls_obj": {
-                    "title": "Enable MTLS With Certificate Object",
+                    "description": "Exclusive with [no_mtls use_mtls]\n",
+                    "title": "Root CA Certificate",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable by selecting a certificate"
+                    "x-displayname": "Select/add a TLS Certificate object for client authentication"
                 },
                 "use_server_verification": {
-                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided Root CA list",
+                    "description": "Exclusive with [skip_server_verification volterra_trusted_ca]\n Perform origin server verification using the provided Root CA Certificate",
                     "title": "Use Server Verification",
                     "$ref": "#/definitions/origin_poolUpstreamTlsValidationContext",
                     "x-displayname": "Use Custom Root CA Certificate"
                 },
                 "volterra_trusted_ca": {
-                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using F5XC default Root CA list",
-                    "title": "F5XC Trusted CA",
+                    "description": "Exclusive with [skip_server_verification use_server_verification]\n Perform origin server verification using F5XC Default Root CA Certificate",
+                    "title": "F5XC Root CA",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Use Default Root CA Certificate"
                 }
@@ -7840,22 +7958,22 @@ var APISwaggerJSON string = `{
             "description": "Upstream TLS Validation Context",
             "title": "UpstreamTlsValidationContext",
             "x-displayname": "TLS Validation Context for Origin Servers",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsValidationContext",
             "properties": {
                 "trusted_ca": {
-                    "description": " Select/Add a Root CA for verification of Server's certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select a Root CA certificate"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Root CA certificate for verification of Server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Upload a Root CA Certificate specifically for this Origin Pool for verification of server's certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Upload a new Root CA certificate",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
@@ -7871,6 +7989,27 @@ var APISwaggerJSON string = `{
             "x-displayname": "App Firewall Attack Type Context",
             "x-ves-proto-message": "ves.io.schema.policy.AppFirewallAttackTypeContext",
             "properties": {
+                "context": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Context",
+                    "$ref": "#/definitions/policyDetectionContext",
+                    "x-displayname": "Context",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "context_name": {
+                    "type": "string",
+                    "description": " Relevant only for contexts: Header, Cookie and Parameter. Name of the Context that the WAF Exclusion Rules will check.\n\nExample: - \"exampleuser-agent for Header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Context Name",
+                    "maxLength": 64,
+                    "x-displayname": "Context Name",
+                    "x-ves-example": "example: user-agent for Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
                 "exclude_attack_type": {
                     "description": "\nExample: - \"ATTACK_TYPE_SQL_INJECTION\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "AttackType",
@@ -7979,7 +8118,7 @@ var APISwaggerJSON string = `{
                 },
                 "signature_id": {
                     "type": "integer",
-                    "description": "\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 10000000\n  ves.io.schema.rules.uint32.lte: 300000000\n",
+                    "description": " The allowed values for signature id are 0 and in the range of 200000001-299999999.\n 0 implies that all signatures will be excluded for the specified context.\n\nExample: - \"10000001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 299999999\n",
                     "title": "SignatureID",
                     "format": "int64",
                     "x-displayname": "SignatureID",
@@ -7987,8 +8126,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.uint32.gte": "10000000",
-                        "ves.io.schema.rules.uint32.lte": "300000000"
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "299999999"
                     }
                 }
             }
@@ -8537,7 +8676,7 @@ var APISwaggerJSON string = `{
         },
         "policyDetectionContext": {
             "type": "string",
-            "description": "The available contexts for Signature and Violation Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nSignature ID or Violation will be excluded in all contexts.\n - CONTEXT_BODY: CONTEXT_BODY\n\nSignature ID or Violation will be excluded for the request body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nSignature ID or Violation will be excluded for the request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nSignature ID or Violation will be excluded for one or more parameters. The parameter name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all parameters.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nSignature ID or Violation will be excluded for one or more headers. The header name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all headers.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nSignature ID or Violation will be excluded for one or more cookies. The cookie name is required in the Context name field. If the field is left empty, then the signature ID or violation will be excluded on all cookies.\n - CONTEXT_URL: CONTEXT_URL\n\nSignature ID or Violation will be excluded for the request URL.\n - CONTEXT_URI: CONTEXT_URI\n",
+            "description": "The available contexts for Exclusion rules.\n\n - CONTEXT_ANY: CONTEXT_ANY\n\nDetection will be excluded for all contexts.\n - CONTEXT_BODY: CONTEXT_BODY\n\nDetection will be excluded for the request body.\n - CONTEXT_REQUEST: CONTEXT_REQUEST\n\nDetection will be excluded for the request.\n - CONTEXT_RESPONSE: CONTEXT_RESPONSE\n\n - CONTEXT_PARAMETER: CONTEXT_PARAMETER\n\nDetection will be excluded for the parameters. The parameter name is required in the Context name field. If the field is left empty, the detection will be excluded for all parameters.\n - CONTEXT_HEADER: CONTEXT_HEADER\n\nDetection will be excluded for the headers. The header name is required in the Context name field. If the field is left empty, the detection will be excluded for all headers.\n - CONTEXT_COOKIE: CONTEXT_COOKIE\n\nDetection will be excluded for the cookies. The cookie name is required in the Context name field. If the field is left empty, the detection will be excluded for all cookies.\n - CONTEXT_URL: CONTEXT_URL\n\nDetection will be excluded for the request URL.\n - CONTEXT_URI: CONTEXT_URI\n",
             "title": "Detection Context",
             "enum": [
                 "CONTEXT_ANY",
@@ -9083,7 +9222,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ip prefixes",
                     "maxItems": 128,
                     "items": {
@@ -9093,13 +9232,14 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "192.168.20.0/24",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "ipv6_prefixes": {
                     "type": "array",
-                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ipv6 prefixes",
                     "maxItems": 128,
                     "items": {
@@ -9109,6 +9249,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "fd48:fa09:d9d4::/48",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -9565,7 +9706,8 @@ var APISwaggerJSON string = `{
             "title": "RateLimitPeriodUnit",
             "enum": [
                 "SECOND",
-                "MINUTE"
+                "MINUTE",
+                "HOUR"
             ],
             "default": "SECOND",
             "x-displayname": "Rate Limit Period Unit",
@@ -11031,17 +11173,23 @@ var APISwaggerJSON string = `{
             "title": "HeaderTransformationType",
             "x-displayname": "Header Transformation",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
             "properties": {
                 "default_header_transformation": {
-                    "description": "Exclusive with [proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "description": "Exclusive with [preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
                     "title": "Default header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
+                "preserve_case_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
+                    "title": "Preserve case header transformation",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Preserve Case"
+                },
                 "proper_case_header_transformation": {
-                    "description": "Exclusive with [default_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
                     "title": "Proper case header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Proper Case"
@@ -11384,75 +11532,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -11530,6 +11609,23 @@ var APISwaggerJSON string = `{
             "default": "PROPERTY_QUERY_PARAMETERS",
             "x-displayname": "OpenAPI Validation Properties",
             "x-ves-proto-enum": "ves.io.schema.OpenApiValidationProperties"
+        },
+        "schemaRegexMatchRewrite": {
+            "type": "object",
+            "description": "x-displayName: \"Regex Match Rewrite\"\nRegexMatchRewrite describes how to match a string and then produce a new string using a \nregular expression and a substitution string.",
+            "title": "RegexMatchRewrite",
+            "properties": {
+                "pattern": {
+                    "type": "string",
+                    "description": "x-displayName: \"Pattern\"\nx-example: \"^/service/([^/]+)(/.*)$\"\nThe regular expression used to find portions of a string that should be replaced.",
+                    "title": "Pattern"
+                },
+                "substitution": {
+                    "type": "string",
+                    "description": "x-displayName: \"Substitution\"\nx-example: \"\\\\2/instance/\\\\1\"\nThe string that should be substituted into matching portions of the subject string during a \nsubstitution operation to produce a new string.",
+                    "title": "Substitution"
+                }
+            }
         },
         "schemaRetryBackOff": {
             "type": "object",
@@ -11614,10 +11710,10 @@ var APISwaggerJSON string = `{
                 },
                 "retry_condition": {
                     "type": "array",
-                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]\n  ves.io.schema.rules.repeated.max_items: 6\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Specifies the conditions under which retry takes place.\n Retries can be on different types of condition depending on application requirements.\n For example, network failure, all 5xx response codes, idempotent 4xx response codes, etc\n\n The possible values are\n\n \"5xx\"             : Retry will be done if the upstream server responds with any 5xx response code,\n                     or does not respond at all (disconnect/reset/read timeout).\n\n \"gateway-error\"   : Retry will be done only if the upstream server responds with 502, 503 or\n                     504 responses (Included in 5xx)\n\n \"connect-failure\" : Retry will be done if the request fails because of a connection failure to the\n                     upstream server (connect timeout, etc.). (Included in 5xx)\n\n \"refused-stream\"  : Retry is done if the upstream server resets the stream with a REFUSED_STREAM\n                     error code (Included in 5xx)\n\n \"retriable-4xx\"   : Retry is done if the upstream server responds with a retriable 4xx response code.\n                     The only response code in this category is HTTP CONFLICT (409)\n\n \"retriable-status-codes\" :  Retry is done if the upstream server responds with any response code\n                             matching one defined in retriable_status_codes field\n\n \"reset\"           : Retry is done if the upstream server does not respond at all\n                     (disconnect/reset/read timeout.)\n\nExample: - \"5xx\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.in: [\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\",\\\"reset\\\"]\n  ves.io.schema.rules.repeated.max_items: 7\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "retry_condition",
                     "minItems": 1,
-                    "maxItems": 6,
+                    "maxItems": 7,
                     "items": {
                         "type": "string"
                     },
@@ -11626,8 +11722,8 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\"]",
-                        "ves.io.schema.rules.repeated.max_items": "6",
+                        "ves.io.schema.rules.repeated.items.string.in": "[\\\"5xx\\\",\\\"gateway-error\\\",\\\"connect-failure\\\",\\\"refused-stream\\\",\\\"retriable-4xx\\\",\\\"retriable-status-codes\\\",\\\"reset\\\"]",
+                        "ves.io.schema.rules.repeated.max_items": "7",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -11875,149 +11971,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -12295,6 +12248,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Path Matcher"
                 },
                 "prefix_values": {
                     "type": "array",
@@ -12787,7 +12747,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -12804,18 +12764,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": " Select/Add a Root CA certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA Certificate object to associate with this Load Balancer",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select a Root CA certificate"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Upload a Root CA Certificate specifically for this Load Balancer\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Upload a new Root CA certificate",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
@@ -13684,6 +13644,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-slow_ddos_mitigation_choice": "[\"slow_ddos_mitigation\",\"system_default_timeouts\"]",
+            "x-ves-oneof-field-threat_intelligence_choice": "[\"disable_threat_intelligence\",\"enable_threat_intelligence\"]",
             "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
@@ -13858,6 +13819,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_threat_intelligence": {
+                    "description": "Exclusive with [enable_threat_intelligence]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_trust_client_ip_headers": {
                     "description": "Exclusive with [enable_trust_client_ip_headers]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -13921,6 +13887,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
+                "enable_threat_intelligence": {
+                    "description": "Exclusive with [disable_threat_intelligence]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "enable_trust_client_ip_headers": {
                     "description": "Exclusive with [disable_trust_client_ip_headers]\n",
                     "$ref": "#/definitions/virtual_hostClientIPHeaders",
@@ -13970,7 +13941,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Block"
                 },
                 "l7_ddos_action_default": {
-                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources and serve JavaScript challenge to rest of traffic",
+                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
@@ -14145,6 +14116,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-slow_ddos_mitigation_choice": "[\"slow_ddos_mitigation\",\"system_default_timeouts\"]",
+            "x-ves-oneof-field-threat_intelligence_choice": "[\"disable_threat_intelligence\",\"enable_threat_intelligence\"]",
             "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
@@ -14220,6 +14192,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
                     "x-displayname": "Captcha Challenge"
                 },
+                "cert_state": {
+                    "description": " State of Custom certificate or Auto certificate generation.",
+                    "$ref": "#/definitions/virtual_hostCertificationState",
+                    "x-displayname": "Cert State"
+                },
                 "client_side_defense": {
                     "description": "Exclusive with [disable_client_side_defense]\n Client-Side Defense configuration for JavaScript insertion",
                     "$ref": "#/definitions/http_loadbalancerClientSideDefenseType",
@@ -14324,6 +14301,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_threat_intelligence": {
+                    "description": "Exclusive with [enable_threat_intelligence]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_trust_client_ip_headers": {
                     "description": "Exclusive with [enable_trust_client_ip_headers]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -14395,6 +14377,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
+                "enable_threat_intelligence": {
+                    "description": "Exclusive with [disable_threat_intelligence]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "enable_trust_client_ip_headers": {
                     "description": "Exclusive with [disable_trust_client_ip_headers]\n",
                     "$ref": "#/definitions/virtual_hostClientIPHeaders",
@@ -14458,7 +14445,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Block"
                 },
                 "l7_ddos_action_default": {
-                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources and serve JavaScript challenge to rest of traffic",
+                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
@@ -14604,595 +14591,6 @@ var APISwaggerJSON string = `{
                 "waf_exclusion_rules": {
                     "type": "array",
                     "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/policySimpleWafExclusionRule"
-                    },
-                    "x-displayname": "WAF Exclusion Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
-                    }
-                }
-            }
-        },
-        "viewshttp_loadbalancerGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of the HTTP load balancer specification",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Specification",
-            "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
-            "x-ves-oneof-field-api_definition_choice": "[\"api_specification\",\"disable_api_definition\"]",
-            "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
-            "x-ves-oneof-field-bot_defense_choice": "[]",
-            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"enable_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
-            "x-ves-oneof-field-client_side_defense_choice": "[\"client_side_defense\",\"disable_client_side_defense\"]",
-            "x-ves-oneof-field-ddos_detection_choice": "[\"disable_ddos_detection\",\"enable_ddos_detection\"]",
-            "x-ves-oneof-field-hash_policy_choice": "[\"cookie_stickiness\",\"least_active\",\"random\",\"ring_hash\",\"round_robin\",\"source_ip_stickiness\"]",
-            "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"disable_host_rewrite\",\"host_rewrite\"]",
-            "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\"]",
-            "x-ves-oneof-field-l7_ddos_auto_mitigation_action": "[\"l7_ddos_action_block\",\"l7_ddos_action_default\",\"l7_ddos_action_js_challenge\"]",
-            "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
-            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
-            "x-ves-oneof-field-ml_config_choice": "[\"multi_lb_app\",\"single_lb_app\"]",
-            "x-ves-oneof-field-origin_pool_choice": "[\"default_pool\",\"default_pool_list\"]",
-            "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
-            "x-ves-oneof-field-slow_ddos_mitigation_choice": "[\"slow_ddos_mitigation\",\"system_default_timeouts\"]",
-            "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
-            "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
-            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.GlobalSpecType",
-            "properties": {
-                "active_service_policies": {
-                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
-                    "title": "Apply Specified Service Policies",
-                    "$ref": "#/definitions/http_loadbalancerServicePolicyList",
-                    "x-displayname": "Apply Specified Service Policies"
-                },
-                "add_location": {
-                    "type": "boolean",
-                    "description": " x-example: true\n Appends header x-volterra-location = \u003cre-site-name\u003e in responses. This configuration\n is ignored on CE sites.\n\nExample: - \"true\"-",
-                    "title": "Add Site information",
-                    "format": "boolean",
-                    "x-displayname": "Add Location",
-                    "x-ves-example": "true"
-                },
-                "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on specific sites",
-                    "title": "Advertise Custom",
-                    "$ref": "#/definitions/viewsAdvertiseCustom",
-                    "x-displayname": "Custom"
-                },
-                "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
-                    "title": "Advertise On Public",
-                    "$ref": "#/definitions/viewsAdvertisePublic",
-                    "x-displayname": "Internet (Specified VIP)"
-                },
-                "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
-                    "title": "Advertise On Public Default VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Internet"
-                },
-                "api_protection_rules": {
-                    "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
-                    "title": "API Protection rules",
-                    "$ref": "#/definitions/http_loadbalancerAPIProtectionRules",
-                    "x-displayname": "API Protection Rules"
-                },
-                "api_rate_limit": {
-                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
-                    "title": "Rate Limiting Parameters",
-                    "$ref": "#/definitions/http_loadbalancerAPIRateLimit",
-                    "x-displayname": "API Rate Limit"
-                },
-                "api_specification": {
-                    "description": "Exclusive with [disable_api_definition]\n Specify API definition and OpenAPI Validation",
-                    "title": "API Specification",
-                    "$ref": "#/definitions/http_loadbalancerAPISpecificationSettings",
-                    "x-displayname": "Enable"
-                },
-                "app_firewall": {
-                    "description": "Exclusive with [disable_waf]\n Reference to App Firewall configuration object",
-                    "title": "app_firewall",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable"
-                },
-                "auto_cert_info": {
-                    "description": " Auto certificate related information",
-                    "title": "Auto Cert Information",
-                    "$ref": "#/definitions/virtual_hostAutoCertInfoType",
-                    "x-displayname": "Auto Cert Information"
-                },
-                "auto_host_rewrite": {
-                    "description": "Exclusive with [disable_host_rewrite host_rewrite]\n Host header will be swapped with hostname of upstream host chosen by the cluster",
-                    "title": "Auto Host Rewrite",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Automatic Host Rewrite"
-                },
-                "blocked_clients": {
-                    "type": "array",
-                    "description": " Define rules to block IP Prefixes or AS numbers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "title": "Client Blocking Rules",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/http_loadbalancerSimpleClientSrcRule"
-                    },
-                    "x-displayname": "Client Blocking Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
-                    }
-                },
-                "captcha_challenge": {
-                    "description": "Exclusive with [enable_challenge js_challenge no_challenge policy_based_challenge]\n Configure Captcha challenge on this load balancer",
-                    "title": "Captcha Challenge",
-                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
-                    "x-displayname": "Captcha Challenge"
-                },
-                "client_side_defense": {
-                    "description": "Exclusive with [disable_client_side_defense]\n Client-Side Defense configuration for JavaScript insertion",
-                    "title": "Client-Side Defense",
-                    "$ref": "#/definitions/http_loadbalancerClientSideDefenseType",
-                    "x-displayname": "Enable"
-                },
-                "cookie_stickiness": {
-                    "description": "Exclusive with [least_active random ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of cookie. Cookie can be passive(present in the cookies header) or\n generated(hashing the source and destination ports and addresses).\n Consistent hashing algorithm, ring hash, is used to select origin server",
-                    "title": "Cookie Based Stickiness",
-                    "$ref": "#/definitions/routeCookieForHashing",
-                    "x-displayname": "Cookie Based Stickiness"
-                },
-                "cors_policy": {
-                    "description": " CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",
-                    "title": "Cross-Origin Resource Sharing (CORS) configuration for requests",
-                    "$ref": "#/definitions/schemaCorsPolicy",
-                    "x-displayname": "CORS Policy"
-                },
-                "csrf_policy": {
-                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
-                    "title": "csrf_policy",
-                    "$ref": "#/definitions/schemaCsrfPolicy",
-                    "x-displayname": "Cross-Site Request Forgery Protection"
-                },
-                "data_guard_rules": {
-                    "type": "array",
-                    "description": " Data Guard prevents responses from exposing sensitive information by masking the data.\n The system masks credit card numbers and social security numbers leaked from the application from within the http response with a string of asterisks (*).\n Note: App Firewall should be enabled, to use Data Guard feature.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "title": "Data Guard Rules",
-                    "maxItems": 64,
-                    "items": {
-                        "$ref": "#/definitions/policySimpleDataGuardRule"
-                    },
-                    "x-displayname": "Data Guard Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "64",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
-                    }
-                },
-                "ddos_mitigation_rules": {
-                    "type": "array",
-                    "description": " Define manual mitigation rules to block L7 DDoS attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "title": "DDoS Mitigation Rules",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/http_loadbalancerDDoSMitigationRule"
-                    },
-                    "x-displayname": "DDoS Mitigation Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
-                    }
-                },
-                "default_pool": {
-                    "description": "Exclusive with [default_pool_list]\n Single Origin Pool",
-                    "title": "Single Origin Pool",
-                    "$ref": "#/definitions/viewsorigin_poolGlobalSpecType",
-                    "x-displayname": "Single Origin Pool"
-                },
-                "default_pool_list": {
-                    "description": "Exclusive with [default_pool]\n Multiple Origin Pools with weights and priorities",
-                    "title": "Multiple Origin Pools",
-                    "$ref": "#/definitions/viewsOriginPoolListType",
-                    "x-displayname": "Multiple Origin Pools"
-                },
-                "default_route_pools": {
-                    "type": "array",
-                    "description": " Origin Pools used when no route is specified (default route)\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Default Route Origin Pools",
-                    "maxItems": 8,
-                    "items": {
-                        "$ref": "#/definitions/viewsOriginPoolWithWeight"
-                    },
-                    "x-displayname": "Origin Pools",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "disable_api_definition": {
-                    "description": "Exclusive with [api_specification]\n API Definition is not currently used for this load balancer",
-                    "title": "Don not use API Definition",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_api_discovery": {
-                    "description": "Exclusive with [enable_api_discovery]\n",
-                    "title": "Disable API discovery",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_client_side_defense": {
-                    "description": "Exclusive with [client_side_defense]\n No Client-Side Defense configuration for this load balancer",
-                    "title": "Disable Client-Side Defense",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_ddos_detection": {
-                    "description": "Exclusive with [enable_ddos_detection]\n",
-                    "title": "Disable DDoS detection",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_host_rewrite": {
-                    "description": "Exclusive with [auto_host_rewrite host_rewrite]\n Host header is not modified",
-                    "title": "Disable Host Rewrite",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Host Rewrite"
-                },
-                "disable_ip_reputation": {
-                    "description": "Exclusive with [enable_ip_reputation]\n",
-                    "title": "disable_ip_reputation",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_malicious_user_detection": {
-                    "description": "Exclusive with [enable_malicious_user_detection]\n",
-                    "title": "Disable malicious user detection",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_rate_limit": {
-                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
-                    "title": "Disable Rate Limiting",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_trust_client_ip_headers": {
-                    "description": "Exclusive with [enable_trust_client_ip_headers]\n",
-                    "title": "Disable",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "disable_waf": {
-                    "description": "Exclusive with [app_firewall]\n No WAF configuration for this load balancer",
-                    "title": "Disable WAF",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "dns_info": {
-                    "type": "array",
-                    "description": " DNS information for this virtual host",
-                    "title": "DNS information",
-                    "items": {
-                        "$ref": "#/definitions/virtual_host_dns_infoDnsInfo"
-                    },
-                    "x-displayname": "DNS Information"
-                },
-                "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
-                    "title": "Do Not Advertise",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Do Not Advertise"
-                },
-                "domains": {
-                    "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to load balancer.\n\n Supported Domains and search order:\n  1. Exact domain names: www.foo.com.\n  2. Domains start with a wildcard: *.foo.com or *-bar.foo.com.\n\n Not supported domains \n - Just a wildcard: *\n - Wild card and TLD: *.com\n - Wildcard in a middle of domian: test*.example.com\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the load balancer type is HTTPS\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Domains",
-                    "minItems": 1,
-                    "maxItems": 32,
-                    "items": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 256
-                    },
-                    "x-displayname": "Domains",
-                    "x-ves-example": "www.foo.com",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
-                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
-                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "enable_api_discovery": {
-                    "description": "Exclusive with [disable_api_discovery]\n",
-                    "title": "Enable API discovery",
-                    "$ref": "#/definitions/http_loadbalancerApiDiscoverySetting",
-                    "x-displayname": "Enable"
-                },
-                "enable_challenge": {
-                    "description": "Exclusive with [captcha_challenge js_challenge no_challenge policy_based_challenge]\n Configure auto mitigation i.e risk based challenges for malicious users",
-                    "title": "Enable",
-                    "$ref": "#/definitions/http_loadbalancerEnableChallenge",
-                    "x-displayname": "Enable"
-                },
-                "enable_ddos_detection": {
-                    "description": "Exclusive with [disable_ddos_detection]\n",
-                    "title": "Enable DDoS detection",
-                    "$ref": "#/definitions/http_loadbalancerEnableDDoSDetectionSetting",
-                    "x-displayname": "Enable"
-                },
-                "enable_ip_reputation": {
-                    "description": "Exclusive with [disable_ip_reputation]\n",
-                    "title": "enable_ip_reputation",
-                    "$ref": "#/definitions/viewshttp_loadbalancerIPThreatCategoryListType",
-                    "x-displayname": "Enable"
-                },
-                "enable_malicious_user_detection": {
-                    "description": "Exclusive with [disable_malicious_user_detection]\n",
-                    "title": "Enable malicious user detection",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable"
-                },
-                "enable_trust_client_ip_headers": {
-                    "description": "Exclusive with [disable_trust_client_ip_headers]\n",
-                    "title": "Enable",
-                    "$ref": "#/definitions/virtual_hostClientIPHeaders",
-                    "x-displayname": "Enable"
-                },
-                "graphql_rules": {
-                    "type": "array",
-                    "description": " GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable\n description of the data in API. GraphQL gives clients the power to ask for exactly what they need, makes it\n easier to evolve APIs over time, and enables powerful developer tools. Policy configuration to analyze GraphQL\n queries and prevent GraphQL tailored attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "title": "GraphQL Inspection",
-                    "maxItems": 64,
-                    "items": {
-                        "$ref": "#/definitions/policyGraphQLRule"
-                    },
-                    "x-displayname": "GraphQL Inspection",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "64",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
-                    }
-                },
-                "host_name": {
-                    "type": "string",
-                    "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
-                    "title": "host name",
-                    "x-displayname": "Host Name",
-                    "x-ves-example": "ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io"
-                },
-                "host_rewrite": {
-                    "type": "string",
-                    "description": "Exclusive with [auto_host_rewrite disable_host_rewrite]\n Host header will be swapped with this value\n\nExample: - \"one.volterra.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
-                    "title": "HostRewrite",
-                    "x-displayname": "Host Rewrite Value",
-                    "x-ves-example": "one.volterra.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true"
-                    }
-                },
-                "http": {
-                    "description": "Exclusive with [https https_auto_cert]\n HTTP Load Balancer.",
-                    "title": "HTTP",
-                    "$ref": "#/definitions/http_loadbalancerProxyTypeHttp",
-                    "x-displayname": "HTTP"
-                },
-                "https": {
-                    "description": "Exclusive with [http https_auto_cert]\n HTTPS load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
-                    "title": "HTTPS",
-                    "$ref": "#/definitions/http_loadbalancerProxyTypeHttps",
-                    "x-displayname": "HTTPS with Custom Certificate"
-                },
-                "https_auto_cert": {
-                    "description": "Exclusive with [http https]\n HTTPS load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
-                    "title": "HTTPS",
-                    "$ref": "#/definitions/http_loadbalancerProxyTypeHttpsAutoCerts",
-                    "x-displayname": "HTTPS with Automatic Certificate"
-                },
-                "internet_vip_info": {
-                    "type": "array",
-                    "description": " Internet VIP Info",
-                    "title": "Internet VIP Info",
-                    "items": {
-                        "$ref": "#/definitions/viewsInternetVIPInfo"
-                    },
-                    "x-displayname": "Internet VIP Info"
-                },
-                "js_challenge": {
-                    "description": "Exclusive with [captcha_challenge enable_challenge no_challenge policy_based_challenge]\n Configure JavaScript challenge on this load balancer",
-                    "title": "JavaScript Challenge",
-                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
-                    "x-displayname": "JavaScript Challenge"
-                },
-                "jwt_validation": {
-                    "description": " JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\n JWTs before they are passed to origin APIs. JWT Validation will also stop requests with expired\n tokens or tokens that are not yet valid.",
-                    "title": "JWT Validation",
-                    "$ref": "#/definitions/http_loadbalancerJWTValidation",
-                    "x-displayname": "JWT Validation"
-                },
-                "l7_ddos_action_block": {
-                    "description": "Exclusive with [l7_ddos_action_default l7_ddos_action_js_challenge]\n Block suspicious sources",
-                    "title": "block",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Block"
-                },
-                "l7_ddos_action_default": {
-                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources and serve JavaScript challenge to rest of traffic",
-                    "title": "Default",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default"
-                },
-                "l7_ddos_action_js_challenge": {
-                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_default]\n Serve JavaScript challenge to suspicious sources",
-                    "title": "JavaScript Challenge",
-                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
-                    "x-displayname": "JavaScript Challenge"
-                },
-                "least_active": {
-                    "description": "Exclusive with [cookie_stickiness random ring_hash round_robin source_ip_stickiness]\n Request are sent to origin server that has least active requests",
-                    "title": "Least Active Requests",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Least Active Request"
-                },
-                "more_option": {
-                    "description": " More options like header manipulation, compression etc.",
-                    "title": "More Options",
-                    "$ref": "#/definitions/http_loadbalancerAdvancedOptionsType",
-                    "x-displayname": "More Options"
-                },
-                "multi_lb_app": {
-                    "description": "Exclusive with [single_lb_app]\n ML config is shared among multiple HTTP load balancers.\n It should be configured externally using app type feature and label should be added to the HTTP load balancer.",
-                    "title": "Multi load balancer application",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Custom"
-                },
-                "no_challenge": {
-                    "description": "Exclusive with [captcha_challenge enable_challenge js_challenge policy_based_challenge]\n No challenge is enabled for this load balancer",
-                    "title": "Disable",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "no_service_policies": {
-                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
-                    "title": "Do Not Apply Service Policies",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Do Not Apply Service Policies"
-                },
-                "origin_server_subset_rule_list": {
-                    "description": " Origin Server Subset Rules allow users to define match condition on Client (IP address, ASN, Country), IP Reputation, Regional Edge names,\n Request for subset selection of origin servers. Origin Server Subset  is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for Origin Server Subset  to get the intended result, rules are evaluated from top to bottom in the list.\n When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.",
-                    "title": "Origin Server Subset Rules",
-                    "$ref": "#/definitions/http_loadbalancerOriginServerSubsetRuleListType",
-                    "x-displayname": "Origin Server Subset Rules"
-                },
-                "policy_based_challenge": {
-                    "description": "Exclusive with [captcha_challenge enable_challenge js_challenge no_challenge]\n Specifies the settings for policy rule based challenge",
-                    "title": "policy based challenge",
-                    "$ref": "#/definitions/viewshttp_loadbalancerPolicyBasedChallenge",
-                    "x-displayname": "Policy Based Challenge"
-                },
-                "protected_cookies": {
-                    "type": "array",
-                    "description": " Allows setting attributes (SameSite, Secure, and HttpOnly) on cookies in responses.\n Cookie Tampering Protection prevents attackers from modifying the value of session cookies.\n For Cookie Tampering Protection, enabling a web app firewall (WAF) is a prerequisite.\n The configured mode of WAF (monitoring or blocking) will be enforced on the request when cookie tampering is identified.\n Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Cookie protection",
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/schemaCookieManipulationOptionType"
-                    },
-                    "x-displayname": "Cookie Protection",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "random": {
-                    "description": "Exclusive with [cookie_stickiness least_active ring_hash round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers in random fashion",
-                    "title": "Random",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Random"
-                },
-                "rate_limit": {
-                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this load balancer",
-                    "title": "Custom Rate Limiting Parameters",
-                    "$ref": "#/definitions/http_loadbalancerRateLimitConfigType",
-                    "x-displayname": "Custom Rate Limiting Parameters"
-                },
-                "ring_hash": {
-                    "description": "Exclusive with [cookie_stickiness least_active random round_robin source_ip_stickiness]\n Request are sent to all eligible origin servers using hash of request based on hash policy. Consistent hashing algorithm, ring hash, is used to select origin server",
-                    "title": "Ring Hash Policy",
-                    "$ref": "#/definitions/http_loadbalancerHashPolicyListType",
-                    "x-displayname": "Ring Hash Policy"
-                },
-                "round_robin": {
-                    "description": "Exclusive with [cookie_stickiness least_active random ring_hash source_ip_stickiness]\n Request are sent to all eligible origin servers in round robin fashion",
-                    "title": "Round Robin",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Round Robin"
-                },
-                "routes": {
-                    "type": "array",
-                    "description": " Routes allow users to define match condition on a path and/or HTTP method to either forward matching traffic\n to origin pool or redirect matching traffic to a different URL or respond directly to matching traffic\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Routes",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/viewshttp_loadbalancerRouteType"
-                    },
-                    "x-displayname": "Routes",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "service_policies_from_namespace": {
-                    "description": "Exclusive with [active_service_policies no_service_policies]\n Apply the active service policies configured as part of the namespace service policy set",
-                    "title": "Apply Namespace Service Policies",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Apply Namespace Service Policies"
-                },
-                "single_lb_app": {
-                    "description": "Exclusive with [multi_lb_app]\n ML Config applied on this load balancer",
-                    "title": "Single load balancer application",
-                    "$ref": "#/definitions/http_loadbalancerSingleLoadBalancerAppSetting",
-                    "x-displayname": "Default"
-                },
-                "slow_ddos_mitigation": {
-                    "description": "Exclusive with [system_default_timeouts]\n Custom Settings for Slow DDoS Mitigation",
-                    "title": "Slow DDoS Mitigation",
-                    "$ref": "#/definitions/virtual_hostSlowDDoSMitigation",
-                    "x-displayname": "Custom"
-                },
-                "source_ip_stickiness": {
-                    "description": "Exclusive with [cookie_stickiness least_active random ring_hash round_robin]\n Request are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
-                    "title": "Source IP Stickiness",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Source IP Stickiness"
-                },
-                "state": {
-                    "description": " State of the virtual host",
-                    "title": "Virtual Host state",
-                    "$ref": "#/definitions/virtual_hostVirtualHostState",
-                    "x-displayname": "Virtual Host State"
-                },
-                "system_default_timeouts": {
-                    "description": "Exclusive with [slow_ddos_mitigation]\n Default Settings for Slow DDoS Mitigation",
-                    "title": "System Default Settings",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Default"
-                },
-                "trusted_clients": {
-                    "type": "array",
-                    "description": " Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "title": "Trusted Client Rules",
-                    "maxItems": 256,
-                    "items": {
-                        "$ref": "#/definitions/http_loadbalancerSimpleClientSrcRule"
-                    },
-                    "x-displayname": "Trusted Client Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
-                    }
-                },
-                "user_id_client_ip": {
-                    "description": "Exclusive with [user_identification]\n Use the Client IP address as the user identifier.",
-                    "title": "user_id_client_ip",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Client IP Address"
-                },
-                "user_identification": {
-                    "description": "Exclusive with [user_id_client_ip]\n A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier.",
-                    "title": "user_identification",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "User Identification Policy"
-                },
-                "waf_exclusion_rules": {
-                    "type": "array",
-                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
-                    "title": "WAF Exclusion Rules",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
@@ -15267,33 +14665,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
-                }
-            }
-        },
-        "viewshttp_loadbalancerObject": {
-            "type": "object",
-            "description": "HTTP loadbalancer view object",
-            "title": "Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the tenant",
-                    "title": "spec",
-                    "$ref": "#/definitions/viewshttp_loadbalancerSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -15405,6 +14776,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
             "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
             "x-ves-oneof-field-slow_ddos_mitigation_choice": "[\"slow_ddos_mitigation\",\"system_default_timeouts\"]",
+            "x-ves-oneof-field-threat_intelligence_choice": "[\"disable_threat_intelligence\",\"enable_threat_intelligence\"]",
             "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
             "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
             "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
@@ -15579,6 +14951,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_threat_intelligence": {
+                    "description": "Exclusive with [enable_threat_intelligence]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "disable_trust_client_ip_headers": {
                     "description": "Exclusive with [enable_trust_client_ip_headers]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -15642,6 +15019,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
+                "enable_threat_intelligence": {
+                    "description": "Exclusive with [disable_threat_intelligence]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "enable_trust_client_ip_headers": {
                     "description": "Exclusive with [disable_trust_client_ip_headers]\n",
                     "$ref": "#/definitions/virtual_hostClientIPHeaders",
@@ -15691,7 +15073,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Block"
                 },
                 "l7_ddos_action_default": {
-                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources and serve JavaScript challenge to rest of traffic",
+                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
@@ -15875,17 +15257,6 @@ var APISwaggerJSON string = `{
                     "title": "RouteTypeSimple",
                     "$ref": "#/definitions/http_loadbalancerRouteTypeSimple",
                     "x-displayname": "Simple Route"
-                }
-            }
-        },
-        "viewshttp_loadbalancerSpecType": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/viewshttp_loadbalancerGlobalSpecType",
-                    "x-displayname": "GC Spec"
                 }
             }
         },
@@ -16094,7 +15465,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostCertificationState": {
             "type": "string",
-            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate",
+            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate\n - AutoCertAccountRateLimited: Auto Cert Account Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertDomainRateLimited: Auto Cert Domain Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - CertificateExpired: Certificate Expired\n\nCertificate has expired",
             "title": "Certification State",
             "enum": [
                 "AutoCertDisabled",
@@ -16111,7 +15482,10 @@ var APISwaggerJSON string = `{
                 "AutoCertError",
                 "PreDomainChallengePending",
                 "DomainChallengeStarted",
-                "AutoCertInitialize"
+                "AutoCertInitialize",
+                "AutoCertAccountRateLimited",
+                "AutoCertDomainRateLimited",
+                "CertificateExpired"
             ],
             "default": "AutoCertDisabled",
             "x-displayname": "Certification State",
@@ -16225,6 +15599,48 @@ var APISwaggerJSON string = `{
                     "description": " DNS record Value",
                     "title": "Value",
                     "x-displayname": "Value"
+                }
+            }
+        },
+        "virtual_hostDNSVHostStatusType": {
+            "type": "object",
+            "description": "DNS related Virtual Host status",
+            "title": "DNS Virtual Host Status Type",
+            "x-displayname": "DNS Virtual Host Status",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.DNSVHostStatusType",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": " Description of error during DNS configuration\n\nExample: - \"value\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "value"
+                },
+                "existing_certificate_state": {
+                    "type": "string",
+                    "description": " Status of Existing Auto Certficate\n\nExample: - \"Certificate Valid or Certificate Expired or Certificate Invalid\"-",
+                    "title": "Existing Certificate Status",
+                    "x-displayname": "Existing Certificate Status",
+                    "x-ves-example": "Certificate Valid or Certificate Expired or Certificate Invalid"
+                },
+                "renew_certificate_state": {
+                    "description": " State of auto certificate generation.",
+                    "title": "Certificate Renewal Status",
+                    "$ref": "#/definitions/virtual_hostCertificationState",
+                    "x-displayname": "Certificate Renewal Status"
+                },
+                "state": {
+                    "description": " State of the virtual host",
+                    "title": "Virtual Host state",
+                    "$ref": "#/definitions/virtual_hostVirtualHostState",
+                    "x-displayname": "Virtual Host State"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
                 }
             }
         },

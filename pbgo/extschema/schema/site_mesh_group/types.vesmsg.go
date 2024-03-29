@@ -146,6 +146,7 @@ func (m *CreateSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_SpokeMesh:
+
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -676,6 +677,7 @@ func (m *GetSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_SpokeMesh:
+
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -1120,6 +1122,7 @@ func (m *GlobalSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_SpokeMesh:
+
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -1659,6 +1662,7 @@ func (m *ReplaceSpecType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_SpokeMesh:
+
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")

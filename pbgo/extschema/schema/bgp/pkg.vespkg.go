@@ -34,6 +34,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp.BgpStatusType"] = BgpStatusTypeValidator()
 	vr["ves.io.schema.bgp.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.bgp.FamilyInet"] = FamilyInetValidator()
+	vr["ves.io.schema.bgp.FamilyInet6"] = FamilyInet6Validator()
 	vr["ves.io.schema.bgp.FamilyInet6vpn"] = FamilyInet6VpnValidator()
 	vr["ves.io.schema.bgp.FamilyInetvpn"] = FamilyInetvpnValidator()
 	vr["ves.io.schema.bgp.FamilyInetvpnParameters"] = FamilyInetvpnParametersValidator()
@@ -68,17 +69,22 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.bgp_parameters.bgp_router_id",
 		"spec.bgp_parameters.bgp_router_id_key",
 		"spec.bgp_parameters.bgp_router_id_type",
-		"spec.peers.#.external.family_inet",
 		"spec.peers.#.external.inside_interfaces",
 		"spec.peers.#.external.outside_interfaces",
 		"spec.peers.#.internal",
 		"spec.peers.#.metadata.disable",
 		"spec.peers.#.target_service",
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -88,13 +94,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.peers.#.external.address_ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.peers.#.external.family_inet_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.bgp.API.Create"] = "ves.io.schema.bgp.CreateRequest"
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.bgp.API.Get"] = []string{
-		"object",
-	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp.API.Get"] = []svcfw.EnvironmentField{
 		{
@@ -102,7 +108,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "object.spec.gc_spec.peers.#.external.address_ipv6",
+			FieldPath:           "create_form.spec.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -110,7 +116,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.peers.#.external.family_inet_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -121,7 +135,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "items.#.object.spec.gc_spec.peers.#.external.address_ipv6",
+			FieldPath:           "items.#.get_spec.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -130,17 +144,22 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.bgp_parameters.bgp_router_id",
 		"spec.bgp_parameters.bgp_router_id_key",
 		"spec.bgp_parameters.bgp_router_id_type",
-		"spec.peers.#.external.family_inet",
 		"spec.peers.#.external.inside_interfaces",
 		"spec.peers.#.external.outside_interfaces",
 		"spec.peers.#.internal",
 		"spec.peers.#.metadata.disable",
 		"spec.peers.#.target_service",
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}

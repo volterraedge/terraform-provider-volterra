@@ -23,25 +23,30 @@ resource "volterra_apm" "example" {
   // One of the arguments from this list "https_management" must be set
 
   https_management {
-    // One of the arguments from this list "advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet advertise_on_internet_default_vip advertise_on_internet" must be set
+    // One of the arguments from this list "advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet" must be set
 
-    advertise_on_slo_internet_vip {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
+    advertise_on_slo_sli {
+      // One of the arguments from this list "use_mtls no_mtls" must be set
 
       use_mtls {
         // One of the arguments from this list "no_crl crl" must be set
         no_crl = true
 
         // One of the arguments from this list "trusted_ca_url trusted_ca" must be set
-        trusted_ca_url = "trusted_ca_url"
 
+        trusted_ca {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
         // One of the arguments from this list "xfcc_disabled xfcc_options" must be set
         xfcc_disabled = true
       }
 
       tls_certificates {
         certificate_url = "value"
-        description     = "Certificate used in production environment"
+
+        description = "Certificate used in production environment"
 
         // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
 
@@ -49,8 +54,10 @@ resource "volterra_apm" "example" {
         private_key {
           blindfold_secret_info_internal {
             decryption_provider = "value"
-            location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-            store_provider      = "value"
+
+            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+            store_provider = "value"
           }
 
           secret_encoding_type = "secret_encoding_type"
@@ -64,8 +71,8 @@ resource "volterra_apm" "example" {
       }
 
       tls_config {
-        // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
-        medium_security = true
+        // One of the arguments from this list "medium_security low_security custom_security default_security" must be set
+        default_security = true
       }
     }
 
@@ -85,18 +92,26 @@ resource "volterra_apm" "example" {
       admin_password {
         blindfold_secret_info_internal {
           decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
+
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+          store_provider = "value"
         }
 
         secret_encoding_type = "secret_encoding_type"
 
         // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-        blindfold_secret_info {
-          decryption_provider = "value"
-          location            = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          store_provider      = "value"
+        vault_secret_info {
+          key = "key_pem"
+
+          location = "v1/data/vhost_key"
+
+          provider = "vault-vh-provider"
+
+          secret_encoding = "secret_encoding"
+
+          version = "1"
         }
       }
 
@@ -118,9 +133,9 @@ resource "volterra_apm" "example" {
         automatic_vip = true
 
         // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
-        no_tcp_ports = true
+        default_tcp_ports = true
 
-        // One of the arguments from this list "custom_udp_ports no_udp_ports" must be set
+        // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
         no_udp_ports = true
       }
 
@@ -128,9 +143,17 @@ resource "volterra_apm" "example" {
         aws_az_name = "us-west-2a"
 
         // One of the arguments from this list "reserved_mgmt_subnet mgmt_subnet" must be set
-        reserved_mgmt_subnet = true
-        node_name            = "node1"
 
+        mgmt_subnet {
+          // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+
+          subnet_param {
+            ipv4 = "10.1.2.0/24"
+
+            ipv6 = "1234:568:abcd:9100::/64"
+          }
+        }
+        node_name = "node1"
         // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
         automatic_prefix = true
       }
@@ -145,7 +168,7 @@ resource "volterra_apm" "example" {
     // One of the arguments from this list "market_place_image" must be set
 
     market_place_image {
-      // One of the arguments from this list "best_plus_payg_1gbps BestPlusPayG200Mbps" must be set
+      // One of the arguments from this list "BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
       BestPlusPayG200Mbps = true
     }
   }
@@ -172,183 +195,13 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`https_management` - (Optional) Enable HTTPS based management. See [Https Management ](#https-management) below for details.
+`https_management` - (Optional) Enable HTTPS based management. See [Http Management Choice Https Management ](#http-management-choice-https-management) below for details.
 
-`aws_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on AWS Transit Gateway Site. See [Aws Site Type Choice ](#aws-site-type-choice) below for details.
+`aws_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on AWS Transit Gateway Site. See [Site Type Choice Aws Site Type Choice ](#site-type-choice-aws-site-type-choice) below for details.
 
-`baremetal_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site. See [Baremetal Site Type Choice ](#baremetal-site-type-choice) below for details.
+`baremetal_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site. See [Site Type Choice Baremetal Site Type Choice ](#site-type-choice-baremetal-site-type-choice) below for details.
 
-### BestPlusPayG200Mbps
-
-F5 Best Plus with all modules in 200Mbps flavor.
-
-### Admin Password
-
-Secret admin password for BIG-IP.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
-
-### Advertise On Internet
-
-Advertise this loadbalancer on public network.
-
-`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
-
-### Advertise On Internet Default Vip
-
-Enable management access on internet with default VIP.
-
-### Advertise On Public
-
-Advertise this loadbalancer on public network.
-
-`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
-
-### Advertise On Public Default Vip
-
-Enable management access on internet with default VIP.
-
-### Advertise On Sli Vip
-
-Enable on Site local inside network, default VIP will be used.
-
-`no_mtls` - (Optional) x-displayName: "Disable" (bool).
-
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
-
-`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
-
-`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
-
-### Advertise On Slo Internet Vip
-
-Enable On Site Local Outside Internet VIP.
-
-`no_mtls` - (Optional) x-displayName: "Disable" (bool).
-
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
-
-`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
-
-`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
-
-### Advertise On Slo Ip
-
-Advertise this loadbalancer on Site Local Outside network address.
-
-### Advertise On Slo Ip External
-
-Advertise this loadbalancer on Site Local Outside network address and enable cloud external IP.
-
-### Advertise On Slo Sli
-
-Enable on Site local inside and outside network, default VIP will be used.
-
-`no_mtls` - (Optional) x-displayName: "Disable" (bool).
-
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
-
-`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
-
-`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
-
-### Advertise On Slo Vip
-
-Enable on Site local outside network, default VIP will be used.
-
-`no_mtls` - (Optional) x-displayName: "Disable" (bool).
-
-`use_mtls` - (Optional) x-displayName: "Enable". See [Use Mtls ](#use-mtls) below for details.
-
-`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Certificates ](#tls-certificates) below for details.
-
-`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Config ](#tls-config) below for details.
-
-### Apm Aws Site
-
-Virtual F5 BIG-IP service to be deployed on AWS.
-
-`admin_password` - (Required) Secret admin password for BIG-IP. See [Admin Password ](#admin-password) below for details.
-
-`admin_username` - (Required) Admin Username for BIG-IP (`String`).
-
-`aws_tgw_site` - (Required) Reference to AWS transit gateway site. See [Aws Tgw Site ](#aws-tgw-site) below for details.
-
-`endpoint_service` - (Optional) External service type is Endpoint service. See [Endpoint Service ](#endpoint-service) below for details.
-
-`nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
-
-`ssh_key` - (Required) Public SSH key for accessing the BIG-IP nodes. (`String`).
-
-`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
-
-### Automatic Prefix
-
-System will automatically select tunnel prefix.
-
-### Automatic Vip
-
-System will automatically select a VIP.
-
-### Aws Site Type Choice
-
-Virtual F5 BIG-IP APM service to be deployed on AWS Transit Gateway Site.
-
-`apm_aws_site` - (Required) Virtual F5 BIG-IP service to be deployed on AWS. See [Apm Aws Site ](#apm-aws-site) below for details.
-
-`market_place_image` - (Optional) Select the BIG-IP pay as you go image to be used for this service. See [Market Place Image ](#market-place-image) below for details.
-
-### Aws Tgw Site
-
-Reference to AWS transit gateway site.
-
-`aws_tgw_site` - (Required) Reference to AWS transit gateway site. See [ref](#ref) below for details.
-
-### Baremetal Site Type Choice
-
-Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site.
-
-`f5_bare_metal_site` - (Required) Virtual BIG-IP specification for App Stack Bare Metal Site. See [F5 Bare Metal Site ](#f5-bare-metal-site) below for details.
-
-### Best Plus Payg 1gbps
-
-F5 Best Plus with all modules in 1Gbps flavor.
-
-### Bigiq Instance
-
-Details of BIG-IQ Instance used for activating licenses..
-
-`license_pool_name` - (Required) Name of Utility Pool on BIG-IQ (`String`).
-
-`license_server_ip` - (Required) IP Address from the TCP Load Balancer which is configured to communicate with License Server (`String`).
-
-`password` - (Required) Password of the user used to access BIG-IQ to activate the license. See [Password ](#password) below for details.
-
-`sku_name` - (Required) License offering name aka SKU name (`String`).
-
-`username` - (Required) User Name used to access BIG-IQ to activate the license (`String`).
-
-### Blindfold Secret Info
-
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Blindfold Secret Info Internal
+### Admin Password Blindfold Secret Info Internal
 
 Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
@@ -358,21 +211,351 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Clear Secret Info
+### Advertise Choice Advertise On Internet
 
-Clear Secret is used for the secrets that are not encrypted.
+Advertise this loadbalancer on public network.
 
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
 
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+### Advertise Choice Advertise On Internet Default Vip
 
-### Custom Hash Algorithms
+Enable management access on internet with default VIP.
 
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+### Advertise Choice Advertise On Sli Vip
 
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+Enable on Site local inside network, default VIP will be used.
 
-### Custom Security
+###### One of the arguments from this list "no_mtls, use_mtls" must be set
+
+`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
+
+`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Advertise On Sli Vip Tls Certificates ](#advertise-on-sli-vip-tls-certificates) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Advertise On Sli Vip Tls Config ](#advertise-on-sli-vip-tls-config) below for details.
+
+### Advertise Choice Advertise On Slo Internet Vip
+
+Enable On Site Local Outside Internet VIP.
+
+###### One of the arguments from this list "no_mtls, use_mtls" must be set
+
+`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
+
+`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Advertise On Slo Internet Vip Tls Certificates ](#advertise-on-slo-internet-vip-tls-certificates) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Advertise On Slo Internet Vip Tls Config ](#advertise-on-slo-internet-vip-tls-config) below for details.
+
+### Advertise Choice Advertise On Slo Sli
+
+Enable on Site local inside and outside network, default VIP will be used.
+
+###### One of the arguments from this list "no_mtls, use_mtls" must be set
+
+`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
+
+`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Advertise On Slo Sli Tls Certificates ](#advertise-on-slo-sli-tls-certificates) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Advertise On Slo Sli Tls Config ](#advertise-on-slo-sli-tls-config) below for details.
+
+### Advertise Choice Advertise On Slo Vip
+
+Enable on Site local outside network, default VIP will be used.
+
+###### One of the arguments from this list "no_mtls, use_mtls" must be set
+
+`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`use_mtls` - (Optional) x-displayName: "Enable". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
+
+`tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Advertise On Slo Vip Tls Certificates ](#advertise-on-slo-vip-tls-certificates) below for details.
+
+`tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Advertise On Slo Vip Tls Config ](#advertise-on-slo-vip-tls-config) below for details.
+
+### Advertise Choice Disable Local
+
+Disable on Site local network.
+
+### Advertise Choice Do Not Advertise On Internet
+
+Do not enable access to management from internet.
+
+### Advertise On Sli Vip Tls Certificates
+
+for example, domain.com and *.domain.com - but use different signature algorithms.
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
+
+### Advertise On Sli Vip Tls Config
+
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
+
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
+
+`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
+
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
+
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
+
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### Advertise On Slo Internet Vip Tls Certificates
+
+for example, domain.com and *.domain.com - but use different signature algorithms.
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
+
+### Advertise On Slo Internet Vip Tls Config
+
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
+
+###### One of the arguments from this list "medium_security, low_security, custom_security, default_security" must be set
+
+`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
+
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
+
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
+
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### Advertise On Slo Sli Tls Certificates
+
+for example, domain.com and *.domain.com - but use different signature algorithms.
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
+
+### Advertise On Slo Sli Tls Config
+
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
+
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
+
+`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
+
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
+
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
+
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### Advertise On Slo Vip Tls Certificates
+
+for example, domain.com and *.domain.com - but use different signature algorithms.
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
+
+### Advertise On Slo Vip Tls Config
+
+Configuration of TLS settings such as min/max TLS version and ciphersuites.
+
+###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
+
+`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
+
+`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
+
+`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
+
+`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
+
+### Ami Choice BestPlusPayG200Mbps
+
+F5 Best Plus with all modules in 200Mbps flavor.
+
+### Ami Choice Best Plus Payg 1gbps
+
+F5 Best Plus with all modules in 1Gbps flavor.
+
+### Apm Aws Site Admin Password
+
+Secret admin password for BIG-IP.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Apm Aws Site Aws Tgw Site
+
+Reference to AWS transit gateway site.
+
+`aws_tgw_site` - (Required) Reference to AWS transit gateway site. See [ref](#ref) below for details.
+
+### Apm Aws Site Endpoint Service
+
+External service type is Endpoint service.
+
+###### One of the arguments from this list "disable_advertise_on_slo_ip, advertise_on_slo_ip, advertise_on_slo_ip_external" must be set
+
+`advertise_on_slo_ip` - (Optional) Advertise this loadbalancer on Site Local Outside network address (`Bool`).
+
+`advertise_on_slo_ip_external` - (Optional) Advertise this loadbalancer on Site Local Outside network address and enable cloud external IP (`Bool`).
+
+`disable_advertise_on_slo_ip` - (Optional) Do not Advertise this loadbalancer on Site Local Outside network address (`Bool`).
+
+###### One of the arguments from this list "configured_vip, automatic_vip" must be set
+
+`automatic_vip` - (Optional) System will automatically select a VIP (`Bool`).
+
+`configured_vip` - (Optional) Enter IP address for the default VIP (`String`).
+
+###### One of the arguments from this list "default_tcp_ports, http_port, https_port, custom_tcp_ports, no_tcp_ports" must be set
+
+`custom_tcp_ports` - (Optional) Select custom TCP Ports. See [Tcp Port Choice Custom Tcp Ports ](#tcp-port-choice-custom-tcp-ports) below for details.
+
+`default_tcp_ports` - (Optional) Select default TCP Ports, 80 and 443 (`Bool`).
+
+`http_port` - (Optional) Select HTTP Port 80 (`Bool`).
+
+`https_port` - (Optional) Select HTTPS Port 443 (`Bool`).
+
+`no_tcp_ports` - (Optional) Do not select TCP Ports (`Bool`).
+
+###### One of the arguments from this list "no_udp_ports, custom_udp_ports" must be set
+
+`custom_udp_ports` - (Optional) select custom udp ports. See [Udp Port Choice Custom Udp Ports ](#udp-port-choice-custom-udp-ports) below for details.
+
+`no_udp_ports` - (Optional) do not select udp ports (`Bool`).
+
+### Apm Aws Site Nodes
+
+Specify how and where the service nodes are spawned.
+
+`aws_az_name` - (Required) The AWS Availability Zone must be consistent with the AWS Region chosen. Please select an AZ in the same Region as your TGW Site (`String`).
+
+###### One of the arguments from this list "reserved_mgmt_subnet, mgmt_subnet" must be set
+
+`mgmt_subnet` - (Optional) Select Existing Subnet or Create New. See [Mgmt Subnet Choice Mgmt Subnet ](#mgmt-subnet-choice-mgmt-subnet) below for details.
+
+`reserved_mgmt_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (`Bool`).
+
+`node_name` - (Required) Node Name will be used to assign as hostname to the service (`String`).
+
+###### One of the arguments from this list "automatic_prefix, tunnel_prefix" must be set
+
+`automatic_prefix` - (Optional) System will automatically select tunnel prefix (`Bool`).
+
+`tunnel_prefix` - (Optional) Enter IP prefix for the tunnel, it has to be /30 (`String`).
+
+### Aws Site Type Choice Apm Aws Site
+
+Virtual F5 BIG-IP service to be deployed on AWS.
+
+`admin_password` - (Required) Secret admin password for BIG-IP. See [Apm Aws Site Admin Password ](#apm-aws-site-admin-password) below for details.
+
+`admin_username` - (Required) Admin Username for BIG-IP (`String`).
+
+`aws_tgw_site` - (Required) Reference to AWS transit gateway site. See [Apm Aws Site Aws Tgw Site ](#apm-aws-site-aws-tgw-site) below for details.
+
+`endpoint_service` - (Optional) External service type is Endpoint service. See [Apm Aws Site Endpoint Service ](#apm-aws-site-endpoint-service) below for details.
+
+`nodes` - (Required) Specify how and where the service nodes are spawned. See [Apm Aws Site Nodes ](#apm-aws-site-nodes) below for details.
+
+`ssh_key` - (Required) Public SSH key for accessing the BIG-IP nodes. (`String`).
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
+
+### Baremetal Site Type Choice F5 Bare Metal Site
+
+Virtual BIG-IP specification for App Stack Bare Metal Site.
+
+`admin_password` - (Required) Secret admin password for BIG-IP. See [F5 Bare Metal Site Admin Password ](#f5-bare-metal-site-admin-password) below for details.
+
+`admin_username` - (Required) Admin Username for BIG-IP (`String`).
+
+`bare_metal_site` - (Required) Reference to bare metal site on which BIG-IP should be deployed. See [ref](#ref) below for details.
+
+`bigiq_instance` - (Required) Details of BIG-IQ Instance used for activating licenses.. See [F5 Bare Metal Site Bigiq Instance ](#f5-bare-metal-site-bigiq-instance) below for details.
+
+`nodes` - (Required) Specify how and where the service nodes are spawned. See [F5 Bare Metal Site Nodes ](#f5-bare-metal-site-nodes) below for details.
+
+`public_download_url` - (Required) Public URL where BIG-IP VE image (qcow2) is hosted (`String`).
+
+`ssh_key` - (Required) Public SSH key for accessing the BIG-IP nodes. (`String`).
+
+### Bigiq Instance Password
+
+Password of the user used to access BIG-IQ to activate the license.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Choice Custom Security
 
 Custom selection of TLS versions and cipher suites.
 
@@ -382,223 +565,251 @@ Custom selection of TLS versions and cipher suites.
 
 `min_version` - (Optional) Minimum TLS protocol version. (`String`).
 
-### Custom Tcp Ports
-
-Select custom TCP Ports.
-
-`ports` - (Required) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
-
-### Custom Udp Ports
-
-select custom udp ports.
-
-`ports` - (Required) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
-
-### Default Https Port
-
-Select default HTTPS 443.
-
-### Default Security
+### Choice Default Security
 
 TLS v1.2+ with PFS ciphers and strong crypto algorithms..
 
-### Default Tcp Ports
-
-Select default TCP Ports, 80 and 443.
-
-### Disable Advertise On Slo Ip
-
-Do not Advertise this loadbalancer on Site Local Outside network address.
-
-### Disable Local
-
-Disable on Site local network.
-
-### Disable Ocsp Stapling
-
-This is the default behavior if no choice is selected..
-
-### Do Not Advertise
-
-Do not enable access to management from internet.
-
-### Do Not Advertise On Internet
-
-Do not enable access to management from internet.
-
-### Endpoint Service
-
-External service type is Endpoint service.
-
-`advertise_on_slo_ip` - (Optional) Advertise this loadbalancer on Site Local Outside network address (bool).
-
-`advertise_on_slo_ip_external` - (Optional) Advertise this loadbalancer on Site Local Outside network address and enable cloud external IP (bool).
-
-`disable_advertise_on_slo_ip` - (Optional) Do not Advertise this loadbalancer on Site Local Outside network address (bool).
-
-`automatic_vip` - (Optional) System will automatically select a VIP (bool).
-
-`configured_vip` - (Optional) Enter IP address for the default VIP (`String`).
-
-`custom_tcp_ports` - (Optional) Select custom TCP Ports. See [Custom Tcp Ports ](#custom-tcp-ports) below for details.
-
-`default_tcp_ports` - (Optional) Select default TCP Ports, 80 and 443 (bool).
-
-`http_port` - (Optional) Select HTTP Port 80 (bool).
-
-`https_port` - (Optional) Select HTTPS Port 443 (bool).
-
-`no_tcp_ports` - (Optional) Do not select TCP Ports (bool).
-
-`custom_udp_ports` - (Optional) select custom udp ports. See [Custom Udp Ports ](#custom-udp-ports) below for details.
-
-`no_udp_ports` - (Optional) do not select udp ports (bool).
-
-### F5 Bare Metal Site
-
-Virtual BIG-IP specification for App Stack Bare Metal Site.
-
-`admin_password` - (Required) Secret admin password for BIG-IP. See [Admin Password ](#admin-password) below for details.
-
-`admin_username` - (Required) Admin Username for BIG-IP (`String`).
-
-`bare_metal_site` - (Required) Reference to bare metal site on which BIG-IP should be deployed. See [ref](#ref) below for details.
-
-`bigiq_instance` - (Required) Details of BIG-IQ Instance used for activating licenses.. See [Bigiq Instance ](#bigiq-instance) below for details.
-
-`nodes` - (Required) Specify how and where the service nodes are spawned. See [Nodes ](#nodes) below for details.
-
-`public_download_url` - (Required) Public URL where BIG-IP VE image (qcow2) is hosted (`String`).
-
-`ssh_key` - (Required) Public SSH key for accessing the BIG-IP nodes. (`String`).
-
-### Http Port
-
-Select HTTP Port 80.
-
-### Https Management
-
-Enable HTTPS based management.
-
-`advertise_on_internet` - (Optional) Advertise this loadbalancer on public network. See [Advertise On Internet ](#advertise-on-internet) below for details.
-
-`advertise_on_internet_default_vip` - (Optional) Enable management access on internet with default VIP (bool).
-
-`advertise_on_sli_vip` - (Optional) Enable on Site local inside network, default VIP will be used. See [Advertise On Sli Vip ](#advertise-on-sli-vip) below for details.
-
-`advertise_on_slo_internet_vip` - (Optional) Enable On Site Local Outside Internet VIP. See [Advertise On Slo Internet Vip ](#advertise-on-slo-internet-vip) below for details.
-
-`advertise_on_slo_sli` - (Optional) Enable on Site local inside and outside network, default VIP will be used. See [Advertise On Slo Sli ](#advertise-on-slo-sli) below for details.
-
-`advertise_on_slo_vip` - (Optional) Enable on Site local outside network, default VIP will be used. See [Advertise On Slo Vip ](#advertise-on-slo-vip) below for details.
-
-`disable_local` - (Optional) Disable on Site local network (bool).
-
-`do_not_advertise_on_internet` - (Optional) Do not enable access to management from internet (bool).
-
-`domain_suffix` - (Required) Domain suffix will be used along with node name to form URL to access node management (`String`).
-
-`advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Advertise On Public ](#advertise-on-public) below for details.
-
-`advertise_on_public_default_vip` - (Optional) Enable management access on internet with default VIP (bool).
-
-`do_not_advertise` - (Optional) Do not enable access to management from internet (bool).
-
-`default_https_port` - (Optional) Select default HTTPS 443 (bool).
-
-`https_port` - (Optional) Enter TCP port number (`Int`).
-
-### Https Port
-
-Select HTTPS Port 443.
-
-### Low Security
+### Choice Low Security
 
 TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
 
-### Market Place Image
-
-Select the BIG-IP pay as you go image to be used for this service.
-
-`BestPlusPayG200Mbps` - (Optional) F5 Best Plus with all modules in 200Mbps flavor (bool).
-
-`best_plus_payg_1gbps` - (Optional) F5 Best Plus with all modules in 1Gbps flavor (bool).
-
-### Medium Security
+### Choice Medium Security
 
 TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
 
-### Mgmt Subnet
+### Choice Subnet Param
 
-Select Existing Subnet or Create New.
+Parameters for creating new subnet.
 
-`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
 
-`subnet_param` - (Optional) Parameters for creating new subnet. See [Subnet Param ](#subnet-param) below for details.
+`ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).
 
-### No Crl
+### Crl Choice No Crl
 
 Client certificate revocation status is not verified.
 
-### No Mtls
+### External Vip Choice Advertise On Slo Ip
 
-x-displayName: "Disable".
+Advertise this loadbalancer on Site Local Outside network address.
 
-### No Tcp Ports
+### External Vip Choice Advertise On Slo Ip External
 
-Do not select TCP Ports.
+Advertise this loadbalancer on Site Local Outside network address and enable cloud external IP.
 
-### No Udp Ports
+### External Vip Choice Disable Advertise On Slo Ip
 
-do not select udp ports.
+Do not Advertise this loadbalancer on Site Local Outside network address.
 
-### Nodes
+### F5 Bare Metal Site Admin Password
+
+Secret admin password for BIG-IP.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### F5 Bare Metal Site Bigiq Instance
+
+Details of BIG-IQ Instance used for activating licenses..
+
+`license_pool_name` - (Required) Name of Utility Pool on BIG-IQ (`String`).
+
+`license_server_ip` - (Required) IP Address from the TCP Load Balancer which is configured to communicate with License Server (`String`).
+
+`password` - (Required) Password of the user used to access BIG-IQ to activate the license. See [Bigiq Instance Password ](#bigiq-instance-password) below for details.
+
+`sku_name` - (Required) License offering name aka SKU name (`String`).
+
+`username` - (Required) User Name used to access BIG-IQ to activate the license (`String`).
+
+### F5 Bare Metal Site Nodes
 
 Specify how and where the service nodes are spawned.
 
-`aws_az_name` - (Required) The AWS Availability Zone must be consistent with the AWS Region chosen. Please select an AZ in the same Region as your TGW Site (`String`).
+`bm_node_memory_size` - (Required) x-required (`String`).
 
-`mgmt_subnet` - (Optional) Select Existing Subnet or Create New. See [Mgmt Subnet ](#mgmt-subnet) below for details.
+`bm_virtual_cpu_count` - (Required) x-required (`String`).
 
-`reserved_mgmt_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (bool).
+`external_interface` - (Optional). See [Nodes External Interface ](#nodes-external-interface) below for details.
+
+`internal_interface` - (Optional). See [Nodes Internal Interface ](#nodes-internal-interface) below for details.
 
 `node_name` - (Required) Node Name will be used to assign as hostname to the service (`String`).
 
-`automatic_prefix` - (Optional) System will automatically select tunnel prefix (bool).
+### Http Management Choice Https Management
 
-`tunnel_prefix` - (Optional) Enter IP prefix for the tunnel, it has to be /30 (`String`).
+Enable HTTPS based management.
 
-### Password
+###### One of the arguments from this list "advertise_on_sli_vip, advertise_on_slo_vip, advertise_on_slo_sli, disable_local, do_not_advertise_on_internet, advertise_on_internet_default_vip, advertise_on_internet, advertise_on_slo_internet_vip" must be set
 
-Password of the user used to access BIG-IQ to activate the license.
+`advertise_on_internet` - (Optional) Advertise this loadbalancer on public network. See [Advertise Choice Advertise On Internet ](#advertise-choice-advertise-on-internet) below for details.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+`advertise_on_internet_default_vip` - (Optional) Enable management access on internet with default VIP (`Bool`).
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`advertise_on_sli_vip` - (Optional) Enable on Site local inside network, default VIP will be used. See [Advertise Choice Advertise On Sli Vip ](#advertise-choice-advertise-on-sli-vip) below for details.
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`advertise_on_slo_internet_vip` - (Optional) Enable On Site Local Outside Internet VIP. See [Advertise Choice Advertise On Slo Internet Vip ](#advertise-choice-advertise-on-slo-internet-vip) below for details.
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+`advertise_on_slo_sli` - (Optional) Enable on Site local inside and outside network, default VIP will be used. See [Advertise Choice Advertise On Slo Sli ](#advertise-choice-advertise-on-slo-sli) below for details.
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+`advertise_on_slo_vip` - (Optional) Enable on Site local outside network, default VIP will be used. See [Advertise Choice Advertise On Slo Vip ](#advertise-choice-advertise-on-slo-vip) below for details.
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`disable_local` - (Optional) Disable on Site local network (`Bool`).(Deprecated)
 
-### Private Key
+`do_not_advertise_on_internet` - (Optional) Do not enable access to management from internet (`Bool`).(Deprecated)
 
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+`domain_suffix` - (Required) Domain suffix will be used along with node name to form URL to access node management (`String`).
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+###### One of the arguments from this list "advertise_on_public_default_vip, advertise_on_public, do_not_advertise" can be set
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Internet Choice Advertise On Public ](#internet-choice-advertise-on-public) below for details.(Deprecated)
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`advertise_on_public_default_vip` - (Optional) Enable management access on internet with default VIP (`Bool`).(Deprecated)
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
+`do_not_advertise` - (Optional) Do not enable access to management from internet (`Bool`).(Deprecated)
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
+###### One of the arguments from this list "default_https_port, https_port" must be set
 
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`default_https_port` - (Optional) Select default HTTPS 443 (`Bool`).
+
+`https_port` - (Optional) Enter TCP port number (`Int`).
+
+### Inside Vip Choice Automatic Vip
+
+System will automatically select a VIP.
+
+### Internet Choice Advertise On Public
+
+Advertise this loadbalancer on public network.
+
+`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
+
+### Internet Choice Advertise On Public Default Vip
+
+Enable management access on internet with default VIP.
+
+### Internet Choice Do Not Advertise
+
+Do not enable access to management from internet.
+
+### License Type Market Place Image
+
+Select the BIG-IP pay as you go image to be used for this service.
+
+###### One of the arguments from this list "BestPlusPayG200Mbps, best_plus_payg_1gbps" must be set
+
+`BestPlusPayG200Mbps` - (Optional) F5 Best Plus with all modules in 200Mbps flavor (`Bool`).
+
+`best_plus_payg_1gbps` - (Optional) F5 Best Plus with all modules in 1Gbps flavor (`Bool`).
+
+### Mgmt Subnet Choice Mgmt Subnet
+
+Select Existing Subnet or Create New.
+
+###### One of the arguments from this list "subnet_param, existing_subnet_id" must be set
+
+`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+
+`subnet_param` - (Optional) Parameters for creating new subnet. See [Choice Subnet Param ](#choice-subnet-param) below for details.
+
+### Mgmt Subnet Choice Reserved Mgmt Subnet
+
+Autogenerate and reserve a subnet from the Primary CIDR.
+
+### Mtls Choice No Mtls
+
+x-displayName: "Disable".
+
+### Mtls Choice Use Mtls
+
+x-displayName: "Enable".
+
+###### One of the arguments from this list "no_crl, crl" can be set
+
+`crl` - (Optional) Specify the CRL server information to download the certificate revocation list. See [ref](#ref) below for details.
+
+`no_crl` - (Optional) Client certificate revocation status is not verified (`Bool`).
+
+###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
+
+`trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Load Balancer. See [ref](#ref) below for details.
+
+`trusted_ca_url` - (Optional) Upload a Root CA Certificate specifically for this Load Balancer (`String`).
+
+###### One of the arguments from this list "xfcc_disabled, xfcc_options" can be set
+
+`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (`Bool`).
+
+`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Header Xfcc Options ](#xfcc-header-xfcc-options) below for details.
+
+### Nodes External Interface
+
+.
+
+`interface` - (Required) L2 Interface on Site to be connected as interface on BIG-IP. See [ref](#ref) below for details.
+
+`network_gateway` - (Optional) (`String`).
+
+`network_self_ip` - (Required) Self IP CIDR (`String`).
+
+### Nodes Internal Interface
+
+.
+
+`interface` - (Required) L2 Interface on Site to be connected as interface on BIG-IP. See [ref](#ref) below for details.
+
+`network_gateway` - (Optional) (`String`).
+
+`network_self_ip` - (Required) Self IP CIDR (`String`).
+
+### Ocsp Stapling Choice Custom Hash Algorithms
+
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Ocsp Stapling Choice Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
+
+### Ocsp Stapling Choice Use System Defaults
+
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Port Choice Default Https Port
+
+Select default HTTPS 443.
+
+### Private Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Ref
 
@@ -610,67 +821,25 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Reserved Mgmt Subnet
+### Secret Info Oneof Blindfold Secret Info
 
-Autogenerate and reserve a subnet from the Primary CIDR.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
-### Subnet Param
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-Parameters for creating new subnet.
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
-`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-`ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).
+### Secret Info Oneof Clear Secret Info
 
-### Tls Certificates
+Clear Secret is used for the secrets that are not encrypted.
 
-for example, domain.com and *.domain.com - but use different signature algorithms.
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-`description` - (Optional) Description for the certificate (`String`).
-
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
-
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
-
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
-
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
-
-### Tls Config
-
-Configuration of TLS settings such as min/max TLS version and ciphersuites.
-
-`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Custom Security ](#custom-security) below for details.
-
-`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (bool).
-
-`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (bool).
-
-`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (bool).
-
-### Use Mtls
-
-x-displayName: "Enable".
-
-`crl` - (Optional) Specify the CRL server information to download the certificate revocation list. See [ref](#ref) below for details.
-
-`no_crl` - (Optional) Client certificate revocation status is not verified (bool).
-
-`trusted_ca` - (Optional) Select/Add a Root CA certificate. See [ref](#ref) below for details.
-
-`trusted_ca_url` - (Optional) Inline Root CA certificate (`String`).
-
-`xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (bool).
-
-`xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Options ](#xfcc-options) below for details.
-
-### Use System Defaults
-
-F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
-
-### Vault Secret Info
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -684,17 +853,87 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Wingman Secret Info
+### Secret Info Oneof Wingman Secret Info
 
 Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 
-### Xfcc Disabled
+### Site Type Choice Aws Site Type Choice
+
+Virtual F5 BIG-IP APM service to be deployed on AWS Transit Gateway Site.
+
+`apm_aws_site` - (Required) Virtual F5 BIG-IP service to be deployed on AWS. See [Aws Site Type Choice Apm Aws Site ](#aws-site-type-choice-apm-aws-site) below for details.
+
+###### One of the arguments from this list "market_place_image" must be set
+
+`market_place_image` - (Optional) Select the BIG-IP pay as you go image to be used for this service. See [License Type Market Place Image ](#license-type-market-place-image) below for details.
+
+### Site Type Choice Baremetal Site Type Choice
+
+Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site.
+
+`f5_bare_metal_site` - (Required) Virtual BIG-IP specification for App Stack Bare Metal Site. See [Baremetal Site Type Choice F5 Bare Metal Site ](#baremetal-site-type-choice-f5-bare-metal-site) below for details.
+
+### Tcp Port Choice Custom Tcp Ports
+
+Select custom TCP Ports.
+
+`ports` - (Required) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
+
+### Tcp Port Choice Default Tcp Ports
+
+Select default TCP Ports, 80 and 443.
+
+### Tcp Port Choice Http Port
+
+Select HTTP Port 80.
+
+### Tcp Port Choice Https Port
+
+Select HTTPS Port 443.
+
+### Tcp Port Choice No Tcp Ports
+
+Do not select TCP Ports.
+
+### Tls Certificates Private Key
+
+TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tunnel Prefix Choice Automatic Prefix
+
+System will automatically select tunnel prefix.
+
+### Udp Port Choice Custom Udp Ports
+
+select custom udp ports.
+
+`ports` - (Required) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
+
+### Udp Port Choice No Udp Ports
+
+do not select udp ports.
+
+### Xfcc Header Xfcc Disabled
 
 No X-Forwarded-Client-Cert header will be added.
 
-### Xfcc Options
+### Xfcc Header Xfcc Options
 
 X-Forwarded-Client-Cert header will be added with the configured fields.
 

@@ -310,11 +310,11 @@ type upgradeAPIInprocClient struct {
 }
 
 func (c *upgradeAPIInprocClient) UpgradeOS(ctx context.Context, in *UpgradeOSRequest, opts ...grpc.CallOption) (*UpgradeOSResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UpgradeAPI.UpgradeOS", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.UpgradeAPI.UpgradeOS")
 	return c.UpgradeAPIServer.UpgradeOS(ctx, in)
 }
 func (c *upgradeAPIInprocClient) UpgradeSW(ctx context.Context, in *UpgradeSWRequest, opts ...grpc.CallOption) (*UpgradeSWResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.UpgradeAPI.UpgradeSW", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.UpgradeAPI.UpgradeSW")
 	return c.UpgradeAPIServer.UpgradeSW(ctx, in)
 }
 

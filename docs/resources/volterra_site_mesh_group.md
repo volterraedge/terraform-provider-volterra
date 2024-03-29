@@ -42,41 +42,53 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`hub` - (Optional) Hub must be empty when Site Mesh Group type is Hub or Full Mesh. See [ref](#ref) below for details.
+`hub` - (Optional) Hub must be empty when Site Mesh Group type is Hub or Full Mesh. See [ref](#ref) below for details.(Deprecated)
 
-`full_mesh` - (Optional) Full mesh of tunnels are created between all sites. See [Full Mesh ](#full-mesh) below for details.
+`full_mesh` - (Optional) Full mesh of tunnels are created between all sites. See [Mesh Choice Full Mesh ](#mesh-choice-full-mesh) below for details.
 
-`hub_mesh` - (Optional) Mesh of Type Hub. See [Hub Mesh ](#hub-mesh) below for details.
+`hub_mesh` - (Optional) Mesh of Type Hub. See [Mesh Choice Hub Mesh ](#mesh-choice-hub-mesh) below for details.
 
-`spoke_mesh` - (Optional) Mesh of Type Spoke. See [Spoke Mesh ](#spoke-mesh) below for details.
+`spoke_mesh` - (Optional) Mesh of Type Spoke. See [Mesh Choice Spoke Mesh ](#mesh-choice-spoke-mesh) below for details.
 
-`type` - (Optional) Type of Site to Site connectivity (Spoke, Hub or Full Mesh) (`String`).
+`type` - (Optional) Type of Site to Site connectivity (Spoke, Hub or Full Mesh) (`String`).(Deprecated)
 
 `virtual_site` - (Optional) If 'Type' is Full Mesh, then it gives set of sites that are connected in full mesh.. See [ref](#ref) below for details.
 
-### Control And Data Plane Mesh
+### Full Mesh Choice Control And Data Plane Mesh
 
 and control plane peering across sites.
 
-### Data Plane Mesh
+### Full Mesh Choice Data Plane Mesh
 
 Full Mesh of data plane tunnels across sites.
 
-### Full Mesh
+### Hub Full Mesh Choice Control And Data Plane Mesh
+
+and control plane peering across sites.
+
+### Hub Full Mesh Choice Data Plane Mesh
+
+Hub Full Mesh of data plane tunnels across sites.
+
+### Mesh Choice Full Mesh
 
 Full mesh of tunnels are created between all sites.
 
-`control_and_data_plane_mesh` - (Optional) and control plane peering across sites (bool).
+###### One of the arguments from this list "data_plane_mesh, control_and_data_plane_mesh" can be set
 
-`data_plane_mesh` - (Optional) Full Mesh of data plane tunnels across sites (bool).
+`control_and_data_plane_mesh` - (Optional) and control plane peering across sites (`Bool`).
 
-### Hub Mesh
+`data_plane_mesh` - (Optional) Full Mesh of data plane tunnels across sites (`Bool`).
+
+### Mesh Choice Hub Mesh
 
 Mesh of Type Hub.
 
-`control_and_data_plane_mesh` - (Optional) and control plane peering across sites (bool).
+### Mesh Choice Spoke Mesh
 
-`data_plane_mesh` - (Optional) Hub Full Mesh of data plane tunnels across sites (bool).
+Mesh of Type Spoke.
+
+`hub_mesh_group` - (Required) Spoke sites will connect to all the member sites of Hub Site Mesh Group. See [ref](#ref) below for details.
 
 ### Ref
 
@@ -88,15 +100,13 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Spoke Mesh
+### Spoke Hub Mesh Choice Control And Data Plane Mesh
 
-Mesh of Type Spoke.
+and control plane peering with the hub site/s.
 
-`hub_mesh_group` - (Required) Spoke sites will connect to all the member sites of Hub Site Mesh Group. See [ref](#ref) below for details.
+### Spoke Hub Mesh Choice Data Plane Mesh
 
-`control_and_data_plane_mesh` - (Optional) and control plane peering with the hub site/s (bool).
-
-`data_plane_mesh` - (Optional) Mesh of data plane tunnels to the hub site/s (bool).
+Mesh of data plane tunnels to the hub site/s.
 
 Attribute Reference
 -------------------

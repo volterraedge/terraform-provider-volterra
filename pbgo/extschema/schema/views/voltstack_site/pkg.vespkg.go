@@ -138,7 +138,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.srv6_network",
 		"spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.static_ip.fleet_static_ip",
 		"spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.static_ipv6_address.fleet_static_ip",
-		"spec.local_control_plane.bgp_config.peers.#.external.family_inet",
 		"spec.local_control_plane.bgp_config.peers.#.external.inside_interfaces",
 		"spec.local_control_plane.bgp_config.peers.#.external.outside_interfaces",
 		"spec.local_control_plane.bgp_config.peers.#.internal",
@@ -148,6 +147,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
@@ -181,12 +188,24 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
@@ -220,6 +239,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -229,7 +252,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.Get"] = []string{
 		"create_form.spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"create_form.spec.master_nodes.#",
-		"object",
 		"replace_form.spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"replace_form.spec.master_nodes.#",
 		"spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
@@ -237,6 +259,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "create_form.spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
@@ -274,40 +304,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
+			FieldPath:           "create_form.spec.local_control_plane.bgp_config.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			FieldPath:           "replace_form.spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.sli_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_network_config.slo_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			FieldPath:           "replace_form.spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
@@ -346,6 +352,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.local_control_plane.bgp_config.peers.#.external.family_inet_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
@@ -381,16 +399,26 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.family_inet_v6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.voltstack_site.API.List"] = []string{
 		"items.#.get_spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
 		"items.#.get_spec.master_nodes.#",
-		"items.#.object.spec.gc_spec.custom_network_config.slo_config.dc_cluster_group_interface.#",
-		"items.#.object.spec.gc_spec.master_nodes.#",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.voltstack_site.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "items.#.get_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
@@ -428,39 +456,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_auto_config",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.interface_list.interfaces.#.loopback_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.sli_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_network_config.slo_config.static_v6_route_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_storage_config.storage_device_list.storage_devices.#.netapp_trident.netapp_backend_ontap_nas.auto_export_cidrs.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_address_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.ipv6_auto_config",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			FieldPath:           "items.#.get_spec.local_control_plane.bgp_config.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -538,7 +534,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.srv6_network",
 		"spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.static_ip.fleet_static_ip",
 		"spec.custom_storage_config.storage_interface_list.storage_interfaces.#.storage_interface.static_ipv6_address.fleet_static_ip",
-		"spec.local_control_plane.bgp_config.peers.#.external.family_inet",
 		"spec.local_control_plane.bgp_config.peers.#.external.inside_interfaces",
 		"spec.local_control_plane.bgp_config.peers.#.external.outside_interfaces",
 		"spec.local_control_plane.bgp_config.peers.#.internal",
@@ -547,6 +542,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.voltstack_site.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "spec.custom_network_config.interface_list.interfaces.#.ethernet_interface.ipv6_address_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
@@ -581,6 +584,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.address_ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.local_control_plane.bgp_config.peers.#.external.family_inet_v6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 	}

@@ -88,6 +88,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
 		"spec.rule_list.rules.#.spec.shape_protected_endpoint_action",
+		"spec.rule_list.rules.#.spec.threat_intelligence_action",
 		"spec.rule_list.rules.#.spec.url_matcher",
 		"spec.rule_list.rules.#.spec.virtual_host_matcher",
 		"spec.rule_list.rules.#.spec.waf_action.data_guard_control",
@@ -105,10 +106,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
-		{
-			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.Create"] = []svcfw.EnvironmentField{
@@ -121,17 +118,9 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
+			FieldPath:           "spec.simple_rules.#.threat_intelligence_action",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
-		{
-			FieldPath:           "spec.simple_rules.#.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.service_policy.API.Get"] = []string{
-		"object",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.Get"] = []svcfw.EnvironmentField{
@@ -144,36 +133,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "create_form.spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.simple_rules.#.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
 			FieldPath:           "replace_form.spec.allow_list.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.deny_list.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
@@ -184,12 +149,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "spec.simple_rules.#.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
+			FieldPath:           "spec.simple_rules.#.threat_intelligence_action",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
 
@@ -203,28 +164,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "items.#.get_spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.simple_rules.#.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.simple_rules.#.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
+			FieldPath:           "items.#.get_spec.simple_rules.#.threat_intelligence_action",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
 
@@ -254,6 +195,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
 		"spec.rule_list.rules.#.spec.shape_protected_endpoint_action",
+		"spec.rule_list.rules.#.spec.threat_intelligence_action",
 		"spec.rule_list.rules.#.spec.url_matcher",
 		"spec.rule_list.rules.#.spec.virtual_host_matcher",
 		"spec.rule_list.rules.#.spec.waf_action.data_guard_control",
@@ -270,10 +212,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.rule_list.rules.#.spec.jwt_claims.#",
-			AllowedEnvironments: []string{"demo1", "test"},
 		},
 	}
 

@@ -214,6 +214,7 @@ func resourceVolterraIpPrefixSetUpdate(d *schema.ResourceData, meta interface{})
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

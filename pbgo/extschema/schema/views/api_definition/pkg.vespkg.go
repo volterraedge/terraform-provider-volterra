@@ -25,12 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.api_definition.UpdateAPIInventoryOpenAPISpecsReq"] = UpdateAPIInventoryOpenAPISpecsReqValidator()
 	vr["ves.io.schema.views.api_definition.UpdateAPIInventoryOpenAPISpecsResp"] = UpdateAPIInventoryOpenAPISpecsRespValidator()
 
-	vr["ves.io.schema.views.api_definition.ApiEndpointWithSchema"] = ApiEndpointWithSchemaValidator()
-	vr["ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesReq"] = GetAPIEndpointsSchemaUpdatesReqValidator()
-	vr["ves.io.schema.views.api_definition.GetAPIEndpointsSchemaUpdatesResp"] = GetAPIEndpointsSchemaUpdatesRespValidator()
-	vr["ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasReq"] = UpdateAPIEndpointsSchemasReqValidator()
-	vr["ves.io.schema.views.api_definition.UpdateAPIEndpointsSchemasResp"] = UpdateAPIEndpointsSchemasRespValidator()
-
 	vr["ves.io.schema.views.api_definition.APInventoryReq"] = APInventoryReqValidator()
 	vr["ves.io.schema.views.api_definition.APInventoryResp"] = APInventoryRespValidator()
 	vr["ves.io.schema.views.api_definition.GetReferencingLoadbalancersReq"] = GetReferencingLoadbalancersReqValidator()
@@ -49,7 +43,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.views.api_definition.ApiGroupBuilder"] = ApiGroupBuilderValidator()
 	vr["ves.io.schema.views.api_definition.ApiGroupSummary"] = ApiGroupSummaryValidator()
-	vr["ves.io.schema.views.api_definition.ApiOperation"] = ApiOperationValidator()
 	vr["ves.io.schema.views.api_definition.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.api_definition.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.api_definition.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -72,26 +65,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.api_definition.API.Create"] = []string{
-		"spec.api_inventory_exclusion_list.#",
-		"spec.api_inventory_inclusion_list.#",
-		"spec.non_api_endpoints.#",
-	}
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.api_definition.API.Get"] = []string{
-		"object",
-	}
-
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.api_definition.API.Replace"] = []string{
-		"spec.api_inventory_exclusion_list.#",
-		"spec.api_inventory_inclusion_list.#",
-		"spec.non_api_endpoints.#",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.views.api_definition.PublicApiepCustomAPI"] = "ml/data"
 	sm["ves.io.schema.views.api_definition.PublicConfigCustomAPI"] = "config"
 	sm["ves.io.schema.views.api_definition.API"] = "config"
 
@@ -147,26 +123,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.api_definition.PrivateConfigCustomAPI"] = RegisterGwPrivateConfigCustomAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.views.api_definition.PrivateConfigCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewPrivateConfigCustomAPIServer(svc)
-		}
-
-	}()
-
-	customCSR = mdr.PubCustomServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-
-		customCSR.SwaggerRegistry["ves.io.schema.views.api_definition.Object"] = PublicApiepCustomAPISwaggerJSON
-
-		customCSR.GrpcClientRegistry["ves.io.schema.views.api_definition.PublicApiepCustomAPI"] = NewPublicApiepCustomAPIGrpcClient
-		customCSR.RestClientRegistry["ves.io.schema.views.api_definition.PublicApiepCustomAPI"] = NewPublicApiepCustomAPIRestClient
-		if isExternal {
-			return
-		}
-		mdr.SvcRegisterHandlers["ves.io.schema.views.api_definition.PublicApiepCustomAPI"] = RegisterPublicApiepCustomAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.views.api_definition.PublicApiepCustomAPI"] = RegisterGwPublicApiepCustomAPIHandler
-		customCSR.ServerRegistry["ves.io.schema.views.api_definition.PublicApiepCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
-			return NewPublicApiepCustomAPIServer(svc)
 		}
 
 	}()

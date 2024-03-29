@@ -72,8 +72,9 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"aws_certified_hw": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"aws_region": {
@@ -136,8 +137,9 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 									},
 
 									"disk_size": {
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"outside_subnet": {
@@ -217,8 +219,9 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"assisted": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"aws_cred": {
@@ -300,8 +303,9 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"allocate_ipv6": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"autogenerate": {
@@ -492,6 +496,36 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 				},
 			},
 
+			"custom_dns": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"inside_nameserver": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"inside_nameserver_v6": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"outside_nameserver": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+
+						"outside_nameserver_v6": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
 			"direct_connect_disabled": {
 
 				Type:     schema.TypeBool,
@@ -515,26 +549,6 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 							Type:     schema.TypeInt,
 							Optional: true,
-						},
-
-						"cloud_aggregated_prefix": {
-
-							Type: schema.TypeList,
-
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-
-						"dc_connect_aggregated_prefix": {
-
-							Type: schema.TypeList,
-
-							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
 						},
 
 						"hosted_vifs": {
@@ -596,7 +610,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Optional: true,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -607,8 +622,9 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 						"manual_gw": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"standard_vifs": {
@@ -1229,83 +1245,96 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 												"disable_forward_proxy": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"enable_forward_proxy": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"connection_timeout": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"max_connect_attempts": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"no_interception": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"tls_intercept": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"enable_for_all_domains": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"policy": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"interception_rules": {
 
-																						Type:     schema.TypeList,
-																						Required: true,
+																						Type:       schema.TypeList,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
-																									Type:     schema.TypeSet,
-																									Required: true,
+																									Type:       schema.TypeSet,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"exact_value": {
 
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"regex_value": {
 
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"suffix_value": {
 
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -1313,14 +1342,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"disable_interception": {
 
-																									Type:     schema.TypeBool,
-																									Optional: true,
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 
 																								"enable_interception": {
 
-																									Type:     schema.TypeBool,
-																									Optional: true,
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1331,25 +1362,29 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"custom_certificate": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"certificate_url": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"description": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"custom_hash_algorithms": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -1357,7 +1392,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																									Type: schema.TypeList,
 
-																									Required: true,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Schema{
 																										Type: schema.TypeString,
 																									},
@@ -1368,8 +1404,9 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"disable_ocsp_stapling": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{},
 																						},
@@ -1377,8 +1414,9 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"use_system_defaults": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{},
 																						},
@@ -1386,61 +1424,71 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																					"private_key": {
 
-																						Type:     schema.TypeSet,
-																						Required: true,
+																						Type:       schema.TypeSet,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"blindfold_secret_info_internal": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"decryption_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"location": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"store_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
 																								},
 
 																								"secret_encoding_type": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 
 																								"blindfold_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"decryption_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"location": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"store_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -1448,19 +1496,22 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"clear_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"url": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -1468,34 +1519,40 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"vault_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"key": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"location": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"provider": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"secret_encoding": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"version": {
-																												Type:     schema.TypeInt,
-																												Optional: true,
+																												Type:       schema.TypeInt,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -1503,14 +1560,16 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																								"wingman_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"name": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -1524,20 +1583,23 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																		"volterra_certificate": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"trusted_ca_url": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"volterra_trusted_ca": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1547,7 +1609,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeInt,
 																},
@@ -1557,7 +1620,8 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -1763,18 +1827,6 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 						},
 
 						"no_inside_static_routes": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"disable_internet_vip": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"enable_internet_vip": {
 
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -2725,6 +2777,35 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//custom_dns
+	if v, ok := d.GetOk("custom_dns"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		customDns := &ves_io_schema_views.CustomDNS{}
+		createSpec.CustomDns = customDns
+		for _, set := range sl {
+			customDnsMapStrToI := set.(map[string]interface{})
+
+			if w, ok := customDnsMapStrToI["inside_nameserver"]; ok && !isIntfNil(w) {
+				customDns.InsideNameserver = w.(string)
+			}
+
+			if w, ok := customDnsMapStrToI["inside_nameserver_v6"]; ok && !isIntfNil(w) {
+				customDns.InsideNameserverV6 = w.(string)
+			}
+
+			if w, ok := customDnsMapStrToI["outside_nameserver"]; ok && !isIntfNil(w) {
+				customDns.OutsideNameserver = w.(string)
+			}
+
+			if w, ok := customDnsMapStrToI["outside_nameserver_v6"]; ok && !isIntfNil(w) {
+				customDns.OutsideNameserverV6 = w.(string)
+			}
+
+		}
+
+	}
+
 	//direct_connect_choice
 
 	directConnectChoiceTypeFound := false
@@ -2774,26 +2855,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 				directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
 
 				asnChoiceInt.CustomAsn = uint32(v.(int))
-
-			}
-
-			if v, ok := cs["cloud_aggregated_prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				directConnectChoiceInt.DirectConnectEnabled.CloudAggregatedPrefix = ls
-
-			}
-
-			if v, ok := cs["dc_connect_aggregated_prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				directConnectChoiceInt.DirectConnectEnabled.DcConnectAggregatedPrefix = ls
 
 			}
 
@@ -4065,16 +4126,22 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
-													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+														ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
-													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+														ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -4600,32 +4667,6 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
-			internetVipChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DisableInternetVip{}
-					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-					vnConfig.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_EnableInternetVip{}
-					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-					vnConfig.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
 			outsideStaticRouteChoiceTypeFound := false
 
 			if v, ok := vnConfigMapStrToI["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
@@ -5014,6 +5055,7 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -5295,6 +5337,34 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	if v, ok := d.GetOk("custom_dns"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		customDns := &ves_io_schema_views.CustomDNS{}
+		updateSpec.CustomDns = customDns
+		for _, set := range sl {
+			customDnsMapStrToI := set.(map[string]interface{})
+
+			if w, ok := customDnsMapStrToI["inside_nameserver"]; ok && !isIntfNil(w) {
+				customDns.InsideNameserver = w.(string)
+			}
+
+			if w, ok := customDnsMapStrToI["inside_nameserver_v6"]; ok && !isIntfNil(w) {
+				customDns.InsideNameserverV6 = w.(string)
+			}
+
+			if w, ok := customDnsMapStrToI["outside_nameserver"]; ok && !isIntfNil(w) {
+				customDns.OutsideNameserver = w.(string)
+			}
+
+			if w, ok := customDnsMapStrToI["outside_nameserver_v6"]; ok && !isIntfNil(w) {
+				customDns.OutsideNameserverV6 = w.(string)
+			}
+
+		}
+
+	}
+
 	directConnectChoiceTypeFound := false
 
 	if v, ok := d.GetOk("direct_connect_disabled"); ok && !directConnectChoiceTypeFound {
@@ -5342,26 +5412,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 				directConnectChoiceInt.DirectConnectEnabled.AsnChoice = asnChoiceInt
 
 				asnChoiceInt.CustomAsn = uint32(v.(int))
-
-			}
-
-			if v, ok := cs["cloud_aggregated_prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				directConnectChoiceInt.DirectConnectEnabled.CloudAggregatedPrefix = ls
-
-			}
-
-			if v, ok := cs["dc_connect_aggregated_prefix"]; ok && !isIntfNil(v) {
-
-				ls := make([]string, len(v.([]interface{})))
-				for i, v := range v.([]interface{}) {
-					ls[i] = v.(string)
-				}
-				directConnectChoiceInt.DirectConnectEnabled.DcConnectAggregatedPrefix = ls
 
 			}
 
@@ -6541,16 +6591,22 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 													}
 
-													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+														ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
-													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+														ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -7072,32 +7128,6 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					insideStaticRouteChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_NoInsideStaticRoutes{}
 					insideStaticRouteChoiceInt.NoInsideStaticRoutes = &ves_io_schema.Empty{}
 					vnConfig.InsideStaticRouteChoice = insideStaticRouteChoiceInt
-				}
-
-			}
-
-			internetVipChoiceTypeFound := false
-
-			if v, ok := vnConfigMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_DisableInternetVip{}
-					internetVipChoiceInt.DisableInternetVip = &ves_io_schema.Empty{}
-					vnConfig.InternetVipChoice = internetVipChoiceInt
-				}
-
-			}
-
-			if v, ok := vnConfigMapStrToI["enable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
-
-				internetVipChoiceTypeFound = true
-
-				if v.(bool) {
-					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.VnConfiguration_EnableInternetVip{}
-					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
-					vnConfig.InternetVipChoice = internetVipChoiceInt
 				}
 
 			}

@@ -1428,7 +1428,8 @@ type CustomBlockingPage struct {
 	// Define the content of the response page (e.g., an HTML document or a JSON object), use the
 	// {{request_id}} placeholder to provide users with a unique
 	// identifier to be able to trace the blocked request in the logs.
-	// Response body can't exceed 4 KB in size.
+	// The maximum allowed size of response body is 4096 bytes after base64 encoding,
+	// which would be about 3070 bytes in plain text.
 	BlockingPage string `protobuf:"bytes,1,opt,name=blocking_page,json=blockingPage,proto3" json:"blocking_page,omitempty"`
 	// response_code
 	//

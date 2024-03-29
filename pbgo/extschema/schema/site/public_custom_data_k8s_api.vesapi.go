@@ -1779,71 +1779,71 @@ type customDataK8SAPIInprocClient struct {
 }
 
 func (c *customDataK8SAPIInprocClient) ConfigMapList(ctx context.Context, in *ConfigMapListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ConfigMapList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList")
 	return c.CustomDataK8SAPIServer.ConfigMapList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) CronJobList(ctx context.Context, in *CronJobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1beta1.CronJobList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.CronJobList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.CronJobList")
 	return c.CustomDataK8SAPIServer.CronJobList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) DaemonSetList(ctx context.Context, in *DaemonSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DaemonSetList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList")
 	return c.CustomDataK8SAPIServer.DaemonSetList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) DeploymentList(ctx context.Context, in *DeploymentListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.DeploymentList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.DeploymentList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.DeploymentList")
 	return c.CustomDataK8SAPIServer.DeploymentList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) EndpointsList(ctx context.Context, in *EndpointsListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.EndpointsList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.EndpointsList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.EndpointsList")
 	return c.CustomDataK8SAPIServer.EndpointsList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) JobList(ctx context.Context, in *JobListRequest, opts ...grpc.CallOption) (*k8s_io_api_batch_v1.JobList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.JobList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.JobList")
 	return c.CustomDataK8SAPIServer.JobList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) NamespaceList(ctx context.Context, in *NamespaceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NamespaceList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.NamespaceList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.NamespaceList")
 	return c.CustomDataK8SAPIServer.NamespaceList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) NodeList(ctx context.Context, in *NodeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.NodeList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.NodeList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.NodeList")
 	return c.CustomDataK8SAPIServer.NodeList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) PersistentVolumeClaimList(ctx context.Context, in *PersistentVolumeClaimListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeClaimList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList")
 	return c.CustomDataK8SAPIServer.PersistentVolumeClaimList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) PersistentVolumeList(ctx context.Context, in *PersistentVolumeListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PersistentVolumeList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList")
 	return c.CustomDataK8SAPIServer.PersistentVolumeList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) PodList(ctx context.Context, in *PodListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.PodList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.PodList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.PodList")
 	return c.CustomDataK8SAPIServer.PodList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) PodsMetrics(ctx context.Context, in *PodsMetricsRequest, opts ...grpc.CallOption) (*PodsMetricsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics")
 	return c.CustomDataK8SAPIServer.PodsMetrics(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) ReplicaSetList(ctx context.Context, in *ReplicaSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.ReplicaSetList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList")
 	return c.CustomDataK8SAPIServer.ReplicaSetList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) SecretList(ctx context.Context, in *SecretListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.SecretList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.SecretList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.SecretList")
 	return c.CustomDataK8SAPIServer.SecretList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) ServiceList(ctx context.Context, in *ServiceListRequest, opts ...grpc.CallOption) (*k8s_io_api_core_v1.ServiceList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.ServiceList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.ServiceList")
 	return c.CustomDataK8SAPIServer.ServiceList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) StatefulSetList(ctx context.Context, in *StatefulSetListRequest, opts ...grpc.CallOption) (*k8s_io_api_apps_v1.StatefulSetList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList")
 	return c.CustomDataK8SAPIServer.StatefulSetList(ctx, in)
 }
 func (c *customDataK8SAPIInprocClient) VirtualMachineInstancesMetrics(ctx context.Context, in *VirtualMachineInstancesMetricsRequest, opts ...grpc.CallOption) (*VirtualMachineInstancesMetricsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomDataK8SAPI.VirtualMachineInstancesMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomDataK8SAPI.VirtualMachineInstancesMetrics")
 	return c.CustomDataK8SAPIServer.VirtualMachineInstancesMetrics(ctx, in)
 }
 

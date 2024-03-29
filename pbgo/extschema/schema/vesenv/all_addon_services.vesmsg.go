@@ -474,6 +474,17 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *AddonServiceChoice_Clearview:
+		if fv, exists := v.FldValidators["choice.clearview"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_Clearview).Clearview
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("clearview"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *AddonServiceChoice_F5XcNone:
 		if fv, exists := v.FldValidators["choice.f5xc_none"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_F5XcNone).F5XcNone

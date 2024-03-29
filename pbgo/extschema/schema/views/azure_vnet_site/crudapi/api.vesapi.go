@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.azure_vnet_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.azure_vnet_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.azure_vnet_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.azure_vnet_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.azure_vnet_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.azure_vnet_site.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -5293,8 +5308,8 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Custom Trusted CA List\"\nCustom trusted CA certificates for validating upstream server certificate",
-                    "title": "Custom List"
+                    "description": "x-displayName: \"Custom Root CA Certificate\"\nCustom Root CA Certificate for validating upstream server certificate",
+                    "title": "Custom Root CA Certificate"
                 },
                 "volterra_certificate": {
                     "description": "x-displayName: \"F5XC Signing Certificate\"\nF5XC certificates for generating intermediate certificate for TLS interception.",
@@ -5302,7 +5317,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "volterra_trusted_ca": {
-                    "description": "x-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
+                    "description": "x-displayName: \"F5XC Default Root CA Certificate\"\nF5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -6238,6 +6253,69 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsConfigValidationState": {
+            "type": "string",
+            "description": "The state of Site Config Validation\n\n - VALIDATION_STATE_NONE: None\n\nConfig validation state is none\n - VALIDATION_IN_PROGRESS: In Progress\n\nConfig validation state is In Progress\n - VALIDATION_FAILED: Failed\n\nConfig validation state is Failed\n - VALIDATION_SUCCEEDED: Succeeded\n\nConfig validation state is Succeeded",
+            "title": "Config Validation State",
+            "enum": [
+                "VALIDATION_STATE_NONE",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_FAILED",
+                "VALIDATION_SUCCEEDED"
+            ],
+            "default": "VALIDATION_STATE_NONE",
+            "x-displayname": "Site Config Validation State",
+            "x-ves-proto-enum": "ves.io.schema.views.ConfigValidationState"
+        },
+        "viewsCustomDNS": {
+            "type": "object",
+            "description": "Custom DNS is the configured for specify CE site",
+            "title": "Custom DNS",
+            "x-displayname": "Custom DNS",
+            "x-ves-proto-message": "ves.io.schema.views.CustomDNS",
+            "properties": {
+                "inside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "inside_nameserver",
+                    "x-displayname": "DNS Server for Inside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "inside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "inside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "outside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "outside_nameserver",
+                    "x-displayname": "DNS Server for Outside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "outside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "outside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
         "viewsGlobalConnectorType": {
             "type": "object",
             "description": "Global network reference for direct connection",
@@ -6399,6 +6477,29 @@ var APISwaggerJSON string = `{
                     "title": "Default Performance Mode",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "L7 Enhanced"
+                }
+            }
+        },
+        "viewsSiteError": {
+            "type": "object",
+            "description": "Site Error",
+            "title": "Site Error",
+            "x-displayname": "Site Error",
+            "x-ves-proto-message": "ves.io.schema.views.SiteError",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": " Error Description \n\nExample: - \"invalid VPC ID\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "invalid VPC ID"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested Action \n\nExample: - \"update VPC ID\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "update VPC ID"
                 }
             }
         },
@@ -6609,11 +6710,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Co-ordinates"
                 },
+                "custom_dns": {
+                    "description": " custom dns configure to the CE site",
+                    "title": "custom_dns",
+                    "$ref": "#/definitions/viewsCustomDNS",
+                    "x-displayname": "Custom DNS"
+                },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
                     "title": "Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH services on Site"
+                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -6671,12 +6778,14 @@ var APISwaggerJSON string = `{
                 },
                 "machine_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed.\n The default setting for Accelerated Networking is enabled, thus make sure \n you select a Virtual Machine that supports accelerated networking or \n disable the setting under, Select Ingress Gateway or Ingress/Egress Gateway \n \u003e advanced options.\n\nExample: - \"Standard_D3_v2\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Select Instance size based on performance needed.\n The default setting for Accelerated Networking is enabled, thus make sure \n you select a Virtual Machine that supports accelerated networking or \n disable the setting under, Select Ingress Gateway or Ingress/Egress Gateway \n \u003e advanced options.\n\nExample: - \"Standard_D3_v2\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Machine Type",
                     "maxLength": 64,
                     "x-displayname": "Azure Machine Type for Node",
                     "x-ves-example": "Standard_D3_v2",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
@@ -6724,6 +6833,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
+                },
+                "site_errors": {
+                    "type": "array",
+                    "description": " Errors on site including suggested action\n\nExample: - \"Site Errors\"-",
+                    "title": "site_errors",
+                    "items": {
+                        "$ref": "#/definitions/viewsSiteError"
+                    },
+                    "x-displayname": "Site Errors",
+                    "x-ves-example": "Site Errors"
                 },
                 "ssh_key": {
                     "type": "string",
@@ -6774,6 +6893,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "61"
                     }
+                },
+                "validation_state": {
+                    "description": " Validation State of the Site\n\nExample: - \"Validation State\"-",
+                    "title": "validation_state",
+                    "$ref": "#/definitions/viewsConfigValidationState",
+                    "x-displayname": "Validation State",
+                    "x-ves-example": "Validation State"
                 },
                 "vnet": {
                     "description": " Choice of using existing VNet or create new VNet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

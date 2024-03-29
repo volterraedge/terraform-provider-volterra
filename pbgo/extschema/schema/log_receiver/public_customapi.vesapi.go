@@ -211,7 +211,7 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) TestLogReceiver(ctx context.Context, in *TestLogReceiverRequest, opts ...grpc.CallOption) (*TestLogReceiverResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.log_receiver.CustomAPI.TestLogReceiver", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.log_receiver.CustomAPI.TestLogReceiver")
 	return c.CustomAPIServer.TestLogReceiver(ctx, in)
 }
 

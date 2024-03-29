@@ -304,11 +304,11 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nginx.one.subscription.CustomAPI.Subscribe", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nginx.one.subscription.CustomAPI.Subscribe")
 	return c.CustomAPIServer.Subscribe(ctx, in)
 }
 func (c *customAPIInprocClient) Unsubscribe(ctx context.Context, in *UnsubscribeRequest, opts ...grpc.CallOption) (*UnsubscribeResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nginx.one.subscription.CustomAPI.Unsubscribe", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nginx.one.subscription.CustomAPI.Unsubscribe")
 	return c.CustomAPIServer.Unsubscribe(ctx, in)
 }
 

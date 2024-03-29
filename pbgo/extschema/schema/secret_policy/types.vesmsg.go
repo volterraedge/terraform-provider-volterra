@@ -96,6 +96,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -390,6 +391,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -708,6 +710,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -1278,6 +1281,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")

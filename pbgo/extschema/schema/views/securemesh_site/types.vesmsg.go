@@ -179,6 +179,7 @@ func (m *CreateSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -860,6 +861,7 @@ func (m *GetSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -1594,6 +1596,7 @@ func (m *GlobalSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -2299,6 +2302,7 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *Interface_EthernetInterface:
+
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -2318,6 +2322,7 @@ func (m *Interface) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *Interface_LoopbackInterface:
+
 		drInfos, err := m.GetLoopbackInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLoopbackInterface().GetDRefInfo() FAILED")
@@ -2936,6 +2941,7 @@ func (m *ReplaceSpecType) GetNetworkCfgChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_CustomNetworkConfig:
+
 		drInfos, err := m.GetCustomNetworkConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomNetworkConfig().GetDRefInfo() FAILED")
@@ -3576,6 +3582,7 @@ func (m *SmsNetworkConfiguration) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo
 		return nil, nil
 
 	case *SmsNetworkConfiguration_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -3607,6 +3614,7 @@ func (m *SmsNetworkConfiguration) GetGlobalNetworkChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *SmsNetworkConfiguration_GlobalNetworkList:
+
 		drInfos, err := m.GetGlobalNetworkList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGlobalNetworkList().GetDRefInfo() FAILED")
@@ -3634,6 +3642,7 @@ func (m *SmsNetworkConfiguration) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *SmsNetworkConfiguration_InterfaceList:
+
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -3661,6 +3670,7 @@ func (m *SmsNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 		return nil, nil
 
 	case *SmsNetworkConfiguration_ActiveNetworkPolicies:
+
 		drInfos, err := m.GetActiveNetworkPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveNetworkPolicies().GetDRefInfo() FAILED")
@@ -3672,6 +3682,7 @@ func (m *SmsNetworkConfiguration) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInf
 		return drInfos, err
 
 	case *SmsNetworkConfiguration_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -3699,6 +3710,7 @@ func (m *SmsNetworkConfiguration) GetSliChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *SmsNetworkConfiguration_SliConfig:
+
 		drInfos, err := m.GetSliConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliConfig().GetDRefInfo() FAILED")
@@ -3726,6 +3738,7 @@ func (m *SmsNetworkConfiguration) GetSloChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *SmsNetworkConfiguration_SloConfig:
+
 		drInfos, err := m.GetSloConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloConfig().GetDRefInfo() FAILED")
@@ -3824,6 +3837,16 @@ func (v *ValidateSmsNetworkConfiguration) TunnelDeadTimeoutValidationRuleHandler
 	return validatorFn, nil
 }
 
+func (v *ValidateSmsNetworkConfiguration) BgpPeerAddressV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bgp_peer_address_v6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SmsNetworkConfiguration)
 	if !ok {
@@ -3842,6 +3865,15 @@ func (v *ValidateSmsNetworkConfiguration) Validate(ctx context.Context, pm inter
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
 		if err := fv(ctx, m.GetBgpPeerAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_address_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_address_v6"))
+		if err := fv(ctx, m.GetBgpPeerAddressV6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4253,6 +4285,17 @@ var DefaultSmsNetworkConfigurationValidator = func() *ValidateSmsNetworkConfigur
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
 
+	vrhBgpPeerAddressV6 := v.BgpPeerAddressV6ValidationRuleHandler
+	rulesBgpPeerAddressV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhBgpPeerAddressV6(rulesBgpPeerAddressV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SmsNetworkConfiguration.bgp_peer_address_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp_peer_address_v6"] = vFn
+
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
@@ -4653,6 +4696,7 @@ func (m *VnConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *VnConfiguration_StaticRoutes:
+
 		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
@@ -4680,6 +4724,7 @@ func (m *VnConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *VnConfiguration_StaticV6Routes:
+
 		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")

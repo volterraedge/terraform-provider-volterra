@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.user_identification.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user_identification.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user_identification.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.user_identification.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user_identification.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user_identification.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.user_identification.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user_identification.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user_identification.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.user_identification.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user_identification.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user_identification.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.user_identification.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user_identification.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user_identification.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3445,42 +3460,42 @@ var APISwaggerJSON string = `{
             "description": "A user identification rule specifies a single criterion to determine an identifier from the input fields extracted from an API request . A rule is considered\nto have a successful outcome if an identifier gets extracted.",
             "title": "UserIdentificationRule",
             "x-displayname": "User Identification Rule",
-            "x-ves-oneof-field-identifier": "[\"client_asn\",\"client_city\",\"client_country\",\"client_ip\",\"client_region\",\"cookie_name\",\"http_header_name\",\"ip_and_http_header_name\",\"ip_and_tls_fingerprint\",\"none\",\"query_param_key\",\"tls_fingerprint\"]",
+            "x-ves-oneof-field-identifier": "[\"client_asn\",\"client_city\",\"client_country\",\"client_ip\",\"client_region\",\"cookie_name\",\"http_header_name\",\"ip_and_http_header_name\",\"ip_and_tls_fingerprint\",\"jwt_claim_name\",\"none\",\"query_param_key\",\"tls_fingerprint\"]",
             "x-ves-proto-message": "ves.io.schema.user_identification.UserIdentificationRule",
             "properties": {
                 "client_asn": {
-                    "description": "Exclusive with [client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use client ASN as user identifier.\n The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
+                    "description": "Exclusive with [client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Use client ASN as user identifier.\n The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
                     "title": "client asn",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Client Autonomous System"
                 },
                 "client_city": {
-                    "description": "Exclusive with [client_asn client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use client city as user identifier.\n The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
+                    "description": "Exclusive with [client_asn client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Use client city as user identifier.\n The client city is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
                     "title": "client city",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Client City"
                 },
                 "client_country": {
-                    "description": "Exclusive with [client_asn client_city client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use client country as user identifier.\n The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
+                    "description": "Exclusive with [client_asn client_city client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Use client country as user identifier.\n The client country is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
                     "title": "client country",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Client Country"
                 },
                 "client_ip": {
-                    "description": "Exclusive with [client_asn client_city client_country client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use client IP address as user identifier.",
+                    "description": "Exclusive with [client_asn client_city client_country client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Use client IP address as user identifier.",
                     "title": "client ip address",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Client IP Address"
                 },
                 "client_region": {
-                    "description": "Exclusive with [client_asn client_city client_country client_ip cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use client region as user identifier.\n The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Use client region as user identifier.\n The client region is obtained by performing a lookup for the client IP Address in a GeoIP DB.",
                     "title": "client region",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Client Region"
                 },
                 "cookie_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use the HTTP cookie value for the given name as user identifier.\n\nExample: - \"Session\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Use the HTTP cookie value for the given name as user identifier.\n\nExample: - \"Session\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "Cookie Name",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3493,7 +3508,7 @@ var APISwaggerJSON string = `{
                 },
                 "http_header_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use the HTTP header value for the given name as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Use the HTTP header value for the given name as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "HTTP header name",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3506,7 +3521,7 @@ var APISwaggerJSON string = `{
                 },
                 "ip_and_http_header_name": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Name of HTTP header from which the value should be extracted.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key tls_fingerprint]\n Name of HTTP header from which the value should be extracted.\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "HTTP header name",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3518,14 +3533,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ip_and_tls_fingerprint": {
-                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name none query_param_key tls_fingerprint]\n Use the combination of Client IP and TLS Fingerprint as user identifier.",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name jwt_claim_name none query_param_key tls_fingerprint]\n Use the combination of Client IP and TLS Fingerprint as user identifier.",
                     "title": "tls_fingerprint",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Client IP and TLS Fingerprint"
                 },
                 "jwt_claim_name": {
                     "type": "string",
-                    "description": " Use the JWT claim value as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key tls_fingerprint]\n Use the JWT claim value as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "JWT claim name",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3536,14 +3551,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "none": {
-                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint query_param_key tls_fingerprint]\n Do not use any user identifier.",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name query_param_key tls_fingerprint]\n Do not use any user identifier.",
                     "title": "none",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No User Identifier"
                 },
                 "query_param_key": {
                     "type": "string",
-                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none tls_fingerprint]\n Use the query parameter value for the given key as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none tls_fingerprint]\n Use the query parameter value for the given key as user identifier.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "query param key",
                     "minLength": 1,
                     "maxLength": 256,
@@ -3554,7 +3569,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tls_fingerprint": {
-                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint none query_param_key]\n Use TLS Fingerprint as user identifier.",
+                    "description": "Exclusive with [client_asn client_city client_country client_ip client_region cookie_name http_header_name ip_and_http_header_name ip_and_tls_fingerprint jwt_claim_name none query_param_key]\n Use TLS Fingerprint as user identifier.",
                     "title": "tls_fingerprint",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "TLS Fingerprint"

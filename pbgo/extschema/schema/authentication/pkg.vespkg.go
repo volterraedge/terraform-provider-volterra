@@ -71,10 +71,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.authentication.API.Create"] = "ves.io.schema.authentication.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.authentication.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.authentication.API.Replace"] = []string{
 		"spec.cookie_params.auth_hmac.prim_key.blindfold_secret_info_internal",
 		"spec.cookie_params.auth_hmac.prim_key.secret_encoding_type",

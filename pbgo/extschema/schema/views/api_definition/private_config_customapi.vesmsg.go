@@ -162,10 +162,8 @@ var DefaultUpdateAPIInventoryOpenAPISpecsReqValidator = func() *ValidateUpdateAP
 
 	vrhApiInventoryOpenapiSpecs := v.ApiInventoryOpenapiSpecsValidationRuleHandler
 	rulesApiInventoryOpenapiSpecs := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.max_bytes": "512",
-		"ves.io.schema.rules.repeated.items.string.pattern":   "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
-		"ves.io.schema.rules.repeated.max_items":              "10",
-		"ves.io.schema.rules.repeated.unique":                 "true",
+		"ves.io.schema.rules.repeated.max_items": "10",
+		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryOpenapiSpecs(rulesApiInventoryOpenapiSpecs)
 	if err != nil {

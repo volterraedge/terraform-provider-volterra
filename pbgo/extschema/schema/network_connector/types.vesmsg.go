@@ -92,6 +92,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectorChoice().(type) {
 	case *CreateSpecType_SliToSloSnat:
+
 		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
@@ -107,6 +108,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_SliToGlobalDr:
+
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -118,6 +120,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_SliToGlobalSnat:
+
 		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
@@ -129,6 +132,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_SloToGlobalDr:
+
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -140,6 +144,7 @@ func (m *CreateSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_SloToGlobalSnat:
+
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
@@ -635,6 +640,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectorChoice().(type) {
 	case *GetSpecType_SliToSloSnat:
+
 		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
@@ -650,6 +656,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_SliToGlobalDr:
+
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -661,6 +668,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_SliToGlobalSnat:
+
 		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
@@ -672,6 +680,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_SloToGlobalDr:
+
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -683,6 +692,7 @@ func (m *GetSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_SloToGlobalSnat:
+
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")
@@ -1954,6 +1964,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetConnectorChoice().(type) {
 	case *ReplaceSpecType_SliToSloSnat:
+
 		drInfos, err := m.GetSliToSloSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToSloSnat().GetDRefInfo() FAILED")
@@ -1969,6 +1980,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_SliToGlobalDr:
+
 		drInfos, err := m.GetSliToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalDr().GetDRefInfo() FAILED")
@@ -1980,6 +1992,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_SliToGlobalSnat:
+
 		drInfos, err := m.GetSliToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSliToGlobalSnat().GetDRefInfo() FAILED")
@@ -1991,6 +2004,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_SloToGlobalDr:
+
 		drInfos, err := m.GetSloToGlobalDr().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalDr().GetDRefInfo() FAILED")
@@ -2002,6 +2016,7 @@ func (m *ReplaceSpecType) GetConnectorChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_SloToGlobalSnat:
+
 		drInfos, err := m.GetSloToGlobalSnat().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSloToGlobalSnat().GetDRefInfo() FAILED")

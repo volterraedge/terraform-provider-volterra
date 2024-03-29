@@ -40,6 +40,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.dns_load_balancer.DNSLBPoolMemberHealthStatusListResponseItem"] = DNSLBPoolMemberHealthStatusListResponseItemValidator()
 	vr["ves.io.schema.dns_load_balancer.HealthStatusSummary"] = HealthStatusSummaryValidator()
 
+	vr["ves.io.schema.dns_load_balancer.SuggestValuesReq"] = SuggestValuesReqValidator()
+	vr["ves.io.schema.dns_load_balancer.SuggestValuesResp"] = SuggestValuesRespValidator()
+	vr["ves.io.schema.dns_load_balancer.SuggestedItem"] = SuggestedItemValidator()
+
 	vr["ves.io.schema.dns_load_balancer.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.dns_load_balancer.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.dns_load_balancer.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -66,14 +70,12 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []string{
+		"spec.rule_list.rules.#.asn_matcher",
 		"spec.rule_list.rules.#.nxdomain",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.dns_load_balancer.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_load_balancer.API.Replace"] = []string{
+		"spec.rule_list.rules.#.asn_matcher",
 		"spec.rule_list.rules.#.nxdomain",
 	}
 
@@ -82,6 +84,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.dns_load_balancer.API"] = "config/dns"
 	sm["ves.io.schema.dns_load_balancer.CustomDataAPI"] = "data"
+	sm["ves.io.schema.dns_load_balancer.CustomAPI"] = "config/dns"
 
 }
 
@@ -135,6 +138,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.dns_load_balancer.CustomDataAPI"] = RegisterGwCustomDataAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.dns_load_balancer.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomDataAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.dns_load_balancer.Object"] = CustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.dns_load_balancer.CustomAPI"] = NewCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.dns_load_balancer.CustomAPI"] = NewCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.dns_load_balancer.CustomAPI"] = RegisterCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.dns_load_balancer.CustomAPI"] = RegisterGwCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.dns_load_balancer.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIServer(svc)
 		}
 
 	}()

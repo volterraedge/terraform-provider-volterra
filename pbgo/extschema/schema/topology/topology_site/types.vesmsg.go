@@ -135,6 +135,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["main_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("main_nodes"))
+		for idx, item := range m.GetMainNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["topology_metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("topology_metadata"))

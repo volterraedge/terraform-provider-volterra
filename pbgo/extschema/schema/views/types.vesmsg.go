@@ -690,6 +690,303 @@ func AdvertiseSiteVsiteValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiEndpointWithSchema) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiEndpointWithSchema) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiEndpointWithSchema) DeepCopy() *ApiEndpointWithSchema {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiEndpointWithSchema{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiEndpointWithSchema) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiEndpointWithSchema) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiEndpointWithSchemaValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiEndpointWithSchema struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiEndpointWithSchema) ApiOperationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for api_operation")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ApiOperationValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiEndpointWithSchema) SchemaJsonValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for schema_json")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiEndpointWithSchema) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiEndpointWithSchema)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiEndpointWithSchema got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_operation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_operation"))
+		if err := fv(ctx, m.GetApiOperation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["schema_json"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("schema_json"))
+		if err := fv(ctx, m.GetSchemaJson(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiEndpointWithSchemaValidator = func() *ValidateApiEndpointWithSchema {
+	v := &ValidateApiEndpointWithSchema{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiOperation := v.ApiOperationValidationRuleHandler
+	rulesApiOperation := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhApiOperation(rulesApiOperation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiEndpointWithSchema.api_operation: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_operation"] = vFn
+
+	vrhSchemaJson := v.SchemaJsonValidationRuleHandler
+	rulesSchemaJson := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "10000",
+	}
+	vFn, err = vrhSchemaJson(rulesSchemaJson)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiEndpointWithSchema.schema_json: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["schema_json"] = vFn
+
+	return v
+}()
+
+func ApiEndpointWithSchemaValidator() db.Validator {
+	return DefaultApiEndpointWithSchemaValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiOperation) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiOperation) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiOperation) DeepCopy() *ApiOperation {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiOperation{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiOperation) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiOperation) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiOperationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiOperation struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiOperation) MethodValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.HttpMethod)
+		return int32(i)
+	}
+	// ves_io_schema.HttpMethod_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.HttpMethod_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for method")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiOperation) PathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for path")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiOperation) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiOperation)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiOperation got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiOperationValidator = func() *ValidateApiOperation {
+	v := &ValidateApiOperation{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMethod := v.MethodValidationRuleHandler
+	rulesMethod := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.enum.not_in":       "0",
+		"ves.io.schema.rules.message.required":  "true",
+	}
+	vFn, err = vrhMethod(rulesMethod)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiOperation.method: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["method"] = vFn
+
+	vrhPath := v.PathValidationRuleHandler
+	rulesPath := map[string]string{
+		"ves.io.schema.rules.message.required":           "true",
+		"ves.io.schema.rules.string.max_bytes":           "1024",
+		"ves.io.schema.rules.string.min_bytes":           "1",
+		"ves.io.schema.rules.string.templated_http_path": "true",
+	}
+	vFn, err = vrhPath(rulesPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiOperation.path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["path"] = vFn
+
+	return v
+}()
+
+func ApiOperationValidator() db.Validator {
+	return DefaultApiOperationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CustomCiphers) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -848,6 +1145,203 @@ func CustomCiphersValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CustomDNS) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomDNS) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomDNS) DeepCopy() *CustomDNS {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomDNS{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomDNS) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomDNS) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomDNSValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomDNS struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomDNS) InsideNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDNS) OutsideNameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDNS) InsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for inside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDNS) OutsideNameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for outside_nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomDNS) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomDNS)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomDNS got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["inside_nameserver"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_nameserver"))
+		if err := fv(ctx, m.GetInsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["inside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("inside_nameserver_v6"))
+		if err := fv(ctx, m.GetInsideNameserverV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_nameserver"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_nameserver"))
+		if err := fv(ctx, m.GetOutsideNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["outside_nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("outside_nameserver_v6"))
+		if err := fv(ctx, m.GetOutsideNameserverV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomDNSValidator = func() *ValidateCustomDNS {
+	v := &ValidateCustomDNS{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInsideNameserver := v.InsideNameserverValidationRuleHandler
+	rulesInsideNameserver := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhInsideNameserver(rulesInsideNameserver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDNS.inside_nameserver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_nameserver"] = vFn
+
+	vrhOutsideNameserver := v.OutsideNameserverValidationRuleHandler
+	rulesOutsideNameserver := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhOutsideNameserver(rulesOutsideNameserver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDNS.outside_nameserver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_nameserver"] = vFn
+
+	vrhInsideNameserverV6 := v.InsideNameserverV6ValidationRuleHandler
+	rulesInsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhInsideNameserverV6(rulesInsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDNS.inside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["inside_nameserver_v6"] = vFn
+
+	vrhOutsideNameserverV6 := v.OutsideNameserverV6ValidationRuleHandler
+	rulesOutsideNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhOutsideNameserverV6(rulesOutsideNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomDNS.outside_nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["outside_nameserver_v6"] = vFn
+
+	return v
+}()
+
+func CustomDNSValidator() db.Validator {
+	return DefaultCustomDNSValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DownstreamTLSCertsParams) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -971,6 +1465,7 @@ func (m *DownstreamTLSCertsParams) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *DownstreamTLSCertsParams_UseMtls:
+
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
@@ -1237,6 +1732,7 @@ func (m *DownstreamTlsParamsType) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *DownstreamTlsParamsType_UseMtls:
+
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
@@ -1617,6 +2113,14 @@ type ValidateDownstreamTlsValidationContext struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDownstreamTlsValidationContext) TrustedCaChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for trusted_ca_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateDownstreamTlsValidationContext) TrustedCaChoiceTrustedCaUrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	oValidatorFn_TrustedCaUrl, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1663,6 +2167,16 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 			}
 		}
 
+	}
+
+	if fv, exists := v.FldValidators["trusted_ca_choice"]; exists {
+		val := m.GetTrustedCaChoice()
+		vOpts := append(opts,
+			db.WithValidateField("trusted_ca_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetTrustedCaChoice().(type) {
@@ -1731,6 +2245,17 @@ var DefaultDownstreamTlsValidationContextValidator = func() *ValidateDownstreamT
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhTrustedCaChoice := v.TrustedCaChoiceValidationRuleHandler
+	rulesTrustedCaChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTrustedCaChoice(rulesTrustedCaChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsValidationContext.trusted_ca_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_ca_choice"] = vFn
 
 	vrhTrustedCaChoiceTrustedCaUrl := v.TrustedCaChoiceTrustedCaUrlValidationRuleHandler
 	rulesTrustedCaChoiceTrustedCaUrl := map[string]string{
@@ -6512,6 +7037,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetChoice().(type) {
 	case *WhereType_Site:
+
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -6523,6 +7049,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereType_VirtualSite:
+
 		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")
@@ -6534,6 +7061,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereType_Vk8SService:
+
 		drInfos, err := m.GetVk8SService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVk8SService().GetDRefInfo() FAILED")
@@ -6545,6 +7073,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereType_VirtualNetwork:
+
 		drInfos, err := m.GetVirtualNetwork().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualNetwork().GetDRefInfo() FAILED")
@@ -6556,6 +7085,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereType_SiteSegment:
+
 		drInfos, err := m.GetSiteSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSiteSegment().GetDRefInfo() FAILED")
@@ -6567,6 +7097,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereType_VirtualSiteSegment:
+
 		drInfos, err := m.GetVirtualSiteSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSiteSegment().GetDRefInfo() FAILED")
@@ -6578,6 +7109,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereType_Segment:
+
 		drInfos, err := m.GetSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSegment().GetDRefInfo() FAILED")
@@ -6589,6 +7121,7 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereType_CloudEdgeSegment:
+
 		drInfos, err := m.GetCloudEdgeSegment().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCloudEdgeSegment().GetDRefInfo() FAILED")
@@ -6904,6 +7437,7 @@ func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetChoice().(type) {
 	case *WhereTypeSiteVsite_Site:
+
 		drInfos, err := m.GetSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSite().GetDRefInfo() FAILED")
@@ -6915,6 +7449,7 @@ func (m *WhereTypeSiteVsite) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *WhereTypeSiteVsite_VirtualSite:
+
 		drInfos, err := m.GetVirtualSite().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVirtualSite().GetDRefInfo() FAILED")

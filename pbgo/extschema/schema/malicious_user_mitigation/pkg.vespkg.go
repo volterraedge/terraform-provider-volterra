@@ -58,10 +58,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.mitigation_type.rules.#.mitigation_action.none",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.malicious_user_mitigation.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.malicious_user_mitigation.API.Replace"] = []string{
 		"spec.mitigation_type.rules.#.mitigation_action.alert_only",
 		"spec.mitigation_type.rules.#.mitigation_action.none",

@@ -72,10 +72,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.use_loadbalancer_setting",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.app_firewall.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.app_firewall.API.Replace"] = []string{
 		"spec.use_loadbalancer_setting",
 	}

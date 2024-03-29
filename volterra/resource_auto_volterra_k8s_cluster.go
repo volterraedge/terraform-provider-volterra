@@ -83,8 +83,9 @@ func resourceVolterraK8SCluster() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"generated_yaml": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"local_domain": {
@@ -108,32 +109,37 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																		"blindfold_secret_info_internal": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"decryption_provider": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"location": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"store_provider": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
 																		},
 
 																		"secret_encoding_type": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"blindfold_secret_info": {
@@ -183,34 +189,40 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																		"vault_secret_info": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"key": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"location": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"provider": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"secret_encoding": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"version": {
-																						Type:     schema.TypeInt,
-																						Optional: true,
+																						Type:       schema.TypeInt,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -218,14 +230,16 @@ func resourceVolterraK8SCluster() *schema.Resource {
 
 																		"wingman_secret_info": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"name": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -260,8 +274,9 @@ func resourceVolterraK8SCluster() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"generated_yaml": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -275,8 +290,9 @@ func resourceVolterraK8SCluster() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"generated_yaml": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -290,8 +306,9 @@ func resourceVolterraK8SCluster() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"generated_yaml": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -465,6 +482,35 @@ func resourceVolterraK8SCluster() *schema.Resource {
 			},
 
 			"no_local_access": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"use_custom_pod_security_admission": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"name": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"namespace": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+						"tenant": {
+							Type:     schema.TypeString,
+							Optional: true,
+						},
+					},
+				},
+			},
+
+			"use_default_pod_security_admission": {
 
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -1191,6 +1237,55 @@ func resourceVolterraK8SClusterCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//pod_security_admission_choice
+
+	podSecurityAdmissionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("use_custom_pod_security_admission"); ok && !podSecurityAdmissionChoiceTypeFound {
+
+		podSecurityAdmissionChoiceTypeFound = true
+		podSecurityAdmissionChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_UseCustomPodSecurityAdmission{}
+		podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission = &ves_io_schema_views.ObjectRefType{}
+		createSpec.PodSecurityAdmissionChoice = podSecurityAdmissionChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Name = v.(string)
+
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Namespace = v.(string)
+
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Tenant = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("use_default_pod_security_admission"); ok && !podSecurityAdmissionChoiceTypeFound {
+
+		podSecurityAdmissionChoiceTypeFound = true
+
+		if v.(bool) {
+			podSecurityAdmissionChoiceInt := &ves_io_schema_k8s_cluster.CreateSpecType_UseDefaultPodSecurityAdmission{}
+			podSecurityAdmissionChoiceInt.UseDefaultPodSecurityAdmission = &ves_io_schema.Empty{}
+			createSpec.PodSecurityAdmissionChoice = podSecurityAdmissionChoiceInt
+		}
+
+	}
+
 	//pod_security_policy_choice
 
 	podSecurityPolicyChoiceTypeFound := false
@@ -1332,6 +1427,7 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -1970,6 +2066,53 @@ func resourceVolterraK8SClusterUpdate(d *schema.ResourceData, meta interface{}) 
 			localAccessChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_NoLocalAccess{}
 			localAccessChoiceInt.NoLocalAccess = &ves_io_schema.Empty{}
 			updateSpec.LocalAccessChoice = localAccessChoiceInt
+		}
+
+	}
+
+	podSecurityAdmissionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("use_custom_pod_security_admission"); ok && !podSecurityAdmissionChoiceTypeFound {
+
+		podSecurityAdmissionChoiceTypeFound = true
+		podSecurityAdmissionChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_UseCustomPodSecurityAdmission{}
+		podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission = &ves_io_schema_views.ObjectRefType{}
+		updateSpec.PodSecurityAdmissionChoice = podSecurityAdmissionChoiceInt
+
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Name = v.(string)
+
+			}
+
+			if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Namespace = v.(string)
+
+			}
+
+			if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+				podSecurityAdmissionChoiceInt.UseCustomPodSecurityAdmission.Tenant = v.(string)
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("use_default_pod_security_admission"); ok && !podSecurityAdmissionChoiceTypeFound {
+
+		podSecurityAdmissionChoiceTypeFound = true
+
+		if v.(bool) {
+			podSecurityAdmissionChoiceInt := &ves_io_schema_k8s_cluster.ReplaceSpecType_UseDefaultPodSecurityAdmission{}
+			podSecurityAdmissionChoiceInt.UseDefaultPodSecurityAdmission = &ves_io_schema.Empty{}
+			updateSpec.PodSecurityAdmissionChoice = podSecurityAdmissionChoiceInt
 		}
 
 	}

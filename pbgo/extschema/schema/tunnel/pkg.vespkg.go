@@ -66,10 +66,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.tunnel.API.Create"] = "ves.io.schema.tunnel.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.tunnel.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.tunnel.API.Replace"] = []string{
 		"spec.params.ipsec.ipsec_psk.blindfold_secret_info_internal",
 		"spec.params.ipsec.ipsec_psk.secret_encoding_type",

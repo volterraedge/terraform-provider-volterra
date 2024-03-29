@@ -1235,47 +1235,47 @@ type apiepCustomAPIInprocClient struct {
 }
 
 func (c *apiepCustomAPIInprocClient) GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq, opts ...grpc.CallOption) (*GetAPICallSummaryRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary")
 	return c.ApiepCustomAPIServer.GetAPICallSummary(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpoint(ctx context.Context, in *APIEndpointReq, opts ...grpc.CallOption) (*APIEndpointRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint")
 	return c.ApiepCustomAPIServer.GetAPIEndpoint(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpointLearntSchema(ctx context.Context, in *APIEndpointLearntSchemaReq, opts ...grpc.CallOption) (*APIEndpointLearntSchemaRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema")
 	return c.ApiepCustomAPIServer.GetAPIEndpointLearntSchema(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpointPDF(ctx context.Context, in *APIEndpointPDFReq, opts ...grpc.CallOption) (*APIEndpointPDFRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF")
 	return c.ApiepCustomAPIServer.GetAPIEndpointPDF(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpoints(ctx context.Context, in *APIEndpointsReq, opts ...grpc.CallOption) (*APIEndpointsRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoints")
 	return c.ApiepCustomAPIServer.GetAPIEndpoints(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetApiEndpointsStats(ctx context.Context, in *ApiEndpointsStatsReq, opts ...grpc.CallOption) (*ApiEndpointsStatsRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetApiEndpointsStats", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetApiEndpointsStats")
 	return c.ApiepCustomAPIServer.GetApiEndpointsStats(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetSwaggerSpec(ctx context.Context, in *SwaggerSpecReq, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetSwaggerSpec")
 	return c.ApiepCustomAPIServer.GetSwaggerSpec(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetTopAPIEndpoints(ctx context.Context, in *GetTopAPIEndpointsReq, opts ...grpc.CallOption) (*GetTopAPIEndpointsRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopAPIEndpoints", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopAPIEndpoints")
 	return c.ApiepCustomAPIServer.GetTopAPIEndpoints(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetTopSensitiveData(ctx context.Context, in *GetTopSensitiveDataReq, opts ...grpc.CallOption) (*GetTopSensitiveDataRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopSensitiveData", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetTopSensitiveData")
 	return c.ApiepCustomAPIServer.GetTopSensitiveData(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetVulnerabilities(ctx context.Context, in *GetVulnerabilitiesReq, opts ...grpc.CallOption) (*GetVulnerabilitiesRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetVulnerabilities", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetVulnerabilities")
 	return c.ApiepCustomAPIServer.GetVulnerabilities(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) UpdateVulnerabilitiesState(ctx context.Context, in *UpdateVulnerabilitiesStateReq, opts ...grpc.CallOption) (*UpdateVulnerabilitiesStateRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UpdateVulnerabilitiesState", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UpdateVulnerabilitiesState")
 	return c.ApiepCustomAPIServer.UpdateVulnerabilitiesState(ctx, in)
 }
 
@@ -4820,6 +4820,13 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "description": " Description of the vulnerability found.",
                     "title": "description",
                     "x-displayname": "Description"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " Domain of the vulnerability found.\n\nExample: - \"www.example.com\"-",
+                    "title": "domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "www.example.com"
                 },
                 "evidence": {
                     "description": " Evidence of the vulnerability found.",

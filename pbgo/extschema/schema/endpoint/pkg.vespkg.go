@@ -59,14 +59,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.endpoint.API.Create"] = []string{
 		"spec.dns_name_advanced.strict_ttl",
-	}
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.endpoint.API.Get"] = []string{
-		"object",
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.endpoint.API.Replace"] = []string{
 		"spec.dns_name_advanced.strict_ttl",
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 }

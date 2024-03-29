@@ -44,11 +44,11 @@ Argument Reference
 
 `dns_name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
-`dns_name_advanced` - (Optional) Specifies name and TTL used for DNS resolution.. See [Dns Name Advanced ](#dns-name-advanced) below for details.
+`dns_name_advanced` - (Optional) Specifies name and TTL used for DNS resolution.. See [Endpoint Address Dns Name Advanced ](#endpoint-address-dns-name-advanced) below for details.
 
 `ip` - (Optional) Endpoint is reachable at the given ipv4/ipv6 address (`String`).
 
-`service_info` - (Optional) In case of Consul, tags on the service is matched against service_selector. See [Service Info ](#service-info) below for details.
+`service_info` - (Optional) In case of Consul, tags on the service is matched against service_selector. See [Endpoint Address Service Info ](#endpoint-address-service-info) below for details.
 
 `health_check_port` - (Optional) Setting this with a non-zero value allows an endpoint to have different health check port. (`Int`).
 
@@ -58,21 +58,49 @@ Argument Reference
 
 `where` - (Optional) This endpoint is present in site, virtual_site or virtual_network selected by following field.. See [Where ](#where) below for details.
 
-### Disable Internet Vip
+### Where
 
-Do not enable advertise on external internet vip..
+This endpoint is present in site, virtual_site or virtual_network selected by following field..
 
-### Dns Name Advanced
+###### One of the arguments from this list "virtual_network, site, virtual_site" must be set
+
+`site` - (Optional) Direct reference to site object. See [Ref Or Selector Site ](#ref-or-selector-site) below for details.
+
+`virtual_network` - (Optional) Direct reference to virtual network object. See [Ref Or Selector Virtual Network ](#ref-or-selector-virtual-network) below for details.
+
+`virtual_site` - (Optional) Direct reference to virtual site object. See [Ref Or Selector Virtual Site ](#ref-or-selector-virtual-site) below for details.
+
+### Endpoint Address Dns Name Advanced
 
 Specifies name and TTL used for DNS resolution..
 
 `name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
+###### One of the arguments from this list "refresh_interval, strict_ttl" can be set
+
 `refresh_interval` - (Optional) Interval for DNS refresh in seconds. (`Int`).
 
-`strict_ttl` - (Optional) Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval (bool).
+`strict_ttl` - (Optional) Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval (`Bool`).(Deprecated)
 
-### Enable Internet Vip
+### Endpoint Address Service Info
+
+```
+ In case of Consul, tags on the service is matched against service_selector.
+```
+
+`discovery_type` - (Required) Specifies whether the discovery is from Kubernetes or Consul cluster (`String`).
+
+###### One of the arguments from this list "service_name, service_selector" can be set
+
+`service_name` - (Optional) discovery objects of the site. (`String`).
+
+`service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Info Service Selector ](#service-info-service-selector) below for details.
+
+### Internet Vip Choice Disable Internet Vip
+
+Do not enable advertise on external internet vip..
+
+### Internet Vip Choice Enable Internet Vip
 
 Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site..
 
@@ -86,95 +114,53 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Segment
-
-Reference to Segment.
-
-`ref` - (Required) A segment reference. See [ref](#ref) below for details.
-
-### Segment Site
-
-Reference to Segment object.
-
-`segment` - (Required) Segment in the site. See [ref](#ref) below for details.
-
-`site` - (Required) Reference to a site. See [ref](#ref) below for details.
-
-### Segment Vsite
-
-Reference to Segment in a virtual site.
-
-`segment` - (Required) Segment in the virtual site. See [ref](#ref) below for details.
-
-`vsite` - (Required) Reference to a virtual site. See [ref](#ref) below for details.
-
-### Service Info
-
-```
- In case of Consul, tags on the service is matched against service_selector.
-```
-
-`discovery_type` - (Required) Specifies whether the discovery is from Kubernetes or Consul cluster (`String`).
-
-`service_name` - (Optional) discovery objects of the site. (`String`).
-
-`service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Selector ](#service-selector) below for details.
-
-### Service Selector
-
-discovery has to happen. This implicit label is added to service_selector.
-
-`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
-### Site
+### Ref Or Selector Site
 
 Direct reference to site object.
 
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
 
 `network_type` - (Optional) The type of network on the referred site (`String`).
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
-### Strict Ttl
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
-Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval.
-
-### Virtual Network
+### Ref Or Selector Virtual Network
 
 Direct reference to virtual network object.
 
 `ref` - (Required) A virtual network direct reference. See [ref](#ref) below for details.
 
-### Virtual Site
+### Ref Or Selector Virtual Site
 
 Direct reference to virtual site object.
 
-`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (bool).
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
-`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (bool).
+`disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
+
+`enable_internet_vip` - (Optional) Enable advertise on internet vip. Only supported for AWS TGW Site or AWS VPC Site. (`Bool`).
 
 `network_type` - (Optional) The type of network on the referred virtual_site (`String`).
 
 `ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
-### Where
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
 
-This endpoint is present in site, virtual_site or virtual_network selected by following field..
+### Service Info Service Selector
 
-`segment` - (Optional) Reference to Segment. See [Segment ](#segment) below for details.
+discovery has to happen. This implicit label is added to service_selector.
 
-`segment_site` - (Optional) Reference to Segment object. See [Segment Site ](#segment-site) below for details.
+`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
-`segment_vsite` - (Optional) Reference to Segment in a virtual site. See [Segment Vsite ](#segment-vsite) below for details.
+### Ttl Choice Strict Ttl
 
-`site` - (Optional) Direct reference to site object. See [Site ](#site) below for details.
-
-`virtual_network` - (Optional) Direct reference to virtual network object. See [Virtual Network ](#virtual-network) below for details.
-
-`virtual_site` - (Optional) Direct reference to virtual site object. See [Virtual Site ](#virtual-site) below for details.
+Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval.
 
 Attribute Reference
 -------------------

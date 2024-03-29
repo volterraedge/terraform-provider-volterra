@@ -44,35 +44,27 @@ Argument Reference
 
 `protocol_policer` - (Optional) List of L4 protocol match condition and associated traffic rate limits. See [Protocol Policer ](#protocol-policer) below for details.
 
-### Dns
-
-Match all DNS packets.
-
-### Icmp
-
-ICMP message types to be matched in packet.
-
-`type` - (Optional) ICMP message type to be matched in packet (`List of Strings`).
-
-### Protocol
-
-Protocol specifys L4 match criteria in a packet.
-
-`dns` - (Optional) Match all DNS packets. See [Dns ](#dns) below for details.
-
-`icmp` - (Optional) ICMP message types to be matched in packet. See [Icmp ](#icmp) below for details.
-
-`tcp` - (Optional) TCP flags to be matched in packet. See [Tcp ](#tcp) below for details.
-
-`udp` - (Optional) Match all UDP packets. See [Udp ](#udp) below for details.
-
 ### Protocol Policer
 
 List of L4 protocol match condition and associated traffic rate limits.
 
 `policer` - (Required) Reference to policer object to apply traffic rate limits. See [ref](#ref) below for details.
 
-`protocol` - (Required) Protocol specifys L4 match criteria in a packet. See [Protocol ](#protocol) below for details.
+`protocol` - (Required) Protocol specifys L4 match criteria in a packet. See [Protocol Policer Protocol ](#protocol-policer-protocol) below for details.
+
+### Protocol Policer Protocol
+
+Protocol specifys L4 match criteria in a packet.
+
+###### One of the arguments from this list "tcp, icmp, udp, dns" can be set
+
+`dns` - (Optional) Match all DNS packets. See [Type Dns ](#type-dns) below for details.
+
+`icmp` - (Optional) ICMP message types to be matched in packet. See [Type Icmp ](#type-icmp) below for details.
+
+`tcp` - (Optional) TCP flags to be matched in packet. See [Type Tcp ](#type-tcp) below for details.
+
+`udp` - (Optional) Match all UDP packets. See [Type Udp ](#type-udp) below for details.
 
 ### Ref
 
@@ -84,13 +76,23 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Tcp
+### Type Dns
+
+Match all DNS packets.
+
+### Type Icmp
+
+ICMP message types to be matched in packet.
+
+`type` - (Optional) ICMP message type to be matched in packet (`List of Strings`).
+
+### Type Tcp
 
 TCP flags to be matched in packet.
 
 `flags` - (Optional) TCP flag to be matched in a TCP packet (`List of Strings`).
 
-### Udp
+### Type Udp
 
 Match all UDP packets.
 

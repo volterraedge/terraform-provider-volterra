@@ -58,10 +58,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.certificate.API.Create"] = "ves.io.schema.certificate.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.certificate.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.certificate.API.Replace"] = []string{
 		"spec.private_key.blindfold_secret_info_internal",
 		"spec.private_key.secret_encoding_type",

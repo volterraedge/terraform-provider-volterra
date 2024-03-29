@@ -309,6 +309,172 @@ func (m *EvaluateAPIAccessResp) GetItemLists() []*APIItemList {
 	return nil
 }
 
+// NamespaceAPIList
+//
+// x-displayName: "NamespaceAPIList"
+// NamespaceAPIList holds the namespace and its associated APIs
+type NamespaceAPIList struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// Name of the namespace under which all the URLs in APIItems will be evaluated
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// item_lists
+	//
+	// x-displayName: "Item Lists"
+	// List of APIItemList entries
+	ItemLists []*APIItemList `protobuf:"bytes,2,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
+}
+
+func (m *NamespaceAPIList) Reset()      { *m = NamespaceAPIList{} }
+func (*NamespaceAPIList) ProtoMessage() {}
+func (*NamespaceAPIList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{4}
+}
+func (m *NamespaceAPIList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NamespaceAPIList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_NamespaceAPIList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *NamespaceAPIList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NamespaceAPIList.Merge(m, src)
+}
+func (m *NamespaceAPIList) XXX_Size() int {
+	return m.Size()
+}
+func (m *NamespaceAPIList) XXX_DiscardUnknown() {
+	xxx_messageInfo_NamespaceAPIList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NamespaceAPIList proto.InternalMessageInfo
+
+func (m *NamespaceAPIList) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *NamespaceAPIList) GetItemLists() []*APIItemList {
+	if m != nil {
+		return m.ItemLists
+	}
+	return nil
+}
+
+// EvaluateBatchAPIAccessReq
+//
+// x-displayName: "Request for EvaluateBatchAPIAccess"
+// Request body of EvaluateBatchAPIAccess request
+type EvaluateBatchAPIAccessReq struct {
+	// batch_namespace_api_list
+	//
+	// x-displayName: "BatchNamespaceApiList"
+	// List of namespaces and associated api list entries
+	BatchNamespaceApiList []*NamespaceAPIList `protobuf:"bytes,1,rep,name=batch_namespace_api_list,json=batchNamespaceApiList,proto3" json:"batch_namespace_api_list,omitempty"`
+}
+
+func (m *EvaluateBatchAPIAccessReq) Reset()      { *m = EvaluateBatchAPIAccessReq{} }
+func (*EvaluateBatchAPIAccessReq) ProtoMessage() {}
+func (*EvaluateBatchAPIAccessReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{5}
+}
+func (m *EvaluateBatchAPIAccessReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EvaluateBatchAPIAccessReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_EvaluateBatchAPIAccessReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *EvaluateBatchAPIAccessReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EvaluateBatchAPIAccessReq.Merge(m, src)
+}
+func (m *EvaluateBatchAPIAccessReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *EvaluateBatchAPIAccessReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_EvaluateBatchAPIAccessReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EvaluateBatchAPIAccessReq proto.InternalMessageInfo
+
+func (m *EvaluateBatchAPIAccessReq) GetBatchNamespaceApiList() []*NamespaceAPIList {
+	if m != nil {
+		return m.BatchNamespaceApiList
+	}
+	return nil
+}
+
+// EvaluateBatchAPIAccessResp
+//
+// x-displayName: "Response for EvaluateBatchAPIAccess"
+// Response body of EvaluateBatchAPIAccess request
+type EvaluateBatchAPIAccessResp struct {
+	// batch_namespace_api_list
+	//
+	// x-displayName: "BatchNamespaceApiList"
+	// List of namespaces and associated api list entries
+	BatchNamespaceApiList []*NamespaceAPIList `protobuf:"bytes,1,rep,name=batch_namespace_api_list,json=batchNamespaceApiList,proto3" json:"batch_namespace_api_list,omitempty"`
+}
+
+func (m *EvaluateBatchAPIAccessResp) Reset()      { *m = EvaluateBatchAPIAccessResp{} }
+func (*EvaluateBatchAPIAccessResp) ProtoMessage() {}
+func (*EvaluateBatchAPIAccessResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{6}
+}
+func (m *EvaluateBatchAPIAccessResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EvaluateBatchAPIAccessResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_EvaluateBatchAPIAccessResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *EvaluateBatchAPIAccessResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EvaluateBatchAPIAccessResp.Merge(m, src)
+}
+func (m *EvaluateBatchAPIAccessResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *EvaluateBatchAPIAccessResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_EvaluateBatchAPIAccessResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EvaluateBatchAPIAccessResp proto.InternalMessageInfo
+
+func (m *EvaluateBatchAPIAccessResp) GetBatchNamespaceApiList() []*NamespaceAPIList {
+	if m != nil {
+		return m.BatchNamespaceApiList
+	}
+	return nil
+}
+
 // LookupUserRolesReq
 //
 // x-displayName: "Request for LookupUserRoles"
@@ -325,7 +491,7 @@ type LookupUserRolesReq struct {
 func (m *LookupUserRolesReq) Reset()      { *m = LookupUserRolesReq{} }
 func (*LookupUserRolesReq) ProtoMessage() {}
 func (*LookupUserRolesReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{4}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{7}
 }
 func (m *LookupUserRolesReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -376,7 +542,7 @@ type LookupUserRolesResp struct {
 func (m *LookupUserRolesResp) Reset()      { *m = LookupUserRolesResp{} }
 func (*LookupUserRolesResp) ProtoMessage() {}
 func (*LookupUserRolesResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{5}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{8}
 }
 func (m *LookupUserRolesResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -421,6 +587,12 @@ func init() {
 	golang_proto.RegisterType((*EvaluateAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateAPIAccessReq")
 	proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
 	golang_proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
+	proto.RegisterType((*NamespaceAPIList)(nil), "ves.io.schema.namespace.NamespaceAPIList")
+	golang_proto.RegisterType((*NamespaceAPIList)(nil), "ves.io.schema.namespace.NamespaceAPIList")
+	proto.RegisterType((*EvaluateBatchAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessReq")
+	golang_proto.RegisterType((*EvaluateBatchAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessReq")
+	proto.RegisterType((*EvaluateBatchAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessResp")
+	golang_proto.RegisterType((*EvaluateBatchAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessResp")
 	proto.RegisterType((*LookupUserRolesReq)(nil), "ves.io.schema.namespace.LookupUserRolesReq")
 	golang_proto.RegisterType((*LookupUserRolesReq)(nil), "ves.io.schema.namespace.LookupUserRolesReq")
 	proto.RegisterType((*LookupUserRolesResp)(nil), "ves.io.schema.namespace.LookupUserRolesResp")
@@ -435,60 +607,68 @@ func init() {
 }
 
 var fileDescriptor_ae2cd67c9bbaccbd = []byte{
-	// 842 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x55, 0xcf, 0x6f, 0xdc, 0x44,
-	0x14, 0xde, 0xd9, 0xd0, 0x84, 0x9d, 0xaa, 0x02, 0xdc, 0x42, 0x97, 0x25, 0xb2, 0x56, 0x86, 0x43,
-	0x48, 0x32, 0x36, 0x0a, 0x82, 0x43, 0x6e, 0x21, 0x70, 0x58, 0xa9, 0x15, 0xd1, 0x56, 0x80, 0x84,
-	0x90, 0x56, 0xb3, 0xf6, 0x5b, 0xef, 0x10, 0xdb, 0x33, 0xf5, 0x1b, 0x6f, 0x1a, 0x55, 0x45, 0xa8,
-	0x17, 0x6e, 0x08, 0x89, 0x7f, 0x82, 0x7f, 0x00, 0x09, 0x29, 0x97, 0xde, 0xa8, 0x38, 0xa0, 0x08,
-	0x0e, 0xf4, 0x06, 0xd9, 0x70, 0xe0, 0xd8, 0xff, 0x80, 0xca, 0x63, 0x67, 0xd3, 0xdd, 0xac, 0x9b,
-	0x28, 0xb7, 0xf7, 0xe3, 0x9b, 0x6f, 0xbe, 0xcf, 0x33, 0xcf, 0x43, 0xdd, 0x11, 0xa0, 0x2b, 0xa4,
-	0x87, 0xfe, 0x10, 0x62, 0xee, 0x25, 0x3c, 0x06, 0x54, 0xdc, 0x07, 0x4f, 0x65, 0xfd, 0x48, 0xf8,
-	0x3d, 0x3f, 0x43, 0x2d, 0x63, 0xae, 0x84, 0xab, 0x52, 0xa9, 0xa5, 0x75, 0xb3, 0xc0, 0xbb, 0x05,
-	0xde, 0x9d, 0xe0, 0x5b, 0x2c, 0x14, 0x7a, 0x98, 0xf5, 0x5d, 0x5f, 0xc6, 0x5e, 0x28, 0x43, 0xe9,
-	0x19, 0x7c, 0x3f, 0x1b, 0x98, 0xcc, 0x24, 0x26, 0x2a, 0x78, 0x5a, 0xcb, 0xa1, 0x94, 0x61, 0x04,
-	0x1e, 0x57, 0xc2, 0xe3, 0x49, 0x22, 0x35, 0xd7, 0x42, 0x26, 0x58, 0x76, 0xdf, 0xae, 0x52, 0xa5,
-	0xf7, 0x15, 0x9c, 0x80, 0xde, 0x9a, 0x06, 0x49, 0xf5, 0x3c, 0xc3, 0x9b, 0xd3, 0xcd, 0xe7, 0xd7,
-	0x2d, 0x4f, 0xb7, 0x46, 0x3c, 0x12, 0x01, 0xd7, 0x50, 0x76, 0x9d, 0x99, 0x2e, 0x20, 0x24, 0xa3,
-	0x19, 0xf2, 0xf6, 0x0c, 0x46, 0xc0, 0x5e, 0x6f, 0x0a, 0xe1, 0xdc, 0xa6, 0x4b, 0x5b, 0x3b, 0x9d,
-	0x8e, 0x86, 0xd8, 0x7a, 0x83, 0x2e, 0xc6, 0xa0, 0x87, 0x32, 0x68, 0x92, 0x36, 0x59, 0x69, 0x74,
-	0xcb, 0xcc, 0xb2, 0xe8, 0x4b, 0x8a, 0xeb, 0x61, 0xb3, 0x6e, 0xaa, 0x26, 0xce, 0xb1, 0x29, 0x60,
-	0x16, 0xe9, 0xe6, 0x42, 0x9b, 0xac, 0xbc, 0xdc, 0x2d, 0x33, 0xe7, 0x1b, 0x7a, 0xb5, 0xa4, 0xbb,
-	0x25, 0x50, 0x5b, 0x37, 0xe9, 0x52, 0x24, 0x50, 0xf7, 0xc4, 0x84, 0x33, 0x4f, 0x3b, 0x81, 0xf5,
-	0x21, 0xbd, 0x22, 0x34, 0xc4, 0xd8, 0xac, 0xb7, 0x17, 0x56, 0xae, 0x6e, 0xb4, 0xdd, 0x8a, 0xd3,
-	0x72, 0x4b, 0xb6, 0x6e, 0x01, 0xaf, 0xda, 0x77, 0x73, 0xf1, 0xb7, 0x03, 0x52, 0x7f, 0x95, 0x38,
-	0xfb, 0xf4, 0xc6, 0x27, 0x23, 0x1e, 0x65, 0x5c, 0xc3, 0xd6, 0x4e, 0x67, 0xcb, 0xf7, 0x01, 0xb1,
-	0x0b, 0x77, 0xad, 0x65, 0xda, 0x98, 0x70, 0x96, 0x52, 0x4e, 0x0b, 0xd6, 0x36, 0xa5, 0x39, 0x7d,
-	0x2f, 0x17, 0x77, 0x22, 0xe9, 0x9d, 0xf3, 0x24, 0xe5, 0x06, 0xbb, 0x0d, 0x51, 0x46, 0xe8, 0x7c,
-	0x45, 0x5f, 0x9f, 0xb3, 0x35, 0xaa, 0x19, 0x76, 0x72, 0x39, 0xf6, 0x0d, 0x6a, 0xdd, 0x92, 0x72,
-	0x37, 0x53, 0x9f, 0x21, 0xa4, 0x5d, 0x19, 0xc1, 0xf9, 0xb6, 0x9c, 0x35, 0x7a, 0xfd, 0xcc, 0x1a,
-	0x54, 0xd6, 0x0d, 0x7a, 0x25, 0xcd, 0x13, 0x23, 0xa5, 0xd1, 0x2d, 0x92, 0x8d, 0x9f, 0x97, 0x68,
-	0x63, 0xdb, 0xcc, 0xd0, 0xd6, 0x4e, 0xc7, 0xfa, 0x9f, 0xd0, 0x6b, 0xdb, 0x1c, 0x7d, 0x1e, 0xc0,
-	0xc7, 0x10, 0x81, 0x06, 0x8b, 0x55, 0x2a, 0x9e, 0xc2, 0x75, 0xe1, 0x6e, 0x06, 0xa8, 0x5b, 0xee,
-	0x45, 0xe1, 0xa8, 0x64, 0x82, 0xe0, 0x7c, 0x4f, 0xc6, 0xbf, 0x36, 0xbf, 0x18, 0x7c, 0x70, 0xcf,
-	0x67, 0xbe, 0x4c, 0x50, 0x46, 0xc0, 0xfa, 0x1c, 0x81, 0xf1, 0x20, 0x16, 0xc9, 0x7a, 0xdb, 0x34,
-	0xf2, 0xc2, 0x7a, 0x7e, 0xa5, 0x99, 0x90, 0x4c, 0x24, 0x83, 0x94, 0xa3, 0x4e, 0x33, 0x5f, 0x67,
-	0x29, 0xb0, 0xbd, 0x54, 0xe8, 0xd3, 0x66, 0xc6, 0xe3, 0x62, 0x65, 0x51, 0x7f, 0xf8, 0xe7, 0xbf,
-	0x3f, 0xd6, 0x99, 0xb3, 0x52, 0xfe, 0x2b, 0x4e, 0xc7, 0x14, 0xbd, 0xfb, 0x79, 0xfc, 0xc0, 0xf3,
-	0x0b, 0x51, 0xbd, 0xc0, 0xa8, 0xda, 0x24, 0xab, 0xd6, 0xdf, 0x84, 0xbe, 0x76, 0xe6, 0x3c, 0x5f,
-	0xf0, 0x15, 0xe6, 0x5d, 0xbb, 0x17, 0x7c, 0x85, 0xb9, 0x57, 0xc5, 0xd9, 0x7d, 0xfc, 0x4b, 0x3d,
-	0xff, 0x10, 0x6b, 0xc6, 0x6f, 0x00, 0x03, 0x9e, 0x45, 0x9a, 0x71, 0x03, 0x98, 0x98, 0xdb, 0x83,
-	0x7e, 0x59, 0x62, 0x29, 0xf0, 0xc0, 0x98, 0xdb, 0x70, 0xd8, 0x1c, 0x73, 0xb8, 0x8f, 0x1a, 0x62,
-	0x0f, 0xca, 0xbd, 0x18, 0x57, 0xa2, 0x5c, 0x99, 0x3b, 0x3c, 0x20, 0xf4, 0xda, 0x9d, 0x2c, 0x0c,
-	0x01, 0xf5, 0xe7, 0x3c, 0xca, 0x00, 0xad, 0x77, 0x2b, 0xe5, 0x4e, 0xe1, 0x72, 0x67, 0xab, 0x17,
-	0x85, 0xa2, 0x72, 0xee, 0x94, 0xae, 0xae, 0x97, 0x06, 0x42, 0x48, 0x20, 0xe5, 0xd1, 0x79, 0xea,
-	0xef, 0x4f, 0xe2, 0x07, 0x1e, 0x16, 0xa4, 0x6c, 0x64, 0x58, 0x73, 0xf5, 0x7f, 0x11, 0xfa, 0xca,
-	0xcc, 0xed, 0xb6, 0xd6, 0x2a, 0x45, 0x9d, 0x9d, 0x9d, 0xd6, 0xfa, 0xc5, 0xc1, 0xa8, 0x1c, 0x71,
-	0xd9, 0x93, 0x79, 0xcf, 0x59, 0xab, 0x3e, 0x99, 0xc8, 0xec, 0xc4, 0x32, 0x84, 0x94, 0x99, 0x31,
-	0xdc, 0x24, 0xab, 0xad, 0xf5, 0x47, 0x07, 0x64, 0xe1, 0x8f, 0x03, 0x62, 0x57, 0xe9, 0xfb, 0xb4,
-	0xff, 0x35, 0xf8, 0xfa, 0xe1, 0xef, 0xcd, 0xfa, 0x90, 0x7c, 0xf4, 0x1d, 0x39, 0x3c, 0xb2, 0x6b,
-	0x4f, 0x8e, 0xec, 0xda, 0xd3, 0x23, 0x9b, 0x7c, 0x3b, 0xb6, 0xc9, 0x4f, 0x63, 0x9b, 0x3c, 0x1e,
-	0xdb, 0xe4, 0x70, 0x6c, 0x93, 0x7f, 0xc6, 0x36, 0xf9, 0x6f, 0x6c, 0xd7, 0x9e, 0x8e, 0x6d, 0xf2,
-	0xc3, 0xb1, 0x5d, 0x7b, 0x74, 0x6c, 0x93, 0xc3, 0x63, 0xbb, 0xf6, 0xe4, 0xd8, 0xae, 0x7d, 0x79,
-	0x3b, 0x94, 0x6a, 0x37, 0x74, 0x47, 0x32, 0xd2, 0x90, 0xa6, 0xdc, 0xcd, 0xd0, 0x33, 0xc1, 0x40,
-	0xa6, 0x31, 0x53, 0xa9, 0x1c, 0x89, 0x00, 0x52, 0x76, 0xd2, 0xf6, 0x54, 0x3f, 0x94, 0x1e, 0xdc,
-	0xd3, 0xe5, 0x63, 0x32, 0xfb, 0xe4, 0xf5, 0x17, 0xcd, 0x8b, 0xf2, 0xfe, 0xb3, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x82, 0x3d, 0x6c, 0x2c, 0xaa, 0x07, 0x00, 0x00,
+	// 970 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xf6, 0x38, 0x24, 0xc5, 0x53, 0x55, 0x84, 0xed, 0x2f, 0xd7, 0x44, 0x2b, 0x6b, 0xe1, 0x10,
+	0x92, 0xcc, 0x2e, 0x72, 0x04, 0x42, 0xb9, 0x25, 0x81, 0x83, 0xa5, 0x96, 0x46, 0xae, 0x00, 0x09,
+	0x21, 0x59, 0xb3, 0xeb, 0xe7, 0xf5, 0x90, 0xdd, 0x9d, 0xc9, 0xce, 0xac, 0xd3, 0xa8, 0x2a, 0xaa,
+	0x7a, 0x41, 0x08, 0x09, 0x21, 0xf8, 0x27, 0x38, 0xf0, 0x07, 0x20, 0x72, 0xc9, 0x8d, 0x8a, 0x03,
+	0x8a, 0xe0, 0x40, 0x6f, 0x10, 0x87, 0x03, 0xdc, 0x7a, 0xe0, 0x0e, 0xda, 0xf1, 0xda, 0x89, 0x1d,
+	0x6f, 0x12, 0xa2, 0xde, 0xe6, 0xcd, 0xfb, 0xe6, 0x9b, 0xef, 0x7b, 0xb3, 0xef, 0x69, 0xb1, 0xdd,
+	0x05, 0x69, 0x33, 0xee, 0x48, 0xaf, 0x03, 0x21, 0x75, 0x22, 0x1a, 0x82, 0x14, 0xd4, 0x03, 0x47,
+	0x24, 0x6e, 0xc0, 0xbc, 0xa6, 0x97, 0x48, 0xc5, 0x43, 0x2a, 0x98, 0x2d, 0x62, 0xae, 0xb8, 0x71,
+	0xb3, 0x8f, 0xb7, 0xfb, 0x78, 0x7b, 0x88, 0xaf, 0x10, 0x9f, 0xa9, 0x4e, 0xe2, 0xda, 0x1e, 0x0f,
+	0x1d, 0x9f, 0xfb, 0xdc, 0xd1, 0x78, 0x37, 0x69, 0xeb, 0x48, 0x07, 0x7a, 0xd5, 0xe7, 0xa9, 0xcc,
+	0xf9, 0x9c, 0xfb, 0x01, 0x38, 0x54, 0x30, 0x87, 0x46, 0x11, 0x57, 0x54, 0x31, 0x1e, 0xc9, 0x2c,
+	0xfb, 0x6a, 0x9e, 0x2a, 0xb5, 0x23, 0x60, 0x00, 0x7a, 0x65, 0x14, 0xc4, 0xc5, 0x71, 0x86, 0x5b,
+	0xa3, 0xc9, 0xe3, 0xe7, 0xe6, 0x46, 0x53, 0x5d, 0x1a, 0xb0, 0x16, 0x55, 0x90, 0x65, 0xad, 0xb1,
+	0x2c, 0x48, 0x88, 0xba, 0x63, 0xe4, 0xd5, 0x31, 0x0c, 0x83, 0xed, 0xe6, 0x08, 0xc2, 0xba, 0x83,
+	0x2f, 0xad, 0x6e, 0xd4, 0xeb, 0x0a, 0x42, 0xe3, 0x06, 0x9e, 0x09, 0x41, 0x75, 0x78, 0xab, 0x8c,
+	0xaa, 0x68, 0xbe, 0xd4, 0xc8, 0x22, 0xc3, 0xc0, 0x2f, 0x08, 0xaa, 0x3a, 0xe5, 0xa2, 0xde, 0xd5,
+	0xeb, 0x14, 0x1b, 0x83, 0x4c, 0x02, 0x55, 0x9e, 0xaa, 0xa2, 0xf9, 0x17, 0x1b, 0x59, 0x64, 0x7d,
+	0x8a, 0x2f, 0x67, 0x74, 0xb7, 0x99, 0x54, 0xc6, 0x4d, 0x7c, 0x29, 0x60, 0x52, 0x35, 0xd9, 0x90,
+	0x33, 0x0d, 0xeb, 0x2d, 0xe3, 0x2d, 0x3c, 0xcd, 0x14, 0x84, 0xb2, 0x5c, 0xac, 0x4e, 0xcd, 0x5f,
+	0xae, 0x55, 0xed, 0x9c, 0xd7, 0xb2, 0x33, 0xb6, 0x46, 0x1f, 0x9e, 0x77, 0xef, 0xca, 0xcc, 0x4f,
+	0xbb, 0xa8, 0x38, 0x8b, 0xac, 0x1d, 0x7c, 0xed, 0xdd, 0x2e, 0x0d, 0x12, 0xaa, 0x60, 0x75, 0xa3,
+	0xbe, 0xea, 0x79, 0x20, 0x65, 0x03, 0xb6, 0x8c, 0x39, 0x5c, 0x1a, 0x72, 0x66, 0x52, 0x8e, 0x36,
+	0x8c, 0x75, 0x8c, 0x53, 0xfa, 0x66, 0x2a, 0x6e, 0x20, 0xe9, 0xb5, 0xb3, 0x24, 0xa5, 0x06, 0x1b,
+	0x25, 0x96, 0xad, 0xa4, 0xf5, 0x31, 0xbe, 0x3e, 0xe1, 0x6a, 0x29, 0xc6, 0xd8, 0xd1, 0xc5, 0xd8,
+	0x3f, 0x47, 0x78, 0xf6, 0xbd, 0x01, 0x68, 0x75, 0xa3, 0xae, 0xcb, 0x7b, 0xba, 0xab, 0xbb, 0x17,
+	0x75, 0xb5, 0x86, 0x7f, 0xf8, 0x7b, 0x6f, 0x6a, 0xfa, 0x6b, 0x54, 0x9c, 0xad, 0x1d, 0xd3, 0x30,
+	0x2c, 0xf2, 0x17, 0x08, 0xdf, 0x1a, 0x58, 0x5d, 0xa3, 0xca, 0xeb, 0x8c, 0x94, 0x3a, 0xc2, 0x65,
+	0x37, 0xdd, 0x6c, 0x0e, 0xb9, 0x9b, 0x54, 0x30, 0xad, 0x22, 0x33, 0xff, 0x7a, 0xae, 0x88, 0x71,
+	0x87, 0x23, 0x4a, 0xae, 0x6b, 0xda, 0x23, 0x88, 0x60, 0x29, 0xc4, 0x7a, 0x84, 0x70, 0x25, 0x4f,
+	0x8d, 0x14, 0x86, 0xfb, 0x1c, 0xe5, 0xe4, 0x49, 0xa8, 0x61, 0xe3, 0x36, 0xe7, 0x9b, 0x89, 0x78,
+	0x5f, 0x42, 0xdc, 0xe0, 0x01, 0x9c, 0xfd, 0xcd, 0x59, 0x8b, 0xf8, 0xea, 0x89, 0x33, 0x52, 0x18,
+	0xd7, 0xf0, 0x74, 0x9c, 0x06, 0x5a, 0x5b, 0xa9, 0xd1, 0x0f, 0x6a, 0xdf, 0x95, 0x70, 0x69, 0x5d,
+	0x0f, 0xb8, 0xd5, 0x8d, 0xba, 0xf1, 0x2f, 0xc2, 0x57, 0xd6, 0xa9, 0xf4, 0x68, 0x0b, 0xde, 0x81,
+	0x00, 0x14, 0x18, 0x24, 0xd7, 0xc2, 0x08, 0xae, 0x01, 0x5b, 0x09, 0x48, 0x55, 0xb1, 0xcf, 0x0b,
+	0x97, 0x82, 0x47, 0x12, 0xac, 0x2f, 0x51, 0xef, 0xc7, 0xf2, 0x87, 0xed, 0x37, 0xef, 0x7b, 0xc4,
+	0xe3, 0x91, 0xe4, 0x01, 0x10, 0x97, 0x4a, 0x20, 0xb4, 0x15, 0xb2, 0x68, 0xa9, 0xaa, 0x13, 0xe9,
+	0xc6, 0x52, 0x3a, 0x6f, 0x08, 0xe3, 0x84, 0x45, 0xed, 0x98, 0x4a, 0x15, 0x27, 0x9e, 0x4a, 0x62,
+	0x20, 0xdb, 0x31, 0x53, 0x47, 0xc9, 0x84, 0x86, 0xfd, 0x93, 0xfd, 0xfd, 0xc7, 0xbf, 0xfe, 0xf9,
+	0x4d, 0x91, 0x58, 0xf3, 0xd9, 0x20, 0x3f, 0x9a, 0xa1, 0xd2, 0x79, 0x90, 0xae, 0x1f, 0x3a, 0x5e,
+	0x5f, 0x54, 0xb3, 0xa5, 0x55, 0xad, 0xa0, 0x05, 0xe3, 0x77, 0x84, 0x5f, 0x3e, 0xd1, 0x6c, 0xa7,
+	0x54, 0x61, 0xd2, 0x4c, 0x38, 0xa5, 0x0a, 0x13, 0xfb, 0xd8, 0xda, 0x7c, 0xf2, 0x7d, 0x31, 0x2d,
+	0xc4, 0xa2, 0xf6, 0xdb, 0x82, 0x36, 0x4d, 0x02, 0x45, 0xa8, 0x06, 0x0c, 0xcd, 0x6d, 0x83, 0x9b,
+	0x6d, 0x91, 0x18, 0x68, 0x4b, 0x9b, 0xab, 0x59, 0x64, 0x82, 0x39, 0xb9, 0x23, 0x15, 0x84, 0x0e,
+	0x64, 0x77, 0x11, 0x2a, 0x58, 0x76, 0x32, 0x75, 0xf8, 0x0f, 0xc2, 0x37, 0x26, 0x7f, 0xd5, 0x46,
+	0xed, 0x4c, 0xdd, 0x27, 0x9a, 0xb2, 0xb2, 0xfc, 0xbf, 0xcf, 0x48, 0x61, 0x6d, 0x5d, 0xd4, 0xf0,
+	0xdb, 0xd6, 0xf2, 0x39, 0x0c, 0xeb, 0x5e, 0x1a, 0xb3, 0xbd, 0x8b, 0xf0, 0x95, 0x7b, 0x89, 0xef,
+	0x83, 0x54, 0x1f, 0xd0, 0x20, 0x01, 0x69, 0xe4, 0x77, 0xe7, 0x08, 0x2e, 0x35, 0xb9, 0x70, 0x5e,
+	0xa8, 0x14, 0xd6, 0xbd, 0xcc, 0xdb, 0xd5, 0xcc, 0x86, 0x0f, 0x11, 0xc4, 0x34, 0x38, 0xeb, 0xd1,
+	0x1e, 0x0c, 0xd7, 0x0f, 0x1d, 0xd9, 0x27, 0x25, 0x5d, 0xcd, 0x9a, 0xaa, 0xff, 0x0d, 0xe1, 0x97,
+	0xc6, 0x9a, 0xda, 0x58, 0xcc, 0x15, 0x75, 0x72, 0x64, 0x54, 0x96, 0xce, 0x0f, 0x96, 0xc2, 0x62,
+	0x17, 0x7d, 0x9f, 0x37, 0xac, 0xc5, 0xfc, 0xf7, 0x09, 0xf4, 0x4d, 0x24, 0x91, 0x10, 0x13, 0x3d,
+	0x7d, 0x56, 0xd0, 0x42, 0x65, 0x69, 0x6f, 0x17, 0x4d, 0xfd, 0xb2, 0x8b, 0xcc, 0x3c, 0x7d, 0x77,
+	0xdd, 0x4f, 0xc0, 0x53, 0x8f, 0x7f, 0x2e, 0x17, 0x3b, 0x68, 0xed, 0x33, 0xb4, 0x7f, 0x60, 0x16,
+	0x9e, 0x1e, 0x98, 0x85, 0x67, 0x07, 0x26, 0x7a, 0xd4, 0x33, 0xd1, 0xb7, 0x3d, 0x13, 0x3d, 0xe9,
+	0x99, 0x68, 0xbf, 0x67, 0xa2, 0x3f, 0x7a, 0x26, 0xfa, 0xab, 0x67, 0x16, 0x9e, 0xf5, 0x4c, 0xf4,
+	0xd5, 0xa1, 0x59, 0xd8, 0x3b, 0x34, 0xd1, 0xfe, 0xa1, 0x59, 0x78, 0x7a, 0x68, 0x16, 0x3e, 0xba,
+	0xe3, 0x73, 0xb1, 0xe9, 0xdb, 0x5d, 0x1e, 0x28, 0x88, 0x63, 0x6a, 0x27, 0xd2, 0xd1, 0x8b, 0x36,
+	0x8f, 0x43, 0x22, 0x62, 0xde, 0x65, 0x2d, 0x88, 0xc9, 0x20, 0xed, 0x08, 0xd7, 0xe7, 0x0e, 0xdc,
+	0x57, 0xd9, 0x0f, 0xce, 0xf8, 0x6f, 0x98, 0x3b, 0xa3, 0xff, 0x72, 0x96, 0xff, 0x0b, 0x00, 0x00,
+	0xff, 0xff, 0x19, 0x57, 0x54, 0x02, 0x3e, 0x0a, 0x00, 0x00,
 }
 
 func (this *APIItem) Equal(that interface{}) bool {
@@ -617,6 +797,96 @@ func (this *EvaluateAPIAccessResp) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *NamespaceAPIList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NamespaceAPIList)
+	if !ok {
+		that2, ok := that.(NamespaceAPIList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if len(this.ItemLists) != len(that1.ItemLists) {
+		return false
+	}
+	for i := range this.ItemLists {
+		if !this.ItemLists[i].Equal(that1.ItemLists[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *EvaluateBatchAPIAccessReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*EvaluateBatchAPIAccessReq)
+	if !ok {
+		that2, ok := that.(EvaluateBatchAPIAccessReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.BatchNamespaceApiList) != len(that1.BatchNamespaceApiList) {
+		return false
+	}
+	for i := range this.BatchNamespaceApiList {
+		if !this.BatchNamespaceApiList[i].Equal(that1.BatchNamespaceApiList[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *EvaluateBatchAPIAccessResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*EvaluateBatchAPIAccessResp)
+	if !ok {
+		that2, ok := that.(EvaluateBatchAPIAccessResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.BatchNamespaceApiList) != len(that1.BatchNamespaceApiList) {
+		return false
+	}
+	for i := range this.BatchNamespaceApiList {
+		if !this.BatchNamespaceApiList[i].Equal(that1.BatchNamespaceApiList[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *LookupUserRolesReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -721,6 +991,43 @@ func (this *EvaluateAPIAccessResp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *NamespaceAPIList) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&namespace.NamespaceAPIList{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	if this.ItemLists != nil {
+		s = append(s, "ItemLists: "+fmt.Sprintf("%#v", this.ItemLists)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *EvaluateBatchAPIAccessReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.EvaluateBatchAPIAccessReq{")
+	if this.BatchNamespaceApiList != nil {
+		s = append(s, "BatchNamespaceApiList: "+fmt.Sprintf("%#v", this.BatchNamespaceApiList)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *EvaluateBatchAPIAccessResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.EvaluateBatchAPIAccessResp{")
+	if this.BatchNamespaceApiList != nil {
+		s = append(s, "BatchNamespaceApiList: "+fmt.Sprintf("%#v", this.BatchNamespaceApiList)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *LookupUserRolesReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -773,6 +1080,11 @@ type CustomAPIClient interface {
 	// x-displayName: "Evaluate API Access"
 	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namespace for a given user of a tenant.
 	EvaluateAPIAccess(ctx context.Context, in *EvaluateAPIAccessReq, opts ...grpc.CallOption) (*EvaluateAPIAccessResp, error)
+	// EvaluateBatchAPIAccess
+	//
+	// x-displayName: "Evaluate Batch API Access"
+	// EvaluateBatchAPIAccess can evaluate multiple lists of API url, method under a batch of namespaces for a given user of a tenant.
+	EvaluateBatchAPIAccess(ctx context.Context, in *EvaluateBatchAPIAccessReq, opts ...grpc.CallOption) (*EvaluateBatchAPIAccessResp, error)
 	// SuggestValues
 	//
 	// x-displayName: "Suggest Values"
@@ -811,6 +1123,15 @@ func (c *customAPIClient) EvaluateAPIAccess(ctx context.Context, in *EvaluateAPI
 	return out, nil
 }
 
+func (c *customAPIClient) EvaluateBatchAPIAccess(ctx context.Context, in *EvaluateBatchAPIAccessReq, opts ...grpc.CallOption) (*EvaluateBatchAPIAccessResp, error) {
+	out := new(EvaluateBatchAPIAccessResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.namespace.CustomAPI/EvaluateBatchAPIAccess", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *customAPIClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
 	out := new(SuggestValuesResp)
 	err := c.cc.Invoke(ctx, "/ves.io.schema.namespace.CustomAPI/SuggestValues", in, out, opts...)
@@ -842,6 +1163,11 @@ type CustomAPIServer interface {
 	// x-displayName: "Evaluate API Access"
 	// EvaluateAPIAccess can evaluate multiple lists of API url, method under a namespace for a given user of a tenant.
 	EvaluateAPIAccess(context.Context, *EvaluateAPIAccessReq) (*EvaluateAPIAccessResp, error)
+	// EvaluateBatchAPIAccess
+	//
+	// x-displayName: "Evaluate Batch API Access"
+	// EvaluateBatchAPIAccess can evaluate multiple lists of API url, method under a batch of namespaces for a given user of a tenant.
+	EvaluateBatchAPIAccess(context.Context, *EvaluateBatchAPIAccessReq) (*EvaluateBatchAPIAccessResp, error)
 	// SuggestValues
 	//
 	// x-displayName: "Suggest Values"
@@ -863,6 +1189,9 @@ func (*UnimplementedCustomAPIServer) CascadeDelete(ctx context.Context, req *Cas
 }
 func (*UnimplementedCustomAPIServer) EvaluateAPIAccess(ctx context.Context, req *EvaluateAPIAccessReq) (*EvaluateAPIAccessResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EvaluateAPIAccess not implemented")
+}
+func (*UnimplementedCustomAPIServer) EvaluateBatchAPIAccess(ctx context.Context, req *EvaluateBatchAPIAccessReq) (*EvaluateBatchAPIAccessResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EvaluateBatchAPIAccess not implemented")
 }
 func (*UnimplementedCustomAPIServer) SuggestValues(ctx context.Context, req *SuggestValuesReq) (*SuggestValuesResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SuggestValues not implemented")
@@ -907,6 +1236,24 @@ func _CustomAPI_EvaluateAPIAccess_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CustomAPIServer).EvaluateAPIAccess(ctx, req.(*EvaluateAPIAccessReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPI_EvaluateBatchAPIAccess_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EvaluateBatchAPIAccessReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIServer).EvaluateBatchAPIAccess(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.namespace.CustomAPI/EvaluateBatchAPIAccess",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIServer).EvaluateBatchAPIAccess(ctx, req.(*EvaluateBatchAPIAccessReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -958,6 +1305,10 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EvaluateAPIAccess",
 			Handler:    _CustomAPI_EvaluateAPIAccess_Handler,
+		},
+		{
+			MethodName: "EvaluateBatchAPIAccess",
+			Handler:    _CustomAPI_EvaluateBatchAPIAccess_Handler,
 		},
 		{
 			MethodName: "SuggestValues",
@@ -1154,6 +1505,124 @@ func (m *EvaluateAPIAccessResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *NamespaceAPIList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NamespaceAPIList) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NamespaceAPIList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ItemLists) > 0 {
+		for iNdEx := len(m.ItemLists) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ItemLists[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EvaluateBatchAPIAccessReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EvaluateBatchAPIAccessReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EvaluateBatchAPIAccessReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.BatchNamespaceApiList) > 0 {
+		for iNdEx := len(m.BatchNamespaceApiList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BatchNamespaceApiList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EvaluateBatchAPIAccessResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EvaluateBatchAPIAccessResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EvaluateBatchAPIAccessResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.BatchNamespaceApiList) > 0 {
+		for iNdEx := len(m.BatchNamespaceApiList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BatchNamespaceApiList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *LookupUserRolesReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1303,6 +1772,55 @@ func (m *EvaluateAPIAccessResp) Size() (n int) {
 	return n
 }
 
+func (m *NamespaceAPIList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.ItemLists) > 0 {
+		for _, e := range m.ItemLists {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *EvaluateBatchAPIAccessReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.BatchNamespaceApiList) > 0 {
+		for _, e := range m.BatchNamespaceApiList {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *EvaluateBatchAPIAccessResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.BatchNamespaceApiList) > 0 {
+		for _, e := range m.BatchNamespaceApiList {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *LookupUserRolesReq) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1393,6 +1911,52 @@ func (this *EvaluateAPIAccessResp) String() string {
 	repeatedStringForItemLists += "}"
 	s := strings.Join([]string{`&EvaluateAPIAccessResp{`,
 		`ItemLists:` + repeatedStringForItemLists + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NamespaceAPIList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItemLists := "[]*APIItemList{"
+	for _, f := range this.ItemLists {
+		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemList", "APIItemList", 1) + ","
+	}
+	repeatedStringForItemLists += "}"
+	s := strings.Join([]string{`&NamespaceAPIList{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`ItemLists:` + repeatedStringForItemLists + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EvaluateBatchAPIAccessReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForBatchNamespaceApiList := "[]*NamespaceAPIList{"
+	for _, f := range this.BatchNamespaceApiList {
+		repeatedStringForBatchNamespaceApiList += strings.Replace(f.String(), "NamespaceAPIList", "NamespaceAPIList", 1) + ","
+	}
+	repeatedStringForBatchNamespaceApiList += "}"
+	s := strings.Join([]string{`&EvaluateBatchAPIAccessReq{`,
+		`BatchNamespaceApiList:` + repeatedStringForBatchNamespaceApiList + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EvaluateBatchAPIAccessResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForBatchNamespaceApiList := "[]*NamespaceAPIList{"
+	for _, f := range this.BatchNamespaceApiList {
+		repeatedStringForBatchNamespaceApiList += strings.Replace(f.String(), "NamespaceAPIList", "NamespaceAPIList", 1) + ","
+	}
+	repeatedStringForBatchNamespaceApiList += "}"
+	s := strings.Join([]string{`&EvaluateBatchAPIAccessResp{`,
+		`BatchNamespaceApiList:` + repeatedStringForBatchNamespaceApiList + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1880,6 +2444,299 @@ func (m *EvaluateAPIAccessResp) Unmarshal(dAtA []byte) error {
 			}
 			m.ItemLists = append(m.ItemLists, &APIItemList{})
 			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NamespaceAPIList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NamespaceAPIList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NamespaceAPIList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemLists", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemLists = append(m.ItemLists, &APIItemList{})
+			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EvaluateBatchAPIAccessReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EvaluateBatchAPIAccessReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EvaluateBatchAPIAccessReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BatchNamespaceApiList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BatchNamespaceApiList = append(m.BatchNamespaceApiList, &NamespaceAPIList{})
+			if err := m.BatchNamespaceApiList[len(m.BatchNamespaceApiList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EvaluateBatchAPIAccessResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EvaluateBatchAPIAccessResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EvaluateBatchAPIAccessResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BatchNamespaceApiList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BatchNamespaceApiList = append(m.BatchNamespaceApiList, &NamespaceAPIList{})
+			if err := m.BatchNamespaceApiList[len(m.BatchNamespaceApiList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

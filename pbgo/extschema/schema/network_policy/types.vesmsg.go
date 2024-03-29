@@ -666,6 +666,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_Rules:
+
 		drInfos, err := m.GetRules().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRules().GetDRefInfo() FAILED")
@@ -677,6 +678,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_LegacyRules:
+
 		drInfos, err := m.GetLegacyRules().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRules().GetDRefInfo() FAILED")
@@ -1008,6 +1010,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GlobalSpecType_Rules:
+
 		drInfos, err := m.GetRules().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRules().GetDRefInfo() FAILED")
@@ -1019,6 +1022,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_LegacyRules:
+
 		drInfos, err := m.GetLegacyRules().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRules().GetDRefInfo() FAILED")
@@ -2062,6 +2066,7 @@ func (m *NetworkPolicyRuleType) GetOtherEndpointDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetOtherEndpoint().(type) {
 	case *NetworkPolicyRuleType_IpPrefixSet:
+
 		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
@@ -2687,6 +2692,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_Rules:
+
 		drInfos, err := m.GetRules().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRules().GetDRefInfo() FAILED")
@@ -2698,6 +2704,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_LegacyRules:
+
 		drInfos, err := m.GetLegacyRules().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRules().GetDRefInfo() FAILED")

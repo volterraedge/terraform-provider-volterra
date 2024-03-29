@@ -21,14 +21,7 @@ resource "volterra_gcp_vpc_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
-
-  blocked_services {
-    blocked_sevice {
-      // One of the arguments from this list "dns ssh web_user_interface" must be set
-      web_user_interface = true
-      network_type       = "network_type"
-    }
-  }
+  block_all_services = true
 
   // One of the arguments from this list "cloud_credentials" must be set
 
@@ -39,14 +32,8 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
-
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-
-  log_receiver {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  logs_streaming_disabled = true
   // One of the arguments from this list "private_connect_disabled private_connectivity" must be set
   private_connect_disabled = true
 
@@ -68,7 +55,9 @@ resource "volterra_gcp_vpc_site" "example" {
     local_subnet {
       // One of the arguments from this list "new_subnet existing_subnet" must be set
 
-      existing_subnet {
+      new_subnet {
+        primary_ipv4 = "10.1.0.0/16"
+
         subnet_name = "subnet1-in-network1"
       }
     }
@@ -106,13 +95,15 @@ Argument Reference
 
 `address` - (Optional) Site's geographical address that can be used determine its latitude and longitude. (`String`).
 
-`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (bool).
+`block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (`Bool`).
 
-`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services ](#blocked-services) below for details.
+`blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (bool).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH & WebUI services on Site (`Bool`).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
+
+`custom_dns` - (Optional) custom dns configure to the CE site. See [Custom Dns ](#custom-dns) below for details.
 
 `cloud_credentials` - (Optional) Reference to GCP credentials for automatic deployment. See [ref](#ref) below for details.
 
@@ -126,91 +117,27 @@ Argument Reference
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
-`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (bool).
+`logs_streaming_disabled` - (Optional) Logs Streaming is disabled (`Bool`).
 
-`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
+`nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).(Deprecated)
 
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
-`private_connect_disabled` - (Optional)Disable Private Connectivity to Site (bool).
+`private_connect_disabled` - (Optional)Disable Private Connectivity to Site (`Bool`).
 
-`private_connectivity` - (Optional) Enable Private Connectivity to Site. See [Private Connectivity ](#private-connectivity) below for details.
+`private_connectivity` - (Optional) Enable Private Connectivity to Site. See [Private Connectivity Choice Private Connectivity ](#private-connectivity-choice-private-connectivity) below for details.
 
-`ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC network.. See [Ingress Egress Gw ](#ingress-egress-gw) below for details.
+`ingress_egress_gw` - (Optional) Two interface site is useful when site is used as ingress/egress gateway to the VPC network.. See [Site Type Ingress Egress Gw ](#site-type-ingress-egress-gw) below for details.
 
-`ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC network.. See [Ingress Gw ](#ingress-gw) below for details.
+`ingress_gw` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC network.. See [Site Type Ingress Gw ](#site-type-ingress-gw) below for details.
 
-`voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Voltstack Cluster ](#voltstack-cluster) below for details.
+`voltstack_cluster` - (Optional) App Stack Cluster using single interface, useful for deploying K8s cluster.. See [Site Type Voltstack Cluster ](#site-type-voltstack-cluster) below for details.
 
 `ssh_key` - (Required) Public SSH key for accessing the site. (`String`).
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
-
-### Active Enhanced Firewall Policies
-
-with an additional option for service insertion..
-
-`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
-
-### Active Forward Proxy Policies
-
-Enable Forward Proxy for this site and manage policies.
-
-`forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
-
-### Active Network Policies
-
-Firewall Policies active for this site..
-
-`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
-
-### Blindfold Secret Info
-
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Blocked Services
-
-Use custom blocked services configuration.
-
-`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Sevice ](#blocked-sevice) below for details.
-
-### Blocked Sevice
-
-Use custom blocked services configuration.
-
-`dns` - (Optional) Matches DNS port 53 (bool).
-
-`ssh` - (Optional) Matches ssh port 22 (bool).
-
-`web_user_interface` - (Optional) Matches the web user interface port (bool).
-
-`network_type` - (Optional) Network type in which these ports get blocked (`String`).
-
-### Clear Secret Info
-
-Clear Secret is used for the secrets that are not encrypted.
-
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
 ### Coordinates
 
@@ -220,295 +147,105 @@ Site longitude and latitude co-ordinates.
 
 `longitude` - (Optional) longitude of site location (`Float`).
 
-### Custom Certificate
+### Custom Dns
 
-Certificates for generating intermediate certificate for TLS interception..
+custom dns configure to the CE site.
 
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+`inside_nameserver` - (Optional) Optional DNS server IP to be used for name resolution in inside network (`String`).
 
-`description` - (Optional) Description for the certificate (`String`).
+`inside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in inside network (`String`).
 
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Custom Hash Algorithms ](#custom-hash-algorithms) below for details.
+`outside_nameserver` - (Optional) Optional DNS server IP to be used for name resolution in outside network (`String`).
 
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Disable Ocsp Stapling ](#disable-ocsp-stapling) below for details.
+`outside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in outside network (`String`).
 
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Use System Defaults ](#use-system-defaults) below for details.
+### Offline Survivability Mode
 
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Private Key ](#private-key) below for details.
+Enable/Disable offline survivability mode.
 
-### Custom Hash Algorithms
+###### One of the arguments from this list "no_offline_survivability_mode, enable_offline_survivability_mode" must be set
 
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+`enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (`Bool`).
 
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+`no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (`Bool`).
 
-### Custom Static Route
+### Os
 
-Use Custom static route to configure all advanced options.
+Operating System Details.
 
-`attrs` - (Optional) List of route attributes associated with the static route (`List of Strings`).
+###### One of the arguments from this list "operating_system_version, default_os_version" must be set
 
-`labels` - (Optional) Add Labels for this Static Route, these labels can be used in network policy (`String`).
+`default_os_version` - (Optional) Will assign latest available OS version (`Bool`).
 
-`nexthop` - (Optional) Nexthop for the route. See [Nexthop ](#nexthop) below for details.
+`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
 
-`subnets` - (Required) List of route prefixes. See [Subnets ](#subnets) below for details.
+### Sw
 
-### Default Os Version
+F5XC Software Details.
 
-Will assign latest available OS version.
+###### One of the arguments from this list "default_sw_version, volterra_software_version" must be set
 
-### Default Storage
+`default_sw_version` - (Optional) Will assign latest available SW version (`Bool`).
 
-Use standard storage class configured as AWS EBS.
+`volterra_software_version` - (Optional) F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
-### Default Sw Version
+### Blocked Services Blocked Sevice
 
-Will assign latest available SW version.
+Use custom blocked services configuration.
 
-### Disable Forward Proxy
+###### One of the arguments from this list "web_user_interface, dns, ssh" can be set
 
-Forward Proxy is disabled for this connector.
+`dns` - (Optional) Matches DNS port 53 (`Bool`).
 
-### Disable Interception
+`ssh` - (Optional) Matches ssh port 22 (`Bool`).
 
-Disable Interception.
+`web_user_interface` - (Optional) Matches the web user interface port (`Bool`).
 
-### Disable Ocsp Stapling
+`network_type` - (Optional) Network type in which these ports get blocked (`String`).
 
-This is the default behavior if no choice is selected..
+### Blocked Services Choice Blocked Services
 
-### Dns
+Use custom blocked services configuration.
+
+`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Services Blocked Sevice ](#blocked-services-blocked-sevice) below for details.
+
+### Blocked Services Value Type Choice Dns
 
 Matches DNS port 53.
 
-### Domain Match
+### Blocked Services Value Type Choice Ssh
 
-Domain value or regular expression to match.
+Matches ssh port 22.
 
-`exact_value` - (Optional) Exact domain name. (`String`).
+### Blocked Services Value Type Choice Web User Interface
 
-`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
+Matches the web user interface port.
 
-`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
-
-### Enable For All Domains
-
-Enable interception for all domains.
-
-### Enable Forward Proxy
-
-Forward Proxy is enabled for this connector.
-
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
-
-`max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
-
-`no_interception` - (Optional) No TLS interception is enabled for this network connector (bool).
-
-`tls_intercept` - (Optional) Specify TLS interception configuration for the network connector. See [Tls Intercept ](#tls-intercept) below for details.
-
-`white_listed_ports` - (Optional) Example "tmate" server port (`Int`).
-
-`white_listed_prefixes` - (Optional) Example "tmate" server ip (`String`).
-
-### Enable Interception
-
-Enable Interception.
-
-### Enable Offline Survivability Mode
-
-When this feature is enabled on an existing site, the pods/services on this site will be restarted..
-
-### Existing Network
+### Choice Existing Network
 
 Name of existing VPC network..
 
 `name` - (Required) Name for your GCP VPC Network (`String`).
 
-### Existing Subnet
+### Choice Existing Subnet
 
 Name of existing VPC subnet..
 
 `subnet_name` - (Required) Name of your subnet in VPC network (`String`).
 
-### Forward Proxy Allow All
-
-Enable Forward Proxy for this site and allow all requests..
-
-### Global Network Connections
-
-Global network connections.
-
-`sli_to_global_dr` - (Optional) Site local inside is connected directly to a given global network. See [Sli To Global Dr ](#sli-to-global-dr) below for details.
-
-`slo_to_global_dr` - (Optional) Site local outside is connected directly to a given global network. See [Slo To Global Dr ](#slo-to-global-dr) below for details.
-
-`disable_forward_proxy` - (Optional) Forward Proxy is disabled for this connector (bool).
-
-`enable_forward_proxy` - (Optional) Forward Proxy is enabled for this connector. See [Enable Forward Proxy ](#enable-forward-proxy) below for details.
-
-### Global Network List
-
-List of global network connections.
-
-`global_network_connections` - (Required) Global network connections. See [Global Network Connections ](#global-network-connections) below for details.
-
-### Ingress Egress Gw
-
-Two interface site is useful when site is used as ingress/egress gateway to the VPC network..
-
-`dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
-
-`dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
-
-`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
-
-`active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
-
-`forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
-
-`no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
-
-`gcp_certified_hw` - (Required) Name for GCP certified hardware. (`String`).
-
-`gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
-
-`global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
-
-`no_global_network` - (Optional) No global network to connect (bool).
-
-`inside_network` - (Optional) Network for the inside interface of the node. See [Inside Network ](#inside-network) below for details.
-
-`inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Routes ](#inside-static-routes) below for details.
-
-`no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (bool).
-
-`inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Inside Subnet ](#inside-subnet) below for details.
-
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
-
-`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
-
-`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
-
-`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
-
-`outside_network` - (Optional) Network for the outside interface of the node. See [Outside Network ](#outside-network) below for details.
-
-`no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
-
-`outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
-
-`outside_subnet` - (Optional) Subnet for the outside interface of the node.. See [Outside Subnet ](#outside-subnet) below for details.
-
-`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
-
-`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
-
-`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
-
-### Ingress Gw
-
-One interface site is useful when site is only used as ingress gateway to the VPC network..
-
-`gcp_certified_hw` - (Required) Name for GCP certified hardware. (`String`).
-
-`gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
-
-`local_network` - (Optional) Network for the local interface of the node. See [Local Network ](#local-network) below for details.
-
-`local_subnet` - (Optional) Subnet for the local interface of the node.. See [Local Subnet ](#local-subnet) below for details.
-
-`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
-
-`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
-
-### Inside
-
-CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
-
-### Inside Network
-
-Network for the inside interface of the node.
-
-`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
-
-`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
-
-`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
-
-### Inside Static Routes
-
-Manage static routes for inside network..
-
-`static_route_list` - (Required) List of Static routes. See [Static Route List ](#static-route-list) below for details.
-
-### Inside Subnet
-
-Subnet for the inside interface of the node..
-
-`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
-
-`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
-
-### Interception Rules
-
-List of ordered rules to enable or disable for TLS interception.
-
-`domain_match` - (Required) Domain value or regular expression to match. See [Domain Match ](#domain-match) below for details.
-
-`disable_interception` - (Optional) Disable Interception (bool).
-
-`enable_interception` - (Optional) Enable Interception (bool).
-
-### Ipv4
-
-IPv4 Address.
-
-`addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
-
-### Ipv6
-
-IPv6 Address.
-
-`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
-
-### Jumbo
-
-L3 performance mode enhancement to use jumbo frame.
-
-### Local Network
-
-Network for the local interface of the node.
-
-`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
-
-`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
-
-`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
-
-### Local Subnet
-
-Subnet for the local interface of the node..
-
-`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
-
-`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
-
-### New Network
+### Choice New Network
 
 Create new VPC network with specified name..
 
 `name` - (Required) Name for your GCP VPC Network (`String`).
 
-### New Network Autogenerate
+### Choice New Network Autogenerate
 
 Create new VPC network with autogenerated name..
 
-`autogenerate` - (Optional) Name for your GCP VPC Network will be autogenerated (`Bool`).
+`autogenerate` - (Optional) Name for your GCP VPC Network will be autogenerated (`Bool`).(Deprecated)
 
-### New Subnet
+### Choice New Subnet
 
 Parameters for creating a new VPC Subnet.
 
@@ -516,159 +253,409 @@ Parameters for creating a new VPC Subnet.
 
 `subnet_name` - (Optional) Name of new VPC Subnet, will be autogenerated if empty (`String`).
 
-### Nexthop
+### Config Mode Choice Custom Static Route
+
+Use Custom static route to configure all advanced options.
+
+`attrs` - (Optional) List of route attributes associated with the static route (`List of Strings`).
+
+`labels` - (Optional) Add Labels for this Static Route, these labels can be used in network policy (`String`).
+
+`nexthop` - (Optional) Nexthop for the route. See [Custom Static Route Nexthop ](#custom-static-route-nexthop) below for details.
+
+`subnets` - (Required) List of route prefixes. See [Custom Static Route Subnets ](#custom-static-route-subnets) below for details.
+
+### Connection Choice Sli To Global Dr
+
+Site local inside is connected directly to a given global network.
+
+`global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
+
+### Connection Choice Slo To Global Dr
+
+Site local outside is connected directly to a given global network.
+
+`global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
+
+### Custom Certificate Private Key
+
+TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Custom Static Route Nexthop
 
 Nexthop for the route.
 
 `interface` - (Optional) Nexthop is network interface when type is "Network-Interface". See [ref](#ref) below for details.
 
-`nexthop_address` - (Optional) Nexthop address when type is "Use-Configured". See [Nexthop Address ](#nexthop-address) below for details.
+`nexthop_address` - (Optional) Nexthop address when type is "Use-Configured". See [Nexthop Nexthop Address ](#nexthop-nexthop-address) below for details.
 
 `type` - (Optional) Identifies the type of next-hop (`String`).
 
-### Nexthop Address
+### Custom Static Route Subnets
 
-Nexthop address when type is "Use-Configured".
+List of route prefixes.
 
-`ipv4` - (Optional) IPv4 Address. See [Ipv4 ](#ipv4) below for details.
+###### One of the arguments from this list "ipv4, ipv6" must be set
 
-`ipv6` - (Optional) IPv6 Address. See [Ipv6 ](#ipv6) below for details.
+`ipv4` - (Optional) IPv4 Subnet Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
-### No Dc Cluster Group
+`ipv6` - (Optional) IPv6 Subnet Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
+
+### Dc Cluster Group Choice No Dc Cluster Group
 
 This site is not a member of dc cluster group.
 
-### No Forward Proxy
+### Enable Disable Choice Disable Interception
+
+Disable Interception.
+
+### Enable Disable Choice Enable Interception
+
+Enable Interception.
+
+### Forward Proxy Choice Active Forward Proxy Policies
+
+Enable Forward Proxy for this site and manage policies.
+
+`forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
+
+### Forward Proxy Choice Disable Forward Proxy
+
+Forward Proxy is disabled for this connector.
+
+### Forward Proxy Choice Enable Forward Proxy
+
+Forward Proxy is enabled for this connector.
+
+`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
+
+`max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
+
+###### One of the arguments from this list "no_interception, tls_intercept" can be set
+
+`no_interception` - (Optional) No TLS interception is enabled for this network connector (`Bool`).(Deprecated)
+
+`tls_intercept` - (Optional) Specify TLS interception configuration for the network connector. See [Tls Interception Choice Tls Intercept ](#tls-interception-choice-tls-intercept) below for details.(Deprecated)
+
+`white_listed_ports` - (Optional) Example "tmate" server port (`Int`).
+
+`white_listed_prefixes` - (Optional) Example "tmate" server ip (`String`).
+
+### Forward Proxy Choice Forward Proxy Allow All
+
+Enable Forward Proxy for this site and allow all requests..
+
+### Forward Proxy Choice No Forward Proxy
 
 Disable Forward Proxy for this site.
 
-### No Global Network
+### Global Network Choice Global Network List
+
+List of global network connections.
+
+`global_network_connections` - (Required) Global network connections. See [Global Network List Global Network Connections ](#global-network-list-global-network-connections) below for details.
+
+### Global Network Choice No Global Network
 
 No global network to connect.
 
-### No Inside Static Routes
+### Global Network List Global Network Connections
 
-Static Routes disabled for inside network..
+Global network connections.
 
-### No Interception
+###### One of the arguments from this list "sli_to_global_dr, slo_to_global_dr" must be set
 
-No TLS interception is enabled for this network connector.
+`sli_to_global_dr` - (Optional) Site local inside is connected directly to a given global network. See [Connection Choice Sli To Global Dr ](#connection-choice-sli-to-global-dr) below for details.
 
-### No Jumbo
+`slo_to_global_dr` - (Optional) Site local outside is connected directly to a given global network. See [Connection Choice Slo To Global Dr ](#connection-choice-slo-to-global-dr) below for details.
 
-L3 performance mode enhancement without jumbo frame.
+###### One of the arguments from this list "disable_forward_proxy, enable_forward_proxy" can be set
 
-### No K8s Cluster
+`disable_forward_proxy` - (Optional) Forward Proxy is disabled for this connector (`Bool`).(Deprecated)
 
-Site Local K8s API access is disabled.
+`enable_forward_proxy` - (Optional) Forward Proxy is enabled for this connector. See [Forward Proxy Choice Enable Forward Proxy ](#forward-proxy-choice-enable-forward-proxy) below for details.(Deprecated)
 
-### No Network Policy
+### Ingress Egress Gw Inside Network
 
-Firewall Policy is disabled for this site..
+Network for the inside interface of the node.
 
-### No Offline Survivability Mode
+###### One of the arguments from this list "new_network_autogenerate, new_network, existing_network" must be set
 
-When this feature is disabled on an existing site, the pods/services on this site will be restarted..
+`existing_network` - (Optional) Name of existing VPC network.. See [Choice Existing Network ](#choice-existing-network) below for details.
 
-### No Outside Static Routes
+`new_network` - (Optional) Create new VPC network with specified name.. See [Choice New Network ](#choice-new-network) below for details.
 
-Static Routes disabled for outside network..
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [Choice New Network Autogenerate ](#choice-new-network-autogenerate) below for details.
 
-### Offline Survivability Mode
+### Ingress Egress Gw Inside Subnet
 
-Enable/Disable offline survivability mode.
+Subnet for the inside interface of the node..
 
-`enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (bool).
+###### One of the arguments from this list "new_subnet, existing_subnet" must be set
 
-`no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (bool).
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Choice Existing Subnet ](#choice-existing-subnet) below for details.
 
-### Os
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [Choice New Subnet ](#choice-new-subnet) below for details.
 
-Operating System Details.
-
-`default_os_version` - (Optional) Will assign latest available OS version (bool).
-
-`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
-
-### Outside
-
-CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
-
-### Outside Network
+### Ingress Egress Gw Outside Network
 
 Network for the outside interface of the node.
 
-`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
+###### One of the arguments from this list "new_network, existing_network, new_network_autogenerate" must be set
 
-`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
+`existing_network` - (Optional) Name of existing VPC network.. See [Choice Existing Network ](#choice-existing-network) below for details.
 
-`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
+`new_network` - (Optional) Create new VPC network with specified name.. See [Choice New Network ](#choice-new-network) below for details.
 
-### Outside Static Routes
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [Choice New Network Autogenerate ](#choice-new-network-autogenerate) below for details.
 
-Manage static routes for outside network..
-
-`static_route_list` - (Required) List of Static routes. See [Static Route List ](#static-route-list) below for details.
-
-### Outside Subnet
+### Ingress Egress Gw Outside Subnet
 
 Subnet for the outside interface of the node..
 
-`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
+###### One of the arguments from this list "new_subnet, existing_subnet" must be set
 
-`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Choice Existing Subnet ](#choice-existing-subnet) below for details.
 
-### Perf Mode L3 Enhanced
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [Choice New Subnet ](#choice-new-subnet) below for details.
 
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
-
-`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (bool).
-
-`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (bool).
-
-### Perf Mode L7 Enhanced
-
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
-
-### Performance Enhancement Mode
+### Ingress Egress Gw Performance Enhancement Mode
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode L3 Enhanced ](#perf-mode-l3-enhanced) below for details.
+###### One of the arguments from this list "perf_mode_l7_enhanced, perf_mode_l3_enhanced" must be set
 
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (bool).
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-### Policy
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (`Bool`).
+
+### Ingress Gw Local Network
+
+Network for the local interface of the node.
+
+###### One of the arguments from this list "new_network, existing_network, new_network_autogenerate" must be set
+
+`existing_network` - (Optional) Name of existing VPC network.. See [Choice Existing Network ](#choice-existing-network) below for details.
+
+`new_network` - (Optional) Create new VPC network with specified name.. See [Choice New Network ](#choice-new-network) below for details.
+
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [Choice New Network Autogenerate ](#choice-new-network-autogenerate) below for details.
+
+### Ingress Gw Local Subnet
+
+Subnet for the local interface of the node..
+
+###### One of the arguments from this list "new_subnet, existing_subnet" must be set
+
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Choice Existing Subnet ](#choice-existing-subnet) below for details.
+
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [Choice New Subnet ](#choice-new-subnet) below for details.
+
+### Ingress Gw Performance Enhancement Mode
+
+Performance Enhancement Mode to optimize for L3 or L7 networking.
+
+###### One of the arguments from this list "perf_mode_l7_enhanced, perf_mode_l3_enhanced" must be set
+
+`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
+
+`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (`Bool`).
+
+### Inside Static Route Choice Inside Static Routes
+
+Manage static routes for inside network..
+
+`static_route_list` - (Required) List of Static routes. See [Inside Static Routes Static Route List ](#inside-static-routes-static-route-list) below for details.
+
+### Inside Static Route Choice No Inside Static Routes
+
+Static Routes disabled for inside network..
+
+### Inside Static Routes Static Route List
+
+List of Static routes.
+
+###### One of the arguments from this list "custom_static_route, simple_static_route" must be set
+
+`custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Config Mode Choice Custom Static Route ](#config-mode-choice-custom-static-route) below for details.
+
+`simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
+
+### Interception Policy Choice Enable For All Domains
+
+Enable interception for all domains.
+
+### Interception Policy Choice Policy
 
 Policy to enable/disable specific domains, with implicit enable all domains.
 
-`interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Interception Rules ](#interception-rules) below for details.
+`interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Policy Interception Rules ](#policy-interception-rules) below for details.
 
-### Private Connectivity
+### Interception Rules Domain Match
+
+Domain value or regular expression to match.
+
+###### One of the arguments from this list "suffix_value, regex_value, exact_value" must be set
+
+`exact_value` - (Optional) Exact domain name. (`String`).
+
+`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
+
+`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
+
+### K8s Cluster Choice No K8s Cluster
+
+Site Local K8s API access is disabled.
+
+### Network Options Inside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
+
+### Network Options Outside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
+
+### Network Policy Choice Active Enhanced Firewall Policies
+
+with an additional option for service insertion..
+
+`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
+
+### Network Policy Choice Active Network Policies
+
+Firewall Policies active for this site..
+
+`network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
+
+### Network Policy Choice No Network Policy
+
+Firewall Policy is disabled for this site..
+
+### Nexthop Nexthop Address
+
+Nexthop address when type is "Use-Configured".
+
+###### One of the arguments from this list "ipv4, ipv6" can be set
+
+`ipv4` - (Optional) IPv4 Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
+
+`ipv6` - (Optional) IPv6 Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
+
+### Ocsp Stapling Choice Custom Hash Algorithms
+
+Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
+
+### Ocsp Stapling Choice Disable Ocsp Stapling
+
+This is the default behavior if no choice is selected..
+
+### Ocsp Stapling Choice Use System Defaults
+
+F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+
+### Offline Survivability Mode Choice Enable Offline Survivability Mode
+
+When this feature is enabled on an existing site, the pods/services on this site will be restarted..
+
+### Offline Survivability Mode Choice No Offline Survivability Mode
+
+When this feature is disabled on an existing site, the pods/services on this site will be restarted..
+
+### Operating System Version Choice Default Os Version
+
+Will assign latest available OS version.
+
+### Outside Static Route Choice No Outside Static Routes
+
+Static Routes disabled for outside network..
+
+### Outside Static Route Choice Outside Static Routes
+
+Manage static routes for outside network..
+
+`static_route_list` - (Required) List of Static routes. See [Outside Static Routes Static Route List ](#outside-static-routes-static-route-list) below for details.
+
+### Outside Static Routes Static Route List
+
+List of Static routes.
+
+###### One of the arguments from this list "simple_static_route, custom_static_route" must be set
+
+`custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Config Mode Choice Custom Static Route ](#config-mode-choice-custom-static-route) below for details.
+
+`simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
+
+### Perf Mode Choice Jumbo
+
+L3 performance mode enhancement to use jumbo frame.
+
+### Perf Mode Choice No Jumbo
+
+L3 performance mode enhancement without jumbo frame.
+
+### Perf Mode Choice Perf Mode L3 Enhanced
+
+When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+
+###### One of the arguments from this list "jumbo, no_jumbo" must be set
+
+`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (`Bool`).
+
+`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (`Bool`).
+
+### Perf Mode Choice Perf Mode L7 Enhanced
+
+When the mode is toggled to l7 enhanced, traffic disruption will be seen.
+
+### Policy Interception Rules
+
+List of ordered rules to enable or disable for TLS interception.
+
+`domain_match` - (Required) Domain value or regular expression to match. See [Interception Rules Domain Match ](#interception-rules-domain-match) below for details.
+
+###### One of the arguments from this list "disable_interception, enable_interception" must be set
+
+`disable_interception` - (Optional) Disable Interception (`Bool`).
+
+`enable_interception` - (Optional) Enable Interception (`Bool`).
+
+### Private Connectivity Choice Private Connectivity
 
 Enable Private Connectivity to Site.
 
 `cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
 
-`inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (bool).
+###### One of the arguments from this list "outside, inside" can be set
 
-`outside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site (bool).
+`inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (`Bool`).
 
-### Private Key
+`outside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site (`Bool`).
 
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+### Private Key Blindfold Secret Info Internal
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Blindfold Secret Info Internal ](#blindfold-secret-info-internal) below for details.
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Blindfold Secret Info ](#blindfold-secret-info) below for details.
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Clear Secret Info ](#clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Vault Secret Info ](#vault-secret-info) below for details.
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Wingman Secret Info ](#wingman-secret-info) below for details.
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Ref
 
@@ -680,107 +667,25 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Site Local Network
+### Secret Info Oneof Blindfold Secret Info
 
-Network for the local interface of the node.
+Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
-`existing_network` - (Optional) Name of existing VPC network.. See [Existing Network ](#existing-network) below for details.
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-`new_network` - (Optional) Create new VPC network with specified name.. See [New Network ](#new-network) below for details.
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
-`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [New Network Autogenerate ](#new-network-autogenerate) below for details.
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Site Local Subnet
+### Secret Info Oneof Clear Secret Info
 
-Subnet for the local interface of the node..
+Clear Secret is used for the secrets that are not encrypted.
 
-`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Existing Subnet ](#existing-subnet) below for details.
+`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [New Subnet ](#new-subnet) below for details.
+`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Sli To Global Dr
-
-Site local inside is connected directly to a given global network.
-
-`global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
-
-### Slo To Global Dr
-
-Site local outside is connected directly to a given global network.
-
-`global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
-
-### Sm Connection Public Ip
-
-creating ipsec between two sites which are part of the site mesh group.
-
-### Sm Connection Pvt Ip
-
-creating ipsec between two sites which are part of the site mesh group.
-
-### Ssh
-
-Matches ssh port 22.
-
-### Static Route List
-
-List of Static routes.
-
-`custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Custom Static Route ](#custom-static-route) below for details.
-
-`simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
-
-### Storage Class List
-
-Add additional custom storage classes in kubernetes for site.
-
-`storage_classes` - (Optional) List of custom storage classes. See [Storage Classes ](#storage-classes) below for details.
-
-### Storage Classes
-
-List of custom storage classes.
-
-`default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
-
-`storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
-
-### Subnets
-
-List of route prefixes.
-
-`ipv4` - (Optional) IPv4 Subnet Address. See [Ipv4 ](#ipv4) below for details.
-
-`ipv6` - (Optional) IPv6 Subnet Address. See [Ipv6 ](#ipv6) below for details.
-
-### Sw
-
-F5XC Software Details.
-
-`default_sw_version` - (Optional) Will assign latest available SW version (bool).
-
-`volterra_software_version` - (Optional) F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
-
-### Tls Intercept
-
-Specify TLS interception configuration for the network connector.
-
-`enable_for_all_domains` - (Optional) Enable interception for all domains (bool).
-
-`policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Policy ](#policy) below for details.
-
-`custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Custom Certificate ](#custom-certificate) below for details.
-
-`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (bool).
-
-`trusted_ca_url` - (Optional) Custom trusted CA certificates for validating upstream server certificate (`String`).
-
-`volterra_trusted_ca` - (Optional) Default volterra trusted CA list for validating upstream server certificate (bool).
-
-### Use System Defaults
-
-F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
-
-### Vault Secret Info
+### Secret Info Oneof Vault Secret Info
 
 Vault Secret is used for the secrets managed by Hashicorp Vault.
 
@@ -794,73 +699,293 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Volterra Certificate
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
+### Signing Cert Choice Custom Certificate
+
+Certificates for generating intermediate certificate for TLS interception..
+
+`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
+
+`description` - (Optional) Description for the certificate (`String`).
+
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
+
+`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
+`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
+
+`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Custom Certificate Private Key ](#custom-certificate-private-key) below for details.
+
+### Signing Cert Choice Volterra Certificate
 
 F5XC certificates for generating intermediate certificate for TLS interception..
 
-### Volterra Trusted Ca
+### Site Mesh Group Choice Sm Connection Public Ip
 
-Default volterra trusted CA list for validating upstream server certificate.
+creating ipsec between two sites which are part of the site mesh group.
 
-### Voltstack Cluster
+### Site Mesh Group Choice Sm Connection Pvt Ip
 
-App Stack Cluster using single interface, useful for deploying K8s cluster..
+creating ipsec between two sites which are part of the site mesh group.
 
-`dc_cluster_group` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+### Site Type Ingress Egress Gw
 
-`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (bool).
+Two interface site is useful when site is used as ingress/egress gateway to the VPC network..
 
-`active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Active Forward Proxy Policies ](#active-forward-proxy-policies) below for details.
+###### One of the arguments from this list "dc_cluster_group_outside_vn, dc_cluster_group_inside_vn, no_dc_cluster_group" must be set
 
-`forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (bool).
+`dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
 
-`no_forward_proxy` - (Optional) Disable Forward Proxy for this site (bool).
+`dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
+
+###### One of the arguments from this list "active_forward_proxy_policies, forward_proxy_allow_all, no_forward_proxy" must be set
+
+`active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
+
+`forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (`Bool`).
+
+`no_forward_proxy` - (Optional) Disable Forward Proxy for this site (`Bool`).
 
 `gcp_certified_hw` - (Required) Name for GCP certified hardware. (`String`).
 
 `gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
 
-`global_network_list` - (Optional) List of global network connections. See [Global Network List ](#global-network-list) below for details.
+###### One of the arguments from this list "no_global_network, global_network_list" must be set
 
-`no_global_network` - (Optional) No global network to connect (bool).
+`global_network_list` - (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
 
-`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+`no_global_network` - (Optional) No global network to connect (`Bool`).
 
-`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (bool).
+`inside_network` - (Optional) Network for the inside interface of the node. See [Ingress Egress Gw Inside Network ](#ingress-egress-gw-inside-network) below for details.
 
-`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Active Enhanced Firewall Policies ](#active-enhanced-firewall-policies) below for details.
+###### One of the arguments from this list "no_inside_static_routes, inside_static_routes" must be set
 
-`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Active Network Policies ](#active-network-policies) below for details.
+`inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Route Choice Inside Static Routes ](#inside-static-route-choice-inside-static-routes) below for details.
 
-`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (bool).
+`no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (`Bool`).
+
+`inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Ingress Egress Gw Inside Subnet ](#ingress-egress-gw-inside-subnet) below for details.
+
+###### One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy, active_network_policies" must be set
+
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
+
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Network Policy Choice Active Network Policies ](#network-policy-choice-active-network-policies) below for details.
+
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (`Bool`).
 
 `node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
 
-`no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (bool).
+`outside_network` - (Optional) Network for the outside interface of the node. See [Ingress Egress Gw Outside Network ](#ingress-egress-gw-outside-network) below for details.
 
-`outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Routes ](#outside-static-routes) below for details.
+###### One of the arguments from this list "no_outside_static_routes, outside_static_routes" must be set
 
-`site_local_network` - (Optional) Network for the local interface of the node. See [Site Local Network ](#site-local-network) below for details.
+`no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (`Bool`).
 
-`site_local_subnet` - (Optional) Subnet for the local interface of the node.. See [Site Local Subnet ](#site-local-subnet) below for details.
+`outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Route Choice Outside Static Routes ](#outside-static-route-choice-outside-static-routes) below for details.
 
-`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+`outside_subnet` - (Optional) Subnet for the outside interface of the node.. See [Ingress Egress Gw Outside Subnet ](#ingress-egress-gw-outside-subnet) below for details.
 
-`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (bool).
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Ingress Egress Gw Performance Enhancement Mode ](#ingress-egress-gw-performance-enhancement-mode) below for details.
 
-`default_storage` - (Optional) Use standard storage class configured as AWS EBS (bool).
+###### One of the arguments from this list "sm_connection_public_ip, sm_connection_pvt_ip" must be set
 
-`storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class List ](#storage-class-list) below for details.
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
 
-### Web User Interface
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
 
-Matches the web user interface port.
+### Site Type Ingress Gw
 
-### Wingman Secret Info
+One interface site is useful when site is only used as ingress gateway to the VPC network..
 
-Secret is given as bootstrap secret in F5XC Security Sidecar.
+`gcp_certified_hw` - (Required) Name for GCP certified hardware. (`String`).
 
-`name` - (Required) Name of the secret. (`String`).
+`gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
+
+`local_network` - (Optional) Network for the local interface of the node. See [Ingress Gw Local Network ](#ingress-gw-local-network) below for details.
+
+`local_subnet` - (Optional) Subnet for the local interface of the node.. See [Ingress Gw Local Subnet ](#ingress-gw-local-subnet) below for details.
+
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
+
+`performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Ingress Gw Performance Enhancement Mode ](#ingress-gw-performance-enhancement-mode) below for details.
+
+### Site Type Voltstack Cluster
+
+App Stack Cluster using single interface, useful for deploying K8s cluster..
+
+###### One of the arguments from this list "no_dc_cluster_group, dc_cluster_group" must be set
+
+`dc_cluster_group` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
+
+`no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
+
+###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
+
+`active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
+
+`forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (`Bool`).
+
+`no_forward_proxy` - (Optional) Disable Forward Proxy for this site (`Bool`).
+
+`gcp_certified_hw` - (Required) Name for GCP certified hardware. (`String`).
+
+`gcp_zone_names` - (Required) List of zones when instances will be created, needs to match with region selected. (`String`).
+
+###### One of the arguments from this list "no_global_network, global_network_list" must be set
+
+`global_network_list` - (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
+
+`no_global_network` - (Optional) No global network to connect (`Bool`).
+
+###### One of the arguments from this list "k8s_cluster, no_k8s_cluster" must be set
+
+`k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
+
+`no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (`Bool`).
+
+###### One of the arguments from this list "no_network_policy, active_network_policies, active_enhanced_firewall_policies" must be set
+
+`active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
+
+`active_network_policies` - (Optional) Firewall Policies active for this site.. See [Network Policy Choice Active Network Policies ](#network-policy-choice-active-network-policies) below for details.
+
+`no_network_policy` - (Optional) Firewall Policy is disabled for this site. (`Bool`).
+
+`node_number` - (Optional) Number of main nodes to create, either 1 or 3. (`Int`).
+
+###### One of the arguments from this list "no_outside_static_routes, outside_static_routes" must be set
+
+`no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (`Bool`).
+
+`outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Route Choice Outside Static Routes ](#outside-static-route-choice-outside-static-routes) below for details.
+
+`site_local_network` - (Optional) Network for the local interface of the node. See [Voltstack Cluster Site Local Network ](#voltstack-cluster-site-local-network) below for details.
+
+`site_local_subnet` - (Optional) Subnet for the local interface of the node.. See [Voltstack Cluster Site Local Subnet ](#voltstack-cluster-site-local-subnet) below for details.
+
+###### One of the arguments from this list "sm_connection_public_ip, sm_connection_pvt_ip" must be set
+
+`sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
+
+`sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
+
+###### One of the arguments from this list "default_storage, storage_class_list" must be set
+
+`default_storage` - (Optional) Use standard storage class configured as AWS EBS (`Bool`).
+
+`storage_class_list` - (Optional) Add additional custom storage classes in kubernetes for site. See [Storage Class Choice Storage Class List ](#storage-class-choice-storage-class-list) below for details.
+
+### Storage Class Choice Default Storage
+
+Use standard storage class configured as AWS EBS.
+
+### Storage Class Choice Storage Class List
+
+Add additional custom storage classes in kubernetes for site.
+
+`storage_classes` - (Optional) List of custom storage classes. See [Storage Class List Storage Classes ](#storage-class-list-storage-classes) below for details.
+
+### Storage Class List Storage Classes
+
+List of custom storage classes.
+
+`default_storage_class` - (Optional) Make this storage class default storage class for the K8s cluster (`Bool`).
+
+`storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
+
+### Tls Interception Choice No Interception
+
+No TLS interception is enabled for this network connector.
+
+### Tls Interception Choice Tls Intercept
+
+Specify TLS interception configuration for the network connector.
+
+###### One of the arguments from this list "policy, enable_for_all_domains" must be set
+
+`enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
+
+`policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Interception Policy Choice Policy ](#interception-policy-choice-policy) below for details.
+
+###### One of the arguments from this list "custom_certificate, volterra_certificate" must be set
+
+`custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Signing Cert Choice Custom Certificate ](#signing-cert-choice-custom-certificate) below for details.
+
+`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (`Bool`).
+
+###### One of the arguments from this list "trusted_ca_url, volterra_trusted_ca" must be set
+
+`trusted_ca_url` - (Optional) Custom Root CA Certificate for validating upstream server certificate (`String`).
+
+`volterra_trusted_ca` - (Optional) F5XC Root CA Certificate for validating upstream server certificate (`Bool`).
+
+### Trusted Ca Choice Volterra Trusted Ca
+
+F5XC Root CA Certificate for validating upstream server certificate.
+
+### Ver Ipv4
+
+IPv4 Address.
+
+`addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
+
+### Ver Ipv4
+
+IPv4 Subnet Address.
+
+`plen` - (Optional) Prefix-length of the IPv4 subnet. Must be <= 32 (`Int`).
+
+`prefix` - (Optional) Prefix part of the IPv4 subnet in string form with dot-decimal notation (`String`).
+
+### Ver Ipv6
+
+IPv6 Address.
+
+`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
+
+### Ver Ipv6
+
+IPv6 Subnet Address.
+
+`plen` - (Optional) Prefix length of the IPv6 subnet. Must be <= 128 (`Int`).
+
+`prefix` - (Optional) e.g. "2001:db8::2::" (`String`).
+
+### Volterra Sw Version Choice Default Sw Version
+
+Will assign latest available SW version.
+
+### Voltstack Cluster Site Local Network
+
+Network for the local interface of the node.
+
+###### One of the arguments from this list "new_network_autogenerate, new_network, existing_network" must be set
+
+`existing_network` - (Optional) Name of existing VPC network.. See [Choice Existing Network ](#choice-existing-network) below for details.
+
+`new_network` - (Optional) Create new VPC network with specified name.. See [Choice New Network ](#choice-new-network) below for details.
+
+`new_network_autogenerate` - (Optional) Create new VPC network with autogenerated name.. See [Choice New Network Autogenerate ](#choice-new-network-autogenerate) below for details.
+
+### Voltstack Cluster Site Local Subnet
+
+Subnet for the local interface of the node..
+
+###### One of the arguments from this list "new_subnet, existing_subnet" must be set
+
+`existing_subnet` - (Optional) Name of existing VPC subnet.. See [Choice Existing Subnet ](#choice-existing-subnet) below for details.
+
+`new_subnet` - (Optional) Parameters for creating a new VPC Subnet. See [Choice New Subnet ](#choice-new-subnet) below for details.
 
 Attribute Reference
 -------------------

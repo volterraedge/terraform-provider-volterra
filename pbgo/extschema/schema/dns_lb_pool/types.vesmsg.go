@@ -1101,6 +1101,7 @@ func (m *CreateSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPoolTypeChoice().(type) {
 	case *CreateSpecType_APool:
+
 		drInfos, err := m.GetAPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAPool().GetDRefInfo() FAILED")
@@ -1500,6 +1501,7 @@ func (m *GetSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPoolTypeChoice().(type) {
 	case *GetSpecType_APool:
+
 		drInfos, err := m.GetAPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAPool().GetDRefInfo() FAILED")
@@ -1913,6 +1915,7 @@ func (m *GlobalSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPoolTypeChoice().(type) {
 	case *GlobalSpecType_APool:
+
 		drInfos, err := m.GetAPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAPool().GetDRefInfo() FAILED")
@@ -2637,6 +2640,7 @@ func (m *ReplaceSpecType) GetPoolTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPoolTypeChoice().(type) {
 	case *ReplaceSpecType_APool:
+
 		drInfos, err := m.GetAPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAPool().GetDRefInfo() FAILED")

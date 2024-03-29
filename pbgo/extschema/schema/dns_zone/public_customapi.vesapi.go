@@ -70,6 +70,24 @@ func (c *CustomAPIGrpcClient) doRPCImportAXFR(ctx context.Context, yamlReq strin
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCImportBINDCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ImportBINDCreateRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.ImportBINDCreateRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ImportBINDCreate(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCImportBINDValidate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ImportBINDValidateRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.ImportBINDValidateRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.ImportBINDValidate(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCImportF5CSZone(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ImportF5CSZoneRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -116,6 +134,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetRemoteZoneFile"] = ccl.doRPCGetRemoteZoneFile
 
 	rpcFns["ImportAXFR"] = ccl.doRPCImportAXFR
+
+	rpcFns["ImportBINDCreate"] = ccl.doRPCImportBINDCreate
+
+	rpcFns["ImportBINDValidate"] = ccl.doRPCImportBINDValidate
 
 	rpcFns["ImportF5CSZone"] = ccl.doRPCImportF5CSZone
 
@@ -467,6 +489,177 @@ func (c *CustomAPIRestClient) doRPCImportAXFR(ctx context.Context, callOpts *ser
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCImportBINDCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ImportBINDCreateRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.ImportBINDCreateRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("description", fmt.Sprintf("%v", req.Description))
+		q.Add("file", fmt.Sprintf("%v", req.File))
+		for _, item := range req.IgnoreZoneList {
+			q.Add("ignore_zone_list", fmt.Sprintf("%v", item))
+		}
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ImportBINDResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ImportBINDResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCImportBINDValidate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ImportBINDValidateRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.dns_zone.ImportBINDValidateRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("description", fmt.Sprintf("%v", req.Description))
+		q.Add("file", fmt.Sprintf("%v", req.File))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ImportBINDResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.dns_zone.ImportBINDResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) doRPCImportF5CSZone(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -582,6 +775,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["ImportAXFR"] = ccl.doRPCImportAXFR
 
+	rpcFns["ImportBINDCreate"] = ccl.doRPCImportBINDCreate
+
+	rpcFns["ImportBINDValidate"] = ccl.doRPCImportBINDValidate
+
 	rpcFns["ImportF5CSZone"] = ccl.doRPCImportF5CSZone
 
 	ccl.rpcFns = rpcFns
@@ -597,23 +794,31 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) CloneFromDNSDomain(ctx context.Context, in *CloneReq, opts ...grpc.CallOption) (*CloneResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain")
 	return c.CustomAPIServer.CloneFromDNSDomain(ctx, in)
 }
 func (c *customAPIInprocClient) GetLocalZoneFile(ctx context.Context, in *GetLocalZoneFileRequest, opts ...grpc.CallOption) (*GetLocalZoneFileResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.GetLocalZoneFile", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.GetLocalZoneFile")
 	return c.CustomAPIServer.GetLocalZoneFile(ctx, in)
 }
 func (c *customAPIInprocClient) GetRemoteZoneFile(ctx context.Context, in *GetRemoteZoneFileRequest, opts ...grpc.CallOption) (*GetRemoteZoneFileResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.GetRemoteZoneFile", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.GetRemoteZoneFile")
 	return c.CustomAPIServer.GetRemoteZoneFile(ctx, in)
 }
 func (c *customAPIInprocClient) ImportAXFR(ctx context.Context, in *ImportAXFRRequest, opts ...grpc.CallOption) (*ImportAXFRResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportAXFR", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportAXFR")
 	return c.CustomAPIServer.ImportAXFR(ctx, in)
 }
+func (c *customAPIInprocClient) ImportBINDCreate(ctx context.Context, in *ImportBINDCreateRequest, opts ...grpc.CallOption) (*ImportBINDResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportBINDCreate")
+	return c.CustomAPIServer.ImportBINDCreate(ctx, in)
+}
+func (c *customAPIInprocClient) ImportBINDValidate(ctx context.Context, in *ImportBINDValidateRequest, opts ...grpc.CallOption) (*ImportBINDResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportBINDValidate")
+	return c.CustomAPIServer.ImportBINDValidate(ctx, in)
+}
 func (c *customAPIInprocClient) ImportF5CSZone(ctx context.Context, in *ImportF5CSZoneRequest, opts ...grpc.CallOption) (*ImportF5CSZoneResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportF5CSZone", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_zone.CustomAPI.ImportF5CSZone")
 	return c.CustomAPIServer.ImportF5CSZone(ctx, in)
 }
 
@@ -831,6 +1036,104 @@ func (s *customAPISrv) ImportAXFR(ctx context.Context, in *ImportAXFRRequest) (*
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportAXFRResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ImportBINDCreate(ctx context.Context, in *ImportBINDCreateRequest) (*ImportBINDResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_zone.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ImportBINDResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportBINDCreateRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ImportBINDCreate' operation on 'dns_zone'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_zone.CustomAPI.ImportBINDCreate"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ImportBINDCreate(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportBINDResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) ImportBINDValidate(ctx context.Context, in *ImportBINDValidateRequest) (*ImportBINDResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.dns_zone.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ImportBINDResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportBINDValidateRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.ImportBINDValidate' operation on 'dns_zone'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.dns_zone.CustomAPI.ImportBINDValidate"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.ImportBINDValidate(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.dns_zone.ImportBINDResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -1154,6 +1457,176 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importaxfr"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportAXFR"
+            },
+            "x-displayname": "DNS Zone Custom API",
+            "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/dns_zone/import_bind_create": {
+            "post": {
+                "summary": "Import BIND Files",
+                "description": "Import BIND Files to Create DNS Zones",
+                "operationId": "ves.io.schema.dns_zone.CustomAPI.ImportBINDCreate",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneImportBINDResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneImportBINDCreateRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindcreate"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportBINDCreate"
+            },
+            "x-displayname": "DNS Zone Custom API",
+            "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/dns_zone/import_bind_validate": {
+            "post": {
+                "summary": "Validate BIND Files",
+                "description": "Validate BIND Files for Import",
+                "operationId": "ves.io.schema.dns_zone.CustomAPI.ImportBINDValidate",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneImportBINDResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dns_zoneImportBINDValidateRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindvalidate"
+                },
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportBINDValidate"
             },
             "x-displayname": "DNS Zone Custom API",
             "x-ves-proto-service": "ves.io.schema.dns_zone.CustomAPI",
@@ -2495,6 +2968,97 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "dns_zoneImportBINDCreateRequest": {
+            "type": "object",
+            "title": "Import BIND Create Request",
+            "x-displayname": "Import BIND Create Request",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.ImportBINDCreateRequest",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "title": "Description",
+                    "x-displayname": "Description for each zone"
+                },
+                "file": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 2097152\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BIND Zip File",
+                    "format": "byte",
+                    "maximum": 2097152,
+                    "x-displayname": "BIND Zip File",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.bytes.max_len": "2097152",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "ignore_zone_list": {
+                    "type": "array",
+                    "description": " Zones in this list will be ignored when parsing the zip file to avoid invalid zone errors. ",
+                    "title": "Ignore Zone List",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Ignore Zone List"
+                }
+            }
+        },
+        "dns_zoneImportBINDResponse": {
+            "type": "object",
+            "title": "Import BIND Response",
+            "x-displayname": "Import BIND Response",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.ImportBINDResponse",
+            "properties": {
+                "invalid_zone_list": {
+                    "type": "array",
+                    "title": "Invalid Zone List",
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneInvalidZone"
+                    },
+                    "x-displayname": "Invalid Zone List"
+                },
+                "success_created_zone_count": {
+                    "type": "integer",
+                    "title": "Success Created Zone Count",
+                    "format": "int64",
+                    "x-displayname": "Success Created Zone Count"
+                },
+                "valid_zone_list": {
+                    "type": "array",
+                    "title": "Valid Zone List",
+                    "items": {
+                        "$ref": "#/definitions/dns_zoneValidZone"
+                    },
+                    "x-displayname": "Valid Zone List"
+                }
+            }
+        },
+        "dns_zoneImportBINDValidateRequest": {
+            "type": "object",
+            "title": "Import BIND Validate Request",
+            "x-displayname": "Import BIND Validate Request",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.ImportBINDValidateRequest",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "title": "Description",
+                    "x-displayname": "Description for each zone"
+                },
+                "file": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 2097152\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "BIND Zip File",
+                    "format": "byte",
+                    "maximum": 2097152,
+                    "x-displayname": "BIND Zip File",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.bytes.max_len": "2097152",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "dns_zoneImportF5CSZoneRequest": {
             "type": "object",
             "description": "Import F5 Cloud Services DNS zone",
@@ -2534,6 +3098,24 @@ var CustomAPISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "dns_zoneInvalidZone": {
+            "type": "object",
+            "title": "Invalid Zone",
+            "x-displayname": "Invalid Zone",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.InvalidZone",
+            "properties": {
+                "validation_error": {
+                    "type": "string",
+                    "title": "Validation Error",
+                    "x-displayname": "Validation Error"
+                },
+                "zone_name": {
+                    "type": "string",
+                    "title": "Zone Name",
+                    "x-displayname": "Zone Name"
                 }
             }
         },
@@ -3623,6 +4205,25 @@ var CustomAPISwaggerJSON string = `{
             "default": "UNDEFINED",
             "x-displayname": "TSIG Key algorithm",
             "x-ves-proto-enum": "ves.io.schema.dns_zone.TSIGKeyAlgorithm"
+        },
+        "dns_zoneValidZone": {
+            "type": "object",
+            "title": "Valid Zone",
+            "x-displayname": "Valid Zone",
+            "x-ves-proto-message": "ves.io.schema.dns_zone.ValidZone",
+            "properties": {
+                "record_count": {
+                    "type": "integer",
+                    "title": "Record Count",
+                    "format": "int64",
+                    "x-displayname": "Record Count"
+                },
+                "zone_name": {
+                    "type": "string",
+                    "title": "Zone Name",
+                    "x-displayname": "Zone Name"
+                }
+            }
         },
         "ioschemaEmpty": {
             "type": "object",

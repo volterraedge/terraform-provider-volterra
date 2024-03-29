@@ -44,55 +44,51 @@ Argument Reference
 
 `rules` - (Optional) A list of RateLimiterRules that are evaluated sequentially till a matching rule is identified.. See [Rules ](#rules) below for details.
 
-`any_server` - (Optional) Any Server (bool).
+`any_server` - (Optional) Any Server (`Bool`).(Deprecated)
 
-`server_name` - (Optional) The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request. (`String`).
+`server_name` - (Optional) The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request. (`String`).(Deprecated)
 
-`server_name_matcher` - (Optional) regular expressions.. See [Server Name Matcher ](#server-name-matcher) below for details.
+`server_name_matcher` - (Optional) regular expressions.. See [Server Choice Server Name Matcher ](#server-choice-server-name-matcher) below for details.(Deprecated)
 
-`server_selector` - (Optional) true if the expressions in the label selector are true for the server labels.. See [Server Selector ](#server-selector) below for details.
+`server_selector` - (Optional) true if the expressions in the label selector are true for the server labels.. See [Server Choice Server Selector ](#server-choice-server-selector) below for details.(Deprecated)
 
-### Any Asn
+### Rules
 
-any_asn.
+A list of RateLimiterRules that are evaluated sequentially till a matching rule is identified..
 
-### Any Country
+`metadata` - (Required) Common attributes for the rule including name and description.. See [Rules Metadata ](#rules-metadata) below for details.
 
-x-displayName: "Any Country".
+`spec` - (Required) Specification for the rule including match preicates and actions.. See [Rules Spec ](#rules-spec) below for details.
 
-### Any Ip
-
-any_ip.
-
-### Apply Rate Limiter
+### Action Choice Apply Rate Limiter
 
 Apply the rate limiter configured on the HTTP loadbalancer..
 
-### Asn List
+### Action Choice Bypass Rate Limiter
+
+Bypass the rate limiter configured on the HTTP loadbalancer..
+
+### Asn Choice Any Asn
+
+any_asn.
+
+### Asn Choice Asn List
 
 asn_list.
 
 `as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
 
-### Asn Matcher
+### Asn Choice Asn Matcher
 
 asn_matcher.
 
 `asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
 
-### Bypass Rate Limiter
+### Country Choice Any Country
 
-Bypass the rate limiter configured on the HTTP loadbalancer..
+x-displayName: "Any Country".
 
-### Check Not Present
-
-Check that the header is not present..
-
-### Check Present
-
-Check that the header is present..
-
-### Country List
+### Country Choice Country List
 
 x-displayName: "Country List".
 
@@ -100,39 +96,11 @@ x-displayName: "Country List".
 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
-### Domain Matcher
+### Ip Choice Any Ip
 
-domain_matcher.
+any_ip.
 
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-### Headers
-
-headers.
-
-`invert_matcher` - (Optional) Invert the match result. (`Bool`).
-
-`check_not_present` - (Optional) Check that the header is not present. (bool).
-
-`check_present` - (Optional) Check that the header is present. (bool).
-
-`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Item ](#item) below for details.
-
-`presence` - (Optional) Check if the header is present or absent. (`Bool`).
-
-`name` - (Required) A case-insensitive HTTP header name. (`String`).
-
-### Http Method
-
-http_method.
-
-`invert_matcher` - (Optional) Invert the match result. (`Bool`).
-
-`methods` - (Optional) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
-
-### Ip Matcher
+### Ip Choice Ip Matcher
 
 ip_matcher.
 
@@ -140,7 +108,7 @@ ip_matcher.
 
 `prefix_sets` - (Required) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
 
-### Ip Prefix List
+### Ip Choice Ip Prefix List
 
 ip_prefix_list.
 
@@ -148,39 +116,21 @@ ip_prefix_list.
 
 `ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
 
-`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+### Match Check Not Present
 
-### Item
+Check that the header is not present..
+
+### Match Check Present
+
+Check that the header is present..
+
+### Match Item
 
 Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher..
 
 `exact_values` - (Optional) A list of exact values to match the input against. (`String`).
 
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
-
-### Metadata
-
-Common attributes for the rule including name and description..
-
-`description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).
-
-`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
-### Path
-
-path.
-
-`exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
-
-`prefix_values` - (Optional) A list of path prefix values to match the input HTTP path against. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input HTTP path against. (`String`).
-
-`suffix_values` - (Optional) A list of path suffix values to match the input HTTP path against. (`String`).
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
@@ -194,15 +144,59 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Rules
+### Rules Metadata
 
-A list of RateLimiterRules that are evaluated sequentially till a matching rule is identified..
+Common attributes for the rule including name and description..
 
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Metadata ](#metadata) below for details.
+`description` - (Optional) Human readable description. (`String`).
 
-`spec` - (Required) Specification for the rule including match preicates and actions.. See [Spec ](#spec) below for details.
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
-### Server Name Matcher
+`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+### Rules Spec
+
+Specification for the rule including match preicates and actions..
+
+###### One of the arguments from this list "bypass_rate_limiter, apply_rate_limiter, custom_rate_limiter" must be set
+
+`apply_rate_limiter` - (Optional) Apply the rate limiter configured on the HTTP loadbalancer. (`Bool`).
+
+`bypass_rate_limiter` - (Optional) Bypass the rate limiter configured on the HTTP loadbalancer. (`Bool`).
+
+`custom_rate_limiter` - (Optional) Apply a custom rate limiter.. See [ref](#ref) below for details.
+
+###### One of the arguments from this list "any_asn, asn_list, asn_matcher" can be set
+
+`any_asn` - (Optional)any_asn (`Bool`).
+
+`asn_list` - (Optional)asn_list. See [Asn Choice Asn List ](#asn-choice-asn-list) below for details.
+
+`asn_matcher` - (Optional)asn_matcher. See [Asn Choice Asn Matcher ](#asn-choice-asn-matcher) below for details.
+
+###### One of the arguments from this list "any_country, country_list" must be set
+
+`any_country` - (Optional) x-displayName: "Any Country" (`Bool`).
+
+`country_list` - (Optional) x-displayName: "Country List". See [Country Choice Country List ](#country-choice-country-list) below for details.
+
+`domain_matcher` - (Optional)domain_matcher. See [Spec Domain Matcher ](#spec-domain-matcher) below for details.
+
+`headers` - (Optional)headers. See [Spec Headers ](#spec-headers) below for details.
+
+`http_method` - (Optional)http_method. See [Spec Http Method ](#spec-http-method) below for details.
+
+###### One of the arguments from this list "any_ip, ip_prefix_list, ip_matcher" can be set
+
+`any_ip` - (Optional)any_ip (`Bool`).
+
+`ip_matcher` - (Optional)ip_matcher. See [Ip Choice Ip Matcher ](#ip-choice-ip-matcher) below for details.
+
+`ip_prefix_list` - (Optional)ip_prefix_list. See [Ip Choice Ip Prefix List ](#ip-choice-ip-prefix-list) below for details.
+
+`path` - (Optional)path. See [Spec Path ](#spec-path) below for details.
+
+### Server Choice Server Name Matcher
 
 regular expressions..
 
@@ -210,45 +204,61 @@ regular expressions..
 
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
 
-### Server Selector
+### Server Choice Server Selector
 
 true if the expressions in the label selector are true for the server labels..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
-### Spec
+### Spec Domain Matcher
 
-Specification for the rule including match preicates and actions..
+domain_matcher.
 
-`apply_rate_limiter` - (Optional) Apply the rate limiter configured on the HTTP loadbalancer. (bool).
+`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
 
-`bypass_rate_limiter` - (Optional) Bypass the rate limiter configured on the HTTP loadbalancer. (bool).
+`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
 
-`custom_rate_limiter` - (Optional) Apply a custom rate limiter.. See [ref](#ref) below for details.
+### Spec Headers
 
-`any_asn` - (Optional)any_asn (bool).
+headers.
 
-`asn_list` - (Optional)asn_list. See [Asn List ](#asn-list) below for details.
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-`asn_matcher` - (Optional)asn_matcher. See [Asn Matcher ](#asn-matcher) below for details.
+###### One of the arguments from this list "presence, check_present, check_not_present, item" must be set
 
-`any_country` - (Optional) x-displayName: "Any Country" (bool).
+`check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
-`country_list` - (Optional) x-displayName: "Country List". See [Country List ](#country-list) below for details.
+`check_present` - (Optional) Check that the header is present. (`Bool`).
 
-`domain_matcher` - (Optional)domain_matcher. See [Domain Matcher ](#domain-matcher) below for details.
+`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
 
-`headers` - (Optional)headers. See [Headers ](#headers) below for details.
+`presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
 
-`http_method` - (Optional)http_method. See [Http Method ](#http-method) below for details.
+`name` - (Required) A case-insensitive HTTP header name. (`String`).
 
-`any_ip` - (Optional)any_ip (bool).
+### Spec Http Method
 
-`ip_matcher` - (Optional)ip_matcher. See [Ip Matcher ](#ip-matcher) below for details.
+http_method.
 
-`ip_prefix_list` - (Optional)ip_prefix_list. See [Ip Prefix List ](#ip-prefix-list) below for details.
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-`path` - (Optional)path. See [Path ](#path) below for details.
+`methods` - (Optional) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
+
+### Spec Path
+
+path.
+
+`exact_values` - (Optional) A list of exact path values to match the input HTTP path against. (`String`).
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`prefix_values` - (Optional) A list of path prefix values to match the input HTTP path against. (`String`).
+
+`regex_values` - (Optional) A list of regular expressions to match the input HTTP path against. (`String`).
+
+`suffix_values` - (Optional) A list of path suffix values to match the input HTTP path against. (`String`).
+
+`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
 Attribute Reference
 -------------------

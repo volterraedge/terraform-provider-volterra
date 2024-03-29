@@ -19,7 +19,8 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	signup "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/signup"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
@@ -144,11 +145,142 @@ func (m *RegistrationResponse) GetRedirectUrl() string {
 	return ""
 }
 
+// AWSAccountSignupRequest
+//
+// x-displayName: "AWS Account Signup Request"
+type AWSAccountSignupRequest struct {
+	// Company Details
+	//
+	// x-displayName: "Company Details"
+	// x-required
+	// Details of the company
+	CompanyDetails *signup.CompanyMeta `protobuf:"bytes,1,opt,name=company_details,json=companyDetails,proto3" json:"company_details,omitempty"`
+	// User Details
+	//
+	// x-displayName: "User Details"
+	// x-required
+	// Details of the user
+	UserDetails *signup.UserMeta `protobuf:"bytes,2,opt,name=user_details,json=userDetails,proto3" json:"user_details,omitempty"`
+	// Account Details
+	//
+	// x-displayName: "Account Details"
+	// x-required
+	// Details of the new F5XC account to be created
+	AccountDetails *signup.AccountMeta `protobuf:"bytes,3,opt,name=account_details,json=accountDetails,proto3" json:"account_details,omitempty"`
+	// CRM Details
+	//
+	// x-displayName: "CRM Details"
+	// This field holds CRM information
+	CrmDetails *schema.CRMInfo `protobuf:"bytes,4,opt,name=crm_details,json=crmDetails,proto3" json:"crm_details,omitempty"`
+}
+
+func (m *AWSAccountSignupRequest) Reset()      { *m = AWSAccountSignupRequest{} }
+func (*AWSAccountSignupRequest) ProtoMessage() {}
+func (*AWSAccountSignupRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4137c9133a2982e0, []int{2}
+}
+func (m *AWSAccountSignupRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSAccountSignupRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AWSAccountSignupRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AWSAccountSignupRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSAccountSignupRequest.Merge(m, src)
+}
+func (m *AWSAccountSignupRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSAccountSignupRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSAccountSignupRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSAccountSignupRequest proto.InternalMessageInfo
+
+func (m *AWSAccountSignupRequest) GetCompanyDetails() *signup.CompanyMeta {
+	if m != nil {
+		return m.CompanyDetails
+	}
+	return nil
+}
+
+func (m *AWSAccountSignupRequest) GetUserDetails() *signup.UserMeta {
+	if m != nil {
+		return m.UserDetails
+	}
+	return nil
+}
+
+func (m *AWSAccountSignupRequest) GetAccountDetails() *signup.AccountMeta {
+	if m != nil {
+		return m.AccountDetails
+	}
+	return nil
+}
+
+func (m *AWSAccountSignupRequest) GetCrmDetails() *schema.CRMInfo {
+	if m != nil {
+		return m.CrmDetails
+	}
+	return nil
+}
+
+// AWSAccountSignupResponse
+//
+// x-displayName: "AWS Account Signup Response"
+type AWSAccountSignupResponse struct {
+}
+
+func (m *AWSAccountSignupResponse) Reset()      { *m = AWSAccountSignupResponse{} }
+func (*AWSAccountSignupResponse) ProtoMessage() {}
+func (*AWSAccountSignupResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4137c9133a2982e0, []int{3}
+}
+func (m *AWSAccountSignupResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AWSAccountSignupResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AWSAccountSignupResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AWSAccountSignupResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AWSAccountSignupResponse.Merge(m, src)
+}
+func (m *AWSAccountSignupResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *AWSAccountSignupResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AWSAccountSignupResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AWSAccountSignupResponse proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*RegistrationRequest)(nil), "ves.io.schema.marketplace.aws_account.RegistrationRequest")
 	golang_proto.RegisterType((*RegistrationRequest)(nil), "ves.io.schema.marketplace.aws_account.RegistrationRequest")
 	proto.RegisterType((*RegistrationResponse)(nil), "ves.io.schema.marketplace.aws_account.RegistrationResponse")
 	golang_proto.RegisterType((*RegistrationResponse)(nil), "ves.io.schema.marketplace.aws_account.RegistrationResponse")
+	proto.RegisterType((*AWSAccountSignupRequest)(nil), "ves.io.schema.marketplace.aws_account.AWSAccountSignupRequest")
+	golang_proto.RegisterType((*AWSAccountSignupRequest)(nil), "ves.io.schema.marketplace.aws_account.AWSAccountSignupRequest")
+	proto.RegisterType((*AWSAccountSignupResponse)(nil), "ves.io.schema.marketplace.aws_account.AWSAccountSignupResponse")
+	golang_proto.RegisterType((*AWSAccountSignupResponse)(nil), "ves.io.schema.marketplace.aws_account.AWSAccountSignupResponse")
 }
 
 func init() {
@@ -159,42 +291,53 @@ func init() {
 }
 
 var fileDescriptor_4137c9133a2982e0 = []byte{
-	// 556 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0x4f, 0x6b, 0xd4, 0x4e,
-	0x18, 0xc7, 0x33, 0x2d, 0xfc, 0xe0, 0x97, 0x7a, 0x90, 0xb5, 0xc2, 0xba, 0x96, 0xb1, 0x2e, 0x08,
-	0x22, 0x24, 0x43, 0x2b, 0x0a, 0xd6, 0x53, 0x15, 0x0f, 0x5e, 0xfc, 0x53, 0x15, 0x41, 0x0f, 0x61,
-	0x92, 0x7d, 0x9a, 0x8e, 0x4d, 0xe6, 0x19, 0x67, 0x26, 0xd9, 0xad, 0x27, 0xe9, 0xc9, 0xa3, 0x20,
-	0xbe, 0x07, 0xdf, 0x83, 0x97, 0xbd, 0xe9, 0x49, 0x16, 0xbc, 0xf4, 0xe8, 0x66, 0x45, 0x3c, 0xf6,
-	0x25, 0x48, 0x93, 0xac, 0x64, 0x17, 0x91, 0xc5, 0x5b, 0x26, 0x9f, 0xe7, 0xfb, 0x61, 0x9e, 0xe1,
-	0xeb, 0xde, 0xc9, 0xc1, 0xf8, 0x02, 0x99, 0x89, 0xf6, 0x20, 0xe5, 0x2c, 0xe5, 0x7a, 0x1f, 0xac,
-	0x4a, 0x78, 0x04, 0x8c, 0xf7, 0x4d, 0xc0, 0xa3, 0x08, 0x33, 0x69, 0x99, 0xca, 0xc2, 0x44, 0x44,
-	0x01, 0xca, 0x10, 0xb9, 0xee, 0x05, 0x51, 0x66, 0x2c, 0xa6, 0xc0, 0x95, 0xf0, 0x95, 0x46, 0x8b,
-	0xad, 0x4b, 0x95, 0xc6, 0xaf, 0x34, 0x7e, 0x43, 0xe3, 0x37, 0x34, 0x1d, 0x2f, 0x16, 0x76, 0x2f,
-	0x0b, 0xfd, 0x08, 0x53, 0x16, 0x63, 0x8c, 0xac, 0x4c, 0x87, 0xd9, 0x6e, 0x79, 0x2a, 0x0f, 0xe5,
-	0x57, 0x65, 0xed, 0xac, 0xc5, 0x88, 0x71, 0x02, 0x8c, 0x2b, 0xc1, 0xb8, 0x94, 0x68, 0xb9, 0x15,
-	0x28, 0x4d, 0x4d, 0x2f, 0xd4, 0xf4, 0xb7, 0xc3, 0x8a, 0x14, 0x8c, 0xe5, 0xa9, 0xaa, 0x07, 0x36,
-	0x17, 0xdb, 0x0d, 0xc3, 0x17, 0x10, 0xd9, 0x3a, 0xb3, 0xb1, 0x58, 0xc6, 0x1e, 0x28, 0x98, 0xde,
-	0xe3, 0xfc, 0x6c, 0x04, 0x55, 0xf3, 0x92, 0xe7, 0x66, 0x61, 0x33, 0xb7, 0x36, 0x8b, 0x72, 0x9e,
-	0x88, 0x1e, 0xb7, 0x50, 0xd3, 0xee, 0x1c, 0x05, 0x03, 0x32, 0x9f, 0x93, 0xaf, 0xcf, 0xcd, 0x08,
-	0xe8, 0x07, 0x33, 0x13, 0xdd, 0x87, 0xee, 0x99, 0x1d, 0x88, 0x85, 0xb1, 0xba, 0x7c, 0xba, 0x1d,
-	0x78, 0x99, 0x81, 0xb1, 0xad, 0x2d, 0xb7, 0x3d, 0x08, 0x78, 0xfa, 0x4a, 0x06, 0x8d, 0x05, 0x03,
-	0x8b, 0xfb, 0x20, 0xdb, 0x64, 0x9d, 0x5c, 0xfe, 0x7f, 0xa7, 0x3d, 0xf0, 0x4e, 0xb8, 0xd7, 0xe0,
-	0x5e, 0xc9, 0xbb, 0x37, 0xdc, 0xd5, 0x59, 0xa5, 0x51, 0x28, 0x0d, 0xb4, 0x2e, 0xba, 0xa7, 0x34,
-	0xf4, 0x84, 0x86, 0xc8, 0x06, 0x99, 0x4e, 0x6a, 0xcf, 0xca, 0xf4, 0xdf, 0x13, 0x9d, 0x6c, 0xbe,
-	0x59, 0x72, 0x4f, 0xdf, 0xaf, 0x2a, 0x74, 0xbb, 0x6c, 0xd0, 0xf6, 0x83, 0xbb, 0xad, 0x1f, 0xc4,
-	0x3d, 0x5b, 0x09, 0x41, 0xdf, 0x83, 0xfe, 0xf6, 0xd3, 0x47, 0xdb, 0xd5, 0x23, 0xb7, 0xb6, 0xfc,
-	0x85, 0x5a, 0xe5, 0xff, 0x61, 0xc3, 0xce, 0xcd, 0x7f, 0xca, 0x56, 0xab, 0x74, 0x1f, 0x17, 0x9f,
-	0xda, 0xab, 0x39, 0x18, 0x4f, 0xa0, 0x17, 0x83, 0x04, 0xcd, 0x13, 0xaf, 0xaf, 0x85, 0x85, 0xc3,
-	0xaf, 0xdf, 0xdf, 0x2d, 0x5d, 0xef, 0x6e, 0x30, 0x89, 0x01, 0xcf, 0xec, 0x1e, 0x93, 0x3c, 0x05,
-	0xa3, 0x78, 0x04, 0x86, 0x99, 0x03, 0x63, 0x21, 0x3d, 0x69, 0x09, 0xdb, 0xbd, 0x36, 0x88, 0x3c,
-	0xc3, 0xb9, 0x61, 0xba, 0x5e, 0x6c, 0x8b, 0x5c, 0xe9, 0xac, 0x0c, 0x3f, 0x92, 0xe5, 0xc3, 0x2f,
-	0xed, 0xe5, 0xe1, 0x12, 0xb9, 0xf5, 0x9e, 0x8c, 0xc6, 0xd4, 0x39, 0x1a, 0x53, 0xe7, 0x78, 0x4c,
-	0xc9, 0xeb, 0x82, 0x92, 0x0f, 0x05, 0x25, 0x9f, 0x0b, 0x4a, 0x46, 0x05, 0x25, 0xdf, 0x0a, 0x4a,
-	0x7e, 0x16, 0xd4, 0x39, 0x2e, 0x28, 0x79, 0x3b, 0xa1, 0xce, 0x70, 0x42, 0xc9, 0x68, 0x42, 0x9d,
-	0xa3, 0x09, 0x75, 0x9e, 0x3d, 0x8f, 0x51, 0xed, 0xc7, 0x7e, 0x8e, 0x89, 0x05, 0xad, 0xb9, 0x9f,
-	0x19, 0x56, 0x7e, 0xec, 0xa2, 0x4e, 0x3d, 0xa5, 0x31, 0x17, 0x3d, 0xd0, 0xde, 0x14, 0x33, 0x15,
-	0xc6, 0xc8, 0x60, 0x60, 0xeb, 0x92, 0xfc, 0xbd, 0xd8, 0xe1, 0x7f, 0x65, 0x6f, 0xae, 0xfe, 0x0a,
-	0x00, 0x00, 0xff, 0xff, 0x63, 0x30, 0xe4, 0xee, 0x18, 0x04, 0x00, 0x00,
+	// 731 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0xcd, 0x6e, 0xd3, 0x4a,
+	0x14, 0xc7, 0x33, 0xc9, 0xd5, 0x95, 0xae, 0x53, 0xdd, 0x56, 0xb9, 0x5f, 0xb9, 0xa1, 0x32, 0xad,
+	0x11, 0x12, 0xaa, 0x14, 0x8f, 0x1a, 0xbe, 0x44, 0x90, 0x40, 0xa1, 0xb0, 0x68, 0x51, 0xf9, 0x48,
+	0x55, 0x21, 0xc1, 0xc2, 0x9a, 0x38, 0x27, 0xae, 0xa9, 0xed, 0x19, 0x66, 0xc6, 0x69, 0xca, 0x0a,
+	0xf5, 0x09, 0x90, 0x10, 0xef, 0xc0, 0x86, 0x27, 0x60, 0xd3, 0x1d, 0xac, 0x50, 0x25, 0x36, 0xdd,
+	0x80, 0x5a, 0x87, 0x05, 0xcb, 0x3e, 0x02, 0xca, 0x8c, 0x13, 0x92, 0x50, 0xaa, 0xa8, 0x3b, 0x4f,
+	0xfe, 0xe7, 0xff, 0xd3, 0x39, 0xff, 0x9c, 0x19, 0xe3, 0x4e, 0x1b, 0x84, 0xed, 0x53, 0x2c, 0xdc,
+	0x0d, 0x08, 0x09, 0x0e, 0x09, 0xdf, 0x04, 0xc9, 0x02, 0xe2, 0x02, 0x26, 0x5b, 0xc2, 0x21, 0xae,
+	0x4b, 0xe3, 0x48, 0x62, 0x16, 0x37, 0x02, 0xdf, 0x75, 0x68, 0xd4, 0xa0, 0x84, 0x37, 0x1d, 0x37,
+	0x16, 0x92, 0x86, 0x40, 0x98, 0x6f, 0x33, 0x4e, 0x25, 0x2d, 0x9c, 0xd7, 0x18, 0x5b, 0x63, 0xec,
+	0x21, 0x8c, 0x3d, 0x84, 0x29, 0x95, 0x3d, 0x5f, 0x6e, 0xc4, 0x0d, 0xdb, 0xa5, 0x21, 0xf6, 0xa8,
+	0x47, 0xb1, 0x72, 0x37, 0xe2, 0x96, 0x3a, 0xa9, 0x83, 0xfa, 0xd2, 0xd4, 0xd2, 0xac, 0x47, 0xa9,
+	0x17, 0x00, 0x26, 0xcc, 0xc7, 0x24, 0x8a, 0xa8, 0x24, 0xd2, 0xa7, 0x91, 0x48, 0xd5, 0xb3, 0xa9,
+	0x3a, 0x60, 0x48, 0x3f, 0x04, 0x21, 0x49, 0xc8, 0xd2, 0x82, 0xca, 0x64, 0xb3, 0xd1, 0xc6, 0x53,
+	0x70, 0x65, 0xea, 0x59, 0x9c, 0xcc, 0x23, 0xb7, 0x19, 0xf4, 0xfb, 0x38, 0x33, 0x6a, 0xa1, 0x6c,
+	0xb8, 0xc9, 0x73, 0xa3, 0xa2, 0xf0, 0xbd, 0x28, 0x66, 0xda, 0xee, 0xb4, 0x2b, 0x69, 0xd1, 0xff,
+	0xa3, 0x45, 0xc3, 0xf0, 0xd9, 0x51, 0xa9, 0x4d, 0x02, 0xbf, 0x49, 0x24, 0xa4, 0xaa, 0x35, 0xa6,
+	0x82, 0x80, 0xa8, 0x3d, 0xd6, 0xc1, 0xdc, 0x58, 0x8d, 0x0f, 0x5b, 0xce, 0x48, 0x85, 0xf5, 0xd0,
+	0xf8, 0xab, 0x0e, 0x9e, 0x2f, 0x24, 0x57, 0xf9, 0xd6, 0xe1, 0x59, 0x0c, 0x42, 0x16, 0xaa, 0x46,
+	0xb1, 0xe3, 0x90, 0xf0, 0x79, 0xe4, 0x0c, 0xa5, 0xe0, 0x48, 0xba, 0x09, 0x51, 0x11, 0xcd, 0xa1,
+	0x0b, 0x7f, 0xd4, 0x8b, 0x9d, 0x72, 0x4f, 0x2f, 0x0f, 0xe9, 0x65, 0xa5, 0x5b, 0xd7, 0x8c, 0xbf,
+	0x47, 0x91, 0x82, 0xd1, 0x48, 0x40, 0x61, 0xde, 0x98, 0xe2, 0xd0, 0xf4, 0x39, 0xb8, 0xd2, 0x89,
+	0x79, 0x90, 0x72, 0xf2, 0xfd, 0xdf, 0xd6, 0x79, 0x60, 0xbd, 0xcd, 0x1a, 0xff, 0xd5, 0x1e, 0xad,
+	0xd5, 0x74, 0xd2, 0x6b, 0x2a, 0xb0, 0x7e, 0x4b, 0x2b, 0xc6, 0xb4, 0x4b, 0x43, 0x46, 0xa2, 0x6d,
+	0xa7, 0x09, 0x92, 0xf8, 0x81, 0x50, 0x84, 0x7c, 0x65, 0xde, 0x1e, 0x5d, 0x40, 0x9d, 0xb3, 0xbd,
+	0xa4, 0x8b, 0x57, 0x41, 0x92, 0xfa, 0x9f, 0xa9, 0xf3, 0xb6, 0x36, 0x16, 0x6a, 0xc6, 0x54, 0x2c,
+	0x80, 0x0f, 0x40, 0x59, 0x05, 0x32, 0x8f, 0x07, 0xad, 0x0b, 0xe0, 0x8a, 0x92, 0xef, 0x79, 0xfa,
+	0x88, 0x15, 0x63, 0x3a, 0x5d, 0x88, 0x01, 0x25, 0x77, 0x52, 0x3b, 0xe9, 0x4c, 0xba, 0x9d, 0xd4,
+	0xd9, 0x67, 0x5d, 0x35, 0xf2, 0x2e, 0x0f, 0x07, 0x9c, 0xdf, 0x14, 0xe7, 0xdf, 0x31, 0xce, 0x52,
+	0x7d, 0x75, 0x39, 0x6a, 0xd1, 0xba, 0xe1, 0xf2, 0x30, 0x35, 0x5a, 0x25, 0xa3, 0xf8, 0x73, 0x5c,
+	0x3a, 0xee, 0xca, 0x41, 0xce, 0x98, 0xb9, 0xaf, 0xef, 0xec, 0x92, 0xba, 0xb2, 0xb5, 0x07, 0xcb,
+	0x85, 0xcf, 0xc8, 0xf8, 0x47, 0xff, 0x39, 0xc0, 0xef, 0xc1, 0xd6, 0x0f, 0x73, 0xa1, 0x6a, 0x4f,
+	0x74, 0x8d, 0xed, 0x63, 0xb6, 0xa5, 0x74, 0xfd, 0x54, 0x5e, 0xdd, 0xa7, 0x75, 0x37, 0x79, 0x5f,
+	0xcc, 0xb7, 0x2e, 0x77, 0xdc, 0x72, 0x44, 0x49, 0x2c, 0x37, 0x76, 0x3e, 0x7d, 0x7d, 0x95, 0xbd,
+	0x62, 0x2d, 0xe2, 0x88, 0x3a, 0xbd, 0x33, 0x8e, 0x48, 0x08, 0x82, 0x11, 0x17, 0x04, 0x16, 0xdb,
+	0x42, 0x42, 0xd8, 0xbb, 0x8d, 0x58, 0x39, 0x04, 0x21, 0x02, 0xf3, 0x74, 0x9e, 0x2a, 0x5a, 0x28,
+	0x7c, 0x41, 0xc6, 0x8c, 0xce, 0x61, 0x68, 0xb4, 0x1b, 0x13, 0xb6, 0xf7, 0x8b, 0xcd, 0x2b, 0xdd,
+	0x3c, 0xb5, 0x3f, 0x1d, 0x71, 0xf9, 0xb8, 0x11, 0x2f, 0x59, 0x78, 0xe2, 0x11, 0xf5, 0x0e, 0x55,
+	0xd1, 0x42, 0x29, 0xbf, 0xfb, 0x0e, 0xe5, 0x76, 0x3e, 0x16, 0x73, 0xbb, 0x59, 0x74, 0xeb, 0x35,
+	0xda, 0x3b, 0x34, 0x33, 0xfb, 0x87, 0x66, 0xe6, 0xe8, 0xd0, 0x44, 0x2f, 0x12, 0x13, 0xbd, 0x49,
+	0x4c, 0xf4, 0x21, 0x31, 0xd1, 0x5e, 0x62, 0xa2, 0x83, 0xc4, 0x44, 0xdf, 0x12, 0x33, 0x73, 0x94,
+	0x98, 0xe8, 0x65, 0xd7, 0xcc, 0xec, 0x76, 0x4d, 0xb4, 0xd7, 0x35, 0x33, 0xfb, 0x5d, 0x33, 0xf3,
+	0xf8, 0x89, 0x47, 0xd9, 0xa6, 0x67, 0xb7, 0x69, 0x20, 0x81, 0x73, 0x62, 0xc7, 0x02, 0xab, 0x8f,
+	0x16, 0xe5, 0x61, 0x99, 0x71, 0xda, 0xf6, 0x9b, 0xc0, 0xcb, 0x7d, 0x19, 0xb3, 0x86, 0x47, 0x31,
+	0x74, 0x64, 0xff, 0x29, 0x3b, 0xf1, 0x85, 0x6c, 0xfc, 0xae, 0xde, 0x96, 0x8b, 0xdf, 0x03, 0x00,
+	0x00, 0xff, 0xff, 0x31, 0x13, 0x1e, 0xa2, 0x61, 0x06, 0x00, 0x00,
 }
 
 func (this *RegistrationRequest) Equal(that interface{}) bool {
@@ -245,6 +388,60 @@ func (this *RegistrationResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AWSAccountSignupRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSAccountSignupRequest)
+	if !ok {
+		that2, ok := that.(AWSAccountSignupRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CompanyDetails.Equal(that1.CompanyDetails) {
+		return false
+	}
+	if !this.UserDetails.Equal(that1.UserDetails) {
+		return false
+	}
+	if !this.AccountDetails.Equal(that1.AccountDetails) {
+		return false
+	}
+	if !this.CrmDetails.Equal(that1.CrmDetails) {
+		return false
+	}
+	return true
+}
+func (this *AWSAccountSignupResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AWSAccountSignupResponse)
+	if !ok {
+		that2, ok := that.(AWSAccountSignupResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
 func (this *RegistrationRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -262,6 +459,36 @@ func (this *RegistrationResponse) GoString() string {
 	s := make([]string, 0, 5)
 	s = append(s, "&aws_account.RegistrationResponse{")
 	s = append(s, "RedirectUrl: "+fmt.Sprintf("%#v", this.RedirectUrl)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSAccountSignupRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&aws_account.AWSAccountSignupRequest{")
+	if this.CompanyDetails != nil {
+		s = append(s, "CompanyDetails: "+fmt.Sprintf("%#v", this.CompanyDetails)+",\n")
+	}
+	if this.UserDetails != nil {
+		s = append(s, "UserDetails: "+fmt.Sprintf("%#v", this.UserDetails)+",\n")
+	}
+	if this.AccountDetails != nil {
+		s = append(s, "AccountDetails: "+fmt.Sprintf("%#v", this.AccountDetails)+",\n")
+	}
+	if this.CrmDetails != nil {
+		s = append(s, "CrmDetails: "+fmt.Sprintf("%#v", this.CrmDetails)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AWSAccountSignupResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&aws_account.AWSAccountSignupResponse{")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -291,6 +518,11 @@ type OnboardCustomAPIClient interface {
 	// x-displayName: "Register New AWS Account"
 	// Use this API to register F5XC AWS marketplace product for F5XC service.
 	RegisterNewAWSAccount(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
+	// SignupAWSAccount
+	//
+	// x-displayName: "Signup AWS Account"
+	// Use this API to signup AWS account for F5XC service.
+	SignupAWSAccount(ctx context.Context, in *AWSAccountSignupRequest, opts ...grpc.CallOption) (*AWSAccountSignupResponse, error)
 }
 
 type onboardCustomAPIClient struct {
@@ -310,6 +542,15 @@ func (c *onboardCustomAPIClient) RegisterNewAWSAccount(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *onboardCustomAPIClient) SignupAWSAccount(ctx context.Context, in *AWSAccountSignupRequest, opts ...grpc.CallOption) (*AWSAccountSignupResponse, error) {
+	out := new(AWSAccountSignupResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.marketplace.aws_account.OnboardCustomAPI/SignupAWSAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OnboardCustomAPIServer is the server API for OnboardCustomAPI service.
 type OnboardCustomAPIServer interface {
 	// RegisterNewAWSAccount
@@ -317,6 +558,11 @@ type OnboardCustomAPIServer interface {
 	// x-displayName: "Register New AWS Account"
 	// Use this API to register F5XC AWS marketplace product for F5XC service.
 	RegisterNewAWSAccount(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
+	// SignupAWSAccount
+	//
+	// x-displayName: "Signup AWS Account"
+	// Use this API to signup AWS account for F5XC service.
+	SignupAWSAccount(context.Context, *AWSAccountSignupRequest) (*AWSAccountSignupResponse, error)
 }
 
 // UnimplementedOnboardCustomAPIServer can be embedded to have forward compatible implementations.
@@ -325,6 +571,9 @@ type UnimplementedOnboardCustomAPIServer struct {
 
 func (*UnimplementedOnboardCustomAPIServer) RegisterNewAWSAccount(ctx context.Context, req *RegistrationRequest) (*RegistrationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterNewAWSAccount not implemented")
+}
+func (*UnimplementedOnboardCustomAPIServer) SignupAWSAccount(ctx context.Context, req *AWSAccountSignupRequest) (*AWSAccountSignupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SignupAWSAccount not implemented")
 }
 
 func RegisterOnboardCustomAPIServer(s *grpc.Server, srv OnboardCustomAPIServer) {
@@ -349,6 +598,24 @@ func _OnboardCustomAPI_RegisterNewAWSAccount_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OnboardCustomAPI_SignupAWSAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AWSAccountSignupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OnboardCustomAPIServer).SignupAWSAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.marketplace.aws_account.OnboardCustomAPI/SignupAWSAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OnboardCustomAPIServer).SignupAWSAccount(ctx, req.(*AWSAccountSignupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _OnboardCustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.marketplace.aws_account.OnboardCustomAPI",
 	HandlerType: (*OnboardCustomAPIServer)(nil),
@@ -356,6 +623,10 @@ var _OnboardCustomAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterNewAWSAccount",
 			Handler:    _OnboardCustomAPI_RegisterNewAWSAccount_Handler,
+		},
+		{
+			MethodName: "SignupAWSAccount",
+			Handler:    _OnboardCustomAPI_SignupAWSAccount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -422,6 +693,100 @@ func (m *RegistrationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AWSAccountSignupRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSAccountSignupRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSAccountSignupRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CrmDetails != nil {
+		{
+			size, err := m.CrmDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicOnboardCustomeapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.AccountDetails != nil {
+		{
+			size, err := m.AccountDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicOnboardCustomeapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.UserDetails != nil {
+		{
+			size, err := m.UserDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicOnboardCustomeapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.CompanyDetails != nil {
+		{
+			size, err := m.CompanyDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicOnboardCustomeapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AWSAccountSignupResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AWSAccountSignupResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AWSAccountSignupResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintPublicOnboardCustomeapi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovPublicOnboardCustomeapi(v)
 	base := offset
@@ -459,6 +824,40 @@ func (m *RegistrationResponse) Size() (n int) {
 	return n
 }
 
+func (m *AWSAccountSignupRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CompanyDetails != nil {
+		l = m.CompanyDetails.Size()
+		n += 1 + l + sovPublicOnboardCustomeapi(uint64(l))
+	}
+	if m.UserDetails != nil {
+		l = m.UserDetails.Size()
+		n += 1 + l + sovPublicOnboardCustomeapi(uint64(l))
+	}
+	if m.AccountDetails != nil {
+		l = m.AccountDetails.Size()
+		n += 1 + l + sovPublicOnboardCustomeapi(uint64(l))
+	}
+	if m.CrmDetails != nil {
+		l = m.CrmDetails.Size()
+		n += 1 + l + sovPublicOnboardCustomeapi(uint64(l))
+	}
+	return n
+}
+
+func (m *AWSAccountSignupResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func sovPublicOnboardCustomeapi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -481,6 +880,28 @@ func (this *RegistrationResponse) String() string {
 	}
 	s := strings.Join([]string{`&RegistrationResponse{`,
 		`RedirectUrl:` + fmt.Sprintf("%v", this.RedirectUrl) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSAccountSignupRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSAccountSignupRequest{`,
+		`CompanyDetails:` + strings.Replace(fmt.Sprintf("%v", this.CompanyDetails), "CompanyMeta", "signup.CompanyMeta", 1) + `,`,
+		`UserDetails:` + strings.Replace(fmt.Sprintf("%v", this.UserDetails), "UserMeta", "signup.UserMeta", 1) + `,`,
+		`AccountDetails:` + strings.Replace(fmt.Sprintf("%v", this.AccountDetails), "AccountMeta", "signup.AccountMeta", 1) + `,`,
+		`CrmDetails:` + strings.Replace(fmt.Sprintf("%v", this.CrmDetails), "CRMInfo", "schema.CRMInfo", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AWSAccountSignupResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AWSAccountSignupResponse{`,
 		`}`,
 	}, "")
 	return s
@@ -639,6 +1060,256 @@ func (m *RegistrationResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.RedirectUrl = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicOnboardCustomeapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSAccountSignupRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicOnboardCustomeapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSAccountSignupRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSAccountSignupRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CompanyDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicOnboardCustomeapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CompanyDetails == nil {
+				m.CompanyDetails = &signup.CompanyMeta{}
+			}
+			if err := m.CompanyDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicOnboardCustomeapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UserDetails == nil {
+				m.UserDetails = &signup.UserMeta{}
+			}
+			if err := m.UserDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccountDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicOnboardCustomeapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AccountDetails == nil {
+				m.AccountDetails = &signup.AccountMeta{}
+			}
+			if err := m.AccountDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CrmDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicOnboardCustomeapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CrmDetails == nil {
+				m.CrmDetails = &schema.CRMInfo{}
+			}
+			if err := m.CrmDetails.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicOnboardCustomeapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicOnboardCustomeapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AWSAccountSignupResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicOnboardCustomeapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AWSAccountSignupResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AWSAccountSignupResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicOnboardCustomeapi(dAtA[iNdEx:])

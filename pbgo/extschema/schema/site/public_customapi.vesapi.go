@@ -212,7 +212,7 @@ type customStateAPIInprocClient struct {
 }
 
 func (c *customStateAPIInprocClient) SetState(ctx context.Context, in *SetStateReq, opts ...grpc.CallOption) (*SetStateResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.site.CustomStateAPI.SetState", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.site.CustomStateAPI.SetState")
 	return c.CustomStateAPIServer.SetState(ctx, in)
 }
 

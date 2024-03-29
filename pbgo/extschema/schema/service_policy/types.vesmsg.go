@@ -94,6 +94,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *CreateSpecType_AllowList:
+
 		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
@@ -105,6 +106,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_DenyList:
+
 		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
@@ -116,6 +118,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -127,6 +130,7 @@ func (m *CreateSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -564,6 +568,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GetSpecType_AllowList:
+
 		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
@@ -575,6 +580,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_DenyList:
+
 		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
@@ -586,6 +592,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -597,6 +604,7 @@ func (m *GetSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -1292,6 +1300,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *GlobalSpecType_AllowList:
+
 		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
@@ -1303,6 +1312,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_DenyList:
+
 		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
@@ -1314,6 +1324,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -1325,6 +1336,7 @@ func (m *GlobalSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -2298,6 +2310,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRuleChoice().(type) {
 	case *ReplaceSpecType_AllowList:
+
 		drInfos, err := m.GetAllowList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAllowList().GetDRefInfo() FAILED")
@@ -2309,6 +2322,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_DenyList:
+
 		drInfos, err := m.GetDenyList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDenyList().GetDRefInfo() FAILED")
@@ -2320,6 +2334,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_RuleList:
+
 		drInfos, err := m.GetRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRuleList().GetDRefInfo() FAILED")
@@ -2331,6 +2346,7 @@ func (m *ReplaceSpecType) GetRuleChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_LegacyRuleList:
+
 		drInfos, err := m.GetLegacyRuleList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyRuleList().GetDRefInfo() FAILED")
@@ -4128,6 +4144,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["threat_intelligence_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("threat_intelligence_action"))
+		if err := fv(ctx, m.GetThreatIntelligenceAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -4371,6 +4396,8 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["dst_asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
 	v.FldValidators["dst_asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
+
+	v.FldValidators["threat_intelligence_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	return v
 }()

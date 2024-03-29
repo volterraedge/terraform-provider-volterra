@@ -931,6 +931,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *CreateSpecType_InterfaceList:
+
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -942,6 +943,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_DeviceList:
+
 		drInfos, err := m.GetDeviceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfo() FAILED")
@@ -1173,6 +1175,7 @@ func (m *CreateSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, err
 		return nil, nil
 
 	case *CreateSpecType_StorageInterfaceList:
+
 		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
@@ -1200,6 +1203,7 @@ func (m *CreateSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *CreateSpecType_StorageStaticRoutes:
+
 		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")
@@ -2778,6 +2782,7 @@ func (m *DeviceInstanceType) GetDeviceInstanceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetDeviceInstance().(type) {
 	case *DeviceInstanceType_NetworkDevice:
+
 		drInfos, err := m.GetNetworkDevice().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetNetworkDevice().GetDRefInfo() FAILED")
@@ -6672,6 +6677,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *GetSpecType_InterfaceList:
+
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -6683,6 +6689,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_DeviceList:
+
 		drInfos, err := m.GetDeviceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfo() FAILED")
@@ -6914,6 +6921,7 @@ func (m *GetSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *GetSpecType_StorageInterfaceList:
+
 		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
@@ -6941,6 +6949,7 @@ func (m *GetSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, err
 		return nil, nil
 
 	case *GetSpecType_StorageStaticRoutes:
+
 		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")
@@ -8600,6 +8609,7 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *GlobalSpecType_InterfaceList:
+
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -8947,6 +8957,7 @@ func (m *GlobalSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, err
 		return nil, nil
 
 	case *GlobalSpecType_StorageInterfaceList:
+
 		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
@@ -8974,6 +8985,7 @@ func (m *GlobalSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *GlobalSpecType_StorageStaticRoutes:
+
 		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")
@@ -11923,6 +11935,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetInterfaceChoice().(type) {
 	case *ReplaceSpecType_InterfaceList:
+
 		drInfos, err := m.GetInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInterfaceList().GetDRefInfo() FAILED")
@@ -11934,6 +11947,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_DeviceList:
+
 		drInfos, err := m.GetDeviceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDeviceList().GetDRefInfo() FAILED")
@@ -12165,6 +12179,7 @@ func (m *ReplaceSpecType) GetStorageInterfaceChoiceDRefInfo() ([]db.DRefInfo, er
 		return nil, nil
 
 	case *ReplaceSpecType_StorageInterfaceList:
+
 		drInfos, err := m.GetStorageInterfaceList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageInterfaceList().GetDRefInfo() FAILED")
@@ -12192,6 +12207,7 @@ func (m *ReplaceSpecType) GetStorageStaticRoutesChoiceDRefInfo() ([]db.DRefInfo,
 		return nil, nil
 
 	case *ReplaceSpecType_StorageStaticRoutes:
+
 		drInfos, err := m.GetStorageStaticRoutes().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStorageStaticRoutes().GetDRefInfo() FAILED")

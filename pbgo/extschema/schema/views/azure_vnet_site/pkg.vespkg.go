@@ -111,6 +111,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
@@ -161,6 +169,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
@@ -213,11 +229,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.azure_vnet_site.API.Create"] = "ves.io.schema.views.azure_vnet_site.CreateRequest"
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "create_form.spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
@@ -267,52 +287,12 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			FieldPath:           "replace_form.spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			FieldPath:           "replace_form.spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
@@ -329,6 +309,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "replace_form.spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
@@ -382,6 +370,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.azure_vnet_site.API.List"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "items.#.get_spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
@@ -429,54 +425,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "items.#.get_spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
 		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.az_nodes.#.inside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.az_nodes.#.outside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.hub.express_route_enabled.route_server_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.node.inside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_egress_gw_ar.node.outside_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_gw.az_nodes.#.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.ingress_gw_ar.node.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.voltstack_cluster.az_nodes.#.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.voltstack_cluster_ar.node.local_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []string{
@@ -509,6 +457,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.azure_vnet_site.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.custom_dns.inside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.custom_dns.outside_nameserver_v6",
+			AllowedEnvironments: []string{"crt", "softbank_mec", "staging", "test"},
+		},
 		{
 			FieldPath:           "spec.ingress_egress_gw.hub.express_route_enabled.gateway_subnet.subnet_param.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
@@ -552,6 +508,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		customCSR *svcfw.CustomServiceRegistry
 	)
 	_, _ = csr, customCSR
+
+	customCSR = mdr.PvtCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.views.azure_vnet_site.Object"] = PrivateCustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = RegisterPrivateCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = RegisterGwPrivateCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.views.azure_vnet_site.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewPrivateCustomAPIServer(svc)
+		}
+
+	}()
 
 	csr = mdr.PubCRUDServiceRegistry
 

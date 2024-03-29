@@ -387,6 +387,7 @@ func (m *AuthenticationDetails) GetCookieParamsChoiceDRefInfo() ([]db.DRefInfo, 
 		return nil, nil
 
 	case *AuthenticationDetails_CookieParams:
+
 		drInfos, err := m.GetCookieParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCookieParams().GetDRefInfo() FAILED")
@@ -1581,6 +1582,7 @@ func (m *CreateSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *CreateSpecType_Authentication:
+
 		drInfos, err := m.GetAuthentication().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
@@ -1775,6 +1777,7 @@ func (m *CreateSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *CreateSpecType_TlsParameters:
+
 		drInfos, err := m.GetTlsParameters().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -1786,6 +1789,7 @@ func (m *CreateSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, erro
 		return drInfos, err
 
 	case *CreateSpecType_TlsCertParams:
+
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
@@ -3891,6 +3895,120 @@ func DNSRecordValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DNSVHostStatusType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DNSVHostStatusType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DNSVHostStatusType) DeepCopy() *DNSVHostStatusType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DNSVHostStatusType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DNSVHostStatusType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DNSVHostStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DNSVHostStatusTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDNSVHostStatusType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSVHostStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DNSVHostStatusType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DNSVHostStatusType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_description"))
+		if err := fv(ctx, m.GetErrorDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["existing_certificate_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("existing_certificate_state"))
+		if err := fv(ctx, m.GetExistingCertificateState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["renew_certificate_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("renew_certificate_state"))
+		if err := fv(ctx, m.GetRenewCertificateState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["suggested_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("suggested_action"))
+		if err := fv(ctx, m.GetSuggestedAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDNSVHostStatusTypeValidator = func() *ValidateDNSVHostStatusType {
+	v := &ValidateDNSVHostStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DNSVHostStatusTypeValidator() db.Validator {
+	return DefaultDNSVHostStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DomainCertificates) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4508,6 +4626,7 @@ func (m *GetSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_Authentication:
+
 		drInfos, err := m.GetAuthentication().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
@@ -4702,6 +4821,7 @@ func (m *GetSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *GetSpecType_TlsParameters:
+
 		drInfos, err := m.GetTlsParameters().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -4713,6 +4833,7 @@ func (m *GetSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return drInfos, err
 
 	case *GetSpecType_TlsCertParams:
+
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
@@ -6490,6 +6611,7 @@ func (m *GlobalSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *GlobalSpecType_Authentication:
+
 		drInfos, err := m.GetAuthentication().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
@@ -6517,6 +6639,7 @@ func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_BotDefense:
+
 		drInfos, err := m.GetBotDefense().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBotDefense().GetDRefInfo() FAILED")
@@ -6552,6 +6675,7 @@ func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_PolicyBasedChallenge:
+
 		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
@@ -7061,6 +7185,7 @@ func (m *GlobalSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *GlobalSpecType_TlsParameters:
+
 		drInfos, err := m.GetTlsParameters().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -7072,6 +7197,7 @@ func (m *GlobalSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, erro
 		return drInfos, err
 
 	case *GlobalSpecType_TlsCertParams:
+
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
@@ -10374,6 +10500,7 @@ func (m *ReplaceSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, erro
 		return nil, nil
 
 	case *ReplaceSpecType_Authentication:
+
 		drInfos, err := m.GetAuthentication().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAuthentication().GetDRefInfo() FAILED")
@@ -10568,6 +10695,7 @@ func (m *ReplaceSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *ReplaceSpecType_TlsParameters:
+
 		drInfos, err := m.GetTlsParameters().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -10579,6 +10707,7 @@ func (m *ReplaceSpecType) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, err
 		return drInfos, err
 
 	case *ReplaceSpecType_TlsCertParams:
+
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")

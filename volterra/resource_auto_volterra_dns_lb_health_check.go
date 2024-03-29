@@ -484,6 +484,7 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

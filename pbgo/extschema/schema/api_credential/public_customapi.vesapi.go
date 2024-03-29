@@ -1481,59 +1481,59 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) Activate(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.Activate", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Activate")
 	return c.CustomAPIServer.Activate(ctx, in)
 }
 func (c *customAPIInprocClient) ActivateServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials")
 	return c.CustomAPIServer.ActivateServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Create")
 	return c.CustomAPIServer.Create(ctx, in)
 }
 func (c *customAPIInprocClient) CreateServiceCredentials(ctx context.Context, in *CreateServiceCredentialsRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials")
 	return c.CustomAPIServer.CreateServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Get")
 	return c.CustomAPIServer.Get(ctx, in)
 }
 func (c *customAPIInprocClient) GetScimToken(ctx context.Context, in *ScimTokenRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.GetScimToken", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.GetScimToken")
 	return c.CustomAPIServer.GetScimToken(ctx, in)
 }
 func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.List")
 	return c.CustomAPIServer.List(ctx, in)
 }
 func (c *customAPIInprocClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials")
 	return c.CustomAPIServer.ListServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) RecreateScimToken(ctx context.Context, in *RecreateScimTokenRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.RecreateScimToken", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RecreateScimToken")
 	return c.CustomAPIServer.RecreateScimToken(ctx, in)
 }
 func (c *customAPIInprocClient) Renew(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.Renew", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Renew")
 	return c.CustomAPIServer.Renew(ctx, in)
 }
 func (c *customAPIInprocClient) RenewServiceCredentials(ctx context.Context, in *RenewRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials")
 	return c.CustomAPIServer.RenewServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) Revoke(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.Revoke", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Revoke")
 	return c.CustomAPIServer.Revoke(ctx, in)
 }
 func (c *customAPIInprocClient) RevokeScimToken(ctx context.Context, in *ScimTokenRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeScimToken", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeScimToken")
 	return c.CustomAPIServer.RevokeScimToken(ctx, in)
 }
 func (c *customAPIInprocClient) RevokeServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials")
 	return c.CustomAPIServer.RevokeServiceCredentials(ctx, in)
 }
 

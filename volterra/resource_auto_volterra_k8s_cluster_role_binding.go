@@ -326,6 +326,7 @@ func resourceVolterraK8SClusterRoleBindingUpdate(d *schema.ResourceData, meta in
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

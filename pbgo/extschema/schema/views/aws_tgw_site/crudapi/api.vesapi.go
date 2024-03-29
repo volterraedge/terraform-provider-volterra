@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -3049,7 +3064,7 @@ var APISwaggerJSON string = `{
             "title": "AWS Service VPC and TGW",
             "x-displayname": "AWS Service VPC and TGW",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
-            "x-ves-oneof-field-internet_vip_choice": "[]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
             "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
@@ -3093,6 +3108,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSecurityGroupType",
                     "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
                 },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n VIPs cannot be advertised to the internet directly on this Site",
+                    "title": "Disable VIP Advertisement to Internet on Site",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable VIP Advertisement to Internet on Site"
+                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Node disk size for all node in the F5XC site. Unit is GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
@@ -3103,6 +3124,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "64000"
                     }
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
+                    "title": "Enable VIP Advertisement to Internet on Site",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable VIP Advertisement to Internet on Site"
                 },
                 "existing_tgw": {
                     "description": "Exclusive with [new_tgw]\n Information about existing TGW",
@@ -3404,7 +3431,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_inside_vn\",\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
-            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VnConfiguration",
@@ -3432,18 +3458,6 @@ var APISwaggerJSON string = `{
                     "title": "Member of DC cluster Group via Outside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
-                },
-                "disable_internet_vip": {
-                    "description": "Exclusive with [enable_internet_vip]\n VIPs cannot be advertised to the internet directly on this Site",
-                    "title": "Disable VIP Advertisement to Internet on Site",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable VIP Advertisement to Internet on Site"
-                },
-                "enable_internet_vip": {
-                    "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
-                    "title": "Enable VIP Advertisement to Internet on Site",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable VIP Advertisement to Internet on Site"
                 },
                 "global_network_list": {
                     "description": "Exclusive with [no_global_network]\n List of global network connections",
@@ -3527,7 +3541,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
                     },
-                    "x-displayname": "AWS VPC Attachment Status Type"
+                    "x-displayname": "AWS VPC Attachment Status"
                 }
             }
         },
@@ -3552,10 +3566,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Attachment Deployment Status"
                 },
                 "installed_routes": {
-                    "description": " Routing Options",
-                    "title": "Routing Options",
+                    "description": " Routes",
+                    "title": "Routes",
                     "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
-                    "x-displayname": "Routing Options"
+                    "x-displayname": "Installed Routes"
                 },
                 "state": {
                     "type": "string",
@@ -3565,18 +3579,12 @@ var APISwaggerJSON string = `{
                 },
                 "subnets": {
                     "type": "array",
-                    "description": " Subnets to Route Traffic",
+                    "description": " Network Interfaces created along with the attachment",
                     "title": "Subnets",
                     "items": {
                         "$ref": "#/definitions/cloud_connectSubnetStatusType"
                     },
-                    "x-displayname": "Subnets"
-                },
-                "tags": {
-                    "type": "object",
-                    "description": " Attachment Tags",
-                    "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Network Interfaces"
                 },
                 "tgw_attachment_id": {
                     "type": "string",
@@ -3668,9 +3676,9 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectSubnetStatusType": {
             "type": "object",
-            "description": "Subnet Status Type",
+            "description": "Network Interface Status",
             "title": "SubnetStatusType for AWS VPC Attachment",
-            "x-displayname": "Subnet Status Type",
+            "x-displayname": "Network Interface Status",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.SubnetStatusType",
             "properties": {
                 "availability_zone": {
@@ -5068,8 +5076,8 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Custom Trusted CA List\"\nCustom trusted CA certificates for validating upstream server certificate",
-                    "title": "Custom List"
+                    "description": "x-displayName: \"Custom Root CA Certificate\"\nCustom Root CA Certificate for validating upstream server certificate",
+                    "title": "Custom Root CA Certificate"
                 },
                 "volterra_certificate": {
                     "description": "x-displayName: \"F5XC Signing Certificate\"\nF5XC certificates for generating intermediate certificate for TLS interception.",
@@ -5077,7 +5085,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "volterra_trusted_ca": {
-                    "description": "x-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
+                    "description": "x-displayName: \"F5XC Default Root CA Certificate\"\nF5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/schemaEmpty"
                 }
@@ -5926,6 +5934,69 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsConfigValidationState": {
+            "type": "string",
+            "description": "The state of Site Config Validation\n\n - VALIDATION_STATE_NONE: None\n\nConfig validation state is none\n - VALIDATION_IN_PROGRESS: In Progress\n\nConfig validation state is In Progress\n - VALIDATION_FAILED: Failed\n\nConfig validation state is Failed\n - VALIDATION_SUCCEEDED: Succeeded\n\nConfig validation state is Succeeded",
+            "title": "Config Validation State",
+            "enum": [
+                "VALIDATION_STATE_NONE",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_FAILED",
+                "VALIDATION_SUCCEEDED"
+            ],
+            "default": "VALIDATION_STATE_NONE",
+            "x-displayname": "Site Config Validation State",
+            "x-ves-proto-enum": "ves.io.schema.views.ConfigValidationState"
+        },
+        "viewsCustomDNS": {
+            "type": "object",
+            "description": "Custom DNS is the configured for specify CE site",
+            "title": "Custom DNS",
+            "x-displayname": "Custom DNS",
+            "x-ves-proto-message": "ves.io.schema.views.CustomDNS",
+            "properties": {
+                "inside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "inside_nameserver",
+                    "x-displayname": "DNS Server for Inside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "inside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "inside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "outside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "outside_nameserver",
+                    "x-displayname": "DNS Server for Outside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "outside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "outside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
         "viewsCustomPorts": {
             "type": "object",
             "description": "List of Custom port",
@@ -6333,6 +6404,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsSiteError": {
+            "type": "object",
+            "description": "Site Error",
+            "title": "Site Error",
+            "x-displayname": "Site Error",
+            "x-ves-proto-message": "ves.io.schema.views.SiteError",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": " Error Description \n\nExample: - \"invalid VPC ID\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "invalid VPC ID"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested Action \n\nExample: - \"update VPC ID\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "update VPC ID"
+                }
+            }
+        },
         "viewsSiteStaticRoutesListType": {
             "type": "object",
             "description": "List of static routes",
@@ -6489,11 +6583,17 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Site Co-ordinates"
                 },
+                "custom_dns": {
+                    "description": " custom dns configure to the CE site",
+                    "title": "custom_dns",
+                    "$ref": "#/definitions/viewsCustomDNS",
+                    "x-displayname": "Custom DNS"
+                },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
-                    "title": "Allow access to DNS, SSH services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
+                    "title": "Allow access to DNS, SSH \u0026 WebUI services on Site",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH services on Site"
+                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
@@ -6556,6 +6656,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPrivateConnectConfigType",
                     "x-displayname": "Enable Private Connectivity via CloudLink"
                 },
+                "site_errors": {
+                    "type": "array",
+                    "description": " Errors on site including suggested action\n\nExample: - \"Site Errors\"-",
+                    "title": "site_errors",
+                    "items": {
+                        "$ref": "#/definitions/viewsSiteError"
+                    },
+                    "x-displayname": "Site Errors",
+                    "x-ves-example": "Site Errors"
+                },
                 "site_state": {
                     "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
                     "title": "site_state",
@@ -6598,6 +6708,13 @@ var APISwaggerJSON string = `{
                     "title": "Site Security",
                     "$ref": "#/definitions/aws_tgw_siteSecurityConfigType",
                     "x-displayname": "Site Security"
+                },
+                "validation_state": {
+                    "description": " Validation State of the Site\n\nExample: - \"Validation State\"-",
+                    "title": "validation_state",
+                    "$ref": "#/definitions/viewsConfigValidationState",
+                    "x-displayname": "Validation State",
+                    "x-ves-example": "Validation State"
                 },
                 "vip_params_per_az": {
                     "type": "array",

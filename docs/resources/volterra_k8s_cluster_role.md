@@ -26,12 +26,8 @@ resource "volterra_k8s_cluster_role" "example" {
     policy_rule {
       // One of the arguments from this list "resource_list non_resource_url_list" must be set
 
-      resource_list {
-        api_groups = ["rbac.authorization.k8s.io"]
-
-        resource_instances = ["admin"]
-
-        resource_types = ["role"]
+      non_resource_url_list {
+        urls = ["value"]
 
         verbs = ["get"]
       }
@@ -60,19 +56,23 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`k8s_cluster_role_selector` - (Optional) This role is aggregation of all rules in roles selected by the label expression. See [K8s Cluster Role Selector ](#k8s-cluster-role-selector) below for details.
+`k8s_cluster_role_selector` - (Optional) This role is aggregation of all rules in roles selected by the label expression. See [Rule Choice K8s Cluster Role Selector ](#rule-choice-k8s-cluster-role-selector) below for details.
 
-`policy_rule_list` - (Optional) Policy in terms of rule list.. See [Policy Rule List ](#policy-rule-list) below for details.
+`policy_rule_list` - (Optional) Policy in terms of rule list.. See [Rule Choice Policy Rule List ](#rule-choice-policy-rule-list) below for details.
 
 `yaml` - (Optional) K8s YAML for ClusterRole (`String`).
 
-### K8s Cluster Role Selector
+### Policy Rule List Policy Rule
 
-This role is aggregation of all rules in roles selected by the label expression.
+List of rules for role permissions.
 
-`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
+###### One of the arguments from this list "resource_list, non_resource_url_list" must be set
 
-### Non Resource Url List
+`non_resource_url_list` - (Optional) permissions for URL(s) that do not represent K8s resource. See [Resource Choice Non Resource Url List ](#resource-choice-non-resource-url-list) below for details.
+
+`resource_list` - (Optional) List of resources in terms of api groups/resource types/resource instances and verbs allowed. See [Resource Choice Resource List ](#resource-choice-resource-list) below for details.
+
+### Resource Choice Non Resource Url List
 
 permissions for URL(s) that do not represent K8s resource.
 
@@ -80,21 +80,7 @@ permissions for URL(s) that do not represent K8s resource.
 
 `verbs` - (Required) Allowed list of verbs(operations) on resources. Use VerbAll for all operations (`String`).
 
-### Policy Rule
-
-List of rules for role permissions.
-
-`non_resource_url_list` - (Optional) permissions for URL(s) that do not represent K8s resource. See [Non Resource Url List ](#non-resource-url-list) below for details.
-
-`resource_list` - (Optional) List of resources in terms of api groups/resource types/resource instances and verbs allowed. See [Resource List ](#resource-list) below for details.
-
-### Policy Rule List
-
-Policy in terms of rule list..
-
-`policy_rule` - (Required) List of rules for role permissions. See [Policy Rule ](#policy-rule) below for details.
-
-### Resource List
+### Resource Choice Resource List
 
 List of resources in terms of api groups/resource types/resource instances and verbs allowed.
 
@@ -105,6 +91,18 @@ List of resources in terms of api groups/resource types/resource instances and v
 `resource_types` - (Required) Allowed list of resource types within the api groups. (`String`).
 
 `verbs` - (Required) Allowed list of verbs(operations) on resources. Use * for all operations (`String`).
+
+### Rule Choice K8s Cluster Role Selector
+
+This role is aggregation of all rules in roles selected by the label expression.
+
+`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
+
+### Rule Choice Policy Rule List
+
+Policy in terms of rule list..
+
+`policy_rule` - (Required) List of rules for role permissions. See [Policy Rule List Policy Rule ](#policy-rule-list-policy-rule) below for details.
 
 Attribute Reference
 -------------------

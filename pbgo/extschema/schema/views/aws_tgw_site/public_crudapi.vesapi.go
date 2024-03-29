@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.aws_tgw_site")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.aws_tgw_site.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.aws_tgw_site.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2478,29 +2461,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "aws_tgw_siteActiveServicePoliciesType": {
-            "type": "object",
-            "description": "Active service policies for the east-west  proxy",
-            "title": "Active Service Policies",
-            "x-displayname": "Active Service Policies",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType",
-            "properties": {
-                "service_policies": {
-                    "type": "array",
-                    "description": " A list of references to service_policy objects.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "service_policies",
-                    "maxItems": 32,
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Service Policies",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                }
-            }
-        },
         "aws_tgw_siteCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2658,12 +2618,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/aws_tgw_siteObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -2802,12 +2756,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/aws_tgw_siteObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -2842,33 +2790,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "aws_tgw_siteObject": {
-            "type": "object",
-            "description": "AWS TGW view object",
-            "title": "Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the tenant",
-                    "title": "spec",
-                    "$ref": "#/definitions/aws_tgw_siteSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -2910,19 +2831,19 @@ var APISwaggerJSON string = `{
                 "active_east_west_service_policies": {
                     "description": "Exclusive with [east_west_service_policy_allow_all no_east_west_policy]\n Enable service policy so east-west traffic goes via proxy",
                     "title": "Enable East-West Service Policy",
-                    "$ref": "#/definitions/aws_tgw_siteActiveServicePoliciesType",
+                    "$ref": "#/definitions/viewsaws_tgw_siteActiveServicePoliciesType",
                     "x-displayname": "Enable East-West Service Policy"
                 },
                 "active_enhanced_firewall_policies": {
                     "description": "Exclusive with [active_network_policies no_network_policy]\n Enhanced Firewall Policies active for this site.\n These policies use session-based rules and provide all options available under firewall policies\n with an additional option for service insertion.",
                     "title": "Manage Enhanced Firewall Policy",
-                    "$ref": "#/definitions/network_firewallActiveEnhancedFirewallPoliciesType",
+                    "$ref": "#/definitions/schemanetwork_firewallActiveEnhancedFirewallPoliciesType",
                     "x-displayname": "Active Enhanced Firewall Policies"
                 },
                 "active_forward_proxy_policies": {
                     "description": "Exclusive with [forward_proxy_allow_all no_forward_proxy]\n Enable Forward Proxy for this site and manage policies",
                     "title": "Enable Forward Proxy and Manage Policies",
-                    "$ref": "#/definitions/network_firewallActiveForwardProxyPoliciesType",
+                    "$ref": "#/definitions/schemanetwork_firewallActiveForwardProxyPoliciesType",
                     "x-displayname": "Enable Forward Proxy and Manage Policies"
                 },
                 "active_network_policies": {
@@ -3029,7 +2950,7 @@ var APISwaggerJSON string = `{
             "title": "AWS Service VPC and TGW",
             "x-displayname": "AWS Service VPC and TGW",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
-            "x-ves-oneof-field-internet_vip_choice": "[]",
+            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
             "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
@@ -3073,6 +2994,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsSecurityGroupType",
                     "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
                 },
+                "disable_internet_vip": {
+                    "description": "Exclusive with [enable_internet_vip]\n VIPs cannot be advertised to the internet directly on this Site",
+                    "title": "Disable VIP Advertisement to Internet on Site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable VIP Advertisement to Internet on Site"
+                },
                 "disk_size": {
                     "type": "integer",
                     "description": " Node disk size for all node in the F5XC site. Unit is GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
@@ -3083,6 +3010,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "64000"
                     }
+                },
+                "enable_internet_vip": {
+                    "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
+                    "title": "Enable VIP Advertisement to Internet on Site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable VIP Advertisement to Internet on Site"
                 },
                 "existing_tgw": {
                     "description": "Exclusive with [new_tgw]\n Information about existing TGW",
@@ -3175,18 +3108,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64",
                         "ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$"
                     }
-                }
-            }
-        },
-        "aws_tgw_siteSpecType": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "description": " The specification of Object",
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/viewsaws_tgw_siteGlobalSpecType",
-                    "x-displayname": "Global Spec"
                 }
             }
         },
@@ -3384,7 +3305,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group_inside_vn\",\"dc_cluster_group_outside_vn\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
             "x-ves-oneof-field-inside_static_route_choice": "[\"inside_static_routes\",\"no_inside_static_routes\"]",
-            "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.VnConfiguration",
@@ -3412,18 +3332,6 @@ var APISwaggerJSON string = `{
                     "title": "Member of DC cluster Group via Outside Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Member of DC Cluster Group via Outside Network"
-                },
-                "disable_internet_vip": {
-                    "description": "Exclusive with [enable_internet_vip]\n VIPs cannot be advertised to the internet directly on this Site",
-                    "title": "Disable VIP Advertisement to Internet on Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable VIP Advertisement to Internet on Site"
-                },
-                "enable_internet_vip": {
-                    "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
-                    "title": "Enable VIP Advertisement to Internet on Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable VIP Advertisement to Internet on Site"
                 },
                 "global_network_list": {
                     "description": "Exclusive with [no_global_network]\n List of global network connections",
@@ -3495,7 +3403,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
                     },
-                    "x-displayname": "AWS VPC Attachment Status Type"
+                    "x-displayname": "AWS VPC Attachment Status"
                 }
             }
         },
@@ -3520,10 +3428,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Attachment Deployment Status"
                 },
                 "installed_routes": {
-                    "description": " Routing Options",
-                    "title": "Routing Options",
+                    "description": " Routes",
+                    "title": "Routes",
                     "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
-                    "x-displayname": "Routing Options"
+                    "x-displayname": "Installed Routes"
                 },
                 "state": {
                     "type": "string",
@@ -3533,18 +3441,12 @@ var APISwaggerJSON string = `{
                 },
                 "subnets": {
                     "type": "array",
-                    "description": " Subnets to Route Traffic",
+                    "description": " Network Interfaces created along with the attachment",
                     "title": "Subnets",
                     "items": {
                         "$ref": "#/definitions/cloud_connectSubnetStatusType"
                     },
-                    "x-displayname": "Subnets"
-                },
-                "tags": {
-                    "type": "object",
-                    "description": " Attachment Tags",
-                    "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Network Interfaces"
                 },
                 "tgw_attachment_id": {
                     "type": "string",
@@ -3636,9 +3538,9 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectSubnetStatusType": {
             "type": "object",
-            "description": "Subnet Status Type",
+            "description": "Network Interface Status",
             "title": "SubnetStatusType for AWS VPC Attachment",
-            "x-displayname": "Subnet Status Type",
+            "x-displayname": "Network Interface Status",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.SubnetStatusType",
             "properties": {
                 "availability_zone": {
@@ -3785,58 +3687,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "network_firewallActiveEnhancedFirewallPoliciesType": {
-            "type": "object",
-            "description": "List of Enhanced Firewall Policies\nThese policies use session-based rules and provide all options available under firewall policies\nwith an additional option for service insertion.",
-            "title": "Active Enhanced Firewall Policies Type",
-            "x-displayname": "Active Enhanced Network Policies Type",
-            "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType",
-            "properties": {
-                "enhanced_firewall_policies": {
-                    "type": "array",
-                    "description": " Ordered List of Enhaned Firewall Policy active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "Enhanced Firewall Policy",
-                    "minItems": 1,
-                    "maxItems": 128,
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Enhanced Firewall Policy",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
-                }
-            }
-        },
-        "network_firewallActiveForwardProxyPoliciesType": {
-            "type": "object",
-            "description": "List of Forward Proxy Policies",
-            "title": "Active Forward Proxy Policies Type",
-            "x-displayname": "Active Forward Proxy Policies Type",
-            "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
-            "properties": {
-                "forward_proxy_policies": {
-                    "type": "array",
-                    "description": " List of Forward Proxy Policies\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
-                    "title": "Forward Proxy Policies",
-                    "minItems": 1,
-                    "maxItems": 128,
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "Forward Proxy Policies",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "128",
-                        "ves.io.schema.rules.repeated.min_items": "1"
-                    }
                 }
             }
         },
@@ -4467,75 +4317,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -4909,149 +4690,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
-                }
-            }
-        },
         "schemaTlsCertificateType": {
             "type": "object",
             "description": "x-displayName: \"TLS Certificate\"\nHandle to fetch certificate and key",
@@ -5148,8 +4786,8 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "x-displayName: \"Custom Trusted CA List\"\nCustom trusted CA certificates for validating upstream server certificate",
-                    "title": "Custom List"
+                    "description": "x-displayName: \"Custom Root CA Certificate\"\nCustom Root CA Certificate for validating upstream server certificate",
+                    "title": "Custom Root CA Certificate"
                 },
                 "volterra_certificate": {
                     "description": "x-displayName: \"F5XC Signing Certificate\"\nF5XC certificates for generating intermediate certificate for TLS interception.",
@@ -5157,7 +4795,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "volterra_trusted_ca": {
-                    "description": "x-displayName: \"Default Trusted CA List\"\nDefault volterra trusted CA list for validating upstream server certificate",
+                    "description": "x-displayName: \"F5XC Default Root CA Certificate\"\nF5XC Root CA Certificate for validating upstream server certificate",
                     "title": "F5XC List",
                     "$ref": "#/definitions/ioschemaEmpty"
                 }
@@ -5265,6 +4903,58 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Name\"\nx-required\nx-example: \"ChargeBack-API-Key\"\nName of the secret.",
                     "title": "Name"
+                }
+            }
+        },
+        "schemanetwork_firewallActiveEnhancedFirewallPoliciesType": {
+            "type": "object",
+            "description": "List of Enhanced Firewall Policies\nThese policies use session-based rules and provide all options available under firewall policies\nwith an additional option for service insertion.",
+            "title": "Active Enhanced Firewall Policies Type",
+            "x-displayname": "Active Enhanced Network Policies Type",
+            "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveEnhancedFirewallPoliciesType",
+            "properties": {
+                "enhanced_firewall_policies": {
+                    "type": "array",
+                    "description": " Ordered List of Enhaned Firewall Policy active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "Enhanced Firewall Policy",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Enhanced Firewall Policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
+                }
+            }
+        },
+        "schemanetwork_firewallActiveForwardProxyPoliciesType": {
+            "type": "object",
+            "description": "List of Forward Proxy Policies",
+            "title": "Active Forward Proxy Policies Type",
+            "x-displayname": "Active Forward Proxy Policies Type",
+            "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
+            "properties": {
+                "forward_proxy_policies": {
+                    "type": "array",
+                    "description": " List of Forward Proxy Policies\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "title": "Forward Proxy Policies",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Forward Proxy Policies",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1"
+                    }
                 }
             }
         },
@@ -6006,6 +5696,69 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsConfigValidationState": {
+            "type": "string",
+            "description": "The state of Site Config Validation\n\n - VALIDATION_STATE_NONE: None\n\nConfig validation state is none\n - VALIDATION_IN_PROGRESS: In Progress\n\nConfig validation state is In Progress\n - VALIDATION_FAILED: Failed\n\nConfig validation state is Failed\n - VALIDATION_SUCCEEDED: Succeeded\n\nConfig validation state is Succeeded",
+            "title": "Config Validation State",
+            "enum": [
+                "VALIDATION_STATE_NONE",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_FAILED",
+                "VALIDATION_SUCCEEDED"
+            ],
+            "default": "VALIDATION_STATE_NONE",
+            "x-displayname": "Site Config Validation State",
+            "x-ves-proto-enum": "ves.io.schema.views.ConfigValidationState"
+        },
+        "viewsCustomDNS": {
+            "type": "object",
+            "description": "Custom DNS is the configured for specify CE site",
+            "title": "Custom DNS",
+            "x-displayname": "Custom DNS",
+            "x-ves-proto-message": "ves.io.schema.views.CustomDNS",
+            "properties": {
+                "inside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "inside_nameserver",
+                    "x-displayname": "DNS Server for Inside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "inside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "inside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "outside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "outside_nameserver",
+                    "x-displayname": "DNS Server for Outside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "outside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "outside_nameserver_v6",
+                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
         "viewsCustomPorts": {
             "type": "object",
             "description": "List of Custom port",
@@ -6413,6 +6166,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsSiteError": {
+            "type": "object",
+            "description": "Site Error",
+            "title": "Site Error",
+            "x-displayname": "Site Error",
+            "x-ves-proto-message": "ves.io.schema.views.SiteError",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": " Error Description \n\nExample: - \"invalid VPC ID\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "invalid VPC ID"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested Action \n\nExample: - \"update VPC ID\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "update VPC ID"
+                }
+            }
+        },
         "viewsSiteStaticRoutesListType": {
             "type": "object",
             "description": "List of static routes",
@@ -6531,6 +6307,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsaws_tgw_siteActiveServicePoliciesType": {
+            "type": "object",
+            "description": "Active service policies for the east-west  proxy",
+            "title": "Active Service Policies",
+            "x-displayname": "Active Service Policies",
+            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.ActiveServicePoliciesType",
+            "properties": {
+                "service_policies": {
+                    "type": "array",
+                    "description": " A list of references to service_policy objects.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "service_policies",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Service Policies",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "viewsaws_tgw_siteCreateSpecType": {
             "type": "object",
             "description": "Shape of the AWS TGW site specification",
@@ -6565,10 +6364,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Site Co-ordinates"
                 },
+                "custom_dns": {
+                    "description": " custom dns configure to the CE site",
+                    "title": "custom_dns",
+                    "$ref": "#/definitions/viewsCustomDNS",
+                    "x-displayname": "Custom DNS"
+                },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH services on Site"
+                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
@@ -6679,10 +6484,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Site Co-ordinates"
                 },
+                "custom_dns": {
+                    "description": " custom dns configure to the CE site",
+                    "title": "custom_dns",
+                    "$ref": "#/definitions/viewsCustomDNS",
+                    "x-displayname": "Custom DNS"
+                },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH services on Site"
+                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
@@ -6730,6 +6541,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPrivateConnectConfigType",
                     "x-displayname": "Enable Private Connectivity via CloudLink"
                 },
+                "site_errors": {
+                    "type": "array",
+                    "description": " Errors on site including suggested action\n\nExample: - \"Site Errors\"-",
+                    "items": {
+                        "$ref": "#/definitions/viewsSiteError"
+                    },
+                    "x-displayname": "Site Errors",
+                    "x-ves-example": "Site Errors"
+                },
                 "site_state": {
                     "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
                     "title": "site_state",
@@ -6763,6 +6583,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/aws_tgw_siteSecurityConfigType",
                     "x-displayname": "Site Security"
                 },
+                "validation_state": {
+                    "description": " Validation State of the Site\n\nExample: - \"Validation State\"-",
+                    "$ref": "#/definitions/viewsConfigValidationState",
+                    "x-displayname": "Validation State",
+                    "x-ves-example": "Validation State"
+                },
                 "vip_params_per_az": {
                     "type": "array",
                     "description": " VIP Parameters Per AZ.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,2,3\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -6782,181 +6608,6 @@ var APISwaggerJSON string = `{
                 },
                 "vpc_attachments": {
                     "description": " Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
-                    "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs"
-                }
-            }
-        },
-        "viewsaws_tgw_siteGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of the AWS TGW site specification",
-            "title": "GlobalSpecType",
-            "x-displayname": "Global Specification",
-            "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
-            "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
-            "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
-            "x-ves-proto-message": "ves.io.schema.views.aws_tgw_site.GlobalSpecType",
-            "properties": {
-                "aws_parameters": {
-                    "description": " Section to provide information related to AWS credentials and AWS resources orchestrated and managed by F5XC.\n Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "AWS Credentials and Resources",
-                    "$ref": "#/definitions/aws_tgw_siteServicesVPCType",
-                    "x-displayname": "AWS Credentials and Resources",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "block_all_services": {
-                    "description": "Exclusive with [blocked_services default_blocked_services]\n Block DNS, SSH \u0026 WebUI services on Site",
-                    "title": "Block DNS, SSH \u0026 WebUI services on Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": " Block DNS, SSH \u0026 WebUI services on Site"
-                },
-                "blocked_services": {
-                    "description": "Exclusive with [block_all_services default_blocked_services]\n Use custom blocked services configuration, to list the services which need to be blocked",
-                    "title": "Custom Blocked Services Configuration",
-                    "$ref": "#/definitions/fleetBlockedServicesListType",
-                    "x-displayname": "Custom Blocked Services Configuration"
-                },
-                "coordinates": {
-                    "description": " Site longitude and latitude co-ordinates",
-                    "title": "coordinates",
-                    "$ref": "#/definitions/siteCoordinates",
-                    "x-displayname": "Site Co-ordinates"
-                },
-                "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
-                    "title": "Allow access to DNS, SSH services on Site",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH services on Site"
-                },
-                "direct_connect_disabled": {
-                    "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",
-                    "title": "Disable Private Connectivity",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Private Connectivity"
-                },
-                "direct_connect_enabled": {
-                    "description": "Exclusive with [direct_connect_disabled private_connectivity]\n Direct Connect Connection to Site is enabled(Legacy)",
-                    "title": "Enable Private Connectivity via Direct Connect (Legacy))",
-                    "$ref": "#/definitions/viewsDirectConnectConfigType",
-                    "x-displayname": "Enable Private Connectivity via Direct Connect (Legacy))"
-                },
-                "direct_connect_info": {
-                    "description": " Direct Connect information obtained after creating the site and TGW",
-                    "title": "Direct Connect information",
-                    "$ref": "#/definitions/viewsDirectConnectInfo",
-                    "x-displayname": "Direct Connect Information"
-                },
-                "error_description": {
-                    "type": "string",
-                    "description": " Description of error on site\n\nExample: - \"value\"-",
-                    "title": "error_description",
-                    "x-displayname": "Error Description",
-                    "x-ves-example": "value"
-                },
-                "log_receiver": {
-                    "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
-                    "title": "Disable Logs Streaming",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable Logs Streaming"
-                },
-                "logs_streaming_disabled": {
-                    "description": "Exclusive with [log_receiver]\n Logs Streaming is disabled",
-                    "title": "Disable Logs Receiver",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Logs Streaming"
-                },
-                "offline_survivability_mode": {
-                    "description": " Enable/Disable offline survivability mode",
-                    "title": "Offline Survivability Mode",
-                    "$ref": "#/definitions/viewsOfflineSurvivabilityModeType",
-                    "x-displayname": "Offline Survivability Mode"
-                },
-                "os": {
-                    "description": " Operating System Details",
-                    "title": "Operating System",
-                    "$ref": "#/definitions/viewsOperatingSystemType",
-                    "x-displayname": "Operating System"
-                },
-                "performance_enhancement_mode": {
-                    "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
-                    "title": "Performance Enhancement Choice",
-                    "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
-                    "x-displayname": "Performance Enhancement Mode"
-                },
-                "private_connectivity": {
-                    "description": "Exclusive with [direct_connect_disabled direct_connect_enabled]\n Enable Private Connectivity to Site via CloudLink",
-                    "title": "Enable Private Connectivity via CloudLink",
-                    "$ref": "#/definitions/viewsPrivateConnectConfigType",
-                    "x-displayname": "Enable Private Connectivity via CloudLink"
-                },
-                "site_state": {
-                    "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
-                    "title": "site_state",
-                    "$ref": "#/definitions/siteSiteState",
-                    "x-displayname": "Site State"
-                },
-                "suggested_action": {
-                    "type": "string",
-                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
-                    "title": "suggested_action",
-                    "x-displayname": "Suggested Action",
-                    "x-ves-example": "value"
-                },
-                "sw": {
-                    "description": " F5XC Software Details",
-                    "title": "F5XC Software",
-                    "$ref": "#/definitions/viewsVolterraSoftwareType",
-                    "x-displayname": "F5XC Software"
-                },
-                "tags": {
-                    "type": "object",
-                    "description": " AWS Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in AWS console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
-                    "title": "AWS Tags",
-                    "x-displayname": "AWS Tags",
-                    "x-ves-example": "dev: staging",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "127",
-                        "ves.io.schema.rules.map.max_pairs": "40",
-                        "ves.io.schema.rules.map.values.string.max_len": "255"
-                    }
-                },
-                "tgw_info": {
-                    "description": " TGW Site information obtained after creating the site and TGW",
-                    "title": "TGW information",
-                    "$ref": "#/definitions/aws_tgw_siteAWSTGWInfoConfigType",
-                    "x-displayname": "TGW Site Information"
-                },
-                "tgw_security": {
-                    "description": " Security Configuration for transit gateway",
-                    "title": "Site Security",
-                    "$ref": "#/definitions/aws_tgw_siteSecurityConfigType",
-                    "x-displayname": "Site Security"
-                },
-                "vip_params_per_az": {
-                    "type": "array",
-                    "description": " VIP Parameters Per AZ.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,2,3\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "VIP Params Per Az",
-                    "items": {
-                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
-                    },
-                    "x-displayname": "VIP Params Per AZ",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "0,1,2,3",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "vn_config": {
-                    "description": " Site Network related details will be configured",
-                    "title": "Site Networking",
-                    "$ref": "#/definitions/aws_tgw_siteVnConfiguration",
-                    "x-displayname": "Site Networking"
-                },
-                "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the AWS TGW Site.\n Note that this choice would be deprecated in the near release.",
-                    "title": "Spoke VPCs",
                     "$ref": "#/definitions/aws_tgw_siteVPCAttachmentListType",
                     "x-displayname": "Spoke VPCs"
                 }
@@ -6996,10 +6647,16 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/siteCoordinates",
                     "x-displayname": "Site Co-ordinates"
                 },
+                "custom_dns": {
+                    "description": " custom dns configure to the CE site",
+                    "title": "custom_dns",
+                    "$ref": "#/definitions/viewsCustomDNS",
+                    "x-displayname": "Custom DNS"
+                },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH services on Site"
+                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled private_connectivity]\n Disable Private Connectivity to Site",

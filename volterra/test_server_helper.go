@@ -27,6 +27,7 @@ import (
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
+	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_aws_tgw_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
 	ves_io_schema_aws_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 	ves_io_schema_azure_vnet_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
@@ -202,6 +203,10 @@ func (n *nsCustomAPIServer) EvaluateAPIAccess(context.Context,
 	return &ves_io_schema_ns.EvaluateAPIAccessResp{}, nil
 }
 
+func (n *nsCustomAPIServer) EvaluateBatchAPIAccess(context.Context, *ves_io_schema_ns.EvaluateBatchAPIAccessReq) (*ves_io_schema_ns.EvaluateBatchAPIAccessResp, error) {
+	return &ves_io_schema_ns.EvaluateBatchAPIAccessResp{}, nil
+}
+
 func (n *nsCustomAPIServer) SuggestValues(context.Context,
 	*ves_io_schema_ns.SuggestValuesReq) (*ves_io_schema_ns.SuggestValuesResp, error) {
 	return &ves_io_schema_ns.SuggestValuesResp{}, nil
@@ -243,6 +248,10 @@ func (t *vpcCustomAPIServer) SetCloudSiteInfo(context.Context,
 
 }
 
+func (t *vpcCustomAPIServer) ValidateConfig(context.Context, *views.ValidateConfigRequest) (*views.ValidateConfigResponse, error) {
+	return &views.ValidateConfigResponse{}, nil
+}
+
 var _ ves_io_schema_aws_vpc_site.CustomAPIServer = &vpcCustomAPIServer{}
 
 // ves.io.schema.views.azure_vnet_site.CustomAPI handling - start
@@ -264,6 +273,10 @@ func (t *vnetCustomAPIServer) SetCloudSiteInfo(context.Context,
 	*ves_io_schema_azure_vnet_site.SetCloudSiteInfoRequest) (*ves_io_schema_azure_vnet_site.SetCloudSiteInfoResponse, error) {
 	return &ves_io_schema_azure_vnet_site.SetCloudSiteInfoResponse{}, nil
 
+}
+
+func (t *vnetCustomAPIServer) ValidateConfig(context.Context, *views.ValidateConfigRequest) (*views.ValidateConfigResponse, error) {
+	return &views.ValidateConfigResponse{}, nil
 }
 
 var _ ves_io_schema_azure_vnet_site.CustomAPIServer = &vnetCustomAPIServer{}
@@ -314,6 +327,10 @@ func (t *tgwCustomAPIServer) SetTGWInfo(context.Context,
 func (t *tgwCustomAPIServer) SetVIPInfo(context.Context,
 	*ves_io_schema_aws_tgw_site.SetVIPInfoRequest) (*ves_io_schema_aws_tgw_site.SetVIPInfoResponse, error) {
 	return &ves_io_schema_aws_tgw_site.SetVIPInfoResponse{}, nil
+}
+
+func (t *tgwCustomAPIServer) ValidateConfig(context.Context, *views.ValidateConfigRequest) (*views.ValidateConfigResponse, error) {
+	return &views.ValidateConfigResponse{}, nil
 }
 
 var _ ves_io_schema_aws_tgw_site.CustomAPIServer = &tgwCustomAPIServer{}
@@ -455,6 +472,10 @@ func (t *gcpVpcCustomAPIServer) SetCloudSiteInfo(context.Context,
 	*ves_io_schema_gcp_vpc_site.SetCloudSiteInfoRequest) (*ves_io_schema_gcp_vpc_site.SetCloudSiteInfoResponse, error) {
 	return &ves_io_schema_gcp_vpc_site.SetCloudSiteInfoResponse{}, nil
 
+}
+
+func (t *gcpVpcCustomAPIServer) ValidateConfig(context.Context, *views.ValidateConfigRequest) (*views.ValidateConfigResponse, error) {
+	return &views.ValidateConfigResponse{}, nil
 }
 
 var _ ves_io_schema_gcp_vpc_site.CustomAPIServer = &gcpVpcCustomAPIServer{}

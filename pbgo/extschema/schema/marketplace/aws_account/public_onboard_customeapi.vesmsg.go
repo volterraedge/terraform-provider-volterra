@@ -13,6 +13,9 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_signup "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/signup"
 )
 
 var (
@@ -21,6 +24,286 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSAccountSignupRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSAccountSignupRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSAccountSignupRequest) DeepCopy() *AWSAccountSignupRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSAccountSignupRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSAccountSignupRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSAccountSignupRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSAccountSignupRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSAccountSignupRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSAccountSignupRequest) CompanyDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for company_details")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_signup.CompanyMetaValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAccountSignupRequest) UserDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for user_details")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_signup.UserMetaValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAccountSignupRequest) AccountDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for account_details")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_signup.AccountMetaValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAWSAccountSignupRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSAccountSignupRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSAccountSignupRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["account_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("account_details"))
+		if err := fv(ctx, m.GetAccountDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["company_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("company_details"))
+		if err := fv(ctx, m.GetCompanyDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["crm_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_details"))
+		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_details"))
+		if err := fv(ctx, m.GetUserDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSAccountSignupRequestValidator = func() *ValidateAWSAccountSignupRequest {
+	v := &ValidateAWSAccountSignupRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCompanyDetails := v.CompanyDetailsValidationRuleHandler
+	rulesCompanyDetails := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCompanyDetails(rulesCompanyDetails)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAccountSignupRequest.company_details: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["company_details"] = vFn
+
+	vrhUserDetails := v.UserDetailsValidationRuleHandler
+	rulesUserDetails := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhUserDetails(rulesUserDetails)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAccountSignupRequest.user_details: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_details"] = vFn
+
+	vrhAccountDetails := v.AccountDetailsValidationRuleHandler
+	rulesAccountDetails := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAccountDetails(rulesAccountDetails)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSAccountSignupRequest.account_details: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["account_details"] = vFn
+
+	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
+
+	return v
+}()
+
+func AWSAccountSignupRequestValidator() db.Validator {
+	return DefaultAWSAccountSignupRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AWSAccountSignupResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSAccountSignupResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSAccountSignupResponse) DeepCopy() *AWSAccountSignupResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSAccountSignupResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSAccountSignupResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSAccountSignupResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSAccountSignupResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSAccountSignupResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSAccountSignupResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSAccountSignupResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSAccountSignupResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSAccountSignupResponseValidator = func() *ValidateAWSAccountSignupResponse {
+	v := &ValidateAWSAccountSignupResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSAccountSignupResponseValidator() db.Validator {
+	return DefaultAWSAccountSignupResponseValidator
+}
 
 // augmented methods on protoc/std generated struct
 

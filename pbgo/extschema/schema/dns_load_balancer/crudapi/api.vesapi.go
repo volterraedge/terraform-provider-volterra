@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_load_balancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_load_balancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_load_balancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_load_balancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.dns_load_balancer.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dns_load_balancer.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2820,73 +2835,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "dns_load_balancerGlobalSpecType": {
-            "type": "object",
-            "description": "Desired state of DNS Load Balancer Record",
-            "title": "DNS Load Balancer Record",
-            "x-displayname": "DNS Load Balancer Record",
-            "x-ves-displayorder": "2,3,4,6",
-            "x-ves-proto-message": "ves.io.schema.dns_load_balancer.GlobalSpecType",
-            "properties": {
-                "dns_zones": {
-                    "type": "array",
-                    "description": " a list of DNS Zones associated with this load balancer",
-                    "title": "backref_objs",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "DNS Zones"
-                },
-                "fallback_pool": {
-                    "description": " Fallback Pool to be used for load balancing if none of the Load Balancing rules match",
-                    "title": "fallback pool",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Fallback Pool"
-                },
-                "record_type": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Resource Record Type",
-                    "$ref": "#/definitions/dns_load_balancerResourceRecordType",
-                    "x-displayname": "Record Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "response_cache": {
-                    "description": " Response Cache Parameters",
-                    "title": "Response Cache Parameters",
-                    "$ref": "#/definitions/dns_load_balancerResponseCache",
-                    "x-displayname": "Response Cache"
-                },
-                "rule_list": {
-                    "description": " Load Balancing Rules\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Rule List",
-                    "$ref": "#/definitions/dns_load_balancerLoadBalancingRuleList",
-                    "x-displayname": "Load Balancing Rule List",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
         "dns_load_balancerLoadBalancingRule": {
             "type": "object",
             "title": "DNS Load Balancing Rule",
             "x-displayname": "Load Balancing Rule",
             "x-ves-oneof-field-action_choice": "[\"pool\"]",
-            "x-ves-oneof-field-geo_location_choice": "[\"geo_location_label_selector\",\"geo_location_set\"]",
+            "x-ves-oneof-field-client_choice": "[\"asn_list\",\"geo_location_label_selector\",\"geo_location_set\"]",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.LoadBalancingRule",
             "properties": {
+                "asn_list": {
+                    "description": "Exclusive with [geo_location_label_selector geo_location_set]\n List of 4-byte ASN values.\n The rule evaluates to true if the origin ASN is present in the ASN list.",
+                    "title": "asn list",
+                    "$ref": "#/definitions/policyAsnMatchList",
+                    "x-displayname": "ASN List"
+                },
                 "geo_location_label_selector": {
-                    "description": "Exclusive with [geo_location_set]\n A label selector that decsribes the expected set of geo-geo_locations for the clients. The selected geo_locations are matched\n with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.",
+                    "description": "Exclusive with [asn_list geo_location_set]\n A label selector that decsribes the expected set of geo-geo_locations for the clients. The selected geo_locations are matched\n with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.",
                     "title": "geo_location label selector",
                     "$ref": "#/definitions/schemaLabelSelectorType",
                     "x-displayname": "Geo Locations by label selector"
                 },
                 "geo_location_set": {
-                    "description": "Exclusive with [geo_location_label_selector]\n Select the pre-defined geo location set. The selected locations in the geo location set are matched\n with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.",
+                    "description": "Exclusive with [asn_list geo_location_label_selector]\n Select the pre-defined geo location set. The selected locations in the geo location set are matched\n with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.",
                     "title": "geo_location selector",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Geo Location Set selector"
@@ -3033,7 +3003,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/dns_load_balancerGlobalSpecType",
+                    "$ref": "#/definitions/schemadns_load_balancerGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -3124,6 +3094,50 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
+        "policyAsnMatchList": {
+            "type": "object",
+            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.",
+            "title": "Asn Match List",
+            "x-displayname": "ASN Match List",
+            "x-ves-proto-message": "ves.io.schema.policy.AsnMatchList",
+            "properties": {
+                "as_numbers": {
+                    "type": "array",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "as numbers",
+                    "minItems": 1,
+                    "maxItems": 16,
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "AS Numbers",
+                    "x-ves-example": "[713, 7932, 847325, 4683, 15269, 1000001]",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "policyAsnMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"ASN Matcher\"\nMatch any AS number contained in the list of bgp_asn_sets.",
+            "title": "asn matcher type",
+            "properties": {
+                "asn_sets": {
+                    "type": "array",
+                    "description": "x-displayName: \"BGP ASN Sets\"\nx-required\nA list of references to bgp_asn_set objects.",
+                    "title": "asn_sets",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
                 }
             }
         },
@@ -3656,6 +3670,57 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
+                }
+            }
+        },
+        "schemadns_load_balancerGlobalSpecType": {
+            "type": "object",
+            "description": "Desired state of DNS Load Balancer Record",
+            "title": "DNS Load Balancer Record",
+            "x-displayname": "DNS Load Balancer Record",
+            "x-ves-displayorder": "2,3,4,6",
+            "x-ves-proto-message": "ves.io.schema.dns_load_balancer.GlobalSpecType",
+            "properties": {
+                "dns_zones": {
+                    "type": "array",
+                    "description": " a list of DNS Zones associated with this load balancer",
+                    "title": "backref_objs",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "DNS Zones"
+                },
+                "fallback_pool": {
+                    "description": " Fallback Pool to be used for load balancing if none of the Load Balancing rules match",
+                    "title": "fallback pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Fallback Pool"
+                },
+                "record_type": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Resource Record Type",
+                    "$ref": "#/definitions/dns_load_balancerResourceRecordType",
+                    "x-displayname": "Record Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "response_cache": {
+                    "description": " Response Cache Parameters",
+                    "title": "Response Cache Parameters",
+                    "$ref": "#/definitions/dns_load_balancerResponseCache",
+                    "x-displayname": "Response Cache"
+                },
+                "rule_list": {
+                    "description": " Load Balancing Rules\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Rule List",
+                    "$ref": "#/definitions/dns_load_balancerLoadBalancingRuleList",
+                    "x-displayname": "Load Balancing Rule List",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

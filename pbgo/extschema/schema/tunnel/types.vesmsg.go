@@ -1153,6 +1153,7 @@ func (m *LocalIpAddressSelector) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetType().(type) {
 	case *LocalIpAddressSelector_Intf:
+
 		drInfos, err := m.GetIntf().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIntf().GetDRefInfo() FAILED")

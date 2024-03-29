@@ -309,11 +309,11 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) GenerateAgentCert(ctx context.Context, in *GenerateAgentCertRequest, opts ...grpc.CallOption) (*GenerateAgentCertResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nginx.nms.agent_certs.CustomAPI.GenerateAgentCert", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nginx.nms.agent_certs.CustomAPI.GenerateAgentCert")
 	return c.CustomAPIServer.GenerateAgentCert(ctx, in)
 }
 func (c *customAPIInprocClient) RevokeAgentCert(ctx context.Context, in *RevokeAgentCertRequest, opts ...grpc.CallOption) (*RevokeAgentCertResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.nginx.nms.agent_certs.CustomAPI.RevokeAgentCert", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nginx.nms.agent_certs.CustomAPI.RevokeAgentCert")
 	return c.CustomAPIServer.RevokeAgentCert(ctx, in)
 }
 

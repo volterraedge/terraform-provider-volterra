@@ -406,15 +406,15 @@ type customPrivateAPIInprocClient struct {
 }
 
 func (c *customPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *PrivateCascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomPrivateAPI.CascadeDelete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomPrivateAPI.CascadeDelete")
 	return c.CustomPrivateAPIServer.CascadeDelete(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) ListByNotificationPreferences(ctx context.Context, in *ListByNotifPrefRequest, opts ...grpc.CallOption) (*ListByNotifPrefResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomPrivateAPI.ListByNotificationPreferences", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomPrivateAPI.ListByNotificationPreferences")
 	return c.CustomPrivateAPIServer.ListByNotificationPreferences(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) UpdateLastLogin(ctx context.Context, in *LastLoginUpdateRequest, opts ...grpc.CallOption) (*LastLoginUpdateResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin")
 	return c.CustomPrivateAPIServer.UpdateLastLogin(ctx, in)
 }
 

@@ -269,13 +269,21 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 					Schema: map[string]*schema.Schema{
 
 						"bgp_peer_address": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"bgp_peer_address_v6": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"bgp_router_id": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"active_forward_proxy_policies": {
@@ -415,83 +423,96 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 												"disable_forward_proxy": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"enable_forward_proxy": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"connection_timeout": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"max_connect_attempts": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"no_interception": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"tls_intercept": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"enable_for_all_domains": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"policy": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"interception_rules": {
 
-																						Type:     schema.TypeList,
-																						Required: true,
+																						Type:       schema.TypeList,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"domain_match": {
 
-																									Type:     schema.TypeSet,
-																									Required: true,
+																									Type:       schema.TypeSet,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"exact_value": {
 
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"regex_value": {
 
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"suffix_value": {
 
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -499,14 +520,16 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																								"disable_interception": {
 
-																									Type:     schema.TypeBool,
-																									Optional: true,
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 
 																								"enable_interception": {
 
-																									Type:     schema.TypeBool,
-																									Optional: true,
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -517,25 +540,29 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"custom_certificate": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"certificate_url": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"description": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"custom_hash_algorithms": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
@@ -543,7 +570,8 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																									Type: schema.TypeList,
 
-																									Required: true,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Schema{
 																										Type: schema.TypeString,
 																									},
@@ -554,8 +582,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"disable_ocsp_stapling": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{},
 																						},
@@ -563,8 +592,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"use_system_defaults": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{},
 																						},
@@ -572,61 +602,71 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"private_key": {
 
-																						Type:     schema.TypeSet,
-																						Required: true,
+																						Type:       schema.TypeSet,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"blindfold_secret_info_internal": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"decryption_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"location": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"store_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
 																								},
 
 																								"secret_encoding_type": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 
 																								"blindfold_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"decryption_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"location": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"store_provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -634,19 +674,22 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																								"clear_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"provider": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"url": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -654,34 +697,40 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																								"vault_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"key": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"location": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"provider": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"secret_encoding": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"version": {
-																												Type:     schema.TypeInt,
-																												Optional: true,
+																												Type:       schema.TypeInt,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -689,14 +738,16 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																								"wingman_secret_info": {
 
-																									Type:     schema.TypeSet,
-																									Optional: true,
+																									Type:       schema.TypeSet,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"name": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -710,20 +761,23 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"volterra_certificate": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"trusted_ca_url": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"volterra_trusted_ca": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -733,7 +787,8 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeInt,
 																},
@@ -743,7 +798,8 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																Type: schema.TypeList,
 
-																Optional: true,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Schema{
 																	Type: schema.TypeString,
 																},
@@ -962,22 +1018,26 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																					"network_prefix_allocator": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"namespace": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"tenant": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1001,8 +1061,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																								},
 
 																								"exclude": {
-																									Type:     schema.TypeBool,
-																									Optional: true,
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 
 																								"start_ip": {
@@ -1017,8 +1078,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																		},
 
 																		"dhcp_option82_tag": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"fixed_ip_map": {
@@ -1093,8 +1155,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																											},
 
 																											"dns_server": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"ip_address": {
@@ -1113,39 +1176,46 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"fleet_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"default_gw": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"network_prefix_allocator": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"namespace": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"tenant": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1167,8 +1237,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
@@ -1235,22 +1306,26 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																											"network_prefix_allocator": {
 
-																												Type:     schema.TypeSet,
-																												Optional: true,
+																												Type:       schema.TypeSet,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																												Elem: &schema.Resource{
 																													Schema: map[string]*schema.Schema{
 
 																														"name": {
-																															Type:     schema.TypeString,
-																															Optional: true,
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 																														"namespace": {
-																															Type:     schema.TypeString,
-																															Optional: true,
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 																														"tenant": {
-																															Type:     schema.TypeString,
-																															Optional: true,
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 																													},
 																												},
@@ -1269,8 +1344,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																														},
 
 																														"exclude": {
-																															Type:     schema.TypeBool,
-																															Optional: true,
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -1426,8 +1502,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																											},
 
 																											"dns_server": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"ip_address": {
@@ -1446,39 +1523,46 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"fleet_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"default_gw": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"network_prefix_allocator": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"namespace": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"tenant": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1500,8 +1584,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
@@ -1537,22 +1622,26 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"inside_network": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1560,31 +1649,9 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"ip_fabric_network": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
-															},
-
-															"segment_network": {
-
-																Type:     schema.TypeSet,
-																Optional: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"site_local_inside_network": {
@@ -1601,22 +1668,26 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"srv6_network": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1674,115 +1745,134 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 												"loopback_interface": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"dhcp_client": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"dhcp_server": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"dhcp_networks": {
 
-																			Type:     schema.TypeList,
-																			Required: true,
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"dns_address": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"same_as_dgw": {
 
-																						Type:     schema.TypeBool,
-																						Optional: true,
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"dgw_address": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"first_address": {
 
-																						Type:     schema.TypeBool,
-																						Optional: true,
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"last_address": {
 
-																						Type:     schema.TypeBool,
-																						Optional: true,
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"network_prefix": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"network_prefix_allocator": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"namespace": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"tenant": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
 																					},
 
 																					"pool_settings": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"pools": {
 
-																						Type:     schema.TypeList,
-																						Optional: true,
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"end_ip": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 
 																								"exclude": {
-																									Type:     schema.TypeBool,
-																									Optional: true,
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 
 																								"start_ip": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1792,37 +1882,43 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																		},
 
 																		"dhcp_option82_tag": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"fixed_ip_map": {
-																			Type:     schema.TypeMap,
-																			Optional: true,
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"automatic_from_end": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"automatic_from_start": {
 
-																			Type:     schema.TypeBool,
-																			Optional: true,
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"interface_ip_map": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"interface_ip_map": {
-																						Type:     schema.TypeMap,
-																						Optional: true,
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -1833,48 +1929,56 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 															"static_ip": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"cluster_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"interface_ip_map": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Required: true,
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"value": {
-																									Type:     schema.TypeSet,
-																									Required: true,
+																									Type:       schema.TypeSet,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"default_gw": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"dns_server": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"ip_address": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -1888,39 +1992,46 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"fleet_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"default_gw": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"network_prefix_allocator": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"namespace": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"tenant": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1931,24 +2042,28 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"node_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"default_gw": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -1958,60 +2073,70 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 															},
 
 															"device": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"no_ipv6_address": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"static_ipv6_address": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"cluster_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"interface_ip_map": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Required: true,
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"value": {
-																									Type:     schema.TypeSet,
-																									Required: true,
+																									Type:       schema.TypeSet,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
 																											"default_gw": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"dns_server": {
-																												Type:     schema.TypeString,
-																												Optional: true,
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 
 																											"ip_address": {
-																												Type:     schema.TypeString,
-																												Required: true,
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -2025,39 +2150,46 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"fleet_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"default_gw": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"network_prefix_allocator": {
 
-																						Type:     schema.TypeSet,
-																						Optional: true,
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
 																								"name": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"namespace": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																								"tenant": {
-																									Type:     schema.TypeString,
-																									Optional: true,
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -2068,24 +2200,28 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 																		"node_static_ip": {
 
-																			Type:     schema.TypeSet,
-																			Optional: true,
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"default_gw": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"dns_server": {
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
-																						Type:     schema.TypeString,
-																						Required: true,
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -2095,38 +2231,44 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 															},
 
 															"mtu": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"ip_fabric_network": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"site_local_inside_network": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"site_local_network": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"cluster": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"node": {
 
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2271,22 +2413,26 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 									"dc_cluster_group_interface": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2526,22 +2672,26 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 
 									"dc_cluster_group_interface": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3239,6 +3389,12 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 			}
 
+			if v, ok := cs["bgp_peer_address_v6"]; ok && !isIntfNil(v) {
+
+				networkCfgChoiceInt.CustomNetworkConfig.BgpPeerAddressV6 = v.(string)
+
+			}
+
 			if v, ok := cs["bgp_router_id"]; ok && !isIntfNil(v) {
 
 				networkCfgChoiceInt.CustomNetworkConfig.BgpRouterId = v.(string)
@@ -3643,16 +3799,22 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 													}
 
-													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+														ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
-													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+														ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -3999,10 +4161,13 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 									monitoringChoiceTypeFound := false
 
-									if v, ok := cs["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+									if _, ok := cs["monitor"]; ok && !monitoringChoiceTypeFound {
 
 										monitoringChoiceTypeFound = true
-										_ = v
+										monitoringChoiceInt := &ves_io_schema_network_interface.DedicatedInterfaceType_Monitor{}
+										monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+										interfaceChoiceInt.DedicatedInterface.MonitoringChoice = monitoringChoiceInt
+
 									}
 
 									if v, ok := cs["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
@@ -5023,10 +5188,13 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 
 									monitoringChoiceTypeFound := false
 
-									if v, ok := cs["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+									if _, ok := cs["monitor"]; ok && !monitoringChoiceTypeFound {
 
 										monitoringChoiceTypeFound = true
-										_ = v
+										monitoringChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Monitor{}
+										monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+										interfaceChoiceInt.EthernetInterface.MonitoringChoice = monitoringChoiceInt
+
 									}
 
 									if v, ok := cs["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
@@ -5090,39 +5258,6 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 											networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_IpFabricNetwork{}
 											networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
 											interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
-										}
-
-									}
-
-									if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-										networkChoiceTypeFound = true
-										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
-										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
-										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												networkChoiceInt.SegmentNetwork.Name = v.(string)
-
-											}
-
-											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
-
-											}
-
-											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
-
-											}
-
 										}
 
 									}
@@ -7100,6 +7235,7 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -7436,6 +7572,12 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 			if v, ok := cs["bgp_peer_address"]; ok && !isIntfNil(v) {
 
 				networkCfgChoiceInt.CustomNetworkConfig.BgpPeerAddress = v.(string)
+
+			}
+
+			if v, ok := cs["bgp_peer_address_v6"]; ok && !isIntfNil(v) {
+
+				networkCfgChoiceInt.CustomNetworkConfig.BgpPeerAddressV6 = v.(string)
 
 			}
 
@@ -7843,16 +7985,22 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 
 													}
 
-													if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+														ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
-													if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+													if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
 
 														ocspStaplingChoiceTypeFound = true
-														_ = v
+														ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+														ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+														signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
 													}
 
 													if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
@@ -8199,10 +8347,13 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 
 									monitoringChoiceTypeFound := false
 
-									if v, ok := cs["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+									if _, ok := cs["monitor"]; ok && !monitoringChoiceTypeFound {
 
 										monitoringChoiceTypeFound = true
-										_ = v
+										monitoringChoiceInt := &ves_io_schema_network_interface.DedicatedInterfaceType_Monitor{}
+										monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+										interfaceChoiceInt.DedicatedInterface.MonitoringChoice = monitoringChoiceInt
+
 									}
 
 									if v, ok := cs["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
@@ -9223,10 +9374,13 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 
 									monitoringChoiceTypeFound := false
 
-									if v, ok := cs["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
+									if _, ok := cs["monitor"]; ok && !monitoringChoiceTypeFound {
 
 										monitoringChoiceTypeFound = true
-										_ = v
+										monitoringChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Monitor{}
+										monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
+										interfaceChoiceInt.EthernetInterface.MonitoringChoice = monitoringChoiceInt
+
 									}
 
 									if v, ok := cs["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
@@ -9290,39 +9444,6 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 											networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_IpFabricNetwork{}
 											networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
 											interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
-										}
-
-									}
-
-									if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-										networkChoiceTypeFound = true
-										networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SegmentNetwork{}
-										networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
-										interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
-
-										sl := v.(*schema.Set).List()
-										for _, set := range sl {
-											cs := set.(map[string]interface{})
-
-											if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-												networkChoiceInt.SegmentNetwork.Name = v.(string)
-
-											}
-
-											if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-												networkChoiceInt.SegmentNetwork.Namespace = v.(string)
-
-											}
-
-											if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-												networkChoiceInt.SegmentNetwork.Tenant = v.(string)
-
-											}
-
 										}
 
 									}

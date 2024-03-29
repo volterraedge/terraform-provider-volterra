@@ -215,7 +215,7 @@ type privateCustomAPIInprocClient struct {
 }
 
 func (c *privateCustomAPIInprocClient) UpdateServiceDomains(ctx context.Context, in *UpdateServiceDomainsRequest, opts ...grpc.CallOption) (*UpdateServiceDomainsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI.UpdateServiceDomains", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI.UpdateServiceDomains")
 	return c.PrivateCustomAPIServer.UpdateServiceDomains(ctx, in)
 }
 

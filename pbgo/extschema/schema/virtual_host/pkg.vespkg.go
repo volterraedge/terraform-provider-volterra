@@ -76,6 +76,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.DNSDDoSProfile"] = DNSDDoSProfileValidator()
 	vr["ves.io.schema.virtual_host.DNSProxyConfiguration"] = DNSProxyConfigurationValidator()
 	vr["ves.io.schema.virtual_host.DNSRecord"] = DNSRecordValidator()
+	vr["ves.io.schema.virtual_host.DNSVHostStatusType"] = DNSVHostStatusTypeValidator()
 	vr["ves.io.schema.virtual_host.DomainCertificates"] = DomainCertificatesValidator()
 	vr["ves.io.schema.virtual_host.DynamicReverseProxyType"] = DynamicReverseProxyTypeValidator()
 	vr["ves.io.schema.virtual_host.GetSpecType"] = GetSpecTypeValidator()
@@ -150,87 +151,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.crl.#",
 	}
 
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.virtual_host.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Create"] = "ves.io.schema.virtual_host.CreateRequest"
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Get"] = []string{
-		"object",
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "create_form.spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "object.spec.gc_spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "items.#.object.spec.gc_spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []string{
 		"spec.api_spec",
@@ -266,17 +187,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.virtual_host.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.tls_cert_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.tls_parameters.common_params.validation_params.trusted_ca",
-			AllowedEnvironments: []string{"test"},
-		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Replace"] = "ves.io.schema.virtual_host.ReplaceRequest"

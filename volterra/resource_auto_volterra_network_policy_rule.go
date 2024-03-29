@@ -492,6 +492,7 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

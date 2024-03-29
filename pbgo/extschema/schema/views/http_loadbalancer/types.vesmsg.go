@@ -1359,6 +1359,7 @@ func (m *APIRateLimit) GetIpAllowedListChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *APIRateLimit_CustomIpAllowedList:
+
 		drInfos, err := m.GetCustomIpAllowedList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomIpAllowedList().GetDRefInfo() FAILED")
@@ -1366,6 +1367,18 @@ func (m *APIRateLimit) GetIpAllowedListChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "custom_ip_allowed_list." + dri.DRField
+		}
+		return drInfos, err
+
+	case *APIRateLimit_BypassRateLimitingRules:
+
+		drInfos, err := m.GetBypassRateLimitingRules().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBypassRateLimitingRules().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bypass_rate_limiting_rules." + dri.DRField
 		}
 		return drInfos, err
 
@@ -1571,6 +1584,17 @@ func (v *ValidateAPIRateLimit) Validate(ctx context.Context, pm interface{}, opt
 				return err
 			}
 		}
+	case *APIRateLimit_BypassRateLimitingRules:
+		if fv, exists := v.FldValidators["ip_allowed_list_choice.bypass_rate_limiting_rules"]; exists {
+			val := m.GetIpAllowedListChoice().(*APIRateLimit_BypassRateLimitingRules).BypassRateLimitingRules
+			vOpts := append(opts,
+				db.WithValidateField("ip_allowed_list_choice"),
+				db.WithValidateField("bypass_rate_limiting_rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1632,6 +1656,7 @@ var DefaultAPIRateLimitValidator = func() *ValidateAPIRateLimit {
 
 	v.FldValidators["ip_allowed_list_choice.ip_allowed_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
 	v.FldValidators["ip_allowed_list_choice.custom_ip_allowed_list"] = CustomIpAllowedListValidator().Validate
+	v.FldValidators["ip_allowed_list_choice.bypass_rate_limiting_rules"] = BypassRateLimitingRulesValidator().Validate
 
 	return v
 }()
@@ -3254,7 +3279,38 @@ func (m *ApiEndpointRule) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRateLimiterChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClientMatcherDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetClientMatcherDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetRateLimiterChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimiterChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApiEndpointRule) GetClientMatcherDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetClientMatcher() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetClientMatcher().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetClientMatcher().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "client_matcher." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -3265,6 +3321,7 @@ func (m *ApiEndpointRule) GetRateLimiterChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetRateLimiterChoice().(type) {
 	case *ApiEndpointRule_InlineRateLimiter:
+
 		drInfos, err := m.GetInlineRateLimiter().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInlineRateLimiter().GetDRefInfo() FAILED")
@@ -3277,7 +3334,21 @@ func (m *ApiEndpointRule) GetRateLimiterChoiceDRefInfo() ([]db.DRefInfo, error) 
 
 	case *ApiEndpointRule_RefRateLimiter:
 
-		return nil, nil
+		vref := m.GetRefRateLimiter()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("rate_limiter.Object")
+		dri := db.DRefInfo{
+			RefdType:   "rate_limiter.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ref_rate_limiter",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -3364,6 +3435,15 @@ func (v *ValidateApiEndpointRule) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["client_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_matcher"))
+		if err := fv(ctx, m.GetClientMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domain_choice"]; exists {
 		val := m.GetDomainChoice()
 		vOpts := append(opts,
@@ -3436,6 +3516,15 @@ func (v *ValidateApiEndpointRule) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["request_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_matcher"))
+		if err := fv(ctx, m.GetRequestMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3503,6 +3592,10 @@ var DefaultApiEndpointRuleValidator = func() *ValidateApiEndpointRule {
 	v.FldValidators["rate_limiter_choice.ref_rate_limiter"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["api_endpoint_method"] = ves_io_schema_policy.HttpMethodMatcherTypeValidator().Validate
+
+	v.FldValidators["request_matcher"] = ves_io_schema_policy.RequestMatcherValidator().Validate
+
+	v.FldValidators["client_matcher"] = ves_io_schema_policy.ClientMatcherValidator().Validate
 
 	return v
 }()
@@ -4961,6 +5054,498 @@ func BotDefenseAdvancedTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BypassRateLimitingRule) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BypassRateLimitingRule) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BypassRateLimitingRule) DeepCopy() *BypassRateLimitingRule {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BypassRateLimitingRule{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BypassRateLimitingRule) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BypassRateLimitingRule) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BypassRateLimitingRuleValidator().Validate(ctx, m, opts...)
+}
+
+func (m *BypassRateLimitingRule) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetClientMatcherDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *BypassRateLimitingRule) GetClientMatcherDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetClientMatcher() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetClientMatcher().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetClientMatcher().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "client_matcher." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateBypassRateLimitingRule struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBypassRateLimitingRule) DestinationTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for destination_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBypassRateLimitingRule) DestinationTypeApiEndpointValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ApiEndpointDetailsValidator().Validate, nil
+}
+
+func (v *ValidateBypassRateLimitingRule) DestinationTypeBasePathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_BasePath, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for base_path")
+	}
+	return oValidatorFn_BasePath, nil
+}
+
+func (v *ValidateBypassRateLimitingRule) DomainChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for domain_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBypassRateLimitingRule) DomainChoiceSpecificDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_SpecificDomain, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for specific_domain")
+	}
+	return oValidatorFn_SpecificDomain, nil
+}
+
+func (v *ValidateBypassRateLimitingRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BypassRateLimitingRule)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BypassRateLimitingRule got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["client_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_matcher"))
+		if err := fv(ctx, m.GetClientMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["destination_type"]; exists {
+		val := m.GetDestinationType()
+		vOpts := append(opts,
+			db.WithValidateField("destination_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDestinationType().(type) {
+	case *BypassRateLimitingRule_AnyUrl:
+		if fv, exists := v.FldValidators["destination_type.any_url"]; exists {
+			val := m.GetDestinationType().(*BypassRateLimitingRule_AnyUrl).AnyUrl
+			vOpts := append(opts,
+				db.WithValidateField("destination_type"),
+				db.WithValidateField("any_url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BypassRateLimitingRule_BasePath:
+		if fv, exists := v.FldValidators["destination_type.base_path"]; exists {
+			val := m.GetDestinationType().(*BypassRateLimitingRule_BasePath).BasePath
+			vOpts := append(opts,
+				db.WithValidateField("destination_type"),
+				db.WithValidateField("base_path"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BypassRateLimitingRule_ApiEndpoint:
+		if fv, exists := v.FldValidators["destination_type.api_endpoint"]; exists {
+			val := m.GetDestinationType().(*BypassRateLimitingRule_ApiEndpoint).ApiEndpoint
+			vOpts := append(opts,
+				db.WithValidateField("destination_type"),
+				db.WithValidateField("api_endpoint"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BypassRateLimitingRule_ApiGroups:
+		if fv, exists := v.FldValidators["destination_type.api_groups"]; exists {
+			val := m.GetDestinationType().(*BypassRateLimitingRule_ApiGroups).ApiGroups
+			vOpts := append(opts,
+				db.WithValidateField("destination_type"),
+				db.WithValidateField("api_groups"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain_choice"]; exists {
+		val := m.GetDomainChoice()
+		vOpts := append(opts,
+			db.WithValidateField("domain_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDomainChoice().(type) {
+	case *BypassRateLimitingRule_AnyDomain:
+		if fv, exists := v.FldValidators["domain_choice.any_domain"]; exists {
+			val := m.GetDomainChoice().(*BypassRateLimitingRule_AnyDomain).AnyDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("any_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BypassRateLimitingRule_SpecificDomain:
+		if fv, exists := v.FldValidators["domain_choice.specific_domain"]; exists {
+			val := m.GetDomainChoice().(*BypassRateLimitingRule_SpecificDomain).SpecificDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("specific_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_matcher"))
+		if err := fv(ctx, m.GetRequestMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBypassRateLimitingRuleValidator = func() *ValidateBypassRateLimitingRule {
+	v := &ValidateBypassRateLimitingRule{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDestinationType := v.DestinationTypeValidationRuleHandler
+	rulesDestinationType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDestinationType(rulesDestinationType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BypassRateLimitingRule.destination_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["destination_type"] = vFn
+
+	vrhDestinationTypeBasePath := v.DestinationTypeBasePathValidationRuleHandler
+	rulesDestinationTypeBasePath := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "128",
+	}
+	vFnMap["destination_type.base_path"], err = vrhDestinationTypeBasePath(rulesDestinationTypeBasePath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BypassRateLimitingRule.destination_type_base_path: %s", err)
+		panic(errMsg)
+	}
+	vrhDestinationTypeApiEndpoint := v.DestinationTypeApiEndpointValidationRuleHandler
+	rulesDestinationTypeApiEndpoint := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["destination_type.api_endpoint"], err = vrhDestinationTypeApiEndpoint(rulesDestinationTypeApiEndpoint)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BypassRateLimitingRule.destination_type_api_endpoint: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["destination_type.base_path"] = vFnMap["destination_type.base_path"]
+	v.FldValidators["destination_type.api_endpoint"] = vFnMap["destination_type.api_endpoint"]
+
+	vrhDomainChoice := v.DomainChoiceValidationRuleHandler
+	rulesDomainChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDomainChoice(rulesDomainChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BypassRateLimitingRule.domain_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domain_choice"] = vFn
+
+	vrhDomainChoiceSpecificDomain := v.DomainChoiceSpecificDomainValidationRuleHandler
+	rulesDomainChoiceSpecificDomain := map[string]string{
+		"ves.io.schema.rules.string.max_len":   "128",
+		"ves.io.schema.rules.string.vh_domain": "true",
+	}
+	vFnMap["domain_choice.specific_domain"], err = vrhDomainChoiceSpecificDomain(rulesDomainChoiceSpecificDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field BypassRateLimitingRule.domain_choice_specific_domain: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["domain_choice.specific_domain"] = vFnMap["domain_choice.specific_domain"]
+
+	v.FldValidators["destination_type.api_groups"] = APIGroupsValidator().Validate
+
+	v.FldValidators["request_matcher"] = ves_io_schema_policy.RequestMatcherValidator().Validate
+
+	v.FldValidators["client_matcher"] = ves_io_schema_policy.ClientMatcherValidator().Validate
+
+	return v
+}()
+
+func BypassRateLimitingRuleValidator() db.Validator {
+	return DefaultBypassRateLimitingRuleValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BypassRateLimitingRules) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BypassRateLimitingRules) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BypassRateLimitingRules) DeepCopy() *BypassRateLimitingRules {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BypassRateLimitingRules{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BypassRateLimitingRules) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BypassRateLimitingRules) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BypassRateLimitingRulesValidator().Validate(ctx, m, opts...)
+}
+
+func (m *BypassRateLimitingRules) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBypassRateLimitingRulesDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *BypassRateLimitingRules) GetBypassRateLimitingRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBypassRateLimitingRules() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetBypassRateLimitingRules() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBypassRateLimitingRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("bypass_rate_limiting_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateBypassRateLimitingRules struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBypassRateLimitingRules) BypassRateLimitingRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for bypass_rate_limiting_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*BypassRateLimitingRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := BypassRateLimitingRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bypass_rate_limiting_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*BypassRateLimitingRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*BypassRateLimitingRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated bypass_rate_limiting_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items bypass_rate_limiting_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBypassRateLimitingRules) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BypassRateLimitingRules)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BypassRateLimitingRules got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bypass_rate_limiting_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("bypass_rate_limiting_rules"))
+		if err := fv(ctx, m.GetBypassRateLimitingRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBypassRateLimitingRulesValidator = func() *ValidateBypassRateLimitingRules {
+	v := &ValidateBypassRateLimitingRules{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBypassRateLimitingRules := v.BypassRateLimitingRulesValidationRuleHandler
+	rulesBypassRateLimitingRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhBypassRateLimitingRules(rulesBypassRateLimitingRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BypassRateLimitingRules.bypass_rate_limiting_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bypass_rate_limiting_rules"] = vFn
+
+	return v
+}()
+
+func BypassRateLimitingRulesValidator() db.Validator {
+	return DefaultBypassRateLimitingRulesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CSDJavaScriptInsertAllWithExceptionsType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6354,6 +6939,7 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *CreateSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -6365,6 +6951,7 @@ func (m *CreateSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -6396,6 +6983,7 @@ func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetApiDefinitionChoice().(type) {
 	case *CreateSpecType_ApiDefinitions:
+
 		drInfos, err := m.GetApiDefinitions().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfo() FAILED")
@@ -6407,6 +6995,7 @@ func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 		return drInfos, err
 
 	case *CreateSpecType_ApiSpecification:
+
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
@@ -6423,7 +7012,21 @@ func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 
 	case *CreateSpecType_ApiDefinition:
 
-		return nil, nil
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -6464,6 +7067,7 @@ func (m *CreateSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_BotDefenseAdvanced:
+
 		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
@@ -6499,6 +7103,7 @@ func (m *CreateSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_PolicyBasedChallenge:
+
 		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
@@ -6510,6 +7115,7 @@ func (m *CreateSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_EnableChallenge:
+
 		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
@@ -6559,6 +7165,7 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_Https:
+
 		drInfos, err := m.GetHttps().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
@@ -6570,6 +7177,7 @@ func (m *CreateSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_HttpsAutoCert:
+
 		drInfos, err := m.GetHttpsAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfo() FAILED")
@@ -6660,6 +7268,7 @@ func (m *CreateSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetOriginPoolChoice().(type) {
 	case *CreateSpecType_DefaultPool:
+
 		drInfos, err := m.GetDefaultPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfo() FAILED")
@@ -6671,6 +7280,7 @@ func (m *CreateSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_DefaultPoolList:
+
 		drInfos, err := m.GetDefaultPoolList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfo() FAILED")
@@ -6716,6 +7326,7 @@ func (m *CreateSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_RateLimit:
+
 		drInfos, err := m.GetRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
@@ -6727,6 +7338,7 @@ func (m *CreateSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_ApiRateLimit:
+
 		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
@@ -6780,6 +7392,7 @@ func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *CreateSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -7014,6 +7627,14 @@ func (v *ValidateCreateSpecType) ServicePolicyChoiceValidationRuleHandler(rules 
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ThreatIntelligenceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_intelligence_choice")
 	}
 	return validatorFn, nil
 }
@@ -8405,6 +9026,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["threat_intelligence_choice"]; exists {
+		val := m.GetThreatIntelligenceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_intelligence_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatIntelligenceChoice().(type) {
+	case *CreateSpecType_DisableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.disable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*CreateSpecType_DisableThreatIntelligence).DisableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("disable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.enable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*CreateSpecType_EnableThreatIntelligence).EnableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("enable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
 		val := m.GetTrustClientIpHeadersChoice()
 		vOpts := append(opts,
@@ -8664,6 +9321,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhThreatIntelligenceChoice := v.ThreatIntelligenceChoiceValidationRuleHandler
+	rulesThreatIntelligenceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatIntelligenceChoice(rulesThreatIntelligenceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.threat_intelligence_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_intelligence_choice"] = vFn
 
 	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
 	rulesTrustClientIpHeadersChoice := map[string]string{
@@ -10490,6 +11158,7 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *GetSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -10501,6 +11170,7 @@ func (m *GetSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -10532,6 +11202,7 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetApiDefinitionChoice().(type) {
 	case *GetSpecType_ApiDefinitions:
+
 		drInfos, err := m.GetApiDefinitions().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfo() FAILED")
@@ -10543,6 +11214,7 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_ApiSpecification:
+
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
@@ -10559,7 +11231,21 @@ func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *GetSpecType_ApiDefinition:
 
-		return nil, nil
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -10600,6 +11286,7 @@ func (m *GetSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_BotDefenseAdvanced:
+
 		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
@@ -10635,6 +11322,7 @@ func (m *GetSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_PolicyBasedChallenge:
+
 		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
@@ -10646,6 +11334,7 @@ func (m *GetSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_EnableChallenge:
+
 		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
@@ -10695,6 +11384,7 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_Https:
+
 		drInfos, err := m.GetHttps().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
@@ -10706,6 +11396,7 @@ func (m *GetSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_HttpsAutoCert:
+
 		drInfos, err := m.GetHttpsAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfo() FAILED")
@@ -10796,6 +11487,7 @@ func (m *GetSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetOriginPoolChoice().(type) {
 	case *GetSpecType_DefaultPool:
+
 		drInfos, err := m.GetDefaultPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfo() FAILED")
@@ -10807,6 +11499,7 @@ func (m *GetSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_DefaultPoolList:
+
 		drInfos, err := m.GetDefaultPoolList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfo() FAILED")
@@ -10852,6 +11545,7 @@ func (m *GetSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_RateLimit:
+
 		drInfos, err := m.GetRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
@@ -10863,6 +11557,7 @@ func (m *GetSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_ApiRateLimit:
+
 		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
@@ -10916,6 +11611,7 @@ func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -11150,6 +11846,14 @@ func (v *ValidateGetSpecType) ServicePolicyChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ThreatIntelligenceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_intelligence_choice")
 	}
 	return validatorFn, nil
 }
@@ -11890,6 +12594,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["cert_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_state"))
+		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["challenge_type"]; exists {
 		val := m.GetChallengeType()
 		vOpts := append(opts,
@@ -12604,6 +13317,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["threat_intelligence_choice"]; exists {
+		val := m.GetThreatIntelligenceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_intelligence_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatIntelligenceChoice().(type) {
+	case *GetSpecType_DisableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.disable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*GetSpecType_DisableThreatIntelligence).DisableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("disable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.enable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*GetSpecType_EnableThreatIntelligence).EnableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("enable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
 		val := m.GetTrustClientIpHeadersChoice()
 		vOpts := append(opts,
@@ -12863,6 +13612,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhThreatIntelligenceChoice := v.ThreatIntelligenceChoiceValidationRuleHandler
+	rulesThreatIntelligenceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatIntelligenceChoice(rulesThreatIntelligenceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.threat_intelligence_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_intelligence_choice"] = vFn
 
 	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
 	rulesTrustClientIpHeadersChoice := map[string]string{
@@ -13283,6 +14043,7 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *GlobalSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -13294,6 +14055,7 @@ func (m *GlobalSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -13325,6 +14087,7 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 	}
 	switch m.GetApiDefinitionChoice().(type) {
 	case *GlobalSpecType_ApiDefinitions:
+
 		drInfos, err := m.GetApiDefinitions().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfo() FAILED")
@@ -13336,6 +14099,7 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 		return drInfos, err
 
 	case *GlobalSpecType_ApiSpecification:
+
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
@@ -13352,7 +14116,21 @@ func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error)
 
 	case *GlobalSpecType_ApiDefinition:
 
-		return nil, nil
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -13393,6 +14171,7 @@ func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_BotDefenseAdvanced:
+
 		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
@@ -13428,6 +14207,7 @@ func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_PolicyBasedChallenge:
+
 		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
@@ -13439,6 +14219,7 @@ func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_EnableChallenge:
+
 		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
@@ -13488,6 +14269,7 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_Https:
+
 		drInfos, err := m.GetHttps().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
@@ -13499,6 +14281,7 @@ func (m *GlobalSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_HttpsAutoCert:
+
 		drInfos, err := m.GetHttpsAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfo() FAILED")
@@ -13589,6 +14372,7 @@ func (m *GlobalSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetOriginPoolChoice().(type) {
 	case *GlobalSpecType_DefaultPool:
+
 		drInfos, err := m.GetDefaultPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfo() FAILED")
@@ -13600,6 +14384,7 @@ func (m *GlobalSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_DefaultPoolList:
+
 		drInfos, err := m.GetDefaultPoolList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfo() FAILED")
@@ -13645,6 +14430,7 @@ func (m *GlobalSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_RateLimit:
+
 		drInfos, err := m.GetRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
@@ -13656,6 +14442,7 @@ func (m *GlobalSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_ApiRateLimit:
+
 		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
@@ -13709,6 +14496,7 @@ func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *GlobalSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -14000,6 +14788,14 @@ func (v *ValidateGlobalSpecType) ServicePolicyChoiceValidationRuleHandler(rules 
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ThreatIntelligenceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_intelligence_choice")
 	}
 	return validatorFn, nil
 }
@@ -14745,6 +15541,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cert_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cert_state"))
+		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -15500,6 +16305,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["threat_intelligence_choice"]; exists {
+		val := m.GetThreatIntelligenceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_intelligence_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatIntelligenceChoice().(type) {
+	case *GlobalSpecType_DisableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.disable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*GlobalSpecType_DisableThreatIntelligence).DisableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("disable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.enable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*GlobalSpecType_EnableThreatIntelligence).EnableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("enable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
 		val := m.GetTrustClientIpHeadersChoice()
 		vOpts := append(opts,
@@ -15780,6 +16621,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhThreatIntelligenceChoice := v.ThreatIntelligenceChoiceValidationRuleHandler
+	rulesThreatIntelligenceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatIntelligenceChoice(rulesThreatIntelligenceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.threat_intelligence_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_intelligence_choice"] = vFn
 
 	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
 	rulesTrustClientIpHeadersChoice := map[string]string{
@@ -16742,15 +17594,13 @@ func (m *JWKS) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Cleartext = ""
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *JWKS) GoString() string {
 	copy := m.DeepCopy()
-	copy.Cleartext = ""
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 
@@ -20326,6 +21176,7 @@ func (m *ProxyTypeHttps) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *ProxyTypeHttps_TlsParameters:
+
 		drInfos, err := m.GetTlsParameters().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsParameters().GetDRefInfo() FAILED")
@@ -20337,6 +21188,7 @@ func (m *ProxyTypeHttps) GetTlsCertificatesChoiceDRefInfo() ([]db.DRefInfo, erro
 		return drInfos, err
 
 	case *ProxyTypeHttps_TlsCertParams:
+
 		drInfos, err := m.GetTlsCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTlsCertParams().GetDRefInfo() FAILED")
@@ -20401,6 +21253,14 @@ func (v *ValidateProxyTypeHttps) ServerHeaderChoiceAppendServerNameValidationRul
 		return nil, errors.Wrap(err, "ValidationRuleHandler for append_server_name")
 	}
 	return oValidatorFn_AppendServerName, nil
+}
+
+func (v *ValidateProxyTypeHttps) TlsCertificatesChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_certificates_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateProxyTypeHttps) ConnectionIdleTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -20618,6 +21478,16 @@ func (v *ValidateProxyTypeHttps) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["tls_certificates_choice"]; exists {
+		val := m.GetTlsCertificatesChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_certificates_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetTlsCertificatesChoice().(type) {
 	case *ProxyTypeHttps_TlsParameters:
 		if fv, exists := v.FldValidators["tls_certificates_choice.tls_parameters"]; exists {
@@ -20728,6 +21598,17 @@ var DefaultProxyTypeHttpsValidator = func() *ValidateProxyTypeHttps {
 	v.FldValidators["server_header_choice.server_name"] = vFnMap["server_header_choice.server_name"]
 	v.FldValidators["server_header_choice.append_server_name"] = vFnMap["server_header_choice.append_server_name"]
 
+	vrhTlsCertificatesChoice := v.TlsCertificatesChoiceValidationRuleHandler
+	rulesTlsCertificatesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsCertificatesChoice(rulesTlsCertificatesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ProxyTypeHttps.tls_certificates_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_certificates_choice"] = vFn
+
 	vrhConnectionIdleTimeout := v.ConnectionIdleTimeoutValidationRuleHandler
 	rulesConnectionIdleTimeout := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "600000",
@@ -20810,6 +21691,7 @@ func (m *ProxyTypeHttpsAutoCerts) GetMtlsChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *ProxyTypeHttpsAutoCerts_UseMtls:
+
 		drInfos, err := m.GetUseMtls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseMtls().GetDRefInfo() FAILED")
@@ -21502,6 +22384,7 @@ func (m *RateLimitConfigType) GetIpAllowedListChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *RateLimitConfigType_CustomIpAllowedList:
+
 		drInfos, err := m.GetCustomIpAllowedList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomIpAllowedList().GetDRefInfo() FAILED")
@@ -21529,6 +22412,7 @@ func (m *RateLimitConfigType) GetPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *RateLimitConfigType_Policies:
+
 		drInfos, err := m.GetPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicies().GetDRefInfo() FAILED")
@@ -21904,6 +22788,7 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ReplaceSpecType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -21915,6 +22800,7 @@ func (m *ReplaceSpecType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_AdvertiseCustom:
+
 		drInfos, err := m.GetAdvertiseCustom().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseCustom().GetDRefInfo() FAILED")
@@ -21946,6 +22832,7 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 	}
 	switch m.GetApiDefinitionChoice().(type) {
 	case *ReplaceSpecType_ApiDefinitions:
+
 		drInfos, err := m.GetApiDefinitions().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiDefinitions().GetDRefInfo() FAILED")
@@ -21957,6 +22844,7 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 		return drInfos, err
 
 	case *ReplaceSpecType_ApiSpecification:
+
 		drInfos, err := m.GetApiSpecification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
@@ -21973,7 +22861,21 @@ func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error
 
 	case *ReplaceSpecType_ApiDefinition:
 
-		return nil, nil
+		vref := m.GetApiDefinition()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("api_definition.Object")
+		dri := db.DRefInfo{
+			RefdType:   "api_definition.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "api_definition",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -22014,6 +22916,7 @@ func (m *ReplaceSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_BotDefenseAdvanced:
+
 		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
@@ -22049,6 +22952,7 @@ func (m *ReplaceSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_PolicyBasedChallenge:
+
 		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
@@ -22060,6 +22964,7 @@ func (m *ReplaceSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_EnableChallenge:
+
 		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
@@ -22109,6 +23014,7 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_Https:
+
 		drInfos, err := m.GetHttps().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttps().GetDRefInfo() FAILED")
@@ -22120,6 +23026,7 @@ func (m *ReplaceSpecType) GetLoadbalancerTypeDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_HttpsAutoCert:
+
 		drInfos, err := m.GetHttpsAutoCert().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsAutoCert().GetDRefInfo() FAILED")
@@ -22210,6 +23117,7 @@ func (m *ReplaceSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetOriginPoolChoice().(type) {
 	case *ReplaceSpecType_DefaultPool:
+
 		drInfos, err := m.GetDefaultPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPool().GetDRefInfo() FAILED")
@@ -22221,6 +23129,7 @@ func (m *ReplaceSpecType) GetOriginPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_DefaultPoolList:
+
 		drInfos, err := m.GetDefaultPoolList().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDefaultPoolList().GetDRefInfo() FAILED")
@@ -22266,6 +23175,7 @@ func (m *ReplaceSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_RateLimit:
+
 		drInfos, err := m.GetRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
@@ -22277,6 +23187,7 @@ func (m *ReplaceSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_ApiRateLimit:
+
 		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
@@ -22330,6 +23241,7 @@ func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *ReplaceSpecType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -22564,6 +23476,14 @@ func (v *ValidateReplaceSpecType) ServicePolicyChoiceValidationRuleHandler(rules
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ThreatIntelligenceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_intelligence_choice")
 	}
 	return validatorFn, nil
 }
@@ -23955,6 +24875,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["threat_intelligence_choice"]; exists {
+		val := m.GetThreatIntelligenceChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_intelligence_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatIntelligenceChoice().(type) {
+	case *ReplaceSpecType_DisableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.disable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*ReplaceSpecType_DisableThreatIntelligence).DisableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("disable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableThreatIntelligence:
+		if fv, exists := v.FldValidators["threat_intelligence_choice.enable_threat_intelligence"]; exists {
+			val := m.GetThreatIntelligenceChoice().(*ReplaceSpecType_EnableThreatIntelligence).EnableThreatIntelligence
+			vOpts := append(opts,
+				db.WithValidateField("threat_intelligence_choice"),
+				db.WithValidateField("enable_threat_intelligence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trust_client_ip_headers_choice"]; exists {
 		val := m.GetTrustClientIpHeadersChoice()
 		vOpts := append(opts,
@@ -24214,6 +25170,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhThreatIntelligenceChoice := v.ThreatIntelligenceChoiceValidationRuleHandler
+	rulesThreatIntelligenceChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatIntelligenceChoice(rulesThreatIntelligenceChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.threat_intelligence_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_intelligence_choice"] = vFn
 
 	vrhTrustClientIpHeadersChoice := v.TrustClientIpHeadersChoiceValidationRuleHandler
 	rulesTrustClientIpHeadersChoice := map[string]string{
@@ -24961,6 +25928,7 @@ func (m *RouteSimpleAdvancedOptions) GetMirroringChoiceDRefInfo() ([]db.DRefInfo
 		return nil, nil
 
 	case *RouteSimpleAdvancedOptions_MirrorPolicy:
+
 		drInfos, err := m.GetMirrorPolicy().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetMirrorPolicy().GetDRefInfo() FAILED")
@@ -25699,6 +26667,17 @@ func (v *ValidateRouteSimpleAdvancedOptions) Validate(ctx context.Context, pm in
 				return err
 			}
 		}
+	case *RouteSimpleAdvancedOptions_RegexRewrite:
+		if fv, exists := v.FldValidators["rewrite_choice.regex_rewrite"]; exists {
+			val := m.GetRewriteChoice().(*RouteSimpleAdvancedOptions_RegexRewrite).RegexRewrite
+			vOpts := append(opts,
+				db.WithValidateField("rewrite_choice"),
+				db.WithValidateField("regex_rewrite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -26020,6 +26999,8 @@ var DefaultRouteSimpleAdvancedOptionsValidator = func() *ValidateRouteSimpleAdva
 
 	v.FldValidators["retry_policy_choice.retry_policy"] = ves_io_schema.RetryPolicyTypeValidator().Validate
 
+	v.FldValidators["rewrite_choice.regex_rewrite"] = ves_io_schema.RegexMatchRewriteValidator().Validate
+
 	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
@@ -26100,6 +27081,7 @@ func (m *RouteType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetChoice().(type) {
 	case *RouteType_SimpleRoute:
+
 		drInfos, err := m.GetSimpleRoute().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSimpleRoute().GetDRefInfo() FAILED")
@@ -26119,6 +27101,7 @@ func (m *RouteType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *RouteType_CustomRouteObject:
+
 		drInfos, err := m.GetCustomRouteObject().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCustomRouteObject().GetDRefInfo() FAILED")
@@ -27533,7 +28516,38 @@ func (m *ServerUrlRule) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetRateLimiterChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetClientMatcherDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetClientMatcherDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetRateLimiterChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimiterChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ServerUrlRule) GetClientMatcherDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetClientMatcher() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetClientMatcher().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetClientMatcher().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "client_matcher." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -27544,6 +28558,7 @@ func (m *ServerUrlRule) GetRateLimiterChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetRateLimiterChoice().(type) {
 	case *ServerUrlRule_InlineRateLimiter:
+
 		drInfos, err := m.GetInlineRateLimiter().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetInlineRateLimiter().GetDRefInfo() FAILED")
@@ -27556,7 +28571,21 @@ func (m *ServerUrlRule) GetRateLimiterChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 	case *ServerUrlRule_RefRateLimiter:
 
-		return nil, nil
+		vref := m.GetRefRateLimiter()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("rate_limiter.Object")
+		dri := db.DRefInfo{
+			RefdType:   "rate_limiter.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "ref_rate_limiter",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
 
 	default:
 		return nil, nil
@@ -27602,6 +28631,16 @@ func (v *ValidateServerUrlRule) BasePathValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateServerUrlRule) ApiGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_group")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateServerUrlRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ServerUrlRule)
 	if !ok {
@@ -27616,10 +28655,28 @@ func (v *ValidateServerUrlRule) Validate(ctx context.Context, pm interface{}, op
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_group"))
+		if err := fv(ctx, m.GetApiGroup(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["base_path"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("base_path"))
 		if err := fv(ctx, m.GetBasePath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_matcher"))
+		if err := fv(ctx, m.GetClientMatcher(), vOpts...); err != nil {
 			return err
 		}
 
@@ -27697,6 +28754,15 @@ func (v *ValidateServerUrlRule) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["request_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_matcher"))
+		if err := fv(ctx, m.GetRequestMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -27760,8 +28826,23 @@ var DefaultServerUrlRuleValidator = func() *ValidateServerUrlRule {
 	}
 	v.FldValidators["base_path"] = vFn
 
+	vrhApiGroup := v.ApiGroupValidationRuleHandler
+	rulesApiGroup := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFn, err = vrhApiGroup(rulesApiGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServerUrlRule.api_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_group"] = vFn
+
 	v.FldValidators["rate_limiter_choice.inline_rate_limiter"] = InlineRateLimiterValidator().Validate
 	v.FldValidators["rate_limiter_choice.ref_rate_limiter"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["client_matcher"] = ves_io_schema_policy.ClientMatcherValidator().Validate
+
+	v.FldValidators["request_matcher"] = ves_io_schema_policy.RequestMatcherValidator().Validate
 
 	return v
 }()
@@ -31812,6 +32893,41 @@ func (r *CreateSpecType) GetSlowDdosMitigationChoiceFromGlobalSpecType(o *Global
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetThreatIntelligenceChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ThreatIntelligenceChoice.(type) {
+	case nil:
+		o.ThreatIntelligenceChoice = nil
+
+	case *CreateSpecType_DisableThreatIntelligence:
+		o.ThreatIntelligenceChoice = &GlobalSpecType_DisableThreatIntelligence{DisableThreatIntelligence: of.DisableThreatIntelligence}
+
+	case *CreateSpecType_EnableThreatIntelligence:
+		o.ThreatIntelligenceChoice = &GlobalSpecType_EnableThreatIntelligence{EnableThreatIntelligence: of.EnableThreatIntelligence}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetThreatIntelligenceChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ThreatIntelligenceChoice.(type) {
+	case nil:
+		r.ThreatIntelligenceChoice = nil
+
+	case *GlobalSpecType_DisableThreatIntelligence:
+		r.ThreatIntelligenceChoice = &CreateSpecType_DisableThreatIntelligence{DisableThreatIntelligence: of.DisableThreatIntelligence}
+
+	case *GlobalSpecType_EnableThreatIntelligence:
+		r.ThreatIntelligenceChoice = &CreateSpecType_EnableThreatIntelligence{EnableThreatIntelligence: of.EnableThreatIntelligence}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetTrustClientIpHeadersChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.TrustClientIpHeadersChoice.(type) {
 	case nil:
@@ -31953,6 +33069,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Routes = f.GetRoutes()
 	m.GetServicePolicyChoiceFromGlobalSpecType(f)
 	m.GetSlowDdosMitigationChoiceFromGlobalSpecType(f)
+	m.GetThreatIntelligenceChoiceFromGlobalSpecType(f)
 	m.GetTrustClientIpHeadersChoiceFromGlobalSpecType(f)
 	m.TrustedClients = f.GetTrustedClients()
 	m.GetUserIdChoiceFromGlobalSpecType(f)
@@ -32008,6 +33125,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Routes = m1.Routes
 	m1.SetServicePolicyChoiceToGlobalSpecType(f)
 	m1.SetSlowDdosMitigationChoiceToGlobalSpecType(f)
+	m1.SetThreatIntelligenceChoiceToGlobalSpecType(f)
 	m1.SetTrustClientIpHeadersChoiceToGlobalSpecType(f)
 	f.TrustedClients = m1.TrustedClients
 	m1.SetUserIdChoiceToGlobalSpecType(f)
@@ -32721,6 +33839,41 @@ func (r *GetSpecType) GetSlowDdosMitigationChoiceFromGlobalSpecType(o *GlobalSpe
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetThreatIntelligenceChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ThreatIntelligenceChoice.(type) {
+	case nil:
+		o.ThreatIntelligenceChoice = nil
+
+	case *GetSpecType_DisableThreatIntelligence:
+		o.ThreatIntelligenceChoice = &GlobalSpecType_DisableThreatIntelligence{DisableThreatIntelligence: of.DisableThreatIntelligence}
+
+	case *GetSpecType_EnableThreatIntelligence:
+		o.ThreatIntelligenceChoice = &GlobalSpecType_EnableThreatIntelligence{EnableThreatIntelligence: of.EnableThreatIntelligence}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetThreatIntelligenceChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ThreatIntelligenceChoice.(type) {
+	case nil:
+		r.ThreatIntelligenceChoice = nil
+
+	case *GlobalSpecType_DisableThreatIntelligence:
+		r.ThreatIntelligenceChoice = &GetSpecType_DisableThreatIntelligence{DisableThreatIntelligence: of.DisableThreatIntelligence}
+
+	case *GlobalSpecType_EnableThreatIntelligence:
+		r.ThreatIntelligenceChoice = &GetSpecType_EnableThreatIntelligence{EnableThreatIntelligence: of.EnableThreatIntelligence}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
 func (r *GetSpecType) SetTrustClientIpHeadersChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.TrustClientIpHeadersChoice.(type) {
 	case nil:
@@ -32837,6 +33990,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.AutoCertInfo = f.GetAutoCertInfo()
 	m.BlockedClients = f.GetBlockedClients()
 	m.GetBotDefenseChoiceFromGlobalSpecType(f)
+	m.CertState = f.GetCertState()
 	m.GetChallengeTypeFromGlobalSpecType(f)
 	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
 	m.CorsPolicy = f.GetCorsPolicy()
@@ -32868,6 +34022,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetServicePolicyChoiceFromGlobalSpecType(f)
 	m.GetSlowDdosMitigationChoiceFromGlobalSpecType(f)
 	m.State = f.GetState()
+	m.GetThreatIntelligenceChoiceFromGlobalSpecType(f)
 	m.GetTrustClientIpHeadersChoiceFromGlobalSpecType(f)
 	m.TrustedClients = f.GetTrustedClients()
 	m.GetUserIdChoiceFromGlobalSpecType(f)
@@ -32898,6 +34053,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.AutoCertInfo = m1.AutoCertInfo
 	f.BlockedClients = m1.BlockedClients
 	m1.SetBotDefenseChoiceToGlobalSpecType(f)
+	f.CertState = m1.CertState
 	m1.SetChallengeTypeToGlobalSpecType(f)
 	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
 	f.CorsPolicy = m1.CorsPolicy
@@ -32929,6 +34085,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetServicePolicyChoiceToGlobalSpecType(f)
 	m1.SetSlowDdosMitigationChoiceToGlobalSpecType(f)
 	f.State = m1.State
+	m1.SetThreatIntelligenceChoiceToGlobalSpecType(f)
 	m1.SetTrustClientIpHeadersChoiceToGlobalSpecType(f)
 	f.TrustedClients = m1.TrustedClients
 	m1.SetUserIdChoiceToGlobalSpecType(f)
@@ -33642,6 +34799,41 @@ func (r *ReplaceSpecType) GetSlowDdosMitigationChoiceFromGlobalSpecType(o *Globa
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetThreatIntelligenceChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ThreatIntelligenceChoice.(type) {
+	case nil:
+		o.ThreatIntelligenceChoice = nil
+
+	case *ReplaceSpecType_DisableThreatIntelligence:
+		o.ThreatIntelligenceChoice = &GlobalSpecType_DisableThreatIntelligence{DisableThreatIntelligence: of.DisableThreatIntelligence}
+
+	case *ReplaceSpecType_EnableThreatIntelligence:
+		o.ThreatIntelligenceChoice = &GlobalSpecType_EnableThreatIntelligence{EnableThreatIntelligence: of.EnableThreatIntelligence}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetThreatIntelligenceChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ThreatIntelligenceChoice.(type) {
+	case nil:
+		r.ThreatIntelligenceChoice = nil
+
+	case *GlobalSpecType_DisableThreatIntelligence:
+		r.ThreatIntelligenceChoice = &ReplaceSpecType_DisableThreatIntelligence{DisableThreatIntelligence: of.DisableThreatIntelligence}
+
+	case *GlobalSpecType_EnableThreatIntelligence:
+		r.ThreatIntelligenceChoice = &ReplaceSpecType_EnableThreatIntelligence{EnableThreatIntelligence: of.EnableThreatIntelligence}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetTrustClientIpHeadersChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.TrustClientIpHeadersChoice.(type) {
 	case nil:
@@ -33783,6 +34975,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Routes = f.GetRoutes()
 	m.GetServicePolicyChoiceFromGlobalSpecType(f)
 	m.GetSlowDdosMitigationChoiceFromGlobalSpecType(f)
+	m.GetThreatIntelligenceChoiceFromGlobalSpecType(f)
 	m.GetTrustClientIpHeadersChoiceFromGlobalSpecType(f)
 	m.TrustedClients = f.GetTrustedClients()
 	m.GetUserIdChoiceFromGlobalSpecType(f)
@@ -33838,6 +35031,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Routes = m1.Routes
 	m1.SetServicePolicyChoiceToGlobalSpecType(f)
 	m1.SetSlowDdosMitigationChoiceToGlobalSpecType(f)
+	m1.SetThreatIntelligenceChoiceToGlobalSpecType(f)
 	m1.SetTrustClientIpHeadersChoiceToGlobalSpecType(f)
 	f.TrustedClients = m1.TrustedClients
 	m1.SetUserIdChoiceToGlobalSpecType(f)

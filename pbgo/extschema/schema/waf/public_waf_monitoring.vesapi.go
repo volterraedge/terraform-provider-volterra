@@ -538,19 +538,19 @@ type wAFMonitoringAPIInprocClient struct {
 }
 
 func (c *wAFMonitoringAPIInprocClient) ClientRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest, opts ...grpc.CallOption) (*RuleHitsCountResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics")
 	return c.WAFMonitoringAPIServer.ClientRuleHitsMetrics(ctx, in)
 }
 func (c *wAFMonitoringAPIInprocClient) ClientSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest, opts ...grpc.CallOption) (*SecurityEventsCountResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics")
 	return c.WAFMonitoringAPIServer.ClientSecurityEventsMetrics(ctx, in)
 }
 func (c *wAFMonitoringAPIInprocClient) ServerRuleHitsMetrics(ctx context.Context, in *RuleHitsCountRequest, opts ...grpc.CallOption) (*RuleHitsCountResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics")
 	return c.WAFMonitoringAPIServer.ServerRuleHitsMetrics(ctx, in)
 }
 func (c *wAFMonitoringAPIInprocClient) ServerSecurityEventsMetrics(ctx context.Context, in *SecurityEventsCountRequest, opts ...grpc.CallOption) (*SecurityEventsCountResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics")
 	return c.WAFMonitoringAPIServer.ServerSecurityEventsMetrics(ctx, in)
 }
 

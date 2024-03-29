@@ -88,13 +88,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.discovery_k8s.access_info.kubeconfig_url.secret_encoding_type",
 		"spec.discovery_k8s.access_info.kubeconfig_url.vault_secret_info",
 		"spec.discovery_k8s.access_info.kubeconfig_url.wingman_secret_info",
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.discovery.API.Create"] = "ves.io.schema.discovery.CreateRequest"
-
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.API.Get"] = []string{
-		"object",
-	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.discovery.API.Replace"] = []string{
 		"spec.discovery_consul.access_info.connection_info.tls_info.ca_certificate_url",
@@ -119,6 +117,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.discovery_k8s.access_info.kubeconfig_url.secret_encoding_type",
 		"spec.discovery_k8s.access_info.kubeconfig_url.vault_secret_info",
 		"spec.discovery_k8s.access_info.kubeconfig_url.wingman_secret_info",
+		"spec.where.site.refs.#",
+		"spec.where.virtual_site.refs.#",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.discovery.API.Replace"] = "ves.io.schema.discovery.ReplaceRequest"

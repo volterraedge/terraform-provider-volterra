@@ -2036,83 +2036,83 @@ type customAPIInprocClient struct {
 }
 
 func (c *customAPIInprocClient) DeleteUserImage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.DeleteUserImage", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.DeleteUserImage")
 	return c.CustomAPIServer.DeleteUserImage(ctx, in)
 }
 func (c *customAPIInprocClient) DisableUserInIDM(ctx context.Context, in *UserEmail, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.DisableUserInIDM", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.DisableUserInIDM")
 	return c.CustomAPIServer.DisableUserInIDM(ctx, in)
 }
 func (c *customAPIInprocClient) EnableUserInIDM(ctx context.Context, in *UserEmail, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.EnableUserInIDM", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.EnableUserInIDM")
 	return c.CustomAPIServer.EnableUserInIDM(ctx, in)
 }
 func (c *customAPIInprocClient) Get(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserSettingsResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.Get")
 	return c.CustomAPIServer.Get(ctx, in)
 }
 func (c *customAPIInprocClient) GetAdminNtfnPreferences(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*NotificationList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.GetAdminNtfnPreferences", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.GetAdminNtfnPreferences")
 	return c.CustomAPIServer.GetAdminNtfnPreferences(ctx, in)
 }
 func (c *customAPIInprocClient) GetCombinedNtfnPreferences(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*NotificationList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.GetCombinedNtfnPreferences", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.GetCombinedNtfnPreferences")
 	return c.CustomAPIServer.GetCombinedNtfnPreferences(ctx, in)
 }
 func (c *customAPIInprocClient) GetNtfnPreferences(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*NotificationList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.GetNtfnPreferences", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.GetNtfnPreferences")
 	return c.CustomAPIServer.GetNtfnPreferences(ctx, in)
 }
 func (c *customAPIInprocClient) GetUserImage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.GetUserImage", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.GetUserImage")
 	return c.CustomAPIServer.GetUserImage(ctx, in)
 }
 func (c *customAPIInprocClient) GetUserSessions(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UserSessionList, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.GetUserSessions", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.GetUserSessions")
 	return c.CustomAPIServer.GetUserSessions(ctx, in)
 }
 func (c *customAPIInprocClient) GetViewPreference(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ViewPreference, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.GetViewPreference", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.GetViewPreference")
 	return c.CustomAPIServer.GetViewPreference(ctx, in)
 }
 func (c *customAPIInprocClient) RequestInitialAccess(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.RequestInitialAccess", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.RequestInitialAccess")
 	return c.CustomAPIServer.RequestInitialAccess(ctx, in)
 }
 func (c *customAPIInprocClient) ResetOtpDeviceByAdmin(ctx context.Context, in *UserEmail, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.ResetOtpDeviceByAdmin", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.ResetOtpDeviceByAdmin")
 	return c.CustomAPIServer.ResetOtpDeviceByAdmin(ctx, in)
 }
 func (c *customAPIInprocClient) SetViewPreference(ctx context.Context, in *SetViewPreferenceRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.SetViewPreference", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.SetViewPreference")
 	return c.CustomAPIServer.SetViewPreference(ctx, in)
 }
 func (c *customAPIInprocClient) UnsetAdminNtfnPreference(ctx context.Context, in *NtfnToUnset, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.UnsetAdminNtfnPreference", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.UnsetAdminNtfnPreference")
 	return c.CustomAPIServer.UnsetAdminNtfnPreference(ctx, in)
 }
 func (c *customAPIInprocClient) UnsetNtfnPreference(ctx context.Context, in *NtfnToUnset, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.UnsetNtfnPreference", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.UnsetNtfnPreference")
 	return c.CustomAPIServer.UnsetNtfnPreference(ctx, in)
 }
 func (c *customAPIInprocClient) Update(ctx context.Context, in *UserSettingsRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.Update", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.Update")
 	return c.CustomAPIServer.Update(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateAdminNtfnPreferences(ctx context.Context, in *NtfnPreferencesMap, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateAdminNtfnPreferences", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateAdminNtfnPreferences")
 	return c.CustomAPIServer.UpdateAdminNtfnPreferences(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateCombinedNtfnPreferences(ctx context.Context, in *NtfnPreferencesMap, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateCombinedNtfnPreferences", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateCombinedNtfnPreferences")
 	return c.CustomAPIServer.UpdateCombinedNtfnPreferences(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateNtfnPreferences(ctx context.Context, in *NtfnPreferencesMap, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateNtfnPreferences", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateNtfnPreferences")
 	return c.CustomAPIServer.UpdateNtfnPreferences(ctx, in)
 }
 func (c *customAPIInprocClient) UpdateUserImage(ctx context.Context, in *UpdateImageRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateUserImage", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.setting.CustomAPI.UpdateUserImage")
 	return c.CustomAPIServer.UpdateUserImage(ctx, in)
 }
 

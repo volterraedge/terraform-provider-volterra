@@ -1828,6 +1828,7 @@ func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, err
 	}
 	switch m.GetTlsParamsChoice().(type) {
 	case *UpstreamTlsParamsType_CommonParams:
+
 		drInfos, err := m.GetCommonParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCommonParams().GetDRefInfo() FAILED")
@@ -1839,6 +1840,7 @@ func (m *UpstreamTlsParamsType) GetTlsParamsChoiceDRefInfo() ([]db.DRefInfo, err
 		return drInfos, err
 
 	case *UpstreamTlsParamsType_CertParams:
+
 		drInfos, err := m.GetCertParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetCertParams().GetDRefInfo() FAILED")

@@ -63,27 +63,32 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 
 			"hub": {
 
-				Type:     schema.TypeList,
-				Optional: true,
+				Type:       schema.TypeList,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
+							Type:       schema.TypeString,
+							Computed:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -116,20 +121,7 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"control_and_data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-					},
+					Schema: map[string]*schema.Schema{},
 				},
 			},
 
@@ -162,25 +154,14 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 								},
 							},
 						},
-
-						"control_and_data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
 					},
 				},
 			},
 
 			"type": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"virtual_site": {
@@ -354,33 +335,7 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			hubFullMeshChoiceTypeFound := false
-
-			if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !hubFullMeshChoiceTypeFound {
-
-				hubFullMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					hubFullMeshChoiceInt := &ves_io_schema_site_mesh_group.HubFullMeshGroupType_ControlAndDataPlaneMesh{}
-					hubFullMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.HubMesh.HubFullMeshChoice = hubFullMeshChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !hubFullMeshChoiceTypeFound {
-
-				hubFullMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					hubFullMeshChoiceInt := &ves_io_schema_site_mesh_group.HubFullMeshGroupType_DataPlaneMesh{}
-					hubFullMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.HubMesh.HubFullMeshChoice = hubFullMeshChoiceInt
-				}
-
-			}
+			_ = set.(map[string]interface{})
 
 		}
 
@@ -415,32 +370,6 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 					if val, ok := hmgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
 						hubMeshGroupInt.Tenant = val.(string)
 					}
-				}
-
-			}
-
-			spokeHubMeshChoiceTypeFound := false
-
-			if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !spokeHubMeshChoiceTypeFound {
-
-				spokeHubMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					spokeHubMeshChoiceInt := &ves_io_schema_site_mesh_group.SpokeMeshGroupType_ControlAndDataPlaneMesh{}
-					spokeHubMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.SpokeMesh.SpokeHubMeshChoice = spokeHubMeshChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !spokeHubMeshChoiceTypeFound {
-
-				spokeHubMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					spokeHubMeshChoiceInt := &ves_io_schema_site_mesh_group.SpokeMeshGroupType_DataPlaneMesh{}
-					spokeHubMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.SpokeMesh.SpokeHubMeshChoice = spokeHubMeshChoiceInt
 				}
 
 			}
@@ -545,6 +474,7 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -671,33 +601,7 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			hubFullMeshChoiceTypeFound := false
-
-			if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !hubFullMeshChoiceTypeFound {
-
-				hubFullMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					hubFullMeshChoiceInt := &ves_io_schema_site_mesh_group.HubFullMeshGroupType_ControlAndDataPlaneMesh{}
-					hubFullMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.HubMesh.HubFullMeshChoice = hubFullMeshChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !hubFullMeshChoiceTypeFound {
-
-				hubFullMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					hubFullMeshChoiceInt := &ves_io_schema_site_mesh_group.HubFullMeshGroupType_DataPlaneMesh{}
-					hubFullMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.HubMesh.HubFullMeshChoice = hubFullMeshChoiceInt
-				}
-
-			}
+			_ = set.(map[string]interface{})
 
 		}
 
@@ -732,32 +636,6 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 					if val, ok := hmgMapToStrVal["tenant"]; ok && !isIntfNil(v) {
 						hubMeshGroupInt.Tenant = val.(string)
 					}
-				}
-
-			}
-
-			spokeHubMeshChoiceTypeFound := false
-
-			if v, ok := cs["control_and_data_plane_mesh"]; ok && !isIntfNil(v) && !spokeHubMeshChoiceTypeFound {
-
-				spokeHubMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					spokeHubMeshChoiceInt := &ves_io_schema_site_mesh_group.SpokeMeshGroupType_ControlAndDataPlaneMesh{}
-					spokeHubMeshChoiceInt.ControlAndDataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.SpokeMesh.SpokeHubMeshChoice = spokeHubMeshChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["data_plane_mesh"]; ok && !isIntfNil(v) && !spokeHubMeshChoiceTypeFound {
-
-				spokeHubMeshChoiceTypeFound = true
-
-				if v.(bool) {
-					spokeHubMeshChoiceInt := &ves_io_schema_site_mesh_group.SpokeMeshGroupType_DataPlaneMesh{}
-					spokeHubMeshChoiceInt.DataPlaneMesh = &ves_io_schema.Empty{}
-					meshChoiceInt.SpokeMesh.SpokeHubMeshChoice = spokeHubMeshChoiceInt
 				}
 
 			}

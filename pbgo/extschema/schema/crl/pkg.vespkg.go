@@ -54,10 +54,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.verify_all_certs_with_crl",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.crl.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.crl.API.Replace"] = []string{
 		"spec.verify_all_certs_with_crl",
 	}

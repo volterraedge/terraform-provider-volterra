@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_definition.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_definition.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_definition.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_definition.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.views.api_definition.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2651,7 +2666,7 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Excluded Operations\"\nList of operations matched by the filters to be excluded from a group.\nThe list should only include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
                     "title": "excluded_operations",
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     }
                 },
                 "included_operations": {
@@ -2659,7 +2674,7 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Included Operations\"\nList of operations not matched by the filters to be included in a group.\nThe list should not include operations matched by the filters.\nThe paths appear here with parameters as defined in OpenAPI spec file.",
                     "title": "included_operations",
                     "items": {
-                        "$ref": "#/definitions/api_definitionApiOperation"
+                        "$ref": "#/definitions/viewsApiOperation"
                     }
                 },
                 "label_filter": {
@@ -2709,23 +2724,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
-                }
-            }
-        },
-        "api_definitionApiOperation": {
-            "type": "object",
-            "description": "x-displayName: \"API Operation\"\nAPI operation according to OpenAPI specification.",
-            "title": "ApiOperation",
-            "properties": {
-                "method": {
-                    "description": "x-displayName: \"HTTP Method\"\nx-required\nx-example: 'POST'\nMethod to match the input request API method against.",
-                    "title": "method",
-                    "$ref": "#/definitions/schemaHttpMethod"
-                },
-                "path": {
-                    "type": "string",
-                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/api/users/{userid}\"\nAn endpoint path, as specified in OpenAPI, including parameters.\nThe path should comply with RFC 3986 and may have parameters according to OpenAPI specification",
-                    "title": "path"
                 }
             }
         },
@@ -3103,6 +3101,13 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaHttpMethod": {
             "type": "string",
@@ -3628,11 +3633,49 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsApiOperation": {
+            "type": "object",
+            "description": "API operation according to OpenAPI specification.",
+            "title": "ApiOperation",
+            "x-displayname": "API Operation",
+            "x-ves-proto-message": "ves.io.schema.views.ApiOperation",
+            "properties": {
+                "method": {
+                    "description": " Method to match the input request API method against.\n\nExample: - 'POST'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: 0\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "method",
+                    "$ref": "#/definitions/schemaHttpMethod",
+                    "x-displayname": "HTTP Method",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.enum.not_in": "0",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "type": "string",
+                    "description": " An endpoint path, as specified in OpenAPI, including parameters.\n The path should comply with RFC 3986 and may have parameters according to OpenAPI specification\n\nExample: - \"/api/users/{userid}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.templated_http_path: true\n",
+                    "title": "path",
+                    "minLength": 1,
+                    "maxLength": 1024,
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/users/{userid}",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.min_bytes": "1",
+                        "ves.io.schema.rules.string.templated_http_path": "true"
+                    }
+                }
+            }
+        },
         "viewsapi_definitionGlobalSpecType": {
             "type": "object",
             "description": "x-required\nShape of api_definition in the storage backend.\nNote: due to UI/UX requirements the API Definition object should have a default value,\ni.e. it should support creating an empty object.",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
+            "x-ves-oneof-field-schema_updates_strategy": "[\"mixed_schema_origin\",\"strict_schema_origin\"]",
             "x-ves-proto-message": "ves.io.schema.views.api_definition.GlobalSpecType",
             "properties": {
                 "api_groups": {
@@ -3643,6 +3686,60 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/api_definitionApiGroupSummary"
                     },
                     "x-displayname": "Api Groups"
+                },
+                "api_inventory_exclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_exclusion_list",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Inventory Exclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "api_inventory_inclusion_list": {
+                    "type": "array",
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "api_inventory_inclusion_list",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Inventory Inclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "mixed_schema_origin": {
+                    "description": "Exclusive with [strict_schema_origin]\n The schema can be updated from all associated LBs",
+                    "title": "mixed_schema_origin",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Mixed Schema Origin"
+                },
+                "non_api_endpoints": {
+                    "type": "array",
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "non_api_endpoints",
+                    "maxItems": 1000,
+                    "items": {
+                        "$ref": "#/definitions/viewsApiOperation"
+                    },
+                    "x-displayname": "API Discovery Exclusion List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "strict_schema_origin": {
+                    "description": "Exclusive with [mixed_schema_origin]\n Restrict schema updates to a single AppType\n The origin of the schema update is stored and validated per API endpoint",
+                    "title": "strict_schema_origin",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Strict Schema Origin"
                 },
                 "swagger_specs": {
                     "type": "array",

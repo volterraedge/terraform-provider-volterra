@@ -1226,6 +1226,7 @@ func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *CreateSpecType_Aws:
+
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -1241,6 +1242,7 @@ func (m *CreateSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_Gcp:
+
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -2222,6 +2224,7 @@ func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *GetSpecType_Aws:
+
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -2237,6 +2240,7 @@ func (m *GetSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_Gcp:
+
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -2534,6 +2538,7 @@ func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *GlobalSpecType_Aws:
+
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -2549,6 +2554,7 @@ func (m *GlobalSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_Gcp:
+
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")
@@ -3058,6 +3064,7 @@ func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloudProvider().(type) {
 	case *ReplaceSpecType_Aws:
+
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
@@ -3073,6 +3080,7 @@ func (m *ReplaceSpecType) GetCloudProviderDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_Gcp:
+
 		drInfos, err := m.GetGcp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetGcp().GetDRefInfo() FAILED")

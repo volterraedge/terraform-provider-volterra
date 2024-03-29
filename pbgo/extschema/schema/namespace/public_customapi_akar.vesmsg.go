@@ -459,6 +459,33 @@ func (m *ApplicationInventoryResponse) Validate(ctx context.Context, opts ...db.
 	return ApplicationInventoryResponseValidator().Validate(ctx, m, opts...)
 }
 
+func (m *ApplicationInventoryResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttpLoadbalancersDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApplicationInventoryResponse) GetHttpLoadbalancersDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetHttpLoadbalancers() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetHttpLoadbalancers().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetHttpLoadbalancers().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "http_loadbalancers." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateApplicationInventoryResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -528,6 +555,8 @@ func (v *ValidateApplicationInventoryResponse) Validate(ctx context.Context, pm 
 // Well-known symbol for default validator implementation
 var DefaultApplicationInventoryResponseValidator = func() *ValidateApplicationInventoryResponse {
 	v := &ValidateApplicationInventoryResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["http_loadbalancers"] = HTTPLoadbalancerInventoryTypeValidator().Validate
 
 	return v
 }()
@@ -1549,6 +1578,15 @@ func (v *ValidateHTTPLoadbalancerInventoryFilterType) Validate(ctx context.Conte
 
 	}
 
+	if fv, exists := v.FldValidators["api_discovery"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery"))
+		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["api_protection"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("api_protection"))
@@ -1870,6 +1908,37 @@ func (m *HTTPLoadbalancerInventoryType) Validate(ctx context.Context, opts ...db
 	return HTTPLoadbalancerInventoryTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *HTTPLoadbalancerInventoryType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetHttplbResultsDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *HTTPLoadbalancerInventoryType) GetHttplbResultsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetHttplbResults() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetHttplbResults() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetHttplbResults() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("httplb_results[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 type ValidateHTTPLoadbalancerInventoryType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1886,6 +1955,15 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery"))
+		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["api_protection"]; exists {
@@ -2015,6 +2093,8 @@ func (v *ValidateHTTPLoadbalancerInventoryType) Validate(ctx context.Context, pm
 var DefaultHTTPLoadbalancerInventoryTypeValidator = func() *ValidateHTTPLoadbalancerInventoryType {
 	v := &ValidateHTTPLoadbalancerInventoryType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["httplb_results"] = HTTPLoadbalancerResultTypeValidator().Validate
+
 	return v
 }()
 
@@ -2059,8 +2139,120 @@ func (m *HTTPLoadbalancerResultType) Validate(ctx context.Context, opts ...db.Va
 	return HTTPLoadbalancerResultTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *HTTPLoadbalancerResultType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWafPolicyRefDRefInfo()
+
+}
+
+func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetWafPolicyRef()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("HTTPLoadbalancerResultType.waf_policy_ref[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf_policy_ref",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetWafPolicyRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *HTTPLoadbalancerResultType) GetWafPolicyRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+	}
+	for i, vref := range m.GetWafPolicyRef() {
+		if vref == nil {
+			return nil, fmt.Errorf("HTTPLoadbalancerResultType.waf_policy_ref[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateHTTPLoadbalancerResultType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHTTPLoadbalancerResultType) WafPolicyRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_policy_ref")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_policy_ref")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_policy_ref")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_policy_ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -2081,6 +2273,15 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("api_definition_enabled"))
 		if err := fv(ctx, m.GetApiDefinitionEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery_enabled"))
+		if err := fv(ctx, m.GetApiDiscoveryEnabled(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2476,10 +2677,9 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 
 	}
 
-	if fv, exists := v.FldValidators["waf_policy_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("waf_policy_name"))
-		if err := fv(ctx, m.GetWafPolicyName(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["waf_policy_ref"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_policy_ref"))
+		if err := fv(ctx, m.GetWafPolicyRef(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2491,6 +2691,25 @@ func (v *ValidateHTTPLoadbalancerResultType) Validate(ctx context.Context, pm in
 // Well-known symbol for default validator implementation
 var DefaultHTTPLoadbalancerResultTypeValidator = func() *ValidateHTTPLoadbalancerResultType {
 	v := &ValidateHTTPLoadbalancerResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhWafPolicyRef := v.WafPolicyRefValidationRuleHandler
+	rulesWafPolicyRef := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhWafPolicyRef(rulesWafPolicyRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HTTPLoadbalancerResultType.waf_policy_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_policy_ref"] = vFn
 
 	return v
 }()
@@ -2732,6 +2951,15 @@ func (v *ValidateNetworkingInventoryResponse) Validate(ctx context.Context, pm i
 
 		vOpts := append(opts, db.WithValidateField("global_networks"))
 		if err := fv(ctx, m.GetGlobalNetworks(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segments"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segments"))
+		if err := fv(ctx, m.GetSegments(), vOpts...); err != nil {
 			return err
 		}
 

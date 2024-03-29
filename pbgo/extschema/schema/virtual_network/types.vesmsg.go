@@ -628,6 +628,7 @@ func (m *CreateSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_Srv6Network:
+
 		drInfos, err := m.GetSrv6Network().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")
@@ -1208,6 +1209,7 @@ func (m *GetSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_Srv6Network:
+
 		drInfos, err := m.GetSrv6Network().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")
@@ -1679,6 +1681,7 @@ func (m *GlobalSpecType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_FleetVip:
+
 		drInfos, err := m.GetFleetVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFleetVip().GetDRefInfo() FAILED")
@@ -1767,6 +1770,7 @@ func (m *GlobalSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_Srv6Network:
+
 		drInfos, err := m.GetSrv6Network().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")
@@ -1847,6 +1851,7 @@ func (m *GlobalSpecType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_FleetSnatPool:
+
 		drInfos, err := m.GetFleetSnatPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFleetSnatPool().GetDRefInfo() FAILED")
@@ -2877,6 +2882,7 @@ func (m *PerSiteSrv6NetworkType) GetDefaultVipChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *PerSiteSrv6NetworkType_FleetVip:
+
 		drInfos, err := m.GetFleetVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFleetVip().GetDRefInfo() FAILED")
@@ -3012,6 +3018,7 @@ func (m *PerSiteSrv6NetworkType) GetSnatPoolChoiceDRefInfo() ([]db.DRefInfo, err
 		return nil, nil
 
 	case *PerSiteSrv6NetworkType_FleetSnatPool:
+
 		drInfos, err := m.GetFleetSnatPool().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFleetSnatPool().GetDRefInfo() FAILED")
@@ -3925,6 +3932,7 @@ func (m *ReplaceSpecType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_Srv6Network:
+
 		drInfos, err := m.GetSrv6Network().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSrv6Network().GetDRefInfo() FAILED")

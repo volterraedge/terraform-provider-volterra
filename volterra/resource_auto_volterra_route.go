@@ -126,32 +126,37 @@ func resourceVolterraRoute() *schema.Resource {
 
 						"bot_defense_javascript_injection_inline_mode": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"element_selector": {
-										Type:     schema.TypeString,
-										Required: true,
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"insert_content": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"position": {
-										Type:     schema.TypeString,
-										Optional: true,
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 
 						"disable_custom_script": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"disable_location_add": {
@@ -321,32 +326,37 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"blindfold_secret_info_internal": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"secret_encoding_type": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"blindfold_secret_info": {
@@ -396,34 +406,40 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"vault_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"key": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"provider": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"secret_encoding": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"version": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -431,14 +447,16 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"wingman_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -492,32 +510,37 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"blindfold_secret_info_internal": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"decryption_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"store_provider": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"secret_encoding_type": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"blindfold_secret_info": {
@@ -567,34 +590,40 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"vault_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"key": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"location": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"provider": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"secret_encoding": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"version": {
-																Type:     schema.TypeInt,
-																Optional: true,
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -602,14 +631,16 @@ func resourceVolterraRoute() *schema.Resource {
 
 												"wingman_secret_info": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -662,8 +693,9 @@ func resourceVolterraRoute() *schema.Resource {
 												},
 
 												"max_request_time": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -734,8 +766,9 @@ func resourceVolterraRoute() *schema.Resource {
 												},
 
 												"max_age": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"maximum_age": {
@@ -1016,11 +1049,6 @@ func resourceVolterraRoute() *schema.Resource {
 										},
 									},
 
-									"prefix_rewrite": {
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
 									"priority": {
 										Type:     schema.TypeString,
 										Optional: true,
@@ -1084,8 +1112,38 @@ func resourceVolterraRoute() *schema.Resource {
 												},
 
 												"retry_on": {
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"prefix_rewrite": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"regex_rewrite": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"pattern": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"substitution": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1119,13 +1177,15 @@ func resourceVolterraRoute() *schema.Resource {
 											Schema: map[string]*schema.Schema{
 
 												"idle_timeout": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"max_connect_attempts": {
-													Type:     schema.TypeInt,
-													Optional: true,
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"use_websocket": {
@@ -1172,8 +1232,9 @@ func resourceVolterraRoute() *schema.Resource {
 									},
 
 									"port_redirect": {
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"proto_redirect": {
@@ -1183,8 +1244,9 @@ func resourceVolterraRoute() *schema.Resource {
 
 									"all_params": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"remove_all_params": {
@@ -1207,8 +1269,9 @@ func resourceVolterraRoute() *schema.Resource {
 
 									"strip_query_params": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1216,7 +1279,8 @@ func resourceVolterraRoute() *schema.Resource {
 
 													Type: schema.TypeList,
 
-													Optional: true,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
@@ -1254,14 +1318,16 @@ func resourceVolterraRoute() *schema.Resource {
 
 									"context_extensions": {
 
-										Type:     schema.TypeSet,
-										Optional: true,
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"context_extensions": {
-													Type:     schema.TypeMap,
-													Optional: true,
+													Type:       schema.TypeMap,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1277,8 +1343,9 @@ func resourceVolterraRoute() *schema.Resource {
 						},
 
 						"skip_lb_override": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"waf_type": {
@@ -2678,12 +2745,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
-
-					}
-
 					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDestination.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
@@ -2744,6 +2805,46 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 							if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
 								retryPolicy.RetryOn = w.(string)
+							}
+
+						}
+
+					}
+
+					routeDestinationRewriteTypeFound := false
+
+					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) && !routeDestinationRewriteTypeFound {
+
+						routeDestinationRewriteTypeFound = true
+						routeDestinationRewriteInt := &ves_io_schema_route.RouteDestinationList_PrefixRewrite{}
+
+						routeActionInt.RouteDestination.RouteDestinationRewrite = routeDestinationRewriteInt
+
+						routeDestinationRewriteInt.PrefixRewrite = v.(string)
+
+					}
+
+					if v, ok := cs["regex_rewrite"]; ok && !isIntfNil(v) && !routeDestinationRewriteTypeFound {
+
+						routeDestinationRewriteTypeFound = true
+						routeDestinationRewriteInt := &ves_io_schema_route.RouteDestinationList_RegexRewrite{}
+						routeDestinationRewriteInt.RegexRewrite = &ves_io_schema.RegexMatchRewrite{}
+						routeActionInt.RouteDestination.RouteDestinationRewrite = routeDestinationRewriteInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["pattern"]; ok && !isIntfNil(v) {
+
+								routeDestinationRewriteInt.RegexRewrite.Pattern = v.(string)
+
+							}
+
+							if v, ok := cs["substitution"]; ok && !isIntfNil(v) {
+
+								routeDestinationRewriteInt.RegexRewrite.Substitution = v.(string)
+
 							}
 
 						}
@@ -3161,6 +3262,7 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -4480,12 +4582,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 					}
 
-					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) {
-
-						routeActionInt.RouteDestination.PrefixRewrite = v.(string)
-
-					}
-
 					if v, ok := cs["priority"]; ok && !isIntfNil(v) {
 
 						routeActionInt.RouteDestination.Priority = ves_io_schema.RoutingPriority(ves_io_schema.RoutingPriority_value[v.(string)])
@@ -4546,6 +4642,46 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 							if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
 								retryPolicy.RetryOn = w.(string)
+							}
+
+						}
+
+					}
+
+					routeDestinationRewriteTypeFound := false
+
+					if v, ok := cs["prefix_rewrite"]; ok && !isIntfNil(v) && !routeDestinationRewriteTypeFound {
+
+						routeDestinationRewriteTypeFound = true
+						routeDestinationRewriteInt := &ves_io_schema_route.RouteDestinationList_PrefixRewrite{}
+
+						routeActionInt.RouteDestination.RouteDestinationRewrite = routeDestinationRewriteInt
+
+						routeDestinationRewriteInt.PrefixRewrite = v.(string)
+
+					}
+
+					if v, ok := cs["regex_rewrite"]; ok && !isIntfNil(v) && !routeDestinationRewriteTypeFound {
+
+						routeDestinationRewriteTypeFound = true
+						routeDestinationRewriteInt := &ves_io_schema_route.RouteDestinationList_RegexRewrite{}
+						routeDestinationRewriteInt.RegexRewrite = &ves_io_schema.RegexMatchRewrite{}
+						routeActionInt.RouteDestination.RouteDestinationRewrite = routeDestinationRewriteInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["pattern"]; ok && !isIntfNil(v) {
+
+								routeDestinationRewriteInt.RegexRewrite.Pattern = v.(string)
+
+							}
+
+							if v, ok := cs["substitution"]; ok && !isIntfNil(v) {
+
+								routeDestinationRewriteInt.RegexRewrite.Substitution = v.(string)
+
 							}
 
 						}

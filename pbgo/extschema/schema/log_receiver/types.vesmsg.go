@@ -104,6 +104,7 @@ func (m *CreateSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_LogReceiverSites:
+
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
@@ -751,6 +752,7 @@ func (m *GetSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_LogReceiverSites:
+
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
@@ -1075,6 +1077,7 @@ func (m *GlobalSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_LogReceiverSites:
+
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")
@@ -1629,6 +1632,7 @@ func (m *ReplaceSpecType) GetWhereChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_LogReceiverSites:
+
 		drInfos, err := m.GetLogReceiverSites().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLogReceiverSites().GetDRefInfo() FAILED")

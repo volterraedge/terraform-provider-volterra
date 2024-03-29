@@ -83,14 +83,6 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *GlobalSpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetTopologySpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *GlobalSpecType) GetTopologyMetadataDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetTopologyMetadata() == nil {
@@ -124,27 +116,6 @@ func (m *GlobalSpecType) GetTopologySpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "topology_spec." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetTopologySpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *GlobalSpecType) GetTopologySpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetTopologySpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetTopologySpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetTopologySpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "topology_spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 

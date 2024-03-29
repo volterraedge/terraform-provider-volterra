@@ -83,8 +83,9 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 
 												"alert_only": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"block_temporarily": {
@@ -107,8 +108,9 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 
 												"none": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -410,6 +412,7 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

@@ -1814,15 +1814,13 @@ func (m *UpdateImageRequest) String() string {
 		return ""
 	}
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.string()
 }
 
 func (m *UpdateImageRequest) GoString() string {
 	copy := m.DeepCopy()
-	copy.Image = []byte{}
-
+	copy.Redact(context.Background())
 	return copy.goString()
 }
 

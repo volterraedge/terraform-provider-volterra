@@ -32,7 +32,6 @@ import (
 )
 
 // TestAccHTTPLB token creation test
-// TestAccHTTPLB token creation test
 func TestHTTPLB(t *testing.T) {
 	name := generateResourceName()
 	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{

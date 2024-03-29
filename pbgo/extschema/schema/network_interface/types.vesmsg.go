@@ -82,6 +82,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_EthernetInterface:
+
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -93,6 +94,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_TunnelInterface:
+
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -104,6 +106,7 @@ func (m *CreateSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *CreateSpecType_LegacyInterface:
+
 		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
@@ -2905,6 +2908,7 @@ func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *EthernetInterfaceType_DhcpServer:
+
 		drInfos, err := m.GetDhcpServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
@@ -2916,6 +2920,7 @@ func (m *EthernetInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 		return drInfos, err
 
 	case *EthernetInterfaceType_StaticIp:
+
 		drInfos, err := m.GetStaticIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
@@ -2943,6 +2948,7 @@ func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *EthernetInterfaceType_StaticIpv6Address:
+
 		drInfos, err := m.GetStaticIpv6Address().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfo() FAILED")
@@ -2954,6 +2960,7 @@ func (m *EthernetInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 		return drInfos, err
 
 	case *EthernetInterfaceType_Ipv6AutoConfig:
+
 		drInfos, err := m.GetIpv6AutoConfig().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpv6AutoConfig().GetDRefInfo() FAILED")
@@ -3859,6 +3866,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_EthernetInterface:
+
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -3870,6 +3878,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_TunnelInterface:
+
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -3881,6 +3890,7 @@ func (m *GetSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GetSpecType_LegacyInterface:
+
 		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
@@ -4977,6 +4987,7 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_EthernetInterface:
+
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -4988,6 +4999,7 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *GlobalSpecType_TunnelInterface:
+
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -5007,6 +5019,7 @@ func (m *GlobalSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_LoopbackInterface:
+
 		drInfos, err := m.GetLoopbackInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLoopbackInterface().GetDRefInfo() FAILED")
@@ -6200,6 +6213,7 @@ func (m *IPV6AutoConfigRouterType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, er
 	}
 	switch m.GetAddressChoice().(type) {
 	case *IPV6AutoConfigRouterType_Stateful:
+
 		drInfos, err := m.GetStateful().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStateful().GetDRefInfo() FAILED")
@@ -6401,6 +6415,7 @@ func (m *IPV6AutoConfigType) GetAutoconfigChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *IPV6AutoConfigType_Router:
+
 		drInfos, err := m.GetRouter().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetRouter().GetDRefInfo() FAILED")
@@ -8335,6 +8350,7 @@ func (m *LoopbackInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *LoopbackInterfaceType_DhcpServer:
+
 		drInfos, err := m.GetDhcpServer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDhcpServer().GetDRefInfo() FAILED")
@@ -8346,6 +8362,7 @@ func (m *LoopbackInterfaceType) GetAddressChoiceDRefInfo() ([]db.DRefInfo, error
 		return drInfos, err
 
 	case *LoopbackInterfaceType_StaticIp:
+
 		drInfos, err := m.GetStaticIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIp().GetDRefInfo() FAILED")
@@ -8373,6 +8390,7 @@ func (m *LoopbackInterfaceType) GetIpv6AddressChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *LoopbackInterfaceType_StaticIpv6Address:
+
 		drInfos, err := m.GetStaticIpv6Address().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetStaticIpv6Address().GetDRefInfo() FAILED")
@@ -9314,6 +9332,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_EthernetInterface:
+
 		drInfos, err := m.GetEthernetInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEthernetInterface().GetDRefInfo() FAILED")
@@ -9325,6 +9344,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_TunnelInterface:
+
 		drInfos, err := m.GetTunnelInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetTunnelInterface().GetDRefInfo() FAILED")
@@ -9336,6 +9356,7 @@ func (m *ReplaceSpecType) GetInterfaceChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *ReplaceSpecType_LegacyInterface:
+
 		drInfos, err := m.GetLegacyInterface().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetLegacyInterface().GetDRefInfo() FAILED")
@@ -9567,6 +9588,7 @@ func (m *StaticIPParametersType) GetNetworkPrefixChoiceDRefInfo() ([]db.DRefInfo
 		return nil, nil
 
 	case *StaticIPParametersType_FleetStaticIp:
+
 		drInfos, err := m.GetFleetStaticIp().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetFleetStaticIp().GetDRefInfo() FAILED")

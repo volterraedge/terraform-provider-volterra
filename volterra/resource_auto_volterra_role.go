@@ -172,6 +172,7 @@ func resourceVolterraRoleUpdate(d *schema.ResourceData, meta interface{}) error 
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

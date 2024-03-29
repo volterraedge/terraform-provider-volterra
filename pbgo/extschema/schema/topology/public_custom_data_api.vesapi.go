@@ -695,27 +695,27 @@ type customDataAPIInprocClient struct {
 }
 
 func (c *customDataAPIInprocClient) DCClusterGroupsSummary(ctx context.Context, in *DCClusterGroupsSummaryRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.DCClusterGroupsSummary", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.DCClusterGroupsSummary")
 	return c.CustomDataAPIServer.DCClusterGroupsSummary(ctx, in)
 }
 func (c *customDataAPIInprocClient) DCClusterTopology(ctx context.Context, in *DCClusterTopologyRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.DCClusterTopology", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.DCClusterTopology")
 	return c.CustomDataAPIServer.DCClusterTopology(ctx, in)
 }
 func (c *customDataAPIInprocClient) GetRouteTable(ctx context.Context, in *RouteTableRequest, opts ...grpc.CallOption) (*RouteTableResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.GetRouteTable", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.GetRouteTable")
 	return c.CustomDataAPIServer.GetRouteTable(ctx, in)
 }
 func (c *customDataAPIInprocClient) SiteMeshGroupsSummary(ctx context.Context, in *SiteMeshGroupsSummaryRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.SiteMeshGroupsSummary", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.SiteMeshGroupsSummary")
 	return c.CustomDataAPIServer.SiteMeshGroupsSummary(ctx, in)
 }
 func (c *customDataAPIInprocClient) SiteMeshTopology(ctx context.Context, in *SiteMeshTopologyRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.SiteMeshTopology", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.SiteMeshTopology")
 	return c.CustomDataAPIServer.SiteMeshTopology(ctx, in)
 }
 func (c *customDataAPIInprocClient) SiteTopology(ctx context.Context, in *SiteTopologyRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.topology.CustomDataAPI.SiteTopology", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.SiteTopology")
 	return c.CustomDataAPIServer.SiteTopology(ctx, in)
 }
 
@@ -1641,36 +1641,6 @@ var CustomDataAPISwaggerJSON string = `{
                 }
             }
         },
-        "schemaLabelSelectorType": {
-            "type": "object",
-            "description": "This type can be used to establish a 'selector reference' from one object(called selector) to\na set of other objects(called selectees) based on the value of expresssions.\nA label selector is a label query over a set of resources. An empty label selector matches all objects.\nA null label selector matches no objects. Label selector is immutable.\nexpressions is a list of strings of label selection expression.\nEach string has \",\" separated values which are \"AND\" and all strings are logically \"OR\".\nBNF for expression string\n\u003cselector-syntax\u003e         ::= \u003crequirement\u003e | \u003crequirement\u003e \",\" \u003cselector-syntax\u003e\n\u003crequirement\u003e             ::= [!] KEY [ \u003cset-based-restriction\u003e | \u003cexact-match-restriction\u003e ]\n\u003cset-based-restriction\u003e   ::= \"\" | \u003cinclusion-exclusion\u003e \u003cvalue-set\u003e\n\u003cinclusion-exclusion\u003e     ::= \u003cinclusion\u003e | \u003cexclusion\u003e\n\u003cexclusion\u003e               ::= \"notin\"\n\u003cinclusion\u003e               ::= \"in\"\n\u003cvalue-set\u003e               ::= \"(\" \u003cvalues\u003e \")\"\n\u003cvalues\u003e                  ::= VALUE | VALUE \",\" \u003cvalues\u003e\n\u003cexact-match-restriction\u003e ::= [\"=\"|\"==\"|\"!=\"] VALUE",
-            "title": "LabelSelectorType",
-            "x-displayname": "Label Selector",
-            "x-ves-proto-message": "ves.io.schema.LabelSelectorType",
-            "properties": {
-                "expressions": {
-                    "type": "array",
-                    "description": " expressions contains the kubernetes style label expression for selections.\n\nExample: - \"region in (us-west1, us-west2),tier in (staging)\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.k8s_label_selector: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4096\n  ves.io.schema.rules.repeated.items.string.min_len: 1\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "expressions",
-                    "maxItems": 1,
-                    "items": {
-                        "type": "string",
-                        "minLength": 1,
-                        "maxLength": 4096
-                    },
-                    "x-displayname": "Selector Expression",
-                    "x-ves-example": "region in (us-west1, us-west2),tier in (staging)",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.k8s_label_selector": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_len": "4096",
-                        "ves.io.schema.rules.repeated.items.string.min_len": "1",
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                }
-            }
-        },
         "schemaMetricValue": {
             "type": "object",
             "description": "Metric data contains timestamp and the value.",
@@ -1973,12 +1943,6 @@ var CustomDataAPISwaggerJSON string = `{
                     "$ref": "#/definitions/site_mesh_groupHubFullMeshGroupType",
                     "x-displayname": "Hub"
                 },
-                "site_selector": {
-                    "description": " Label selector for virtual site",
-                    "title": "Site Selector",
-                    "$ref": "#/definitions/schemaLabelSelectorType",
-                    "x-displayname": "Site Selector Expression"
-                },
                 "site_type": {
                     "description": " Site type for sites in the virtual site",
                     "title": "site_type",
@@ -1991,11 +1955,33 @@ var CustomDataAPISwaggerJSON string = `{
                     "$ref": "#/definitions/site_mesh_groupSpokeMeshGroupType",
                     "x-displayname": "Spoke"
                 },
+                "topology_site": {
+                    "type": "array",
+                    "description": " Topology Sites referenced in this site_mesh_group",
+                    "title": "Topology Site Reference",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Topology Site"
+                },
                 "type": {
                     "description": " Site Mesh Group Type",
                     "title": "Type",
                     "$ref": "#/definitions/schemasite_mesh_groupSiteMeshGroupType",
                     "x-displayname": "Type"
+                },
+                "virtual_site": {
+                    "type": "array",
+                    "description": " Virtual Site referenced in this site_mesh_group\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "virtual_site",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Virtual Site",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },

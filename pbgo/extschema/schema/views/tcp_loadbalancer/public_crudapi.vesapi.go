@@ -23,8 +23,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -243,10 +241,8 @@ func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -258,10 +254,8 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -449,7 +443,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -570,7 +567,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -612,7 +612,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -638,10 +641,8 @@ func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -653,10 +654,8 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -737,7 +736,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -788,7 +790,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	_, err = io.ReadAll(rsp.Body)
@@ -825,7 +830,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -840,7 +845,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
@@ -854,7 +859,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Get")
 	rsp, err := oah.Get(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -869,7 +874,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...gr
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.API.List")
 	rsp, err := oah.List(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -884,7 +889,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts .
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.views.tcp_loadbalancer")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.tcp_loadbalancer.API.Delete")
 	rsp, err := oah.Delete(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -991,10 +996,8 @@ func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...serve
 
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
+		obj := NewDBObject(nil)
+		gRsp.ToObject(obj)
 		return obj, err
 	}
 	return nil, err
@@ -1006,10 +1009,8 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	gRsp, err := c.GetRaw(ctx, key, opts...)
 	respDetail := server.GetResponse{}
 	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
+		respDetail.Entry = NewDBObject(nil)
+		gRsp.ToObject(respDetail.Entry)
 		for _, status := range gRsp.Status {
 			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
 		}
@@ -1545,21 +1546,8 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 		buildBrokenReferencesForm()
 
 	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
+		buildReadForm()
 
-		} else {
-			buildReadForm()
-
-		}
 		buildStatusForm()
 	}
 
@@ -1617,11 +1605,6 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 		item.Disabled = o.GetMetadata().GetDisable()
 
 		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
 			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
 			item.Metadata.FromObjectMetaType(o.Metadata)
 			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
@@ -2645,75 +2628,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
         "schemaObjectReplaceMetaType": {
             "type": "object",
             "description": "ObjectReplaceMetaType is metadata that can be specified in Replace request of an object.",
@@ -3003,149 +2917,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -3526,12 +3297,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaObjectGetMetaType",
                     "x-displayname": "Metadata"
                 },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/viewstcp_loadbalancerObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
                 "referring_objects": {
                     "type": "array",
                     "description": "The set of objects that are referring to this object in their spec",
@@ -3670,12 +3435,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/viewstcp_loadbalancerObject",
-                    "x-displayname": "Object"
-                },
                 "owner_view": {
                     "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
                     "title": "owner_view",
@@ -3722,16 +3481,16 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.ProxyTypeTLSTCP",
             "properties": {
                 "tls_cert_params": {
-                    "description": "Exclusive with [tls_parameters]\n Multiple domains with separate TLS certificates on this load balancer",
-                    "title": "TLS Parameters With Certificates",
+                    "description": "Exclusive with [tls_parameters]\n Select/Add one or more TLS Certificate objects to associate with this Load Balancer",
+                    "title": "TLS Certificates",
                     "$ref": "#/definitions/viewsDownstreamTLSCertsParams",
-                    "x-displayname": "Multiple Certificates"
+                    "x-displayname": "TLS Certificates"
                 },
                 "tls_parameters": {
-                    "description": "Exclusive with [tls_cert_params]\n Single RSA and/or ECDSA TLS certificate for all domains on this load balancer",
-                    "title": "TLS Parameters With Inline Certificates",
+                    "description": "Exclusive with [tls_cert_params]\n Upload a TLS certificate specifically for this Load Balancer (certificate must cover all Load Balancer domain names)",
+                    "title": "Inline TLS Parameters (legacy)",
                     "$ref": "#/definitions/schemaviewsDownstreamTlsParamsType",
-                    "x-displayname": "Single Certificate"
+                    "x-displayname": "Inline Certificate (legacy)"
                 }
             }
         },
@@ -3846,6 +3605,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "virtual_host_status": {
+                    "description": " DNS related Virtual Host status",
+                    "title": "DNS Virtual Host Status",
+                    "$ref": "#/definitions/virtual_hostDNSVHostStatusType",
+                    "x-displayname": "DNS Virtual Host Status"
                 }
             }
         },
@@ -3983,7 +3748,7 @@ var APISwaggerJSON string = `{
             "title": "DownstreamTlsValidationContext",
             "x-displayname": "Clients TLS validation context",
             "x-ves-oneof-field-crl_choice": "[\"crl\",\"no_crl\"]",
-            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca_url\"]",
+            "x-ves-oneof-field-trusted_ca_choice": "[\"trusted_ca\",\"trusted_ca_url\"]",
             "x-ves-oneof-field-xfcc_header": "[\"xfcc_disabled\",\"xfcc_options\"]",
             "x-ves-proto-message": "ves.io.schema.views.DownstreamTlsValidationContext",
             "properties": {
@@ -4000,18 +3765,18 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No CRL"
                 },
                 "trusted_ca": {
-                    "description": " Select/Add a Root CA certificate",
+                    "description": "Exclusive with [trusted_ca_url]\n Select/Add a Root CA Certificate object to associate with this Load Balancer",
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Select a Root CA certificate"
+                    "x-displayname": "Root CA Certificate"
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with []\n Inline Root CA certificate\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
+                    "description": "Exclusive with [trusted_ca]\n Upload a Root CA Certificate specifically for this Load Balancer\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.min_bytes: 1\n  ves.io.schema.rules.string.truststore_url: true\n",
                     "title": "trusted_ca_url",
                     "minLength": 1,
                     "maxLength": 131072,
-                    "x-displayname": "Upload a new Root CA certificate",
+                    "x-displayname": "Inline Root CA Certificate (legacy)",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.min_bytes": "1",
@@ -4962,6 +4727,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostAutoCertInfoType",
                     "x-displayname": "Auto Cert Information"
                 },
+                "cert_state": {
+                    "description": " State of Custom certificate or Auto certificate generation.",
+                    "$ref": "#/definitions/virtual_hostCertificationState",
+                    "x-displayname": "Cert State"
+                },
                 "default_lb_with_sni": {
                     "description": "Exclusive with [no_sni sni]\n Enables Server Name Indication for Loadbalancer\n Also enables usage as Default LB for Non SNI Clients",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -5126,274 +4896,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
                     "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCPAutoCerts",
                     "x-displayname": "TLS over TCP with Automatic Certificate"
-                }
-            }
-        },
-        "viewstcp_loadbalancerGlobalSpecType": {
-            "type": "object",
-            "description": "Shape of the TCP load balancer view specification",
-            "title": "GlobalSpecType",
-            "x-displayname": "View Specification",
-            "x-ves-oneof-field-advertise_choice": "[\"advertise_custom\",\"advertise_on_public\",\"advertise_on_public_default_vip\",\"do_not_advertise\"]",
-            "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
-            "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_least_active\",\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
-            "x-ves-oneof-field-loadbalancer_type": "[\"tcp\",\"tls_tcp\",\"tls_tcp_auto_cert\"]",
-            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
-            "x-ves-oneof-field-sni_default_lb_choice": "[\"default_lb_with_sni\",\"no_sni\",\"sni\"]",
-            "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.GlobalSpecType",
-            "properties": {
-                "active_service_policies": {
-                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
-                    "title": "Apply Specified Service Policies",
-                    "$ref": "#/definitions/tcp_loadbalancerServicePolicyList",
-                    "x-displayname": "Apply Specified Service Policies"
-                },
-                "advertise_custom": {
-                    "description": "Exclusive with [advertise_on_public advertise_on_public_default_vip do_not_advertise]\n Advertise this VIP on specific sites",
-                    "title": "Advertise Custom",
-                    "$ref": "#/definitions/viewsAdvertiseCustom",
-                    "x-displayname": "Advertise Custom"
-                },
-                "advertise_on_public": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public_default_vip do_not_advertise]\n Advertise this load balancer on public network",
-                    "title": "Advertise On Public",
-                    "$ref": "#/definitions/viewsAdvertisePublic",
-                    "x-displayname": "Advertise On Public With Specified VIP"
-                },
-                "advertise_on_public_default_vip": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public do_not_advertise]\n Advertise this load balancer on public network with default VIP",
-                    "title": "Advertise On Public Default VIP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Advertise On Public"
-                },
-                "auto_cert_info": {
-                    "description": " Auto certificate related information",
-                    "title": "Auto Cert Information",
-                    "$ref": "#/definitions/virtual_hostAutoCertInfoType",
-                    "x-displayname": "Auto Cert Information"
-                },
-                "default_lb_with_sni": {
-                    "description": "Exclusive with [no_sni sni]\n Enables Server Name Indication for Loadbalancer\n Also enables usage as Default LB for Non SNI Clients",
-                    "title": "SNI and Default LB",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "SNI and Default LB"
-                },
-                "dns_info": {
-                    "type": "array",
-                    "description": " DNS information for this virtual host",
-                    "title": "DNS information",
-                    "items": {
-                        "$ref": "#/definitions/virtual_host_dns_infoDnsInfo"
-                    },
-                    "x-displayname": "DNS Information"
-                },
-                "dns_volterra_managed": {
-                    "type": "boolean",
-                    "description": " DNS records for domains will be managed automatically by Volterra.\n This requires the domain to be delegated to F5XC using the Delegated Domain feature.",
-                    "title": "Manage DNS Domain",
-                    "format": "boolean",
-                    "x-displayname": "Automatically Manage DNS Records"
-                },
-                "do_not_advertise": {
-                    "description": "Exclusive with [advertise_custom advertise_on_public advertise_on_public_default_vip]\n Do not advertise this load balancer",
-                    "title": "Do Not Advertise",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Do Not Advertise"
-                },
-                "do_not_retract_cluster": {
-                    "description": "Exclusive with [retract_cluster]\n When this option is configured, cluster with no healthy\n endpoints is not retracted from route having weighted cluster\n configuration.",
-                    "title": "do_not_retract_cluster",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable cluster retraction"
-                },
-                "domains": {
-                    "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Domains",
-                    "maxItems": 32,
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Domains",
-                    "x-ves-example": "www.foo.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
-                        "ves.io.schema.rules.repeated.max_items": "32",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "hash_policy_choice_least_active": {
-                    "description": "Exclusive with [hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n Connections are sent to origin server that has least active connections",
-                    "title": "Least Active Connections",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Least Active Connections"
-                },
-                "hash_policy_choice_random": {
-                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness]\n Connections are sent to all eligible origin servers in random fashion",
-                    "title": "Random",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Random"
-                },
-                "hash_policy_choice_round_robin": {
-                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness]\n Connections are sent to all eligible origin servers in round robin fashion",
-                    "title": "Round Robin",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Round Robin"
-                },
-                "hash_policy_choice_source_ip_stickiness": {
-                    "description": "Exclusive with [hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin]\n Connections are sent to all eligible origin servers using hash of source ip. Consistent hashing algorithm, ring hash, is used to select origin server",
-                    "title": "Source IP Stickiness",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Source IP Stickiness"
-                },
-                "host_name": {
-                    "type": "string",
-                    "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
-                    "title": "host name",
-                    "x-displayname": "Host Name",
-                    "x-ves-example": "ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io"
-                },
-                "idle_timeout": {
-                    "type": "integer",
-                    "description": " The amount of time that a stream can exist without upstream or downstream activity, in milliseconds.\n\nExample: - \"2000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 4147200000\n",
-                    "title": "Idle timeout",
-                    "format": "int64",
-                    "x-displayname": "Idle Timeout",
-                    "x-ves-example": "2000",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "4147200000"
-                    }
-                },
-                "internet_vip_info": {
-                    "type": "array",
-                    "description": " Internet VIP Info ",
-                    "title": "Internet VIP Info",
-                    "items": {
-                        "$ref": "#/definitions/viewsInternetVIPInfo"
-                    },
-                    "x-displayname": "Internet VIP Info"
-                },
-                "listen_port": {
-                    "type": "integer",
-                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "Port",
-                    "format": "int64",
-                    "x-displayname": "Listen Port",
-                    "x-ves-example": "0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "no_service_policies": {
-                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
-                    "title": "Do Not Apply Service Policies",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Do Not Apply Service Policies"
-                },
-                "no_sni": {
-                    "description": "Exclusive with [default_lb_with_sni sni]\n Loadbalancer without Server Name Indication support",
-                    "title": "No SNI",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "No SNI"
-                },
-                "origin_pools_weights": {
-                    "type": "array",
-                    "description": " Origin pools and weights used for this load balancer.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Origin Pools with Weights",
-                    "maxItems": 16,
-                    "items": {
-                        "$ref": "#/definitions/viewsOriginPoolWithWeight"
-                    },
-                    "x-displayname": "Origin Pools",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "port_ranges": {
-                    "type": "string",
-                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
-                    "title": "Port_ranges",
-                    "minLength": 1,
-                    "maxLength": 512,
-                    "x-displayname": "Port Ranges",
-                    "x-ves-example": "80,443,8080-8191,9080",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "512",
-                        "ves.io.schema.rules.string.max_ports": "64",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.unique_port_range_list": "true"
-                    }
-                },
-                "retract_cluster": {
-                    "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for load balancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
-                    "title": "retract_cluster",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Retract cluster with no healthy endpoints"
-                },
-                "service_policies_from_namespace": {
-                    "description": "Exclusive with [active_service_policies no_service_policies]\n Apply the active service policies configured as part of the namespace service policy set",
-                    "title": "Apply Namespace Service Policies",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Apply Namespace Service Policies"
-                },
-                "sni": {
-                    "description": "Exclusive with [default_lb_with_sni no_sni]\n Enables Server Name Indication for Loadbalancer",
-                    "title": "With SNI",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "SNI"
-                },
-                "tcp": {
-                    "description": "Exclusive with [tls_tcp tls_tcp_auto_cert]\n TCP Load Balancer.",
-                    "title": "TCP",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "TCP"
-                },
-                "tls_tcp": {
-                    "description": "Exclusive with [tcp tls_tcp_auto_cert]\n TLS over TCP load balancer with a custom public/private certificate.\n This is also known as BYOC (Bring Your Own Certificate).\n User is responsible for managing DNS to this load balancer.",
-                    "title": "TLS over TCP",
-                    "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCP",
-                    "x-displayname": "TLS over TCP with Custom Certificate"
-                },
-                "tls_tcp_auto_cert": {
-                    "description": "Exclusive with [tcp tls_tcp]\n TLS over TCP load balancer with automatic public certificate provisioning.\n DNS records for the domains will be automatically managed by F5 Distributed Cloud.\n As a prerequisite, the domain must be delegated to F5 Distributed Cloud (see the DNS Management section)\n or a DNS CNAME record should be created in your DNS provider's portal(only for Domains not managed by F5 Distributed Cloud).",
-                    "title": "TLS over TCP with automatic certificate",
-                    "$ref": "#/definitions/tcp_loadbalancerProxyTypeTLSTCPAutoCerts",
-                    "x-displayname": "TLS over TCP with Automatic Certificate"
-                },
-                "view_internal": {
-                    "description": " Reference to view internal object",
-                    "title": "view_internal",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "View Internal"
-                }
-            }
-        },
-        "viewstcp_loadbalancerObject": {
-            "type": "object",
-            "description": "TCP loadbalancer view object",
-            "title": "Object",
-            "x-displayname": "Object",
-            "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the tenant",
-                    "title": "spec",
-                    "$ref": "#/definitions/viewstcp_loadbalancerSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
                 }
             }
         },
@@ -5576,17 +5078,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewstcp_loadbalancerSpecType": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.views.tcp_loadbalancer.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/viewstcp_loadbalancerGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
-        },
         "virtual_hostAutoCertInfoType": {
             "type": "object",
             "description": "Information related to auto certificate",
@@ -5632,7 +5123,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostCertificationState": {
             "type": "string",
-            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate",
+            "description": "State of auto certification generation for the virtual host\n\n - AutoCertDisabled: Auto Cert Disabled\n\nAuto Certification is disabled.\n - DnsDomainVerification: Dns Domain Verification\n\nAuto Certification is waiting for domain verification.\n - AutoCertStarted: Auto Cert Started\n\nAuto Certificate generation action has started.\n - PreDomainChallengePending: Pre Domain Challenge Pending\n\nThe domains in the virtual host configuration are not still verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeStarted: Domain Challenge Started\n\nDomain challenge process started.\n - DomainChallengePending: Domain Challenge Pending\n\nThe domains in the virtual host configuration are being verified. This requires\nthe _acme-challenge TXT record in the domain to have the correct TXT.\n - DomainChallengeVerified: Domain Challenge Verified\n\nAll the domains in the virtual host have been verified.\n - AutoCertFinalize: Auto Cert Finalize\n\nCertificate generation order is Ready and Finalized.\n - CertificateInvalid: Certificate Invalid\n\nCertificate is invalid\n - CertificateValid: Certificate Valid\n\nValid certificate generated and tls_parameters are updated\n - AutoCertNotApplicable: Auto Cert Not Applicable\n\nAuto certificate not applicable because virtual host does not use TLS\n - AutoCertRateLimited: Auto Cert Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertGenerationRetry: Auto Cert Generation Retry\n\nAuto certificate generate failed in the previous attempt, will be retried automatically\n - AutoCertError: Auto Cert Error\n\nError in Certificate generation\nDefault State for Vhost State with Auto Certificate\n - AutoCertAccountRateLimited: Auto Cert Account Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - AutoCertDomainRateLimited: Auto Cert Domain Rate Limited\n\nAuto certificate not available because CA has rate limited the request\n - CertificateExpired: Certificate Expired\n\nCertificate has expired",
             "title": "Certification State",
             "enum": [
                 "AutoCertDisabled",
@@ -5649,7 +5140,10 @@ var APISwaggerJSON string = `{
                 "AutoCertError",
                 "PreDomainChallengePending",
                 "DomainChallengeStarted",
-                "AutoCertInitialize"
+                "AutoCertInitialize",
+                "AutoCertAccountRateLimited",
+                "AutoCertDomainRateLimited",
+                "CertificateExpired"
             ],
             "default": "AutoCertDisabled",
             "x-displayname": "Certification State",
@@ -5682,6 +5176,66 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Value"
                 }
             }
+        },
+        "virtual_hostDNSVHostStatusType": {
+            "type": "object",
+            "description": "DNS related Virtual Host status",
+            "title": "DNS Virtual Host Status Type",
+            "x-displayname": "DNS Virtual Host Status",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.DNSVHostStatusType",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": " Description of error during DNS configuration\n\nExample: - \"value\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "value"
+                },
+                "existing_certificate_state": {
+                    "type": "string",
+                    "description": " Status of Existing Auto Certficate\n\nExample: - \"Certificate Valid or Certificate Expired or Certificate Invalid\"-",
+                    "title": "Existing Certificate Status",
+                    "x-displayname": "Existing Certificate Status",
+                    "x-ves-example": "Certificate Valid or Certificate Expired or Certificate Invalid"
+                },
+                "renew_certificate_state": {
+                    "description": " State of auto certificate generation.",
+                    "title": "Certificate Renewal Status",
+                    "$ref": "#/definitions/virtual_hostCertificationState",
+                    "x-displayname": "Certificate Renewal Status"
+                },
+                "state": {
+                    "description": " State of the virtual host",
+                    "title": "Virtual Host state",
+                    "$ref": "#/definitions/virtual_hostVirtualHostState",
+                    "x-displayname": "Virtual Host State"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested action for customer on error\n\nExample: - \"value\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "virtual_hostVirtualHostState": {
+            "type": "string",
+            "description": "State of the virtual host\n\n - VIRTUAL_HOST_READY: VIRTUAL_HOST_READY\n\nVirtual host is ready to install\n - VIRTUAL_HOST_PENDING_VERIFICATION: VIRTUAL_HOST_PENDING_VERIFICATION\n\nVirtual host is verfication pending for some or all of its domains\n - VIRTUAL_HOST_VERIFICATION_FAILED: VIRTUAL_HOST_VERIFICATION_FAILED\n\nVirtual host has one or more domains for which verification failed\n - VIRTUAL_HOST_PENDING_DNS_DELEGATION: VIRTUAL_HOST_PENDING_DNS_DELEGATION\n\nVirtual host is pending DNS delegation\n - VIRTUAL_HOST_PENDING_A_RECORD: VIRTUAL_HOST_PENDING_A_RECORD\n\nVirtual host is waiting for one or more A records to be created\n - VIRTUAL_HOST_DNS_A_RECORD_ADDED: VIRTUAL_HOST_DNS_A_RECORD_ADDED\n\nDNS A record has been added for this Virtual host\n - VIRTUAL_HOST_INTERNET_NLB_PENDING_CREATION: VIRTUAL_HOST_INTERNET_NLB_PENDING_CREATION\n\nInternet facing NLB, is being created on the site/sites belonging to the virtual site\n - VIRTUAL_HOST_INTERNET_NLB_CREATION_FAILED: VIRTUAL_HOST_INTERNET_NLB_CREATION_FAILED\n\nInternet NLB creation failed on the site/sites. InternetNLBVIPStatus will have more information.",
+            "title": "VirtualHostState",
+            "enum": [
+                "VIRTUAL_HOST_READY",
+                "VIRTUAL_HOST_PENDING_VERIFICATION",
+                "VIRTUAL_HOST_VERIFICATION_FAILED",
+                "VIRTUAL_HOST_PENDING_DNS_DELEGATION",
+                "VIRTUAL_HOST_PENDING_A_RECORD",
+                "VIRTUAL_HOST_DNS_A_RECORD_ADDED",
+                "VIRTUAL_HOST_INTERNET_NLB_PENDING_CREATION",
+                "VIRTUAL_HOST_INTERNET_NLB_CREATION_FAILED"
+            ],
+            "default": "VIRTUAL_HOST_READY",
+            "x-displayname": "Virtual Host State",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host.VirtualHostState"
         },
         "virtual_host_dns_infoDnsInfo": {
             "type": "object",

@@ -266,6 +266,7 @@ func (m *GlobalSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetCloud().(type) {
 	case *GlobalSpecType_Aws:
+
 		drInfos, err := m.GetAws().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")

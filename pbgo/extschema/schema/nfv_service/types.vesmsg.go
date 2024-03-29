@@ -383,6 +383,7 @@ func (m *CreateSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *CreateSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -406,6 +407,7 @@ func (m *CreateSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetServiceProviderChoice().(type) {
 	case *CreateSpecType_PaloAltoFwService:
+
 		drInfos, err := m.GetPaloAltoFwService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPaloAltoFwService().GetDRefInfo() FAILED")
@@ -417,6 +419,7 @@ func (m *CreateSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 		return drInfos, err
 
 	case *CreateSpecType_F5BigIpAwsService:
+
 		drInfos, err := m.GetF5BigIpAwsService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpAwsService().GetDRefInfo() FAILED")
@@ -444,6 +447,7 @@ func (m *CreateSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *CreateSpecType_EnabledSshAccess:
+
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -2353,6 +2357,7 @@ func (m *F5BigIpAWSType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetSiteTypeChoice().(type) {
 	case *F5BigIpAWSType_AwsTgwSiteParams:
+
 		drInfos, err := m.GetAwsTgwSiteParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsTgwSiteParams().GetDRefInfo() FAILED")
@@ -2364,6 +2369,7 @@ func (m *F5BigIpAWSType) GetSiteTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return drInfos, err
 
 	case *F5BigIpAWSType_AwsVpcSiteParams:
+
 		drInfos, err := m.GetAwsVpcSiteParams().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAwsVpcSiteParams().GetDRefInfo() FAILED")
@@ -3618,6 +3624,7 @@ func (m *GetSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -3641,6 +3648,7 @@ func (m *GetSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, error) 
 	}
 	switch m.GetServiceProviderChoice().(type) {
 	case *GetSpecType_PaloAltoFwService:
+
 		drInfos, err := m.GetPaloAltoFwService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPaloAltoFwService().GetDRefInfo() FAILED")
@@ -3652,6 +3660,7 @@ func (m *GetSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return drInfos, err
 
 	case *GetSpecType_F5BigIpAwsService:
+
 		drInfos, err := m.GetF5BigIpAwsService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpAwsService().GetDRefInfo() FAILED")
@@ -3679,6 +3688,7 @@ func (m *GetSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_EnabledSshAccess:
+
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -3805,6 +3815,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				db.WithValidateField("https_management"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_info"))
+		for idx, item := range m.GetNodeInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -4253,6 +4275,7 @@ func (m *GlobalSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *GlobalSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -4433,6 +4456,7 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 	}
 	switch m.GetServiceProviderChoice().(type) {
 	case *GlobalSpecType_PaloAltoFwService:
+
 		drInfos, err := m.GetPaloAltoFwService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetPaloAltoFwService().GetDRefInfo() FAILED")
@@ -4444,6 +4468,7 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 		return drInfos, err
 
 	case *GlobalSpecType_F5BigIpAwsService:
+
 		drInfos, err := m.GetF5BigIpAwsService().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpAwsService().GetDRefInfo() FAILED")
@@ -4455,6 +4480,7 @@ func (m *GlobalSpecType) GetServiceProviderChoiceDRefInfo() ([]db.DRefInfo, erro
 		return drInfos, err
 
 	case *GlobalSpecType_F5BigIpBareMetalType:
+
 		drInfos, err := m.GetF5BigIpBareMetalType().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetF5BigIpBareMetalType().GetDRefInfo() FAILED")
@@ -4527,6 +4553,7 @@ func (m *GlobalSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *GlobalSpecType_EnabledSshAccess:
+
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -5586,6 +5613,15 @@ func (v *ValidateNodeInfo) Validate(ctx context.Context, pm interface{}, opts ..
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["node_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_name"))
+		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["ssh_command"]; exists {
@@ -7175,6 +7211,7 @@ func (m *ReplaceSpecType) GetHttpManagementChoiceDRefInfo() ([]db.DRefInfo, erro
 		return nil, nil
 
 	case *ReplaceSpecType_HttpsManagement:
+
 		drInfos, err := m.GetHttpsManagement().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetHttpsManagement().GetDRefInfo() FAILED")
@@ -7202,6 +7239,7 @@ func (m *ReplaceSpecType) GetSshManagementChoiceDRefInfo() ([]db.DRefInfo, error
 		return nil, nil
 
 	case *ReplaceSpecType_EnabledSshAccess:
+
 		drInfos, err := m.GetEnabledSshAccess().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetEnabledSshAccess().GetDRefInfo() FAILED")
@@ -7793,6 +7831,7 @@ func (m *SSHManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) 
 		return nil, nil
 
 	case *SSHManagementType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -7802,10 +7841,6 @@ func (m *SSHManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo, error) 
 			dri.DRField = "advertise_on_public." + dri.DRField
 		}
 		return drInfos, err
-
-	case *SSHManagementType_AdvertiseOnSloInternetVip:
-
-		return nil, nil
 
 	case *SSHManagementType_AdvertiseOnSli:
 
@@ -7919,17 +7954,6 @@ func (v *ValidateSSHManagementType) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("advertise_choice"),
 				db.WithValidateField("advertise_on_public"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *SSHManagementType_AdvertiseOnSloInternetVip:
-		if fv, exists := v.FldValidators["advertise_choice.advertise_on_slo_internet_vip"]; exists {
-			val := m.GetAdvertiseChoice().(*SSHManagementType_AdvertiseOnSloInternetVip).AdvertiseOnSloInternetVip
-			vOpts := append(opts,
-				db.WithValidateField("advertise_choice"),
-				db.WithValidateField("advertise_on_slo_internet_vip"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -8128,6 +8152,7 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 	}
 	switch m.GetAdvertiseChoice().(type) {
 	case *ServiceHttpsManagementType_AdvertiseOnSliVip:
+
 		drInfos, err := m.GetAdvertiseOnSliVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSliVip().GetDRefInfo() FAILED")
@@ -8139,6 +8164,7 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 		return drInfos, err
 
 	case *ServiceHttpsManagementType_AdvertiseOnSloVip:
+
 		drInfos, err := m.GetAdvertiseOnSloVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSloVip().GetDRefInfo() FAILED")
@@ -8150,6 +8176,7 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 		return drInfos, err
 
 	case *ServiceHttpsManagementType_AdvertiseOnSloSli:
+
 		drInfos, err := m.GetAdvertiseOnSloSli().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSloSli().GetDRefInfo() FAILED")
@@ -8165,6 +8192,7 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 		return nil, nil
 
 	case *ServiceHttpsManagementType_AdvertiseOnSloInternetVip:
+
 		drInfos, err := m.GetAdvertiseOnSloInternetVip().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnSloInternetVip().GetDRefInfo() FAILED")
@@ -8184,6 +8212,7 @@ func (m *ServiceHttpsManagementType) GetAdvertiseChoiceDRefInfo() ([]db.DRefInfo
 		return nil, nil
 
 	case *ServiceHttpsManagementType_AdvertiseOnInternet:
+
 		drInfos, err := m.GetAdvertiseOnInternet().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnInternet().GetDRefInfo() FAILED")
@@ -8215,6 +8244,7 @@ func (m *ServiceHttpsManagementType) GetInternetChoiceDRefInfo() ([]db.DRefInfo,
 		return nil, nil
 
 	case *ServiceHttpsManagementType_AdvertiseOnPublic:
+
 		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
@@ -9763,6 +9793,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.FinalizerTimestamp = f.GetFinalizerTimestamp()
 	m.ForceDelete = f.GetForceDelete()
 	m.GetHttpManagementChoiceFromGlobalSpecType(f)
+	m.NodeInfo = f.GetNodeInfo()
 	m.GetServiceProviderChoiceFromGlobalSpecType(f)
 	m.GetServiceTypeChoiceFromGlobalSpecType(f)
 	m.GetSshManagementChoiceFromGlobalSpecType(f)
@@ -9787,6 +9818,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.FinalizerTimestamp = m1.FinalizerTimestamp
 	f.ForceDelete = m1.ForceDelete
 	m1.SetHttpManagementChoiceToGlobalSpecType(f)
+	f.NodeInfo = m1.NodeInfo
 	m1.SetServiceProviderChoiceToGlobalSpecType(f)
 	m1.SetServiceTypeChoiceToGlobalSpecType(f)
 	m1.SetSshManagementChoiceToGlobalSpecType(f)

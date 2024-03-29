@@ -31,10 +31,14 @@ resource "volterra_dns_load_balancer" "example" {
         tenant    = "acmecorp"
       }
 
-      // One of the arguments from this list "geo_location_label_selector geo_location_set" must be set
+      // One of the arguments from this list "geo_location_label_selector geo_location_set asn_list asn_matcher" must be set
 
-      geo_location_label_selector {
-        expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+      asn_matcher {
+        asn_sets {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
       }
       score = "50"
     }
@@ -70,23 +74,45 @@ Argument Reference
 
 `rule_list` - (Required) Load Balancing Rules. See [Rule List ](#rule-list) below for details.
 
-### Default Response Cache Parameters
+### Response Cache
 
-Default Parameters for caching the DNS responses.
+Response Cache Parameters.
 
-### Disable
+###### One of the arguments from this list "response_cache_parameters, disable, default_response_cache_parameters" must be set
 
-When Response Cache is disabled, responses will be computed for each request.
+`default_response_cache_parameters` - (Optional) Default Parameters for caching the DNS responses (`Bool`).
 
-### Geo Location Label Selector
+`disable` - (Optional) When Response Cache is disabled, responses will be computed for each request (`Bool`).
+
+`response_cache_parameters` - (Optional) Customize the parameters for Response cache. See [Response Cache Parameters Choice Response Cache Parameters ](#response-cache-parameters-choice-response-cache-parameters) below for details.
+
+### Rule List
+
+Load Balancing Rules.
+
+`rules` - (Required) Rules to perform load balancing. See [Rule List Rules ](#rule-list-rules) below for details.
+
+### Action Choice Nxdomain
+
+Do not perform any load-balancing. Instead return NXDOMAIN.
+
+### Client Choice Asn List
+
+The rule evaluates to true if the origin ASN is present in the ASN list..
+
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+
+### Client Choice Asn Matcher
+
+The rule evaluates to true if the origin ASN is present in one of the BGP ASN Set objects..
+
+`asn_sets` - (Required) A list of references to bgp_asn_set objects.. See [ref](#ref) below for details.
+
+### Client Choice Geo Location Label Selector
 
 with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
-### Nxdomain
-
-Do not perform any load-balancing. Instead return NXDOMAIN.
 
 ### Ref
 
@@ -98,17 +124,15 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Response Cache
+### Response Cache Parameters Choice Default Response Cache Parameters
 
-Response Cache Parameters.
+Default Parameters for caching the DNS responses.
 
-`default_response_cache_parameters` - (Optional) Default Parameters for caching the DNS responses (bool).
+### Response Cache Parameters Choice Disable
 
-`disable` - (Optional) When Response Cache is disabled, responses will be computed for each request (bool).
+When Response Cache is disabled, responses will be computed for each request.
 
-`response_cache_parameters` - (Optional) Customize the parameters for Response cache. See [Response Cache Parameters ](#response-cache-parameters) below for details.
-
-### Response Cache Parameters
+### Response Cache Parameters Choice Response Cache Parameters
 
 Customize the parameters for Response cache.
 
@@ -118,21 +142,23 @@ Customize the parameters for Response cache.
 
 `cache_ttl` - (Optional) TTL for response cache (`Int`).
 
-### Rule List
-
-Load Balancing Rules.
-
-`rules` - (Required) Rules to perform load balancing. See [Rules ](#rules) below for details.
-
-### Rules
+### Rule List Rules
 
 Rules to perform load balancing.
 
-`nxdomain` - (Optional) Do not perform any load-balancing. Instead return NXDOMAIN (bool).
+###### One of the arguments from this list "pool, nxdomain" must be set
+
+`nxdomain` - (Optional) Do not perform any load-balancing. Instead return NXDOMAIN (`Bool`).(Deprecated)
 
 `pool` - (Optional) Use this pool for the Load Balancing.. See [ref](#ref) below for details.
 
-`geo_location_label_selector` - (Optional) with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.. See [Geo Location Label Selector ](#geo-location-label-selector) below for details.
+###### One of the arguments from this list "asn_list, asn_matcher, geo_location_label_selector, geo_location_set" must be set
+
+`asn_list` - (Optional) The rule evaluates to true if the origin ASN is present in the ASN list.. See [Client Choice Asn List ](#client-choice-asn-list) below for details.
+
+`asn_matcher` - (Optional) The rule evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Client Choice Asn Matcher ](#client-choice-asn-matcher) below for details.(Deprecated)
+
+`geo_location_label_selector` - (Optional) with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.. See [Client Choice Geo Location Label Selector ](#client-choice-geo-location-label-selector) below for details.
 
 `geo_location_set` - (Optional) with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.. See [ref](#ref) below for details.
 

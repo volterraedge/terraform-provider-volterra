@@ -651,6 +651,7 @@ func (m *CreateSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *CreateSpecType_Webhook:
+
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
@@ -1019,6 +1020,7 @@ func (m *GetSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GetSpecType_Webhook:
+
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
@@ -1280,6 +1282,7 @@ func (m *GlobalSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *GlobalSpecType_Webhook:
+
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
@@ -1538,6 +1541,7 @@ func (m *HTTPConfig) GetAuthChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *HTTPConfig_ClientCertObj:
+
 		drInfos, err := m.GetClientCertObj().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetClientCertObj().GetDRefInfo() FAILED")
@@ -1565,6 +1569,7 @@ func (m *HTTPConfig) GetTlsChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *HTTPConfig_UseTls:
+
 		drInfos, err := m.GetUseTls().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseTls().GetDRefInfo() FAILED")
@@ -2365,6 +2370,7 @@ func (m *ReplaceSpecType) GetReceiverDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ReplaceSpecType_Webhook:
+
 		drInfos, err := m.GetWebhook().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetWebhook().GetDRefInfo() FAILED")
@@ -2854,6 +2860,7 @@ func (m *TLSConfig) GetServerValidationChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *TLSConfig_UseServerVerification:
+
 		drInfos, err := m.GetUseServerVerification().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetUseServerVerification().GetDRefInfo() FAILED")

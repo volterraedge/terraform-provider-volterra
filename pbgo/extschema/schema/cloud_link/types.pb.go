@@ -926,7 +926,7 @@ type GCPBYOCListType struct {
 	//
 	// x-displayName: "Bring Your Own Connections"
 	// x-required
-	// List of Bring You Own Connections. These GCP Cloud Interconnect connections are not managed by F5XC but will be used for connecting sites and REs.
+	//Each 'Bring Your Own Connection' represents a virtual connection that the customer has provisioned in the Cloud (example: AWS Direct Connect). F5XC will orchestrate networking resources in the cloud to facilitate seamless private connectivity.
 	Connections []*GCPBYOCType `protobuf:"bytes,1,rep,name=connections,proto3" json:"connections,omitempty"`
 }
 

@@ -211,7 +211,7 @@ type wafSignatureChangelogCustomApiInprocClient struct {
 }
 
 func (c *wafSignatureChangelogCustomApiInprocClient) GetReleasedSignatures(ctx context.Context, in *ReleasedSignaturesReq, opts ...grpc.CallOption) (*ReleasedSignaturesRsp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi.GetReleasedSignatures", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi.GetReleasedSignatures")
 	return c.WafSignatureChangelogCustomApiServer.GetReleasedSignatures(ctx, in)
 }
 

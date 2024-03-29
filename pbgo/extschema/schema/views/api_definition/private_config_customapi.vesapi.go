@@ -4,7 +4,7 @@
 package api_definition
 
 import (
-	bytes "bytes"
+	"bytes"
 	"context"
 	"fmt"
 	io "io"
@@ -214,7 +214,7 @@ type privateConfigCustomAPIInprocClient struct {
 }
 
 func (c *privateConfigCustomAPIInprocClient) UpdateAPIInventoryOpenAPISpecs(ctx context.Context, in *UpdateAPIInventoryOpenAPISpecsReq, opts ...grpc.CallOption) (*UpdateAPIInventoryOpenAPISpecsResp, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.views.api_definition.PrivateConfigCustomAPI.UpdateAPIInventoryOpenAPISpecs", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.api_definition.PrivateConfigCustomAPI.UpdateAPIInventoryOpenAPISpecs")
 	return c.PrivateConfigCustomAPIServer.UpdateAPIInventoryOpenAPISpecs(ctx, in)
 }
 
@@ -407,17 +407,14 @@ var PrivateConfigCustomAPISwaggerJSON string = `{
             "properties": {
                 "api_inventory_openapi_specs": {
                     "type": "array",
-                    "description": " A stored object link to internally generated OpenAPI specification file.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 512\n  ves.io.schema.rules.repeated.items.string.pattern: /api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A stored object link to internally generated OpenAPI specification file.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_openapi_spec",
                     "maxItems": 10,
                     "items": {
-                        "type": "string",
-                        "maxLength": 512
+                        "type": "string"
                     },
                     "x-displayname": "API Inventory OpenAPI specification files",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.max_bytes": "512",
-                        "ves.io.schema.rules.repeated.items.string.pattern": "/api/object_store/namespaces/([a-z]([-a-z0-9]*[a-z0-9])?)/stored_objects/swagger/([a-z]([-a-z0-9]*[a-z0-9])?)/(v|V)[0-9]+(-[0-9]{2}){3}$",
                         "ves.io.schema.rules.repeated.max_items": "10",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

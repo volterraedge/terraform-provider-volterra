@@ -278,7 +278,7 @@ func waitForActionToComplete(apiCl *APIClient, action, siteName, siteType string
 			switch statusResp.Status.PlanStatus.State.(type) {
 			case *ves_io_schema_tf_params.PlanStatus_PlanState:
 				planState := statusResp.Status.PlanStatus.State.(*ves_io_schema_tf_params.PlanStatus_PlanState).PlanState
-				if planState == ves_io_schema_tf_params.PLANNING {
+				if planState == ves_io_schema_tf_params.PLANNING || planState == ves_io_schema_tf_params.PLAN_QUEUED {
 					if prevState != ves_io_schema_tf_params.PlanStageState_name[int32(planState)] {
 						prevState = ves_io_schema_tf_params.PlanStageState_name[int32(planState)]
 						log.Printf("[INFO] Plan State changed to %s", prevState)
@@ -317,7 +317,7 @@ func waitForActionToComplete(apiCl *APIClient, action, siteName, siteType string
 			switch statusResp.Status.ApplyStatus.State.(type) {
 			case *ves_io_schema_tf_params.ApplyStatus_ApplyState:
 				applyState := statusResp.Status.ApplyStatus.State.(*ves_io_schema_tf_params.ApplyStatus_ApplyState).ApplyState
-				if applyState == ves_io_schema_tf_params.APPLY_PLANNING || applyState == ves_io_schema_tf_params.APPLYING {
+				if applyState == ves_io_schema_tf_params.APPLY_PLANNING || applyState == ves_io_schema_tf_params.APPLYING || applyState == ves_io_schema_tf_params.APPLY_QUEUED {
 					if prevState != ves_io_schema_tf_params.ApplyStageState_name[int32(applyState)] {
 						prevState = ves_io_schema_tf_params.ApplyStageState_name[int32(applyState)]
 						log.Printf("[INFO] Apply State changed to %s", prevState)
@@ -404,7 +404,7 @@ func parseInfraState(prevState string, infraState ves_io_schema_tf_params.InfraS
 func parseDestroyState(prevState string,
 	destroyState ves_io_schema_tf_params.DestroyStageState,
 	applyStatus *ves_io_schema_tf_params.ApplyStatus) (bool, string, error) {
-	if destroyState == ves_io_schema_tf_params.DESTROYING {
+	if destroyState == ves_io_schema_tf_params.DESTROYING || destroyState == ves_io_schema_tf_params.DESTROY_QUEUED {
 		if prevState != ves_io_schema_tf_params.DestroyStageState_name[int32(destroyState)] {
 			prevState = ves_io_schema_tf_params.DestroyStageState_name[int32(destroyState)]
 			log.Printf("[DEBUG] Destroy State changed to %s", prevState)

@@ -310,11 +310,11 @@ type privateDosMitigationAPIInprocClient struct {
 }
 
 func (c *privateDosMitigationAPIInprocClient) CreateBulk(ctx context.Context, in *CreateBulkRequest, opts ...grpc.CallOption) (*CreateBulkResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dos_mitigation.PrivateDosMitigationAPI.CreateBulk", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dos_mitigation.PrivateDosMitigationAPI.CreateBulk")
 	return c.PrivateDosMitigationAPIServer.CreateBulk(ctx, in)
 }
 func (c *privateDosMitigationAPIInprocClient) DeleteBulk(ctx context.Context, in *DeleteBulkRequest, opts ...grpc.CallOption) (*DeleteBulkResponse, error) {
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.dos_mitigation.PrivateDosMitigationAPI.DeleteBulk", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.dos_mitigation.PrivateDosMitigationAPI.DeleteBulk")
 	return c.PrivateDosMitigationAPIServer.DeleteBulk(ctx, in)
 }
 
@@ -1684,9 +1684,9 @@ var PrivateDosMitigationAPISwaggerJSON string = `{
                 },
                 "ip_prefixes": {
                     "type": "array",
-                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " IP Address prefix in string format. String must contain both prefix and prefix-length\n\nExample: - \"[192.168.1.0/24, 192.168.2.0/24]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "ip_prefixes",
-                    "maxItems": 256,
+                    "maxItems": 1024,
                     "items": {
                         "type": "string"
                     },
@@ -1694,7 +1694,7 @@ var PrivateDosMitigationAPISwaggerJSON string = `{
                     "x-ves-example": "[192.168.1.0/24, 192.168.2.0/24]",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
-                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.max_items": "1024",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },

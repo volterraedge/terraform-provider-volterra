@@ -53,10 +53,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.label_matcher",
 	}
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.secret_policy_rule.API.Get"] = []string{
-		"object",
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.secret_policy_rule.API.Replace"] = []string{
 		"spec.label_matcher",
 	}

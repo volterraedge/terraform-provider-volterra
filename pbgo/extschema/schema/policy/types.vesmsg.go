@@ -712,6 +712,32 @@ func (v *ValidateAppFirewallAttackTypeContext) ExcludeAttackTypeValidationRuleHa
 	return validatorFn, nil
 }
 
+func (v *ValidateAppFirewallAttackTypeContext) ContextValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(DetectionContext)
+		return int32(i)
+	}
+	// DetectionContext_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, DetectionContext_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for context")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAppFirewallAttackTypeContext) ContextNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for context_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAppFirewallAttackTypeContext) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AppFirewallAttackTypeContext)
 	if !ok {
@@ -724,6 +750,24 @@ func (v *ValidateAppFirewallAttackTypeContext) Validate(ctx context.Context, pm 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["context"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("context"))
+		if err := fv(ctx, m.GetContext(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["context_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("context_name"))
+		if err := fv(ctx, m.GetContextName(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["exclude_attack_type"]; exists {
@@ -760,6 +804,28 @@ var DefaultAppFirewallAttackTypeContextValidator = func() *ValidateAppFirewallAt
 		panic(errMsg)
 	}
 	v.FldValidators["exclude_attack_type"] = vFn
+
+	vrhContext := v.ContextValidationRuleHandler
+	rulesContext := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhContext(rulesContext)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallAttackTypeContext.context: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["context"] = vFn
+
+	vrhContextName := v.ContextNameValidationRuleHandler
+	rulesContextName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhContextName(rulesContextName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AppFirewallAttackTypeContext.context_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["context_name"] = vFn
 
 	return v
 }()
@@ -1253,8 +1319,8 @@ var DefaultAppFirewallSignatureContextValidator = func() *ValidateAppFirewallSig
 	vrhSignatureId := v.SignatureIdValidationRuleHandler
 	rulesSignatureId := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.uint32.gte":       "10000000",
-		"ves.io.schema.rules.uint32.lte":       "300000000",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "299999999",
 	}
 	vFn, err = vrhSignatureId(rulesSignatureId)
 	if err != nil {
@@ -2308,6 +2374,7 @@ func (m *ClientMatcher) GetIpAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ClientMatcher_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -2323,6 +2390,7 @@ func (m *ClientMatcher) GetIpAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *ClientMatcher_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -6613,6 +6681,7 @@ func (m *OriginServerSubsetRule) GetAsnChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetAsnChoice().(type) {
 	case *OriginServerSubsetRule_AsnMatcher:
+
 		drInfos, err := m.GetAsnMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetAsnMatcher().GetDRefInfo() FAILED")
@@ -6644,6 +6713,7 @@ func (m *OriginServerSubsetRule) GetIpChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetIpChoice().(type) {
 	case *OriginServerSubsetRule_IpMatcher:
+
 		drInfos, err := m.GetIpMatcher().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetIpMatcher().GetDRefInfo() FAILED")
@@ -7434,6 +7504,15 @@ func (v *ValidatePathMatcherType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["invert_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("invert_matcher"))
+		if err := fv(ctx, m.GetInvertMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["prefix_values"]; exists {
 		vOpts := append(opts, db.WithValidateField("prefix_values"))
 		if err := fv(ctx, m.GetPrefixValues(), vOpts...); err != nil {
@@ -7891,6 +7970,7 @@ var DefaultPrefixMatchListValidator = func() *ValidatePrefixMatchList {
 	vrhIpPrefixes := v.IpPrefixesValidationRuleHandler
 	rulesIpPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "128",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -7904,6 +7984,7 @@ var DefaultPrefixMatchListValidator = func() *ValidatePrefixMatchList {
 	vrhIpv6Prefixes := v.Ipv6PrefixesValidationRuleHandler
 	rulesIpv6Prefixes := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "128",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
@@ -9638,6 +9719,7 @@ func (m *SecurityPoliciesType) GetFirewallPolicyChoiceDRefInfo() ([]db.DRefInfo,
 		return nil, nil
 
 	case *SecurityPoliciesType_ActiveEnhancedFirewallPolicies:
+
 		drInfos, err := m.GetActiveEnhancedFirewallPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveEnhancedFirewallPolicies().GetDRefInfo() FAILED")
@@ -9665,6 +9747,7 @@ func (m *SecurityPoliciesType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, e
 		return nil, nil
 
 	case *SecurityPoliciesType_ActiveForwardProxyPolicies:
+
 		drInfos, err := m.GetActiveForwardProxyPolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveForwardProxyPolicies().GetDRefInfo() FAILED")
@@ -9676,6 +9759,7 @@ func (m *SecurityPoliciesType) GetForwardProxyChoiceDRefInfo() ([]db.DRefInfo, e
 		return drInfos, err
 
 	case *SecurityPoliciesType_ActiveServicePolicies:
+
 		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
@@ -9932,6 +10016,7 @@ func (m *SegmentPolicyType) GetDstSegmentChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *SegmentPolicyType_DstSegments:
+
 		drInfos, err := m.GetDstSegments().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetDstSegments().GetDRefInfo() FAILED")
@@ -9959,6 +10044,7 @@ func (m *SegmentPolicyType) GetSrcSegmentChoiceDRefInfo() ([]db.DRefInfo, error)
 		return nil, nil
 
 	case *SegmentPolicyType_SrcSegments:
+
 		drInfos, err := m.GetSrcSegments().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSrcSegments().GetDRefInfo() FAILED")

@@ -83,8 +83,9 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 									},
 
 									"disable": {
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
@@ -328,8 +329,9 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 												"presence": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
@@ -435,16 +437,6 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 														Type: schema.TypeString,
 													},
 												},
-
-												"ipv6_prefixes": {
-
-													Type: schema.TypeList,
-
-													Optional: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
 											},
 										},
 									},
@@ -464,6 +456,11 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 													Elem: &schema.Schema{
 														Type: schema.TypeString,
 													},
+												},
+
+												"invert_matcher": {
+													Type:     schema.TypeBool,
+													Optional: true,
 												},
 
 												"prefix_values": {
@@ -517,20 +514,23 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 			"any_server": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"server_name": {
 
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"server_name_matcher": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -538,7 +538,8 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -548,7 +549,8 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -559,8 +561,9 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 			"server_selector": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -568,7 +571,8 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Required: true,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -1116,16 +1120,6 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 
 							}
 
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-							}
-
 						}
 
 					}
@@ -1144,6 +1138,10 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 									ls[i] = v.(string)
 								}
 								path.ExactValues = ls
+							}
+
+							if w, ok := pathMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+								path.InvertMatcher = w.(bool)
 							}
 
 							if w, ok := pathMapStrToI["prefix_values"]; ok && !isIntfNil(w) {
@@ -1335,6 +1333,7 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -1859,16 +1858,6 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 
 							}
 
-							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-							}
-
 						}
 
 					}
@@ -1887,6 +1876,10 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 									ls[i] = v.(string)
 								}
 								path.ExactValues = ls
+							}
+
+							if w, ok := pathMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+								path.InvertMatcher = w.(bool)
 							}
 
 							if w, ok := pathMapStrToI["prefix_values"]; ok && !isIntfNil(w) {

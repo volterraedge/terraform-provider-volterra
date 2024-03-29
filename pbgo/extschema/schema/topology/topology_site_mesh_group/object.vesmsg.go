@@ -68,14 +68,6 @@ func (m *SpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *SpecType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return m.GetGcSpecSRefInfo()
-
-}
-
 // GetDRefInfo for the field's type
 func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetGcSpec() == nil {
@@ -91,27 +83,6 @@ func (m *SpecType) GetGcSpecDRefInfo() ([]db.DRefInfo, error) {
 		dri.DRField = "gc_spec." + dri.DRField
 	}
 	return drInfos, err
-
-}
-
-// GetGcSpecSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *SpecType) GetGcSpecSRefInfo() ([]db.SelrFldInfo, error) {
-	if m.GetGcSpec() == nil {
-		return nil, nil
-	}
-
-	srInfos, err := m.GetGcSpec().GetSRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetGcSpec().GetSRefInfo() FAILED")
-	}
-
-	for i := range srInfos {
-		sri := &srInfos[i]
-		// Convert GlobalSpecType.vnRefs to LcSpec.vnRefs i.e. convert field-type to field-name
-		sl := strings.Split(sri.Name, ".")
-		sri.Name = "gc_spec." + strings.Join(sl[1:], ".")
-	}
-	return srInfos, nil
 
 }
 

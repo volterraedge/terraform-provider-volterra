@@ -17,6 +17,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.marketplace.aws_account.Object"] = ObjectValidator()
 
+	vr["ves.io.schema.marketplace.aws_account.AWSAccountSignupRequest"] = AWSAccountSignupRequestValidator()
+	vr["ves.io.schema.marketplace.aws_account.AWSAccountSignupResponse"] = AWSAccountSignupResponseValidator()
 	vr["ves.io.schema.marketplace.aws_account.RegistrationRequest"] = RegistrationRequestValidator()
 	vr["ves.io.schema.marketplace.aws_account.RegistrationResponse"] = RegistrationResponseValidator()
 
@@ -33,6 +35,15 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.marketplace.aws_account.OnboardCustomAPI.SignupAWSAccount"] = []string{
+		"crm_details.account_id",
+		"crm_details.customer_identifier",
+		"crm_details.entitled_skus.#",
+		"crm_details.entitlement_id",
+		"crm_details.order_type",
+		"crm_details.subscription_id",
+	}
 
 }
 

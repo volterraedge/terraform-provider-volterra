@@ -1373,7 +1373,7 @@ type K8SDiscoveryType struct {
 	//
 	// x-displayName: "Access Credentials"
 	// x-required
-	// Credentials can be kubeconfig file or mutual TLS using PKI certificates
+	// Credentials can be kubeconfig file or mTLS using PKI certificates
 	AccessInfo *K8SAccessInfo `protobuf:"bytes,1,opt,name=access_info,json=accessInfo,proto3" json:"access_info,omitempty"`
 	// publish info
 	//

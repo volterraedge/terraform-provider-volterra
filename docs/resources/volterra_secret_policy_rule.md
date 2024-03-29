@@ -22,10 +22,7 @@ resource "volterra_secret_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "client_name client_selector client_name_matcher" must be set
-
-  client_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-  }
+  client_name = "ver.re01.int.ves.io"
 }
 
 ```
@@ -53,13 +50,19 @@ Argument Reference
 
 `client_name` - (Optional) This predicate evaluates to true if client name matches the configured name (`String`).
 
-`client_name_matcher` - (Optional) The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.. See [Client Name Matcher ](#client-name-matcher) below for details.
+`client_name_matcher` - (Optional) The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.. See [Client Choice Client Name Matcher ](#client-choice-client-name-matcher) below for details.
 
-`client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Selector ](#client-selector) below for details.
+`client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Choice Client Selector ](#client-choice-client-selector) below for details.
 
-`label_matcher` - (Optional) The values of any other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.
+`label_matcher` - (Optional) The values of any other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.(Deprecated)
 
-### Client Name Matcher
+### Label Matcher
+
+The values of any other labels do not matter..
+
+`keys` - (Optional) The list of label key names that have to match (`String`).
+
+### Client Choice Client Name Matcher
 
 The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher..
 
@@ -67,17 +70,11 @@ The predicate evaluates to true if any of the client's actual names match any of
 
 `regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
 
-### Client Selector
+### Client Choice Client Selector
 
 The predicate evaluates to true if the expressions in the label selector are true for the client labels..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
-### Label Matcher
-
-The values of any other labels do not matter..
-
-`keys` - (Optional) The list of label key names that have to match (`String`).
 
 Attribute Reference
 -------------------

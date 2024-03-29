@@ -895,6 +895,408 @@ func ImportAXFRResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ImportBINDCreateRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ImportBINDCreateRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ImportBINDCreateRequest) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *ImportBINDCreateRequest) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ImportBINDCreateRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.File = []byte{}
+
+	return nil
+}
+
+func (m *ImportBINDCreateRequest) DeepCopy() *ImportBINDCreateRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ImportBINDCreateRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ImportBINDCreateRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ImportBINDCreateRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ImportBINDCreateRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateImportBINDCreateRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateImportBINDCreateRequest) FileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewBytesValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for file")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateImportBINDCreateRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ImportBINDCreateRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ImportBINDCreateRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["file"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("file"))
+		if err := fv(ctx, m.GetFile(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ignore_zone_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ignore_zone_list"))
+		for idx, item := range m.GetIgnoreZoneList() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultImportBINDCreateRequestValidator = func() *ValidateImportBINDCreateRequest {
+	v := &ValidateImportBINDCreateRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFile := v.FileValidationRuleHandler
+	rulesFile := map[string]string{
+		"ves.io.schema.rules.bytes.max_len":    "2097152",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhFile(rulesFile)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ImportBINDCreateRequest.file: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["file"] = vFn
+
+	return v
+}()
+
+func ImportBINDCreateRequestValidator() db.Validator {
+	return DefaultImportBINDCreateRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ImportBINDResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ImportBINDResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ImportBINDResponse) DeepCopy() *ImportBINDResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ImportBINDResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ImportBINDResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ImportBINDResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ImportBINDResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateImportBINDResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateImportBINDResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ImportBINDResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ImportBINDResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["invalid_zone_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("invalid_zone_list"))
+		for idx, item := range m.GetInvalidZoneList() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["success_created_zone_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("success_created_zone_count"))
+		if err := fv(ctx, m.GetSuccessCreatedZoneCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["valid_zone_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("valid_zone_list"))
+		for idx, item := range m.GetValidZoneList() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultImportBINDResponseValidator = func() *ValidateImportBINDResponse {
+	v := &ValidateImportBINDResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ImportBINDResponseValidator() db.Validator {
+	return DefaultImportBINDResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ImportBINDValidateRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ImportBINDValidateRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ImportBINDValidateRequest) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *ImportBINDValidateRequest) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ImportBINDValidateRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.File = []byte{}
+
+	return nil
+}
+
+func (m *ImportBINDValidateRequest) DeepCopy() *ImportBINDValidateRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ImportBINDValidateRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ImportBINDValidateRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ImportBINDValidateRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ImportBINDValidateRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateImportBINDValidateRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateImportBINDValidateRequest) FileValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewBytesValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for file")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateImportBINDValidateRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ImportBINDValidateRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ImportBINDValidateRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["file"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("file"))
+		if err := fv(ctx, m.GetFile(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultImportBINDValidateRequestValidator = func() *ValidateImportBINDValidateRequest {
+	v := &ValidateImportBINDValidateRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFile := v.FileValidationRuleHandler
+	rulesFile := map[string]string{
+		"ves.io.schema.rules.bytes.max_len":    "2097152",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhFile(rulesFile)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ImportBINDValidateRequest.file: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["file"] = vFn
+
+	return v
+}()
+
+func ImportBINDValidateRequestValidator() db.Validator {
+	return DefaultImportBINDValidateRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ImportF5CSZoneRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1114,6 +1516,93 @@ func ImportF5CSZoneResponseValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *InvalidZone) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InvalidZone) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InvalidZone) DeepCopy() *InvalidZone {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InvalidZone{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InvalidZone) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InvalidZone) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InvalidZoneValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInvalidZone struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInvalidZone) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InvalidZone)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InvalidZone got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["validation_error"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validation_error"))
+		if err := fv(ctx, m.GetValidationError(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["zone_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("zone_name"))
+		if err := fv(ctx, m.GetZoneName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInvalidZoneValidator = func() *ValidateInvalidZone {
+	v := &ValidateInvalidZone{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func InvalidZoneValidator() db.Validator {
+	return DefaultInvalidZoneValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *TSIGConfiguration) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1252,6 +1741,93 @@ var DefaultTSIGConfigurationValidator = func() *ValidateTSIGConfiguration {
 
 func TSIGConfigurationValidator() db.Validator {
 	return DefaultTSIGConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValidZone) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValidZone) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValidZone) DeepCopy() *ValidZone {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValidZone{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValidZone) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValidZone) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValidZoneValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValidZone struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValidZone) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValidZone)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValidZone got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["record_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("record_count"))
+		if err := fv(ctx, m.GetRecordCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["zone_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("zone_name"))
+		if err := fv(ctx, m.GetZoneName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValidZoneValidator = func() *ValidateValidZone {
+	v := &ValidateValidZone{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ValidZoneValidator() db.Validator {
+	return DefaultValidZoneValidator
 }
 
 func (m *ImportF5CSZoneResponse) fromObject(e db.Entry, withDeepCopy bool) {

@@ -115,32 +115,37 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 															"blindfold_secret_info_internal": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"decryption_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"store_provider": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
 															},
 
 															"secret_encoding_type": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"blindfold_secret_info": {
@@ -190,34 +195,40 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 															"vault_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"location": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"provider": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"secret_encoding": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"version": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -225,14 +236,16 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 															"wingman_secret_info": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -253,27 +266,31 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"coordinates": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"latitude": {
-																Type:     schema.TypeFloat,
-																Optional: true,
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"longitude": {
-																Type:     schema.TypeFloat,
-																Optional: true,
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
 												},
 
 												"enable_sitelink": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"ipv4": {
@@ -298,16 +315,18 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"ipv6": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{},
 													},
 												},
 
 												"jumbo_mtu": {
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"metadata": {
@@ -323,8 +342,9 @@ func resourceVolterraCloudLink() *schema.Resource {
 															},
 
 															"disable": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"name": {
@@ -342,14 +362,16 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"system_generated_name": {
 
-													Type:     schema.TypeBool,
-													Optional: true,
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"user_assigned_name": {
 
-													Type:     schema.TypeString,
-													Optional: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"tags": {
@@ -375,8 +397,9 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 						"f5xc_managed": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{},
 							},
@@ -384,8 +407,9 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 						"auto": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"custom_asn": {
@@ -399,8 +423,9 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 			"azure": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{},
 				},
@@ -429,19 +454,22 @@ func resourceVolterraCloudLink() *schema.Resource {
 
 												"coordinates": {
 
-													Type:     schema.TypeSet,
-													Optional: true,
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"latitude": {
-																Type:     schema.TypeFloat,
-																Optional: true,
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"longitude": {
-																Type:     schema.TypeFloat,
-																Optional: true,
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -465,8 +493,9 @@ func resourceVolterraCloudLink() *schema.Resource {
 															},
 
 															"disable": {
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"name": {
@@ -893,10 +922,13 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 							}
 
-							if v, ok := connectionsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
+							if _, ok := connectionsMapStrToI["ipv6"]; ok && !ipTypeTypeFound {
 
 								ipTypeTypeFound = true
-								_ = v
+								ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
+								ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
+								connections[i].IpType = ipTypeInt
+
 							}
 
 							if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
@@ -982,10 +1014,13 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 			}
 
-			if v, ok := cs["f5xc_managed"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+			if _, ok := cs["f5xc_managed"]; ok && !cloudLinkTypeTypeFound {
 
 				cloudLinkTypeTypeFound = true
-				_ = v
+				cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
+				cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
+				cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+
 			}
 
 			directConnectGatewayAsnChoiceTypeFound := false
@@ -1017,10 +1052,13 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("azure"); ok && !cloudProviderTypeFound {
+	if _, ok := d.GetOk("azure"); ok && !cloudProviderTypeFound {
 
 		cloudProviderTypeFound = true
-		_ = v
+		cloudProviderInt := &ves_io_schema_cloud_link.CreateSpecType_Azure{}
+		cloudProviderInt.Azure = &ves_io_schema_cloud_link.AzureType{}
+		createSpec.CloudProvider = cloudProviderInt
+
 	}
 
 	if v, ok := d.GetOk("gcp"); ok && !cloudProviderTypeFound {
@@ -1260,6 +1298,7 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}
@@ -1590,10 +1629,13 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 							}
 
-							if v, ok := connectionsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
+							if _, ok := connectionsMapStrToI["ipv6"]; ok && !ipTypeTypeFound {
 
 								ipTypeTypeFound = true
-								_ = v
+								ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
+								ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
+								connections[i].IpType = ipTypeInt
+
 							}
 
 							if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
@@ -1679,10 +1721,13 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 			}
 
-			if v, ok := cs["f5xc_managed"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+			if _, ok := cs["f5xc_managed"]; ok && !cloudLinkTypeTypeFound {
 
 				cloudLinkTypeTypeFound = true
-				_ = v
+				cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
+				cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
+				cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+
 			}
 
 			directConnectGatewayAsnChoiceTypeFound := false
@@ -1714,10 +1759,13 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("azure"); ok && !cloudProviderTypeFound {
+	if _, ok := d.GetOk("azure"); ok && !cloudProviderTypeFound {
 
 		cloudProviderTypeFound = true
-		_ = v
+		cloudProviderInt := &ves_io_schema_cloud_link.ReplaceSpecType_Azure{}
+		cloudProviderInt.Azure = &ves_io_schema_cloud_link.AzureType{}
+		updateSpec.CloudProvider = cloudProviderInt
+
 	}
 
 	if v, ok := d.GetOk("gcp"); ok && !cloudProviderTypeFound {

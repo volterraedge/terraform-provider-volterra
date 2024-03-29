@@ -22,8 +22,10 @@ resource "volterra_rate_limiter" "example" {
 
   limits {
     burst_multiplier = "1"
-    total_number     = "1"
-    unit             = "unit"
+
+    total_number = "1"
+
+    unit = "unit"
   }
 }
 

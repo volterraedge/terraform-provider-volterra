@@ -390,8 +390,9 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 			"use_loadbalancer_setting": {
 
-				Type:     schema.TypeBool,
-				Optional: true,
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 		},
 	}
@@ -1067,6 +1068,7 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		Metadata: updateMeta,
 		Spec:     updateSpec,
 	}
+
 	if v, ok := d.GetOk("annotations"); ok && !isIntfNil(v) {
 
 		ms := map[string]string{}

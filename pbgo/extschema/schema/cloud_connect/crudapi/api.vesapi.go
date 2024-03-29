@@ -436,7 +436,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -520,7 +523,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -566,7 +572,10 @@ func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -707,7 +716,10 @@ func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -763,7 +775,10 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	body, err := io.ReadAll(rsp.Body)
@@ -806,7 +821,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *ObjectCreateReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_connect.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_connect.crudapi.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.Create")
 	return oah.Create(ctx, req)
 }
 
@@ -817,7 +832,7 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ObjectReplaceReq, op
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_connect.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_connect.crudapi.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.Replace")
 	return oah.Replace(ctx, req)
 }
 
@@ -828,7 +843,7 @@ func (c *APIInprocClient) Get(ctx context.Context, req *ObjectGetReq, opts ...gr
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_connect.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_connect.crudapi.API.Get", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.Get")
 	return oah.Get(ctx, req)
 }
 
@@ -839,7 +854,7 @@ func (c *APIInprocClient) List(ctx context.Context, req *ObjectListReq, opts ...
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_connect.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_connect.crudapi.API.List", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.List")
 	return oah.List(ctx, req)
 }
 
@@ -854,7 +869,7 @@ func (c *APIInprocClient) Delete(ctx context.Context, req *ObjectDeleteReq, opts
 		return nil, fmt.Errorf("No CRUD Server for ves.io.schema.cloud_connect.crudapi")
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.cloud_connect.crudapi.API.Delete", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.crudapi.API.Delete")
 	return oah.Delete(ctx, req)
 }
 
@@ -2666,7 +2681,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/cloud_connectAWSAttachmentsStatusType"
                     },
-                    "x-displayname": "AWS VPC Attachment Status Type"
+                    "x-displayname": "AWS VPC Attachment Status"
                 }
             }
         },
@@ -2691,10 +2706,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Attachment Deployment Status"
                 },
                 "installed_routes": {
-                    "description": " Routing Options",
-                    "title": "Routing Options",
+                    "description": " Routes",
+                    "title": "Routes",
                     "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
-                    "x-displayname": "Routing Options"
+                    "x-displayname": "Installed Routes"
                 },
                 "state": {
                     "type": "string",
@@ -2704,18 +2719,12 @@ var APISwaggerJSON string = `{
                 },
                 "subnets": {
                     "type": "array",
-                    "description": " Subnets to Route Traffic",
+                    "description": " Network Interfaces created along with the attachment",
                     "title": "Subnets",
                     "items": {
                         "$ref": "#/definitions/cloud_connectSubnetStatusType"
                     },
-                    "x-displayname": "Subnets"
-                },
-                "tags": {
-                    "type": "object",
-                    "description": " Attachment Tags",
-                    "title": "Attachment Tags",
-                    "x-displayname": "Attachment Tags"
+                    "x-displayname": "Network Interfaces"
                 },
                 "tgw_attachment_id": {
                     "type": "string",
@@ -2764,41 +2773,41 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAWSREType": {
             "type": "object",
+            "description": "x-displayName: \"AWS\"",
             "title": "Cloud Connect AWS Type",
-            "x-displayname": "AWS",
-            "x-ves-displayorder": "1,2,3,4",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSREType",
             "properties": {
                 "cloud_links": {
-                    "description": " Reference to cloud link",
+                    "description": "x-displayName: \"CloudLink\"\nReference to cloud link",
                     "title": "Cloud Links",
-                    "$ref": "#/definitions/cloud_connectCloudLinkListType",
-                    "x-displayname": "CloudLink"
+                    "$ref": "#/definitions/cloud_connectCloudLinkListType"
                 },
                 "cred": {
-                    "description": " Select a cloud credential to begin onboarding VPCs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Credential\"\nSelect a cloud credential to begin onboarding VPCs\nx-required",
                     "title": "Cloud Credential",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Credential",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "peers": {
+                    "type": "array",
+                    "description": "x-displayName: \"Peers\"\nPeers",
+                    "title": "Peers",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectPeerType"
                     }
                 },
                 "region": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Cloud Edge\"\nx-required",
                     "title": "Region",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Cloud Edge",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "tgw": {
+                    "type": "string",
+                    "description": "x-displayName: \"TGW Name\"",
+                    "title": "TGW Name"
                 },
                 "vpc_attachments": {
+                    "description": "x-displayName: \"VPC Attachement List\"",
                     "title": "VPC Attachement List",
-                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "VPC Attachement List"
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
                 }
             }
         },
@@ -2877,12 +2886,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "AWS TGW Site Type",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSTGWSiteType",
             "properties": {
-                "cloud_links": {
-                    "description": " Reference to cloud link",
-                    "title": "Cloud Links",
-                    "$ref": "#/definitions/cloud_connectCloudLinkListType",
-                    "x-displayname": "CloudLink"
-                },
                 "cred": {
                     "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Cloud Credential",
@@ -2977,11 +2980,24 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectCloudConnectState": {
+            "type": "string",
+            "description": "State of the CloudConnect connections\n\n - DOWN: Down\n\nCloudConnect and their corresponding vpc attachments are down\n - DEGRADED: Degraded\n\nSome of vpc attachments with the CloudConnect are down\n - UP: Up\n\nCloudConnect and their corresponding vpc attachments are available and healthy",
+            "title": "CloudConnect State",
+            "enum": [
+                "DOWN",
+                "DEGRADED",
+                "UP"
+            ],
+            "default": "DOWN",
+            "x-displayname": "CloudConnect State",
+            "x-ves-proto-enum": "ves.io.schema.cloud_connect.CloudConnectState"
+        },
         "cloud_connectCloudConnectStatusType": {
             "type": "object",
             "description": "Cloud Connect Status",
             "title": "Cloud Connect Status",
-            "x-displayname": "Cloud Connect Status",
+            "x-displayname": "Status",
             "x-ves-oneof-field-cloud_connect_deployment": "[\"cloud_connect_aws_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudConnectStatusType",
             "properties": {
@@ -2995,22 +3011,15 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectCloudLinkListType": {
             "type": "object",
-            "description": "List of CloudLink references to be attached",
+            "description": "x-displayName: \"CloudLink\"\nList of CloudLink references to be attached",
             "title": "CloudLinks",
-            "x-displayname": "CloudLink",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudLinkListType",
             "properties": {
                 "cloud_link": {
                     "type": "array",
-                    "description": " Attach a CloudLink to this Cloud Connect\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": "x-displayName: \"CloudLink\"\nAttach a CloudLink to this Cloud Connect",
                     "title": "CloudLink",
-                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "CloudLink",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
             }
@@ -3090,7 +3099,7 @@ var APISwaggerJSON string = `{
                     "description": " Cloud Connect Status",
                     "title": "Cloud Connect Status",
                     "$ref": "#/definitions/cloud_connectCloudConnectStatusType",
-                    "x-displayname": "Cloud Connect Status"
+                    "x-displayname": "Status"
                 },
                 "conditions": {
                     "type": "array",
@@ -3120,9 +3129,9 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectSubnetStatusType": {
             "type": "object",
-            "description": "Subnet Status Type",
+            "description": "Network Interface Status",
             "title": "SubnetStatusType for AWS VPC Attachment",
-            "x-displayname": "Subnet Status Type",
+            "x-displayname": "Network Interface Status",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.SubnetStatusType",
             "properties": {
                 "availability_zone": {
@@ -3969,17 +3978,11 @@ var APISwaggerJSON string = `{
             "title": "Cloud Connect specification",
             "x-displayname": "Specification",
             "x-ves-oneof-field-bandwidth_option": "[\"bandwidth_500mbs\"]",
-            "x-ves-oneof-field-cloud": "[\"aws_re\",\"aws_tgw_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GlobalSpecType",
             "properties": {
-                "aws_re": {
-                    "description": "Exclusive with [aws_tgw_site]\n",
-                    "title": "AWS",
-                    "$ref": "#/definitions/cloud_connectAWSREType",
-                    "x-displayname": "AWS"
-                },
                 "aws_tgw_site": {
-                    "description": "Exclusive with [aws_re]\n",
+                    "description": "Exclusive with []\n",
                     "title": "AWS TGW Site",
                     "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
                     "x-displayname": "AWS TGW Site"
@@ -3991,9 +3994,20 @@ var APISwaggerJSON string = `{
                     "x-displayname": "500Mbps"
                 },
                 "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Segment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment"
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "state": {
+                    "description": " State of the vpc attachments with the Cloud Connect deployment",
+                    "title": "Cloud Connect State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectState",
+                    "x-displayname": "Cloud Connect State"
                 }
             }
         },

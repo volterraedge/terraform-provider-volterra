@@ -1949,116 +1949,92 @@ func (v *ValidateFieldViewOptions) Validate(ctx context.Context, pm interface{},
 		return nil
 	}
 
-	switch m.GetType().(type) {
-	case *FieldViewOptions_NewForm:
-		if fv, exists := v.FldValidators["type.new_form"]; exists {
-			val := m.GetType().(*FieldViewOptions_NewForm).NewForm
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("new_form"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+	if fv, exists := v.FldValidators["common_choices"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("common_choices"))
+		if err := fv(ctx, m.GetCommonChoices(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_InputBoxSize:
-		if fv, exists := v.FldValidators["type.input_box_size"]; exists {
-			val := m.GetType().(*FieldViewOptions_InputBoxSize).InputBoxSize
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("input_box_size"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["default_value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_value"))
+		if err := fv(ctx, m.GetDefaultValue(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_DefaultValue:
-		if fv, exists := v.FldValidators["type.default_value"]; exists {
-			val := m.GetType().(*FieldViewOptions_DefaultValue).DefaultValue
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("default_value"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_CommonChoices:
-		if fv, exists := v.FldValidators["type.common_choices"]; exists {
-			val := m.GetType().(*FieldViewOptions_CommonChoices).CommonChoices
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("common_choices"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["display_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("display_name"))
+		if err := fv(ctx, m.GetDisplayName(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_DisplayName:
-		if fv, exists := v.FldValidators["type.display_name"]; exists {
-			val := m.GetType().(*FieldViewOptions_DisplayName).DisplayName
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("display_name"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["in_namespace_types"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("in_namespace_types"))
+		if err := fv(ctx, m.GetInNamespaceTypes(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_Description:
-		if fv, exists := v.FldValidators["type.description"]; exists {
-			val := m.GetType().(*FieldViewOptions_Description).Description
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("description"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["input_box_format"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("input_box_format"))
+		if err := fv(ctx, m.GetInputBoxFormat(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_Map:
-		if fv, exists := v.FldValidators["type.map"]; exists {
-			val := m.GetType().(*FieldViewOptions_Map).Map
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("map"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["input_box_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("input_box_size"))
+		if err := fv(ctx, m.GetInputBoxSize(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_Repeated:
-		if fv, exists := v.FldValidators["type.repeated"]; exists {
-			val := m.GetType().(*FieldViewOptions_Repeated).Repeated
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("repeated"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["map"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("map"))
+		if err := fv(ctx, m.GetMap(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_InNamespaceTypes:
-		if fv, exists := v.FldValidators["type.in_namespace_types"]; exists {
-			val := m.GetType().(*FieldViewOptions_InNamespaceTypes).InNamespaceTypes
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("in_namespace_types"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["new_form"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("new_form"))
+		if err := fv(ctx, m.GetNewForm(), vOpts...); err != nil {
+			return err
 		}
-	case *FieldViewOptions_InputBoxFormat:
-		if fv, exists := v.FldValidators["type.input_box_format"]; exists {
-			val := m.GetType().(*FieldViewOptions_InputBoxFormat).InputBoxFormat
-			vOpts := append(opts,
-				db.WithValidateField("type"),
-				db.WithValidateField("input_box_format"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
+
+	}
+
+	if fv, exists := v.FldValidators["repeated"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("repeated"))
+		if err := fv(ctx, m.GetRepeated(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -2181,6 +2157,18 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 		vOpts := append(opts, db.WithValidateField("root_object_in"))
 		for idx, item := range m.GetRootObjectIn() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["workspaces_in"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("workspaces_in"))
+		for idx, item := range m.GetWorkspacesIn() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err

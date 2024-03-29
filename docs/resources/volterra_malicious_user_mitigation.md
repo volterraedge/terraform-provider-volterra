@@ -44,75 +44,79 @@ Argument Reference
 
 `mitigation_type` - (Optional) Malicious user mitigation rules specifies the actions to be taken for users to different threat levels. See [Mitigation Type ](#mitigation-type) below for details.
 
-### Alert Only
-
-Generate alert while not taking any invasive actions.
-
-### Block Temporarily
-
-assigned to this mitigation action.
-
-### Captcha Challenge
-
-configured on the corresponding http load balancer.
-
-### High
-
-.
-
-### Javascript Challenge
-
-configured on the corresponding http load balancer.
-
-### Low
-
-.
-
-### Medium
-
-.
-
-### Mitigation Action
-
-The action to be taken at the specified threat level.
-
-`alert_only` - (Optional) Generate alert while not taking any invasive actions (bool).
-
-`block_temporarily` - (Optional) assigned to this mitigation action (bool).
-
-`captcha_challenge` - (Optional) configured on the corresponding http load balancer (bool).
-
-`javascript_challenge` - (Optional) configured on the corresponding http load balancer (bool).
-
-`none` - (Optional) No mitigation actions (bool).
-
 ### Mitigation Type
 
 Malicious user mitigation rules specifies the actions to be taken for users to different threat levels.
 
-`rules` - (Required) Define the threat levels and the corresponding mitigation actions to be taken. See [Rules ](#rules) below for details.
+`rules` - (Required) Define the threat levels and the corresponding mitigation actions to be taken. See [Mitigation Type Rules ](#mitigation-type-rules) below for details.
 
-### None
+### Mitigation Action Alert Only
+
+Generate alert while not taking any invasive actions.
+
+### Mitigation Action Block Temporarily
+
+assigned to this mitigation action.
+
+### Mitigation Action Captcha Challenge
+
+configured on the corresponding http load balancer.
+
+### Mitigation Action Javascript Challenge
+
+configured on the corresponding http load balancer.
+
+### Mitigation Action None
 
 No mitigation actions.
 
-### Rules
+### Mitigation Type Rules
 
 Define the threat levels and the corresponding mitigation actions to be taken.
 
-`mitigation_action` - (Required) The action to be taken at the specified threat level. See [Mitigation Action ](#mitigation-action) below for details.
+`mitigation_action` - (Required) The action to be taken at the specified threat level. See [Rules Mitigation Action ](#rules-mitigation-action) below for details.
 
-`threat_level` - (Required) The threat level at which mitigation actions will be taken. See [Threat Level ](#threat-level) below for details.
+`threat_level` - (Required) The threat level at which mitigation actions will be taken. See [Rules Threat Level ](#rules-threat-level) below for details.
 
-### Threat Level
+### Rules Mitigation Action
+
+The action to be taken at the specified threat level.
+
+###### One of the arguments from this list "none, alert_only, javascript_challenge, captcha_challenge, block_temporarily" must be set
+
+`alert_only` - (Optional) Generate alert while not taking any invasive actions (`Bool`).(Deprecated)
+
+`block_temporarily` - (Optional) assigned to this mitigation action (`Bool`).
+
+`captcha_challenge` - (Optional) configured on the corresponding http load balancer (`Bool`).
+
+`javascript_challenge` - (Optional) configured on the corresponding http load balancer (`Bool`).
+
+`none` - (Optional) No mitigation actions (`Bool`).(Deprecated)
+
+### Rules Threat Level
 
 The threat level at which mitigation actions will be taken.
 
-`high` - (Optional) (bool).
+###### One of the arguments from this list "high, low, medium" must be set
 
-`low` - (Optional) (bool).
+`high` - (Optional) (`Bool`).
 
-`medium` - (Optional) (bool).
+`low` - (Optional) (`Bool`).
+
+`medium` - (Optional) (`Bool`).
+
+### Threat Level High
+
+.
+
+### Threat Level Low
+
+.
+
+### Threat Level Medium
+
+.
 
 Attribute Reference
 -------------------

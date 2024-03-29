@@ -10,11 +10,14 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/googleapis/google/api"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -111,8 +114,352 @@ func (m *GetPathSuggestionsReq) GetMatchValue() string {
 	return ""
 }
 
+// Update API Definition Reference Request
+//
+// x-displayName: "Update API Definition Reference Request"
+// Request shape of the 'UpdateApiDefinitionRef' RPC
+type UpdateApiDefinitionRefReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "default"
+	// Namespace for the object to be configured
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "all-api"
+	// Name of the object to be configured
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// api_definition
+	//
+	// x-displayName: "API Definition Reference"
+	// A reference to an API Definition object
+	ApiDefinition *views.ObjectRefType `protobuf:"bytes,3,opt,name=api_definition,json=apiDefinition,proto3" json:"api_definition,omitempty"`
+}
+
+func (m *UpdateApiDefinitionRefReq) Reset()      { *m = UpdateApiDefinitionRefReq{} }
+func (*UpdateApiDefinitionRefReq) ProtoMessage() {}
+func (*UpdateApiDefinitionRefReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2dada6645ff1af20, []int{1}
+}
+func (m *UpdateApiDefinitionRefReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UpdateApiDefinitionRefReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UpdateApiDefinitionRefReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UpdateApiDefinitionRefReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateApiDefinitionRefReq.Merge(m, src)
+}
+func (m *UpdateApiDefinitionRefReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *UpdateApiDefinitionRefReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateApiDefinitionRefReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateApiDefinitionRefReq proto.InternalMessageInfo
+
+func (m *UpdateApiDefinitionRefReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *UpdateApiDefinitionRefReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateApiDefinitionRefReq) GetApiDefinition() *views.ObjectRefType {
+	if m != nil {
+		return m.ApiDefinition
+	}
+	return nil
+}
+
+// Update API Definition Reference Response
+//
+// x-displayName: "Update API Definition Reference Response"
+// Response shape of the 'UpdateApiDefinitionRef' RPC
+type UpdateApiDefinitionRefResp struct {
+}
+
+func (m *UpdateApiDefinitionRefResp) Reset()      { *m = UpdateApiDefinitionRefResp{} }
+func (*UpdateApiDefinitionRefResp) ProtoMessage() {}
+func (*UpdateApiDefinitionRefResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2dada6645ff1af20, []int{2}
+}
+func (m *UpdateApiDefinitionRefResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UpdateApiDefinitionRefResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UpdateApiDefinitionRefResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UpdateApiDefinitionRefResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateApiDefinitionRefResp.Merge(m, src)
+}
+func (m *UpdateApiDefinitionRefResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *UpdateApiDefinitionRefResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateApiDefinitionRefResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateApiDefinitionRefResp proto.InternalMessageInfo
+
+// Update API Inventory Lists Request
+//
+// x-displayName: "Update API Inventory Lists Request"
+// Request shape of the 'UpdateApiInventoryLists' RPC
+type UpdateApiInventoryListsReq struct {
+	// Namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "default"
+	// Namespace for the object to be configured
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-example: "all-api"
+	// Name of the object to be configured
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// api_inventory_inclusion_list_delta_added
+	//
+	// x-displayName: "API Inventory Inclusion List Delta Added"
+	// List of API Endpoints that were added to the inclusion list.
+	ApiInventoryInclusionListDeltaAdded []*views.ApiOperation `protobuf:"bytes,3,rep,name=api_inventory_inclusion_list_delta_added,json=apiInventoryInclusionListDeltaAdded,proto3" json:"api_inventory_inclusion_list_delta_added,omitempty"`
+	// api_inventory_inclusion_list_delta_removed
+	//
+	// x-displayName: "API Inventory Inclusion List Delta Removed"
+	// List of API Endpoints that were removed from the inclusion list.
+	ApiInventoryInclusionListDeltaRemoved []*views.ApiOperation `protobuf:"bytes,4,rep,name=api_inventory_inclusion_list_delta_removed,json=apiInventoryInclusionListDeltaRemoved,proto3" json:"api_inventory_inclusion_list_delta_removed,omitempty"`
+	// api_inventory_exclusion_list_delta_added
+	//
+	// x-displayName: "API Inventory Exclusion List Delta Added"
+	// List of API Endpoints that were added to the exclusion list.
+	ApiInventoryExclusionListDeltaAdded []*views.ApiOperation `protobuf:"bytes,5,rep,name=api_inventory_exclusion_list_delta_added,json=apiInventoryExclusionListDeltaAdded,proto3" json:"api_inventory_exclusion_list_delta_added,omitempty"`
+	// api_inventory_exclusion_list_delta_removed
+	//
+	// x-displayName: "API Inventory Exclusion List Delta Removed"
+	// List of API Endpoints that were removed from the exclusion list.
+	ApiInventoryExclusionListDeltaRemoved []*views.ApiOperation `protobuf:"bytes,6,rep,name=api_inventory_exclusion_list_delta_removed,json=apiInventoryExclusionListDeltaRemoved,proto3" json:"api_inventory_exclusion_list_delta_removed,omitempty"`
+	// non_api_endpoints_delta_added
+	//
+	// x-displayName: "API Discovery Exclusion List Delta Added"
+	// List of Non-API Endpoints that were added to the list.
+	NonApiEndpointsDeltaAdded []*views.ApiOperation `protobuf:"bytes,7,rep,name=non_api_endpoints_delta_added,json=nonApiEndpointsDeltaAdded,proto3" json:"non_api_endpoints_delta_added,omitempty"`
+	// non_api_endpoints_delta_removed
+	//
+	// x-displayName: "API Discovery Exclusion List Delta Removed"
+	// List of Non-API Endpoints that were removed from the list.
+	NonApiEndpointsDeltaRemoved []*views.ApiOperation `protobuf:"bytes,8,rep,name=non_api_endpoints_delta_removed,json=nonApiEndpointsDeltaRemoved,proto3" json:"non_api_endpoints_delta_removed,omitempty"`
+	// old_api_definition_timestamp
+	//
+	// x-displayName: "Old API Definition Timestamp"
+	// The timestamp of the API Definition object before the inventory lists update
+	OldApiDefinitionTimestamp *types.Timestamp `protobuf:"bytes,9,opt,name=old_api_definition_timestamp,json=oldApiDefinitionTimestamp,proto3" json:"old_api_definition_timestamp,omitempty"`
+	// new_api_definition_timestamp
+	//
+	// x-displayName: "New API Definition Timestamp"
+	// The timestamp of the API Definition object after the inventory lists update
+	NewApiDefinitionTimestamp *types.Timestamp `protobuf:"bytes,10,opt,name=new_api_definition_timestamp,json=newApiDefinitionTimestamp,proto3" json:"new_api_definition_timestamp,omitempty"`
+	// old_api_definition_hash
+	//
+	// x-displayName: "Old API Definition Hash"
+	// The hash of the API Definition object before the inventory lists update
+	OldApiDefinitionHash string `protobuf:"bytes,11,opt,name=old_api_definition_hash,json=oldApiDefinitionHash,proto3" json:"old_api_definition_hash,omitempty"`
+	// new_api_definition_timestamp
+	//
+	// x-displayName: "New API Definition Hash"
+	// The hash of the API Definition object after the inventory lists update
+	NewApiDefinitionHash string `protobuf:"bytes,12,opt,name=new_api_definition_hash,json=newApiDefinitionHash,proto3" json:"new_api_definition_hash,omitempty"`
+}
+
+func (m *UpdateApiInventoryListsReq) Reset()      { *m = UpdateApiInventoryListsReq{} }
+func (*UpdateApiInventoryListsReq) ProtoMessage() {}
+func (*UpdateApiInventoryListsReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2dada6645ff1af20, []int{3}
+}
+func (m *UpdateApiInventoryListsReq) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UpdateApiInventoryListsReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UpdateApiInventoryListsReq.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UpdateApiInventoryListsReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateApiInventoryListsReq.Merge(m, src)
+}
+func (m *UpdateApiInventoryListsReq) XXX_Size() int {
+	return m.Size()
+}
+func (m *UpdateApiInventoryListsReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateApiInventoryListsReq.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateApiInventoryListsReq proto.InternalMessageInfo
+
+func (m *UpdateApiInventoryListsReq) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *UpdateApiInventoryListsReq) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateApiInventoryListsReq) GetApiInventoryInclusionListDeltaAdded() []*views.ApiOperation {
+	if m != nil {
+		return m.ApiInventoryInclusionListDeltaAdded
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetApiInventoryInclusionListDeltaRemoved() []*views.ApiOperation {
+	if m != nil {
+		return m.ApiInventoryInclusionListDeltaRemoved
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetApiInventoryExclusionListDeltaAdded() []*views.ApiOperation {
+	if m != nil {
+		return m.ApiInventoryExclusionListDeltaAdded
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetApiInventoryExclusionListDeltaRemoved() []*views.ApiOperation {
+	if m != nil {
+		return m.ApiInventoryExclusionListDeltaRemoved
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetNonApiEndpointsDeltaAdded() []*views.ApiOperation {
+	if m != nil {
+		return m.NonApiEndpointsDeltaAdded
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetNonApiEndpointsDeltaRemoved() []*views.ApiOperation {
+	if m != nil {
+		return m.NonApiEndpointsDeltaRemoved
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetOldApiDefinitionTimestamp() *types.Timestamp {
+	if m != nil {
+		return m.OldApiDefinitionTimestamp
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetNewApiDefinitionTimestamp() *types.Timestamp {
+	if m != nil {
+		return m.NewApiDefinitionTimestamp
+	}
+	return nil
+}
+
+func (m *UpdateApiInventoryListsReq) GetOldApiDefinitionHash() string {
+	if m != nil {
+		return m.OldApiDefinitionHash
+	}
+	return ""
+}
+
+func (m *UpdateApiInventoryListsReq) GetNewApiDefinitionHash() string {
+	if m != nil {
+		return m.NewApiDefinitionHash
+	}
+	return ""
+}
+
+// Update API Inventory Lists Response
+//
+// x-displayName: "Update API Inventory Lists Response"
+// Response shape of the 'UpdateApiInventoryLists' RPC
+type UpdateApiInventoryListsResp struct {
+}
+
+func (m *UpdateApiInventoryListsResp) Reset()      { *m = UpdateApiInventoryListsResp{} }
+func (*UpdateApiInventoryListsResp) ProtoMessage() {}
+func (*UpdateApiInventoryListsResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2dada6645ff1af20, []int{4}
+}
+func (m *UpdateApiInventoryListsResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *UpdateApiInventoryListsResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_UpdateApiInventoryListsResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *UpdateApiInventoryListsResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateApiInventoryListsResp.Merge(m, src)
+}
+func (m *UpdateApiInventoryListsResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *UpdateApiInventoryListsResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateApiInventoryListsResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateApiInventoryListsResp proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterType((*GetPathSuggestionsReq)(nil), "ves.io.schema.views.api_inventory.GetPathSuggestionsReq")
+	proto.RegisterType((*UpdateApiDefinitionRefReq)(nil), "ves.io.schema.views.api_inventory.UpdateApiDefinitionRefReq")
+	proto.RegisterType((*UpdateApiDefinitionRefResp)(nil), "ves.io.schema.views.api_inventory.UpdateApiDefinitionRefResp")
+	proto.RegisterType((*UpdateApiInventoryListsReq)(nil), "ves.io.schema.views.api_inventory.UpdateApiInventoryListsReq")
+	proto.RegisterType((*UpdateApiInventoryListsResp)(nil), "ves.io.schema.views.api_inventory.UpdateApiInventoryListsResp")
 }
 
 func init() {
@@ -120,37 +467,66 @@ func init() {
 }
 
 var fileDescriptor_2dada6645ff1af20 = []byte{
-	// 480 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x93, 0x41, 0x6b, 0x13, 0x41,
-	0x14, 0xc7, 0x77, 0x36, 0x55, 0xe8, 0x7a, 0x91, 0x05, 0x61, 0x8d, 0x71, 0xa8, 0x39, 0x15, 0xa5,
-	0x3b, 0x52, 0x41, 0xc4, 0x9b, 0xf5, 0x20, 0x9e, 0x0c, 0x29, 0xa8, 0x78, 0x59, 0x26, 0x9b, 0xe7,
-	0x66, 0x34, 0x3b, 0x33, 0xce, 0x4c, 0x46, 0x8b, 0x08, 0xa5, 0x77, 0x41, 0xf0, 0x13, 0x78, 0xf3,
-	0x23, 0x88, 0xbd, 0xf4, 0xd8, 0x93, 0x04, 0xf5, 0xd0, 0xa3, 0xd9, 0x78, 0xd0, 0x5b, 0x3f, 0x82,
-	0x64, 0x36, 0x89, 0xdd, 0x68, 0xc9, 0xed, 0xed, 0xfc, 0xf8, 0xbf, 0xf7, 0xff, 0x3f, 0xde, 0x06,
-	0x9b, 0x16, 0x74, 0xcc, 0x04, 0xd1, 0x69, 0x0f, 0x72, 0x4a, 0x2c, 0x83, 0x97, 0x9a, 0x50, 0xc9,
-	0x12, 0xc6, 0x2d, 0x70, 0x23, 0xd4, 0x0e, 0x49, 0x07, 0xda, 0x88, 0x3c, 0xa1, 0x92, 0xc5, 0x52,
-	0x09, 0x23, 0xc2, 0x2b, 0xa5, 0x26, 0x2e, 0x35, 0xb1, 0xd3, 0xc4, 0x15, 0x4d, 0xbd, 0x91, 0x09,
-	0x91, 0xf5, 0x61, 0xd2, 0x89, 0x50, 0xce, 0x85, 0xa1, 0x86, 0x09, 0xae, 0xcb, 0x06, 0xf5, 0x4b,
-	0xd5, 0xa1, 0x42, 0x9e, 0x84, 0x97, 0xab, 0x50, 0x5a, 0x93, 0x98, 0x1d, 0x09, 0x33, 0x7c, 0xb1,
-	0x8a, 0x4f, 0xa2, 0xc6, 0x42, 0x16, 0xda, 0x67, 0x5d, 0x6a, 0x60, 0x4a, 0x9b, 0x0b, 0x14, 0x34,
-	0x70, 0x5b, 0x9d, 0xdd, 0xb4, 0xc1, 0x85, 0x7b, 0x60, 0x5a, 0xd4, 0xf4, 0xb6, 0x07, 0x59, 0x06,
-	0xda, 0xb1, 0x36, 0xbc, 0x08, 0x1b, 0xc1, 0x2a, 0xa7, 0x39, 0x68, 0x49, 0x53, 0x88, 0xd0, 0x1a,
-	0x5a, 0x5f, 0x6d, 0xff, 0x7d, 0x08, 0xc3, 0x60, 0x65, 0xf2, 0x11, 0xf9, 0x0e, 0xb8, 0x3a, 0xbc,
-	0x16, 0x9c, 0xcb, 0xa9, 0x49, 0x7b, 0x89, 0xa5, 0xfd, 0x01, 0x44, 0xb5, 0x09, 0xda, 0x0a, 0x3e,
-	0xff, 0x3e, 0xa8, 0x9d, 0x51, 0xb5, 0x68, 0xd7, 0x6f, 0x07, 0x0e, 0x3f, 0x9c, 0xd0, 0xcd, 0x0f,
-	0x7e, 0x70, 0xfe, 0xae, 0x5b, 0xf3, 0x9d, 0xd6, 0xfd, 0x96, 0x62, 0x96, 0x1a, 0x08, 0xbf, 0xa3,
-	0x20, 0xfc, 0xd7, 0x4d, 0x78, 0x2b, 0x5e, 0xba, 0xfe, 0xf8, 0xbf, 0x21, 0xea, 0x6b, 0x0b, 0xca,
-	0x29, 0x76, 0x16, 0x74, 0x1b, 0xb4, 0x6c, 0x76, 0x0e, 0x3f, 0xf9, 0x68, 0xef, 0xdb, 0xcf, 0xf7,
-	0xfe, 0xe3, 0xe6, 0x36, 0x91, 0xa5, 0x11, 0x32, 0x0f, 0xaa, 0xc9, 0xeb, 0x79, 0xfd, 0xa6, 0x72,
-	0x25, 0x6c, 0xc6, 0xca, 0x67, 0xe0, 0x5d, 0x29, 0x18, 0x37, 0x89, 0xa4, 0xa6, 0x47, 0xf4, 0xdc,
-	0xc6, 0x6d, 0x74, 0xb5, 0x7e, 0xf3, 0x60, 0x1f, 0xad, 0x7c, 0xdd, 0x47, 0xeb, 0xcb, 0x63, 0x3c,
-	0xe8, 0x3c, 0x83, 0xd4, 0xec, 0x7d, 0x89, 0xfc, 0xeb, 0x68, 0xeb, 0x2d, 0x1a, 0x8e, 0xb0, 0x77,
-	0x34, 0xc2, 0xde, 0xf1, 0x08, 0xa3, 0xdd, 0x02, 0xa3, 0x8f, 0x05, 0x46, 0x87, 0x05, 0x46, 0xc3,
-	0x02, 0xa3, 0x1f, 0x05, 0x46, 0xbf, 0x0a, 0xec, 0x1d, 0x17, 0x18, 0xbd, 0x1b, 0x63, 0x6f, 0x38,
-	0xc6, 0xde, 0xd1, 0x18, 0x7b, 0x4f, 0x1e, 0x65, 0x42, 0x3e, 0xcf, 0x62, 0x2b, 0xfa, 0x06, 0x94,
-	0xa2, 0xf1, 0x40, 0x13, 0x57, 0x3c, 0x15, 0x2a, 0xdf, 0x90, 0x4a, 0x58, 0xd6, 0x05, 0xb5, 0x31,
-	0xc3, 0x44, 0x76, 0x32, 0x41, 0xe0, 0x95, 0x99, 0x5e, 0xc9, 0xe9, 0xbf, 0x45, 0xe7, 0xac, 0x3b,
-	0x99, 0x1b, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xcd, 0x53, 0x50, 0x78, 0x42, 0x03, 0x00, 0x00,
+	// 943 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xc1, 0x6f, 0x1b, 0xc5,
+	0x17, 0xf6, 0xd8, 0x49, 0xda, 0x4c, 0x7e, 0xfd, 0xa9, 0xac, 0x40, 0xdd, 0x38, 0xce, 0x26, 0x5d,
+	0x84, 0x14, 0x05, 0x75, 0x17, 0x05, 0x81, 0x50, 0x05, 0x48, 0x0e, 0xad, 0x20, 0x08, 0x29, 0x91,
+	0x9b, 0x02, 0x2a, 0x48, 0xab, 0xb1, 0xf7, 0xd9, 0x1e, 0xb0, 0x67, 0x86, 0x9d, 0xf1, 0x26, 0x11,
+	0xaa, 0x54, 0xf5, 0xc2, 0x01, 0x55, 0x42, 0xe5, 0x9f, 0x40, 0xf0, 0x0f, 0x20, 0x7a, 0xe9, 0xb1,
+	0x27, 0x14, 0x01, 0x87, 0x1e, 0x89, 0xc3, 0xa1, 0x9c, 0xe8, 0x8d, 0x2b, 0xda, 0x59, 0xaf, 0xe3,
+	0x75, 0x76, 0x49, 0x70, 0x7a, 0x5b, 0xef, 0x37, 0xdf, 0x7b, 0xdf, 0xf7, 0xfc, 0xf6, 0xbd, 0xc1,
+	0x6b, 0x21, 0x48, 0x87, 0x72, 0x57, 0x36, 0xda, 0xd0, 0x25, 0x6e, 0x48, 0x61, 0x47, 0xba, 0x44,
+	0x50, 0x8f, 0xb2, 0x10, 0x98, 0xe2, 0xc1, 0x9e, 0xdb, 0xe8, 0x49, 0xc5, 0xbb, 0x1e, 0x11, 0xd4,
+	0x11, 0x01, 0x57, 0xdc, 0xb8, 0x1c, 0x73, 0x9c, 0x98, 0xe3, 0x68, 0x8e, 0x93, 0xe2, 0x94, 0x2b,
+	0x2d, 0xce, 0x5b, 0x1d, 0x88, 0x22, 0xb9, 0x84, 0x31, 0xae, 0x88, 0xa2, 0x9c, 0xc9, 0x38, 0x40,
+	0x79, 0x69, 0x80, 0xea, 0x5f, 0xf5, 0x5e, 0xd3, 0x55, 0xb4, 0x0b, 0x52, 0x91, 0xae, 0x18, 0x1c,
+	0x58, 0x48, 0xab, 0xe2, 0x62, 0x94, 0xbd, 0x98, 0x06, 0x45, 0xa8, 0x3c, 0xb5, 0x27, 0x20, 0x81,
+	0xe7, 0xd3, 0xf0, 0x28, 0x54, 0x19, 0x33, 0x4b, 0x3a, 0xd4, 0x27, 0x0a, 0x06, 0xa8, 0x3d, 0x86,
+	0x82, 0x04, 0x16, 0x8e, 0xe5, 0x76, 0xf2, 0xca, 0xe5, 0x43, 0x93, 0x32, 0x1a, 0x1d, 0x4d, 0x65,
+	0x5c, 0xca, 0x3a, 0x3f, 0x72, 0xc0, 0x0e, 0xf1, 0x0b, 0xef, 0x82, 0xda, 0x22, 0xaa, 0x7d, 0xa3,
+	0xd7, 0x6a, 0x81, 0xd4, 0xc9, 0x6a, 0xf0, 0x85, 0x51, 0xc1, 0xb3, 0x8c, 0x74, 0x41, 0x0a, 0xd2,
+	0x00, 0x13, 0x2d, 0xa3, 0x95, 0xd9, 0xda, 0xd1, 0x0b, 0xc3, 0xc0, 0x53, 0xd1, 0x0f, 0xb3, 0xa8,
+	0x01, 0xfd, 0x6c, 0xbc, 0x8c, 0xe7, 0xba, 0x44, 0x35, 0xda, 0x5e, 0x48, 0x3a, 0x3d, 0x30, 0x4b,
+	0x11, 0xb4, 0x8e, 0x7f, 0xfa, 0xf3, 0x61, 0x69, 0x3a, 0x28, 0x99, 0x77, 0x8a, 0x35, 0xac, 0xe1,
+	0x0f, 0x23, 0xd4, 0xfe, 0x01, 0xe1, 0xf9, 0x9b, 0x22, 0x72, 0x5f, 0x15, 0xf4, 0xda, 0x50, 0x7c,
+	0x0d, 0x9a, 0x93, 0x25, 0xff, 0x14, 0xff, 0x3f, 0x5d, 0x06, 0x9d, 0x7f, 0x6e, 0xcd, 0x76, 0xb2,
+	0x9a, 0x65, 0xb3, 0xfe, 0x19, 0x34, 0x54, 0x0d, 0x9a, 0xdb, 0x7b, 0x02, 0xd6, 0x9f, 0xfb, 0xfe,
+	0xf6, 0x18, 0xb9, 0x76, 0x81, 0x8c, 0xaa, 0xb2, 0x2b, 0xb8, 0x9c, 0x27, 0x56, 0x0a, 0xfb, 0xfe,
+	0xec, 0x08, 0xbc, 0x91, 0xf4, 0xe0, 0x07, 0x54, 0xaa, 0x09, 0x2b, 0xf9, 0x15, 0xc2, 0x2b, 0xa9,
+	0x7e, 0xf6, 0x28, 0x6b, 0x74, 0x7a, 0x92, 0x72, 0xe6, 0x75, 0xa8, 0x54, 0x9e, 0x0f, 0x1d, 0x45,
+	0x3c, 0xe2, 0xfb, 0xe0, 0x9b, 0xa5, 0xe5, 0xd2, 0xca, 0xdc, 0xda, 0xe5, 0x4c, 0x9f, 0x55, 0x41,
+	0x37, 0x05, 0x04, 0xba, 0xf9, 0xd7, 0x2f, 0x44, 0x7f, 0xc5, 0xf9, 0xfb, 0x68, 0xfa, 0xe2, 0x93,
+	0x73, 0x26, 0xaa, 0xbd, 0x48, 0x46, 0xc4, 0x6e, 0x24, 0xf1, 0x23, 0xd5, 0xd7, 0xa2, 0xe8, 0xd5,
+	0x28, 0xb8, 0xf1, 0x35, 0xc2, 0xab, 0xa7, 0x50, 0x12, 0x40, 0x97, 0x87, 0xe0, 0x9b, 0x53, 0x13,
+	0x6a, 0x79, 0xe9, 0xdf, 0xb5, 0xd4, 0xe2, 0xf0, 0x19, 0x75, 0x81, 0xdd, 0xdc, 0xba, 0x4c, 0x3f,
+	0x8b, 0xba, 0x5c, 0xdf, 0x3d, 0x6d, 0x5d, 0x32, 0x95, 0x24, 0x75, 0x99, 0x79, 0x16, 0x75, 0x39,
+	0xae, 0x25, 0xa9, 0x4b, 0x80, 0x17, 0x19, 0x67, 0xd1, 0x84, 0xf4, 0x80, 0xf9, 0x82, 0x53, 0xa6,
+	0x64, 0xaa, 0x16, 0xe7, 0x26, 0xcc, 0x3f, 0xcf, 0x38, 0xab, 0x0a, 0x7a, 0x3d, 0x09, 0x3a, 0x52,
+	0x81, 0x10, 0x2f, 0xe5, 0xe5, 0x4c, 0x5c, 0x9f, 0x9f, 0x30, 0xeb, 0x42, 0x56, 0xd6, 0xc4, 0xeb,
+	0x27, 0xb8, 0xc2, 0x3b, 0xbe, 0x97, 0xfe, 0x5e, 0xbd, 0xe1, 0x00, 0x37, 0x67, 0xf5, 0x67, 0x5f,
+	0x76, 0xe2, 0x11, 0xef, 0x24, 0x23, 0xde, 0xd9, 0x4e, 0x4e, 0xd4, 0xe6, 0x79, 0xc7, 0x4f, 0x7d,
+	0xc7, 0x43, 0x28, 0x0a, 0xce, 0x60, 0x27, 0x3f, 0x38, 0x3e, 0x39, 0x38, 0x83, 0x9d, 0x9c, 0xe0,
+	0xaf, 0xe1, 0x4b, 0x19, 0xca, 0xdb, 0x44, 0xb6, 0xcd, 0x39, 0xfd, 0xf1, 0x3f, 0x3f, 0x2e, 0xec,
+	0x3d, 0x22, 0xdb, 0x11, 0x2d, 0x43, 0x93, 0xa6, 0xfd, 0x2f, 0xa6, 0x8d, 0xa7, 0x8c, 0x68, 0xf6,
+	0x22, 0x5e, 0xc8, 0x9d, 0x49, 0x52, 0xac, 0xdd, 0x9b, 0xc1, 0x17, 0xdf, 0xd1, 0x8b, 0xb5, 0xba,
+	0xb5, 0xb1, 0x15, 0xd0, 0x90, 0x28, 0x30, 0x7e, 0x43, 0xd8, 0x38, 0xbe, 0x0d, 0x8c, 0x37, 0x9c,
+	0x13, 0x17, 0xae, 0x93, 0xb9, 0x44, 0xca, 0xcb, 0x63, 0xcc, 0x01, 0xac, 0x57, 0x80, 0xd6, 0x61,
+	0xd7, 0x1f, 0xfd, 0x58, 0x44, 0x77, 0x7f, 0xfd, 0xe3, 0xdb, 0xe2, 0xc7, 0xf6, 0x0d, 0x57, 0xc4,
+	0x42, 0xdc, 0xe1, 0x78, 0x94, 0xee, 0x97, 0xc3, 0xe7, 0xdb, 0xa9, 0x7b, 0x01, 0x4d, 0xb0, 0xf8,
+	0x75, 0xd2, 0x83, 0x9e, 0x20, 0xaa, 0xed, 0xca, 0xa1, 0x8c, 0xab, 0x68, 0xd5, 0xf8, 0x1b, 0xe1,
+	0x4a, 0xf6, 0xf8, 0x86, 0x00, 0x58, 0x03, 0x8c, 0x37, 0x4f, 0x61, 0x30, 0x77, 0x59, 0x95, 0xdf,
+	0x3a, 0x03, 0x5b, 0x0a, 0xfb, 0x96, 0x76, 0xbf, 0x6d, 0x6f, 0x9e, 0xc1, 0xfd, 0x48, 0x63, 0x04,
+	0x89, 0xab, 0xc8, 0xf9, 0x5f, 0x08, 0x5f, 0xca, 0xe9, 0x02, 0xe3, 0x3f, 0xc9, 0x3e, 0xb6, 0xd5,
+	0xca, 0x6f, 0x9f, 0x85, 0x2e, 0x85, 0x7d, 0x53, 0xdb, 0xde, 0xb4, 0xdf, 0x3f, 0x8d, 0xed, 0x23,
+	0x7f, 0x29, 0xdb, 0x47, 0xd3, 0x37, 0x9a, 0xb9, 0xf2, 0x2a, 0x5a, 0x2d, 0xbf, 0xfe, 0xf0, 0x01,
+	0x9a, 0xfa, 0xe5, 0x01, 0x5a, 0x39, 0x59, 0x5d, 0x7c, 0x09, 0xb8, 0xfb, 0xb3, 0x59, 0x7c, 0x05,
+	0xad, 0xdf, 0x43, 0xfb, 0x07, 0x56, 0xe1, 0xf1, 0x81, 0x55, 0x78, 0x7a, 0x60, 0xa1, 0x3b, 0x7d,
+	0x0b, 0x7d, 0xd7, 0xb7, 0xd0, 0xa3, 0xbe, 0x85, 0xf6, 0xfb, 0x16, 0xfa, 0xbd, 0x6f, 0xa1, 0x27,
+	0x7d, 0xab, 0xf0, 0xb4, 0x6f, 0xa1, 0x6f, 0x0e, 0xad, 0xc2, 0xfe, 0xa1, 0x55, 0x78, 0x7c, 0x68,
+	0x15, 0x6e, 0x7d, 0xd4, 0xe2, 0xe2, 0xf3, 0x96, 0x13, 0xf2, 0x8e, 0x82, 0x20, 0x20, 0x4e, 0x4f,
+	0xba, 0xfa, 0xa1, 0xc9, 0x83, 0xee, 0x15, 0x11, 0xf0, 0x90, 0xfa, 0x10, 0x5c, 0x49, 0x60, 0x57,
+	0xd4, 0x5b, 0xdc, 0x85, 0x5d, 0x35, 0xb8, 0x8e, 0xe5, 0x5f, 0x7a, 0xeb, 0x33, 0x7a, 0xb6, 0xbc,
+	0xfa, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xc4, 0xfb, 0x45, 0x91, 0x20, 0x0b, 0x00, 0x00,
 }
 
 func (this *GetPathSuggestionsReq) Equal(that interface{}) bool {
@@ -183,6 +559,165 @@ func (this *GetPathSuggestionsReq) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *UpdateApiDefinitionRefReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpdateApiDefinitionRefReq)
+	if !ok {
+		that2, ok := that.(UpdateApiDefinitionRefReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if !this.ApiDefinition.Equal(that1.ApiDefinition) {
+		return false
+	}
+	return true
+}
+func (this *UpdateApiDefinitionRefResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpdateApiDefinitionRefResp)
+	if !ok {
+		that2, ok := that.(UpdateApiDefinitionRefResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
+func (this *UpdateApiInventoryListsReq) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpdateApiInventoryListsReq)
+	if !ok {
+		that2, ok := that.(UpdateApiInventoryListsReq)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if len(this.ApiInventoryInclusionListDeltaAdded) != len(that1.ApiInventoryInclusionListDeltaAdded) {
+		return false
+	}
+	for i := range this.ApiInventoryInclusionListDeltaAdded {
+		if !this.ApiInventoryInclusionListDeltaAdded[i].Equal(that1.ApiInventoryInclusionListDeltaAdded[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryInclusionListDeltaRemoved) != len(that1.ApiInventoryInclusionListDeltaRemoved) {
+		return false
+	}
+	for i := range this.ApiInventoryInclusionListDeltaRemoved {
+		if !this.ApiInventoryInclusionListDeltaRemoved[i].Equal(that1.ApiInventoryInclusionListDeltaRemoved[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryExclusionListDeltaAdded) != len(that1.ApiInventoryExclusionListDeltaAdded) {
+		return false
+	}
+	for i := range this.ApiInventoryExclusionListDeltaAdded {
+		if !this.ApiInventoryExclusionListDeltaAdded[i].Equal(that1.ApiInventoryExclusionListDeltaAdded[i]) {
+			return false
+		}
+	}
+	if len(this.ApiInventoryExclusionListDeltaRemoved) != len(that1.ApiInventoryExclusionListDeltaRemoved) {
+		return false
+	}
+	for i := range this.ApiInventoryExclusionListDeltaRemoved {
+		if !this.ApiInventoryExclusionListDeltaRemoved[i].Equal(that1.ApiInventoryExclusionListDeltaRemoved[i]) {
+			return false
+		}
+	}
+	if len(this.NonApiEndpointsDeltaAdded) != len(that1.NonApiEndpointsDeltaAdded) {
+		return false
+	}
+	for i := range this.NonApiEndpointsDeltaAdded {
+		if !this.NonApiEndpointsDeltaAdded[i].Equal(that1.NonApiEndpointsDeltaAdded[i]) {
+			return false
+		}
+	}
+	if len(this.NonApiEndpointsDeltaRemoved) != len(that1.NonApiEndpointsDeltaRemoved) {
+		return false
+	}
+	for i := range this.NonApiEndpointsDeltaRemoved {
+		if !this.NonApiEndpointsDeltaRemoved[i].Equal(that1.NonApiEndpointsDeltaRemoved[i]) {
+			return false
+		}
+	}
+	if !this.OldApiDefinitionTimestamp.Equal(that1.OldApiDefinitionTimestamp) {
+		return false
+	}
+	if !this.NewApiDefinitionTimestamp.Equal(that1.NewApiDefinitionTimestamp) {
+		return false
+	}
+	if this.OldApiDefinitionHash != that1.OldApiDefinitionHash {
+		return false
+	}
+	if this.NewApiDefinitionHash != that1.NewApiDefinitionHash {
+		return false
+	}
+	return true
+}
+func (this *UpdateApiInventoryListsResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpdateApiInventoryListsResp)
+	if !ok {
+		that2, ok := that.(UpdateApiInventoryListsResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
 func (this *GetPathSuggestionsReq) GoString() string {
 	if this == nil {
 		return "nil"
@@ -192,6 +727,75 @@ func (this *GetPathSuggestionsReq) GoString() string {
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "MatchValue: "+fmt.Sprintf("%#v", this.MatchValue)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *UpdateApiDefinitionRefReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&api_inventory.UpdateApiDefinitionRefReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.ApiDefinition != nil {
+		s = append(s, "ApiDefinition: "+fmt.Sprintf("%#v", this.ApiDefinition)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *UpdateApiDefinitionRefResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&api_inventory.UpdateApiDefinitionRefResp{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *UpdateApiInventoryListsReq) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&api_inventory.UpdateApiInventoryListsReq{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	if this.ApiInventoryInclusionListDeltaAdded != nil {
+		s = append(s, "ApiInventoryInclusionListDeltaAdded: "+fmt.Sprintf("%#v", this.ApiInventoryInclusionListDeltaAdded)+",\n")
+	}
+	if this.ApiInventoryInclusionListDeltaRemoved != nil {
+		s = append(s, "ApiInventoryInclusionListDeltaRemoved: "+fmt.Sprintf("%#v", this.ApiInventoryInclusionListDeltaRemoved)+",\n")
+	}
+	if this.ApiInventoryExclusionListDeltaAdded != nil {
+		s = append(s, "ApiInventoryExclusionListDeltaAdded: "+fmt.Sprintf("%#v", this.ApiInventoryExclusionListDeltaAdded)+",\n")
+	}
+	if this.ApiInventoryExclusionListDeltaRemoved != nil {
+		s = append(s, "ApiInventoryExclusionListDeltaRemoved: "+fmt.Sprintf("%#v", this.ApiInventoryExclusionListDeltaRemoved)+",\n")
+	}
+	if this.NonApiEndpointsDeltaAdded != nil {
+		s = append(s, "NonApiEndpointsDeltaAdded: "+fmt.Sprintf("%#v", this.NonApiEndpointsDeltaAdded)+",\n")
+	}
+	if this.NonApiEndpointsDeltaRemoved != nil {
+		s = append(s, "NonApiEndpointsDeltaRemoved: "+fmt.Sprintf("%#v", this.NonApiEndpointsDeltaRemoved)+",\n")
+	}
+	if this.OldApiDefinitionTimestamp != nil {
+		s = append(s, "OldApiDefinitionTimestamp: "+fmt.Sprintf("%#v", this.OldApiDefinitionTimestamp)+",\n")
+	}
+	if this.NewApiDefinitionTimestamp != nil {
+		s = append(s, "NewApiDefinitionTimestamp: "+fmt.Sprintf("%#v", this.NewApiDefinitionTimestamp)+",\n")
+	}
+	s = append(s, "OldApiDefinitionHash: "+fmt.Sprintf("%#v", this.OldApiDefinitionHash)+",\n")
+	s = append(s, "NewApiDefinitionHash: "+fmt.Sprintf("%#v", this.NewApiDefinitionHash)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *UpdateApiInventoryListsResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&api_inventory.UpdateApiInventoryListsResp{")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -221,6 +825,18 @@ type CustomAPIPrivateClient interface {
 	// x-displayName: "Get Path Suggestions"
 	// Get the suggestions for API Endpoint paths
 	GetPathSuggestions(ctx context.Context, in *GetPathSuggestionsReq, opts ...grpc.CallOption) (*schema.SuggestValuesResp, error)
+	// Update API Definition Reference
+	//
+	// x-displayName: "Update API Definition Reference"
+	// Updates the reference to API Definition, effectively updates the API Inventory for the Loadbalancer.
+	// The purpose of this private method is to synchronize API Inventory actions across akar and asterix.
+	UpdateApiDefinitionReference(ctx context.Context, in *UpdateApiDefinitionRefReq, opts ...grpc.CallOption) (*UpdateApiDefinitionRefResp, error)
+	// Update API Inventory Lists
+	//
+	// x-displayName: "Update API Inventory Lists"
+	// Updates the API Inventory lists, which are part of API Definition object.
+	// The purpose of this private method is to synchronize API Inventory actions across akar and asterix.
+	UpdateApiInventoryLists(ctx context.Context, in *UpdateApiInventoryListsReq, opts ...grpc.CallOption) (*UpdateApiInventoryListsResp, error)
 }
 
 type customAPIPrivateClient struct {
@@ -240,6 +856,24 @@ func (c *customAPIPrivateClient) GetPathSuggestions(ctx context.Context, in *Get
 	return out, nil
 }
 
+func (c *customAPIPrivateClient) UpdateApiDefinitionReference(ctx context.Context, in *UpdateApiDefinitionRefReq, opts ...grpc.CallOption) (*UpdateApiDefinitionRefResp, error) {
+	out := new(UpdateApiDefinitionRefResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_inventory.CustomAPIPrivate/UpdateApiDefinitionReference", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *customAPIPrivateClient) UpdateApiInventoryLists(ctx context.Context, in *UpdateApiInventoryListsReq, opts ...grpc.CallOption) (*UpdateApiInventoryListsResp, error) {
+	out := new(UpdateApiInventoryListsResp)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.views.api_inventory.CustomAPIPrivate/UpdateApiInventoryLists", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomAPIPrivateServer is the server API for CustomAPIPrivate service.
 type CustomAPIPrivateServer interface {
 	// Get path suggestions
@@ -247,6 +881,18 @@ type CustomAPIPrivateServer interface {
 	// x-displayName: "Get Path Suggestions"
 	// Get the suggestions for API Endpoint paths
 	GetPathSuggestions(context.Context, *GetPathSuggestionsReq) (*schema.SuggestValuesResp, error)
+	// Update API Definition Reference
+	//
+	// x-displayName: "Update API Definition Reference"
+	// Updates the reference to API Definition, effectively updates the API Inventory for the Loadbalancer.
+	// The purpose of this private method is to synchronize API Inventory actions across akar and asterix.
+	UpdateApiDefinitionReference(context.Context, *UpdateApiDefinitionRefReq) (*UpdateApiDefinitionRefResp, error)
+	// Update API Inventory Lists
+	//
+	// x-displayName: "Update API Inventory Lists"
+	// Updates the API Inventory lists, which are part of API Definition object.
+	// The purpose of this private method is to synchronize API Inventory actions across akar and asterix.
+	UpdateApiInventoryLists(context.Context, *UpdateApiInventoryListsReq) (*UpdateApiInventoryListsResp, error)
 }
 
 // UnimplementedCustomAPIPrivateServer can be embedded to have forward compatible implementations.
@@ -255,6 +901,12 @@ type UnimplementedCustomAPIPrivateServer struct {
 
 func (*UnimplementedCustomAPIPrivateServer) GetPathSuggestions(ctx context.Context, req *GetPathSuggestionsReq) (*schema.SuggestValuesResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPathSuggestions not implemented")
+}
+func (*UnimplementedCustomAPIPrivateServer) UpdateApiDefinitionReference(ctx context.Context, req *UpdateApiDefinitionRefReq) (*UpdateApiDefinitionRefResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateApiDefinitionReference not implemented")
+}
+func (*UnimplementedCustomAPIPrivateServer) UpdateApiInventoryLists(ctx context.Context, req *UpdateApiInventoryListsReq) (*UpdateApiInventoryListsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateApiInventoryLists not implemented")
 }
 
 func RegisterCustomAPIPrivateServer(s *grpc.Server, srv CustomAPIPrivateServer) {
@@ -279,6 +931,42 @@ func _CustomAPIPrivate_GetPathSuggestions_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomAPIPrivate_UpdateApiDefinitionReference_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateApiDefinitionRefReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIPrivateServer).UpdateApiDefinitionReference(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.api_inventory.CustomAPIPrivate/UpdateApiDefinitionReference",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIPrivateServer).UpdateApiDefinitionReference(ctx, req.(*UpdateApiDefinitionRefReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CustomAPIPrivate_UpdateApiInventoryLists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateApiInventoryListsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomAPIPrivateServer).UpdateApiInventoryLists(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.views.api_inventory.CustomAPIPrivate/UpdateApiInventoryLists",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomAPIPrivateServer).UpdateApiInventoryLists(ctx, req.(*UpdateApiInventoryListsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomAPIPrivate_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.api_inventory.CustomAPIPrivate",
 	HandlerType: (*CustomAPIPrivateServer)(nil),
@@ -286,6 +974,14 @@ var _CustomAPIPrivate_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPathSuggestions",
 			Handler:    _CustomAPIPrivate_GetPathSuggestions_Handler,
+		},
+		{
+			MethodName: "UpdateApiDefinitionReference",
+			Handler:    _CustomAPIPrivate_UpdateApiDefinitionReference_Handler,
+		},
+		{
+			MethodName: "UpdateApiInventoryLists",
+			Handler:    _CustomAPIPrivate_UpdateApiInventoryLists_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -336,6 +1032,260 @@ func (m *GetPathSuggestionsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *UpdateApiDefinitionRefReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UpdateApiDefinitionRefReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpdateApiDefinitionRefReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ApiDefinition != nil {
+		{
+			size, err := m.ApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCustomApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintCustomApi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintCustomApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *UpdateApiDefinitionRefResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UpdateApiDefinitionRefResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpdateApiDefinitionRefResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *UpdateApiInventoryListsReq) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UpdateApiInventoryListsReq) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpdateApiInventoryListsReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.NewApiDefinitionHash) > 0 {
+		i -= len(m.NewApiDefinitionHash)
+		copy(dAtA[i:], m.NewApiDefinitionHash)
+		i = encodeVarintCustomApi(dAtA, i, uint64(len(m.NewApiDefinitionHash)))
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.OldApiDefinitionHash) > 0 {
+		i -= len(m.OldApiDefinitionHash)
+		copy(dAtA[i:], m.OldApiDefinitionHash)
+		i = encodeVarintCustomApi(dAtA, i, uint64(len(m.OldApiDefinitionHash)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.NewApiDefinitionTimestamp != nil {
+		{
+			size, err := m.NewApiDefinitionTimestamp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCustomApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	if m.OldApiDefinitionTimestamp != nil {
+		{
+			size, err := m.OldApiDefinitionTimestamp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCustomApi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.NonApiEndpointsDeltaRemoved) > 0 {
+		for iNdEx := len(m.NonApiEndpointsDeltaRemoved) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NonApiEndpointsDeltaRemoved[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintCustomApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.NonApiEndpointsDeltaAdded) > 0 {
+		for iNdEx := len(m.NonApiEndpointsDeltaAdded) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.NonApiEndpointsDeltaAdded[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintCustomApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.ApiInventoryExclusionListDeltaRemoved) > 0 {
+		for iNdEx := len(m.ApiInventoryExclusionListDeltaRemoved) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryExclusionListDeltaRemoved[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintCustomApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.ApiInventoryExclusionListDeltaAdded) > 0 {
+		for iNdEx := len(m.ApiInventoryExclusionListDeltaAdded) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryExclusionListDeltaAdded[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintCustomApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.ApiInventoryInclusionListDeltaRemoved) > 0 {
+		for iNdEx := len(m.ApiInventoryInclusionListDeltaRemoved) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryInclusionListDeltaRemoved[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintCustomApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.ApiInventoryInclusionListDeltaAdded) > 0 {
+		for iNdEx := len(m.ApiInventoryInclusionListDeltaAdded) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ApiInventoryInclusionListDeltaAdded[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintCustomApi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintCustomApi(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintCustomApi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *UpdateApiInventoryListsResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *UpdateApiInventoryListsResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpdateApiInventoryListsResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintCustomApi(dAtA []byte, offset int, v uint64) int {
 	offset -= sovCustomApi(v)
 	base := offset
@@ -368,6 +1318,114 @@ func (m *GetPathSuggestionsReq) Size() (n int) {
 	return n
 }
 
+func (m *UpdateApiDefinitionRefReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	if m.ApiDefinition != nil {
+		l = m.ApiDefinition.Size()
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	return n
+}
+
+func (m *UpdateApiDefinitionRefResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *UpdateApiInventoryListsReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	if len(m.ApiInventoryInclusionListDeltaAdded) > 0 {
+		for _, e := range m.ApiInventoryInclusionListDeltaAdded {
+			l = e.Size()
+			n += 1 + l + sovCustomApi(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryInclusionListDeltaRemoved) > 0 {
+		for _, e := range m.ApiInventoryInclusionListDeltaRemoved {
+			l = e.Size()
+			n += 1 + l + sovCustomApi(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryExclusionListDeltaAdded) > 0 {
+		for _, e := range m.ApiInventoryExclusionListDeltaAdded {
+			l = e.Size()
+			n += 1 + l + sovCustomApi(uint64(l))
+		}
+	}
+	if len(m.ApiInventoryExclusionListDeltaRemoved) > 0 {
+		for _, e := range m.ApiInventoryExclusionListDeltaRemoved {
+			l = e.Size()
+			n += 1 + l + sovCustomApi(uint64(l))
+		}
+	}
+	if len(m.NonApiEndpointsDeltaAdded) > 0 {
+		for _, e := range m.NonApiEndpointsDeltaAdded {
+			l = e.Size()
+			n += 1 + l + sovCustomApi(uint64(l))
+		}
+	}
+	if len(m.NonApiEndpointsDeltaRemoved) > 0 {
+		for _, e := range m.NonApiEndpointsDeltaRemoved {
+			l = e.Size()
+			n += 1 + l + sovCustomApi(uint64(l))
+		}
+	}
+	if m.OldApiDefinitionTimestamp != nil {
+		l = m.OldApiDefinitionTimestamp.Size()
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	if m.NewApiDefinitionTimestamp != nil {
+		l = m.NewApiDefinitionTimestamp.Size()
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	l = len(m.OldApiDefinitionHash)
+	if l > 0 {
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	l = len(m.NewApiDefinitionHash)
+	if l > 0 {
+		n += 1 + l + sovCustomApi(uint64(l))
+	}
+	return n
+}
+
+func (m *UpdateApiInventoryListsResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func sovCustomApi(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -382,6 +1440,87 @@ func (this *GetPathSuggestionsReq) String() string {
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`MatchValue:` + fmt.Sprintf("%v", this.MatchValue) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpdateApiDefinitionRefReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UpdateApiDefinitionRefReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.ApiDefinition), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpdateApiDefinitionRefResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UpdateApiDefinitionRefResp{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpdateApiInventoryListsReq) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForApiInventoryInclusionListDeltaAdded := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryInclusionListDeltaAdded {
+		repeatedStringForApiInventoryInclusionListDeltaAdded += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryInclusionListDeltaAdded += "}"
+	repeatedStringForApiInventoryInclusionListDeltaRemoved := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryInclusionListDeltaRemoved {
+		repeatedStringForApiInventoryInclusionListDeltaRemoved += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryInclusionListDeltaRemoved += "}"
+	repeatedStringForApiInventoryExclusionListDeltaAdded := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryExclusionListDeltaAdded {
+		repeatedStringForApiInventoryExclusionListDeltaAdded += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryExclusionListDeltaAdded += "}"
+	repeatedStringForApiInventoryExclusionListDeltaRemoved := "[]*ApiOperation{"
+	for _, f := range this.ApiInventoryExclusionListDeltaRemoved {
+		repeatedStringForApiInventoryExclusionListDeltaRemoved += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
+	}
+	repeatedStringForApiInventoryExclusionListDeltaRemoved += "}"
+	repeatedStringForNonApiEndpointsDeltaAdded := "[]*ApiOperation{"
+	for _, f := range this.NonApiEndpointsDeltaAdded {
+		repeatedStringForNonApiEndpointsDeltaAdded += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
+	}
+	repeatedStringForNonApiEndpointsDeltaAdded += "}"
+	repeatedStringForNonApiEndpointsDeltaRemoved := "[]*ApiOperation{"
+	for _, f := range this.NonApiEndpointsDeltaRemoved {
+		repeatedStringForNonApiEndpointsDeltaRemoved += strings.Replace(fmt.Sprintf("%v", f), "ApiOperation", "views.ApiOperation", 1) + ","
+	}
+	repeatedStringForNonApiEndpointsDeltaRemoved += "}"
+	s := strings.Join([]string{`&UpdateApiInventoryListsReq{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`ApiInventoryInclusionListDeltaAdded:` + repeatedStringForApiInventoryInclusionListDeltaAdded + `,`,
+		`ApiInventoryInclusionListDeltaRemoved:` + repeatedStringForApiInventoryInclusionListDeltaRemoved + `,`,
+		`ApiInventoryExclusionListDeltaAdded:` + repeatedStringForApiInventoryExclusionListDeltaAdded + `,`,
+		`ApiInventoryExclusionListDeltaRemoved:` + repeatedStringForApiInventoryExclusionListDeltaRemoved + `,`,
+		`NonApiEndpointsDeltaAdded:` + repeatedStringForNonApiEndpointsDeltaAdded + `,`,
+		`NonApiEndpointsDeltaRemoved:` + repeatedStringForNonApiEndpointsDeltaRemoved + `,`,
+		`OldApiDefinitionTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.OldApiDefinitionTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
+		`NewApiDefinitionTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.NewApiDefinitionTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
+		`OldApiDefinitionHash:` + fmt.Sprintf("%v", this.OldApiDefinitionHash) + `,`,
+		`NewApiDefinitionHash:` + fmt.Sprintf("%v", this.NewApiDefinitionHash) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpdateApiInventoryListsResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UpdateApiInventoryListsResp{`,
 		`}`,
 	}, "")
 	return s
@@ -519,6 +1658,722 @@ func (m *GetPathSuggestionsReq) Unmarshal(dAtA []byte) error {
 			}
 			m.MatchValue = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCustomApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateApiDefinitionRefReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCustomApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateApiDefinitionRefReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateApiDefinitionRefReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiDefinition == nil {
+				m.ApiDefinition = &views.ObjectRefType{}
+			}
+			if err := m.ApiDefinition.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCustomApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateApiDefinitionRefResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCustomApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateApiDefinitionRefResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateApiDefinitionRefResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCustomApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateApiInventoryListsReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCustomApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateApiInventoryListsReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateApiInventoryListsReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryInclusionListDeltaAdded", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryInclusionListDeltaAdded = append(m.ApiInventoryInclusionListDeltaAdded, &views.ApiOperation{})
+			if err := m.ApiInventoryInclusionListDeltaAdded[len(m.ApiInventoryInclusionListDeltaAdded)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryInclusionListDeltaRemoved", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryInclusionListDeltaRemoved = append(m.ApiInventoryInclusionListDeltaRemoved, &views.ApiOperation{})
+			if err := m.ApiInventoryInclusionListDeltaRemoved[len(m.ApiInventoryInclusionListDeltaRemoved)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryExclusionListDeltaAdded", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryExclusionListDeltaAdded = append(m.ApiInventoryExclusionListDeltaAdded, &views.ApiOperation{})
+			if err := m.ApiInventoryExclusionListDeltaAdded[len(m.ApiInventoryExclusionListDeltaAdded)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiInventoryExclusionListDeltaRemoved", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ApiInventoryExclusionListDeltaRemoved = append(m.ApiInventoryExclusionListDeltaRemoved, &views.ApiOperation{})
+			if err := m.ApiInventoryExclusionListDeltaRemoved[len(m.ApiInventoryExclusionListDeltaRemoved)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NonApiEndpointsDeltaAdded", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NonApiEndpointsDeltaAdded = append(m.NonApiEndpointsDeltaAdded, &views.ApiOperation{})
+			if err := m.NonApiEndpointsDeltaAdded[len(m.NonApiEndpointsDeltaAdded)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NonApiEndpointsDeltaRemoved", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NonApiEndpointsDeltaRemoved = append(m.NonApiEndpointsDeltaRemoved, &views.ApiOperation{})
+			if err := m.NonApiEndpointsDeltaRemoved[len(m.NonApiEndpointsDeltaRemoved)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OldApiDefinitionTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.OldApiDefinitionTimestamp == nil {
+				m.OldApiDefinitionTimestamp = &types.Timestamp{}
+			}
+			if err := m.OldApiDefinitionTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewApiDefinitionTimestamp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.NewApiDefinitionTimestamp == nil {
+				m.NewApiDefinitionTimestamp = &types.Timestamp{}
+			}
+			if err := m.NewApiDefinitionTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OldApiDefinitionHash", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OldApiDefinitionHash = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NewApiDefinitionHash", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCustomApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NewApiDefinitionHash = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipCustomApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthCustomApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *UpdateApiInventoryListsResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowCustomApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: UpdateApiInventoryListsResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: UpdateApiInventoryListsResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCustomApi(dAtA[iNdEx:])

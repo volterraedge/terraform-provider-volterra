@@ -85,48 +85,6 @@ func (v *ValidateCreateV2Request) SourceChoiceValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateV2Request) CompanyDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for company_details")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := CompanyMetaValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateV2Request) UserDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for user_details")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := UserMetaValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateV2Request) AccountDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -314,28 +272,6 @@ var DefaultCreateV2RequestValidator = func() *ValidateCreateV2Request {
 	}
 	v.FldValidators["source_choice"] = vFn
 
-	vrhCompanyDetails := v.CompanyDetailsValidationRuleHandler
-	rulesCompanyDetails := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhCompanyDetails(rulesCompanyDetails)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateV2Request.company_details: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["company_details"] = vFn
-
-	vrhUserDetails := v.UserDetailsValidationRuleHandler
-	rulesUserDetails := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhUserDetails(rulesUserDetails)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateV2Request.user_details: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_details"] = vFn
-
 	vrhAccountDetails := v.AccountDetailsValidationRuleHandler
 	rulesAccountDetails := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -361,6 +297,10 @@ var DefaultCreateV2RequestValidator = func() *ValidateCreateV2Request {
 	v.FldValidators["source_choice.source_internal_sre"] = SourceInternalSreValidator().Validate
 	v.FldValidators["source_choice.source_msp"] = SourceMspValidator().Validate
 	v.FldValidators["source_choice.source_marketplace"] = SourceMarketplaceValidator().Validate
+
+	v.FldValidators["company_details"] = CompanyMetaValidator().Validate
+
+	v.FldValidators["user_details"] = UserMetaValidator().Validate
 
 	return v
 }()

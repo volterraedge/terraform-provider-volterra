@@ -1291,6 +1291,7 @@ func (m *NetworkPeerType) GetPeerChoiceDRefInfo() ([]db.DRefInfo, error) {
 	}
 	switch m.GetPeerChoice().(type) {
 	case *NetworkPeerType_VnetPeer:
+
 		drInfos, err := m.GetVnetPeer().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetVnetPeer().GetDRefInfo() FAILED")
@@ -2188,15 +2189,19 @@ func (m *SiteMeshGroupType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	return drInfos, nil
-
-}
-
-func (m *SiteMeshGroupType) GetSRefInfo() ([]db.SelrFldInfo, error) {
-	if m == nil {
-		return nil, nil
+	if fdrInfos, err := m.GetTopologySiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTopologySiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
 	}
-	return m.GetSiteSelectorSRefInfo()
+
+	if fdrInfos, err := m.GetVirtualSiteDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualSiteDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -2256,6 +2261,7 @@ func (m *SiteMeshGroupType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 
 	case *SiteMeshGroupType_SpokeMesh:
+
 		drInfos, err := m.GetSpokeMesh().GetDRefInfo()
 		if err != nil {
 			return nil, errors.Wrap(err, "GetSpokeMesh().GetDRefInfo() FAILED")
@@ -2276,24 +2282,146 @@ func (m *SiteMeshGroupType) GetMeshChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetSiteSelectorSRefInfo returns the selector info (fld-name/val, selectee-type) of this field
-func (m *SiteMeshGroupType) GetSiteSelectorSRefInfo() ([]db.SelrFldInfo, error) {
-	f := m.GetSiteSelector()
-	if f == nil {
+func (m *SiteMeshGroupType) GetTopologySiteDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTopologySite()
+	if len(refs) == 0 {
 		return nil, nil
 	}
-	return []db.SelrFldInfo{
-		{
-			Name:  "SiteMeshGroupType.site_selector",
-			Kind:  "topology_site.Object",
-			Value: strings.Join(f.Expressions, ","),
-			Ref:   f,
-		},
-	}, nil
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SiteMeshGroupType.topology_site[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "topology_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "topology_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetTopologySiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SiteMeshGroupType) GetTopologySiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "topology_site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: topology_site")
+	}
+	for _, ref := range m.GetTopologySite() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *SiteMeshGroupType) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetVirtualSite()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("SiteMeshGroupType.virtual_site[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_site.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_site",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SiteMeshGroupType) GetVirtualSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
+	}
+	for _, ref := range m.GetVirtualSite() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 type ValidateSiteMeshGroupType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteMeshGroupType) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_site")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_site")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_site")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_site")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -2359,20 +2487,23 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 
 	}
 
-	if fv, exists := v.FldValidators["site_selector"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("site_selector"))
-		if err := fv(ctx, m.GetSiteSelector(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["site_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_type"))
 		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["topology_site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("topology_site"))
+		for idx, item := range m.GetTopologySite() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2386,6 +2517,14 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["virtual_site"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_site"))
+		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2393,9 +2532,26 @@ func (v *ValidateSiteMeshGroupType) Validate(ctx context.Context, pm interface{}
 var DefaultSiteMeshGroupTypeValidator = func() *ValidateSiteMeshGroupType {
 	v := &ValidateSiteMeshGroupType{FldValidators: map[string]db.ValidatorFunc{}}
 
-	v.FldValidators["mesh_choice.spoke_mesh"] = ves_io_schema_site_mesh_group.SpokeMeshGroupTypeValidator().Validate
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
 
-	v.FldValidators["site_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+	vrhVirtualSite := v.VirtualSiteValidationRuleHandler
+	rulesVirtualSite := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhVirtualSite(rulesVirtualSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteMeshGroupType.virtual_site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_site"] = vFn
+
+	v.FldValidators["mesh_choice.spoke_mesh"] = ves_io_schema_site_mesh_group.SpokeMeshGroupTypeValidator().Validate
 
 	return v
 }()
