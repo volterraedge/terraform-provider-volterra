@@ -70,6 +70,10 @@ func resourceVolterraSetCloudSiteInfo() *schema.Resource {
 					Type: schema.TypeString,
 				},
 			},
+			"vpc_name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"subnet_ids": {
 				Type:     schema.TypeList,
 				Optional: true,
@@ -297,6 +301,9 @@ func resourceVolterraSetCloudSiteInfoCreate(d *schema.ResourceData, meta interfa
 		}
 		if v, ok := d.GetOk("vpc_id"); ok {
 			req.AwsVpcInfo.VpcId = v.(string)
+		}
+		if v, ok := d.GetOk("vpc_name"); ok {
+			req.AwsVpcInfo.VpcName = v.(string)
 		}
 		if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
 			req.DirectConnectInfo = dcxInfo

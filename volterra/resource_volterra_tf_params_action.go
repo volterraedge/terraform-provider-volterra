@@ -121,6 +121,8 @@ func resourceVolterraTFParamsRunActionCreate(d *schema.ResourceData, meta interf
 		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 	}
 
+	time.Sleep(time.Duration(45 * time.Second))
+
 	log.Printf("[DEBUG] Running terraform parameter action struct: %+v", req)
 	_, err = client.CustomAPI(context.Background(), http.MethodPost,
 		fmt.Sprintf(tfParamsActionRunURI, "system", actionParams.siteKind, actionParams.siteName), tfParamsActionRunRPCFQN, yamlReq)
@@ -181,6 +183,8 @@ func resourceVolterraTFParamsRunActionUpdate(d *schema.ResourceData, meta interf
 		if err != nil {
 			return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
 		}
+
+		time.Sleep(time.Duration(45 * time.Second))
 
 		log.Printf("[DEBUG] Running terraform parameter action struct: %+v", req)
 		_, err = client.CustomAPI(context.Background(), http.MethodPost,
