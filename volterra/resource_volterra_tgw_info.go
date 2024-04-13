@@ -45,6 +45,10 @@ func resourceVolterraSetTGWInfo() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"vpc_name": {
+				Type:     schema.TypeString,
+				Optional: true,
+			},
 			"subnet_ids": {
 				Type:     schema.TypeList,
 				Required: true,
@@ -176,7 +180,7 @@ func resourceVolterraSetTGWInfo() *schema.Resource {
 func resourceVolterraSetTGWInfoCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 
-	var name, tgwID, vpcID string
+	var name, tgwID, vpcID, vpcName string
 	if v, ok := d.GetOk("name"); ok {
 		name = v.(string)
 	}
@@ -185,6 +189,9 @@ func resourceVolterraSetTGWInfoCreate(d *schema.ResourceData, meta interface{}) 
 	}
 	if v, ok := d.GetOk("vpc_id"); ok {
 		vpcID = v.(string)
+	}
+	if v, ok := d.GetOk("vpc_name"); ok {
+		vpcName = v.(string)
 	}
 
 	var publicIps []string
@@ -211,6 +218,7 @@ func resourceVolterraSetTGWInfoCreate(d *schema.ResourceData, meta interface{}) 
 			SubnetIds:  subnetIDs,
 			PublicIps:  publicIps,
 			PrivateIps: privateIps,
+			VpcName:    vpcName,
 		},
 	}
 	if dcxInfo := getDirectConnectInfo(d); dcxInfo != nil {
