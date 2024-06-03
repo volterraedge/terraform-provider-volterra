@@ -165,27 +165,38 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"header_transformation_type": {
 
-				Type:     schema.TypeSet,
-				Optional: true,
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
 						"default_header_transformation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"legacy_header_transformation": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"preserve_case_header_transformation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"proper_case_header_transformation": {
 
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -232,8 +243,46 @@ func resourceVolterraCluster() *schema.Resource {
 
 			"http1_config": {
 
-				Type:     schema.TypeBool,
+				Type:     schema.TypeSet,
 				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"header_transformation": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"legacy_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"preserve_case_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"proper_case_header_transformation": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 
 			"http2_options": {
@@ -300,6 +349,24 @@ func resourceVolterraCluster() *schema.Resource {
 			"panic_threshold": {
 
 				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"disable_proxy_protocol": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"proxy_protocol_v1": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"proxy_protocol_v2": {
+
+				Type:     schema.TypeBool,
 				Optional: true,
 			},
 
@@ -410,32 +477,27 @@ func resourceVolterraCluster() *schema.Resource {
 
 															"trusted_ca_list": {
 
-																Type:       schema.TypeList,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeList,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:       schema.TypeString,
-																			Computed:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Computed: true,
 																		},
 
 																		"name": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																		"namespace": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																		"tenant": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																	},
 																},
@@ -732,32 +794,27 @@ func resourceVolterraCluster() *schema.Resource {
 
 															"trusted_ca_list": {
 
-																Type:       schema.TypeList,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeList,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:       schema.TypeString,
-																			Computed:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Computed: true,
 																		},
 
 																		"name": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																		"namespace": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																		"tenant": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																	},
 																},
@@ -998,6 +1055,18 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 			}
 
+			if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+					headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
 			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 				headerTransformationChoiceTypeFound = true
@@ -1086,11 +1155,76 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 	if v, ok := d.GetOk("http1_config"); ok && !httpProtocolTypeTypeFound {
 
 		httpProtocolTypeTypeFound = true
+		httpProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_Http1Config{}
+		httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
+		createSpec.HttpProtocolType = httpProtocolTypeInt
 
-		if v.(bool) {
-			httpProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_Http1Config{}
-			httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
-			createSpec.HttpProtocolType = httpProtocolTypeInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				headerTransformation := &ves_io_schema.HeaderTransformationType{}
+				httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+				for _, set := range sl {
+					headerTransformationMapStrToI := set.(map[string]interface{})
+
+					headerTransformationChoiceTypeFound := false
+
+					if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+							headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -1180,6 +1314,46 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		createSpec.PanicThresholdType = panicThresholdTypeInt
 
 		panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+	}
+
+	//proxy_protocol_type
+
+	proxyProtocolTypeTypeFound := false
+
+	if v, ok := d.GetOk("disable_proxy_protocol"); ok && !proxyProtocolTypeTypeFound {
+
+		proxyProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			proxyProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_DisableProxyProtocol{}
+			proxyProtocolTypeInt.DisableProxyProtocol = &ves_io_schema.Empty{}
+			createSpec.ProxyProtocolType = proxyProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("proxy_protocol_v1"); ok && !proxyProtocolTypeTypeFound {
+
+		proxyProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			proxyProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_ProxyProtocolV1{}
+			proxyProtocolTypeInt.ProxyProtocolV1 = &ves_io_schema.Empty{}
+			createSpec.ProxyProtocolType = proxyProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("proxy_protocol_v2"); ok && !proxyProtocolTypeTypeFound {
+
+		proxyProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			proxyProtocolTypeInt := &ves_io_schema_cluster.CreateSpecType_ProxyProtocolV2{}
+			proxyProtocolTypeInt.ProxyProtocolV2 = &ves_io_schema.Empty{}
+			createSpec.ProxyProtocolType = proxyProtocolTypeInt
+		}
 
 	}
 
@@ -1989,6 +2163,18 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 			}
 
+			if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+					headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
 			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 				headerTransformationChoiceTypeFound = true
@@ -2073,11 +2259,76 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 	if v, ok := d.GetOk("http1_config"); ok && !httpProtocolTypeTypeFound {
 
 		httpProtocolTypeTypeFound = true
+		httpProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_Http1Config{}
+		httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
+		updateSpec.HttpProtocolType = httpProtocolTypeInt
 
-		if v.(bool) {
-			httpProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_Http1Config{}
-			httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
-			updateSpec.HttpProtocolType = httpProtocolTypeInt
+		sl := v.(*schema.Set).List()
+		for _, set := range sl {
+			cs := set.(map[string]interface{})
+
+			if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				headerTransformation := &ves_io_schema.HeaderTransformationType{}
+				httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+				for _, set := range sl {
+					headerTransformationMapStrToI := set.(map[string]interface{})
+
+					headerTransformationChoiceTypeFound := false
+
+					if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+							headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+							headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+					if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+							headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
 		}
 
 	}
@@ -2163,6 +2414,44 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		updateSpec.PanicThresholdType = panicThresholdTypeInt
 
 		panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+	}
+
+	proxyProtocolTypeTypeFound := false
+
+	if v, ok := d.GetOk("disable_proxy_protocol"); ok && !proxyProtocolTypeTypeFound {
+
+		proxyProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			proxyProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_DisableProxyProtocol{}
+			proxyProtocolTypeInt.DisableProxyProtocol = &ves_io_schema.Empty{}
+			updateSpec.ProxyProtocolType = proxyProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("proxy_protocol_v1"); ok && !proxyProtocolTypeTypeFound {
+
+		proxyProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			proxyProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_ProxyProtocolV1{}
+			proxyProtocolTypeInt.ProxyProtocolV1 = &ves_io_schema.Empty{}
+			updateSpec.ProxyProtocolType = proxyProtocolTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("proxy_protocol_v2"); ok && !proxyProtocolTypeTypeFound {
+
+		proxyProtocolTypeTypeFound = true
+
+		if v.(bool) {
+			proxyProtocolTypeInt := &ves_io_schema_cluster.ReplaceSpecType_ProxyProtocolV2{}
+			proxyProtocolTypeInt.ProxyProtocolV2 = &ves_io_schema.Empty{}
+			updateSpec.ProxyProtocolType = proxyProtocolTypeInt
+		}
 
 	}
 

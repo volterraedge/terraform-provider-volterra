@@ -7,20 +7,29 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 func TestAccVirtualHostBasic(t *testing.T) {
 	name := generateResourceName()
 	resourceName := "volterra_virtual_host." + name
-	testURL, stopFunc := createTestServer(t, ves_io_schema_vh.ObjectType)
+	testURL, stopFunc, f := createTestCustomAPIServer(t, []string{
+		ves_io_schema_tenant.ObjectType,
+		ves_io_schema_vh.ObjectType,
+	})
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)
 	os.Setenv("TF_ACC", "true")
 	os.Setenv("VOLT_VESENV", "true")
 	os.Setenv("VOLT_TENANT", "ves-io")
+	tenantName := "ves-io"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String())
+	f.MustCreateEntry(tenantObj)
+
 	resource.Test(t, resource.TestCase{
 		Providers: testAccProviders,
 		PreCheck:  func() { testAccPreCheck() },

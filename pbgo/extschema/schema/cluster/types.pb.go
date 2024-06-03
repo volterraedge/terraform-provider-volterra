@@ -579,6 +579,59 @@ func (m *Http2ProtocolOptions) GetEnabled() bool {
 	return false
 }
 
+// Http1ProtocolOptions
+//
+// x-displayName: "HTTP/1.1 Protocol Options"
+// HTTP/1.1 Protocol options for upstream connections
+type Http1ProtocolOptions struct {
+	// Header transformation
+	//
+	// x-displayName: "Header Transformation Configuration"
+	// Two mutually exclusive types of header key formatters are supported: Stateless
+	// (Default and Proper Case) and Stateful (Preserve Case) formatters. When a Stateless
+	// formatter is selected, it applies to the upstream request headers and when a
+	// Stateful formatter is selected, it applies to response headers sent to the client.
+	// It's essential to ensure that the same formatter type (either stateless or stateful)
+	// is applied on http load balancer. If different formatter types are applied, only
+	// the stateful formatter will take effect, and the stateless formatter will be disregarded.
+	HeaderTransformation *schema.HeaderTransformationType `protobuf:"bytes,1,opt,name=header_transformation,json=headerTransformation,proto3" json:"header_transformation,omitempty"`
+}
+
+func (m *Http1ProtocolOptions) Reset()      { *m = Http1ProtocolOptions{} }
+func (*Http1ProtocolOptions) ProtoMessage() {}
+func (*Http1ProtocolOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f4ccbbce2db2b210, []int{4}
+}
+func (m *Http1ProtocolOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Http1ProtocolOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Http1ProtocolOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Http1ProtocolOptions.Merge(m, src)
+}
+func (m *Http1ProtocolOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *Http1ProtocolOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_Http1ProtocolOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Http1ProtocolOptions proto.InternalMessageInfo
+
+func (m *Http1ProtocolOptions) GetHeaderTransformation() *schema.HeaderTransformationType {
+	if m != nil {
+		return m.HeaderTransformation
+	}
+	return nil
+}
+
 // GlobalSpecType
 //
 // x-displayName: "Global Configuration Specification"
@@ -774,22 +827,32 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Header Transformation Configuration"
 	// Settings to normalize the headers of upstream requests.
-	HeaderTransformationType *schema.HeaderTransformationType `protobuf:"bytes,20,opt,name=header_transformation_type,json=headerTransformationType,proto3" json:"header_transformation_type,omitempty"`
-	// Loadbalancer source IP persistance
+	HeaderTransformationType *schema.HeaderTransformationType `protobuf:"bytes,20,opt,name=header_transformation_type,json=headerTransformationType,proto3" json:"header_transformation_type,omitempty"` // Deprecated: Do not use.
+	// Loadbalancer source IP persistence
 	//
-	// x-displayName: "LB source IP persistance"
+	// x-displayName: "LB source IP persistence"
 	// Enable/Disable stickiness of source IP used by LB while connecting to origin server
 	//
 	// Types that are valid to be assigned to LbSourceIpPersistanceChoice:
 	//	*GlobalSpecType_EnableLbSourceIpPersistance
 	//	*GlobalSpecType_DisableLbSourceIpPersistance
 	LbSourceIpPersistanceChoice isGlobalSpecType_LbSourceIpPersistanceChoice `protobuf_oneof:"lb_source_ip_persistance_choice"`
+	// Proxy Protocol Configuration
+	//
+	// x-displayName: "Proxy Protocol Configuration"
+	// Proxy protocol configuration options for upstream connections
+	//
+	// Types that are valid to be assigned to ProxyProtocolType:
+	//	*GlobalSpecType_DisableProxyProtocol
+	//	*GlobalSpecType_ProxyProtocolV1
+	//	*GlobalSpecType_ProxyProtocolV2
+	ProxyProtocolType isGlobalSpecType_ProxyProtocolType `protobuf_oneof:"proxy_protocol_type"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f4ccbbce2db2b210, []int{4}
+	return fileDescriptor_f4ccbbce2db2b210, []int{5}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -832,9 +895,15 @@ type isGlobalSpecType_LbSourceIpPersistanceChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ProxyProtocolType interface {
+	isGlobalSpecType_ProxyProtocolType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_Http1Config struct {
-	Http1Config *schema.Empty `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
+	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
 }
 type GlobalSpecType_Http2Options struct {
 	Http2Options *Http2ProtocolOptions `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3,oneof" json:"http2_options,omitempty"`
@@ -854,6 +923,15 @@ type GlobalSpecType_EnableLbSourceIpPersistance struct {
 type GlobalSpecType_DisableLbSourceIpPersistance struct {
 	DisableLbSourceIpPersistance *schema.Empty `protobuf:"bytes,26,opt,name=disable_lb_source_ip_persistance,json=disableLbSourceIpPersistance,proto3,oneof" json:"disable_lb_source_ip_persistance,omitempty"`
 }
+type GlobalSpecType_DisableProxyProtocol struct {
+	DisableProxyProtocol *schema.Empty `protobuf:"bytes,28,opt,name=disable_proxy_protocol,json=disableProxyProtocol,proto3,oneof" json:"disable_proxy_protocol,omitempty"`
+}
+type GlobalSpecType_ProxyProtocolV1 struct {
+	ProxyProtocolV1 *schema.Empty `protobuf:"bytes,29,opt,name=proxy_protocol_v1,json=proxyProtocolV1,proto3,oneof" json:"proxy_protocol_v1,omitempty"`
+}
+type GlobalSpecType_ProxyProtocolV2 struct {
+	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
+}
 
 func (*GlobalSpecType_Http1Config) isGlobalSpecType_HttpProtocolType()                             {}
 func (*GlobalSpecType_Http2Options) isGlobalSpecType_HttpProtocolType()                            {}
@@ -862,6 +940,9 @@ func (*GlobalSpecType_NoPanicThreshold) isGlobalSpecType_PanicThresholdType()   
 func (*GlobalSpecType_PanicThreshold) isGlobalSpecType_PanicThresholdType()                        {}
 func (*GlobalSpecType_EnableLbSourceIpPersistance) isGlobalSpecType_LbSourceIpPersistanceChoice()  {}
 func (*GlobalSpecType_DisableLbSourceIpPersistance) isGlobalSpecType_LbSourceIpPersistanceChoice() {}
+func (*GlobalSpecType_DisableProxyProtocol) isGlobalSpecType_ProxyProtocolType()                   {}
+func (*GlobalSpecType_ProxyProtocolV1) isGlobalSpecType_ProxyProtocolType()                        {}
+func (*GlobalSpecType_ProxyProtocolV2) isGlobalSpecType_ProxyProtocolType()                        {}
 
 func (m *GlobalSpecType) GetHttpProtocolType() isGlobalSpecType_HttpProtocolType {
 	if m != nil {
@@ -878,6 +959,12 @@ func (m *GlobalSpecType) GetPanicThresholdType() isGlobalSpecType_PanicThreshold
 func (m *GlobalSpecType) GetLbSourceIpPersistanceChoice() isGlobalSpecType_LbSourceIpPersistanceChoice {
 	if m != nil {
 		return m.LbSourceIpPersistanceChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetProxyProtocolType() isGlobalSpecType_ProxyProtocolType {
+	if m != nil {
+		return m.ProxyProtocolType
 	}
 	return nil
 }
@@ -980,7 +1067,7 @@ func (m *GlobalSpecType) GetDnsDiscoveryType() DnsDiscoveryType {
 	return STRICT_DNS
 }
 
-func (m *GlobalSpecType) GetHttp1Config() *schema.Empty {
+func (m *GlobalSpecType) GetHttp1Config() *Http1ProtocolOptions {
 	if x, ok := m.GetHttpProtocolType().(*GlobalSpecType_Http1Config); ok {
 		return x.Http1Config
 	}
@@ -1015,6 +1102,7 @@ func (m *GlobalSpecType) GetPanicThreshold() uint32 {
 	return 0
 }
 
+// Deprecated: Do not use.
 func (m *GlobalSpecType) GetHeaderTransformationType() *schema.HeaderTransformationType {
 	if m != nil {
 		return m.HeaderTransformationType
@@ -1036,6 +1124,27 @@ func (m *GlobalSpecType) GetDisableLbSourceIpPersistance() *schema.Empty {
 	return nil
 }
 
+func (m *GlobalSpecType) GetDisableProxyProtocol() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*GlobalSpecType_DisableProxyProtocol); ok {
+		return x.DisableProxyProtocol
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetProxyProtocolV1() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*GlobalSpecType_ProxyProtocolV1); ok {
+		return x.ProxyProtocolV1
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetProxyProtocolV2() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*GlobalSpecType_ProxyProtocolV2); ok {
+		return x.ProxyProtocolV2
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1046,6 +1155,9 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_PanicThreshold)(nil),
 		(*GlobalSpecType_EnableLbSourceIpPersistance)(nil),
 		(*GlobalSpecType_DisableLbSourceIpPersistance)(nil),
+		(*GlobalSpecType_DisableProxyProtocol)(nil),
+		(*GlobalSpecType_ProxyProtocolV1)(nil),
+		(*GlobalSpecType_ProxyProtocolV2)(nil),
 	}
 }
 
@@ -1076,12 +1188,17 @@ type CreateSpecType struct {
 	//	*CreateSpecType_PanicThreshold
 	PanicThresholdType       isCreateSpecType_PanicThresholdType `protobuf_oneof:"panic_threshold_type"`
 	HeaderTransformationType *schema.HeaderTransformationType    `protobuf:"bytes,20,opt,name=header_transformation_type,json=headerTransformationType,proto3" json:"header_transformation_type,omitempty"`
+	// Types that are valid to be assigned to ProxyProtocolType:
+	//	*CreateSpecType_DisableProxyProtocol
+	//	*CreateSpecType_ProxyProtocolV1
+	//	*CreateSpecType_ProxyProtocolV2
+	ProxyProtocolType isCreateSpecType_ProxyProtocolType `protobuf_oneof:"proxy_protocol_type"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f4ccbbce2db2b210, []int{5}
+	return fileDescriptor_f4ccbbce2db2b210, []int{6}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1118,9 +1235,15 @@ type isCreateSpecType_PanicThresholdType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_ProxyProtocolType interface {
+	isCreateSpecType_ProxyProtocolType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_Http1Config struct {
-	Http1Config *schema.Empty `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
+	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
 }
 type CreateSpecType_Http2Options struct {
 	Http2Options *Http2ProtocolOptions `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3,oneof" json:"http2_options,omitempty"`
@@ -1134,12 +1257,24 @@ type CreateSpecType_NoPanicThreshold struct {
 type CreateSpecType_PanicThreshold struct {
 	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof" json:"panic_threshold,omitempty"`
 }
+type CreateSpecType_DisableProxyProtocol struct {
+	DisableProxyProtocol *schema.Empty `protobuf:"bytes,28,opt,name=disable_proxy_protocol,json=disableProxyProtocol,proto3,oneof" json:"disable_proxy_protocol,omitempty"`
+}
+type CreateSpecType_ProxyProtocolV1 struct {
+	ProxyProtocolV1 *schema.Empty `protobuf:"bytes,29,opt,name=proxy_protocol_v1,json=proxyProtocolV1,proto3,oneof" json:"proxy_protocol_v1,omitempty"`
+}
+type CreateSpecType_ProxyProtocolV2 struct {
+	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
+}
 
-func (*CreateSpecType_Http1Config) isCreateSpecType_HttpProtocolType()        {}
-func (*CreateSpecType_Http2Options) isCreateSpecType_HttpProtocolType()       {}
-func (*CreateSpecType_AutoHttpConfig) isCreateSpecType_HttpProtocolType()     {}
-func (*CreateSpecType_NoPanicThreshold) isCreateSpecType_PanicThresholdType() {}
-func (*CreateSpecType_PanicThreshold) isCreateSpecType_PanicThresholdType()   {}
+func (*CreateSpecType_Http1Config) isCreateSpecType_HttpProtocolType()           {}
+func (*CreateSpecType_Http2Options) isCreateSpecType_HttpProtocolType()          {}
+func (*CreateSpecType_AutoHttpConfig) isCreateSpecType_HttpProtocolType()        {}
+func (*CreateSpecType_NoPanicThreshold) isCreateSpecType_PanicThresholdType()    {}
+func (*CreateSpecType_PanicThreshold) isCreateSpecType_PanicThresholdType()      {}
+func (*CreateSpecType_DisableProxyProtocol) isCreateSpecType_ProxyProtocolType() {}
+func (*CreateSpecType_ProxyProtocolV1) isCreateSpecType_ProxyProtocolType()      {}
+func (*CreateSpecType_ProxyProtocolV2) isCreateSpecType_ProxyProtocolType()      {}
 
 func (m *CreateSpecType) GetHttpProtocolType() isCreateSpecType_HttpProtocolType {
 	if m != nil {
@@ -1150,6 +1285,12 @@ func (m *CreateSpecType) GetHttpProtocolType() isCreateSpecType_HttpProtocolType
 func (m *CreateSpecType) GetPanicThresholdType() isCreateSpecType_PanicThresholdType {
 	if m != nil {
 		return m.PanicThresholdType
+	}
+	return nil
+}
+func (m *CreateSpecType) GetProxyProtocolType() isCreateSpecType_ProxyProtocolType {
+	if m != nil {
+		return m.ProxyProtocolType
 	}
 	return nil
 }
@@ -1238,7 +1379,7 @@ func (m *CreateSpecType) GetEndpointSelection() EndpointSelectionPolicy {
 	return DISTRIBUTED
 }
 
-func (m *CreateSpecType) GetHttp1Config() *schema.Empty {
+func (m *CreateSpecType) GetHttp1Config() *Http1ProtocolOptions {
 	if x, ok := m.GetHttpProtocolType().(*CreateSpecType_Http1Config); ok {
 		return x.Http1Config
 	}
@@ -1280,6 +1421,27 @@ func (m *CreateSpecType) GetHeaderTransformationType() *schema.HeaderTransformat
 	return nil
 }
 
+func (m *CreateSpecType) GetDisableProxyProtocol() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*CreateSpecType_DisableProxyProtocol); ok {
+		return x.DisableProxyProtocol
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetProxyProtocolV1() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*CreateSpecType_ProxyProtocolV1); ok {
+		return x.ProxyProtocolV1
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetProxyProtocolV2() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*CreateSpecType_ProxyProtocolV2); ok {
+		return x.ProxyProtocolV2
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1288,6 +1450,9 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_AutoHttpConfig)(nil),
 		(*CreateSpecType_NoPanicThreshold)(nil),
 		(*CreateSpecType_PanicThreshold)(nil),
+		(*CreateSpecType_DisableProxyProtocol)(nil),
+		(*CreateSpecType_ProxyProtocolV1)(nil),
+		(*CreateSpecType_ProxyProtocolV2)(nil),
 	}
 }
 
@@ -1319,12 +1484,17 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_PanicThreshold
 	PanicThresholdType       isReplaceSpecType_PanicThresholdType `protobuf_oneof:"panic_threshold_type"`
 	HeaderTransformationType *schema.HeaderTransformationType     `protobuf:"bytes,20,opt,name=header_transformation_type,json=headerTransformationType,proto3" json:"header_transformation_type,omitempty"`
+	// Types that are valid to be assigned to ProxyProtocolType:
+	//	*ReplaceSpecType_DisableProxyProtocol
+	//	*ReplaceSpecType_ProxyProtocolV1
+	//	*ReplaceSpecType_ProxyProtocolV2
+	ProxyProtocolType isReplaceSpecType_ProxyProtocolType `protobuf_oneof:"proxy_protocol_type"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f4ccbbce2db2b210, []int{6}
+	return fileDescriptor_f4ccbbce2db2b210, []int{7}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1361,9 +1531,15 @@ type isReplaceSpecType_PanicThresholdType interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_ProxyProtocolType interface {
+	isReplaceSpecType_ProxyProtocolType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_Http1Config struct {
-	Http1Config *schema.Empty `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
+	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
 }
 type ReplaceSpecType_Http2Options struct {
 	Http2Options *Http2ProtocolOptions `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3,oneof" json:"http2_options,omitempty"`
@@ -1377,12 +1553,24 @@ type ReplaceSpecType_NoPanicThreshold struct {
 type ReplaceSpecType_PanicThreshold struct {
 	PanicThreshold uint32 `protobuf:"varint,19,opt,name=panic_threshold,json=panicThreshold,proto3,oneof" json:"panic_threshold,omitempty"`
 }
+type ReplaceSpecType_DisableProxyProtocol struct {
+	DisableProxyProtocol *schema.Empty `protobuf:"bytes,28,opt,name=disable_proxy_protocol,json=disableProxyProtocol,proto3,oneof" json:"disable_proxy_protocol,omitempty"`
+}
+type ReplaceSpecType_ProxyProtocolV1 struct {
+	ProxyProtocolV1 *schema.Empty `protobuf:"bytes,29,opt,name=proxy_protocol_v1,json=proxyProtocolV1,proto3,oneof" json:"proxy_protocol_v1,omitempty"`
+}
+type ReplaceSpecType_ProxyProtocolV2 struct {
+	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
+}
 
-func (*ReplaceSpecType_Http1Config) isReplaceSpecType_HttpProtocolType()        {}
-func (*ReplaceSpecType_Http2Options) isReplaceSpecType_HttpProtocolType()       {}
-func (*ReplaceSpecType_AutoHttpConfig) isReplaceSpecType_HttpProtocolType()     {}
-func (*ReplaceSpecType_NoPanicThreshold) isReplaceSpecType_PanicThresholdType() {}
-func (*ReplaceSpecType_PanicThreshold) isReplaceSpecType_PanicThresholdType()   {}
+func (*ReplaceSpecType_Http1Config) isReplaceSpecType_HttpProtocolType()           {}
+func (*ReplaceSpecType_Http2Options) isReplaceSpecType_HttpProtocolType()          {}
+func (*ReplaceSpecType_AutoHttpConfig) isReplaceSpecType_HttpProtocolType()        {}
+func (*ReplaceSpecType_NoPanicThreshold) isReplaceSpecType_PanicThresholdType()    {}
+func (*ReplaceSpecType_PanicThreshold) isReplaceSpecType_PanicThresholdType()      {}
+func (*ReplaceSpecType_DisableProxyProtocol) isReplaceSpecType_ProxyProtocolType() {}
+func (*ReplaceSpecType_ProxyProtocolV1) isReplaceSpecType_ProxyProtocolType()      {}
+func (*ReplaceSpecType_ProxyProtocolV2) isReplaceSpecType_ProxyProtocolType()      {}
 
 func (m *ReplaceSpecType) GetHttpProtocolType() isReplaceSpecType_HttpProtocolType {
 	if m != nil {
@@ -1393,6 +1581,12 @@ func (m *ReplaceSpecType) GetHttpProtocolType() isReplaceSpecType_HttpProtocolTy
 func (m *ReplaceSpecType) GetPanicThresholdType() isReplaceSpecType_PanicThresholdType {
 	if m != nil {
 		return m.PanicThresholdType
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetProxyProtocolType() isReplaceSpecType_ProxyProtocolType {
+	if m != nil {
+		return m.ProxyProtocolType
 	}
 	return nil
 }
@@ -1481,7 +1675,7 @@ func (m *ReplaceSpecType) GetEndpointSelection() EndpointSelectionPolicy {
 	return DISTRIBUTED
 }
 
-func (m *ReplaceSpecType) GetHttp1Config() *schema.Empty {
+func (m *ReplaceSpecType) GetHttp1Config() *Http1ProtocolOptions {
 	if x, ok := m.GetHttpProtocolType().(*ReplaceSpecType_Http1Config); ok {
 		return x.Http1Config
 	}
@@ -1523,6 +1717,27 @@ func (m *ReplaceSpecType) GetHeaderTransformationType() *schema.HeaderTransforma
 	return nil
 }
 
+func (m *ReplaceSpecType) GetDisableProxyProtocol() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*ReplaceSpecType_DisableProxyProtocol); ok {
+		return x.DisableProxyProtocol
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetProxyProtocolV1() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*ReplaceSpecType_ProxyProtocolV1); ok {
+		return x.ProxyProtocolV1
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetProxyProtocolV2() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*ReplaceSpecType_ProxyProtocolV2); ok {
+		return x.ProxyProtocolV2
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1531,6 +1746,9 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_AutoHttpConfig)(nil),
 		(*ReplaceSpecType_NoPanicThreshold)(nil),
 		(*ReplaceSpecType_PanicThreshold)(nil),
+		(*ReplaceSpecType_DisableProxyProtocol)(nil),
+		(*ReplaceSpecType_ProxyProtocolV1)(nil),
+		(*ReplaceSpecType_ProxyProtocolV2)(nil),
 	}
 }
 
@@ -1565,12 +1783,17 @@ type GetSpecType struct {
 	//	*GetSpecType_EnableLbSourceIpPersistance
 	//	*GetSpecType_DisableLbSourceIpPersistance
 	LbSourceIpPersistanceChoice isGetSpecType_LbSourceIpPersistanceChoice `protobuf_oneof:"lb_source_ip_persistance_choice"`
+	// Types that are valid to be assigned to ProxyProtocolType:
+	//	*GetSpecType_DisableProxyProtocol
+	//	*GetSpecType_ProxyProtocolV1
+	//	*GetSpecType_ProxyProtocolV2
+	ProxyProtocolType isGetSpecType_ProxyProtocolType `protobuf_oneof:"proxy_protocol_type"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f4ccbbce2db2b210, []int{7}
+	return fileDescriptor_f4ccbbce2db2b210, []int{8}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1613,9 +1836,15 @@ type isGetSpecType_LbSourceIpPersistanceChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_ProxyProtocolType interface {
+	isGetSpecType_ProxyProtocolType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_Http1Config struct {
-	Http1Config *schema.Empty `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
+	Http1Config *Http1ProtocolOptions `protobuf:"bytes,22,opt,name=http1_config,json=http1Config,proto3,oneof" json:"http1_config,omitempty"`
 }
 type GetSpecType_Http2Options struct {
 	Http2Options *Http2ProtocolOptions `protobuf:"bytes,16,opt,name=http2_options,json=http2Options,proto3,oneof" json:"http2_options,omitempty"`
@@ -1635,6 +1864,15 @@ type GetSpecType_EnableLbSourceIpPersistance struct {
 type GetSpecType_DisableLbSourceIpPersistance struct {
 	DisableLbSourceIpPersistance *schema.Empty `protobuf:"bytes,26,opt,name=disable_lb_source_ip_persistance,json=disableLbSourceIpPersistance,proto3,oneof" json:"disable_lb_source_ip_persistance,omitempty"`
 }
+type GetSpecType_DisableProxyProtocol struct {
+	DisableProxyProtocol *schema.Empty `protobuf:"bytes,28,opt,name=disable_proxy_protocol,json=disableProxyProtocol,proto3,oneof" json:"disable_proxy_protocol,omitempty"`
+}
+type GetSpecType_ProxyProtocolV1 struct {
+	ProxyProtocolV1 *schema.Empty `protobuf:"bytes,29,opt,name=proxy_protocol_v1,json=proxyProtocolV1,proto3,oneof" json:"proxy_protocol_v1,omitempty"`
+}
+type GetSpecType_ProxyProtocolV2 struct {
+	ProxyProtocolV2 *schema.Empty `protobuf:"bytes,30,opt,name=proxy_protocol_v2,json=proxyProtocolV2,proto3,oneof" json:"proxy_protocol_v2,omitempty"`
+}
 
 func (*GetSpecType_Http1Config) isGetSpecType_HttpProtocolType()                             {}
 func (*GetSpecType_Http2Options) isGetSpecType_HttpProtocolType()                            {}
@@ -1643,6 +1881,9 @@ func (*GetSpecType_NoPanicThreshold) isGetSpecType_PanicThresholdType()         
 func (*GetSpecType_PanicThreshold) isGetSpecType_PanicThresholdType()                        {}
 func (*GetSpecType_EnableLbSourceIpPersistance) isGetSpecType_LbSourceIpPersistanceChoice()  {}
 func (*GetSpecType_DisableLbSourceIpPersistance) isGetSpecType_LbSourceIpPersistanceChoice() {}
+func (*GetSpecType_DisableProxyProtocol) isGetSpecType_ProxyProtocolType()                   {}
+func (*GetSpecType_ProxyProtocolV1) isGetSpecType_ProxyProtocolType()                        {}
+func (*GetSpecType_ProxyProtocolV2) isGetSpecType_ProxyProtocolType()                        {}
 
 func (m *GetSpecType) GetHttpProtocolType() isGetSpecType_HttpProtocolType {
 	if m != nil {
@@ -1659,6 +1900,12 @@ func (m *GetSpecType) GetPanicThresholdType() isGetSpecType_PanicThresholdType {
 func (m *GetSpecType) GetLbSourceIpPersistanceChoice() isGetSpecType_LbSourceIpPersistanceChoice {
 	if m != nil {
 		return m.LbSourceIpPersistanceChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetProxyProtocolType() isGetSpecType_ProxyProtocolType {
+	if m != nil {
+		return m.ProxyProtocolType
 	}
 	return nil
 }
@@ -1747,7 +1994,7 @@ func (m *GetSpecType) GetEndpointSelection() EndpointSelectionPolicy {
 	return DISTRIBUTED
 }
 
-func (m *GetSpecType) GetHttp1Config() *schema.Empty {
+func (m *GetSpecType) GetHttp1Config() *Http1ProtocolOptions {
 	if x, ok := m.GetHttpProtocolType().(*GetSpecType_Http1Config); ok {
 		return x.Http1Config
 	}
@@ -1803,6 +2050,27 @@ func (m *GetSpecType) GetDisableLbSourceIpPersistance() *schema.Empty {
 	return nil
 }
 
+func (m *GetSpecType) GetDisableProxyProtocol() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*GetSpecType_DisableProxyProtocol); ok {
+		return x.DisableProxyProtocol
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetProxyProtocolV1() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*GetSpecType_ProxyProtocolV1); ok {
+		return x.ProxyProtocolV1
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetProxyProtocolV2() *schema.Empty {
+	if x, ok := m.GetProxyProtocolType().(*GetSpecType_ProxyProtocolV2); ok {
+		return x.ProxyProtocolV2
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -1813,6 +2081,9 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_PanicThreshold)(nil),
 		(*GetSpecType_EnableLbSourceIpPersistance)(nil),
 		(*GetSpecType_DisableLbSourceIpPersistance)(nil),
+		(*GetSpecType_DisableProxyProtocol)(nil),
+		(*GetSpecType_ProxyProtocolV1)(nil),
+		(*GetSpecType_ProxyProtocolV2)(nil),
 	}
 }
 
@@ -1835,6 +2106,8 @@ func init() {
 	golang_proto.RegisterType((*CircuitBreaker)(nil), "ves.io.schema.cluster.CircuitBreaker")
 	proto.RegisterType((*Http2ProtocolOptions)(nil), "ves.io.schema.cluster.Http2ProtocolOptions")
 	golang_proto.RegisterType((*Http2ProtocolOptions)(nil), "ves.io.schema.cluster.Http2ProtocolOptions")
+	proto.RegisterType((*Http1ProtocolOptions)(nil), "ves.io.schema.cluster.Http1ProtocolOptions")
+	golang_proto.RegisterType((*Http1ProtocolOptions)(nil), "ves.io.schema.cluster.Http1ProtocolOptions")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cluster.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cluster.GlobalSpecType")
 	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cluster.GlobalSpecType.DefaultSubsetEntry")
@@ -1859,152 +2132,161 @@ func init() {
 }
 
 var fileDescriptor_f4ccbbce2db2b210 = []byte{
-	// 2310 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xdf, 0x6f, 0xdb, 0xd6,
-	0x15, 0xd6, 0x95, 0x65, 0x5b, 0xbe, 0xb6, 0x25, 0xfa, 0xc6, 0x4e, 0x68, 0x27, 0x55, 0x55, 0x2f,
-	0xc3, 0x12, 0x97, 0x91, 0x23, 0x39, 0x4e, 0x1c, 0x03, 0x6b, 0x62, 0x5a, 0xf2, 0x8f, 0x44, 0x95,
-	0x1c, 0x4a, 0x2e, 0xd6, 0x2e, 0x2b, 0x4b, 0x51, 0x57, 0x12, 0x67, 0x8a, 0xe4, 0x48, 0xca, 0xb5,
-	0x31, 0x04, 0x08, 0xf2, 0x30, 0xa0, 0x7b, 0x1a, 0xf2, 0x32, 0xa0, 0xd8, 0x1f, 0x30, 0xf4, 0x4f,
-	0x98, 0xf2, 0xe0, 0x75, 0x18, 0x56, 0xf4, 0x65, 0x79, 0x5b, 0xd0, 0xa7, 0x46, 0x79, 0xe9, 0x5e,
-	0x86, 0x60, 0x4f, 0x43, 0x9e, 0x86, 0x7b, 0x49, 0xda, 0x92, 0x2c, 0xe6, 0xc7, 0x6c, 0x74, 0x28,
-	0xe0, 0x37, 0x91, 0xe7, 0x7c, 0xdf, 0xb9, 0xbc, 0xe7, 0x5c, 0x7e, 0x5f, 0x18, 0xc3, 0x77, 0xb6,
-	0xb1, 0x95, 0x50, 0xf4, 0x59, 0x4b, 0xae, 0xe1, 0xba, 0x34, 0x2b, 0xab, 0x0d, 0xcb, 0xc6, 0xe6,
-	0xac, 0xbd, 0x6b, 0x60, 0x2b, 0x61, 0x98, 0xba, 0xad, 0xa3, 0x09, 0x27, 0x25, 0xe1, 0xa4, 0x24,
-	0xdc, 0x94, 0xa9, 0x4b, 0x55, 0xc5, 0xae, 0x35, 0x4a, 0x09, 0x59, 0xaf, 0xcf, 0x56, 0xf5, 0xaa,
-	0x3e, 0x4b, 0xb3, 0x4b, 0x8d, 0x0a, 0xbd, 0xa2, 0x17, 0xf4, 0x97, 0xc3, 0x32, 0x15, 0xeb, 0x2a,
-	0x84, 0x4d, 0x5b, 0x6c, 0xab, 0x32, 0x75, 0xb6, 0x33, 0xae, 0x1b, 0xb6, 0xa2, 0x6b, 0x5e, 0x70,
-	0xb2, 0x33, 0xd8, 0x8e, 0x3b, 0xd7, 0x19, 0xda, 0x96, 0x54, 0xa5, 0x2c, 0xd9, 0xd8, 0x8d, 0xc6,
-	0xbb, 0xa2, 0x0a, 0xfe, 0x54, 0xec, 0xa0, 0x9e, 0xfe, 0x26, 0x08, 0xc7, 0xf3, 0x0d, 0x5b, 0x55,
-	0xb0, 0x99, 0xc6, 0x36, 0x96, 0x49, 0xac, 0xb8, 0x6b, 0x60, 0x74, 0x0d, 0x46, 0x65, 0x5d, 0xb3,
-	0xb0, 0xdc, 0xb0, 0x95, 0x6d, 0x2c, 0xce, 0xef, 0xec, 0xb0, 0x20, 0x0e, 0x2e, 0x8c, 0xf2, 0x91,
-	0xff, 0x34, 0x41, 0xe0, 0x4f, 0xff, 0xdc, 0xeb, 0xeb, 0x9f, 0xe9, 0x63, 0xef, 0x87, 0x85, 0x48,
-	0x5b, 0xda, 0xfc, 0xce, 0x0e, 0x7a, 0x17, 0x86, 0x15, 0xcd, 0xc6, 0xe6, 0xb6, 0xa4, 0xb2, 0x41,
-	0x8a, 0x88, 0x7a, 0x88, 0x81, 0x99, 0x10, 0xbb, 0xf7, 0xf7, 0xf3, 0xc2, 0x7e, 0x02, 0xfa, 0x29,
-	0x44, 0x25, 0xc9, 0xc2, 0x22, 0xfe, 0xa5, 0x53, 0x5a, 0xb4, 0x95, 0x3a, 0x66, 0xfb, 0x7a, 0xc0,
-	0xfe, 0x55, 0x17, 0x18, 0x92, 0x9a, 0x71, 0x33, 0x8b, 0x4a, 0x1d, 0xa3, 0x1b, 0x70, 0xbc, 0x2e,
-	0xed, 0x1c, 0xa0, 0x0d, 0x6c, 0xca, 0x58, 0xb3, 0xd9, 0x10, 0x25, 0x18, 0xf5, 0x08, 0x42, 0x33,
-	0x41, 0xb6, 0x2c, 0xa0, 0xba, 0xb4, 0xe3, 0xa1, 0x37, 0x9c, 0x44, 0x94, 0x83, 0x67, 0xdb, 0x9f,
-	0xb2, 0x2a, 0xd9, 0xf8, 0x53, 0x69, 0x57, 0xac, 0x48, 0x8a, 0xda, 0x30, 0x31, 0xdb, 0xdf, 0xf3,
-	0x89, 0x27, 0xdb, 0x20, 0xab, 0x0e, 0x62, 0xc5, 0x01, 0x2c, 0x8e, 0xfc, 0xfb, 0xbd, 0xa1, 0x24,
-	0x97, 0xe2, 0xe6, 0xb8, 0x2b, 0xdc, 0xfc, 0xf4, 0x67, 0x00, 0x4e, 0x65, 0xb4, 0xb2, 0xa1, 0x2b,
-	0x9a, 0x5d, 0x68, 0x94, 0x2c, 0x6c, 0x17, 0xb0, 0x8a, 0x65, 0x5b, 0x37, 0xe9, 0x16, 0x27, 0x61,
-	0x68, 0x0b, 0xef, 0x5a, 0x2c, 0x88, 0xf7, 0x5d, 0x18, 0xe2, 0xdf, 0xf2, 0xaa, 0xc0, 0x87, 0x60,
-	0x70, 0xba, 0xdf, 0xec, 0x7b, 0x02, 0x00, 0x2d, 0xfa, 0x10, 0x04, 0x19, 0x46, 0xa0, 0xa9, 0x8b,
-	0x0b, 0x5f, 0x36, 0x41, 0x0c, 0x9e, 0x83, 0x67, 0xb2, 0x8a, 0x65, 0xc7, 0xf5, 0x4a, 0x9c, 0xdc,
-	0x8d, 0x57, 0x74, 0x33, 0xee, 0xf0, 0x23, 0x90, 0xfc, 0xba, 0x09, 0x10, 0x64, 0x60, 0xe8, 0x36,
-	0xde, 0xb5, 0xf8, 0xb0, 0x53, 0x82, 0xe9, 0x9f, 0xfe, 0x47, 0x10, 0x46, 0x96, 0x15, 0x53, 0x6e,
-	0x28, 0x36, 0x6f, 0x62, 0x69, 0x0b, 0x9b, 0xe8, 0x26, 0x0c, 0x1b, 0xa6, 0xa2, 0x9b, 0x8a, 0xbd,
-	0x4b, 0x7b, 0x1b, 0x49, 0xc5, 0x12, 0x9d, 0xc3, 0x2e, 0xe8, 0x0d, 0x5b, 0xd1, 0xaa, 0x1b, 0x6e,
-	0x16, 0x1f, 0x22, 0x6b, 0x14, 0xf6, 0x51, 0x88, 0x87, 0x8c, 0xac, 0x6b, 0x9a, 0xbb, 0xfb, 0xaa,
-	0x52, 0x57, 0x6c, 0xb7, 0xe7, 0x67, 0xbe, 0x69, 0x82, 0x50, 0xf2, 0x72, 0xea, 0x4a, 0x7b, 0x13,
-	0xef, 0xdf, 0x0f, 0x0a, 0xd1, 0x03, 0x40, 0x96, 0xe4, 0x13, 0x0e, 0x03, 0x6b, 0x65, 0x45, 0xab,
-	0x8a, 0x26, 0xfe, 0x55, 0x03, 0x5b, 0xb6, 0xe5, 0x0e, 0x80, 0x3f, 0x87, 0x0b, 0x10, 0xdc, 0x7c,
-	0x94, 0x84, 0x83, 0x26, 0xb6, 0x4d, 0x05, 0x5b, 0x6e, 0xeb, 0x7d, 0xa1, 0x5e, 0x1e, 0x5a, 0x84,
-	0x23, 0x64, 0x74, 0xf6, 0x4b, 0xf6, 0xbf, 0x1c, 0x37, 0x5c, 0x97, 0x76, 0xbc, 0x72, 0x5d, 0x5d,
-	0x5e, 0x84, 0xe3, 0x6b, 0xb6, 0x6d, 0xa4, 0x36, 0xc8, 0x81, 0x92, 0x75, 0x35, 0xef, 0x1c, 0x30,
-	0x34, 0x0d, 0x07, 0xb1, 0x26, 0x95, 0x54, 0x5c, 0xa6, 0xbb, 0x1b, 0xe6, 0xc3, 0x84, 0xdc, 0x36,
-	0x1b, 0x58, 0xf0, 0x02, 0xd3, 0xbf, 0x39, 0x05, 0x23, 0xab, 0xaa, 0x5e, 0x92, 0xd4, 0x82, 0x81,
-	0x65, 0x3a, 0x15, 0x77, 0xe0, 0x10, 0x76, 0x67, 0xc6, 0x19, 0x8d, 0xe1, 0xd4, 0xb9, 0xae, 0xb6,
-	0xe4, 0x4b, 0x64, 0x8c, 0x05, 0x5c, 0x21, 0x00, 0x7e, 0xe2, 0x8b, 0x7b, 0x61, 0x0f, 0xb1, 0x3f,
-	0x30, 0x71, 0xe1, 0x80, 0x05, 0xfd, 0x1c, 0x8e, 0xd6, 0xb0, 0xa4, 0xda, 0x35, 0x51, 0xae, 0x61,
-	0x79, 0xcb, 0x62, 0x83, 0xaf, 0x41, 0xcb, 0x7e, 0x71, 0x6f, 0xd8, 0x41, 0x51, 0xd0, 0x3e, 0x73,
-	0x48, 0x18, 0x71, 0x6e, 0x2f, 0x53, 0x2e, 0xa4, 0xc0, 0xd3, 0xaa, 0x2e, 0x95, 0x4b, 0x92, 0x2a,
-	0x69, 0x32, 0x36, 0x45, 0x49, 0xad, 0x92, 0xe1, 0xa8, 0xd5, 0x69, 0x17, 0x23, 0x29, 0x2e, 0xd1,
-	0xf3, 0x05, 0x9a, 0xc8, 0xb6, 0x81, 0x96, 0x3c, 0x8c, 0x3b, 0x61, 0x13, 0x6a, 0xaf, 0x20, 0x2a,
-	0xc2, 0xa8, 0xec, 0x8c, 0xb0, 0x58, 0x72, 0x66, 0x98, 0xb6, 0x7b, 0x38, 0xf5, 0x63, 0x9f, 0x1a,
-	0x9d, 0x03, 0xcf, 0x87, 0xf6, 0x9a, 0x00, 0x08, 0x11, 0xb9, 0xf3, 0x18, 0xfc, 0x1a, 0x32, 0xde,
-	0x56, 0x89, 0x16, 0x3d, 0x45, 0x64, 0x1a, 0xc8, 0x06, 0x25, 0x7d, 0x68, 0xfd, 0xcf, 0x34, 0xff,
-	0x16, 0x29, 0xf1, 0xb8, 0xd9, 0x76, 0x74, 0xe3, 0xad, 0x6f, 0xff, 0xda, 0x37, 0xf0, 0xf0, 0x11,
-	0x08, 0x32, 0x40, 0x88, 0xe2, 0x0e, 0xa8, 0x85, 0x1e, 0x00, 0x18, 0x29, 0xe3, 0x8a, 0xd4, 0x50,
-	0xbd, 0xe2, 0xec, 0x00, 0xad, 0xbd, 0xe0, 0x53, 0xbb, 0x73, 0x5a, 0x12, 0x69, 0x07, 0xeb, 0xd0,
-	0x65, 0x34, 0xdb, 0xdc, 0xe5, 0xdf, 0x21, 0x4b, 0xf8, 0xfc, 0x11, 0x08, 0xc1, 0x60, 0xc0, 0x59,
-	0xc6, 0xe7, 0xfb, 0xcb, 0xf8, 0xed, 0x23, 0x10, 0x0c, 0x07, 0x84, 0xd1, 0x72, 0x3b, 0x0c, 0x95,
-	0x60, 0xb4, 0x22, 0xa9, 0x6a, 0x49, 0x92, 0xb7, 0x44, 0x43, 0x57, 0x15, 0x79, 0x97, 0x1d, 0xa4,
-	0xbd, 0x7b, 0xd7, 0x67, 0x11, 0x0e, 0x6e, 0xc5, 0xc5, 0x6c, 0x50, 0x08, 0x3f, 0xe2, 0x3d, 0x3a,
-	0x6d, 0x61, 0xa4, 0xd2, 0x11, 0x45, 0x77, 0x60, 0xc4, 0x56, 0x2d, 0xd1, 0x90, 0x4c, 0xa9, 0x8e,
-	0x6d, 0x6c, 0x5a, 0x6c, 0x98, 0xb6, 0xee, 0x7c, 0x57, 0x89, 0x4d, 0xc3, 0xb2, 0x4d, 0x2c, 0xd5,
-	0x8b, 0xaa, 0xb5, 0x41, 0x72, 0x2d, 0xba, 0xad, 0x21, 0xc2, 0x2b, 0x8c, 0xda, 0xee, 0x4d, 0x4a,
-	0x80, 0x78, 0x88, 0xda, 0xde, 0x3e, 0x44, 0x39, 0xf4, 0x86, 0xcd, 0x0e, 0xd1, 0x83, 0x7c, 0x6a,
-	0xcf, 0x5d, 0x48, 0xbb, 0xee, 0x8c, 0x1d, 0xa4, 0x17, 0x9d, 0x6c, 0x74, 0x03, 0x8e, 0xd5, 0x6c,
-	0xdb, 0x10, 0x95, 0xb2, 0x8a, 0xf7, 0x29, 0xa0, 0x3f, 0x45, 0x94, 0x64, 0xaf, 0x97, 0x55, 0xec,
-	0x11, 0x7c, 0x0c, 0xc7, 0x74, 0x47, 0x3f, 0xc5, 0xb2, 0x27, 0xa0, 0xec, 0x08, 0x7d, 0x34, 0xbf,
-	0xdd, 0xeb, 0xa5, 0xb7, 0xee, 0x6c, 0x32, 0x7a, 0x57, 0x0c, 0xc9, 0x10, 0x1d, 0x4c, 0x27, 0x9d,
-	0x34, 0x52, 0x60, 0x94, 0xb6, 0x27, 0xf1, 0xaa, 0xf9, 0xf4, 0xf2, 0xdd, 0x0e, 0x39, 0x87, 0x6b,
-	0x0c, 0x77, 0x87, 0xd1, 0x47, 0x70, 0xac, 0xac, 0x59, 0xa2, 0xaa, 0xeb, 0x5b, 0x0d, 0x43, 0xac,
-	0x48, 0x75, 0x45, 0xdd, 0x65, 0x23, 0xb4, 0xc6, 0x79, 0x9f, 0x1a, 0x69, 0xcd, 0xca, 0xd2, 0x74,
-	0xba, 0xfa, 0xb0, 0xb7, 0x57, 0x42, 0xb4, 0xec, 0x05, 0x56, 0x28, 0x0d, 0x12, 0x21, 0x22, 0xdc,
-	0x65, 0xc5, 0x92, 0xf5, 0x6d, 0x6c, 0xee, 0x52, 0xdb, 0xc3, 0x46, 0x29, 0xf9, 0x4f, 0xfc, 0xc9,
-	0xd3, 0x5e, 0x7e, 0x17, 0x3f, 0x53, 0xee, 0x8a, 0xa1, 0x1b, 0x70, 0x84, 0x34, 0x25, 0x29, 0xca,
-	0xba, 0x56, 0x51, 0xaa, 0xec, 0x69, 0xba, 0xf9, 0xe3, 0x5d, 0xd4, 0x99, 0xba, 0x41, 0x04, 0x8c,
-	0xf0, 0xac, 0x05, 0x84, 0x61, 0x8a, 0x58, 0xa6, 0x00, 0xf4, 0x09, 0x1c, 0x25, 0x97, 0x29, 0xcf,
-	0x1a, 0xb1, 0xcc, 0x4b, 0xdb, 0xd7, 0xeb, 0x65, 0xef, 0x0c, 0xff, 0x73, 0x77, 0x91, 0x6b, 0x01,
-	0x81, 0x2e, 0x29, 0xe5, 0x49, 0xc1, 0x0a, 0x64, 0xa4, 0x86, 0xad, 0x8b, 0x74, 0xd4, 0xdc, 0x65,
-	0x9e, 0x79, 0x8d, 0x65, 0x46, 0x08, 0x8a, 0xd4, 0x73, 0x57, 0x7a, 0x0b, 0x22, 0x4d, 0x17, 0x0d,
-	0x49, 0x53, 0x64, 0xd1, 0xae, 0x99, 0xd8, 0xaa, 0xe9, 0x6a, 0x99, 0x45, 0xaf, 0x64, 0x02, 0x02,
-	0xa3, 0xe9, 0x1b, 0x04, 0x56, 0xf4, 0x50, 0x68, 0x01, 0x46, 0xbb, 0x89, 0x4e, 0x39, 0xb6, 0x69,
-	0xcf, 0x7d, 0x7d, 0x51, 0xdb, 0xb4, 0x06, 0x84, 0x88, 0xd1, 0x89, 0xd4, 0xe1, 0x54, 0x0d, 0x4b,
-	0x65, 0x6c, 0x8a, 0xb6, 0x29, 0x69, 0x56, 0x45, 0x37, 0xeb, 0x92, 0x73, 0x04, 0x49, 0x67, 0xc7,
-	0xe9, 0x6a, 0xba, 0x3b, 0xbb, 0x46, 0x01, 0xc5, 0x8e, 0xfc, 0x83, 0xce, 0x92, 0x8d, 0x13, 0xd8,
-	0x9a, 0x4f, 0x0e, 0xc2, 0xf0, 0x6d, 0x47, 0x30, 0x45, 0xb5, 0x24, 0x5a, 0x7a, 0xc3, 0x94, 0xb1,
-	0xa8, 0x18, 0xc4, 0xed, 0x59, 0x8a, 0x65, 0x13, 0x91, 0x60, 0x27, 0x5f, 0xb2, 0x07, 0x83, 0x4f,
-	0xee, 0x81, 0xef, 0xc8, 0x36, 0x04, 0x85, 0xb3, 0x0e, 0x4f, 0xb6, 0x54, 0xa0, 0x2c, 0xeb, 0xc6,
-	0xc6, 0x01, 0x07, 0xaa, 0xc2, 0x78, 0x59, 0xb1, 0x5e, 0x5e, 0x67, 0xea, 0xf5, 0xea, 0x9c, 0x73,
-	0x89, 0x7a, 0x16, 0x9a, 0xba, 0x09, 0xd1, 0xe1, 0xf7, 0x36, 0x62, 0x60, 0xdf, 0x16, 0x76, 0x9c,
-	0xd8, 0x90, 0x40, 0x7e, 0xa2, 0x71, 0xd8, 0xbf, 0x2d, 0xa9, 0x0d, 0x4c, 0x3d, 0xd5, 0x90, 0xe0,
-	0x5c, 0x2c, 0x06, 0x17, 0xc0, 0xe2, 0x1f, 0xc0, 0x97, 0x4d, 0xf0, 0x7b, 0x00, 0x63, 0x70, 0x32,
-	0x6f, 0x2a, 0x55, 0x45, 0x8b, 0x17, 0xb0, 0xb9, 0x8d, 0x4d, 0xeb, 0x82, 0x77, 0xf6, 0xad, 0x8b,
-	0x08, 0x24, 0xe1, 0x4d, 0x18, 0x77, 0xe3, 0x1b, 0xba, 0xae, 0x5e, 0x70, 0x47, 0xf8, 0x62, 0xfc,
-	0xe0, 0x2d, 0x1a, 0x47, 0xe7, 0xe6, 0xb8, 0x14, 0x97, 0x9c, 0xe3, 0x16, 0xb8, 0xeb, 0x5c, 0xf2,
-	0x32, 0x97, 0xbc, 0xc2, 0x25, 0xe7, 0xb9, 0x54, 0x92, 0x4b, 0x5e, 0xe3, 0x52, 0x97, 0x21, 0x0b,
-	0x19, 0x57, 0x45, 0xe3, 0xae, 0x60, 0x5a, 0x28, 0x74, 0x85, 0x4b, 0xa6, 0xe0, 0x24, 0x64, 0xbc,
-	0x62, 0x71, 0x4f, 0xce, 0xfa, 0xe7, 0xb9, 0xab, 0xdc, 0x35, 0x3e, 0x01, 0x11, 0x1d, 0x75, 0xc3,
-	0x3d, 0x25, 0x74, 0x32, 0x10, 0xbb, 0xd7, 0x04, 0x67, 0xbe, 0x72, 0x44, 0x62, 0xa2, 0xd5, 0x04,
-	0xe1, 0xd4, 0x1c, 0x97, 0xbc, 0xca, 0xa5, 0x52, 0xfc, 0x25, 0x38, 0xde, 0x35, 0x8b, 0x0e, 0x62,
-	0x62, 0xaf, 0x09, 0x90, 0x8b, 0x18, 0x6b, 0x35, 0x41, 0x7f, 0x72, 0x81, 0x4b, 0x5e, 0xe7, 0xaf,
-	0xc3, 0xb7, 0xfd, 0x1a, 0x24, 0xca, 0x35, 0x5d, 0x91, 0x31, 0x3a, 0xbd, 0xd7, 0x04, 0x53, 0x8f,
-	0x9b, 0x80, 0x6d, 0x35, 0xc1, 0x40, 0x6a, 0x9e, 0x8b, 0xa7, 0xae, 0x92, 0x21, 0xbb, 0x15, 0x0a,
-	0x0f, 0x33, 0x23, 0xb7, 0x42, 0xe1, 0x09, 0xe6, 0xf4, 0xad, 0x50, 0x78, 0x8c, 0x41, 0xb7, 0x42,
-	0x61, 0x96, 0x99, 0x9c, 0xfe, 0xf3, 0x08, 0x8c, 0x2c, 0x9b, 0x58, 0xb2, 0xf1, 0xbe, 0x11, 0x5b,
-	0x7d, 0x53, 0x23, 0x36, 0xdc, 0x66, 0xc4, 0xda, 0xed, 0xd7, 0x9d, 0xff, 0xc5, 0x7e, 0x45, 0x3a,
-	0xed, 0x57, 0x97, 0xe9, 0x92, 0x8f, 0xd3, 0x74, 0xf9, 0xd9, 0xad, 0xdc, 0xd1, 0xec, 0xd6, 0x21,
-	0xa3, 0x75, 0xf7, 0x18, 0x8d, 0xd6, 0x61, 0x27, 0x25, 0xbe, 0xa1, 0x91, 0xea, 0xec, 0x76, 0x0f,
-	0x23, 0xd5, 0xed, 0x92, 0x8a, 0xc7, 0xe1, 0x92, 0x0e, 0xf9, 0xa2, 0xdb, 0x47, 0xf1, 0x45, 0xdd,
-	0x8e, 0xe8, 0x92, 0xbf, 0x23, 0xea, 0x65, 0x7e, 0x66, 0x7c, 0xcd, 0xcf, 0x61, 0x9f, 0xf3, 0xb3,
-	0xe3, 0xf1, 0x39, 0x3d, 0x1c, 0xce, 0x2f, 0x8e, 0xcf, 0xe1, 0xf4, 0xf2, 0x36, 0xd7, 0x5f, 0xdf,
-	0x1e, 0x74, 0x1b, 0x03, 0xe1, 0xe8, 0xc6, 0xe0, 0x90, 0x15, 0xb8, 0xf9, 0x66, 0x56, 0xa0, 0x87,
-	0x09, 0x48, 0xbf, 0xa9, 0x09, 0xe8, 0x29, 0xff, 0x17, 0x7d, 0xe4, 0xbf, 0x87, 0xde, 0xe3, 0x63,
-	0xd4, 0x7b, 0x7f, 0x95, 0x3f, 0x06, 0x55, 0x1c, 0xfb, 0xfa, 0xbd, 0xae, 0x7f, 0x4d, 0xf3, 0x5c,
-	0x4f, 0x25, 0x3a, 0xfd, 0xe0, 0x05, 0xe8, 0x71, 0x9f, 0xbf, 0xec, 0xa3, 0x43, 0xec, 0x83, 0x17,
-	0xa0, 0x67, 0xa4, 0x5d, 0x49, 0xa6, 0xff, 0x32, 0x02, 0xa3, 0x02, 0x36, 0x54, 0x49, 0x3e, 0x11,
-	0x91, 0x1f, 0xa8, 0x88, 0x7c, 0xe2, 0x23, 0x22, 0xd7, 0x7d, 0xb8, 0xbb, 0xda, 0x7d, 0xa2, 0x22,
-	0x27, 0x2a, 0x72, 0xa2, 0x22, 0x27, 0x2a, 0x72, 0x14, 0x15, 0xf9, 0x5b, 0x04, 0x0e, 0xaf, 0x62,
-	0xfb, 0x44, 0x41, 0x7e, 0x98, 0x0a, 0x72, 0xd7, 0x47, 0x41, 0xe6, 0xfd, 0xbe, 0xe7, 0x1e, 0xb4,
-	0xfa, 0x44, 0x3d, 0x4e, 0xd4, 0xe3, 0x44, 0x3d, 0xfe, 0x9f, 0xea, 0x81, 0xee, 0x1e, 0xe9, 0x4b,
-	0xe3, 0xab, 0x3e, 0x30, 0x7e, 0x7c, 0xb4, 0x0f, 0x8c, 0xdf, 0xc3, 0x77, 0xc5, 0xef, 0x5f, 0xfb,
-	0xf8, 0x95, 0x57, 0x7f, 0xcc, 0xfb, 0xd1, 0x83, 0x17, 0xe0, 0x55, 0x49, 0x87, 0xbf, 0xe9, 0xcd,
-	0xd4, 0xe1, 0x44, 0x4f, 0xa1, 0x41, 0x51, 0x38, 0x2c, 0xe4, 0x37, 0x73, 0x69, 0x51, 0xc8, 0xf3,
-	0xeb, 0x39, 0x26, 0x80, 0xc6, 0xe0, 0x68, 0x36, 0xb3, 0x54, 0x28, 0x8a, 0x42, 0xe6, 0xce, 0x66,
-	0xa6, 0x50, 0x64, 0x00, 0x1a, 0x85, 0x43, 0xc2, 0x7a, 0x6e, 0x55, 0x5c, 0x5b, 0x2a, 0xac, 0x31,
-	0x41, 0x04, 0xe1, 0x80, 0xb0, 0x94, 0x4b, 0xe7, 0xdf, 0x67, 0xfa, 0x08, 0x3c, 0xcb, 0x8b, 0xf9,
-	0x0f, 0x32, 0x82, 0xb0, 0x9e, 0xce, 0x30, 0xa1, 0xa9, 0xd0, 0x5e, 0x13, 0x84, 0x66, 0xe6, 0x20,
-	0xd3, 0xfd, 0xff, 0x16, 0x28, 0x02, 0x61, 0xa1, 0x28, 0xac, 0x2f, 0x17, 0xc5, 0x74, 0xae, 0xc0,
-	0x04, 0x28, 0x34, 0xbf, 0xba, 0xbe, 0xbc, 0x94, 0xa5, 0x37, 0xc0, 0xcc, 0x1c, 0x1c, 0xed, 0xf8,
-	0x9f, 0x14, 0x14, 0x86, 0xa1, 0xa5, 0xcd, 0x62, 0x9e, 0x09, 0xa0, 0x61, 0x38, 0xf8, 0xc1, 0x15,
-	0x31, 0x9f, 0xcb, 0x7e, 0xc8, 0x00, 0x7a, 0x71, 0xd5, 0xb9, 0x08, 0xce, 0xbc, 0x0f, 0xc7, 0x7b,
-	0xbd, 0xd7, 0x09, 0x7b, 0x2e, 0x2f, 0xae, 0x2c, 0x65, 0xb3, 0xfc, 0xd2, 0xf2, 0x6d, 0x26, 0x80,
-	0x18, 0x38, 0xb2, 0x94, 0xfb, 0x50, 0xcc, 0xe4, 0xd2, 0x1b, 0xf9, 0xf5, 0x1c, 0x79, 0x2c, 0x04,
-	0x23, 0xe9, 0xcc, 0xca, 0xd2, 0x66, 0xb6, 0x28, 0x16, 0x36, 0xf9, 0x42, 0xa6, 0xc8, 0x04, 0x67,
-	0x36, 0xe1, 0x19, 0x9f, 0x77, 0x19, 0x61, 0x4c, 0xaf, 0x93, 0x27, 0xe0, 0x37, 0x8b, 0x99, 0x34,
-	0x13, 0x20, 0x0f, 0x94, 0xcd, 0x93, 0xe5, 0xbb, 0xeb, 0x3a, 0x05, 0xa3, 0xce, 0xf5, 0x86, 0x90,
-	0x59, 0xc9, 0x08, 0x42, 0x26, 0xcd, 0x04, 0xe9, 0x7e, 0x04, 0xf9, 0xcf, 0xc0, 0xe3, 0xa7, 0xb1,
-	0xc0, 0x93, 0xa7, 0xb1, 0xc0, 0xf3, 0xa7, 0x31, 0x70, 0xbf, 0x15, 0x03, 0x7f, 0x6c, 0xc5, 0xc0,
-	0x57, 0xad, 0x18, 0x78, 0xdc, 0x8a, 0x81, 0x27, 0xad, 0x18, 0xf8, 0xb6, 0x15, 0x03, 0xdf, 0xb5,
-	0x62, 0x81, 0xe7, 0xad, 0x18, 0xf8, 0xdd, 0xb3, 0x58, 0x60, 0xef, 0x59, 0x0c, 0x3c, 0x7e, 0x16,
-	0x0b, 0x3c, 0x79, 0x16, 0x0b, 0x7c, 0x74, 0xbb, 0xaa, 0x1b, 0x5b, 0xd5, 0xc4, 0xb6, 0xae, 0xda,
-	0xd8, 0x34, 0xa5, 0x44, 0xc3, 0x9a, 0xa5, 0x3f, 0xc8, 0x81, 0xbd, 0x64, 0x98, 0xfa, 0xb6, 0x52,
-	0xc6, 0xe6, 0x25, 0x2f, 0x3c, 0x6b, 0x94, 0xaa, 0xfa, 0x2c, 0xde, 0xb1, 0xdd, 0x3f, 0x75, 0xe9,
-	0xfc, 0x83, 0x9e, 0xd2, 0x00, 0x9d, 0xd2, 0xb9, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x25, 0x43,
-	0xcd, 0x34, 0xf0, 0x23, 0x00, 0x00,
+	// 2456 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0x4f, 0x6c, 0xdb, 0xd6,
+	0xfd, 0xd7, 0x93, 0x64, 0x47, 0x7e, 0xb6, 0x25, 0xfa, 0xc5, 0x8e, 0x69, 0xc7, 0x55, 0x55, 0xff,
+	0xfa, 0x43, 0x53, 0x97, 0x91, 0x23, 0x39, 0x4e, 0x1c, 0x03, 0x6b, 0x6b, 0x5a, 0xf2, 0xbf, 0xa8,
+	0x92, 0x42, 0xc9, 0xc1, 0xda, 0x65, 0x65, 0x29, 0xea, 0x59, 0xe2, 0x4c, 0x89, 0x1c, 0x49, 0xb9,
+	0x36, 0x86, 0x02, 0x41, 0x6e, 0xdd, 0x69, 0xc8, 0x31, 0x97, 0x5d, 0x87, 0x1e, 0x77, 0x9c, 0x72,
+	0x30, 0x0a, 0x0c, 0x28, 0x7a, 0x59, 0x6e, 0x0b, 0x7a, 0x6a, 0x94, 0x61, 0xe8, 0x76, 0x18, 0x82,
+	0x9d, 0x86, 0x9c, 0x06, 0x3e, 0x92, 0xb6, 0x44, 0x93, 0x71, 0x9d, 0x78, 0xc0, 0x32, 0xf8, 0x66,
+	0xea, 0xfb, 0xfd, 0x7c, 0xbe, 0x8f, 0xef, 0xfb, 0x7d, 0xef, 0xf3, 0x81, 0x64, 0xf8, 0xd6, 0x0e,
+	0xd6, 0x93, 0x92, 0x32, 0xab, 0x8b, 0x75, 0xdc, 0x10, 0x66, 0x45, 0xb9, 0xa5, 0x1b, 0x58, 0x9b,
+	0x35, 0xf6, 0x54, 0xac, 0x27, 0x55, 0x4d, 0x31, 0x14, 0x34, 0x66, 0xa5, 0x24, 0xad, 0x94, 0xa4,
+	0x9d, 0x32, 0x79, 0xb9, 0x26, 0x19, 0xf5, 0x56, 0x25, 0x29, 0x2a, 0x8d, 0xd9, 0x9a, 0x52, 0x53,
+	0x66, 0x49, 0x76, 0xa5, 0xb5, 0x45, 0x9e, 0xc8, 0x03, 0xf9, 0xcb, 0x62, 0x99, 0x8c, 0xbb, 0x0a,
+	0x61, 0xcd, 0xe0, 0xbb, 0xaa, 0x4c, 0x5e, 0xec, 0x8d, 0x2b, 0xaa, 0x21, 0x29, 0x4d, 0x27, 0x38,
+	0xd1, 0x1b, 0xec, 0xc6, 0x4d, 0xf5, 0x86, 0x76, 0x04, 0x59, 0xaa, 0x0a, 0x06, 0xb6, 0xa3, 0x09,
+	0x57, 0x54, 0xc2, 0x9f, 0xf3, 0x3d, 0xd4, 0xd3, 0xdf, 0x05, 0xe1, 0x68, 0xa1, 0x65, 0xc8, 0x12,
+	0xd6, 0x32, 0xd8, 0xc0, 0xa2, 0x19, 0x2b, 0xef, 0xa9, 0x18, 0x5d, 0x87, 0x31, 0x51, 0x69, 0xea,
+	0x58, 0x6c, 0x19, 0xd2, 0x0e, 0xe6, 0xe7, 0x77, 0x77, 0x69, 0x90, 0x00, 0x97, 0x86, 0xd9, 0xe8,
+	0xbf, 0xda, 0x20, 0xf0, 0x87, 0xbf, 0xed, 0x87, 0xfa, 0x66, 0x42, 0xf4, 0xdd, 0x08, 0x17, 0xed,
+	0x4a, 0x9b, 0xdf, 0xdd, 0x45, 0xef, 0xc1, 0x88, 0xd4, 0x34, 0xb0, 0xb6, 0x23, 0xc8, 0x74, 0x90,
+	0x20, 0x62, 0x0e, 0xa2, 0x7f, 0x26, 0x4c, 0xef, 0xff, 0xe9, 0x6d, 0xee, 0x20, 0x01, 0xfd, 0x04,
+	0xa2, 0x8a, 0xa0, 0x63, 0x1e, 0xff, 0xc2, 0x2a, 0xcd, 0x1b, 0x52, 0x03, 0xd3, 0x21, 0x0f, 0xd8,
+	0x3f, 0x1a, 0x1c, 0x65, 0xa6, 0x66, 0xed, 0xcc, 0xb2, 0xd4, 0xc0, 0xe8, 0x03, 0x38, 0xda, 0x10,
+	0x76, 0x0f, 0xd1, 0x2a, 0xd6, 0x44, 0xdc, 0x34, 0xe8, 0x30, 0x21, 0x18, 0x76, 0x08, 0xc2, 0x33,
+	0x41, 0xba, 0xca, 0xa1, 0x86, 0xb0, 0xeb, 0xa0, 0x8b, 0x56, 0x22, 0xca, 0xc3, 0x8b, 0xdd, 0x6f,
+	0x59, 0x13, 0x0c, 0xfc, 0xb9, 0xb0, 0xc7, 0x6f, 0x09, 0x92, 0xdc, 0xd2, 0x30, 0xdd, 0xe7, 0xf9,
+	0xc6, 0x13, 0x5d, 0x90, 0x55, 0x0b, 0xb1, 0x62, 0x01, 0x16, 0x87, 0xfe, 0xf9, 0xfe, 0x40, 0x8a,
+	0x49, 0x33, 0x73, 0xcc, 0x55, 0x66, 0x7e, 0xfa, 0x4b, 0x00, 0x27, 0xb3, 0xcd, 0xaa, 0xaa, 0x48,
+	0x4d, 0xa3, 0xd4, 0xaa, 0xe8, 0xd8, 0x28, 0x61, 0x19, 0x8b, 0x86, 0xa2, 0x91, 0x2d, 0x4e, 0xc1,
+	0xf0, 0x36, 0xde, 0xd3, 0x69, 0x90, 0x08, 0x5d, 0x1a, 0x60, 0xdf, 0x70, 0xaa, 0xc0, 0xfb, 0xe0,
+	0xdc, 0x74, 0x9f, 0x16, 0x7a, 0x0c, 0x00, 0x29, 0x7a, 0x1f, 0x04, 0x29, 0x8a, 0x23, 0xa9, 0x8b,
+	0x0b, 0x5f, 0xb7, 0x41, 0x1c, 0x4e, 0xc1, 0xf1, 0x9c, 0xa4, 0x1b, 0x09, 0x65, 0x2b, 0x61, 0x7e,
+	0x9a, 0xd8, 0x52, 0xb4, 0x84, 0xc5, 0x8f, 0x40, 0xea, 0xdb, 0x36, 0x40, 0x90, 0x82, 0xe1, 0x9b,
+	0x78, 0x4f, 0x67, 0x23, 0x56, 0x09, 0xaa, 0x6f, 0xfa, 0xcf, 0x41, 0x18, 0x5d, 0x96, 0x34, 0xb1,
+	0x25, 0x19, 0xac, 0x86, 0x85, 0x6d, 0xac, 0xa1, 0x0f, 0x61, 0x44, 0xd5, 0x24, 0x45, 0x93, 0x8c,
+	0x3d, 0xd2, 0xdb, 0x68, 0x3a, 0x9e, 0xec, 0x1d, 0x76, 0x4e, 0x69, 0x19, 0x52, 0xb3, 0x56, 0xb4,
+	0xb3, 0xd8, 0xb0, 0xb9, 0x46, 0xee, 0x00, 0x85, 0x58, 0x48, 0x89, 0x4a, 0xb3, 0x69, 0xef, 0xbe,
+	0x2c, 0x35, 0x24, 0xc3, 0xee, 0xf9, 0xf8, 0x77, 0x6d, 0x10, 0x4e, 0x5d, 0x49, 0x5f, 0xed, 0x6e,
+	0xe2, 0xdd, 0xbb, 0x41, 0x2e, 0x76, 0x08, 0xc8, 0x99, 0xf9, 0x26, 0x87, 0x8a, 0x9b, 0x55, 0xa9,
+	0x59, 0xe3, 0x35, 0xfc, 0xcb, 0x16, 0xd6, 0x0d, 0xdd, 0x1e, 0x00, 0x7f, 0x0e, 0x1b, 0xc0, 0xd9,
+	0xf9, 0x28, 0x05, 0xcf, 0x69, 0xd8, 0xd0, 0x24, 0xac, 0xdb, 0xad, 0xf7, 0x85, 0x3a, 0x79, 0x68,
+	0x11, 0x0e, 0x99, 0xa3, 0x73, 0x50, 0xb2, 0xef, 0xc5, 0xb8, 0xc1, 0x86, 0xb0, 0xeb, 0x94, 0x73,
+	0x75, 0x79, 0x11, 0x8e, 0xae, 0x19, 0x86, 0x9a, 0x2e, 0x9a, 0x07, 0x4a, 0x54, 0xe4, 0x82, 0x75,
+	0xc0, 0xd0, 0x34, 0x3c, 0x87, 0x9b, 0x42, 0x45, 0xc6, 0x55, 0xb2, 0xbb, 0x11, 0x36, 0x62, 0x92,
+	0x1b, 0x5a, 0x0b, 0x73, 0x4e, 0x60, 0xda, 0xb0, 0xb0, 0x29, 0x37, 0xf6, 0x0e, 0x1c, 0xab, 0x63,
+	0xa1, 0x8a, 0x35, 0xde, 0xd0, 0x84, 0xa6, 0xbe, 0xa5, 0x68, 0x0d, 0xc1, 0x8c, 0x10, 0xa6, 0xc1,
+	0xf4, 0x3b, 0xae, 0x3e, 0xad, 0x91, 0xdc, 0x72, 0x4f, 0xaa, 0x39, 0x62, 0xdc, 0x68, 0xdd, 0x23,
+	0x32, 0xfd, 0xfb, 0x31, 0x18, 0x5d, 0x95, 0x95, 0x8a, 0x20, 0x97, 0x54, 0x2c, 0x92, 0x59, 0xbc,
+	0x05, 0x07, 0xb0, 0x3d, 0xa9, 0xd6, 0x40, 0x0e, 0xa6, 0xa7, 0x5c, 0x45, 0x0a, 0x15, 0xf3, 0xf0,
+	0x70, 0x78, 0xcb, 0x04, 0xb0, 0x63, 0x5f, 0x7d, 0x11, 0x71, 0x10, 0x07, 0x63, 0x9a, 0xe0, 0x0e,
+	0x59, 0xd0, 0xcf, 0xe0, 0x70, 0x1d, 0x0b, 0xb2, 0x51, 0xe7, 0xc5, 0x3a, 0x16, 0xb7, 0x75, 0x3a,
+	0xf8, 0x23, 0x68, 0xe9, 0xaf, 0xbe, 0x18, 0xb4, 0x50, 0x04, 0x74, 0xc0, 0x1c, 0xe6, 0x86, 0xac,
+	0x8f, 0x97, 0x09, 0x17, 0x92, 0xe0, 0x05, 0x59, 0x11, 0xaa, 0x15, 0x41, 0x16, 0x9a, 0x22, 0xd6,
+	0x78, 0x41, 0xae, 0x99, 0x23, 0x59, 0x6f, 0x90, 0xd9, 0x89, 0xa6, 0x99, 0xa4, 0xe7, 0xb5, 0x9d,
+	0xcc, 0x75, 0x81, 0x96, 0x1c, 0x8c, 0x3d, 0xd7, 0x63, 0xb2, 0x57, 0x10, 0x95, 0x61, 0x4c, 0xb4,
+	0x0e, 0x0e, 0x5f, 0xb1, 0x4e, 0x0e, 0x19, 0xb2, 0xc1, 0xf4, 0xff, 0xfb, 0xd4, 0xe8, 0x3d, 0x66,
+	0x6c, 0x78, 0xbf, 0x0d, 0x00, 0x17, 0x15, 0x7b, 0x0f, 0xdf, 0xaf, 0x20, 0xe5, 0x6c, 0x15, 0xaf,
+	0x93, 0xb3, 0x6b, 0xce, 0xa0, 0xb9, 0x41, 0x29, 0x1f, 0x5a, 0xff, 0x9b, 0x84, 0x7d, 0xc3, 0x2c,
+	0xf1, 0xa8, 0xdd, 0x75, 0x61, 0x24, 0x3a, 0xdf, 0xff, 0x31, 0xd4, 0x7f, 0xff, 0x21, 0x08, 0x52,
+	0x80, 0x8b, 0xe1, 0x1e, 0xa8, 0x8e, 0xee, 0x01, 0x18, 0xad, 0xe2, 0x2d, 0xa1, 0x25, 0x3b, 0xc5,
+	0xe9, 0x7e, 0x52, 0x7b, 0xc1, 0xa7, 0x76, 0xef, 0xb4, 0x24, 0x33, 0x16, 0xd6, 0xa2, 0xcb, 0x36,
+	0x0d, 0x6d, 0x8f, 0x7d, 0xcb, 0x5c, 0xc2, 0x83, 0x87, 0x20, 0x0c, 0x83, 0x01, 0x6b, 0x19, 0x0f,
+	0x0e, 0x96, 0xf1, 0xeb, 0x87, 0x20, 0x18, 0x09, 0x70, 0xc3, 0xd5, 0x6e, 0x18, 0xaa, 0xc0, 0xd8,
+	0x96, 0x20, 0xcb, 0x15, 0x41, 0xdc, 0xe6, 0x55, 0x45, 0x96, 0xc4, 0x3d, 0xfa, 0x1c, 0xe9, 0xdd,
+	0x7b, 0x3e, 0x8b, 0xb0, 0x70, 0x2b, 0x36, 0xa6, 0x48, 0x20, 0xec, 0x90, 0xf3, 0xea, 0xa4, 0x85,
+	0xd1, 0xad, 0x9e, 0x28, 0xba, 0x05, 0xa3, 0x86, 0xac, 0xf3, 0xaa, 0xa0, 0x09, 0x0d, 0x6c, 0x60,
+	0x4d, 0xa7, 0x23, 0xa4, 0x75, 0x6f, 0xbb, 0x4a, 0x6c, 0xaa, 0xba, 0xa1, 0x61, 0xa1, 0x51, 0x96,
+	0xf5, 0xa2, 0x99, 0xab, 0x93, 0x6d, 0x0d, 0x9b, 0xbc, 0xdc, 0xb0, 0x61, 0x7f, 0x48, 0x08, 0x10,
+	0x0b, 0x51, 0xd7, 0x9d, 0x67, 0xea, 0x95, 0xd2, 0x32, 0xe8, 0x01, 0x72, 0x7d, 0x9c, 0xdf, 0xb7,
+	0x17, 0xd2, 0xad, 0x76, 0x23, 0x87, 0xe9, 0x65, 0x2b, 0x1b, 0x7d, 0x00, 0x47, 0xea, 0x86, 0xa1,
+	0xf2, 0x52, 0x55, 0xc6, 0x07, 0x14, 0xd0, 0x9f, 0x22, 0x66, 0x66, 0xaf, 0x57, 0x65, 0xec, 0x10,
+	0x7c, 0x0a, 0x47, 0x14, 0x4b, 0xb5, 0xf9, 0xaa, 0x23, 0xdb, 0xf4, 0x10, 0x79, 0x35, 0xbf, 0xdd,
+	0xf3, 0x52, 0x79, 0x7b, 0x36, 0x29, 0xc5, 0x15, 0x43, 0x22, 0x44, 0x87, 0xd3, 0x49, 0x26, 0xcd,
+	0x2c, 0x30, 0x4c, 0xda, 0x93, 0x3c, 0x6e, 0x3e, 0x9d, 0x7c, 0xbb, 0x43, 0xd6, 0xe1, 0x1a, 0xc1,
+	0xee, 0x30, 0xfa, 0x04, 0x8e, 0x54, 0x9b, 0x3a, 0x2f, 0x2b, 0xca, 0x76, 0x4b, 0xe5, 0xb7, 0x84,
+	0x86, 0x24, 0xef, 0xd1, 0x51, 0x52, 0xe3, 0x6d, 0x9f, 0x1a, 0x99, 0xa6, 0x9e, 0x23, 0xe9, 0x64,
+	0xf5, 0x11, 0x67, 0xaf, 0xb8, 0x58, 0xd5, 0x09, 0xac, 0x10, 0x1a, 0xc4, 0x43, 0x64, 0x72, 0x57,
+	0x25, 0x5d, 0x54, 0x76, 0xb0, 0xb6, 0x47, 0xcc, 0x16, 0x1d, 0x23, 0xe4, 0xef, 0xf8, 0x93, 0x67,
+	0x9c, 0x7c, 0x17, 0x3f, 0x55, 0x75, 0xc5, 0xd0, 0x6d, 0x38, 0x64, 0x36, 0x25, 0xc5, 0x8b, 0x4a,
+	0x73, 0x4b, 0xaa, 0xd1, 0x17, 0x5e, 0xb8, 0xf9, 0x5e, 0x97, 0xbc, 0xb5, 0xf9, 0x6b, 0x01, 0x6e,
+	0x90, 0x10, 0x2d, 0x13, 0x1e, 0xf4, 0x19, 0x1c, 0x36, 0x1f, 0xd3, 0x8e, 0x4f, 0xa3, 0xa9, 0x63,
+	0x89, 0xdd, 0xca, 0x63, 0x9d, 0x89, 0x67, 0xf6, 0xda, 0xd7, 0x02, 0x1c, 0x59, 0x69, 0xda, 0xd1,
+	0x96, 0x15, 0x48, 0x09, 0x2d, 0x43, 0xe1, 0xc9, 0x04, 0xda, 0xab, 0x1f, 0x27, 0x45, 0x46, 0x5d,
+	0x45, 0xb2, 0x0d, 0xd5, 0x14, 0x7d, 0x7b, 0x99, 0x51, 0x13, 0x65, 0xd6, 0xb3, 0x57, 0xba, 0x01,
+	0x51, 0x53, 0xe1, 0x55, 0xa1, 0x29, 0x89, 0xbc, 0x51, 0xd7, 0xb0, 0x5e, 0x57, 0xe4, 0x2a, 0x8d,
+	0x8e, 0x65, 0x02, 0x1c, 0xd5, 0x54, 0x8a, 0x26, 0xac, 0xec, 0xa0, 0xd0, 0x02, 0x8c, 0xb9, 0x89,
+	0xce, 0x5b, 0x1e, 0x6e, 0xdf, 0xbe, 0xd5, 0x88, 0x87, 0x5b, 0x03, 0x5c, 0x54, 0xed, 0x45, 0xee,
+	0xc2, 0x49, 0x4f, 0xa5, 0xb4, 0x1a, 0x3e, 0x7a, 0x22, 0xb9, 0x64, 0x47, 0x1e, 0x7f, 0x01, 0xcc,
+	0x82, 0x3f, 0xd8, 0xfb, 0x47, 0x03, 0x8e, 0xae, 0xfb, 0x24, 0xa3, 0x3b, 0xf0, 0x4d, 0x4b, 0xc6,
+	0x79, 0xb9, 0xc2, 0xeb, 0x4a, 0x4b, 0x13, 0x31, 0x2f, 0xa9, 0xa6, 0x07, 0xd5, 0x25, 0xdd, 0x30,
+	0x45, 0x84, 0x9e, 0xf0, 0xdf, 0x8c, 0xb5, 0x20, 0x77, 0xd1, 0x82, 0xe7, 0x2a, 0x25, 0x02, 0x5e,
+	0x57, 0x8b, 0x87, 0x50, 0xf4, 0x29, 0x4c, 0x54, 0x25, 0xfd, 0xc5, 0xf4, 0x93, 0x2f, 0xa4, 0x9f,
+	0xb2, 0xf1, 0xde, 0xfc, 0x1c, 0xbc, 0xe0, 0xf0, 0xab, 0x9a, 0xb2, 0xbb, 0xc7, 0xab, 0xf6, 0x10,
+	0xd1, 0x53, 0xc7, 0x76, 0x30, 0xc4, 0x8d, 0xda, 0xd8, 0xa2, 0x09, 0x75, 0xc6, 0x0f, 0xad, 0xc1,
+	0x91, 0x5e, 0x2e, 0x7e, 0x27, 0x45, 0xbf, 0xf1, 0x23, 0xe8, 0x62, 0x6a, 0x37, 0xcf, 0xed, 0x94,
+	0x17, 0x53, 0x9a, 0x8e, 0x9f, 0x9c, 0x29, 0x3d, 0xf9, 0x21, 0x44, 0x47, 0xd5, 0x0a, 0x51, 0x30,
+	0xb4, 0x8d, 0x2d, 0xd7, 0x3b, 0xc0, 0x99, 0x7f, 0xa2, 0x51, 0xd8, 0xb7, 0x23, 0xc8, 0x2d, 0x4c,
+	0xfc, 0xeb, 0x00, 0x67, 0x3d, 0x2c, 0x06, 0x17, 0xc0, 0xe2, 0x6f, 0xc1, 0xd7, 0x6d, 0xf0, 0x00,
+	0xc0, 0x38, 0x9c, 0x28, 0x68, 0x52, 0x4d, 0x6a, 0x26, 0x4a, 0x58, 0xdb, 0xc1, 0x9a, 0x7e, 0xc9,
+	0xb9, 0xf1, 0xf4, 0x77, 0x11, 0x48, 0xc1, 0x65, 0x98, 0xb0, 0xe3, 0x45, 0x45, 0x91, 0x2f, 0xd9,
+	0x27, 0xf4, 0xdd, 0xc4, 0xa1, 0x76, 0x24, 0xd0, 0x9b, 0x73, 0x4c, 0x9a, 0x49, 0xcd, 0x31, 0x0b,
+	0xcc, 0x0d, 0x26, 0x75, 0x85, 0x49, 0x5d, 0x65, 0x52, 0xf3, 0x4c, 0x3a, 0xc5, 0xa4, 0xae, 0x33,
+	0xe9, 0x2b, 0x4c, 0xfa, 0x3a, 0xa4, 0x21, 0x65, 0xdb, 0x87, 0x84, 0xed, 0x14, 0x74, 0x14, 0xbe,
+	0xca, 0xa4, 0xd2, 0x70, 0x02, 0x52, 0x4e, 0xbd, 0x84, 0xa3, 0xe3, 0x7d, 0xf3, 0xcc, 0x35, 0xe6,
+	0x3a, 0x9b, 0x84, 0x88, 0x1c, 0xe6, 0x83, 0xcd, 0x32, 0x67, 0x1f, 0xd1, 0xfb, 0x6d, 0x30, 0xfe,
+	0x8d, 0xa5, 0x8e, 0x63, 0x9d, 0x36, 0x88, 0xa4, 0xe7, 0x98, 0xd4, 0x35, 0x26, 0x9d, 0x66, 0x2f,
+	0xc3, 0x51, 0xd7, 0x69, 0xb3, 0x10, 0x63, 0xfb, 0x6d, 0x80, 0x6c, 0xc4, 0x48, 0xa7, 0x0d, 0xfa,
+	0x52, 0x0b, 0x4c, 0xea, 0x06, 0x3b, 0x0f, 0xdf, 0xf4, 0x1b, 0x41, 0x5e, 0xac, 0x2b, 0x92, 0x88,
+	0x11, 0xda, 0x6f, 0x83, 0xc9, 0x47, 0x6d, 0x40, 0x77, 0xda, 0xa0, 0x3f, 0x3d, 0xcf, 0x24, 0xd2,
+	0xd7, 0xd8, 0x59, 0x78, 0xde, 0xd5, 0xc3, 0x83, 0x65, 0x4d, 0xd9, 0x45, 0x2e, 0x92, 0x65, 0x2d,
+	0x30, 0xe9, 0x1b, 0xcc, 0xdc, 0x95, 0x8d, 0x70, 0x64, 0x90, 0x1a, 0xda, 0x08, 0x47, 0xc6, 0xa8,
+	0x0b, 0x1b, 0xe1, 0xc8, 0x08, 0x85, 0x36, 0xc2, 0x11, 0x9a, 0x9a, 0xd8, 0x08, 0x47, 0x2e, 0x52,
+	0x53, 0xd3, 0x7f, 0x89, 0xc2, 0xe8, 0xb2, 0x86, 0x05, 0x03, 0x1f, 0x98, 0xd6, 0xd5, 0x93, 0x9a,
+	0xd6, 0xc1, 0x2e, 0xd3, 0xda, 0x6d, 0x55, 0x6f, 0xbd, 0x8c, 0x55, 0x8d, 0xf6, 0x5a, 0x55, 0x97,
+	0x41, 0x15, 0x4f, 0xd3, 0xa0, 0xfa, 0x59, 0xd3, 0xfc, 0xab, 0x59, 0xd3, 0x23, 0xa6, 0xf4, 0xce,
+	0x29, 0x9a, 0xd2, 0xa3, 0xae, 0x93, 0x3f, 0xa1, 0xe9, 0xec, 0xed, 0xb6, 0x87, 0xe9, 0x74, 0x3b,
+	0xca, 0xf2, 0x69, 0x38, 0xca, 0x23, 0x1e, 0xf2, 0xe6, 0xab, 0x78, 0x48, 0xb7, 0x7b, 0xbc, 0xec,
+	0xef, 0x1e, 0xbd, 0x8c, 0xe2, 0x8c, 0xaf, 0x51, 0x3c, 0xea, 0x09, 0x7f, 0x7a, 0x3a, 0x9e, 0xd0,
+	0xc3, 0x0d, 0xfe, 0xfc, 0xf4, 0xdc, 0xa0, 0x97, 0x0f, 0x2c, 0xbe, 0xb2, 0x95, 0x72, 0x9b, 0x28,
+	0xee, 0xd5, 0x4d, 0xd4, 0x11, 0xdb, 0xf4, 0xe1, 0xc9, 0x6c, 0x93, 0x87, 0x61, 0xca, 0x9c, 0xd4,
+	0x30, 0x79, 0x5a, 0xa5, 0x77, 0x7d, 0xac, 0x92, 0x87, 0x37, 0xc2, 0xa7, 0xe8, 0x8d, 0x5e, 0x60,
+	0x84, 0x72, 0x2f, 0x63, 0x25, 0xd6, 0x82, 0x3e, 0x26, 0x82, 0x3d, 0xa1, 0x89, 0x58, 0x0b, 0x1e,
+	0xb5, 0x0f, 0xec, 0x09, 0xed, 0xc3, 0x51, 0x8e, 0xd3, 0x30, 0x0e, 0x23, 0xdf, 0xbe, 0xef, 0xfa,
+	0x9a, 0x85, 0x65, 0x3c, 0x95, 0xfa, 0xc2, 0xbd, 0xe7, 0xc0, 0xe3, 0x73, 0xf6, 0x8a, 0x8f, 0x4e,
+	0xd3, 0xf7, 0x9e, 0x03, 0xcf, 0x08, 0x9b, 0xf4, 0xd6, 0xdc, 0xf1, 0x7b, 0xcf, 0x81, 0x57, 0xc0,
+	0x25, 0xb6, 0xa6, 0xcc, 0xfe, 0x35, 0x0a, 0x63, 0x1c, 0x56, 0x65, 0x41, 0x3c, 0xd3, 0xd9, 0xd7,
+	0x54, 0x67, 0x3f, 0xf3, 0xd1, 0xd9, 0x1b, 0x3e, 0xdc, 0xae, 0x76, 0x9f, 0x09, 0xed, 0x99, 0xd0,
+	0x9e, 0x09, 0xed, 0x99, 0xd0, 0x9e, 0x09, 0xed, 0x7f, 0x54, 0x68, 0xff, 0x4e, 0xc1, 0xc1, 0x55,
+	0x6c, 0x9c, 0x89, 0xec, 0xeb, 0x29, 0xb2, 0x77, 0x7c, 0x44, 0x76, 0xde, 0xef, 0x17, 0x94, 0xc3,
+	0x56, 0x9f, 0x09, 0xec, 0x99, 0xc0, 0x9e, 0x09, 0xec, 0x7f, 0xa3, 0xc0, 0xbe, 0xde, 0x5f, 0xe9,
+	0xbf, 0x9c, 0x3d, 0x08, 0x9d, 0x96, 0x3d, 0x08, 0x9d, 0x82, 0x3d, 0x08, 0xfd, 0x8f, 0xd8, 0x83,
+	0x95, 0xe3, 0xbf, 0x32, 0xff, 0xbf, 0x7b, 0xcf, 0xc1, 0x71, 0x49, 0xaf, 0x68, 0x33, 0x0e, 0xbe,
+	0x3c, 0x9f, 0x69, 0xc0, 0x31, 0x4f, 0x2d, 0x46, 0x31, 0x38, 0xc8, 0x15, 0x36, 0xf3, 0x19, 0x9e,
+	0x2b, 0xb0, 0xeb, 0x79, 0x2a, 0x80, 0x46, 0xe0, 0x70, 0x2e, 0xbb, 0x54, 0x2a, 0xf3, 0x5c, 0xf6,
+	0xd6, 0x66, 0xb6, 0x54, 0xa6, 0x00, 0x1a, 0x86, 0x03, 0xdc, 0x7a, 0x7e, 0x95, 0x5f, 0x5b, 0x2a,
+	0xad, 0x51, 0x41, 0x04, 0x61, 0x3f, 0xb7, 0x94, 0xcf, 0x14, 0x3e, 0xa2, 0x42, 0x26, 0x3c, 0xc7,
+	0xf2, 0x85, 0xdb, 0x59, 0x8e, 0x5b, 0xcf, 0x64, 0xa9, 0xf0, 0x64, 0x78, 0xbf, 0x0d, 0xc2, 0x33,
+	0x73, 0x90, 0x72, 0xff, 0x98, 0x8a, 0xa2, 0x10, 0x96, 0xca, 0xdc, 0xfa, 0x72, 0x99, 0xcf, 0xe4,
+	0x4b, 0x54, 0x80, 0x40, 0x0b, 0xab, 0xeb, 0xcb, 0x4b, 0x39, 0xf2, 0x01, 0x98, 0x99, 0x83, 0xc3,
+	0x3d, 0x3f, 0xef, 0xa2, 0x08, 0x0c, 0x2f, 0x6d, 0x96, 0x0b, 0x54, 0x00, 0x0d, 0xc2, 0x73, 0xb7,
+	0xaf, 0xf2, 0x85, 0x7c, 0xee, 0x63, 0x0a, 0x90, 0x87, 0x6b, 0xd6, 0x43, 0x70, 0xe6, 0x23, 0x38,
+	0xea, 0x25, 0x7d, 0x26, 0x7b, 0xbe, 0xc0, 0xaf, 0x2c, 0xe5, 0x72, 0xec, 0xd2, 0xf2, 0x4d, 0x2a,
+	0x80, 0x28, 0x38, 0xb4, 0x94, 0xff, 0x98, 0xcf, 0xe6, 0x33, 0xc5, 0xc2, 0x7a, 0xde, 0x7c, 0x2d,
+	0x04, 0xa3, 0x99, 0xec, 0xca, 0xd2, 0x66, 0xae, 0xcc, 0x97, 0x36, 0xd9, 0x52, 0xb6, 0x4c, 0x05,
+	0x67, 0x36, 0xe1, 0xb8, 0xcf, 0x75, 0x6f, 0x32, 0x66, 0xd6, 0xcd, 0x37, 0x60, 0x37, 0xcb, 0xd9,
+	0x0c, 0x15, 0x30, 0x5f, 0x28, 0x57, 0x30, 0x97, 0x6f, 0xaf, 0xeb, 0x3c, 0x8c, 0x59, 0xcf, 0x45,
+	0x2e, 0xbb, 0x92, 0xe5, 0xb8, 0x6c, 0x86, 0x0a, 0x92, 0xfd, 0x08, 0xb2, 0x5f, 0x82, 0x47, 0x4f,
+	0xe2, 0x81, 0xc7, 0x4f, 0xe2, 0x81, 0x67, 0x4f, 0xe2, 0xe0, 0x6e, 0x27, 0x0e, 0x7e, 0xd7, 0x89,
+	0x83, 0x6f, 0x3a, 0x71, 0xf0, 0xa8, 0x13, 0x07, 0x8f, 0x3b, 0x71, 0xf0, 0x7d, 0x27, 0x0e, 0x7e,
+	0xe8, 0xc4, 0x03, 0xcf, 0x3a, 0x71, 0xf0, 0x9b, 0xa7, 0xf1, 0xc0, 0xfe, 0xd3, 0x38, 0x78, 0xf4,
+	0x34, 0x1e, 0x78, 0xfc, 0x34, 0x1e, 0xf8, 0xe4, 0x66, 0x4d, 0x51, 0xb7, 0x6b, 0xc9, 0x1d, 0x45,
+	0x36, 0xb0, 0xa6, 0x09, 0xc9, 0x96, 0x3e, 0x4b, 0xfe, 0x30, 0x2f, 0xaf, 0xcb, 0xaa, 0xa6, 0xec,
+	0x48, 0x55, 0xac, 0x5d, 0x76, 0xc2, 0xb3, 0x6a, 0xa5, 0xa6, 0xcc, 0xe2, 0x5d, 0xc3, 0xfe, 0xaf,
+	0xbf, 0xde, 0xff, 0x6d, 0xac, 0xf4, 0x93, 0x89, 0x99, 0xfb, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x61, 0x27, 0x6c, 0xab, 0xfb, 0x28, 0x00, 0x00,
 }
 
 func (x LoadbalancerAlgorithm) String() string {
@@ -2167,6 +2449,30 @@ func (this *Http2ProtocolOptions) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *Http1ProtocolOptions) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Http1ProtocolOptions)
+	if !ok {
+		that2, ok := that.(Http1ProtocolOptions)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HeaderTransformation.Equal(that1.HeaderTransformation) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2276,6 +2582,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if this.LbSourceIpPersistanceChoice == nil {
 		return false
 	} else if !this.LbSourceIpPersistanceChoice.Equal(that1.LbSourceIpPersistanceChoice) {
+		return false
+	}
+	if that1.ProxyProtocolType == nil {
+		if this.ProxyProtocolType != nil {
+			return false
+		}
+	} else if this.ProxyProtocolType == nil {
+		return false
+	} else if !this.ProxyProtocolType.Equal(that1.ProxyProtocolType) {
 		return false
 	}
 	return true
@@ -2448,6 +2763,78 @@ func (this *GlobalSpecType_DisableLbSourceIpPersistance) Equal(that interface{})
 	}
 	return true
 }
+func (this *GlobalSpecType_DisableProxyProtocol) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DisableProxyProtocol)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DisableProxyProtocol)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableProxyProtocol.Equal(that1.DisableProxyProtocol) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ProxyProtocolV1) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ProxyProtocolV1)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ProxyProtocolV1)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV1.Equal(that1.ProxyProtocolV1) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ProxyProtocolV2)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ProxyProtocolV2)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV2.Equal(that1.ProxyProtocolV2) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2542,6 +2929,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.HeaderTransformationType.Equal(that1.HeaderTransformationType) {
+		return false
+	}
+	if that1.ProxyProtocolType == nil {
+		if this.ProxyProtocolType != nil {
+			return false
+		}
+	} else if this.ProxyProtocolType == nil {
+		return false
+	} else if !this.ProxyProtocolType.Equal(that1.ProxyProtocolType) {
 		return false
 	}
 	return true
@@ -2666,6 +3062,78 @@ func (this *CreateSpecType_PanicThreshold) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_DisableProxyProtocol) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DisableProxyProtocol)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DisableProxyProtocol)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableProxyProtocol.Equal(that1.DisableProxyProtocol) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ProxyProtocolV1) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ProxyProtocolV1)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ProxyProtocolV1)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV1.Equal(that1.ProxyProtocolV1) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ProxyProtocolV2)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ProxyProtocolV2)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV2.Equal(that1.ProxyProtocolV2) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2760,6 +3228,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.HeaderTransformationType.Equal(that1.HeaderTransformationType) {
+		return false
+	}
+	if that1.ProxyProtocolType == nil {
+		if this.ProxyProtocolType != nil {
+			return false
+		}
+	} else if this.ProxyProtocolType == nil {
+		return false
+	} else if !this.ProxyProtocolType.Equal(that1.ProxyProtocolType) {
 		return false
 	}
 	return true
@@ -2884,6 +3361,78 @@ func (this *ReplaceSpecType_PanicThreshold) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_DisableProxyProtocol) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DisableProxyProtocol)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DisableProxyProtocol)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableProxyProtocol.Equal(that1.DisableProxyProtocol) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ProxyProtocolV1) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ProxyProtocolV1)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ProxyProtocolV1)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV1.Equal(that1.ProxyProtocolV1) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ProxyProtocolV2)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ProxyProtocolV2)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV2.Equal(that1.ProxyProtocolV2) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2987,6 +3536,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.LbSourceIpPersistanceChoice == nil {
 		return false
 	} else if !this.LbSourceIpPersistanceChoice.Equal(that1.LbSourceIpPersistanceChoice) {
+		return false
+	}
+	if that1.ProxyProtocolType == nil {
+		if this.ProxyProtocolType != nil {
+			return false
+		}
+	} else if this.ProxyProtocolType == nil {
+		return false
+	} else if !this.ProxyProtocolType.Equal(that1.ProxyProtocolType) {
 		return false
 	}
 	return true
@@ -3159,6 +3717,78 @@ func (this *GetSpecType_DisableLbSourceIpPersistance) Equal(that interface{}) bo
 	}
 	return true
 }
+func (this *GetSpecType_DisableProxyProtocol) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DisableProxyProtocol)
+	if !ok {
+		that2, ok := that.(GetSpecType_DisableProxyProtocol)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableProxyProtocol.Equal(that1.DisableProxyProtocol) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ProxyProtocolV1) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ProxyProtocolV1)
+	if !ok {
+		that2, ok := that.(GetSpecType_ProxyProtocolV1)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV1.Equal(that1.ProxyProtocolV1) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ProxyProtocolV2) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ProxyProtocolV2)
+	if !ok {
+		that2, ok := that.(GetSpecType_ProxyProtocolV2)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ProxyProtocolV2.Equal(that1.ProxyProtocolV2) {
+		return false
+	}
+	return true
+}
 func (this *OutlierDetectionType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -3207,11 +3837,23 @@ func (this *Http2ProtocolOptions) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *Http1ProtocolOptions) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cluster.Http1ProtocolOptions{")
+	if this.HeaderTransformation != nil {
+		s = append(s, "HeaderTransformation: "+fmt.Sprintf("%#v", this.HeaderTransformation)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 26)
+	s := make([]string, 0, 29)
 	s = append(s, "&cluster.GlobalSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -3262,6 +3904,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.LbSourceIpPersistanceChoice != nil {
 		s = append(s, "LbSourceIpPersistanceChoice: "+fmt.Sprintf("%#v", this.LbSourceIpPersistanceChoice)+",\n")
+	}
+	if this.ProxyProtocolType != nil {
+		s = append(s, "ProxyProtocolType: "+fmt.Sprintf("%#v", this.ProxyProtocolType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3322,11 +3967,35 @@ func (this *GlobalSpecType_DisableLbSourceIpPersistance) GoString() string {
 		`DisableLbSourceIpPersistance:` + fmt.Sprintf("%#v", this.DisableLbSourceIpPersistance) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_DisableProxyProtocol) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GlobalSpecType_DisableProxyProtocol{` +
+		`DisableProxyProtocol:` + fmt.Sprintf("%#v", this.DisableProxyProtocol) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ProxyProtocolV1) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GlobalSpecType_ProxyProtocolV1{` +
+		`ProxyProtocolV1:` + fmt.Sprintf("%#v", this.ProxyProtocolV1) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ProxyProtocolV2) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GlobalSpecType_ProxyProtocolV2{` +
+		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 25)
 	s = append(s, "&cluster.CreateSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -3373,6 +4042,9 @@ func (this *CreateSpecType) GoString() string {
 	if this.HeaderTransformationType != nil {
 		s = append(s, "HeaderTransformationType: "+fmt.Sprintf("%#v", this.HeaderTransformationType)+",\n")
 	}
+	if this.ProxyProtocolType != nil {
+		s = append(s, "ProxyProtocolType: "+fmt.Sprintf("%#v", this.ProxyProtocolType)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3416,11 +4088,35 @@ func (this *CreateSpecType_PanicThreshold) GoString() string {
 		`PanicThreshold:` + fmt.Sprintf("%#v", this.PanicThreshold) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_DisableProxyProtocol) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.CreateSpecType_DisableProxyProtocol{` +
+		`DisableProxyProtocol:` + fmt.Sprintf("%#v", this.DisableProxyProtocol) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ProxyProtocolV1) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.CreateSpecType_ProxyProtocolV1{` +
+		`ProxyProtocolV1:` + fmt.Sprintf("%#v", this.ProxyProtocolV1) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ProxyProtocolV2) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.CreateSpecType_ProxyProtocolV2{` +
+		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 22)
+	s := make([]string, 0, 25)
 	s = append(s, "&cluster.ReplaceSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -3467,6 +4163,9 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.HeaderTransformationType != nil {
 		s = append(s, "HeaderTransformationType: "+fmt.Sprintf("%#v", this.HeaderTransformationType)+",\n")
 	}
+	if this.ProxyProtocolType != nil {
+		s = append(s, "ProxyProtocolType: "+fmt.Sprintf("%#v", this.ProxyProtocolType)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3510,11 +4209,35 @@ func (this *ReplaceSpecType_PanicThreshold) GoString() string {
 		`PanicThreshold:` + fmt.Sprintf("%#v", this.PanicThreshold) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_DisableProxyProtocol) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.ReplaceSpecType_DisableProxyProtocol{` +
+		`DisableProxyProtocol:` + fmt.Sprintf("%#v", this.DisableProxyProtocol) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ProxyProtocolV1) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.ReplaceSpecType_ProxyProtocolV1{` +
+		`ProxyProtocolV1:` + fmt.Sprintf("%#v", this.ProxyProtocolV1) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ProxyProtocolV2) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.ReplaceSpecType_ProxyProtocolV2{` +
+		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 24)
+	s := make([]string, 0, 27)
 	s = append(s, "&cluster.GetSpecType{")
 	if this.Endpoints != nil {
 		s = append(s, "Endpoints: "+fmt.Sprintf("%#v", this.Endpoints)+",\n")
@@ -3563,6 +4286,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.LbSourceIpPersistanceChoice != nil {
 		s = append(s, "LbSourceIpPersistanceChoice: "+fmt.Sprintf("%#v", this.LbSourceIpPersistanceChoice)+",\n")
+	}
+	if this.ProxyProtocolType != nil {
+		s = append(s, "ProxyProtocolType: "+fmt.Sprintf("%#v", this.ProxyProtocolType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -3621,6 +4347,30 @@ func (this *GetSpecType_DisableLbSourceIpPersistance) GoString() string {
 	}
 	s := strings.Join([]string{`&cluster.GetSpecType_DisableLbSourceIpPersistance{` +
 		`DisableLbSourceIpPersistance:` + fmt.Sprintf("%#v", this.DisableLbSourceIpPersistance) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DisableProxyProtocol) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GetSpecType_DisableProxyProtocol{` +
+		`DisableProxyProtocol:` + fmt.Sprintf("%#v", this.DisableProxyProtocol) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ProxyProtocolV1) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GetSpecType_ProxyProtocolV1{` +
+		`ProxyProtocolV1:` + fmt.Sprintf("%#v", this.ProxyProtocolV1) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ProxyProtocolV2) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cluster.GetSpecType_ProxyProtocolV2{` +
+		`ProxyProtocolV2:` + fmt.Sprintf("%#v", this.ProxyProtocolV2) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -3792,6 +4542,41 @@ func (m *Http2ProtocolOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *Http1ProtocolOptions) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Http1ProtocolOptions) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Http1ProtocolOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HeaderTransformation != nil {
+		{
+			size, err := m.HeaderTransformation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3812,6 +4597,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ProxyProtocolType != nil {
+		{
+			size := m.ProxyProtocolType.Size()
+			i -= size
+			if _, err := m.ProxyProtocolType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.LbSourceIpPersistanceChoice != nil {
 		{
 			size := m.LbSourceIpPersistanceChoice.Size()
@@ -4145,6 +4939,75 @@ func (m *GlobalSpecType_DisableLbSourceIpPersistance) MarshalToSizedBuffer(dAtA 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_DisableProxyProtocol) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableProxyProtocol) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableProxyProtocol != nil {
+		{
+			size, err := m.DisableProxyProtocol.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ProxyProtocolV1) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ProxyProtocolV1) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV1 != nil {
+		{
+			size, err := m.ProxyProtocolV1.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ProxyProtocolV2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV2 != nil {
+		{
+			size, err := m.ProxyProtocolV2.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4165,6 +5028,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ProxyProtocolType != nil {
+		{
+			size := m.ProxyProtocolType.Size()
+			i -= size
+			if _, err := m.ProxyProtocolType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.HttpProtocolType != nil {
 		{
 			size := m.HttpProtocolType.Size()
@@ -4433,6 +5305,75 @@ func (m *CreateSpecType_AutoHttpConfig) MarshalToSizedBuffer(dAtA []byte) (int, 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_DisableProxyProtocol) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableProxyProtocol) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableProxyProtocol != nil {
+		{
+			size, err := m.DisableProxyProtocol.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ProxyProtocolV1) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ProxyProtocolV1) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV1 != nil {
+		{
+			size, err := m.ProxyProtocolV1.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ProxyProtocolV2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV2 != nil {
+		{
+			size, err := m.ProxyProtocolV2.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4453,6 +5394,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ProxyProtocolType != nil {
+		{
+			size := m.ProxyProtocolType.Size()
+			i -= size
+			if _, err := m.ProxyProtocolType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.HttpProtocolType != nil {
 		{
 			size := m.HttpProtocolType.Size()
@@ -4721,6 +5671,75 @@ func (m *ReplaceSpecType_AutoHttpConfig) MarshalToSizedBuffer(dAtA []byte) (int,
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_DisableProxyProtocol) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableProxyProtocol) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableProxyProtocol != nil {
+		{
+			size, err := m.DisableProxyProtocol.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ProxyProtocolV1) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ProxyProtocolV1) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV1 != nil {
+		{
+			size, err := m.ProxyProtocolV1.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ProxyProtocolV2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV2 != nil {
+		{
+			size, err := m.ProxyProtocolV2.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4741,6 +5760,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ProxyProtocolType != nil {
+		{
+			size := m.ProxyProtocolType.Size()
+			i -= size
+			if _, err := m.ProxyProtocolType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.LbSourceIpPersistanceChoice != nil {
 		{
 			size := m.LbSourceIpPersistanceChoice.Size()
@@ -5064,6 +6092,75 @@ func (m *GetSpecType_DisableLbSourceIpPersistance) MarshalToSizedBuffer(dAtA []b
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_DisableProxyProtocol) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableProxyProtocol) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableProxyProtocol != nil {
+		{
+			size, err := m.DisableProxyProtocol.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ProxyProtocolV1) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ProxyProtocolV1) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV1 != nil {
+		{
+			size, err := m.ProxyProtocolV1.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ProxyProtocolV2) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ProxyProtocolV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ProxyProtocolV2 != nil {
+		{
+			size, err := m.ProxyProtocolV2.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -5150,6 +6247,19 @@ func (m *Http2ProtocolOptions) Size() (n int) {
 	return n
 }
 
+func (m *Http1ProtocolOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HeaderTransformation != nil {
+		l = m.HeaderTransformation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5227,6 +6337,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.LbSourceIpPersistanceChoice != nil {
 		n += m.LbSourceIpPersistanceChoice.Size()
+	}
+	if m.ProxyProtocolType != nil {
+		n += m.ProxyProtocolType.Size()
 	}
 	return n
 }
@@ -5312,6 +6425,42 @@ func (m *GlobalSpecType_DisableLbSourceIpPersistance) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_DisableProxyProtocol) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableProxyProtocol != nil {
+		l = m.DisableProxyProtocol.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ProxyProtocolV1) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV1 != nil {
+		l = m.ProxyProtocolV1.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ProxyProtocolV2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV2 != nil {
+		l = m.ProxyProtocolV2.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5381,6 +6530,9 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.HeaderTransformationType.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
+	if m.ProxyProtocolType != nil {
+		n += m.ProxyProtocolType.Size()
+	}
 	return n
 }
 
@@ -5437,6 +6589,42 @@ func (m *CreateSpecType_AutoHttpConfig) Size() (n int) {
 	_ = l
 	if m.AutoHttpConfig != nil {
 		l = m.AutoHttpConfig.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DisableProxyProtocol) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableProxyProtocol != nil {
+		l = m.DisableProxyProtocol.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ProxyProtocolV1) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV1 != nil {
+		l = m.ProxyProtocolV1.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ProxyProtocolV2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV2 != nil {
+		l = m.ProxyProtocolV2.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -5510,6 +6698,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.HeaderTransformationType.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
+	if m.ProxyProtocolType != nil {
+		n += m.ProxyProtocolType.Size()
+	}
 	return n
 }
 
@@ -5566,6 +6757,42 @@ func (m *ReplaceSpecType_AutoHttpConfig) Size() (n int) {
 	_ = l
 	if m.AutoHttpConfig != nil {
 		l = m.AutoHttpConfig.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DisableProxyProtocol) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableProxyProtocol != nil {
+		l = m.DisableProxyProtocol.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ProxyProtocolV1) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV1 != nil {
+		l = m.ProxyProtocolV1.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ProxyProtocolV2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV2 != nil {
+		l = m.ProxyProtocolV2.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -5641,6 +6868,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.LbSourceIpPersistanceChoice != nil {
 		n += m.LbSourceIpPersistanceChoice.Size()
+	}
+	if m.ProxyProtocolType != nil {
+		n += m.ProxyProtocolType.Size()
 	}
 	return n
 }
@@ -5726,6 +6956,42 @@ func (m *GetSpecType_DisableLbSourceIpPersistance) Size() (n int) {
 	}
 	return n
 }
+func (m *GetSpecType_DisableProxyProtocol) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableProxyProtocol != nil {
+		l = m.DisableProxyProtocol.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ProxyProtocolV1) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV1 != nil {
+		l = m.ProxyProtocolV1.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ProxyProtocolV2) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ProxyProtocolV2 != nil {
+		l = m.ProxyProtocolV2.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -5781,6 +7047,16 @@ func (this *Http2ProtocolOptions) String() string {
 	}, "")
 	return s
 }
+func (this *Http1ProtocolOptions) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Http1ProtocolOptions{`,
+		`HeaderTransformation:` + strings.Replace(fmt.Sprintf("%v", this.HeaderTransformation), "HeaderTransformationType", "schema.HeaderTransformationType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -5829,6 +7105,7 @@ func (this *GlobalSpecType) String() string {
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`HeaderTransformationType:` + strings.Replace(fmt.Sprintf("%v", this.HeaderTransformationType), "HeaderTransformationType", "schema.HeaderTransformationType", 1) + `,`,
 		`LbSourceIpPersistanceChoice:` + fmt.Sprintf("%v", this.LbSourceIpPersistanceChoice) + `,`,
+		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5868,7 +7145,7 @@ func (this *GlobalSpecType_Http1Config) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Http1Config{`,
-		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Empty", "schema.Empty", 1) + `,`,
+		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Http1ProtocolOptions", "Http1ProtocolOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5899,6 +7176,36 @@ func (this *GlobalSpecType_DisableLbSourceIpPersistance) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_DisableLbSourceIpPersistance{`,
 		`DisableLbSourceIpPersistance:` + strings.Replace(fmt.Sprintf("%v", this.DisableLbSourceIpPersistance), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DisableProxyProtocol) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DisableProxyProtocol{`,
+		`DisableProxyProtocol:` + strings.Replace(fmt.Sprintf("%v", this.DisableProxyProtocol), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ProxyProtocolV1) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ProxyProtocolV1{`,
+		`ProxyProtocolV1:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV1), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ProxyProtocolV2) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ProxyProtocolV2{`,
+		`ProxyProtocolV2:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV2), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5948,6 +7255,7 @@ func (this *CreateSpecType) String() string {
 		`HttpProtocolType:` + fmt.Sprintf("%v", this.HttpProtocolType) + `,`,
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`HeaderTransformationType:` + strings.Replace(fmt.Sprintf("%v", this.HeaderTransformationType), "HeaderTransformationType", "schema.HeaderTransformationType", 1) + `,`,
+		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5987,7 +7295,7 @@ func (this *CreateSpecType_Http1Config) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_Http1Config{`,
-		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Empty", "schema.Empty", 1) + `,`,
+		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Http1ProtocolOptions", "Http1ProtocolOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5998,6 +7306,36 @@ func (this *CreateSpecType_AutoHttpConfig) String() string {
 	}
 	s := strings.Join([]string{`&CreateSpecType_AutoHttpConfig{`,
 		`AutoHttpConfig:` + strings.Replace(fmt.Sprintf("%v", this.AutoHttpConfig), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DisableProxyProtocol) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DisableProxyProtocol{`,
+		`DisableProxyProtocol:` + strings.Replace(fmt.Sprintf("%v", this.DisableProxyProtocol), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ProxyProtocolV1) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ProxyProtocolV1{`,
+		`ProxyProtocolV1:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV1), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ProxyProtocolV2) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ProxyProtocolV2{`,
+		`ProxyProtocolV2:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV2), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6047,6 +7385,7 @@ func (this *ReplaceSpecType) String() string {
 		`HttpProtocolType:` + fmt.Sprintf("%v", this.HttpProtocolType) + `,`,
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`HeaderTransformationType:` + strings.Replace(fmt.Sprintf("%v", this.HeaderTransformationType), "HeaderTransformationType", "schema.HeaderTransformationType", 1) + `,`,
+		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6086,7 +7425,7 @@ func (this *ReplaceSpecType_Http1Config) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_Http1Config{`,
-		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Empty", "schema.Empty", 1) + `,`,
+		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Http1ProtocolOptions", "Http1ProtocolOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6097,6 +7436,36 @@ func (this *ReplaceSpecType_AutoHttpConfig) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_AutoHttpConfig{`,
 		`AutoHttpConfig:` + strings.Replace(fmt.Sprintf("%v", this.AutoHttpConfig), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DisableProxyProtocol) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DisableProxyProtocol{`,
+		`DisableProxyProtocol:` + strings.Replace(fmt.Sprintf("%v", this.DisableProxyProtocol), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ProxyProtocolV1) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ProxyProtocolV1{`,
+		`ProxyProtocolV1:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV1), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ProxyProtocolV2) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ProxyProtocolV2{`,
+		`ProxyProtocolV2:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV2), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6147,6 +7516,7 @@ func (this *GetSpecType) String() string {
 		`PanicThresholdType:` + fmt.Sprintf("%v", this.PanicThresholdType) + `,`,
 		`HeaderTransformationType:` + strings.Replace(fmt.Sprintf("%v", this.HeaderTransformationType), "HeaderTransformationType", "schema.HeaderTransformationType", 1) + `,`,
 		`LbSourceIpPersistanceChoice:` + fmt.Sprintf("%v", this.LbSourceIpPersistanceChoice) + `,`,
+		`ProxyProtocolType:` + fmt.Sprintf("%v", this.ProxyProtocolType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6186,7 +7556,7 @@ func (this *GetSpecType_Http1Config) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_Http1Config{`,
-		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Empty", "schema.Empty", 1) + `,`,
+		`Http1Config:` + strings.Replace(fmt.Sprintf("%v", this.Http1Config), "Http1ProtocolOptions", "Http1ProtocolOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6217,6 +7587,36 @@ func (this *GetSpecType_DisableLbSourceIpPersistance) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_DisableLbSourceIpPersistance{`,
 		`DisableLbSourceIpPersistance:` + strings.Replace(fmt.Sprintf("%v", this.DisableLbSourceIpPersistance), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DisableProxyProtocol) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DisableProxyProtocol{`,
+		`DisableProxyProtocol:` + strings.Replace(fmt.Sprintf("%v", this.DisableProxyProtocol), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ProxyProtocolV1) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ProxyProtocolV1{`,
+		`ProxyProtocolV1:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV1), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ProxyProtocolV2) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ProxyProtocolV2{`,
+		`ProxyProtocolV2:` + strings.Replace(fmt.Sprintf("%v", this.ProxyProtocolV2), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6659,6 +8059,95 @@ func (m *Http2ProtocolOptions) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Enabled = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Http1ProtocolOptions) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Http1ProtocolOptions: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Http1ProtocolOptions: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HeaderTransformation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HeaderTransformation == nil {
+				m.HeaderTransformation = &schema.HeaderTransformationType{}
+			}
+			if err := m.HeaderTransformation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -7337,7 +8826,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &Http1ProtocolOptions{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7447,6 +8936,111 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.LbSourceIpPersistanceChoice = &GlobalSpecType_DisableLbSourceIpPersistance{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableProxyProtocol", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &GlobalSpecType_DisableProxyProtocol{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV1", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV1{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV2", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV2{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -8088,7 +9682,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &Http1ProtocolOptions{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8128,6 +9722,111 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.HttpProtocolType = &CreateSpecType_AutoHttpConfig{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableProxyProtocol", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &CreateSpecType_DisableProxyProtocol{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV1", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &CreateSpecType_ProxyProtocolV1{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV2", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &CreateSpecType_ProxyProtocolV2{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -8769,7 +10468,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &Http1ProtocolOptions{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8809,6 +10508,111 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.HttpProtocolType = &ReplaceSpecType_AutoHttpConfig{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableProxyProtocol", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &ReplaceSpecType_DisableProxyProtocol{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV1", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &ReplaceSpecType_ProxyProtocolV1{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV2", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &ReplaceSpecType_ProxyProtocolV2{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9450,7 +11254,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &schema.Empty{}
+			v := &Http1ProtocolOptions{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9560,6 +11364,111 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.LbSourceIpPersistanceChoice = &GetSpecType_DisableLbSourceIpPersistance{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableProxyProtocol", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &GetSpecType_DisableProxyProtocol{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV1", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &GetSpecType_ProxyProtocolV1{v}
+			iNdEx = postIndex
+		case 30:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProxyProtocolV2", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ProxyProtocolType = &GetSpecType_ProxyProtocolV2{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

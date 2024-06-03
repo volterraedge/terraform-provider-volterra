@@ -20,43 +20,28 @@ resource "volterra_app_firewall" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "allow_all_response_codes allowed_response_codes" must be set
+  // One of the arguments from this list "allowed_response_codes allow_all_response_codes" must be set
+
   allow_all_response_codes = true
 
-  // One of the arguments from this list "disable_anonymization default_anonymization custom_anonymization" must be set
+  // One of the arguments from this list "custom_anonymization disable_anonymization default_anonymization" must be set
+
   disable_anonymization = true
 
   // One of the arguments from this list "use_default_blocking_page blocking_page" must be set
+
   use_default_blocking_page = true
 
   // One of the arguments from this list "default_bot_setting bot_protection_setting" must be set
+
   default_bot_setting = true
 
   // One of the arguments from this list "default_detection_settings detection_settings" must be set
 
-  detection_settings {
-    // One of the arguments from this list "enable_suppression disable_suppression" must be set
-    enable_suppression = true
+  default_detection_settings = true
 
-    signature_selection_setting {
-      // One of the arguments from this list "default_attack_type_settings attack_type_settings" must be set
-      default_attack_type_settings = true
-
-      // One of the arguments from this list "only_high_accuracy_signatures high_medium_accuracy_signatures high_medium_low_accuracy_signatures" must be set
-      only_high_accuracy_signatures = true
-    }
-
-    // One of the arguments from this list "disable_staging stage_new_signatures stage_new_and_updated_signatures" must be set
-
-    stage_new_and_updated_signatures {
-      staging_period = "7"
-    }
-    // One of the arguments from this list "enable_threat_campaigns disable_threat_campaigns" must be set
-    disable_threat_campaigns = true
-    // One of the arguments from this list "default_violation_settings violation_settings" must be set
-    default_violation_settings = true
-  }
   // One of the arguments from this list "use_loadbalancer_setting blocking monitoring" must be set
+
   use_loadbalancer_setting = true
 }
 
@@ -205,7 +190,7 @@ Define Custom Security Policy settings.
 
 `enable_threat_campaigns` - (Optional) x-displayName: "Enable" (`Bool`).
 
-###### One of the arguments from this list "default_violation_settings, violation_settings" must be set
+###### One of the arguments from this list "violation_settings, default_violation_settings" must be set
 
 `default_violation_settings` - (Optional) All violations are enabled for detection (`Bool`).
 

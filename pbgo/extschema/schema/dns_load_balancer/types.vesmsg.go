@@ -1139,6 +1139,22 @@ func (m *LoadBalancingRule) GetClientChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *LoadBalancingRule_IpPrefixList:
+
+		return nil, nil
+
+	case *LoadBalancingRule_IpPrefixSet:
+
+		drInfos, err := m.GetIpPrefixSet().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpPrefixSet().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ip_prefix_set." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -1280,6 +1296,28 @@ func (v *ValidateLoadBalancingRule) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *LoadBalancingRule_IpPrefixList:
+		if fv, exists := v.FldValidators["client_choice.ip_prefix_list"]; exists {
+			val := m.GetClientChoice().(*LoadBalancingRule_IpPrefixList).IpPrefixList
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("ip_prefix_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LoadBalancingRule_IpPrefixSet:
+		if fv, exists := v.FldValidators["client_choice.ip_prefix_set"]; exists {
+			val := m.GetClientChoice().(*LoadBalancingRule_IpPrefixSet).IpPrefixSet
+			vOpts := append(opts,
+				db.WithValidateField("client_choice"),
+				db.WithValidateField("ip_prefix_set"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1347,6 +1385,8 @@ var DefaultLoadBalancingRuleValidator = func() *ValidateLoadBalancingRule {
 	v.FldValidators["client_choice.geo_location_set"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["client_choice.asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 	v.FldValidators["client_choice.asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
+	v.FldValidators["client_choice.ip_prefix_list"] = ves_io_schema_policy.PrefixMatchListValidator().Validate
+	v.FldValidators["client_choice.ip_prefix_set"] = ves_io_schema_policy.IpMatcherTypeValidator().Validate
 
 	return v
 }()

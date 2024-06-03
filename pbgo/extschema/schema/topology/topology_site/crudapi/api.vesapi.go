@@ -2966,10 +2966,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3244,6 +3248,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "site",
             "x-ves-proto-message": "ves.io.schema.topology.SiteType",
             "properties": {
+                "app_type": {
+                    "description": " Site App Type",
+                    "title": "Site App type",
+                    "$ref": "#/definitions/topologySiteAppTypeEnum",
+                    "x-displayname": "Site App type"
+                },
                 "dc_cluster_group": {
                     "type": "array",
                     "description": " Reference to the DC Cluster group",
@@ -3252,6 +3262,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "DC Cluster Group"
+                },
+                "gateway_type": {
+                    "description": " Information related to the site provider",
+                    "title": "Provider Info",
+                    "$ref": "#/definitions/topologyGatewayTypeEnum",
+                    "x-displayname": "Provider Info"
                 },
                 "network": {
                     "type": "array",
@@ -3305,6 +3321,35 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Site Local Outside IP addresses"
                 }
             }
+        },
+        "topologyAzureResourceGroupInfo": {
+            "type": "object",
+            "description": "x-displayName: \"Azure Resource Group Info\"\nAzure Site and Virtual Network resource group info",
+            "title": "AzureResourceGroupInfo",
+            "properties": {
+                "site_rg": {
+                    "type": "string",
+                    "description": "x-displayName: \"Site Resource Group\"\nResource group for Site",
+                    "title": "Site Resource Group"
+                },
+                "virtual_network_rg": {
+                    "type": "string",
+                    "description": "x-displayName: \"Virtual Network Resource Group\"\nResource group for Virtual Network",
+                    "title": "Virtual Network Resource Group"
+                }
+            }
+        },
+        "topologyGatewayTypeEnum": {
+            "type": "string",
+            "description": "x-displayName: Gateway type\nGateway Type\n\n - INGRESS_GATEWAY: Ingress gateway\n\nx-displayName: Ingress gateway\nIngress gateway (single nic)\n - INGRESS_EGRESS_GATEWAY: Ingress and Egress gateway\n\nx-displayName: Ingress and Egress gateway\nIngress and Egress gateway (dual nic)",
+            "title": "GatewayType",
+            "enum": [
+                "INGRESS_GATEWAY",
+                "INGRESS_EGRESS_GATEWAY"
+            ],
+            "default": "INGRESS_GATEWAY",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.topology.GatewayTypeEnum"
         },
         "topologyMetaType": {
             "type": "object",
@@ -3367,6 +3412,39 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "topologyProviderInfo": {
+            "type": "object",
+            "description": "x-displayName: \"Provider Info\"\nCloud provider information",
+            "title": "ProviderInfo",
+            "properties": {
+                "azure_rg_info": {
+                    "description": "x-displayName: \"Azure Resource Group Info\"\nResource group information for Azure Site and Virtual Network",
+                    "title": "Azure Resource Group Info",
+                    "$ref": "#/definitions/topologyAzureResourceGroupInfo"
+                },
+                "cloud_link": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cloud Link\"\nReference to cloud link",
+                    "title": "Cloud Link",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
+                "gcp_zones": {
+                    "type": "array",
+                    "description": "x-displayName: \"GCP Zones\"\nGCP Zones for the resource",
+                    "title": "GCP Zones",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "region": {
+                    "type": "string",
+                    "description": "x-displayName: \"Region\"\nRegion in which the resource exists",
+                    "title": "Region"
+                }
+            }
+        },
         "topologyProviderType": {
             "type": "string",
             "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend",
@@ -3381,6 +3459,19 @@ var APISwaggerJSON string = `{
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",
             "x-ves-proto-enum": "ves.io.schema.topology.ProviderType"
+        },
+        "topologySiteAppTypeEnum": {
+            "type": "string",
+            "description": "x-displayName: Site App type\nSite App Type\n\n - SITE_APPTYPE_NONE: Not applicable \n\nx-displayName: Not applicable \nNot applicable\n - SITE_APPTYPE_APPSTACK: AppStack Site\n\nx-displayName: AppStack Site\nAppStack Site\n - SITE_APPTYPE_MESH: Mesh site \n\nx-displayName: Mesh site \nMesh site",
+            "title": "Site App Type",
+            "enum": [
+                "SITE_APPTYPE_NONE",
+                "SITE_APPTYPE_APPSTACK",
+                "SITE_APPTYPE_MESH"
+            ],
+            "default": "SITE_APPTYPE_NONE",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.topology.SiteAppTypeEnum"
         },
         "topology_siteSpecType": {
             "type": "object",

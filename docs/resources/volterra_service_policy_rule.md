@@ -22,19 +22,25 @@ resource "volterra_service_policy_rule" "example" {
   action    = ["action"]
 
   // One of the arguments from this list "any_asn asn_list asn_matcher" must be set
+
   any_asn          = true
   challenge_action = ["challenge_action"]
 
-  // One of the arguments from this list "any_client client_name ip_threat_category_list client_selector client_name_matcher" must be set
+  // One of the arguments from this list "ip_threat_category_list client_selector client_name_matcher any_client client_name" must be set
 
-  client_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+  client_name_matcher {
+    exact_values = ["['new york', 'london', 'sydney', 'tokyo', 'cairo']"]
+
+    regex_values = ["['^new .*$', 'san f.*', '.* del .*']"]
   }
+
   // One of the arguments from this list "any_ip ip_prefix_list ip_matcher" must be set
+
   any_ip = true
   waf_action {
     // One of the arguments from this list "jwt_claims_validation none waf_skip_processing waf_in_monitoring_mode app_firewall_detection_control data_guard_control jwt_validation" must be set
-    none = true
+
+    jwt_claims_validation = true
   }
 }
 
@@ -145,6 +151,8 @@ Argument Reference
 
 `scheme` - (Optional) The scheme in the request. (`List of String`).(Deprecated)
 
+`segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Segment Policy ](#segment-policy) below for details.
+
 `server_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the server labels.. See [Server Selector ](#server-selector) below for details.(Deprecated)
 
 `shape_protected_endpoint_action` - (Optional) Shape Protected Endpoint Action that include application traffic type and mitigation. See [Shape Protected Endpoint Action ](#shape-protected-endpoint-action) below for details.(Deprecated)
@@ -253,7 +261,7 @@ Note that all specified header predicates must evaluate to true..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "check_not_present, item, presence, check_present" must be set
+###### One of the arguments from this list "presence, check_present, check_not_present, item" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
@@ -289,7 +297,7 @@ Note that all specified JWT claim predicates must evaluate to true..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "item, check_present, check_not_present" must be set
+###### One of the arguments from this list "check_present, check_not_present, item" must be set
 
 `check_not_present` - (Optional) Check that the JWT Claim is not present. (`Bool`).
 
@@ -355,7 +363,7 @@ Note that all specified query parameter predicates must evaluate to true..
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
-###### One of the arguments from this list "presence, check_present, check_not_present, item" must be set
+###### One of the arguments from this list "check_present, check_not_present, item, presence" must be set
 
 `check_not_present` - (Optional) Check that the query parameter is not present. (`Bool`).
 
@@ -393,7 +401,7 @@ Place limits on request based on the request attributes. The request matches if 
 
 `max_header_count_none` - (Optional) x-displayName: "Not Configured" (`Bool`).
 
-###### One of the arguments from this list "max_header_key_size_exceeds, max_header_key_size_none" must be set
+###### One of the arguments from this list "max_header_key_size_none, max_header_key_size_exceeds" must be set
 
 `max_header_key_size_exceeds` - (Optional) x-example: "32" (`Int`).
 
@@ -411,25 +419,25 @@ Place limits on request based on the request attributes. The request matches if 
 
 `max_parameter_count_none` - (Optional) x-displayName: "Not Configured" (`Bool`).
 
-###### One of the arguments from this list "max_parameter_name_size_exceeds, max_parameter_name_size_none" must be set
+###### One of the arguments from this list "max_parameter_name_size_none, max_parameter_name_size_exceeds" must be set
 
 `max_parameter_name_size_exceeds` - (Optional) x-example: "64" (`Int`).
 
 `max_parameter_name_size_none` - (Optional) x-displayName: "Not Configured" (`Bool`).
 
-###### One of the arguments from this list "max_parameter_value_size_none, max_parameter_value_size_exceeds" must be set
+###### One of the arguments from this list "max_parameter_value_size_exceeds, max_parameter_value_size_none" must be set
 
 `max_parameter_value_size_exceeds` - (Optional) x-example: "1000" (`Int`).
 
 `max_parameter_value_size_none` - (Optional) x-displayName: "Not Configured" (`Bool`).
 
-###### One of the arguments from this list "max_query_size_exceeds, max_query_size_none" must be set
+###### One of the arguments from this list "max_query_size_none, max_query_size_exceeds" must be set
 
 `max_query_size_exceeds` - (Optional) x-example: "4096" (`Int`).
 
 `max_query_size_none` - (Optional) x-displayName: "Not Configured" (`Bool`).
 
-###### One of the arguments from this list "max_request_line_size_none, max_request_line_size_exceeds" must be set
+###### One of the arguments from this list "max_request_line_size_exceeds, max_request_line_size_none" must be set
 
 `max_request_line_size_exceeds` - (Optional) x-example: "4096" (`Int`).
 
@@ -446,6 +454,24 @@ Place limits on request based on the request attributes. The request matches if 
 `max_url_size_exceeds` - (Optional) x-example: "4096" (`Int`).
 
 `max_url_size_none` - (Optional) x-displayName: "Not Configured" (`Bool`).
+
+### Segment Policy
+
+Skip the configuration or set option as Any to ignore corresponding segment match.
+
+###### One of the arguments from this list "dst_any, intra_segment, dst_segments" can be set
+
+`dst_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`dst_segments` - (Optional) Traffic is matched against destination segment in selected segments. See [Dst Segment Choice Dst Segments ](#dst-segment-choice-dst-segments) below for details.
+
+`intra_segment` - (Optional) Traffic is matched for source and destination on the same segment (`Bool`).
+
+###### One of the arguments from this list "src_any, src_segments" can be set
+
+`src_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`src_segments` - (Optional) Source traffic is matched against selected segments. See [Src Segment Choice Src Segments ](#src-segment-choice-src-segments) below for details.
 
 ### Server Selector
 
@@ -499,7 +525,7 @@ Hidden because this will be used only in system generated rate limiting service_
 
 App Firewall action to be enforced if the input request matches the rule..
 
-###### One of the arguments from this list "none, waf_skip_processing, waf_in_monitoring_mode, app_firewall_detection_control, data_guard_control, jwt_validation, jwt_claims_validation" must be set
+###### One of the arguments from this list "app_firewall_detection_control, data_guard_control, jwt_validation, jwt_claims_validation, none, waf_skip_processing, waf_in_monitoring_mode" must be set
 
 `app_firewall_detection_control` - (Optional) Define the list of Signature IDs, Violations, Attack Types and Bot Names that should be excluded from triggering on the defined match criteria.. See [Action Type App Firewall Detection Control ](#action-type-app-firewall-detection-control) below for details.
 
@@ -631,7 +657,7 @@ Violations to be excluded for the defined match criteria.
 
 The predicate evaluates to true if the origin ASN is present in the ASN list..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Asn Choice Asn Matcher
 
@@ -663,7 +689,7 @@ IP threat categories to choose from.
 
 The predicate evaluates to true if the destination ASN is present in the ASN list..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Dst Asn Choice Dst Asn Matcher
 
@@ -686,6 +712,20 @@ The predicate evaluates to true if the destination address is covered by one or 
 `invert_match` - (Optional) Invert the match result. (`Bool`).
 
 `ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+### Dst Segment Choice Dst Any
+
+Traffic is not matched against any segment.
+
+### Dst Segment Choice Dst Segments
+
+Traffic is matched against destination segment in selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
+
+### Dst Segment Choice Intra Segment
+
+Traffic is matched for source and destination on the same segment.
 
 ### Ip Choice Ip Matcher
 
@@ -807,7 +847,7 @@ No mitigation headers..
 
 Mitigation action for protected endpoint.
 
-###### One of the arguments from this list "none, block, redirect, flag" can be set
+###### One of the arguments from this list "flag, none, block, redirect" can be set
 
 `block` - (Optional) Block bot request and send response with custom content.. See [Action Type Block ](#action-type-block) below for details.
 
@@ -824,6 +864,16 @@ Success/failure Criteria for transaction result.
 `failure_conditions` - (Optional) Failure Conditions. See [Transaction Result Failure Conditions ](#transaction-result-failure-conditions) below for details.
 
 `success_conditions` - (Optional) Success Conditions. See [Transaction Result Success Conditions ](#transaction-result-success-conditions) below for details.
+
+### Src Segment Choice Src Any
+
+Traffic is not matched against any segment.
+
+### Src Segment Choice Src Segments
+
+Source traffic is matched against selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
 
 ### Transaction Result Failure Conditions
 
@@ -849,13 +899,13 @@ Success Conditions.
 
 A list of URL items used as match criteria. The match is considered successful if the domain and path match any of the URL items..
 
-###### One of the arguments from this list "domain_value, domain_regex" must be set
+###### One of the arguments from this list "domain_regex, domain_value" must be set
 
 `domain_regex` - (Optional) A regular expression to match the domain against. (`String`).
 
 `domain_value` - (Optional) An exact value to match the domain against. (`String`).
 
-###### One of the arguments from this list "path_regex, path_value, path_prefix" can be set
+###### One of the arguments from this list "path_value, path_prefix, path_regex" can be set
 
 `path_prefix` - (Optional) An prefix value to match the path against. (`String`).
 

@@ -222,6 +222,7 @@ func (c *OnboardCustomAPIRestClient) doRPCSignupAWSAccount(ctx context.Context, 
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("account_details", fmt.Sprintf("%v", req.AccountDetails))
+		q.Add("account_id", fmt.Sprintf("%v", req.AccountId))
 		q.Add("company_details", fmt.Sprintf("%v", req.CompanyDetails))
 		q.Add("crm_details", fmt.Sprintf("%v", req.CrmDetails))
 		q.Add("user_details", fmt.Sprintf("%v", req.UserDetails))
@@ -645,6 +646,12 @@ var OnboardCustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "account_id": {
+                    "type": "string",
+                    "description": " Identifier for the aws_account object",
+                    "title": "account_id",
+                    "x-displayname": "Account ID"
                 },
                 "company_details": {
                     "description": " Details of the company\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

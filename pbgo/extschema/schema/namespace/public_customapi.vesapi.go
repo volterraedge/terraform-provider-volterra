@@ -1535,15 +1535,15 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "batch_namespace_api_list": {
                     "type": "array",
-                    "description": " List of namespaces and associated api list entries\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "description": " List of namespaces and associated api list entries\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 75\n",
                     "title": "batch_namespace_api_list",
-                    "maxItems": 50,
+                    "maxItems": 75,
                     "items": {
                         "$ref": "#/definitions/namespaceNamespaceAPIList"
                     },
                     "x-displayname": "BatchNamespaceApiList",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "50"
+                        "ves.io.schema.rules.repeated.max_items": "75"
                     }
                 }
             }
@@ -1609,15 +1609,15 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "item_lists": {
                     "type": "array",
-                    "description": " List of APIItemList entries\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "description": " List of APIItemList entries\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 15\n",
                     "title": "item_lists",
-                    "maxItems": 50,
+                    "maxItems": 15,
                     "items": {
                         "$ref": "#/definitions/namespaceAPIItemList"
                     },
                     "x-displayname": "Item Lists",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "50"
+                        "ves.io.schema.rules.repeated.max_items": "15"
                     }
                 },
                 "namespace": {

@@ -17,6 +17,7 @@ import (
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/access_log"
+	common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
@@ -494,6 +495,872 @@ func (m *HeaderControlType) GetResponseHeadersToRemove() []string {
 	return nil
 }
 
+// Web Application Firewall
+//
+// x-displayName: "Web Application Firewall"
+// Web Application Firewall
+type WebApplicationFirewall struct {
+	// Enable the WAF (Web Application Firewall) functionality for VirtualHost
+	//
+	// x-displayName: "Web Application Firewall (WAF)"
+	// x-required
+	//
+	// F5 Distributed Cloud WAF is a next-gen web application firewall that provides signature-based
+	// and behavior-based threat detection to protect applications wherever they are deployed.
+	// WAF can be configured in Monitoring (log threats) or Blocking (log and block threats) mode.
+	//
+	// Types that are valid to be assigned to WafChoice:
+	//	*WebApplicationFirewall_DisableWaf
+	//	*WebApplicationFirewall_AppFirewall
+	//	*WebApplicationFirewall_AppFirewallOnCacheMiss
+	WafChoice isWebApplicationFirewall_WafChoice `protobuf_oneof:"waf_choice"`
+	// WAF Exclusion Rules
+	//
+	// x-displayName: "WAF Exclusion Rules"
+	// Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.
+	// The match criteria include domain, path and method.
+	// WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.
+	// It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.
+	// For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.
+	// When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.
+	WafExclusionRules []*policy.SimpleWafExclusionRule `protobuf:"bytes,4,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
+	// Data Guard Rules
+	//
+	// x-displayName: "Data Guard Rules"
+	// Data Guard prevents responses from exposing sensitive information by masking the data.
+	// The system masks credit card numbers and social security numbers leaked from the application from within the http response with a string of asterisks (*).
+	// Note: App Firewall should be enabled, to use Data Guard feature.
+	DataGuardRules []*policy.SimpleDataGuardRule `protobuf:"bytes,5,rep,name=data_guard_rules,json=dataGuardRules,proto3" json:"data_guard_rules,omitempty"`
+	// csrf_policy
+	//
+	// x-displayName: "Cross-Site Request Forgery Protection"
+	// Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.
+	//
+	// The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.
+	//
+	// 1. The origin that caused the user agent to issue the request (source origin).
+	// 2. The origin that the request is going to (target origin).
+	// When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.
+	// Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).
+	CsrfPolicy *schema.CsrfPolicy `protobuf:"bytes,6,opt,name=csrf_policy,json=csrfPolicy,proto3" json:"csrf_policy,omitempty"`
+	// GraphQL Inspection
+	//
+	// x-displayName: "GraphQL Inspection"
+	// GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable
+	// description of the data in API. GraphQL gives clients the power to ask for exactly what they need, makes it
+	// easier to evolve APIs over time, and enables powerful developer tools. Policy configuration to analyze GraphQL
+	// queries and prevent GraphQL tailored attacks.
+	GraphqlRules []*policy.GraphQLRule `protobuf:"bytes,7,rep,name=graphql_rules,json=graphqlRules,proto3" json:"graphql_rules,omitempty"`
+	// Cookie protection
+	//
+	// x-displayName: "Cookie Protection"
+	// Allows setting attributes (SameSite, Secure, and HttpOnly) on cookies in responses.
+	// Cookie Tampering Protection prevents attackers from modifying the value of session cookies.
+	// For Cookie Tampering Protection, enabling a web app firewall (WAF) is a prerequisite.
+	// The configured mode of WAF (monitoring or blocking) will be enforced on the request when cookie tampering is identified.
+	// Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.
+	ProtectedCookies []*schema.CookieManipulationOptionType `protobuf:"bytes,8,rep,name=protected_cookies,json=protectedCookies,proto3" json:"protected_cookies,omitempty"`
+}
+
+func (m *WebApplicationFirewall) Reset()      { *m = WebApplicationFirewall{} }
+func (*WebApplicationFirewall) ProtoMessage() {}
+func (*WebApplicationFirewall) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a2659efdd085843, []int{2}
+}
+func (m *WebApplicationFirewall) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *WebApplicationFirewall) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *WebApplicationFirewall) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WebApplicationFirewall.Merge(m, src)
+}
+func (m *WebApplicationFirewall) XXX_Size() int {
+	return m.Size()
+}
+func (m *WebApplicationFirewall) XXX_DiscardUnknown() {
+	xxx_messageInfo_WebApplicationFirewall.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WebApplicationFirewall proto.InternalMessageInfo
+
+type isWebApplicationFirewall_WafChoice interface {
+	isWebApplicationFirewall_WafChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type WebApplicationFirewall_DisableWaf struct {
+	DisableWaf *schema.Empty `protobuf:"bytes,2,opt,name=disable_waf,json=disableWaf,proto3,oneof" json:"disable_waf,omitempty"`
+}
+type WebApplicationFirewall_AppFirewall struct {
+	AppFirewall *views.ObjectRefType `protobuf:"bytes,3,opt,name=app_firewall,json=appFirewall,proto3,oneof" json:"app_firewall,omitempty"`
+}
+type WebApplicationFirewall_AppFirewallOnCacheMiss struct {
+	AppFirewallOnCacheMiss *views.ObjectRefType `protobuf:"bytes,9,opt,name=app_firewall_on_cache_miss,json=appFirewallOnCacheMiss,proto3,oneof" json:"app_firewall_on_cache_miss,omitempty"`
+}
+
+func (*WebApplicationFirewall_DisableWaf) isWebApplicationFirewall_WafChoice()             {}
+func (*WebApplicationFirewall_AppFirewall) isWebApplicationFirewall_WafChoice()            {}
+func (*WebApplicationFirewall_AppFirewallOnCacheMiss) isWebApplicationFirewall_WafChoice() {}
+
+func (m *WebApplicationFirewall) GetWafChoice() isWebApplicationFirewall_WafChoice {
+	if m != nil {
+		return m.WafChoice
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetDisableWaf() *schema.Empty {
+	if x, ok := m.GetWafChoice().(*WebApplicationFirewall_DisableWaf); ok {
+		return x.DisableWaf
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetAppFirewall() *views.ObjectRefType {
+	if x, ok := m.GetWafChoice().(*WebApplicationFirewall_AppFirewall); ok {
+		return x.AppFirewall
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetAppFirewallOnCacheMiss() *views.ObjectRefType {
+	if x, ok := m.GetWafChoice().(*WebApplicationFirewall_AppFirewallOnCacheMiss); ok {
+		return x.AppFirewallOnCacheMiss
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetWafExclusionRules() []*policy.SimpleWafExclusionRule {
+	if m != nil {
+		return m.WafExclusionRules
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetDataGuardRules() []*policy.SimpleDataGuardRule {
+	if m != nil {
+		return m.DataGuardRules
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetCsrfPolicy() *schema.CsrfPolicy {
+	if m != nil {
+		return m.CsrfPolicy
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetGraphqlRules() []*policy.GraphQLRule {
+	if m != nil {
+		return m.GraphqlRules
+	}
+	return nil
+}
+
+func (m *WebApplicationFirewall) GetProtectedCookies() []*schema.CookieManipulationOptionType {
+	if m != nil {
+		return m.ProtectedCookies
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*WebApplicationFirewall) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*WebApplicationFirewall_DisableWaf)(nil),
+		(*WebApplicationFirewall_AppFirewall)(nil),
+		(*WebApplicationFirewall_AppFirewallOnCacheMiss)(nil),
+	}
+}
+
+// Common Security Controls
+//
+// x-displayName: "Common Security Controls"
+type CommonSecurityControls struct {
+	// Service Policies
+	//
+	// x-displayName: "Service Policies"
+	// x-required
+	// Service policies provide the ability to configure security controls such as IP Allow/Deny lists, Geo IP filtering and Custom rules
+	//
+	// Types that are valid to be assigned to ServicePolicyChoice:
+	//	*CommonSecurityControls_ServicePoliciesFromNamespace
+	//	*CommonSecurityControls_NoServicePolicies
+	//	*CommonSecurityControls_ActiveServicePolicies
+	ServicePolicyChoice isCommonSecurityControls_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
+	// ip_reputation
+	//
+	// x-displayName: "IP Reputation"
+	// IP reputation service analyzes IP threats and publishes a dynamic data set of millions of high-risk IP addresses, to protect users from inbound traffic from malicious IPs.
+	// IP threat categories include Spam Sources, Windows Exploits, Web Attacks, BotNets, Scanners, Denial of Service, Reputation, Phishing, Proxy, Mobile Threats, and TOR Proxy.
+	//
+	// Types that are valid to be assigned to IpReputationChoice:
+	//	*CommonSecurityControls_DisableIpReputation
+	//	*CommonSecurityControls_EnableIpReputation
+	//	*CommonSecurityControls_IpReputationOnCacheMiss
+	IpReputationChoice isCommonSecurityControls_IpReputationChoice `protobuf_oneof:"ip_reputation_choice"`
+	// User Identifier
+	//
+	// x-displayName: "User Identifier"
+	// x-required
+	// Select user identifier for rate limiting and malicious user mitigation.
+	//
+	// Types that are valid to be assigned to UserIdChoice:
+	//	*CommonSecurityControls_UserIdClientIp
+	//	*CommonSecurityControls_UserIdentification
+	UserIdChoice isCommonSecurityControls_UserIdChoice `protobuf_oneof:"user_id_choice"`
+	// Malicious User Detection Choice
+	//
+	// x-required
+	// x-displayName: "Malicious User Detection"
+	// Malicious User Detection performs user behavior analysis and assigns a risk score and threat level of low, medium
+	// or high based on the suspicious activity of the user.
+	// The risk score of the user is decayed over time, if no further suspicious activity is noticed.
+	// The feature can be configured also via external app_type and labeling this HTTP Load Balancer.
+	// In this case external app_type configuration overrides internally disabled feature.
+	// Enabling the feature internally is allowed only when no labeling to external app_type.
+	//
+	// Types that are valid to be assigned to MaliciousUserDetectionChoice:
+	//	*CommonSecurityControls_DisableMaliciousUserDetection
+	//	*CommonSecurityControls_EnableMaliciousUserDetection
+	//	*CommonSecurityControls_MaliciousUserDetectionOnCacheMiss
+	MaliciousUserDetectionChoice isCommonSecurityControls_MaliciousUserDetectionChoice `protobuf_oneof:"malicious_user_detection_choice"`
+	// Challenge Type
+	//
+	// x-displayName: "Malicious User Mitigation And Challenges"
+	// x-required
+	// Malicious User Mitigation is an adaptive response and risk-based challenge capability.
+	// Enabling this feature would automatically serve different challenges such as JavaScript challenge,
+	// Captcha challenge or block temporarily based on the threat level of the malicious user.
+	// Policy based challenge can be used to selectively enable or disable JavaScript or Captcha challenge
+	// on a specific client and request match criteria
+	//
+	// Types that are valid to be assigned to ChallengeType:
+	//	*CommonSecurityControls_NoChallenge
+	//	*CommonSecurityControls_EnableChallenge
+	//	*CommonSecurityControls_ChallengeOnCacheMiss
+	//	*CommonSecurityControls_JsChallenge
+	//	*CommonSecurityControls_CaptchaChallenge
+	//	*CommonSecurityControls_PolicyBasedChallenge
+	ChallengeType isCommonSecurityControls_ChallengeType `protobuf_oneof:"challenge_type"`
+	// Enable Rate Limiting
+	//
+	// x-displayName: "Rate Limiting"
+	// x-required
+	// Rate Limiting allows you to control the rate of requests sent to your origin servers, protect against API traffic surge and denial of services attacks.
+	//
+	// Types that are valid to be assigned to RateLimitChoice:
+	//	*CommonSecurityControls_DisableRateLimit
+	//	*CommonSecurityControls_ApiRateLimit
+	//	*CommonSecurityControls_RateLimit
+	RateLimitChoice isCommonSecurityControls_RateLimitChoice `protobuf_oneof:"rate_limit_choice"`
+	// Trusted Client Rules
+	//
+	// x-displayName: "Trusted Client Rules"
+	// Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients.
+	TrustedClients []*common_waf.SimpleClientSrcRule `protobuf:"bytes,24,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
+	// Client Blocking Rules
+	//
+	// x-displayName: "Client Blocking Rules"
+	// Define rules to block IP Prefixes or AS numbers.
+	BlockedClients []*common_waf.SimpleClientSrcRule `protobuf:"bytes,25,rep,name=blocked_clients,json=blockedClients,proto3" json:"blocked_clients,omitempty"`
+	// cors_policy
+	//
+	// x-displayName: "CORS Policy"
+	// Cross-Origin Resource Sharing requests configuration
+	//
+	// CORS is a mechanism that uses additional HTTP headers to tell a browser to let
+	// a web application running at one origin (domain) have permission to access selected
+	// resources from a server at a different origin
+	CorsPolicy *schema.CorsPolicy `protobuf:"bytes,26,opt,name=cors_policy,json=corsPolicy,proto3" json:"cors_policy,omitempty"`
+}
+
+func (m *CommonSecurityControls) Reset()      { *m = CommonSecurityControls{} }
+func (*CommonSecurityControls) ProtoMessage() {}
+func (*CommonSecurityControls) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a2659efdd085843, []int{3}
+}
+func (m *CommonSecurityControls) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CommonSecurityControls) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CommonSecurityControls) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CommonSecurityControls.Merge(m, src)
+}
+func (m *CommonSecurityControls) XXX_Size() int {
+	return m.Size()
+}
+func (m *CommonSecurityControls) XXX_DiscardUnknown() {
+	xxx_messageInfo_CommonSecurityControls.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CommonSecurityControls proto.InternalMessageInfo
+
+type isCommonSecurityControls_ServicePolicyChoice interface {
+	isCommonSecurityControls_ServicePolicyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCommonSecurityControls_IpReputationChoice interface {
+	isCommonSecurityControls_IpReputationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCommonSecurityControls_UserIdChoice interface {
+	isCommonSecurityControls_UserIdChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCommonSecurityControls_MaliciousUserDetectionChoice interface {
+	isCommonSecurityControls_MaliciousUserDetectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCommonSecurityControls_ChallengeType interface {
+	isCommonSecurityControls_ChallengeType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCommonSecurityControls_RateLimitChoice interface {
+	isCommonSecurityControls_RateLimitChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CommonSecurityControls_ServicePoliciesFromNamespace struct {
+	ServicePoliciesFromNamespace *schema.Empty `protobuf:"bytes,2,opt,name=service_policies_from_namespace,json=servicePoliciesFromNamespace,proto3,oneof" json:"service_policies_from_namespace,omitempty"`
+}
+type CommonSecurityControls_NoServicePolicies struct {
+	NoServicePolicies *schema.Empty `protobuf:"bytes,3,opt,name=no_service_policies,json=noServicePolicies,proto3,oneof" json:"no_service_policies,omitempty"`
+}
+type CommonSecurityControls_ActiveServicePolicies struct {
+	ActiveServicePolicies *common_waf.ServicePolicyList `protobuf:"bytes,4,opt,name=active_service_policies,json=activeServicePolicies,proto3,oneof" json:"active_service_policies,omitempty"`
+}
+type CommonSecurityControls_DisableIpReputation struct {
+	DisableIpReputation *schema.Empty `protobuf:"bytes,6,opt,name=disable_ip_reputation,json=disableIpReputation,proto3,oneof" json:"disable_ip_reputation,omitempty"`
+}
+type CommonSecurityControls_EnableIpReputation struct {
+	EnableIpReputation *common_waf.IPThreatCategoryListType `protobuf:"bytes,7,opt,name=enable_ip_reputation,json=enableIpReputation,proto3,oneof" json:"enable_ip_reputation,omitempty"`
+}
+type CommonSecurityControls_IpReputationOnCacheMiss struct {
+	IpReputationOnCacheMiss *common_waf.IPThreatCategoryListType `protobuf:"bytes,27,opt,name=ip_reputation_on_cache_miss,json=ipReputationOnCacheMiss,proto3,oneof" json:"ip_reputation_on_cache_miss,omitempty"`
+}
+type CommonSecurityControls_UserIdClientIp struct {
+	UserIdClientIp *schema.Empty `protobuf:"bytes,9,opt,name=user_id_client_ip,json=userIdClientIp,proto3,oneof" json:"user_id_client_ip,omitempty"`
+}
+type CommonSecurityControls_UserIdentification struct {
+	UserIdentification *views.ObjectRefType `protobuf:"bytes,10,opt,name=user_identification,json=userIdentification,proto3,oneof" json:"user_identification,omitempty"`
+}
+type CommonSecurityControls_DisableMaliciousUserDetection struct {
+	DisableMaliciousUserDetection *schema.Empty `protobuf:"bytes,12,opt,name=disable_malicious_user_detection,json=disableMaliciousUserDetection,proto3,oneof" json:"disable_malicious_user_detection,omitempty"`
+}
+type CommonSecurityControls_EnableMaliciousUserDetection struct {
+	EnableMaliciousUserDetection *schema.Empty `protobuf:"bytes,13,opt,name=enable_malicious_user_detection,json=enableMaliciousUserDetection,proto3,oneof" json:"enable_malicious_user_detection,omitempty"`
+}
+type CommonSecurityControls_MaliciousUserDetectionOnCacheMiss struct {
+	MaliciousUserDetectionOnCacheMiss *schema.Empty `protobuf:"bytes,28,opt,name=malicious_user_detection_on_cache_miss,json=maliciousUserDetectionOnCacheMiss,proto3,oneof" json:"malicious_user_detection_on_cache_miss,omitempty"`
+}
+type CommonSecurityControls_NoChallenge struct {
+	NoChallenge *schema.Empty `protobuf:"bytes,15,opt,name=no_challenge,json=noChallenge,proto3,oneof" json:"no_challenge,omitempty"`
+}
+type CommonSecurityControls_EnableChallenge struct {
+	EnableChallenge *common_waf.EnableChallenge `protobuf:"bytes,16,opt,name=enable_challenge,json=enableChallenge,proto3,oneof" json:"enable_challenge,omitempty"`
+}
+type CommonSecurityControls_ChallengeOnCacheMiss struct {
+	ChallengeOnCacheMiss *common_waf.EnableChallenge `protobuf:"bytes,29,opt,name=challenge_on_cache_miss,json=challengeOnCacheMiss,proto3,oneof" json:"challenge_on_cache_miss,omitempty"`
+}
+type CommonSecurityControls_JsChallenge struct {
+	JsChallenge *virtual_host.JavascriptChallengeType `protobuf:"bytes,17,opt,name=js_challenge,json=jsChallenge,proto3,oneof" json:"js_challenge,omitempty"`
+}
+type CommonSecurityControls_CaptchaChallenge struct {
+	CaptchaChallenge *virtual_host.CaptchaChallengeType `protobuf:"bytes,18,opt,name=captcha_challenge,json=captchaChallenge,proto3,oneof" json:"captcha_challenge,omitempty"`
+}
+type CommonSecurityControls_PolicyBasedChallenge struct {
+	PolicyBasedChallenge *common_waf.PolicyBasedChallenge `protobuf:"bytes,19,opt,name=policy_based_challenge,json=policyBasedChallenge,proto3,oneof" json:"policy_based_challenge,omitempty"`
+}
+type CommonSecurityControls_DisableRateLimit struct {
+	DisableRateLimit *schema.Empty `protobuf:"bytes,21,opt,name=disable_rate_limit,json=disableRateLimit,proto3,oneof" json:"disable_rate_limit,omitempty"`
+}
+type CommonSecurityControls_ApiRateLimit struct {
+	ApiRateLimit *common_waf.APIRateLimit `protobuf:"bytes,22,opt,name=api_rate_limit,json=apiRateLimit,proto3,oneof" json:"api_rate_limit,omitempty"`
+}
+type CommonSecurityControls_RateLimit struct {
+	RateLimit *common_waf.RateLimitConfigType `protobuf:"bytes,23,opt,name=rate_limit,json=rateLimit,proto3,oneof" json:"rate_limit,omitempty"`
+}
+
+func (*CommonSecurityControls_ServicePoliciesFromNamespace) isCommonSecurityControls_ServicePolicyChoice() {
+}
+func (*CommonSecurityControls_NoServicePolicies) isCommonSecurityControls_ServicePolicyChoice()     {}
+func (*CommonSecurityControls_ActiveServicePolicies) isCommonSecurityControls_ServicePolicyChoice() {}
+func (*CommonSecurityControls_DisableIpReputation) isCommonSecurityControls_IpReputationChoice()    {}
+func (*CommonSecurityControls_EnableIpReputation) isCommonSecurityControls_IpReputationChoice()     {}
+func (*CommonSecurityControls_IpReputationOnCacheMiss) isCommonSecurityControls_IpReputationChoice() {
+}
+func (*CommonSecurityControls_UserIdClientIp) isCommonSecurityControls_UserIdChoice()     {}
+func (*CommonSecurityControls_UserIdentification) isCommonSecurityControls_UserIdChoice() {}
+func (*CommonSecurityControls_DisableMaliciousUserDetection) isCommonSecurityControls_MaliciousUserDetectionChoice() {
+}
+func (*CommonSecurityControls_EnableMaliciousUserDetection) isCommonSecurityControls_MaliciousUserDetectionChoice() {
+}
+func (*CommonSecurityControls_MaliciousUserDetectionOnCacheMiss) isCommonSecurityControls_MaliciousUserDetectionChoice() {
+}
+func (*CommonSecurityControls_NoChallenge) isCommonSecurityControls_ChallengeType()          {}
+func (*CommonSecurityControls_EnableChallenge) isCommonSecurityControls_ChallengeType()      {}
+func (*CommonSecurityControls_ChallengeOnCacheMiss) isCommonSecurityControls_ChallengeType() {}
+func (*CommonSecurityControls_JsChallenge) isCommonSecurityControls_ChallengeType()          {}
+func (*CommonSecurityControls_CaptchaChallenge) isCommonSecurityControls_ChallengeType()     {}
+func (*CommonSecurityControls_PolicyBasedChallenge) isCommonSecurityControls_ChallengeType() {}
+func (*CommonSecurityControls_DisableRateLimit) isCommonSecurityControls_RateLimitChoice()   {}
+func (*CommonSecurityControls_ApiRateLimit) isCommonSecurityControls_RateLimitChoice()       {}
+func (*CommonSecurityControls_RateLimit) isCommonSecurityControls_RateLimitChoice()          {}
+
+func (m *CommonSecurityControls) GetServicePolicyChoice() isCommonSecurityControls_ServicePolicyChoice {
+	if m != nil {
+		return m.ServicePolicyChoice
+	}
+	return nil
+}
+func (m *CommonSecurityControls) GetIpReputationChoice() isCommonSecurityControls_IpReputationChoice {
+	if m != nil {
+		return m.IpReputationChoice
+	}
+	return nil
+}
+func (m *CommonSecurityControls) GetUserIdChoice() isCommonSecurityControls_UserIdChoice {
+	if m != nil {
+		return m.UserIdChoice
+	}
+	return nil
+}
+func (m *CommonSecurityControls) GetMaliciousUserDetectionChoice() isCommonSecurityControls_MaliciousUserDetectionChoice {
+	if m != nil {
+		return m.MaliciousUserDetectionChoice
+	}
+	return nil
+}
+func (m *CommonSecurityControls) GetChallengeType() isCommonSecurityControls_ChallengeType {
+	if m != nil {
+		return m.ChallengeType
+	}
+	return nil
+}
+func (m *CommonSecurityControls) GetRateLimitChoice() isCommonSecurityControls_RateLimitChoice {
+	if m != nil {
+		return m.RateLimitChoice
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetServicePoliciesFromNamespace() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*CommonSecurityControls_ServicePoliciesFromNamespace); ok {
+		return x.ServicePoliciesFromNamespace
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetNoServicePolicies() *schema.Empty {
+	if x, ok := m.GetServicePolicyChoice().(*CommonSecurityControls_NoServicePolicies); ok {
+		return x.NoServicePolicies
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetActiveServicePolicies() *common_waf.ServicePolicyList {
+	if x, ok := m.GetServicePolicyChoice().(*CommonSecurityControls_ActiveServicePolicies); ok {
+		return x.ActiveServicePolicies
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetDisableIpReputation() *schema.Empty {
+	if x, ok := m.GetIpReputationChoice().(*CommonSecurityControls_DisableIpReputation); ok {
+		return x.DisableIpReputation
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetEnableIpReputation() *common_waf.IPThreatCategoryListType {
+	if x, ok := m.GetIpReputationChoice().(*CommonSecurityControls_EnableIpReputation); ok {
+		return x.EnableIpReputation
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetIpReputationOnCacheMiss() *common_waf.IPThreatCategoryListType {
+	if x, ok := m.GetIpReputationChoice().(*CommonSecurityControls_IpReputationOnCacheMiss); ok {
+		return x.IpReputationOnCacheMiss
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetUserIdClientIp() *schema.Empty {
+	if x, ok := m.GetUserIdChoice().(*CommonSecurityControls_UserIdClientIp); ok {
+		return x.UserIdClientIp
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetUserIdentification() *views.ObjectRefType {
+	if x, ok := m.GetUserIdChoice().(*CommonSecurityControls_UserIdentification); ok {
+		return x.UserIdentification
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetDisableMaliciousUserDetection() *schema.Empty {
+	if x, ok := m.GetMaliciousUserDetectionChoice().(*CommonSecurityControls_DisableMaliciousUserDetection); ok {
+		return x.DisableMaliciousUserDetection
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetEnableMaliciousUserDetection() *schema.Empty {
+	if x, ok := m.GetMaliciousUserDetectionChoice().(*CommonSecurityControls_EnableMaliciousUserDetection); ok {
+		return x.EnableMaliciousUserDetection
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetMaliciousUserDetectionOnCacheMiss() *schema.Empty {
+	if x, ok := m.GetMaliciousUserDetectionChoice().(*CommonSecurityControls_MaliciousUserDetectionOnCacheMiss); ok {
+		return x.MaliciousUserDetectionOnCacheMiss
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetNoChallenge() *schema.Empty {
+	if x, ok := m.GetChallengeType().(*CommonSecurityControls_NoChallenge); ok {
+		return x.NoChallenge
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetEnableChallenge() *common_waf.EnableChallenge {
+	if x, ok := m.GetChallengeType().(*CommonSecurityControls_EnableChallenge); ok {
+		return x.EnableChallenge
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetChallengeOnCacheMiss() *common_waf.EnableChallenge {
+	if x, ok := m.GetChallengeType().(*CommonSecurityControls_ChallengeOnCacheMiss); ok {
+		return x.ChallengeOnCacheMiss
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetJsChallenge() *virtual_host.JavascriptChallengeType {
+	if x, ok := m.GetChallengeType().(*CommonSecurityControls_JsChallenge); ok {
+		return x.JsChallenge
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetCaptchaChallenge() *virtual_host.CaptchaChallengeType {
+	if x, ok := m.GetChallengeType().(*CommonSecurityControls_CaptchaChallenge); ok {
+		return x.CaptchaChallenge
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetPolicyBasedChallenge() *common_waf.PolicyBasedChallenge {
+	if x, ok := m.GetChallengeType().(*CommonSecurityControls_PolicyBasedChallenge); ok {
+		return x.PolicyBasedChallenge
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetDisableRateLimit() *schema.Empty {
+	if x, ok := m.GetRateLimitChoice().(*CommonSecurityControls_DisableRateLimit); ok {
+		return x.DisableRateLimit
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetApiRateLimit() *common_waf.APIRateLimit {
+	if x, ok := m.GetRateLimitChoice().(*CommonSecurityControls_ApiRateLimit); ok {
+		return x.ApiRateLimit
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetRateLimit() *common_waf.RateLimitConfigType {
+	if x, ok := m.GetRateLimitChoice().(*CommonSecurityControls_RateLimit); ok {
+		return x.RateLimit
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetTrustedClients() []*common_waf.SimpleClientSrcRule {
+	if m != nil {
+		return m.TrustedClients
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetBlockedClients() []*common_waf.SimpleClientSrcRule {
+	if m != nil {
+		return m.BlockedClients
+	}
+	return nil
+}
+
+func (m *CommonSecurityControls) GetCorsPolicy() *schema.CorsPolicy {
+	if m != nil {
+		return m.CorsPolicy
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CommonSecurityControls) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CommonSecurityControls_ServicePoliciesFromNamespace)(nil),
+		(*CommonSecurityControls_NoServicePolicies)(nil),
+		(*CommonSecurityControls_ActiveServicePolicies)(nil),
+		(*CommonSecurityControls_DisableIpReputation)(nil),
+		(*CommonSecurityControls_EnableIpReputation)(nil),
+		(*CommonSecurityControls_IpReputationOnCacheMiss)(nil),
+		(*CommonSecurityControls_UserIdClientIp)(nil),
+		(*CommonSecurityControls_UserIdentification)(nil),
+		(*CommonSecurityControls_DisableMaliciousUserDetection)(nil),
+		(*CommonSecurityControls_EnableMaliciousUserDetection)(nil),
+		(*CommonSecurityControls_MaliciousUserDetectionOnCacheMiss)(nil),
+		(*CommonSecurityControls_NoChallenge)(nil),
+		(*CommonSecurityControls_EnableChallenge)(nil),
+		(*CommonSecurityControls_ChallengeOnCacheMiss)(nil),
+		(*CommonSecurityControls_JsChallenge)(nil),
+		(*CommonSecurityControls_CaptchaChallenge)(nil),
+		(*CommonSecurityControls_PolicyBasedChallenge)(nil),
+		(*CommonSecurityControls_DisableRateLimit)(nil),
+		(*CommonSecurityControls_ApiRateLimit)(nil),
+		(*CommonSecurityControls_RateLimit)(nil),
+	}
+}
+
+// API Definition
+//
+// x-displayName: "API Definition"
+// API Definition based on the imported swagger specs
+type ApiProtection struct {
+	// API Definition choice
+	//
+	// x-required
+	// x-displayName: "API Definition"
+	// API Definition based on the imported swagger specs
+	//
+	// Types that are valid to be assigned to ApiDefinitionChoice:
+	//	*ApiProtection_DisableApiDefinition
+	//	*ApiProtection_ApiSpecification
+	//	*ApiProtection_ApiSpecificationOnCacheMiss
+	ApiDefinitionChoice isApiProtection_ApiDefinitionChoice `protobuf_oneof:"api_definition_choice"`
+	// API Protection rules
+	//
+	// x-displayName: "API Protection Rules"
+	// API Protection Rules can be defined in two categories.
+	// The first category includes fine-grained rules, per API path and methods.
+	// The second category includes rules per API groups or Server URLs.
+	// If request matches any rule in the first category, second category rules are not evaluated.
+	// Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.
+	ApiProtectionRules *common_waf.APIProtectionRules `protobuf:"bytes,4,opt,name=api_protection_rules,json=apiProtectionRules,proto3" json:"api_protection_rules,omitempty"`
+	// JWT Validation
+	//
+	// x-displayName: "JWT Validation"
+	// JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming
+	// JWTs before they are passed to origin APIs. JWT Validation will also stop requests with expired
+	// tokens or tokens that are not yet valid.
+	JwtValidation *common_waf.JWTValidation `protobuf:"bytes,5,opt,name=jwt_validation,json=jwtValidation,proto3" json:"jwt_validation,omitempty"`
+	// API Discovery Choice
+	//
+	// x-required
+	// x-displayName: "API Discovery"
+	// When enabled, sampled traffic passing through this load balancer is analyzed and
+	// APIs exposed by the application are identified.
+	// An API is identified by its canonical (collapsed) URL path and the method used to call it.
+	// Once all APIs are identified, for each API, the system learns its possible schema.
+	// The learnt schema for all APIs is used to automatically generate a swagger definition file for the entire API set exposed by this load balancer.
+	// The feature can be configured also via external app_type and labeling this HTTP Load Balancer.
+	// In this case external app_type configuration overrides internally disabled feature.
+	// Enabling the feature internally is allowed only when no labeling to external app_type.
+	//
+	// Types that are valid to be assigned to ApiDiscoveryChoice:
+	//	*ApiProtection_EnableApiDiscovery
+	//	*ApiProtection_DisableApiDiscovery
+	//	*ApiProtection_ApiDiscoveryOnCacheMiss
+	ApiDiscoveryChoice isApiProtection_ApiDiscoveryChoice `protobuf_oneof:"api_discovery_choice"`
+}
+
+func (m *ApiProtection) Reset()      { *m = ApiProtection{} }
+func (*ApiProtection) ProtoMessage() {}
+func (*ApiProtection) Descriptor() ([]byte, []int) {
+	return fileDescriptor_0a2659efdd085843, []int{4}
+}
+func (m *ApiProtection) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiProtection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ApiProtection) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiProtection.Merge(m, src)
+}
+func (m *ApiProtection) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiProtection) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiProtection.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiProtection proto.InternalMessageInfo
+
+type isApiProtection_ApiDefinitionChoice interface {
+	isApiProtection_ApiDefinitionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isApiProtection_ApiDiscoveryChoice interface {
+	isApiProtection_ApiDiscoveryChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ApiProtection_DisableApiDefinition struct {
+	DisableApiDefinition *schema.Empty `protobuf:"bytes,2,opt,name=disable_api_definition,json=disableApiDefinition,proto3,oneof" json:"disable_api_definition,omitempty"`
+}
+type ApiProtection_ApiSpecification struct {
+	ApiSpecification *common_waf.APISpecificationSettings `protobuf:"bytes,3,opt,name=api_specification,json=apiSpecification,proto3,oneof" json:"api_specification,omitempty"`
+}
+type ApiProtection_ApiSpecificationOnCacheMiss struct {
+	ApiSpecificationOnCacheMiss *common_waf.APISpecificationSettings `protobuf:"bytes,9,opt,name=api_specification_on_cache_miss,json=apiSpecificationOnCacheMiss,proto3,oneof" json:"api_specification_on_cache_miss,omitempty"`
+}
+type ApiProtection_EnableApiDiscovery struct {
+	EnableApiDiscovery *common_waf.ApiDiscoverySetting `protobuf:"bytes,7,opt,name=enable_api_discovery,json=enableApiDiscovery,proto3,oneof" json:"enable_api_discovery,omitempty"`
+}
+type ApiProtection_DisableApiDiscovery struct {
+	DisableApiDiscovery *schema.Empty `protobuf:"bytes,8,opt,name=disable_api_discovery,json=disableApiDiscovery,proto3,oneof" json:"disable_api_discovery,omitempty"`
+}
+type ApiProtection_ApiDiscoveryOnCacheMiss struct {
+	ApiDiscoveryOnCacheMiss *common_waf.ApiDiscoverySetting `protobuf:"bytes,10,opt,name=api_discovery_on_cache_miss,json=apiDiscoveryOnCacheMiss,proto3,oneof" json:"api_discovery_on_cache_miss,omitempty"`
+}
+
+func (*ApiProtection_DisableApiDefinition) isApiProtection_ApiDefinitionChoice()        {}
+func (*ApiProtection_ApiSpecification) isApiProtection_ApiDefinitionChoice()            {}
+func (*ApiProtection_ApiSpecificationOnCacheMiss) isApiProtection_ApiDefinitionChoice() {}
+func (*ApiProtection_EnableApiDiscovery) isApiProtection_ApiDiscoveryChoice()           {}
+func (*ApiProtection_DisableApiDiscovery) isApiProtection_ApiDiscoveryChoice()          {}
+func (*ApiProtection_ApiDiscoveryOnCacheMiss) isApiProtection_ApiDiscoveryChoice()      {}
+
+func (m *ApiProtection) GetApiDefinitionChoice() isApiProtection_ApiDefinitionChoice {
+	if m != nil {
+		return m.ApiDefinitionChoice
+	}
+	return nil
+}
+func (m *ApiProtection) GetApiDiscoveryChoice() isApiProtection_ApiDiscoveryChoice {
+	if m != nil {
+		return m.ApiDiscoveryChoice
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetDisableApiDefinition() *schema.Empty {
+	if x, ok := m.GetApiDefinitionChoice().(*ApiProtection_DisableApiDefinition); ok {
+		return x.DisableApiDefinition
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetApiSpecification() *common_waf.APISpecificationSettings {
+	if x, ok := m.GetApiDefinitionChoice().(*ApiProtection_ApiSpecification); ok {
+		return x.ApiSpecification
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetApiSpecificationOnCacheMiss() *common_waf.APISpecificationSettings {
+	if x, ok := m.GetApiDefinitionChoice().(*ApiProtection_ApiSpecificationOnCacheMiss); ok {
+		return x.ApiSpecificationOnCacheMiss
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetApiProtectionRules() *common_waf.APIProtectionRules {
+	if m != nil {
+		return m.ApiProtectionRules
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetJwtValidation() *common_waf.JWTValidation {
+	if m != nil {
+		return m.JwtValidation
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetEnableApiDiscovery() *common_waf.ApiDiscoverySetting {
+	if x, ok := m.GetApiDiscoveryChoice().(*ApiProtection_EnableApiDiscovery); ok {
+		return x.EnableApiDiscovery
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetDisableApiDiscovery() *schema.Empty {
+	if x, ok := m.GetApiDiscoveryChoice().(*ApiProtection_DisableApiDiscovery); ok {
+		return x.DisableApiDiscovery
+	}
+	return nil
+}
+
+func (m *ApiProtection) GetApiDiscoveryOnCacheMiss() *common_waf.ApiDiscoverySetting {
+	if x, ok := m.GetApiDiscoveryChoice().(*ApiProtection_ApiDiscoveryOnCacheMiss); ok {
+		return x.ApiDiscoveryOnCacheMiss
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ApiProtection) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ApiProtection_DisableApiDefinition)(nil),
+		(*ApiProtection_ApiSpecification)(nil),
+		(*ApiProtection_ApiSpecificationOnCacheMiss)(nil),
+		(*ApiProtection_EnableApiDiscovery)(nil),
+		(*ApiProtection_DisableApiDiscovery)(nil),
+		(*ApiProtection_ApiDiscoveryOnCacheMiss)(nil),
+	}
+}
+
 // Security options
 //
 // x-displayName: "Security Options"
@@ -514,12 +1381,25 @@ type SecurityOptionsType struct {
 	// x-displayName: "Authentication Options"
 	// Authentication Options
 	AuthOptions *AuthenticationOptions `protobuf:"bytes,9,opt,name=auth_options,json=authOptions,proto3" json:"auth_options,omitempty"`
+	// Web Application Firewall
+	//
+	// x-displayName: "Web Application Firewall"
+	// Web Application Firewall
+	WebAppFirewall *WebApplicationFirewall `protobuf:"bytes,10,opt,name=web_app_firewall,json=webAppFirewall,proto3" json:"web_app_firewall,omitempty"`
+	// API Protection
+	//
+	// x-displayName: "API Protection"
+	ApiProtection *ApiProtection `protobuf:"bytes,12,opt,name=api_protection,json=apiProtection,proto3" json:"api_protection,omitempty"`
+	// Common Security Controls
+	//
+	// x-displayName: "Common Security Controls"
+	CommonSecurityControls *CommonSecurityControls `protobuf:"bytes,11,opt,name=common_security_controls,json=commonSecurityControls,proto3" json:"common_security_controls,omitempty"`
 }
 
 func (m *SecurityOptionsType) Reset()      { *m = SecurityOptionsType{} }
 func (*SecurityOptionsType) ProtoMessage() {}
 func (*SecurityOptionsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{2}
+	return fileDescriptor_0a2659efdd085843, []int{5}
 }
 func (m *SecurityOptionsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -565,6 +1445,27 @@ func (m *SecurityOptionsType) GetAuthOptions() *AuthenticationOptions {
 	return nil
 }
 
+func (m *SecurityOptionsType) GetWebAppFirewall() *WebApplicationFirewall {
+	if m != nil {
+		return m.WebAppFirewall
+	}
+	return nil
+}
+
+func (m *SecurityOptionsType) GetApiProtection() *ApiProtection {
+	if m != nil {
+		return m.ApiProtection
+	}
+	return nil
+}
+
+func (m *SecurityOptionsType) GetCommonSecurityControls() *CommonSecurityControls {
+	if m != nil {
+		return m.CommonSecurityControls
+	}
+	return nil
+}
+
 // Logging options
 //
 // x-displayName: "Logging Options"
@@ -585,7 +1486,7 @@ type LoggingOptionsType struct {
 func (m *LoggingOptionsType) Reset()      { *m = LoggingOptionsType{} }
 func (*LoggingOptionsType) ProtoMessage() {}
 func (*LoggingOptionsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{3}
+	return fileDescriptor_0a2659efdd085843, []int{6}
 }
 func (m *LoggingOptionsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -647,7 +1548,7 @@ type CDNCacheRuleExpressionList struct {
 func (m *CDNCacheRuleExpressionList) Reset()      { *m = CDNCacheRuleExpressionList{} }
 func (*CDNCacheRuleExpressionList) ProtoMessage() {}
 func (*CDNCacheRuleExpressionList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{4}
+	return fileDescriptor_0a2659efdd085843, []int{7}
 }
 func (m *CDNCacheRuleExpressionList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -710,7 +1611,7 @@ type CacheOperator struct {
 func (m *CacheOperator) Reset()      { *m = CacheOperator{} }
 func (*CacheOperator) ProtoMessage() {}
 func (*CacheOperator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{5}
+	return fileDescriptor_0a2659efdd085843, []int{8}
 }
 func (m *CacheOperator) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -896,7 +1797,7 @@ type CacheHeaderMatcherType struct {
 func (m *CacheHeaderMatcherType) Reset()      { *m = CacheHeaderMatcherType{} }
 func (*CacheHeaderMatcherType) ProtoMessage() {}
 func (*CacheHeaderMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{6}
+	return fileDescriptor_0a2659efdd085843, []int{9}
 }
 func (m *CacheHeaderMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -950,7 +1851,7 @@ type CDNPathMatcherType struct {
 func (m *CDNPathMatcherType) Reset()      { *m = CDNPathMatcherType{} }
 func (*CDNPathMatcherType) ProtoMessage() {}
 func (*CDNPathMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{7}
+	return fileDescriptor_0a2659efdd085843, []int{10}
 }
 func (m *CDNPathMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1008,7 +1909,7 @@ type CacheCookieMatcherType struct {
 func (m *CacheCookieMatcherType) Reset()      { *m = CacheCookieMatcherType{} }
 func (*CacheCookieMatcherType) ProtoMessage() {}
 func (*CacheCookieMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{8}
+	return fileDescriptor_0a2659efdd085843, []int{11}
 }
 func (m *CacheCookieMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1071,7 +1972,7 @@ type CacheQueryParameterMatcherType struct {
 func (m *CacheQueryParameterMatcherType) Reset()      { *m = CacheQueryParameterMatcherType{} }
 func (*CacheQueryParameterMatcherType) ProtoMessage() {}
 func (*CacheQueryParameterMatcherType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{9}
+	return fileDescriptor_0a2659efdd085843, []int{12}
 }
 func (m *CacheQueryParameterMatcherType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1142,7 +2043,7 @@ type CDNCacheRuleExpression struct {
 func (m *CDNCacheRuleExpression) Reset()      { *m = CDNCacheRuleExpression{} }
 func (*CDNCacheRuleExpression) ProtoMessage() {}
 func (*CDNCacheRuleExpression) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{10}
+	return fileDescriptor_0a2659efdd085843, []int{13}
 }
 func (m *CDNCacheRuleExpression) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1223,7 +2124,7 @@ type CacheTTLEnableProps struct {
 func (m *CacheTTLEnableProps) Reset()      { *m = CacheTTLEnableProps{} }
 func (*CacheTTLEnableProps) ProtoMessage() {}
 func (*CacheTTLEnableProps) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{11}
+	return fileDescriptor_0a2659efdd085843, []int{14}
 }
 func (m *CacheTTLEnableProps) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1293,7 +2194,7 @@ type CacheEligibleOptions struct {
 func (m *CacheEligibleOptions) Reset()      { *m = CacheEligibleOptions{} }
 func (*CacheEligibleOptions) ProtoMessage() {}
 func (*CacheEligibleOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{12}
+	return fileDescriptor_0a2659efdd085843, []int{15}
 }
 func (m *CacheEligibleOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1449,7 +2350,7 @@ type CDNCacheRule struct {
 func (m *CDNCacheRule) Reset()      { *m = CDNCacheRule{} }
 func (*CDNCacheRule) ProtoMessage() {}
 func (*CDNCacheRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{13}
+	return fileDescriptor_0a2659efdd085843, []int{16}
 }
 func (m *CDNCacheRule) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1552,7 +2453,7 @@ type DefaultCacheTTLProps struct {
 func (m *DefaultCacheTTLProps) Reset()      { *m = DefaultCacheTTLProps{} }
 func (*DefaultCacheTTLProps) ProtoMessage() {}
 func (*DefaultCacheTTLProps) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{14}
+	return fileDescriptor_0a2659efdd085843, []int{17}
 }
 func (m *DefaultCacheTTLProps) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1605,7 +2506,7 @@ type DefaultCacheAction struct {
 func (m *DefaultCacheAction) Reset()      { *m = DefaultCacheAction{} }
 func (*DefaultCacheAction) ProtoMessage() {}
 func (*DefaultCacheAction) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{15}
+	return fileDescriptor_0a2659efdd085843, []int{18}
 }
 func (m *DefaultCacheAction) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1722,7 +2623,7 @@ type CacheOptions struct {
 func (m *CacheOptions) Reset()      { *m = CacheOptions{} }
 func (*CacheOptions) ProtoMessage() {}
 func (*CacheOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{16}
+	return fileDescriptor_0a2659efdd085843, []int{19}
 }
 func (m *CacheOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1781,7 +2682,7 @@ type CacheTTLOptionsType struct {
 func (m *CacheTTLOptionsType) Reset()      { *m = CacheTTLOptionsType{} }
 func (*CacheTTLOptionsType) ProtoMessage() {}
 func (*CacheTTLOptionsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{17}
+	return fileDescriptor_0a2659efdd085843, []int{20}
 }
 func (m *CacheTTLOptionsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1899,7 +2800,7 @@ type AdvancedOptionsType struct {
 func (m *AdvancedOptionsType) Reset()      { *m = AdvancedOptionsType{} }
 func (*AdvancedOptionsType) ProtoMessage() {}
 func (*AdvancedOptionsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{18}
+	return fileDescriptor_0a2659efdd085843, []int{21}
 }
 func (m *AdvancedOptionsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1980,7 +2881,7 @@ type CDNTLSConfig struct {
 func (m *CDNTLSConfig) Reset()      { *m = CDNTLSConfig{} }
 func (*CDNTLSConfig) ProtoMessage() {}
 func (*CDNTLSConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{19}
+	return fileDescriptor_0a2659efdd085843, []int{22}
 }
 func (m *CDNTLSConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2076,7 +2977,7 @@ type CDNHTTPSAutoCertsType struct {
 func (m *CDNHTTPSAutoCertsType) Reset()      { *m = CDNHTTPSAutoCertsType{} }
 func (*CDNHTTPSAutoCertsType) ProtoMessage() {}
 func (*CDNHTTPSAutoCertsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{20}
+	return fileDescriptor_0a2659efdd085843, []int{23}
 }
 func (m *CDNHTTPSAutoCertsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2144,7 +3045,7 @@ type CDNDownstreamTlsParamsType struct {
 func (m *CDNDownstreamTlsParamsType) Reset()      { *m = CDNDownstreamTlsParamsType{} }
 func (*CDNDownstreamTlsParamsType) ProtoMessage() {}
 func (*CDNDownstreamTlsParamsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{21}
+	return fileDescriptor_0a2659efdd085843, []int{24}
 }
 func (m *CDNDownstreamTlsParamsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2208,7 +3109,7 @@ type CDNHTTPSCustomCertsType struct {
 func (m *CDNHTTPSCustomCertsType) Reset()      { *m = CDNHTTPSCustomCertsType{} }
 func (*CDNHTTPSCustomCertsType) ProtoMessage() {}
 func (*CDNHTTPSCustomCertsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{22}
+	return fileDescriptor_0a2659efdd085843, []int{25}
 }
 func (m *CDNHTTPSCustomCertsType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2342,7 +3243,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{23}
+	return fileDescriptor_0a2659efdd085843, []int{26}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2529,7 +3430,7 @@ type IpFilteringOptions struct {
 func (m *IpFilteringOptions) Reset()      { *m = IpFilteringOptions{} }
 func (*IpFilteringOptions) ProtoMessage() {}
 func (*IpFilteringOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{24}
+	return fileDescriptor_0a2659efdd085843, []int{27}
 }
 func (m *IpFilteringOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2619,7 +3520,7 @@ type GeoFilteringOptions struct {
 func (m *GeoFilteringOptions) Reset()      { *m = GeoFilteringOptions{} }
 func (*GeoFilteringOptions) ProtoMessage() {}
 func (*GeoFilteringOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{25}
+	return fileDescriptor_0a2659efdd085843, []int{28}
 }
 func (m *GeoFilteringOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2706,7 +3607,7 @@ type LogHeaderOptions struct {
 func (m *LogHeaderOptions) Reset()      { *m = LogHeaderOptions{} }
 func (*LogHeaderOptions) ProtoMessage() {}
 func (*LogHeaderOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{26}
+	return fileDescriptor_0a2659efdd085843, []int{29}
 }
 func (m *LogHeaderOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2754,7 +3655,7 @@ type CDNCustomAuthentication struct {
 func (m *CDNCustomAuthentication) Reset()      { *m = CDNCustomAuthentication{} }
 func (*CDNCustomAuthentication) ProtoMessage() {}
 func (*CDNCustomAuthentication) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{27}
+	return fileDescriptor_0a2659efdd085843, []int{30}
 }
 func (m *CDNCustomAuthentication) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2806,7 +3707,7 @@ type AuthenticationOptions struct {
 func (m *AuthenticationOptions) Reset()      { *m = AuthenticationOptions{} }
 func (*AuthenticationOptions) ProtoMessage() {}
 func (*AuthenticationOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{28}
+	return fileDescriptor_0a2659efdd085843, []int{31}
 }
 func (m *AuthenticationOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2915,7 +3816,7 @@ type CDNOriginServerType struct {
 func (m *CDNOriginServerType) Reset()      { *m = CDNOriginServerType{} }
 func (*CDNOriginServerType) ProtoMessage() {}
 func (*CDNOriginServerType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{29}
+	return fileDescriptor_0a2659efdd085843, []int{32}
 }
 func (m *CDNOriginServerType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3042,7 +3943,7 @@ type CdnOriginPoolType struct {
 func (m *CdnOriginPoolType) Reset()      { *m = CdnOriginPoolType{} }
 func (*CdnOriginPoolType) ProtoMessage() {}
 func (*CdnOriginPoolType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{30}
+	return fileDescriptor_0a2659efdd085843, []int{33}
 }
 func (m *CdnOriginPoolType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3168,7 +4069,7 @@ type OriginAdvancedConfiguration struct {
 func (m *OriginAdvancedConfiguration) Reset()      { *m = OriginAdvancedConfiguration{} }
 func (*OriginAdvancedConfiguration) ProtoMessage() {}
 func (*OriginAdvancedConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{31}
+	return fileDescriptor_0a2659efdd085843, []int{34}
 }
 func (m *OriginAdvancedConfiguration) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3230,7 +4131,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{32}
+	return fileDescriptor_0a2659efdd085843, []int{35}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3364,7 +4265,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{33}
+	return fileDescriptor_0a2659efdd085843, []int{36}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3500,7 +4401,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{34}
+	return fileDescriptor_0a2659efdd085843, []int{37}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3682,7 +4583,7 @@ type LilacCDNMetricsFilter struct {
 func (m *LilacCDNMetricsFilter) Reset()      { *m = LilacCDNMetricsFilter{} }
 func (*LilacCDNMetricsFilter) ProtoMessage() {}
 func (*LilacCDNMetricsFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{35}
+	return fileDescriptor_0a2659efdd085843, []int{38}
 }
 func (m *LilacCDNMetricsFilter) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3748,7 +4649,7 @@ type LilacCDNMetricsResponseGroupBy struct {
 func (m *LilacCDNMetricsResponseGroupBy) Reset()      { *m = LilacCDNMetricsResponseGroupBy{} }
 func (*LilacCDNMetricsResponseGroupBy) ProtoMessage() {}
 func (*LilacCDNMetricsResponseGroupBy) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{36}
+	return fileDescriptor_0a2659efdd085843, []int{39}
 }
 func (m *LilacCDNMetricsResponseGroupBy) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3807,7 +4708,7 @@ type LilacCDNMetricsResponseValue struct {
 func (m *LilacCDNMetricsResponseValue) Reset()      { *m = LilacCDNMetricsResponseValue{} }
 func (*LilacCDNMetricsResponseValue) ProtoMessage() {}
 func (*LilacCDNMetricsResponseValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{37}
+	return fileDescriptor_0a2659efdd085843, []int{40}
 }
 func (m *LilacCDNMetricsResponseValue) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3867,7 +4768,7 @@ type LilacCDNMetricsResponseSeries struct {
 func (m *LilacCDNMetricsResponseSeries) Reset()      { *m = LilacCDNMetricsResponseSeries{} }
 func (*LilacCDNMetricsResponseSeries) ProtoMessage() {}
 func (*LilacCDNMetricsResponseSeries) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{38}
+	return fileDescriptor_0a2659efdd085843, []int{41}
 }
 func (m *LilacCDNMetricsResponseSeries) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3931,7 +4832,7 @@ type LilacCDNMetricsResponseData struct {
 func (m *LilacCDNMetricsResponseData) Reset()      { *m = LilacCDNMetricsResponseData{} }
 func (*LilacCDNMetricsResponseData) ProtoMessage() {}
 func (*LilacCDNMetricsResponseData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_0a2659efdd085843, []int{39}
+	return fileDescriptor_0a2659efdd085843, []int{42}
 }
 func (m *LilacCDNMetricsResponseData) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3992,6 +4893,12 @@ func init() {
 	golang_proto.RegisterType((*ProxyTypeHttpsAutoCerts)(nil), "ves.io.schema.views.cdn_loadbalancer.ProxyTypeHttpsAutoCerts")
 	proto.RegisterType((*HeaderControlType)(nil), "ves.io.schema.views.cdn_loadbalancer.HeaderControlType")
 	golang_proto.RegisterType((*HeaderControlType)(nil), "ves.io.schema.views.cdn_loadbalancer.HeaderControlType")
+	proto.RegisterType((*WebApplicationFirewall)(nil), "ves.io.schema.views.cdn_loadbalancer.WebApplicationFirewall")
+	golang_proto.RegisterType((*WebApplicationFirewall)(nil), "ves.io.schema.views.cdn_loadbalancer.WebApplicationFirewall")
+	proto.RegisterType((*CommonSecurityControls)(nil), "ves.io.schema.views.cdn_loadbalancer.CommonSecurityControls")
+	golang_proto.RegisterType((*CommonSecurityControls)(nil), "ves.io.schema.views.cdn_loadbalancer.CommonSecurityControls")
+	proto.RegisterType((*ApiProtection)(nil), "ves.io.schema.views.cdn_loadbalancer.ApiProtection")
+	golang_proto.RegisterType((*ApiProtection)(nil), "ves.io.schema.views.cdn_loadbalancer.ApiProtection")
 	proto.RegisterType((*SecurityOptionsType)(nil), "ves.io.schema.views.cdn_loadbalancer.SecurityOptionsType")
 	golang_proto.RegisterType((*SecurityOptionsType)(nil), "ves.io.schema.views.cdn_loadbalancer.SecurityOptionsType")
 	proto.RegisterType((*LoggingOptionsType)(nil), "ves.io.schema.views.cdn_loadbalancer.LoggingOptionsType")
@@ -4078,334 +4985,425 @@ func init() {
 }
 
 var fileDescriptor_0a2659efdd085843 = []byte{
-	// 5219 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7c, 0x6f, 0x6c, 0x5b, 0x59,
-	0x56, 0xb8, 0xaf, 0xed, 0xd8, 0xce, 0x71, 0xe2, 0x38, 0x37, 0x69, 0xe2, 0x64, 0x3a, 0xa9, 0xc7,
-	0xbf, 0xce, 0x8f, 0x4c, 0x9a, 0x3a, 0x8d, 0x3b, 0xed, 0x4c, 0x33, 0xb3, 0x9d, 0x8d, 0x9d, 0xb4,
-	0x49, 0x48, 0x93, 0xcc, 0x8b, 0x33, 0x7f, 0x77, 0xf6, 0xe9, 0xc5, 0xbe, 0x71, 0xde, 0xf4, 0xc5,
-	0xcf, 0xf3, 0xde, 0x73, 0x3b, 0x59, 0x51, 0x31, 0x42, 0xbb, 0x1f, 0x16, 0x04, 0x82, 0xb2, 0x68,
-	0xf9, 0x02, 0x82, 0x0f, 0xc0, 0xb2, 0x1f, 0x56, 0xf0, 0x05, 0x24, 0xcc, 0x4a, 0x55, 0x05, 0x68,
-	0x55, 0x24, 0xe8, 0x17, 0xa4, 0xd1, 0x22, 0x10, 0x93, 0x11, 0x30, 0xbb, 0x0c, 0xd2, 0x50, 0x46,
-	0x68, 0x85, 0x16, 0x2d, 0xba, 0x7f, 0x9e, 0xfd, 0x9e, 0xfd, 0xec, 0xda, 0x6d, 0x67, 0x24, 0xa0,
-	0x9f, 0x62, 0xdf, 0x7b, 0xfe, 0xdd, 0x73, 0xcf, 0x39, 0xf7, 0xdc, 0x73, 0x8f, 0x03, 0x67, 0xae,
-	0x11, 0x33, 0xad, 0xea, 0x73, 0x66, 0x61, 0x9f, 0x1c, 0x28, 0x73, 0xd7, 0x54, 0x72, 0xdd, 0x9c,
-	0x2b, 0x14, 0xcb, 0xb2, 0xa6, 0x2b, 0xc5, 0x5d, 0x45, 0x53, 0xca, 0x05, 0x62, 0xcc, 0x59, 0x87,
-	0x15, 0x62, 0xa6, 0x2b, 0x86, 0x6e, 0xe9, 0xf8, 0x24, 0xc7, 0x48, 0x73, 0x8c, 0x34, 0xc3, 0x48,
-	0x37, 0x63, 0x4c, 0x9e, 0x2e, 0xa9, 0xd6, 0x7e, 0x75, 0x37, 0x5d, 0xd0, 0x0f, 0xe6, 0x4a, 0x7a,
-	0x49, 0x9f, 0x63, 0xc8, 0xbb, 0xd5, 0x3d, 0xf6, 0x8d, 0x7d, 0x61, 0x9f, 0x38, 0xd1, 0xc9, 0x13,
-	0x25, 0x5d, 0x2f, 0x69, 0xa4, 0x01, 0x65, 0xa9, 0x07, 0xc4, 0xb4, 0x94, 0x83, 0x8a, 0x00, 0x78,
-	0xc2, 0x2d, 0xa7, 0x5e, 0xb1, 0x54, 0xbd, 0x2c, 0x44, 0x9a, 0x4c, 0xba, 0x27, 0x2b, 0xba, 0xa6,
-	0x16, 0x0e, 0x9d, 0x42, 0x4f, 0xfe, 0x7f, 0x37, 0x84, 0xa1, 0x58, 0x44, 0xd6, 0xd4, 0x03, 0xd5,
-	0x72, 0x2f, 0x6e, 0xf2, 0x44, 0x13, 0x9c, 0x5e, 0xb5, 0x88, 0x0b, 0x60, 0xda, 0x0d, 0x60, 0x12,
-	0xe3, 0x9a, 0x5a, 0x20, 0xb2, 0x07, 0xcb, 0xd3, 0x9d, 0x20, 0x65, 0xa3, 0xaa, 0xb9, 0x09, 0x4f,
-	0xb8, 0xc1, 0x9d, 0x53, 0xc7, 0x9b, 0xf6, 0x48, 0xd1, 0xd4, 0xa2, 0x62, 0x11, 0xef, 0xc5, 0xd3,
-	0xfd, 0x90, 0xdd, 0xea, 0x79, 0xa1, 0xab, 0x3d, 0x56, 0x0a, 0x05, 0x62, 0x9a, 0xb2, 0xa6, 0x97,
-	0x5c, 0xcc, 0xe7, 0xbd, 0x90, 0xf7, 0x2d, 0xab, 0xd2, 0xd6, 0x42, 0x26, 0x4f, 0x79, 0xa1, 0xe8,
-	0x86, 0x5a, 0x52, 0xcb, 0x72, 0x45, 0xd7, 0x35, 0x17, 0xf0, 0x59, 0x2f, 0x60, 0xe7, 0xfe, 0x78,
-	0xe9, 0xf6, 0x84, 0x17, 0x52, 0x87, 0xfd, 0xbe, 0xa6, 0x1a, 0x56, 0x55, 0xd1, 0xe4, 0x7d, 0xdd,
-	0xb4, 0x5c, 0x70, 0x67, 0xda, 0xc3, 0xc9, 0xc5, 0xb2, 0x29, 0xab, 0xe5, 0x3d, 0x7d, 0x4e, 0xdf,
-	0x7d, 0x9b, 0x14, 0x2c, 0x8e, 0x91, 0xfa, 0xa7, 0x00, 0x8c, 0x6f, 0x19, 0xfa, 0xbb, 0x87, 0xf9,
-	0xc3, 0x0a, 0x59, 0xb1, 0xac, 0x8a, 0xb9, 0x58, 0xb5, 0xf4, 0x1c, 0x31, 0x2c, 0x13, 0x3f, 0x03,
-	0x83, 0x4c, 0x33, 0x06, 0x29, 0xaa, 0x06, 0x29, 0x58, 0x09, 0x94, 0x44, 0xd3, 0x91, 0x6c, 0xf0,
-	0x47, 0x35, 0xe4, 0x93, 0x06, 0xe8, 0x94, 0x24, 0x66, 0xf0, 0x09, 0x88, 0x28, 0xc5, 0xa2, 0xbc,
-	0x6f, 0x5a, 0x66, 0xc2, 0xef, 0x80, 0x0a, 0x2b, 0xc5, 0xe2, 0x8a, 0x69, 0x99, 0x38, 0x07, 0x60,
-	0x69, 0xa6, 0x5c, 0xd0, 0xcb, 0x7b, 0x6a, 0x29, 0x11, 0x48, 0xa2, 0xe9, 0x68, 0x66, 0x2a, 0xed,
-	0xe5, 0x7b, 0x79, 0xcd, 0xcc, 0x31, 0xa8, 0x6c, 0xf0, 0x93, 0x1a, 0x42, 0x52, 0xbf, 0x65, 0x0f,
-	0xe0, 0x1c, 0xc4, 0x8a, 0x64, 0x4f, 0xa9, 0x6a, 0x96, 0xbc, 0x4f, 0x94, 0x22, 0x31, 0x12, 0x7d,
-	0x8c, 0xd0, 0x68, 0x13, 0xa1, 0xe5, 0x83, 0x8a, 0x75, 0x98, 0x0d, 0xde, 0xaa, 0x21, 0xb4, 0xe2,
-	0x93, 0x06, 0x05, 0xce, 0x0a, 0x43, 0xc1, 0xf3, 0x10, 0xa5, 0xc6, 0x4b, 0x0c, 0xb9, 0xac, 0x1c,
-	0x90, 0x44, 0x28, 0x89, 0xa6, 0xfb, 0xb3, 0x31, 0x0a, 0xfb, 0x27, 0x3f, 0xb8, 0x15, 0xe8, 0x33,
-	0x02, 0xef, 0xfb, 0x29, 0x16, 0x70, 0xa0, 0x0d, 0xe5, 0x80, 0xe0, 0x8b, 0x80, 0x95, 0x4a, 0x85,
-	0x94, 0x8b, 0xb2, 0x13, 0x33, 0xdc, 0x06, 0x33, 0xce, 0x61, 0xb7, 0x1b, 0xf8, 0x2f, 0xc1, 0x40,
-	0x45, 0x31, 0x4d, 0xd9, 0xda, 0x37, 0xf4, 0x6a, 0x69, 0x3f, 0x11, 0xe9, 0x42, 0xea, 0x28, 0xc5,
-	0xc8, 0x73, 0x84, 0x05, 0xb8, 0x77, 0x31, 0x3c, 0x3f, 0x9b, 0x99, 0x3d, 0x3b, 0xfb, 0x6c, 0x76,
-	0x0e, 0x46, 0x85, 0x14, 0x5c, 0x07, 0x72, 0x61, 0x5f, 0x57, 0x0b, 0x04, 0x8f, 0xdf, 0xaa, 0xa1,
-	0xbe, 0xef, 0xd5, 0x10, 0xba, 0x5b, 0x43, 0xc1, 0xa3, 0x1a, 0x0a, 0x9f, 0x9b, 0x3d, 0x3f, 0xfb,
-	0xdc, 0xec, 0xf3, 0x6b, 0xc1, 0x48, 0x30, 0xde, 0x97, 0xfa, 0xc5, 0x20, 0x0c, 0x73, 0x0d, 0xe4,
-	0xf4, 0xb2, 0x65, 0xe8, 0x1a, 0xdd, 0x70, 0xfc, 0x15, 0x18, 0x33, 0xc8, 0x3b, 0x55, 0x62, 0xda,
-	0x1a, 0x35, 0x65, 0x4b, 0x97, 0x95, 0x62, 0x31, 0x81, 0x92, 0x81, 0xe9, 0x68, 0xe6, 0x54, 0x93,
-	0x8c, 0x9c, 0xc2, 0x15, 0xa5, 0xac, 0x56, 0xaa, 0x9a, 0x42, 0xbd, 0x72, 0x93, 0xf9, 0x26, 0x25,
-	0x96, 0x4d, 0xdc, 0xb5, 0x55, 0x71, 0x13, 0xf9, 0xe3, 0x49, 0xfb, 0x53, 0x02, 0x49, 0x23, 0x82,
-	0x09, 0x47, 0x37, 0xf3, 0xfa, 0x62, 0xb1, 0x88, 0xbf, 0x86, 0x60, 0xc2, 0x83, 0xb9, 0x41, 0x0e,
-	0xf4, 0x6b, 0x24, 0xe1, 0x4f, 0x06, 0xa6, 0xfb, 0xb3, 0x6b, 0x36, 0xc9, 0x81, 0x9b, 0xa8, 0x3f,
-	0x15, 0x36, 0xe8, 0x7e, 0xbf, 0xe7, 0xa7, 0x03, 0xc7, 0x6f, 0xa2, 0x89, 0xd4, 0xb8, 0x71, 0x2c,
-	0x33, 0xf2, 0xe5, 0x37, 0xcf, 0x9c, 0xbe, 0xb0, 0x78, 0xfa, 0x0d, 0xe5, 0xf4, 0x57, 0xe4, 0x2f,
-	0x9d, 0xfe, 0x52, 0xfa, 0xad, 0x53, 0x27, 0x3d, 0x85, 0x18, 0x6b, 0x16, 0x42, 0x62, 0x9c, 0xf0,
-	0xcf, 0xc0, 0xb8, 0x41, 0xcc, 0x8a, 0x5e, 0x36, 0x49, 0xb3, 0x12, 0x02, 0x8f, 0x52, 0x09, 0xa3,
-	0x36, 0x17, 0x97, 0x16, 0xae, 0xc1, 0xa4, 0x17, 0x77, 0xa1, 0x85, 0x20, 0xd3, 0xc2, 0x05, 0x9b,
-	0x66, 0xef, 0x8b, 0x1e, 0x6f, 0x61, 0xca, 0x57, 0x9d, 0xfa, 0x33, 0x3f, 0x8c, 0x6c, 0x93, 0x42,
-	0xd5, 0x50, 0xad, 0x43, 0x2e, 0xbe, 0xc9, 0x2c, 0x42, 0x81, 0x01, 0xb5, 0x22, 0xef, 0xa9, 0x9a,
-	0x45, 0x0c, 0xb5, 0x5c, 0x12, 0x1e, 0xf6, 0x7c, 0xba, 0x9b, 0x63, 0x32, 0xbd, 0x5a, 0xb9, 0x64,
-	0x23, 0x0a, 0x9a, 0xd9, 0x20, 0x95, 0x5d, 0x8a, 0xaa, 0x8d, 0x19, 0x5c, 0x84, 0xc1, 0x12, 0xd1,
-	0x1d, 0x3c, 0x42, 0x8c, 0xc7, 0x85, 0xee, 0x78, 0x5c, 0x26, 0x7a, 0x1b, 0x26, 0x03, 0x25, 0xc7,
-	0x14, 0x2e, 0xc2, 0x80, 0x52, 0xb5, 0xf6, 0xed, 0xc3, 0x23, 0xd1, 0xcf, 0x98, 0xbc, 0xd0, 0x1d,
-	0x93, 0xc5, 0xaa, 0xb5, 0x4f, 0xca, 0x96, 0x5a, 0x70, 0x6c, 0x6f, 0x7d, 0x2d, 0x94, 0xac, 0x18,
-	0x4a, 0x7d, 0x8c, 0x00, 0xaf, 0xeb, 0xa5, 0x52, 0x43, 0x18, 0xa6, 0xc5, 0xb7, 0x01, 0x17, 0x34,
-	0x95, 0x94, 0x2d, 0x7a, 0x00, 0xd5, 0x45, 0x08, 0x33, 0x11, 0xce, 0x77, 0x27, 0xc2, 0xba, 0x5e,
-	0xe2, 0x7b, 0xe6, 0xe6, 0x1e, 0xe7, 0x74, 0xd7, 0x75, 0x9b, 0x1f, 0xe5, 0x25, 0x4e, 0x23, 0x27,
-	0xaf, 0xc8, 0xa3, 0xe0, 0xc5, 0xe9, 0x36, 0x78, 0xa5, 0xfe, 0xce, 0x0f, 0x93, 0xb9, 0xa5, 0x8d,
-	0x9c, 0x52, 0xd8, 0x27, 0x52, 0x55, 0x23, 0xcb, 0xef, 0x56, 0x0c, 0x62, 0x9a, 0xaa, 0x5e, 0x5e,
-	0x57, 0x4d, 0x0b, 0x9f, 0x85, 0x21, 0x52, 0x1f, 0xe1, 0x51, 0x12, 0xb1, 0x28, 0x09, 0x22, 0x42,
-	0x26, 0xde, 0x43, 0x52, 0xac, 0x01, 0xc2, 0xa2, 0xe3, 0x37, 0x10, 0x1c, 0x2b, 0x50, 0x82, 0x2c,
-	0x8b, 0x90, 0x1b, 0xb3, 0x2c, 0x06, 0x44, 0x33, 0x2f, 0x76, 0xb7, 0x06, 0x6f, 0xb1, 0xb2, 0xa9,
-	0x4f, 0x9c, 0xfe, 0x18, 0xb1, 0x3f, 0x45, 0x90, 0x33, 0x3c, 0x15, 0x5a, 0x11, 0x17, 0xcc, 0x3b,
-	0x35, 0xa4, 0xc3, 0x49, 0x18, 0x6a, 0x8c, 0x25, 0xa9, 0xbc, 0x93, 0xc3, 0x2d, 0x8b, 0x84, 0xcb,
-	0x10, 0x77, 0x40, 0x5d, 0x51, 0xac, 0xc2, 0x7e, 0xea, 0x6c, 0x9b, 0x55, 0x61, 0xe0, 0xa7, 0x59,
-	0xd5, 0x20, 0xc5, 0xc9, 0xd8, 0x86, 0x6e, 0x25, 0x1b, 0xdf, 0x53, 0x5f, 0x0f, 0xc0, 0x20, 0x5b,
-	0xc5, 0x66, 0x85, 0x18, 0x8a, 0xa5, 0x1b, 0x38, 0x01, 0xa1, 0xe5, 0x77, 0xaa, 0x8a, 0xc6, 0xcf,
-	0xd5, 0xfe, 0x15, 0x9f, 0x24, 0xbe, 0xe3, 0x93, 0x30, 0xb0, 0xa4, 0x13, 0x73, 0x43, 0xb7, 0xd8,
-	0x00, 0x3b, 0x54, 0xe9, 0xbc, 0x6b, 0x14, 0x1f, 0x87, 0x08, 0x0d, 0xf8, 0x8a, 0x5a, 0x36, 0x13,
-	0x41, 0x01, 0x51, 0x1f, 0xc1, 0xd3, 0x10, 0x13, 0xd0, 0x62, 0x88, 0xf9, 0x3b, 0x85, 0x69, 0x1a,
-	0xc7, 0x49, 0x80, 0x6d, 0x4b, 0x31, 0x2c, 0xf3, 0xba, 0x6a, 0xed, 0xf3, 0x53, 0x93, 0x9e, 0x92,
-	0x8d, 0x31, 0x3c, 0x0b, 0x71, 0x81, 0xc3, 0x06, 0x5f, 0xa5, 0x70, 0x61, 0x01, 0xd7, 0x32, 0x43,
-	0xe5, 0x5a, 0x2e, 0x17, 0x39, 0xb5, 0x88, 0x2d, 0x97, 0x3d, 0xe2, 0x90, 0x6b, 0xb9, 0x5c, 0x64,
-	0x94, 0xfa, 0x9b, 0xe4, 0x12, 0xe3, 0x54, 0x2e, 0xa6, 0x6f, 0x89, 0x94, 0xc8, 0xbb, 0x09, 0xb0,
-	0xe5, 0x6a, 0x8c, 0x65, 0xcf, 0x40, 0x8c, 0x6f, 0x84, 0x6e, 0xeb, 0x74, 0xea, 0x56, 0x0d, 0xf9,
-	0xa9, 0x85, 0x1f, 0xd5, 0x10, 0x66, 0xa7, 0xea, 0xac, 0x38, 0x2c, 0x67, 0x2f, 0xcc, 0xce, 0x9f,
-	0x59, 0x0b, 0x46, 0x50, 0xdc, 0x9f, 0xfa, 0xa3, 0x10, 0x8c, 0xb1, 0xbd, 0xb0, 0xe3, 0xbd, 0x55,
-	0xd8, 0x27, 0x06, 0x73, 0xef, 0xcb, 0x10, 0xac, 0x1b, 0x77, 0x2c, 0x73, 0xb6, 0x3b, 0x03, 0x75,
-	0x79, 0x98, 0xc4, 0x08, 0xe0, 0x1d, 0x88, 0xd8, 0x52, 0x89, 0x48, 0xdb, 0x25, 0x31, 0x97, 0x91,
-	0x88, 0x4c, 0xa9, 0x4e, 0x6a, 0xe1, 0xc3, 0xe0, 0xed, 0x1a, 0x4a, 0xc0, 0x18, 0x0c, 0x71, 0xa6,
-	0x49, 0x4b, 0xe7, 0x56, 0x89, 0x03, 0xf3, 0xb3, 0xe7, 0xee, 0xd4, 0xd0, 0xed, 0x20, 0xc4, 0x21,
-	0xc8, 0xcc, 0x39, 0xc2, 0xd7, 0x92, 0x44, 0xf0, 0xb7, 0x7e, 0x88, 0xd8, 0x24, 0x67, 0xfe, 0xca,
-	0x0f, 0x7f, 0xe9, 0x87, 0x09, 0x18, 0xb2, 0x89, 0xa6, 0xb9, 0xd9, 0x65, 0x84, 0xf9, 0xc1, 0xd3,
-	0x70, 0xac, 0x3e, 0xe5, 0xb4, 0xb8, 0x8c, 0xcb, 0xfe, 0xe0, 0x49, 0x18, 0xae, 0x83, 0xd9, 0x66,
-	0x97, 0xa9, 0x1b, 0x20, 0x3c, 0x03, 0xe3, 0xcd, 0x54, 0xc4, 0x5c, 0xa6, 0xc9, 0x02, 0xe1, 0x29,
-	0x18, 0xa9, 0x83, 0x36, 0xcc, 0x2e, 0xe3, 0x30, 0x41, 0x38, 0x0d, 0x13, 0xcd, 0xd4, 0xea, 0x16,
-	0x97, 0x69, 0xb1, 0x41, 0x97, 0x6c, 0xb6, 0xe9, 0x65, 0xea, 0x46, 0xe8, 0x25, 0x9b, 0xb0, 0xba,
-	0x4c, 0x93, 0x15, 0xba, 0x64, 0x6b, 0x98, 0x5e, 0xc6, 0x61, 0x86, 0xf0, 0xd7, 0x08, 0xfa, 0x5e,
-	0x51, 0xb4, 0x2a, 0xc9, 0xfc, 0x39, 0x6a, 0xd1, 0x6a, 0x1b, 0x5d, 0x7a, 0xe8, 0xae, 0xad, 0xbe,
-	0x3c, 0xb5, 0xd3, 0x41, 0x1f, 0x1e, 0x6b, 0x6f, 0xbb, 0x5e, 0xcf, 0xd5, 0xad, 0x05, 0x23, 0xa1,
-	0x78, 0x78, 0x2d, 0x18, 0xf1, 0xc7, 0x03, 0x6b, 0xc1, 0x48, 0x20, 0x1e, 0x14, 0xa9, 0xe6, 0xd7,
-	0x11, 0xe0, 0xdc, 0xd2, 0xc6, 0x96, 0x62, 0xed, 0x3b, 0x9d, 0xe6, 0x51, 0xd9, 0xfa, 0x1f, 0xfc,
-	0xa9, 0xcb, 0xd6, 0x83, 0xf7, 0x2e, 0xa2, 0x73, 0x9c, 0x33, 0x77, 0x5c, 0xa7, 0x44, 0xa9, 0x1f,
-	0xf7, 0x09, 0x27, 0xce, 0xe9, 0xfa, 0x55, 0x95, 0x38, 0xe5, 0x99, 0x72, 0x38, 0x71, 0xe3, 0x84,
-	0x9a, 0x7e, 0xcf, 0xef, 0xe1, 0x9b, 0xfe, 0x47, 0xe7, 0x9b, 0x3f, 0xa4, 0xbe, 0xf9, 0x14, 0x9c,
-	0x80, 0x04, 0x83, 0x4b, 0x6e, 0x29, 0x86, 0x72, 0x40, 0x2c, 0x62, 0x24, 0xf3, 0x0e, 0x27, 0xcd,
-	0xdc, 0xa9, 0xa1, 0x5b, 0x41, 0x88, 0x09, 0x27, 0x0d, 0x71, 0x59, 0x1f, 0xbb, 0xe8, 0x63, 0x17,
-	0xed, 0xc5, 0x45, 0x53, 0xbf, 0x16, 0x82, 0x29, 0x66, 0x66, 0x2f, 0x57, 0x89, 0x71, 0x58, 0x37,
-	0x35, 0xa7, 0x1b, 0x3c, 0x0d, 0x81, 0xab, 0xe4, 0x50, 0x78, 0xc1, 0x48, 0xc3, 0x0b, 0xe8, 0xa7,
-	0xa0, 0xe1, 0x4f, 0x22, 0x89, 0xce, 0x7f, 0x56, 0xde, 0xf0, 0x69, 0xdd, 0x1b, 0x98, 0x84, 0x1d,
-	0xbc, 0xe1, 0x4e, 0x10, 0x06, 0x20, 0xf0, 0xd3, 0xe4, 0x70, 0xb2, 0x8f, 0x49, 0x0c, 0x1f, 0xf8,
-	0x21, 0xc6, 0x20, 0x92, 0x8f, 0x3d, 0xe2, 0xb3, 0xf2, 0x88, 0xbf, 0x41, 0x10, 0xe5, 0x3a, 0xfe,
-	0xdf, 0xe5, 0x17, 0x9f, 0x46, 0x61, 0xcc, 0xfb, 0xc2, 0x80, 0xdf, 0x02, 0xa8, 0x28, 0xd6, 0xbe,
-	0x7c, 0x40, 0xa1, 0x99, 0x5b, 0x74, 0x7d, 0xfd, 0x6d, 0x3d, 0xf4, 0xc4, 0x69, 0xd5, 0x5f, 0xb1,
-	0x87, 0xf1, 0xd7, 0x10, 0xc4, 0xdf, 0xa1, 0xa6, 0x2e, 0x57, 0x6c, 0x53, 0x37, 0x13, 0x21, 0x76,
-	0xd1, 0x59, 0xea, 0xc1, 0xa1, 0xda, 0xfa, 0x73, 0x76, 0xb4, 0xf5, 0xb2, 0x93, 0x40, 0xd2, 0xd0,
-	0x3b, 0x2e, 0x04, 0x13, 0x5f, 0x87, 0x41, 0x9e, 0x15, 0x8b, 0xa2, 0x43, 0xa2, 0xaf, 0xa7, 0xcb,
-	0x96, 0x67, 0x5e, 0xdc, 0x86, 0xf7, 0x40, 0xa1, 0x01, 0x6d, 0xe2, 0x43, 0x88, 0x15, 0xd8, 0x59,
-	0xcc, 0x35, 0x4c, 0x8c, 0x44, 0xb8, 0x67, 0xce, 0x2d, 0x87, 0x79, 0x1b, 0xce, 0x83, 0x05, 0x27,
-	0xe0, 0xc2, 0xc7, 0x61, 0x56, 0x47, 0x3b, 0x3f, 0x7b, 0x6e, 0xf6, 0xb9, 0xdb, 0x35, 0x74, 0x1c,
-	0x26, 0x61, 0x88, 0x5b, 0x77, 0x4e, 0x2f, 0x17, 0x55, 0x9a, 0x98, 0x63, 0x7b, 0xfe, 0x4e, 0x0d,
-	0x7d, 0x37, 0x0c, 0xb7, 0x02, 0x00, 0x74, 0x4b, 0x79, 0x28, 0x9a, 0xf9, 0xc3, 0x00, 0x7c, 0x27,
-	0x00, 0x27, 0x61, 0xb2, 0x61, 0x21, 0xe9, 0x76, 0xa1, 0xe6, 0x0c, 0x24, 0xbd, 0xa0, 0x3a, 0x44,
-	0x9d, 0x69, 0x38, 0xee, 0x85, 0xe1, 0x11, 0x80, 0x9e, 0x85, 0x54, 0x07, 0xda, 0xed, 0x62, 0xd1,
-	0x2c, 0x4c, 0x79, 0x61, 0xb5, 0x09, 0x4b, 0xcf, 0xc3, 0xc9, 0x0e, 0x3c, 0x3a, 0x45, 0xa8, 0x36,
-	0xeb, 0xf0, 0x08, 0x56, 0x9d, 0xd7, 0xd1, 0x2e, 0x6e, 0xb5, 0x59, 0x47, 0x9b, 0x10, 0xf6, 0xc7,
-	0x7e, 0xb1, 0x85, 0x3c, 0x82, 0x7d, 0xcb, 0xdf, 0x69, 0xf7, 0xee, 0xbf, 0x67, 0x9d, 0xf7, 0xa8,
-	0x9b, 0x7d, 0xb9, 0xdf, 0x2e, 0x74, 0xa7, 0xf7, 0xce, 0x3a, 0xee, 0x46, 0xaf, 0xf7, 0xd3, 0x22,
-	0xe4, 0x60, 0xd8, 0x71, 0x28, 0x8b, 0xb2, 0x46, 0xba, 0x35, 0x7c, 0x75, 0xaa, 0x68, 0xc0, 0x0b,
-	0x30, 0x20, 0xee, 0xa0, 0x1c, 0xff, 0x54, 0x53, 0xdc, 0xe9, 0x88, 0xfc, 0x22, 0x0c, 0x70, 0x57,
-	0x17, 0xc8, 0xb3, 0xcd, 0xb1, 0xa3, 0x13, 0xb6, 0xc7, 0xcd, 0xe4, 0xb7, 0x11, 0x8c, 0xb0, 0x00,
-	0x92, 0xcf, 0xaf, 0x2f, 0x97, 0x95, 0x5d, 0x8d, 0x6c, 0x19, 0x7a, 0xc5, 0xc4, 0x3f, 0x05, 0xfd,
-	0x5c, 0x28, 0xcb, 0xd2, 0x9a, 0xee, 0x03, 0x9f, 0xf8, 0x91, 0x14, 0x61, 0x93, 0x79, 0x4b, 0xc3,
-	0xcf, 0xc2, 0x98, 0x5a, 0x2a, 0xeb, 0x06, 0x91, 0xeb, 0x45, 0x5b, 0x2e, 0x10, 0xbb, 0xd1, 0x44,
-	0xa4, 0x51, 0x3e, 0x2b, 0x89, 0x49, 0x2e, 0x3c, 0x7e, 0xba, 0x5e, 0x81, 0xb8, 0x46, 0x0c, 0x43,
-	0x2d, 0x12, 0x56, 0x89, 0x89, 0x48, 0x5c, 0x13, 0x9b, 0x62, 0x50, 0xdc, 0x58, 0xbe, 0x1b, 0x86,
-	0x51, 0x26, 0xe3, 0xb2, 0xa6, 0x96, 0xd4, 0x5d, 0x8d, 0xd8, 0x75, 0xbe, 0x6f, 0x22, 0x18, 0x61,
-	0xb1, 0x91, 0xb0, 0x07, 0x1d, 0x7a, 0x1f, 0x90, 0xab, 0x86, 0x2a, 0xb2, 0xb1, 0x0b, 0x3d, 0x84,
-	0x4f, 0xf7, 0xea, 0xb3, 0x33, 0x47, 0x37, 0x9e, 0x92, 0x48, 0x45, 0x53, 0x0a, 0xa4, 0x98, 0xdc,
-	0x3d, 0x4c, 0x0a, 0x26, 0x15, 0x43, 0x7f, 0xf7, 0x90, 0xbf, 0x1d, 0x55, 0x0d, 0xf5, 0xa3, 0x1a,
-	0x42, 0x09, 0xb4, 0xe2, 0x93, 0x86, 0xf9, 0xf4, 0x8a, 0x10, 0x61, 0xc7, 0x50, 0xf1, 0x77, 0x10,
-	0x3c, 0xd1, 0x2c, 0x99, 0x5d, 0xd9, 0xa7, 0x12, 0x06, 0x1e, 0x56, 0xc2, 0xcc, 0xd1, 0x8d, 0x67,
-	0x3a, 0x4b, 0xe8, 0x60, 0x57, 0x97, 0x34, 0xe1, 0x96, 0x54, 0xe2, 0x20, 0x54, 0xe0, 0x9f, 0x47,
-	0x30, 0xe0, 0xd2, 0x61, 0xf0, 0xf3, 0xd5, 0x61, 0x74, 0xdf, 0xa1, 0xbd, 0x6f, 0x23, 0x98, 0xf0,
-	0xd8, 0x57, 0x99, 0xb9, 0x99, 0xb8, 0x29, 0x7f, 0xee, 0xba, 0x1b, 0x6b, 0xd9, 0x65, 0x16, 0x0a,
-	0x70, 0x19, 0x8e, 0x79, 0x2e, 0xad, 0xb7, 0x1a, 0xbe, 0x87, 0x9c, 0x2b, 0x3e, 0x09, 0x73, 0xca,
-	0xec, 0x39, 0x92, 0x32, 0xa6, 0xca, 0xb9, 0x01, 0x4f, 0x76, 0x14, 0x58, 0xd4, 0xd4, 0x1f, 0x8a,
-	0xef, 0x44, 0x13, 0xdf, 0x86, 0xa1, 0xb0, 0xe2, 0xc2, 0x7c, 0xf6, 0x69, 0xc0, 0x44, 0x38, 0xa3,
-	0xbc, 0xa7, 0x1b, 0x32, 0x73, 0x5b, 0x3c, 0x74, 0xab, 0x86, 0x42, 0xa2, 0x8a, 0x18, 0x38, 0x3f,
-	0xfb, 0x9c, 0x28, 0x1b, 0xfe, 0x42, 0x04, 0x06, 0x9c, 0xa9, 0x25, 0x0d, 0x2e, 0xac, 0x04, 0xdc,
-	0xa6, 0x1c, 0x1e, 0xa1, 0x93, 0xac, 0x10, 0x7e, 0x13, 0xc1, 0x68, 0x53, 0xb1, 0x58, 0xd6, 0x54,
-	0xd3, 0x12, 0x75, 0xf0, 0x2f, 0x3e, 0x4c, 0x1d, 0x7c, 0x5d, 0x35, 0xad, 0xec, 0xd4, 0x7d, 0xea,
-	0xe0, 0xd8, 0x68, 0x2d, 0xe9, 0x5f, 0x00, 0x9e, 0xbe, 0xc9, 0xbb, 0x87, 0x15, 0xc5, 0x34, 0x85,
-	0xa7, 0x78, 0xbe, 0x5d, 0x52, 0xc3, 0x66, 0xb0, 0x59, 0x06, 0x8a, 0xdf, 0xf6, 0x52, 0x9b, 0x30,
-	0xe8, 0x85, 0x1e, 0x36, 0xac, 0x29, 0x10, 0xae, 0xf8, 0xa4, 0xb8, 0x4d, 0xf7, 0x92, 0x6e, 0x30,
-	0x90, 0x85, 0x4f, 0x83, 0xf7, 0x2e, 0xf6, 0xb1, 0x27, 0xd2, 0x3b, 0x35, 0xf4, 0xcf, 0x41, 0x18,
-	0x11, 0x85, 0x93, 0xa8, 0x43, 0xf9, 0xf0, 0xd5, 0xa0, 0xa8, 0xae, 0x27, 0x17, 0x0b, 0xbc, 0x0a,
-	0x7b, 0x2f, 0x00, 0x29, 0xec, 0x5a, 0xe0, 0xe4, 0x00, 0x97, 0x3e, 0xc9, 0xe9, 0x06, 0x2d, 0xa3,
-	0x4a, 0xe0, 0x25, 0x9c, 0x69, 0x5d, 0x49, 0xda, 0xd3, 0x11, 0xd2, 0xf5, 0x83, 0x64, 0xb2, 0x9f,
-	0xf3, 0xca, 0xe7, 0xd7, 0xe1, 0x32, 0x5e, 0xe8, 0x8a, 0x80, 0xc3, 0xb2, 0xbd, 0x09, 0x5d, 0xc1,
-	0x2f, 0x75, 0x2d, 0x89, 0xf7, 0x49, 0x35, 0x09, 0xdb, 0xc4, 0x4a, 0xf2, 0xcf, 0xb0, 0x83, 0x2f,
-	0xf7, 0x2c, 0x57, 0x17, 0x64, 0x57, 0xf1, 0x73, 0x3d, 0xea, 0xcb, 0x3e, 0x19, 0x27, 0x63, 0x7c,
-	0xad, 0xf6, 0x77, 0x78, 0xb9, 0xcb, 0x05, 0xb7, 0x6a, 0xae, 0x2d, 0xc9, 0x55, 0x18, 0xa1, 0xa6,
-	0x9d, 0xd4, 0xf7, 0x92, 0x0d, 0x63, 0x37, 0x53, 0x19, 0x6f, 0xef, 0xeb, 0x94, 0x62, 0x64, 0x27,
-	0xec, 0x6c, 0x46, 0xe1, 0x06, 0x85, 0x23, 0xb7, 0x6a, 0x28, 0x78, 0xb7, 0x86, 0xec, 0xfa, 0xe3,
-	0x4b, 0x30, 0xba, 0xc4, 0xdb, 0x0f, 0xec, 0xd8, 0xd3, 0x5b, 0xc6, 0x91, 0xfa, 0xd5, 0x00, 0x60,
-	0x27, 0x05, 0x6e, 0xb9, 0xf8, 0x77, 0x91, 0xa7, 0x73, 0xf9, 0x7b, 0x71, 0x2e, 0x2f, 0xc1, 0xb2,
-	0x0b, 0x47, 0x37, 0xe6, 0x9d, 0xc7, 0x45, 0x5d, 0xca, 0xba, 0x3e, 0x93, 0x4a, 0xb9, 0x28, 0x86,
-	0x8b, 0xaa, 0x49, 0x03, 0x69, 0xb1, 0x7e, 0x6c, 0xb4, 0x38, 0x26, 0x7e, 0x1e, 0x86, 0x1b, 0x24,
-	0x44, 0x27, 0x06, 0x7f, 0xaa, 0x72, 0x2e, 0x78, 0xc5, 0x27, 0x0d, 0xd9, 0x4b, 0x16, 0x62, 0xe1,
-	0x05, 0xc0, 0xad, 0xcc, 0xf9, 0x1b, 0x56, 0x13, 0x6a, 0xdc, 0x46, 0xb5, 0x53, 0x29, 0xfc, 0x05,
-	0x3b, 0xe3, 0xb2, 0x25, 0xec, 0xd4, 0x29, 0xb2, 0xe2, 0x13, 0x99, 0xd8, 0x92, 0x00, 0xf6, 0xde,
-	0xd6, 0x00, 0x8d, 0xf5, 0x22, 0xc8, 0xff, 0x23, 0x82, 0x01, 0x51, 0xd8, 0xb2, 0x1f, 0x61, 0x47,
-	0xed, 0xd6, 0x14, 0x27, 0x66, 0x6f, 0xf5, 0x83, 0xd6, 0x7d, 0x96, 0x70, 0xb1, 0x75, 0xef, 0x55,
-	0x88, 0x36, 0x5e, 0x16, 0x4d, 0x71, 0x3a, 0x64, 0x7a, 0x3f, 0x1d, 0xda, 0x5c, 0x9a, 0xa1, 0xfe,
-	0x1a, 0x6a, 0xa6, 0x7e, 0xe0, 0x48, 0x98, 0x9d, 0xef, 0xdb, 0x9e, 0xbb, 0xea, 0x7f, 0xf0, 0x5d,
-	0x0d, 0x3c, 0xe0, 0xae, 0x06, 0x7b, 0xd9, 0xd5, 0x71, 0x88, 0x32, 0xa6, 0x95, 0xc6, 0x9e, 0xfa,
-	0x1d, 0x7b, 0xfa, 0xd5, 0x3e, 0x18, 0x59, 0x2c, 0x5e, 0xa3, 0x7a, 0x2a, 0x3a, 0xd7, 0xba, 0x0f,
-	0x31, 0xd1, 0x69, 0x63, 0xbf, 0xad, 0xc7, 0x19, 0xd7, 0xe7, 0x7a, 0x79, 0xf6, 0x73, 0x34, 0xdd,
-	0x64, 0x29, 0x63, 0xc4, 0x1e, 0xd8, 0x07, 0xf7, 0x9d, 0x6f, 0x82, 0xb8, 0x0c, 0x71, 0x53, 0xb4,
-	0x64, 0xd4, 0x79, 0x0d, 0xf7, 0x92, 0xdf, 0x78, 0x34, 0x74, 0x38, 0xb8, 0x0d, 0x99, 0xee, 0x69,
-	0x7c, 0x15, 0x86, 0x34, 0xde, 0xbb, 0x50, 0x67, 0x87, 0x7b, 0xb1, 0xd7, 0xd6, 0xc6, 0x07, 0x07,
-	0xb7, 0x98, 0xe6, 0x9a, 0xc5, 0xbf, 0x89, 0x9c, 0x36, 0x63, 0xf3, 0x1b, 0x79, 0x90, 0xf4, 0xcd,
-	0xc9, 0xf0, 0xb9, 0xf7, 0x6f, 0xa0, 0xa3, 0x1b, 0xff, 0xcf, 0x19, 0xb2, 0xca, 0xe4, 0x7a, 0x72,
-	0x4f, 0x25, 0x9a, 0x1d, 0xa5, 0x04, 0x2f, 0x5b, 0x32, 0x1e, 0xac, 0x1a, 0x96, 0x69, 0x0b, 0xa8,
-	0xd8, 0x4e, 0x6f, 0xcb, 0x36, 0xca, 0x64, 0xcb, 0xf4, 0x54, 0xe6, 0xe6, 0xed, 0x13, 0x0d, 0x2d,
-	0xf0, 0xdc, 0x42, 0x8c, 0xb7, 0xbe, 0x4f, 0xd5, 0xdf, 0xad, 0x62, 0xf1, 0xa1, 0xb5, 0x60, 0x64,
-	0x28, 0x1e, 0x4f, 0xfd, 0x0e, 0x62, 0xf9, 0x63, 0x7e, 0x7d, 0x5b, 0x74, 0xbd, 0x9d, 0x87, 0xa8,
-	0xa5, 0x99, 0xf2, 0x7c, 0x46, 0xae, 0x68, 0x55, 0x53, 0x44, 0x94, 0x76, 0x26, 0xdf, 0x6f, 0x69,
-	0xe6, 0x7c, 0x66, 0x4b, 0xab, 0x9a, 0x75, 0xbc, 0x79, 0x8e, 0xe7, 0xbf, 0x3f, 0xde, 0x3c, 0xc5,
-	0xe3, 0x0f, 0x6a, 0xd9, 0x09, 0x08, 0x89, 0xc6, 0xb2, 0x21, 0xb1, 0x98, 0x3e, 0x9a, 0xe7, 0xce,
-	0xcf, 0x66, 0xd6, 0x82, 0x91, 0xbe, 0x78, 0x28, 0xf5, 0x17, 0x08, 0x8e, 0xe5, 0x96, 0x36, 0x56,
-	0xf2, 0xf9, 0xad, 0xed, 0x7a, 0xcf, 0x20, 0x73, 0x98, 0x47, 0xd9, 0x37, 0xf8, 0xaa, 0x47, 0xdf,
-	0x60, 0xf7, 0xa1, 0xae, 0xae, 0xc4, 0x96, 0x5e, 0xc2, 0x85, 0x88, 0x9d, 0x2f, 0xa6, 0xfe, 0x03,
-	0xb1, 0x9e, 0x96, 0x25, 0xfd, 0x7a, 0xd9, 0xb4, 0x0c, 0xa2, 0x1c, 0xe4, 0x35, 0x93, 0x55, 0x3c,
-	0xf8, 0x6a, 0xdc, 0x12, 0xa0, 0x47, 0x26, 0x01, 0xde, 0x85, 0x38, 0x23, 0x4c, 0x0c, 0x4b, 0xdd,
-	0x53, 0x0b, 0x8a, 0x55, 0x8f, 0xe5, 0x4f, 0x35, 0x91, 0xcf, 0x6b, 0x66, 0xae, 0x01, 0xd5, 0x54,
-	0xef, 0x8c, 0x37, 0x52, 0x79, 0x69, 0xc8, 0x72, 0x41, 0x9a, 0x0b, 0x4f, 0xdc, 0xae, 0xa1, 0x71,
-	0x38, 0x06, 0xb1, 0xfc, 0xfa, 0x76, 0xd2, 0x51, 0xfd, 0xa5, 0xfb, 0x98, 0xfa, 0x7b, 0x04, 0xe3,
-	0xf6, 0x0e, 0xe6, 0xaa, 0xa6, 0xa5, 0x1f, 0x7c, 0x36, 0x7b, 0x78, 0x00, 0x31, 0xba, 0x50, 0x47,
-	0xbd, 0x9b, 0xef, 0x63, 0xf7, 0x17, 0x9a, 0x36, 0x7b, 0x23, 0xda, 0x94, 0x06, 0x2d, 0x31, 0xc8,
-	0x88, 0x3b, 0x76, 0xf6, 0x37, 0xa2, 0x10, 0xbb, 0xac, 0xe9, 0xbb, 0x8a, 0xb6, 0x5d, 0x21, 0x05,
-	0xb6, 0xae, 0x9f, 0x85, 0x70, 0x51, 0x3f, 0x60, 0xdd, 0x30, 0x88, 0xf5, 0xd6, 0x11, 0xaa, 0xbe,
-	0xfe, 0x9b, 0x28, 0x94, 0x0a, 0x1a, 0xfe, 0x7d, 0x76, 0x1b, 0x82, 0x9b, 0x28, 0x9c, 0x62, 0xb7,
-	0x33, 0xbf, 0x73, 0x32, 0xce, 0x26, 0xc7, 0x6f, 0xa2, 0xd1, 0x14, 0x36, 0xe2, 0x99, 0xd8, 0x9b,
-	0x5f, 0x4a, 0xbf, 0x75, 0xea, 0x4d, 0xde, 0x83, 0xf7, 0xd6, 0xa9, 0xd6, 0xee, 0x3b, 0xd7, 0xd5,
-	0xca, 0xe6, 0x8a, 0xd7, 0x20, 0x48, 0xb5, 0x27, 0x54, 0xf0, 0xac, 0xa7, 0x0a, 0x5a, 0xfa, 0x91,
-	0xd3, 0xae, 0x16, 0xdd, 0x15, 0x9f, 0xc4, 0x68, 0x60, 0x02, 0x43, 0xf4, 0xaf, 0x29, 0x2b, 0x55,
-	0x4b, 0x67, 0x86, 0x24, 0xe2, 0xf7, 0x0b, 0x5d, 0x6b, 0xb6, 0xd5, 0x7d, 0xe9, 0xb9, 0xb9, 0xef,
-	0x6c, 0x04, 0xc6, 0x3b, 0xd0, 0xc7, 0x06, 0x44, 0xb0, 0xfe, 0x42, 0x6f, 0xc4, 0x9b, 0x2c, 0x6b,
-	0xc5, 0x27, 0x71, 0x6a, 0xf8, 0x14, 0x0c, 0x50, 0xbb, 0xd1, 0x74, 0xde, 0x64, 0x97, 0x88, 0x32,
-	0xdb, 0x61, 0xa1, 0x93, 0xd9, 0x4f, 0x54, 0x29, 0x16, 0xd7, 0xc5, 0x24, 0x2e, 0x42, 0xf4, 0x80,
-	0xde, 0x3a, 0x78, 0x6c, 0x4e, 0x0c, 0xf6, 0x72, 0x6c, 0x78, 0x1c, 0xea, 0x9c, 0x0d, 0xf3, 0x48,
-	0xa0, 0x74, 0xf9, 0x14, 0xfe, 0x32, 0x44, 0x1d, 0x8d, 0xdd, 0xbd, 0x9d, 0xf3, 0xb9, 0x62, 0x79,
-	0x93, 0xe1, 0x6e, 0xe9, 0xe2, 0x9c, 0xe7, 0xd6, 0x09, 0x7a, 0x7d, 0x14, 0x7f, 0x19, 0x06, 0x59,
-	0x43, 0xbb, 0x5a, 0xb6, 0x88, 0x51, 0x56, 0xb4, 0xc4, 0x47, 0xbc, 0x7c, 0x91, 0xf2, 0x64, 0xb1,
-	0xc9, 0x1a, 0xb5, 0x25, 0xb2, 0xc7, 0x3d, 0xfe, 0xdb, 0x37, 0xdc, 0xc8, 0x1f, 0xb1, 0xf3, 0x85,
-	0x0e, 0xad, 0x8a, 0x11, 0x7c, 0x1c, 0xfa, 0xd9, 0x65, 0x88, 0x95, 0x1a, 0x7e, 0xc0, 0x9a, 0xaf,
-	0xa4, 0x08, 0x1d, 0x61, 0xf5, 0x85, 0x15, 0x88, 0xd8, 0x4d, 0xe0, 0x89, 0x1f, 0xf2, 0x47, 0x97,
-	0xd9, 0x16, 0xc6, 0x1e, 0x1d, 0xe3, 0xe9, 0xa5, 0xb2, 0xb9, 0x5a, 0xde, 0xd3, 0xa5, 0x70, 0x91,
-	0x7f, 0xc0, 0x39, 0xe8, 0x33, 0x2d, 0xc5, 0x22, 0x89, 0x7f, 0x09, 0xb3, 0x0e, 0xa8, 0x4e, 0x64,
-	0xd2, 0xaf, 0xf0, 0x2f, 0x2b, 0xba, 0x69, 0x6d, 0x53, 0x24, 0x89, 0xe3, 0xe2, 0x37, 0x61, 0xa8,
-	0x6e, 0xb7, 0x32, 0x27, 0xf7, 0x31, 0x27, 0x97, 0xee, 0x44, 0xae, 0x11, 0xdf, 0x54, 0xbd, 0xcc,
-	0x08, 0x66, 0xd9, 0x53, 0x8f, 0x22, 0xcc, 0x95, 0x0d, 0xe1, 0x6d, 0x88, 0x35, 0x88, 0xb3, 0x15,
-	0xdf, 0xe3, 0xaa, 0xee, 0x28, 0xaa, 0x6d, 0xf2, 0x74, 0x91, 0x54, 0xe9, 0xd2, 0x80, 0xe2, 0x18,
-	0xc1, 0xdb, 0x30, 0x64, 0xff, 0xee, 0xc1, 0x0e, 0x22, 0xff, 0xce, 0xf5, 0xf8, 0x4c, 0x27, 0xaa,
-	0xdb, 0x1c, 0x67, 0x89, 0xa1, 0x48, 0x31, 0xd3, 0xf9, 0xd5, 0xc4, 0x1b, 0x00, 0x0e, 0x0d, 0x7c,
-	0xfa, 0x40, 0x1a, 0x90, 0xfa, 0x0b, 0xf6, 0xca, 0x17, 0xde, 0xb8, 0x5d, 0x43, 0xaf, 0xc0, 0x24,
-	0x8c, 0x64, 0x15, 0x53, 0x2d, 0xd4, 0x2f, 0xab, 0xdc, 0x8d, 0x68, 0xdc, 0x87, 0x71, 0x18, 0xca,
-	0x2d, 0x6d, 0x24, 0xb9, 0xb5, 0x26, 0x99, 0x61, 0xfa, 0xe7, 0xcf, 0x4f, 0x23, 0x38, 0x01, 0x63,
-	0xb6, 0xaf, 0x34, 0xe1, 0xf5, 0xcd, 0xcf, 0xcf, 0xce, 0x9f, 0xcd, 0x3e, 0x09, 0xc3, 0x4e, 0x9b,
-	0x97, 0x2d, 0x1a, 0x52, 0xa9, 0x2b, 0xe1, 0xbb, 0x35, 0xd4, 0x48, 0x6c, 0x78, 0x4a, 0xd3, 0x17,
-	0x0f, 0xd5, 0x5b, 0x84, 0xc2, 0xf1, 0xc8, 0x5a, 0x30, 0x32, 0x10, 0x1f, 0x74, 0xa5, 0x3a, 0xff,
-	0x86, 0x00, 0xb7, 0xb6, 0x0c, 0xe3, 0x4b, 0x00, 0x8a, 0xa6, 0xe9, 0xd7, 0xed, 0xe2, 0x17, 0xdd,
-	0xb6, 0xa7, 0x9b, 0x14, 0xc2, 0x7f, 0x45, 0x91, 0xde, 0x32, 0xc8, 0x9e, 0xfa, 0x2e, 0x7b, 0x1c,
-	0xa0, 0x57, 0x7a, 0x9a, 0xc8, 0x30, 0x54, 0x56, 0xba, 0xba, 0x04, 0xb0, 0xab, 0xe9, 0x85, 0xab,
-	0x9c, 0x4e, 0xa0, 0x47, 0x3a, 0x0c, 0x95, 0x7e, 0x59, 0x38, 0x71, 0xbb, 0x86, 0x9e, 0x80, 0x09,
-	0x18, 0x5d, 0xdd, 0x4a, 0xd6, 0x85, 0x4d, 0xda, 0xd2, 0xa2, 0xf9, 0xec, 0x49, 0x18, 0x76, 0xf6,
-	0x4c, 0x73, 0xb5, 0x0c, 0x39, 0x9a, 0x0c, 0x03, 0x99, 0xd9, 0xb3, 0xe2, 0x96, 0xf1, 0x29, 0x82,
-	0x11, 0x8f, 0x16, 0xe6, 0x5e, 0x16, 0x9d, 0xd3, 0xab, 0x65, 0xcb, 0x38, 0xcc, 0xe9, 0x45, 0xf2,
-	0x50, 0x8b, 0xf6, 0xa0, 0xd3, 0x58, 0x74, 0x52, 0x3c, 0x90, 0x1e, 0xbb, 0x4c, 0x74, 0xef, 0x55,
-	0x3f, 0x0d, 0xd8, 0xd5, 0xc6, 0xdd, 0x71, 0xd9, 0xab, 0x10, 0x6f, 0x6e, 0x32, 0xc6, 0xe7, 0x20,
-	0x2a, 0x2e, 0x56, 0x4c, 0x56, 0x7e, 0x1e, 0x37, 0x12, 0x9b, 0x2f, 0x3a, 0xef, 0xa4, 0x1c, 0x90,
-	0x4a, 0x96, 0x7a, 0x95, 0x65, 0x2d, 0xfc, 0x58, 0x71, 0xf7, 0x69, 0xe3, 0x17, 0x01, 0x17, 0xd8,
-	0xb8, 0xcc, 0x5a, 0xbf, 0x1d, 0x39, 0x5b, 0x7f, 0x36, 0xf6, 0xa3, 0x1a, 0x0a, 0xd4, 0xeb, 0xae,
-	0x49, 0x29, 0x5e, 0xa8, 0x53, 0xe0, 0xb6, 0x9e, 0xfa, 0x15, 0x3f, 0x1c, 0xf3, 0x6c, 0xfc, 0xc6,
-	0x17, 0x60, 0x40, 0x5c, 0x39, 0x19, 0xe1, 0xfb, 0xe4, 0xd2, 0x51, 0x01, 0x4b, 0x69, 0xe1, 0x2f,
-	0x40, 0xe0, 0xed, 0xeb, 0xf6, 0x46, 0x3c, 0xe3, 0xbd, 0x11, 0x6b, 0xd7, 0xad, 0xbc, 0x7e, 0x95,
-	0x94, 0x17, 0x1b, 0x8d, 0xe5, 0x2b, 0x3e, 0x89, 0xe2, 0xe1, 0x57, 0x21, 0xc4, 0xe5, 0x14, 0x57,
-	0xdd, 0xee, 0x0f, 0x5f, 0x2f, 0x05, 0xad, 0xf8, 0x24, 0x41, 0x2e, 0x7b, 0xc2, 0xdd, 0x1e, 0xdf,
-	0x6e, 0xdf, 0x7e, 0x2f, 0x00, 0x23, 0xb9, 0xa5, 0x0d, 0x1e, 0x2b, 0xf8, 0x4f, 0x5a, 0x58, 0x1e,
-	0x95, 0x87, 0xfe, 0x4a, 0x75, 0x57, 0x53, 0x0b, 0xb2, 0x5a, 0x11, 0xea, 0x38, 0xe7, 0x29, 0x9a,
-	0xe3, 0x3c, 0x4d, 0x3b, 0xa9, 0x6c, 0x31, 0xec, 0xd5, 0xad, 0x15, 0x9f, 0x14, 0xe1, 0x94, 0x56,
-	0x2b, 0xf8, 0x0d, 0x88, 0x0a, 0xaa, 0xec, 0x04, 0x0b, 0x74, 0x38, 0x7f, 0x3b, 0xd3, 0xa5, 0xe7,
-	0xdd, 0x8a, 0x4f, 0x82, 0x4a, 0xfd, 0x1b, 0x9e, 0x86, 0x60, 0x45, 0x37, 0x2c, 0xa6, 0xc7, 0x41,
-	0x6e, 0x66, 0xc1, 0x19, 0xff, 0xb4, 0x8f, 0x7e, 0x08, 0xcd, 0x04, 0x13, 0x3f, 0xf9, 0x49, 0x40,
-	0x62, 0x10, 0x0b, 0xbf, 0x84, 0xee, 0xd4, 0xd0, 0xd7, 0x11, 0x5c, 0x82, 0x20, 0x5d, 0xeb, 0xcc,
-	0x45, 0x38, 0x0b, 0x63, 0x8e, 0xf5, 0x66, 0xfa, 0x39, 0x93, 0xe4, 0xea, 0x16, 0x4c, 0xb8, 0x24,
-	0xce, 0x80, 0x98, 0x59, 0xda, 0xd8, 0xc6, 0xe1, 0x9d, 0xf2, 0xd5, 0xb2, 0x7e, 0xbd, 0x0c, 0x73,
-	0x10, 0xa6, 0x12, 0xcc, 0xad, 0x6e, 0x65, 0x4e, 0xc2, 0x40, 0x9d, 0x4c, 0x5a, 0xad, 0xc0, 0xa8,
-	0x03, 0x39, 0x4d, 0xcf, 0x5b, 0x56, 0xa7, 0x8e, 0x41, 0x70, 0x4b, 0x37, 0xac, 0x4c, 0x88, 0x8b,
-	0x9c, 0x7d, 0xb2, 0x7e, 0x17, 0x1b, 0xb1, 0xeb, 0x50, 0x62, 0x97, 0x7e, 0xd4, 0x28, 0x5f, 0xfc,
-	0x7e, 0x1f, 0x0c, 0xb7, 0xe4, 0x20, 0xf8, 0x35, 0xb7, 0x46, 0xd1, 0x43, 0x69, 0xd4, 0xa5, 0xcf,
-	0xd3, 0x10, 0x2a, 0xeb, 0xb2, 0xa5, 0xd9, 0xd9, 0x7c, 0x3b, 0x6f, 0xe8, 0x2b, 0xeb, 0x79, 0xcd,
-	0xc4, 0x2f, 0x43, 0xb8, 0x6a, 0x12, 0x06, 0x1f, 0xec, 0xf0, 0xd3, 0x04, 0xa7, 0x10, 0x3b, 0x15,
-	0x77, 0xce, 0xcf, 0xd2, 0x7b, 0x6a, 0xc2, 0x55, 0x93, 0x50, 0x92, 0xef, 0x21, 0x88, 0x09, 0x78,
-	0xfe, 0x8b, 0x28, 0xbb, 0x89, 0xe5, 0x42, 0xd7, 0x4e, 0xd2, 0x6c, 0xd7, 0x8e, 0x27, 0x12, 0xef,
-	0x3c, 0x7e, 0x50, 0x77, 0x60, 0x98, 0x78, 0x01, 0xc6, 0xf6, 0x74, 0x16, 0xb6, 0x85, 0x20, 0xf5,
-	0xfb, 0x52, 0x88, 0xdf, 0x84, 0x58, 0x92, 0x36, 0xca, 0x61, 0x38, 0xb3, 0xfa, 0xbd, 0x49, 0x81,
-	0xb1, 0x3a, 0x12, 0xaf, 0x5d, 0x5b, 0xea, 0x01, 0xd1, 0xab, 0x96, 0xf8, 0x65, 0xd9, 0xa9, 0xef,
-	0xd7, 0x50, 0xe0, 0xfc, 0x19, 0x93, 0x72, 0x8f, 0x18, 0xa1, 0x1f, 0x06, 0x02, 0xf3, 0x67, 0x0e,
-	0xc4, 0x97, 0x23, 0xfa, 0xc5, 0x74, 0x14, 0x8c, 0x47, 0x75, 0x41, 0x9c, 0x51, 0xca, 0x73, 0x42,
-	0xf8, 0x1d, 0x18, 0xe1, 0x59, 0x33, 0xe7, 0xe3, 0xfe, 0x6d, 0xc8, 0x62, 0x77, 0x5a, 0xe2, 0x52,
-	0xdb, 0x79, 0x81, 0x2b, 0x2d, 0x90, 0x86, 0x59, 0xee, 0xcc, 0x00, 0xec, 0xd2, 0xc7, 0x93, 0xe2,
-	0xba, 0xdc, 0xa8, 0x1d, 0xd0, 0x34, 0xd8, 0x4f, 0xed, 0xf5, 0xec, 0xec, 0xb3, 0x3c, 0x45, 0x48,
-	0x7d, 0x13, 0xc1, 0x13, 0x1d, 0xe8, 0xe2, 0x45, 0x98, 0xb4, 0xe3, 0xed, 0xee, 0xa1, 0x45, 0x64,
-	0x43, 0x29, 0x97, 0xea, 0x4f, 0xca, 0xf6, 0x55, 0x94, 0x66, 0xf0, 0xd2, 0xb8, 0x80, 0xcb, 0x1e,
-	0x5a, 0x44, 0xa2, 0x50, 0x42, 0x03, 0xf8, 0x34, 0x0c, 0x5d, 0x27, 0xbb, 0xa6, 0x5e, 0xb8, 0x4a,
-	0x2c, 0xfe, 0x4e, 0x60, 0x5f, 0x4e, 0x19, 0x5e, 0xac, 0x3e, 0xc9, 0xae, 0x56, 0x0b, 0xa1, 0x7b,
-	0x17, 0xd9, 0x9d, 0xf8, 0xc7, 0x41, 0x88, 0xe5, 0x0c, 0xa2, 0x58, 0xa4, 0x7e, 0x65, 0x4c, 0x34,
-	0x5d, 0x19, 0x1f, 0xdf, 0xe5, 0x5a, 0xef, 0x72, 0x4f, 0x79, 0xdd, 0xe5, 0xdc, 0x37, 0xb8, 0x37,
-	0x1e, 0xed, 0x0d, 0xce, 0x75, 0x6f, 0x7b, 0xed, 0x51, 0xde, 0xdb, 0x9c, 0x37, 0xb6, 0x85, 0xe1,
-	0x3b, 0x17, 0x9b, 0x4a, 0x08, 0xd9, 0x19, 0xaf, 0x24, 0xf8, 0xd8, 0xcf, 0xfd, 0x27, 0x6a, 0x1d,
-	0xee, 0x39, 0x23, 0xfe, 0xaf, 0x20, 0x0c, 0x89, 0x52, 0xe6, 0x63, 0xfb, 0x7b, 0x6c, 0x7f, 0x9f,
-	0xbb, 0xfd, 0x7d, 0x2b, 0x02, 0xd1, 0xcb, 0xc4, 0x7a, 0x6c, 0x7b, 0x8f, 0x6d, 0xef, 0x7f, 0x58,
-	0x35, 0xe9, 0xff, 0x6e, 0xc1, 0xe7, 0xf3, 0x0d, 0x11, 0x6b, 0xa1, 0xc8, 0xc7, 0xe1, 0xf8, 0xbf,
-	0x86, 0x53, 0x47, 0x08, 0x8e, 0xad, 0xab, 0x9a, 0x52, 0xc8, 0x2d, 0x6d, 0x5c, 0x21, 0x96, 0xa1,
-	0x16, 0x4c, 0x5e, 0x26, 0xc0, 0x6b, 0x10, 0xb0, 0x94, 0x92, 0xf8, 0x71, 0x64, 0xb7, 0x4f, 0x89,
-	0x6e, 0x4a, 0x79, 0xa5, 0x24, 0x51, 0x22, 0x78, 0x0c, 0x42, 0xd7, 0x14, 0xad, 0x2a, 0x9e, 0x46,
-	0xfa, 0x25, 0xf1, 0x0d, 0xbf, 0xe5, 0xf8, 0x39, 0x4a, 0x80, 0x31, 0x5a, 0x7c, 0x20, 0x46, 0xf6,
-	0x4f, 0x47, 0xd8, 0xe6, 0x37, 0x7e, 0x96, 0x12, 0xba, 0x53, 0x43, 0xfe, 0x38, 0x4a, 0x7d, 0x15,
-	0xc1, 0x54, 0x13, 0x86, 0xdd, 0xdb, 0x79, 0xd9, 0xd0, 0xab, 0x95, 0xec, 0x21, 0x5e, 0x77, 0xfd,
-	0x16, 0xf4, 0xc1, 0x97, 0xcb, 0x7f, 0x74, 0x36, 0x0a, 0x7d, 0x6c, 0x85, 0xfc, 0x31, 0x5d, 0xe2,
-	0x5f, 0x52, 0x12, 0x1c, 0x6f, 0x23, 0x05, 0x6b, 0x6a, 0xa6, 0x9e, 0x5a, 0xff, 0x0f, 0x33, 0xbc,
-	0xdc, 0x21, 0x35, 0x06, 0xda, 0xd0, 0xfc, 0x3e, 0x82, 0x27, 0xdb, 0x10, 0xdd, 0x26, 0x86, 0x4a,
-	0x4c, 0x2c, 0x43, 0xa4, 0x44, 0x17, 0x29, 0xef, 0x1e, 0x8a, 0x7f, 0x07, 0xb1, 0xf4, 0x40, 0xab,
-	0x6b, 0xd2, 0x98, 0x14, 0x2e, 0x09, 0xd5, 0xbd, 0xd6, 0x10, 0x8c, 0x52, 0xcf, 0x3e, 0x14, 0x75,
-	0xa6, 0x09, 0x7b, 0x71, 0xbf, 0xe5, 0x87, 0x27, 0xda, 0xc0, 0x2d, 0x29, 0x96, 0x82, 0x5f, 0x81,
-	0x20, 0x35, 0x7e, 0xb1, 0x69, 0x0f, 0xc6, 0xf8, 0x92, 0x4a, 0xb4, 0xe2, 0x36, 0xd1, 0x48, 0xc1,
-	0xd2, 0x0d, 0x89, 0xd1, 0xa3, 0xc6, 0x50, 0x2d, 0xab, 0xbc, 0x7e, 0xf7, 0x80, 0xc6, 0xb0, 0x53,
-	0x56, 0x2d, 0x89, 0x51, 0xc1, 0x6f, 0x42, 0xc8, 0x64, 0x5b, 0x21, 0xfe, 0x11, 0x45, 0xee, 0xa1,
-	0x14, 0xc4, 0x77, 0x55, 0x12, 0x24, 0x67, 0x56, 0x60, 0xd0, 0x5d, 0x8e, 0x8b, 0x01, 0x34, 0xfa,
-	0xa9, 0xe2, 0x3e, 0x1c, 0x85, 0xb0, 0x41, 0xf6, 0x88, 0x41, 0x8c, 0x38, 0xc2, 0x00, 0x21, 0xde,
-	0x73, 0x15, 0xf7, 0x53, 0xc0, 0xaa, 0x49, 0x0c, 0x59, 0x29, 0x91, 0xb2, 0x15, 0x0f, 0xcc, 0x7c,
-	0x1f, 0xb5, 0x98, 0xa7, 0x4b, 0x37, 0xf8, 0x18, 0x0c, 0x4b, 0xcb, 0x2f, 0xef, 0x2c, 0x6f, 0xe7,
-	0xe5, 0xfc, 0x66, 0x7e, 0x71, 0x5d, 0xde, 0xde, 0xb9, 0x12, 0xf7, 0xe1, 0x31, 0xc0, 0xf6, 0xf0,
-	0xa5, 0xc5, 0xd5, 0xf5, 0xe5, 0x25, 0x36, 0x8e, 0xf0, 0x08, 0x0c, 0xd9, 0xe3, 0xf3, 0xaf, 0xbd,
-	0xc6, 0x06, 0xfd, 0xce, 0xc1, 0x8c, 0x18, 0x0c, 0x38, 0x07, 0xcf, 0x8a, 0xc1, 0xa0, 0x73, 0xf0,
-	0x59, 0x31, 0xd8, 0xe7, 0x1c, 0x3c, 0x27, 0x06, 0x43, 0x38, 0x0e, 0x03, 0x4b, 0x8b, 0xf9, 0x45,
-	0x79, 0x73, 0x27, 0xcf, 0x46, 0xc2, 0x74, 0x64, 0x7d, 0x31, 0xbf, 0xbc, 0x91, 0x7b, 0x5d, 0xbe,
-	0xb2, 0xbc, 0xb8, 0x11, 0x8f, 0xcc, 0x7c, 0x03, 0x01, 0x6e, 0xf5, 0x56, 0x3c, 0xc1, 0x1e, 0xbf,
-	0xe5, 0xa5, 0xd5, 0xed, 0xbc, 0xb4, 0x9a, 0xdd, 0xc9, 0xaf, 0x6e, 0x6e, 0xc8, 0x1b, 0x8b, 0x57,
-	0x96, 0xe3, 0x3e, 0x8c, 0x21, 0x96, 0x5b, 0xcc, 0xad, 0x2c, 0xcb, 0x2b, 0xab, 0x79, 0x39, 0xff,
-	0xfa, 0xd6, 0xb2, 0x7b, 0x49, 0xb9, 0xcd, 0x9d, 0x8d, 0xbc, 0xf4, 0x7a, 0xdc, 0x4f, 0x99, 0xd1,
-	0xcc, 0x42, 0x7e, 0x65, 0x59, 0xda, 0x5e, 0xdd, 0xdc, 0x88, 0x07, 0xf0, 0x10, 0x44, 0xf3, 0xeb,
-	0xdb, 0xf5, 0x81, 0x20, 0x55, 0xf5, 0xd6, 0xe6, 0x96, 0x2c, 0x2d, 0x5f, 0xa6, 0xdf, 0xfb, 0x70,
-	0x18, 0x02, 0x5b, 0x9b, 0x5b, 0xf1, 0xd0, 0xcc, 0x95, 0x16, 0xfb, 0x76, 0x46, 0x32, 0x3c, 0x0a,
-	0xf1, 0xcd, 0xad, 0x65, 0x69, 0x31, 0xbf, 0x29, 0x31, 0x11, 0xe4, 0xd5, 0x8d, 0xb8, 0x0f, 0x27,
-	0x60, 0xd4, 0x3d, 0xba, 0xb1, 0x99, 0xa7, 0x33, 0x68, 0xe6, 0xc5, 0xe6, 0x45, 0x52, 0x2b, 0xc4,
-	0xfd, 0xd0, 0xc7, 0xa4, 0x8d, 0xfb, 0xe8, 0xc7, 0xec, 0xeb, 0xf9, 0xe5, 0xed, 0x38, 0xa2, 0x62,
-	0x5f, 0x59, 0x5d, 0x5f, 0x5f, 0xdd, 0x5e, 0xce, 0x6d, 0x6e, 0x2c, 0x6d, 0xc7, 0xfd, 0xd9, 0x5f,
-	0x47, 0x77, 0x3f, 0x98, 0xf2, 0xbd, 0xff, 0xc1, 0x94, 0xef, 0x93, 0x0f, 0xa6, 0xd0, 0x7b, 0x47,
-	0x53, 0xe8, 0x5b, 0x47, 0x53, 0xe8, 0x7b, 0x47, 0x53, 0xe8, 0xee, 0xd1, 0x14, 0x7a, 0xff, 0x68,
-	0x0a, 0xfd, 0xc3, 0xd1, 0x14, 0xfa, 0xe8, 0x68, 0xca, 0xf7, 0xc9, 0xd1, 0x14, 0xfa, 0xe5, 0x0f,
-	0xa7, 0x7c, 0xb7, 0x3e, 0x9c, 0x42, 0x77, 0x3f, 0x9c, 0xf2, 0xbd, 0xff, 0xe1, 0x94, 0xef, 0x8d,
-	0x37, 0x4a, 0x7a, 0xe5, 0x6a, 0x29, 0x7d, 0x4d, 0xa7, 0xa7, 0x87, 0xa1, 0xa4, 0xab, 0xe6, 0x1c,
-	0xfb, 0xb0, 0xa7, 0x1b, 0x07, 0xa7, 0x2b, 0x86, 0x7e, 0x4d, 0x2d, 0x12, 0xe3, 0xb4, 0x3d, 0x3d,
-	0x57, 0xd9, 0x2d, 0xe9, 0x73, 0xe4, 0x5d, 0xcb, 0xfe, 0x4f, 0x54, 0x9d, 0xfe, 0x0d, 0xd4, 0x6e,
-	0x88, 0xfd, 0x9b, 0xa3, 0xb3, 0xff, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x94, 0x52, 0x24, 0x3b, 0x19,
-	0x4c, 0x00, 0x00,
+	// 6682 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7c, 0x6f, 0x6c, 0x1b, 0x47,
+	0x76, 0xb8, 0x86, 0xa4, 0x44, 0xea, 0x51, 0xa2, 0xa8, 0xd1, 0x3f, 0x5a, 0xb6, 0x65, 0x86, 0xe7,
+	0xdc, 0x39, 0x36, 0x2d, 0x5b, 0x74, 0x6c, 0xc7, 0x4a, 0x2e, 0x89, 0x48, 0xc9, 0x96, 0xf4, 0x93,
+	0x25, 0x65, 0x45, 0xe7, 0x8f, 0x93, 0xdc, 0x62, 0x45, 0x8e, 0xa8, 0xb5, 0x29, 0xee, 0x66, 0x77,
+	0x69, 0x59, 0x87, 0x9f, 0xd1, 0xf4, 0x70, 0x07, 0xf4, 0x5a, 0xb4, 0xe8, 0xb9, 0x57, 0x5c, 0xbf,
+	0xb4, 0x68, 0x3f, 0xb4, 0xbd, 0x06, 0xc5, 0xa1, 0xfd, 0xd2, 0x02, 0xe5, 0x1d, 0x60, 0x04, 0xb8,
+	0xe2, 0xe0, 0x03, 0x5a, 0x03, 0x45, 0x81, 0xe0, 0x8a, 0x16, 0x17, 0x05, 0x6d, 0x73, 0x69, 0x0a,
+	0xa4, 0x69, 0x50, 0x1c, 0x8a, 0x2b, 0xae, 0x98, 0x3f, 0xbb, 0xdc, 0x25, 0x97, 0x14, 0x65, 0x3b,
+	0x01, 0xda, 0xfa, 0x93, 0xc4, 0x99, 0x79, 0x7f, 0xe6, 0xcd, 0x7b, 0x6f, 0xde, 0x7b, 0x33, 0xb3,
+	0x70, 0xfa, 0x06, 0x31, 0x27, 0x55, 0xed, 0x94, 0x59, 0xd8, 0x24, 0x5b, 0xca, 0xa9, 0x1b, 0x2a,
+	0xd9, 0x36, 0x4f, 0x15, 0x8a, 0x15, 0xb9, 0xac, 0x29, 0xc5, 0x75, 0xa5, 0xac, 0x54, 0x0a, 0xc4,
+	0x38, 0x65, 0xed, 0xe8, 0xc4, 0x9c, 0xd4, 0x0d, 0xcd, 0xd2, 0xf0, 0x51, 0x0e, 0x31, 0xc9, 0x21,
+	0x26, 0x19, 0xc4, 0x64, 0x23, 0xc4, 0xf8, 0xc9, 0x92, 0x6a, 0x6d, 0x56, 0xd7, 0x27, 0x0b, 0xda,
+	0xd6, 0xa9, 0x92, 0x56, 0xd2, 0x4e, 0x31, 0xe0, 0xf5, 0xea, 0x06, 0xfb, 0xc5, 0x7e, 0xb0, 0xff,
+	0x38, 0xd2, 0xf1, 0x23, 0x25, 0x4d, 0x2b, 0x95, 0x49, 0x7d, 0x94, 0xa5, 0x6e, 0x11, 0xd3, 0x52,
+	0xb6, 0x74, 0x31, 0xe0, 0xa0, 0x97, 0x4f, 0x4d, 0xb7, 0x54, 0xad, 0x22, 0x58, 0x1a, 0x4f, 0x7a,
+	0x3b, 0x75, 0xad, 0xac, 0x16, 0x76, 0xdc, 0x4c, 0x8f, 0x7f, 0xde, 0x3b, 0xc2, 0x50, 0x2c, 0x22,
+	0x97, 0xd5, 0x2d, 0xd5, 0xf2, 0x4e, 0x6e, 0xfc, 0x48, 0xc3, 0x38, 0xad, 0x6a, 0x11, 0xcf, 0x80,
+	0x63, 0xde, 0x01, 0x26, 0x31, 0x6e, 0xa8, 0x05, 0x22, 0xfb, 0x90, 0x3c, 0xd9, 0x6e, 0xa4, 0x6c,
+	0x54, 0xcb, 0x5e, 0xc4, 0x07, 0xbc, 0xc3, 0xdd, 0x5d, 0x87, 0x1a, 0xd6, 0x48, 0x29, 0xab, 0x45,
+	0xc5, 0x22, 0xfe, 0x93, 0xa7, 0xeb, 0x21, 0x7b, 0xc5, 0xf3, 0x74, 0x47, 0x6b, 0xac, 0x14, 0x0a,
+	0xc4, 0x34, 0xe5, 0xb2, 0x56, 0xf2, 0x10, 0x3f, 0xeb, 0x0b, 0xac, 0x6d, 0x6d, 0x69, 0x15, 0x79,
+	0x5b, 0xd9, 0x70, 0xfd, 0x2b, 0xbb, 0xc1, 0xa6, 0xfc, 0xc0, 0x36, 0x2d, 0x4b, 0x6f, 0xa9, 0x58,
+	0xe3, 0x27, 0xfc, 0x40, 0x34, 0x43, 0x2d, 0xa9, 0x15, 0x59, 0xd7, 0xb4, 0xb2, 0x67, 0xf0, 0x19,
+	0xbf, 0xc1, 0xee, 0x65, 0xf5, 0x5b, 0x92, 0x23, 0x7e, 0x40, 0x6d, 0xd4, 0xe4, 0x86, 0x6a, 0x58,
+	0x55, 0xa5, 0x2c, 0x6f, 0x6a, 0xa6, 0xe5, 0x19, 0x77, 0xba, 0xf5, 0x38, 0xb9, 0x58, 0x31, 0x65,
+	0xb5, 0xb2, 0xa1, 0x9d, 0xd2, 0xd6, 0xaf, 0x91, 0x82, 0xc5, 0x21, 0x52, 0xff, 0x14, 0x84, 0xb1,
+	0x55, 0x43, 0xbb, 0xb9, 0x93, 0xdf, 0xd1, 0xc9, 0xbc, 0x65, 0xe9, 0xe6, 0x4c, 0xd5, 0xd2, 0x72,
+	0xc4, 0xb0, 0x4c, 0xfc, 0x04, 0xf4, 0x33, 0xc9, 0x18, 0xa4, 0xa8, 0x1a, 0xa4, 0x60, 0x25, 0x50,
+	0x12, 0x1d, 0x8b, 0x64, 0x43, 0x3f, 0xad, 0xa1, 0x2e, 0xa9, 0x8f, 0x76, 0x49, 0xa2, 0x07, 0x1f,
+	0x81, 0x88, 0x52, 0x2c, 0xca, 0x9b, 0xa6, 0x65, 0x26, 0x02, 0xae, 0x51, 0x61, 0xa5, 0x58, 0x9c,
+	0x37, 0x2d, 0x13, 0xe7, 0x00, 0xac, 0xb2, 0x29, 0x17, 0xb4, 0xca, 0x86, 0x5a, 0x4a, 0x04, 0x93,
+	0xe8, 0x58, 0x34, 0x33, 0x31, 0xe9, 0x67, 0xb2, 0xf9, 0xb2, 0x99, 0x63, 0xa3, 0xb2, 0xa1, 0x8f,
+	0x6a, 0x08, 0x49, 0xbd, 0x96, 0xdd, 0x80, 0x73, 0x10, 0x2b, 0x92, 0x0d, 0xa5, 0x5a, 0xb6, 0xe4,
+	0x4d, 0xa2, 0x14, 0x89, 0x91, 0xe8, 0x66, 0x88, 0x86, 0x1b, 0x10, 0xcd, 0x6d, 0xe9, 0xd6, 0x4e,
+	0x36, 0x74, 0xa7, 0x86, 0xd0, 0x7c, 0x97, 0xd4, 0x2f, 0x60, 0xe6, 0x19, 0x08, 0x9e, 0x82, 0x28,
+	0xd5, 0x79, 0x62, 0xc8, 0x15, 0x65, 0x8b, 0x24, 0x7a, 0x92, 0xe8, 0x58, 0x6f, 0x36, 0x46, 0xc7,
+	0xfe, 0xc5, 0x4f, 0xee, 0x04, 0xbb, 0x8d, 0xe0, 0x3b, 0x01, 0x0a, 0x05, 0x7c, 0xd0, 0xb2, 0xb2,
+	0x45, 0xf0, 0xb3, 0x80, 0x15, 0x5d, 0x27, 0x95, 0xa2, 0xec, 0x86, 0x0c, 0xb7, 0x80, 0x8c, 0xf3,
+	0xb1, 0x6b, 0x75, 0xf8, 0xe7, 0xa0, 0x4f, 0x57, 0x4c, 0x53, 0xb6, 0x36, 0x0d, 0xad, 0x5a, 0xda,
+	0x4c, 0x44, 0x3a, 0xe0, 0x3a, 0x4a, 0x21, 0xf2, 0x1c, 0x60, 0x1a, 0x3e, 0x7e, 0x36, 0x3c, 0x95,
+	0xce, 0xa4, 0xcf, 0xa4, 0x9f, 0xcc, 0x9e, 0x82, 0x61, 0xc1, 0x05, 0x97, 0x81, 0x5c, 0xd8, 0xd4,
+	0xd4, 0x02, 0xc1, 0x63, 0x77, 0x6a, 0xa8, 0xfb, 0x07, 0x35, 0x84, 0xee, 0xd5, 0x50, 0x68, 0xb7,
+	0x86, 0xc2, 0x67, 0xd3, 0xe7, 0xd2, 0xe7, 0xd3, 0x4f, 0x2d, 0x86, 0x22, 0xa1, 0x78, 0x77, 0xea,
+	0x57, 0x43, 0x30, 0xc8, 0x25, 0x90, 0xd3, 0x2a, 0x96, 0xa1, 0x95, 0xe9, 0x82, 0xe3, 0x2f, 0xc3,
+	0xa8, 0x41, 0xde, 0xa8, 0x12, 0xd3, 0x96, 0xa8, 0x29, 0x5b, 0x9a, 0xac, 0x14, 0x8b, 0x09, 0x94,
+	0x0c, 0x1e, 0x8b, 0x66, 0x4e, 0x34, 0xf0, 0xc8, 0x31, 0x5c, 0x56, 0x2a, 0xaa, 0x5e, 0x2d, 0x2b,
+	0xd4, 0x98, 0x57, 0x98, 0x49, 0x53, 0x64, 0xd9, 0xc4, 0x3d, 0x5b, 0x14, 0xb7, 0x51, 0x20, 0x9e,
+	0xb4, 0xff, 0x4b, 0x20, 0x69, 0x48, 0x10, 0xe1, 0xe0, 0x66, 0x5e, 0x9b, 0x29, 0x16, 0xf1, 0xd7,
+	0x10, 0x1c, 0xf0, 0x21, 0x6e, 0x90, 0x2d, 0xed, 0x06, 0x49, 0x04, 0x92, 0xc1, 0x63, 0xbd, 0xd9,
+	0x45, 0x1b, 0x65, 0xdf, 0x6d, 0xd4, 0x9b, 0x0a, 0x1b, 0x74, 0xbd, 0xdf, 0x0c, 0xd0, 0x86, 0x43,
+	0xb7, 0xd1, 0x81, 0xd4, 0x98, 0x31, 0x92, 0x19, 0xfa, 0xd2, 0xab, 0xa7, 0x4f, 0x5e, 0x98, 0x39,
+	0x79, 0x55, 0x39, 0xf9, 0x65, 0xf9, 0xb5, 0x93, 0xaf, 0x4d, 0xbe, 0x7e, 0xe2, 0xa8, 0x2f, 0x13,
+	0xa3, 0x8d, 0x4c, 0x48, 0x8c, 0x12, 0xfe, 0xff, 0x30, 0x66, 0x10, 0x53, 0xd7, 0x2a, 0x26, 0x69,
+	0x14, 0x42, 0xf0, 0x61, 0x0a, 0x61, 0xd8, 0xa6, 0xe2, 0x91, 0xc2, 0x0d, 0x18, 0xf7, 0xa3, 0x2e,
+	0xa4, 0x10, 0x62, 0x52, 0xb8, 0x60, 0xe3, 0xdc, 0xff, 0xa4, 0xc7, 0x9a, 0x88, 0xf2, 0x59, 0xa7,
+	0x7e, 0x29, 0x0c, 0xa3, 0x2f, 0x91, 0xf5, 0x19, 0x5d, 0x2f, 0xab, 0x05, 0x36, 0x89, 0x8b, 0xaa,
+	0x41, 0xb6, 0x95, 0x72, 0x19, 0x9f, 0x87, 0x68, 0x51, 0x35, 0x95, 0xf5, 0x32, 0xa1, 0xee, 0x93,
+	0xd9, 0x73, 0x0b, 0x6d, 0xa5, 0x76, 0x22, 0x86, 0xbe, 0xa4, 0x6c, 0xe0, 0x97, 0xa1, 0x4f, 0xd1,
+	0x75, 0x79, 0x43, 0x20, 0x12, 0x66, 0x9e, 0xf2, 0x35, 0xf3, 0x15, 0xe6, 0x85, 0x24, 0xb2, 0xc1,
+	0xa4, 0x36, 0xf0, 0xd6, 0x2d, 0x0f, 0x28, 0x35, 0x00, 0x45, 0xd7, 0x1d, 0x96, 0xde, 0x80, 0x71,
+	0x77, 0xb7, 0xac, 0x55, 0xe4, 0x82, 0x52, 0xd8, 0x24, 0xf2, 0x96, 0x6a, 0x9a, 0x89, 0xde, 0x07,
+	0xa1, 0x33, 0xea, 0xa2, 0xb3, 0x52, 0xc9, 0x51, 0xac, 0x97, 0x55, 0xd3, 0xc4, 0x5f, 0x41, 0x30,
+	0x44, 0x77, 0x0f, 0x72, 0xb3, 0x50, 0xae, 0x9a, 0xaa, 0x56, 0x61, 0x7b, 0xa3, 0xc9, 0x96, 0x24,
+	0x9a, 0x49, 0x37, 0x10, 0xe3, 0x5e, 0x7d, 0x72, 0x4d, 0xdd, 0xd2, 0x99, 0x2c, 0xe6, 0x6c, 0x28,
+	0xa9, 0x5a, 0x26, 0xd9, 0xa3, 0xf6, 0x02, 0xf6, 0xdc, 0x46, 0xc1, 0x38, 0x57, 0x60, 0xba, 0x40,
+	0xa7, 0xd1, 0xee, 0x8f, 0xbf, 0x1f, 0xec, 0xb9, 0xfd, 0x5d, 0x14, 0x88, 0x23, 0x69, 0x70, 0xbb,
+	0x01, 0xce, 0xc4, 0x37, 0x21, 0x5e, 0x54, 0x2c, 0x45, 0x2e, 0x55, 0x15, 0xa3, 0x28, 0x18, 0xe8,
+	0x66, 0x0c, 0x3c, 0xd1, 0x8e, 0x81, 0x59, 0xc5, 0x52, 0x2e, 0x51, 0x10, 0x46, 0xfd, 0x73, 0x1e,
+	0x95, 0x7c, 0xde, 0x9f, 0x78, 0xac, 0xe8, 0x86, 0x31, 0xf1, 0xf3, 0x10, 0x2d, 0x98, 0xc6, 0x86,
+	0xd8, 0xae, 0x98, 0x9b, 0x8c, 0x66, 0x0e, 0x34, 0x10, 0xcd, 0x99, 0xc6, 0xc6, 0x2a, 0x1b, 0x90,
+	0x0d, 0x51, 0x22, 0x12, 0x14, 0x9c, 0x16, 0x7c, 0x1d, 0xfa, 0x4b, 0x86, 0xa2, 0x6f, 0xbe, 0x51,
+	0x16, 0x8c, 0x87, 0x19, 0xe3, 0x8f, 0xf9, 0x33, 0x7e, 0x89, 0x0e, 0x7d, 0x61, 0xa9, 0x73, 0x86,
+	0xfb, 0x04, 0x72, 0xce, 0xee, 0x2d, 0x18, 0xa4, 0x1b, 0x1a, 0x29, 0x58, 0xa4, 0x28, 0x17, 0x34,
+	0xed, 0xba, 0x4a, 0xcc, 0x44, 0xc4, 0xd7, 0x7c, 0x73, 0xac, 0xb7, 0x85, 0xf9, 0x7a, 0x49, 0xc7,
+	0xeb, 0x96, 0xe4, 0x26, 0x1d, 0x77, 0x48, 0x71, 0x5c, 0x66, 0xf6, 0x2c, 0x00, 0xd5, 0x15, 0xe1,
+	0x8a, 0xbf, 0x70, 0xa7, 0x86, 0x02, 0x14, 0xd1, 0x6e, 0x0d, 0x75, 0x53, 0xaf, 0x7d, 0xe1, 0xf6,
+	0x77, 0x11, 0xde, 0x38, 0x7b, 0xb3, 0x70, 0x72, 0x5b, 0x51, 0xf4, 0x93, 0xa6, 0xa5, 0x54, 0x8a,
+	0x8a, 0x51, 0x5c, 0x0c, 0x45, 0x50, 0x3c, 0x90, 0xfa, 0xe3, 0x61, 0x18, 0xcd, 0xb1, 0x70, 0x65,
+	0x8d, 0x14, 0xaa, 0x86, 0x6a, 0xed, 0x08, 0x17, 0x6d, 0xe2, 0xd7, 0xe1, 0x88, 0x27, 0x40, 0x53,
+	0x89, 0x29, 0x6f, 0x18, 0xda, 0x16, 0xdb, 0x81, 0x4c, 0x5d, 0x29, 0x90, 0x3d, 0xcc, 0xf3, 0x90,
+	0x00, 0x5f, 0x15, 0xd0, 0x17, 0x0d, 0x6d, 0x6b, 0xd9, 0x86, 0xc5, 0x17, 0x61, 0xa8, 0xa2, 0xc9,
+	0x8d, 0x14, 0x84, 0xdd, 0xb6, 0x42, 0x39, 0x58, 0xd1, 0xd6, 0xbc, 0x48, 0xf1, 0x75, 0x18, 0x53,
+	0x0a, 0x96, 0x7a, 0x83, 0x34, 0xe3, 0x0a, 0x31, 0x5c, 0x53, 0xbe, 0xb6, 0x59, 0x8f, 0xd1, 0x26,
+	0xdd, 0x18, 0x77, 0x96, 0x54, 0xd3, 0x9a, 0xef, 0x92, 0x46, 0x38, 0xce, 0x46, 0x62, 0x8b, 0x30,
+	0x62, 0xbb, 0x27, 0x95, 0x06, 0x27, 0x7a, 0xd5, 0x62, 0xab, 0x28, 0x74, 0xd4, 0x9f, 0x6d, 0x24,
+	0x0d, 0x09, 0xa0, 0x05, 0x5d, 0x72, 0x40, 0x70, 0x19, 0x86, 0x49, 0xc5, 0x07, 0x55, 0x98, 0xa1,
+	0x7a, 0x6a, 0x2f, 0xae, 0x17, 0x56, 0xf3, 0x9b, 0x06, 0x51, 0xac, 0x9c, 0x62, 0x91, 0x92, 0x66,
+	0x30, 0xc6, 0x59, 0x20, 0x85, 0x24, 0xcc, 0xf1, 0x7a, 0xa8, 0xdd, 0x84, 0x83, 0x1e, 0x32, 0x0d,
+	0x6e, 0xec, 0xe0, 0x03, 0x13, 0x1d, 0x53, 0x5d, 0xe4, 0xdc, 0xce, 0x6c, 0x06, 0x06, 0xab, 0x26,
+	0x31, 0x64, 0xb5, 0x28, 0x17, 0xca, 0x2a, 0xa9, 0x58, 0xb2, 0xaa, 0x0b, 0xb7, 0xe9, 0x2f, 0xaf,
+	0x80, 0x14, 0xa3, 0x00, 0x0b, 0xc5, 0x1c, 0x1b, 0xbe, 0xa0, 0xe3, 0x2d, 0x18, 0x12, 0x28, 0x48,
+	0xc5, 0x52, 0x37, 0xc4, 0xa6, 0x91, 0x80, 0x8e, 0x7d, 0xef, 0xe8, 0x5b, 0xb7, 0xfc, 0x30, 0xcc,
+	0x07, 0x24, 0xcc, 0x49, 0xb9, 0x5b, 0xb1, 0x0c, 0x49, 0x7b, 0x95, 0xb7, 0x14, 0xba, 0xf2, 0x5a,
+	0xd5, 0x94, 0x19, 0x78, 0x91, 0x50, 0xdb, 0xa3, 0xb4, 0xfb, 0xda, 0x4c, 0x20, 0x28, 0x1d, 0x16,
+	0xf0, 0x97, 0x6d, 0xf0, 0x2b, 0x26, 0x31, 0x66, 0x6d, 0x60, 0x6a, 0x5a, 0x62, 0xe9, 0x5b, 0xe2,
+	0xef, 0x6f, 0x8b, 0xff, 0x10, 0x07, 0x6f, 0x81, 0x5e, 0x85, 0xcf, 0xb7, 0xc2, 0xdb, 0xb0, 0xec,
+	0x87, 0xda, 0x52, 0x79, 0x6c, 0xcb, 0x17, 0xbf, 0x7b, 0x71, 0x2f, 0x40, 0x5f, 0x45, 0x93, 0x0b,
+	0x9b, 0x4a, 0xb9, 0x4c, 0x2a, 0x25, 0x92, 0x18, 0x68, 0x83, 0x30, 0x24, 0x45, 0x2b, 0x5a, 0xce,
+	0x1e, 0x8a, 0x5f, 0x83, 0xb8, 0x10, 0x42, 0x1d, 0x3c, 0xce, 0xc0, 0x4f, 0xed, 0xa5, 0x86, 0x73,
+	0x0c, 0xce, 0x41, 0x35, 0x1f, 0x92, 0x06, 0x88, 0xb7, 0x09, 0x6f, 0xc2, 0x98, 0x83, 0xb6, 0x61,
+	0xd2, 0x87, 0xef, 0x97, 0xc8, 0xb0, 0x83, 0xd1, 0x2d, 0x82, 0x75, 0xe8, 0xbb, 0x66, 0xba, 0xe6,
+	0x30, 0xc8, 0xd0, 0x9f, 0x69, 0x42, 0x5f, 0xcf, 0x87, 0x26, 0x17, 0x95, 0x1b, 0x8a, 0x59, 0x30,
+	0x54, 0xdd, 0x72, 0xd0, 0x33, 0x35, 0x8d, 0xdc, 0xe1, 0x31, 0x34, 0xa2, 0xb2, 0xba, 0x66, 0xd6,
+	0x67, 0xa3, 0xc2, 0x60, 0x41, 0xd1, 0xad, 0xc2, 0xa6, 0xe2, 0x22, 0x84, 0x19, 0xa1, 0xd3, 0xed,
+	0x08, 0xe5, 0x38, 0x50, 0x6b, 0x2a, 0xf1, 0x42, 0xc3, 0x08, 0x7c, 0x03, 0x46, 0x45, 0x3e, 0xbe,
+	0xae, 0x98, 0x74, 0x43, 0x73, 0xe8, 0x0d, 0x31, 0x7a, 0x4f, 0xee, 0x25, 0x37, 0xb1, 0x29, 0x53,
+	0x60, 0x07, 0xab, 0x87, 0xe6, 0xb0, 0xee, 0x33, 0x02, 0xcf, 0x02, 0xb6, 0x8d, 0xae, 0x9e, 0xb3,
+	0x26, 0x46, 0xda, 0xe8, 0x53, 0xb7, 0x14, 0x17, 0x10, 0x92, 0x62, 0x91, 0x25, 0x3a, 0x1e, 0xe7,
+	0x21, 0xa6, 0xe8, 0xaa, 0x1b, 0xc3, 0x28, 0xc3, 0x90, 0xde, 0x8b, 0xeb, 0x99, 0xd5, 0x05, 0x07,
+	0xcb, 0x7c, 0xb7, 0xd4, 0xa7, 0xe8, 0x6a, 0x1d, 0xeb, 0x55, 0x00, 0x17, 0xc6, 0xb1, 0x16, 0x0b,
+	0xdc, 0x80, 0xd1, 0x01, 0xe7, 0x19, 0x24, 0x13, 0x3d, 0x8b, 0x54, 0xe6, 0xbb, 0xa5, 0x5e, 0xc3,
+	0xc1, 0xfd, 0x15, 0x04, 0x03, 0x96, 0x51, 0x35, 0x59, 0xf0, 0xc0, 0x1c, 0x9e, 0x99, 0x48, 0xb0,
+	0xe0, 0x61, 0x4f, 0x0a, 0x3c, 0xe0, 0xe2, 0x5e, 0x72, 0xcd, 0x28, 0xec, 0x23, 0xdc, 0x8b, 0x09,
+	0x8a, 0x1c, 0x96, 0x05, 0x9c, 0x03, 0xeb, 0x65, 0xad, 0x70, 0xdd, 0xc5, 0xc4, 0x81, 0x4f, 0x9d,
+	0x09, 0x41, 0xd1, 0x66, 0x82, 0x86, 0x7d, 0x9a, 0x61, 0xda, 0x61, 0xdf, 0xb8, 0x7f, 0xd8, 0xa7,
+	0x19, 0x66, 0x43, 0xd8, 0x57, 0x6f, 0x39, 0x0e, 0x23, 0x0d, 0x35, 0x25, 0x11, 0x15, 0x0d, 0x36,
+	0x46, 0x45, 0x4f, 0x66, 0x9f, 0x87, 0x61, 0xef, 0x86, 0x28, 0x86, 0x1e, 0xbb, 0x53, 0x43, 0x3d,
+	0xf7, 0x6a, 0xa8, 0x7b, 0xb7, 0x86, 0x7a, 0x68, 0x16, 0x9b, 0x39, 0xef, 0x1f, 0x41, 0x65, 0x53,
+	0x10, 0x73, 0x36, 0x36, 0x0e, 0x1b, 0xbf, 0x53, 0x43, 0xbd, 0xf7, 0x6a, 0x28, 0xb2, 0x5b, 0x43,
+	0xa1, 0x0b, 0xe9, 0xa9, 0xd3, 0xd9, 0xcb, 0x70, 0xa4, 0xa5, 0x2b, 0x16, 0x40, 0xc7, 0xef, 0xd4,
+	0x50, 0xdf, 0xbd, 0x1a, 0x8a, 0xee, 0xd6, 0x50, 0x64, 0x2a, 0x93, 0x9e, 0x3a, 0x93, 0xce, 0x3c,
+	0xe5, 0x25, 0xa9, 0x14, 0x6f, 0x28, 0x95, 0x02, 0x29, 0x66, 0x4f, 0x41, 0xac, 0xee, 0xd5, 0x2c,
+	0x9a, 0x45, 0x1f, 0xbe, 0x53, 0x43, 0x03, 0xf7, 0x6a, 0x28, 0xb6, 0x5b, 0x43, 0x83, 0x53, 0x67,
+	0xd3, 0x53, 0xe7, 0xd2, 0x99, 0x0b, 0xe9, 0xa9, 0xf3, 0xe9, 0xa9, 0xa7, 0xd2, 0x53, 0x17, 0xb2,
+	0x4f, 0xc0, 0x60, 0x5d, 0x73, 0x6d, 0x8a, 0xc3, 0x77, 0x6a, 0x68, 0xe4, 0x5e, 0x0d, 0x0d, 0x53,
+	0x8a, 0x99, 0xa9, 0x74, 0x26, 0x93, 0xce, 0x9c, 0xe1, 0x01, 0xe1, 0x62, 0x28, 0xd2, 0x1d, 0xef,
+	0x59, 0x0c, 0x45, 0x22, 0xf1, 0xde, 0xc5, 0x50, 0x24, 0x1a, 0xef, 0x5b, 0x0c, 0x45, 0x62, 0xf1,
+	0x81, 0xc5, 0x50, 0x64, 0x38, 0x3e, 0x92, 0xfa, 0x61, 0x18, 0xfa, 0x67, 0x74, 0x75, 0x95, 0xc7,
+	0xa0, 0x74, 0xaf, 0x59, 0x82, 0x51, 0xdb, 0x6c, 0xa9, 0xe1, 0x15, 0xc9, 0x86, 0x5a, 0x51, 0xd9,
+	0x0e, 0xd6, 0x3e, 0x38, 0x1c, 0x16, 0x50, 0x33, 0xba, 0x3a, 0xeb, 0xc0, 0xe0, 0x12, 0x0c, 0x52,
+	0x2c, 0xa6, 0x4e, 0x0a, 0xf5, 0x6d, 0x3e, 0xd8, 0x59, 0x6c, 0x32, 0xb3, 0xba, 0xb0, 0xe6, 0x86,
+	0x5b, 0x23, 0x96, 0xa5, 0x56, 0x4a, 0x26, 0x2f, 0x8b, 0xa8, 0x9e, 0x3e, 0xfc, 0x26, 0x82, 0x23,
+	0x4d, 0x94, 0x7c, 0x53, 0xbb, 0x07, 0xa1, 0x7b, 0xb0, 0x91, 0xae, 0x7b, 0xdf, 0xb8, 0x06, 0xc3,
+	0x94, 0x03, 0xdd, 0x91, 0xa5, 0x93, 0xe4, 0x51, 0xb2, 0x99, 0x0e, 0xc8, 0xd6, 0x97, 0x81, 0x25,
+	0x22, 0xc2, 0x20, 0xb0, 0xe2, 0x5e, 0x20, 0x9e, 0xa2, 0x5c, 0x85, 0xd8, 0xb5, 0x6d, 0x4b, 0x16,
+	0x65, 0x52, 0x2a, 0x54, 0x5e, 0xbd, 0x3a, 0xb9, 0x17, 0x95, 0xc5, 0x97, 0xf2, 0x2f, 0x3a, 0x40,
+	0x82, 0x40, 0xff, 0xb5, 0x6d, 0xab, 0xde, 0x88, 0x4b, 0x4e, 0x1c, 0xcb, 0x14, 0x40, 0x35, 0x0b,
+	0xda, 0x0d, 0x62, 0xec, 0x88, 0x38, 0x76, 0x4f, 0xff, 0x41, 0x15, 0xc0, 0x86, 0x11, 0xa2, 0xab,
+	0x87, 0xb0, 0xee, 0x4e, 0x77, 0xf0, 0xed, 0xa5, 0x14, 0xe9, 0x28, 0xf8, 0xf6, 0xe0, 0x32, 0xe1,
+	0xa0, 0x07, 0x47, 0xc3, 0xd2, 0xc3, 0x83, 0xf0, 0x3e, 0xa6, 0xb8, 0x9a, 0x5d, 0x2b, 0x9e, 0x7d,
+	0x1e, 0x46, 0xbc, 0x36, 0xd2, 0x69, 0xd2, 0xe6, 0xd8, 0xff, 0xf3, 0x5c, 0x67, 0xea, 0x6c, 0xbb,
+	0x9c, 0x56, 0xe4, 0x5e, 0x0d, 0xf5, 0x50, 0xa7, 0xf5, 0x54, 0xfa, 0x7c, 0x7a, 0xea, 0xb4, 0x3f,
+	0x06, 0xc7, 0xca, 0x7b, 0xe2, 0xe1, 0xd4, 0xdf, 0x74, 0xc3, 0x90, 0x9d, 0xf6, 0xf1, 0x3c, 0xd4,
+	0x64, 0x95, 0x39, 0x05, 0xfa, 0x54, 0x5d, 0xde, 0x50, 0xcb, 0x16, 0x31, 0xd4, 0x4a, 0x49, 0xe8,
+	0x4a, 0x0b, 0x43, 0x68, 0xa8, 0x99, 0x4f, 0x2e, 0xe8, 0x17, 0x6d, 0x40, 0x81, 0x53, 0xa8, 0x4d,
+	0x54, 0xad, 0xf7, 0xe0, 0x22, 0xf4, 0x97, 0x88, 0xe6, 0xa2, 0xc1, 0x13, 0xa8, 0x0b, 0x9d, 0xd1,
+	0xb8, 0x44, 0xb4, 0x16, 0x44, 0xfa, 0x4a, 0xae, 0x2e, 0x5c, 0x84, 0x3e, 0xa5, 0x6a, 0x6d, 0xda,
+	0xb5, 0x7f, 0x61, 0xd1, 0x4f, 0x77, 0x46, 0x64, 0xa6, 0x6a, 0x6d, 0xd2, 0xb4, 0xa0, 0xe0, 0xca,
+	0xd3, 0x9d, 0xb9, 0x50, 0xb4, 0xa2, 0x09, 0xff, 0x22, 0x82, 0xf8, 0x36, 0x59, 0x97, 0x3d, 0xf5,
+	0x27, 0xae, 0x41, 0xcf, 0x74, 0x46, 0xca, 0xbf, 0x18, 0x96, 0x3d, 0xf0, 0xc1, 0xad, 0xd1, 0x22,
+	0xd9, 0xd2, 0xa6, 0xd2, 0x16, 0x31, 0xad, 0x74, 0xc1, 0xb0, 0xd2, 0xa6, 0xa5, 0x94, 0xd4, 0x4a,
+	0x49, 0x8a, 0x6d, 0x33, 0x10, 0xa7, 0x48, 0x55, 0xe5, 0x71, 0x4f, 0xdd, 0x99, 0x88, 0x04, 0xe5,
+	0x4c, 0x87, 0x73, 0x75, 0xbb, 0x8c, 0x76, 0x74, 0xfb, 0x3d, 0xce, 0x05, 0x7f, 0x03, 0x41, 0x42,
+	0xd8, 0x83, 0x29, 0x14, 0x49, 0x2e, 0x88, 0x02, 0x42, 0x22, 0xba, 0x1f, 0x11, 0xf8, 0x17, 0x21,
+	0xda, 0xb1, 0x32, 0x5a, 0xf0, 0x05, 0x49, 0x7d, 0x88, 0x00, 0x2f, 0x69, 0xa5, 0x52, 0x5d, 0x37,
+	0x98, 0x52, 0x5f, 0x03, 0x2c, 0xd2, 0xcf, 0xb2, 0x56, 0x72, 0x34, 0x82, 0x3b, 0xa9, 0x73, 0x9d,
+	0xf1, 0xb8, 0xa4, 0x95, 0x78, 0x29, 0xd3, 0xab, 0x0c, 0x71, 0x8e, 0x77, 0x49, 0xb3, 0xe9, 0x51,
+	0x5a, 0xe2, 0x90, 0xc6, 0x4d, 0x2b, 0xf2, 0x30, 0x68, 0x71, 0xbc, 0x75, 0x5a, 0xa9, 0xbf, 0x0f,
+	0xc0, 0x78, 0x6e, 0x76, 0x99, 0x79, 0x19, 0xea, 0xec, 0xe7, 0x6e, 0xea, 0x06, 0x31, 0x4d, 0x55,
+	0xab, 0xd0, 0xe4, 0x1c, 0x9f, 0x81, 0x01, 0xe2, 0xb4, 0xf0, 0xc3, 0x03, 0xc4, 0x0e, 0x0f, 0x40,
+	0x1c, 0x1c, 0x24, 0xde, 0x44, 0x52, 0xac, 0x3e, 0x84, 0x1d, 0x1a, 0x7c, 0x13, 0xc1, 0x08, 0xf7,
+	0x86, 0x74, 0x4b, 0x92, 0xeb, 0xbd, 0xac, 0x34, 0xde, 0xf9, 0x9a, 0xfa, 0xb2, 0x95, 0x4d, 0x7d,
+	0xe4, 0xae, 0x73, 0x45, 0xec, 0xff, 0x22, 0xc8, 0x5d, 0xb5, 0x2f, 0x34, 0x03, 0x4e, 0x9b, 0x77,
+	0x6b, 0x48, 0x83, 0xa3, 0x30, 0x50, 0x6f, 0x4b, 0x52, 0x7e, 0xc7, 0x07, 0x9b, 0x26, 0x09, 0x97,
+	0x20, 0xee, 0x1a, 0x75, 0x59, 0xb1, 0x0a, 0x9b, 0xa9, 0x33, 0x2d, 0x66, 0x85, 0x81, 0x87, 0xe8,
+	0x55, 0x83, 0x14, 0xc7, 0x63, 0xcb, 0x9a, 0x95, 0xac, 0xff, 0x4e, 0x7d, 0x3d, 0x08, 0xfd, 0x6c,
+	0x16, 0x2b, 0x3a, 0x31, 0x14, 0x4b, 0x33, 0x70, 0x02, 0x7a, 0xe6, 0xde, 0xa8, 0x2a, 0x65, 0x7e,
+	0xdc, 0xd4, 0x3b, 0xdf, 0x25, 0x89, 0xdf, 0xf8, 0x28, 0xf4, 0xcd, 0x6a, 0xc4, 0x5c, 0xd6, 0x2c,
+	0xd6, 0xc0, 0x22, 0x17, 0xda, 0xef, 0x69, 0xc5, 0x87, 0x20, 0x42, 0x95, 0x55, 0x51, 0x2b, 0x7c,
+	0xb3, 0xa7, 0x23, 0x9c, 0x16, 0x7c, 0x0c, 0x62, 0x62, 0xb4, 0x68, 0x62, 0xee, 0x97, 0x8e, 0x69,
+	0x68, 0xc7, 0x49, 0x80, 0x35, 0x4b, 0x31, 0x2c, 0x73, 0x5b, 0xb5, 0x36, 0xf9, 0x61, 0xd2, 0x7c,
+	0x97, 0xe4, 0x6a, 0xc3, 0x69, 0x88, 0x0b, 0x18, 0xd6, 0xf8, 0x12, 0x1d, 0x17, 0x16, 0xe3, 0x9a,
+	0x7a, 0x28, 0x5f, 0x73, 0x95, 0x22, 0xc7, 0x16, 0xb1, 0xf9, 0xb2, 0x5b, 0x5c, 0x7c, 0xcd, 0x55,
+	0x8a, 0x0c, 0x53, 0x6f, 0x03, 0x5f, 0xa2, 0x9d, 0xf2, 0xc5, 0xe4, 0x2d, 0x91, 0x12, 0xb9, 0xc9,
+	0x1c, 0x21, 0xe3, 0xab, 0xde, 0x96, 0x3d, 0x0d, 0x31, 0xbe, 0x10, 0x9a, 0x2d, 0xd3, 0x09, 0xd7,
+	0x0e, 0x88, 0x59, 0x80, 0x9e, 0x16, 0x67, 0x48, 0x69, 0x1a, 0x47, 0x8b, 0x6a, 0xe5, 0x9f, 0xf5,
+	0xc0, 0x28, 0x5b, 0x0b, 0xfb, 0x18, 0xc4, 0x2a, 0x6c, 0x12, 0x83, 0x99, 0xf7, 0x25, 0x08, 0x39,
+	0xca, 0x1d, 0xeb, 0xd4, 0xed, 0x79, 0x2c, 0x4c, 0x62, 0x08, 0xf0, 0x15, 0x88, 0xd8, 0x5c, 0x89,
+	0x8d, 0xaf, 0x43, 0x64, 0x1e, 0x25, 0x11, 0x07, 0x88, 0x0e, 0xaa, 0xe9, 0xf7, 0x42, 0x6f, 0xd7,
+	0x50, 0x02, 0x46, 0x61, 0x80, 0x13, 0x4d, 0x5a, 0x1a, 0xd7, 0x4a, 0x1c, 0x9c, 0x4a, 0x9f, 0xbd,
+	0x5b, 0x43, 0x6f, 0x87, 0x20, 0x0e, 0x21, 0xa6, 0xce, 0x11, 0x3e, 0x97, 0x24, 0x82, 0xbf, 0x0b,
+	0x40, 0xc4, 0x46, 0x79, 0xfc, 0xaf, 0x02, 0xf0, 0xc3, 0x00, 0x1c, 0x80, 0x01, 0x1b, 0xe9, 0x24,
+	0x57, 0xbb, 0x8c, 0x50, 0x3f, 0x78, 0x1c, 0x46, 0x9c, 0x2e, 0xb7, 0xc6, 0x65, 0x3c, 0xfa, 0x07,
+	0x87, 0x61, 0xd0, 0x19, 0x66, 0xab, 0x5d, 0xc6, 0x51, 0x40, 0x78, 0x02, 0xc6, 0x1a, 0xb1, 0x88,
+	0xbe, 0x4c, 0x83, 0x06, 0xc2, 0x63, 0x30, 0xe4, 0x0c, 0xad, 0xab, 0x5d, 0xc6, 0xa5, 0x82, 0x70,
+	0x12, 0x0e, 0x34, 0x62, 0x73, 0x34, 0x2e, 0xd3, 0xa4, 0x83, 0x1e, 0xde, 0x6c, 0xd5, 0xcb, 0x38,
+	0x4a, 0xe8, 0xc7, 0x9b, 0xd0, 0xba, 0x4c, 0x83, 0x16, 0x7a, 0x78, 0xab, 0xab, 0x5e, 0xc6, 0xa5,
+	0x86, 0xf0, 0xd7, 0x08, 0xba, 0x5f, 0x54, 0xca, 0x55, 0x92, 0xf9, 0x3e, 0x6a, 0x92, 0x6a, 0x0b,
+	0x59, 0xfa, 0xc8, 0xae, 0xa5, 0xbc, 0x7c, 0xa5, 0xd3, 0x46, 0x1e, 0x3e, 0x73, 0x6f, 0x39, 0x5f,
+	0xdf, 0xd9, 0xf1, 0xb8, 0x6e, 0x31, 0x14, 0x09, 0xc4, 0x83, 0x8b, 0xa1, 0x48, 0x30, 0x1e, 0x12,
+	0x27, 0xb0, 0x5f, 0x47, 0x80, 0x73, 0xb3, 0xcb, 0xab, 0x8a, 0xb5, 0xe9, 0x36, 0x9a, 0x87, 0xa5,
+	0xeb, 0x7f, 0xf2, 0x5d, 0x8f, 0xae, 0x87, 0x3e, 0x7e, 0x16, 0x9d, 0xe5, 0x94, 0x9d, 0x78, 0xd3,
+	0xe1, 0x28, 0xf5, 0xb3, 0x6e, 0x61, 0xc4, 0xf6, 0x61, 0x48, 0x9d, 0x9f, 0x09, 0x97, 0x11, 0xd7,
+	0x77, 0xa8, 0x63, 0x6f, 0x06, 0x7c, 0x6c, 0x33, 0xf0, 0xf0, 0x6c, 0xf3, 0x03, 0x6a, 0x9b, 0x8f,
+	0xc1, 0x11, 0x48, 0xb0, 0x71, 0xc9, 0x55, 0xc5, 0x50, 0xb6, 0x88, 0x45, 0x8c, 0x64, 0xde, 0x65,
+	0xa4, 0x99, 0xbb, 0x35, 0x74, 0x27, 0x04, 0x31, 0x61, 0xa4, 0x3d, 0x9c, 0xd7, 0x47, 0x26, 0xfa,
+	0xc8, 0x44, 0xf7, 0x63, 0xa2, 0xa9, 0xdf, 0xec, 0x81, 0x09, 0xa6, 0x66, 0x2f, 0x54, 0x89, 0xb1,
+	0xe3, 0xa8, 0x9a, 0xdb, 0x0c, 0x1e, 0x87, 0xe0, 0x75, 0xb2, 0x23, 0xac, 0x60, 0xa8, 0x6e, 0x05,
+	0xf4, 0xbf, 0x90, 0x11, 0x48, 0x22, 0x89, 0xf6, 0x7f, 0x5a, 0xd6, 0xf0, 0x89, 0x63, 0x0d, 0x8c,
+	0xc3, 0x36, 0xd6, 0x70, 0x37, 0x04, 0x7d, 0x10, 0xfc, 0x7f, 0x64, 0x67, 0xbc, 0x9b, 0x71, 0x0c,
+	0xef, 0x06, 0x20, 0xc6, 0x46, 0x24, 0x1f, 0x59, 0xc4, 0xa7, 0x65, 0x11, 0x7f, 0x8b, 0x20, 0xca,
+	0x65, 0xfc, 0xbf, 0xcb, 0x2e, 0x3e, 0x89, 0xc2, 0xa8, 0x7f, 0xc2, 0x80, 0x5f, 0x07, 0xd0, 0x15,
+	0x6b, 0x53, 0xde, 0xa2, 0xa3, 0x99, 0x59, 0x74, 0x5c, 0x8d, 0x68, 0xde, 0xf4, 0xc4, 0x6e, 0xd5,
+	0xab, 0xdb, 0xcd, 0xf8, 0x6b, 0x08, 0xe2, 0x6f, 0x50, 0x55, 0x97, 0x75, 0x5b, 0xd5, 0xcd, 0x44,
+	0x0f, 0x4b, 0x74, 0x66, 0xf7, 0x61, 0x50, 0x2d, 0xed, 0x39, 0x3b, 0xdc, 0x9c, 0xec, 0x24, 0x90,
+	0x34, 0xf0, 0x86, 0x07, 0xc0, 0xc4, 0xdb, 0xd0, 0xcf, 0xa3, 0x62, 0x71, 0x17, 0x47, 0xdc, 0xb6,
+	0x78, 0x66, 0x1f, 0x3c, 0x34, 0xc5, 0xc5, 0x2d, 0x68, 0xf7, 0x15, 0xea, 0xa3, 0x4d, 0xbc, 0x03,
+	0x31, 0x7e, 0x6d, 0x81, 0x4b, 0x98, 0x18, 0xe2, 0xba, 0xc4, 0x7e, 0x28, 0x37, 0x6d, 0xe6, 0x2d,
+	0x28, 0xf7, 0x17, 0xdc, 0x03, 0xa7, 0x3f, 0x0c, 0xb3, 0xeb, 0x65, 0xe7, 0xd2, 0x67, 0xd3, 0xe7,
+	0xdf, 0xae, 0xa1, 0x43, 0x30, 0x0e, 0x03, 0x5c, 0xbb, 0x73, 0x5a, 0xa5, 0xc8, 0x8b, 0xc2, 0x76,
+	0xff, 0xdd, 0x1a, 0xfa, 0x5e, 0x18, 0xee, 0x04, 0x01, 0xe8, 0x92, 0x72, 0x57, 0x74, 0xfc, 0x4f,
+	0x83, 0xf0, 0x9d, 0x20, 0x1c, 0x85, 0xf1, 0xba, 0x86, 0x4c, 0xb6, 0x72, 0x35, 0xa7, 0x21, 0xe9,
+	0x37, 0xaa, 0x8d, 0xd7, 0x39, 0x06, 0x87, 0xfc, 0x20, 0x7c, 0x1c, 0xd0, 0x93, 0x90, 0x6a, 0x83,
+	0xbb, 0x95, 0x2f, 0x4a, 0xc3, 0x84, 0x1f, 0x54, 0x0b, 0xb7, 0xf4, 0x14, 0x1c, 0x6d, 0x43, 0xa3,
+	0x9d, 0x87, 0x6a, 0x31, 0x0f, 0x1f, 0x67, 0xd5, 0x7e, 0x1e, 0xad, 0xfc, 0x56, 0x8b, 0x79, 0xb4,
+	0x70, 0x61, 0x7f, 0x1e, 0x10, 0x4b, 0xc8, 0x3d, 0xd8, 0xb7, 0x03, 0xed, 0x56, 0x6f, 0xef, 0x35,
+	0x6b, 0xbf, 0x46, 0x9d, 0xac, 0xcb, 0x5e, 0xab, 0xd0, 0x99, 0xdc, 0xdb, 0xcb, 0xb8, 0x13, 0xb9,
+	0xee, 0x25, 0x45, 0xc8, 0xc1, 0xa0, 0x6b, 0x53, 0x16, 0x65, 0x8d, 0xc9, 0x66, 0xf7, 0xd5, 0xae,
+	0xa2, 0x01, 0x4f, 0x43, 0x9f, 0xc8, 0x41, 0x39, 0xfc, 0x89, 0x06, 0xbf, 0xd3, 0x16, 0xf8, 0x19,
+	0xe8, 0xe3, 0xa6, 0x2e, 0x80, 0xd3, 0x8d, 0xbe, 0xa3, 0x1d, 0xb4, 0x4f, 0x66, 0xf2, 0x7b, 0x08,
+	0x86, 0x98, 0x03, 0xc9, 0xe7, 0x97, 0xf8, 0x89, 0xfb, 0xaa, 0xa1, 0xe9, 0x26, 0xfe, 0x02, 0xf4,
+	0x72, 0xa6, 0x2c, 0xab, 0xdc, 0x90, 0x0f, 0x7c, 0x14, 0x40, 0x52, 0x84, 0x75, 0xe6, 0xad, 0x32,
+	0x7e, 0x12, 0x46, 0xd5, 0x52, 0x45, 0x33, 0x88, 0xec, 0xdc, 0x65, 0xe4, 0x0c, 0xb1, 0x8c, 0x26,
+	0x22, 0x0d, 0xf3, 0x5e, 0x49, 0x74, 0x72, 0xe6, 0xf1, 0xe3, 0x4e, 0x05, 0xe2, 0x06, 0x31, 0x0c,
+	0xb5, 0x48, 0x58, 0x25, 0x26, 0x22, 0x71, 0x49, 0xac, 0x88, 0x46, 0x91, 0xb1, 0x7c, 0x2f, 0x0c,
+	0xc3, 0x8c, 0xc7, 0xb9, 0xb2, 0x5a, 0x52, 0xd7, 0xcb, 0xc4, 0xae, 0xf3, 0x7d, 0x0b, 0xc1, 0x10,
+	0xf3, 0x8d, 0x84, 0x1d, 0xb7, 0xd3, 0x7c, 0x40, 0xae, 0x1a, 0xaa, 0x88, 0xc6, 0x2e, 0xec, 0xc3,
+	0x7d, 0x7a, 0x67, 0x9f, 0x3d, 0xbe, 0x7b, 0xeb, 0x31, 0x89, 0xe8, 0x65, 0xa5, 0x40, 0x8a, 0xc9,
+	0xf5, 0x9d, 0xa4, 0x20, 0xa2, 0x1b, 0xda, 0xcd, 0x1d, 0x7e, 0xa5, 0xba, 0x6a, 0xa8, 0xef, 0xd7,
+	0x10, 0x4a, 0xa0, 0xf9, 0x2e, 0x69, 0x90, 0x77, 0xcf, 0x0b, 0x16, 0xae, 0x18, 0x2a, 0xfe, 0x0e,
+	0x82, 0x83, 0x8d, 0x9c, 0xd9, 0x17, 0x5e, 0x29, 0x87, 0xc1, 0x07, 0xe5, 0x30, 0xb3, 0x7b, 0xeb,
+	0x89, 0xf6, 0x1c, 0xba, 0xc8, 0x39, 0x9c, 0x26, 0xbc, 0x9c, 0x4a, 0x7c, 0x08, 0x65, 0xf8, 0x97,
+	0x11, 0xf4, 0x79, 0x64, 0x18, 0xfa, 0x6c, 0x65, 0x18, 0xdd, 0x74, 0x49, 0xef, 0x2d, 0x04, 0x07,
+	0x7c, 0xd6, 0x55, 0x66, 0x66, 0x26, 0x32, 0xe5, 0xcf, 0x5c, 0x76, 0xa3, 0x4d, 0xab, 0xcc, 0x5c,
+	0x01, 0xae, 0xc0, 0x88, 0xef, 0xd4, 0xf6, 0x77, 0xa4, 0xe2, 0xc3, 0xe7, 0x7c, 0x97, 0x84, 0x39,
+	0x66, 0x76, 0x4b, 0x9f, 0x12, 0xa6, 0xc2, 0xb9, 0x05, 0x87, 0xdb, 0x32, 0x2c, 0x6a, 0xea, 0x0f,
+	0x44, 0xf7, 0x40, 0x03, 0xdd, 0xba, 0xa2, 0xb0, 0xe2, 0xc2, 0x54, 0xf6, 0x71, 0xc0, 0x44, 0x18,
+	0xa3, 0xbc, 0xa1, 0x19, 0xfc, 0xec, 0x0e, 0x0f, 0x88, 0xb3, 0x7b, 0xb4, 0x5b, 0x43, 0xc1, 0x73,
+	0xe9, 0xf3, 0xa2, 0x6c, 0xf8, 0x2b, 0x11, 0xe8, 0x73, 0x87, 0x96, 0xd4, 0xb9, 0xb0, 0x12, 0x70,
+	0x8b, 0x72, 0x78, 0x84, 0x76, 0xb2, 0x42, 0xf8, 0x6d, 0x04, 0xc3, 0x0d, 0xc5, 0x62, 0xb9, 0xac,
+	0x9a, 0x96, 0xa8, 0x83, 0x3f, 0xff, 0x20, 0x75, 0xf0, 0x25, 0xd5, 0xb4, 0xb2, 0x13, 0x7b, 0xd4,
+	0xc1, 0xb1, 0xd1, 0x5c, 0xd2, 0xbf, 0x00, 0x3c, 0x7c, 0x93, 0xd7, 0x77, 0x74, 0xc5, 0xb4, 0x0f,
+	0x8c, 0x5b, 0x1d, 0xb4, 0x47, 0xd9, 0xd8, 0x2c, 0x1b, 0x8a, 0xaf, 0xf9, 0x89, 0x4d, 0x28, 0xf4,
+	0xf4, 0x3e, 0x16, 0xac, 0xc1, 0x11, 0xce, 0x77, 0x49, 0x71, 0x1b, 0xef, 0x45, 0xcd, 0x60, 0x43,
+	0xa6, 0x3f, 0x09, 0x7d, 0xfc, 0x6c, 0x37, 0x7b, 0x39, 0x70, 0xb7, 0x86, 0xfe, 0x39, 0x04, 0x43,
+	0xa2, 0x70, 0x12, 0x75, 0x09, 0x1f, 0xbe, 0x1a, 0x12, 0xd5, 0xf5, 0xe4, 0x4c, 0x81, 0x57, 0x61,
+	0x3f, 0x0e, 0x42, 0x0a, 0x7b, 0x26, 0x38, 0xde, 0xc7, 0xb9, 0x4f, 0x72, 0xbc, 0x21, 0xcb, 0xa8,
+	0x12, 0x78, 0x0e, 0x67, 0x9a, 0x67, 0x32, 0xe9, 0x6b, 0x08, 0x93, 0xce, 0x46, 0x32, 0xde, 0xcb,
+	0x69, 0xe5, 0xf3, 0x4b, 0x70, 0x09, 0x4f, 0x77, 0x84, 0xc0, 0xa5, 0xd9, 0xfe, 0x88, 0x2e, 0xe3,
+	0xe7, 0x3a, 0xe6, 0xc4, 0x7f, 0xa7, 0x1a, 0x87, 0x35, 0x62, 0x25, 0xf9, 0xff, 0x70, 0x05, 0x5f,
+	0xda, 0x37, 0x5f, 0x1d, 0xa0, 0x5d, 0xc0, 0xe7, 0xf7, 0x29, 0x2f, 0x7b, 0x67, 0x1c, 0x8f, 0xf1,
+	0xb9, 0xda, 0xbf, 0xe1, 0x85, 0x0e, 0x27, 0xdc, 0x2c, 0xb9, 0x96, 0x28, 0x17, 0x60, 0x88, 0xaa,
+	0x76, 0x52, 0xdb, 0x48, 0xd6, 0x95, 0xdd, 0x4c, 0x65, 0xfc, 0xad, 0xaf, 0x5d, 0x88, 0x91, 0x3d,
+	0x60, 0x47, 0x33, 0x0a, 0x57, 0x28, 0x1c, 0xb9, 0x53, 0x43, 0xa1, 0x7b, 0x35, 0x64, 0xd7, 0x1f,
+	0x9f, 0x83, 0xe1, 0x59, 0xfe, 0x2a, 0xc7, 0xf6, 0x3d, 0xfb, 0x8b, 0x38, 0x52, 0xbf, 0x11, 0x04,
+	0xec, 0xc6, 0xc0, 0x35, 0x17, 0xff, 0x01, 0xf2, 0x35, 0xae, 0xc0, 0x7e, 0x8c, 0xcb, 0x8f, 0xb1,
+	0xec, 0xf4, 0xee, 0xad, 0x29, 0xf7, 0x76, 0xe1, 0x70, 0xe9, 0xc8, 0x33, 0xa9, 0x54, 0x8a, 0xa2,
+	0x59, 0x5c, 0x76, 0x28, 0x3a, 0xdb, 0x46, 0x93, 0x61, 0xe2, 0xa7, 0x60, 0xb0, 0x8e, 0x42, 0x3c,
+	0x50, 0xe2, 0x47, 0x55, 0xee, 0x09, 0xcf, 0x77, 0x49, 0x03, 0xf6, 0x94, 0x05, 0x5b, 0x78, 0x1a,
+	0x70, 0x33, 0x71, 0x7e, 0x86, 0xd5, 0x00, 0x1a, 0xb7, 0x41, 0xed, 0x50, 0x0a, 0x7f, 0xd1, 0x8e,
+	0xb8, 0x6c, 0x0e, 0xdb, 0x3d, 0xa0, 0x9a, 0xef, 0x12, 0x91, 0xd8, 0xac, 0x18, 0xec, 0xbf, 0xac,
+	0x41, 0xea, 0xeb, 0x85, 0x93, 0xff, 0x47, 0x04, 0x7d, 0xa2, 0xb0, 0x65, 0x1f, 0xc2, 0x0e, 0xdb,
+	0x2f, 0xb6, 0xdc, 0x90, 0xfb, 0xab, 0x1f, 0x34, 0xaf, 0xb3, 0x84, 0x8b, 0xcd, 0x6b, 0xaf, 0x42,
+	0xb4, 0x7e, 0xb2, 0x68, 0x8a, 0xdd, 0x21, 0xb3, 0xff, 0xdd, 0xa1, 0x45, 0xd2, 0x0c, 0xce, 0x69,
+	0xa8, 0x99, 0xfa, 0x89, 0x2b, 0x60, 0x76, 0x9f, 0x6f, 0xfb, 0xae, 0x6a, 0xe0, 0xfe, 0x57, 0x35,
+	0x78, 0x9f, 0xab, 0x1a, 0xda, 0xcf, 0xaa, 0x8e, 0x41, 0x94, 0x11, 0xd5, 0xeb, 0x6b, 0x1a, 0x70,
+	0xad, 0xe9, 0x57, 0xbb, 0x61, 0x68, 0x46, 0xdc, 0x5c, 0x71, 0xcf, 0x75, 0x13, 0x62, 0xe2, 0x01,
+	0x9a, 0x7d, 0xb6, 0xce, 0x2f, 0x0e, 0x9f, 0xdf, 0xcf, 0xb1, 0x9f, 0xeb, 0x2d, 0x5a, 0xfd, 0x7a,
+	0xaa, 0xd4, 0xbf, 0xe9, 0x3e, 0x13, 0xc4, 0x15, 0x88, 0x3b, 0x17, 0x1b, 0x6c, 0x5a, 0x83, 0xfb,
+	0x89, 0x6f, 0x7c, 0xee, 0xd7, 0xb8, 0xa8, 0x0d, 0x98, 0xde, 0x6e, 0x7c, 0x1d, 0x06, 0xca, 0xfc,
+	0xee, 0x82, 0x43, 0x0e, 0xef, 0x47, 0x5f, 0x9b, 0x2f, 0x3e, 0xb8, 0xa8, 0xc5, 0xca, 0x9e, 0x5e,
+	0xfc, 0x3b, 0xc8, 0xad, 0x33, 0x36, 0xbd, 0xa1, 0xfb, 0x09, 0xdf, 0xdc, 0x04, 0xcf, 0xbf, 0x73,
+	0x0b, 0xed, 0xde, 0xfa, 0x9c, 0xdb, 0x65, 0x55, 0xc8, 0x76, 0x72, 0x43, 0x25, 0x65, 0xdb, 0x4b,
+	0x09, 0x5a, 0x36, 0x67, 0xdc, 0x59, 0xd5, 0x35, 0xd3, 0x66, 0x50, 0xb1, 0x8d, 0xde, 0xe6, 0x6d,
+	0xb8, 0xdd, 0xdd, 0xb8, 0x16, 0x65, 0x6e, 0x7e, 0x7d, 0xa2, 0x2e, 0x05, 0x1e, 0x5b, 0x88, 0xf6,
+	0xe6, 0xf3, 0x29, 0xe7, 0xdc, 0x8a, 0xdf, 0x7a, 0x1c, 0x88, 0xc7, 0x53, 0xbf, 0x8f, 0x58, 0xfc,
+	0x98, 0x5f, 0x5a, 0x13, 0x8f, 0x41, 0xcf, 0x41, 0xd4, 0x2a, 0x9b, 0xf2, 0x54, 0x46, 0xd6, 0xcb,
+	0x55, 0x53, 0x78, 0x94, 0x56, 0x2a, 0xdf, 0x6b, 0x95, 0xcd, 0xa9, 0xcc, 0x6a, 0xb9, 0x6a, 0x3a,
+	0x70, 0x53, 0x1c, 0x2e, 0xb0, 0x37, 0xdc, 0x14, 0x85, 0xe3, 0x07, 0x6a, 0xd9, 0x03, 0xd0, 0x23,
+	0xae, 0x7b, 0x0d, 0x88, 0xc9, 0x74, 0xd3, 0x38, 0x77, 0x2a, 0x9d, 0xe1, 0xb7, 0x36, 0x53, 0x7f,
+	0x89, 0x60, 0x24, 0x37, 0xbb, 0x3c, 0x9f, 0xcf, 0xaf, 0xae, 0x39, 0x4f, 0x69, 0x99, 0xc1, 0x3c,
+	0xcc, 0xe7, 0xb4, 0x2f, 0xf9, 0x3c, 0xa7, 0xed, 0xdc, 0xd5, 0x39, 0x42, 0x6c, 0x7a, 0x62, 0x3b,
+	0x1d, 0xb1, 0xe3, 0xc5, 0xd4, 0x7f, 0x20, 0x76, 0xa7, 0x65, 0x56, 0xdb, 0xae, 0x98, 0x96, 0x41,
+	0x94, 0xad, 0x7c, 0xd9, 0x64, 0x15, 0x0f, 0x3e, 0x1b, 0x2f, 0x07, 0xe8, 0xa1, 0x71, 0x80, 0xd7,
+	0x21, 0xce, 0x10, 0x13, 0x43, 0xbc, 0x06, 0x71, 0x7c, 0x79, 0xe3, 0xcb, 0xb1, 0x7c, 0xd9, 0xcc,
+	0xd5, 0x47, 0x35, 0xd4, 0x3b, 0xe3, 0xf5, 0x50, 0x5e, 0x1a, 0xb0, 0x3c, 0x23, 0xcd, 0xe9, 0x83,
+	0x6f, 0xd7, 0xd0, 0x18, 0x8c, 0x40, 0x2c, 0xbf, 0xb4, 0x96, 0x74, 0x55, 0x7f, 0xe9, 0x3a, 0xa6,
+	0xfe, 0x01, 0xc1, 0x98, 0xbd, 0x82, 0xb9, 0xaa, 0x69, 0x69, 0x5b, 0x9f, 0xce, 0x1a, 0x6e, 0x41,
+	0x8c, 0x4e, 0xd4, 0x55, 0xef, 0xe6, 0xeb, 0xd8, 0x79, 0x42, 0xd3, 0x62, 0x6d, 0xec, 0x2b, 0xa2,
+	0x96, 0x68, 0x64, 0xc8, 0x5d, 0x2b, 0xfb, 0xdb, 0x51, 0x88, 0x5d, 0x2a, 0x6b, 0xeb, 0x4a, 0x79,
+	0x4d, 0x27, 0x05, 0x36, 0xaf, 0x5f, 0x80, 0x70, 0x51, 0xdb, 0x62, 0xb7, 0x61, 0x10, 0x7b, 0x72,
+	0x4a, 0xa8, 0xf8, 0x7a, 0x6f, 0xa3, 0x9e, 0x54, 0xc8, 0x08, 0x6c, 0xb2, 0x6c, 0x08, 0x6e, 0xa3,
+	0x70, 0x8a, 0x65, 0x67, 0x01, 0x77, 0x67, 0x9c, 0x75, 0x8e, 0xdd, 0x46, 0xc3, 0x29, 0x6c, 0xc4,
+	0x33, 0xb1, 0x57, 0x5f, 0x9b, 0x7c, 0xfd, 0xc4, 0xab, 0xfc, 0x69, 0xea, 0xeb, 0x27, 0x9a, 0x1f,
+	0xa5, 0x7a, 0x52, 0x2b, 0x9b, 0x2a, 0x5e, 0x84, 0x10, 0x95, 0x9e, 0x10, 0x81, 0xff, 0xfb, 0x86,
+	0xa6, 0x67, 0xfa, 0x93, 0x9e, 0x97, 0xeb, 0xf3, 0x5d, 0x12, 0xc3, 0x81, 0x09, 0x0c, 0xd0, 0xbf,
+	0xa6, 0xac, 0x54, 0x2d, 0x8d, 0x29, 0x92, 0xf0, 0xdf, 0x4f, 0x77, 0x2c, 0xd9, 0x66, 0xf3, 0xa5,
+	0xfb, 0xe6, 0xa6, 0xfb, 0x7d, 0x3c, 0xbe, 0x02, 0xdd, 0xac, 0x41, 0x38, 0xeb, 0x2f, 0xee, 0x0f,
+	0x79, 0x83, 0x66, 0xcd, 0x77, 0x49, 0x1c, 0x1b, 0x3e, 0x01, 0x7d, 0x54, 0x6f, 0xca, 0x9a, 0xb8,
+	0x79, 0x1d, 0x65, 0xba, 0xc3, 0x5c, 0x27, 0xd3, 0x9f, 0xa8, 0x52, 0x2c, 0x2e, 0x89, 0x4e, 0x5c,
+	0x84, 0xe8, 0x16, 0xcd, 0x3a, 0xb8, 0x6f, 0x16, 0x0f, 0x96, 0x3a, 0xdc, 0x36, 0x7c, 0x36, 0x75,
+	0x4e, 0x86, 0x59, 0x24, 0x50, 0xbc, 0xbc, 0x0b, 0x7f, 0x09, 0xa2, 0xae, 0xef, 0x1d, 0xec, 0x6f,
+	0x9f, 0xcf, 0x15, 0x2b, 0x2b, 0x0c, 0x76, 0x55, 0x13, 0xfb, 0xbc, 0x78, 0x32, 0xa0, 0x39, 0xad,
+	0xf8, 0x4b, 0xd0, 0xcf, 0x3e, 0x0f, 0xa1, 0x56, 0x2c, 0x62, 0x54, 0x94, 0x72, 0xe2, 0xfd, 0x70,
+	0xc7, 0xaf, 0xca, 0x86, 0xdf, 0xba, 0xe5, 0x05, 0x7e, 0x9f, 0xed, 0x2f, 0xb4, 0x69, 0x41, 0xb4,
+	0xe0, 0x43, 0xd0, 0xcb, 0x92, 0x21, 0x56, 0x6a, 0xf8, 0x09, 0xbb, 0x7c, 0x25, 0x45, 0x68, 0x0b,
+	0xab, 0x2f, 0xcc, 0x43, 0xc4, 0xfe, 0x36, 0x42, 0xe2, 0x83, 0xb0, 0xef, 0xeb, 0x5e, 0xdf, 0x0f,
+	0x29, 0x4c, 0xce, 0x56, 0xcc, 0x85, 0xca, 0x86, 0x26, 0x85, 0x8b, 0xfc, 0x1f, 0x9c, 0x83, 0x6e,
+	0xd3, 0x52, 0x2c, 0x92, 0xf8, 0x97, 0x30, 0xbb, 0x01, 0xd5, 0x0e, 0xcd, 0xe4, 0x8b, 0xfc, 0xc7,
+	0xbc, 0x66, 0x5a, 0x6b, 0x14, 0x48, 0xe2, 0xb0, 0xf8, 0x55, 0x18, 0x70, 0xf4, 0x56, 0xe6, 0xe8,
+	0x3e, 0xe4, 0xe8, 0x26, 0xdb, 0xbe, 0x32, 0x72, 0xfc, 0x9b, 0xaa, 0x55, 0x18, 0xc2, 0x2c, 0x3b,
+	0xea, 0x51, 0x84, 0xba, 0xb2, 0x26, 0xbc, 0x06, 0xb1, 0x3a, 0x72, 0x36, 0xe3, 0x8f, 0xc3, 0x2d,
+	0xde, 0xe6, 0xb8, 0x70, 0xdb, 0x2a, 0x4f, 0x27, 0x49, 0x85, 0x2e, 0xf5, 0x29, 0xae, 0x16, 0xbc,
+	0x06, 0x03, 0xf6, 0x8b, 0x0f, 0xdb, 0x89, 0xfc, 0x7b, 0xd8, 0xf7, 0x91, 0xb2, 0x07, 0xab, 0x78,
+	0xd7, 0x39, 0xcb, 0x40, 0xa4, 0x98, 0xe9, 0xfe, 0x69, 0xe2, 0x65, 0x00, 0x97, 0x04, 0x3e, 0xb9,
+	0x2f, 0x09, 0x48, 0xbd, 0x05, 0x7b, 0xe6, 0xd3, 0x57, 0xdf, 0xae, 0xa1, 0x17, 0x61, 0x1c, 0x86,
+	0xb2, 0x8a, 0xa9, 0x16, 0x9c, 0x64, 0x95, 0x9b, 0x11, 0xf5, 0xfb, 0x30, 0x06, 0x03, 0xb9, 0xd9,
+	0xe5, 0x24, 0xd7, 0xd6, 0x24, 0x53, 0xcc, 0xc0, 0xd4, 0xb9, 0x63, 0x08, 0x8e, 0xc0, 0xa8, 0x6d,
+	0x2b, 0x0d, 0x70, 0xdd, 0x53, 0x53, 0xe9, 0xa9, 0x33, 0xd9, 0xc3, 0x30, 0xe8, 0xd6, 0x79, 0xfe,
+	0x28, 0x84, 0x9a, 0x12, 0xbe, 0x57, 0x43, 0xf5, 0xc0, 0x86, 0x87, 0x34, 0xfc, 0x69, 0x07, 0xbf,
+	0x22, 0x14, 0x8e, 0x47, 0x16, 0x43, 0x91, 0xbe, 0x78, 0xbf, 0x27, 0xd4, 0xf9, 0x37, 0x04, 0xb8,
+	0xf9, 0x06, 0x37, 0xbe, 0x08, 0xa0, 0x94, 0xcb, 0xda, 0xb6, 0x5d, 0xfc, 0xa2, 0xcb, 0xf6, 0xb8,
+	0xff, 0x63, 0xea, 0x55, 0x83, 0x6c, 0xa8, 0x37, 0xd9, 0xe1, 0x80, 0x78, 0x4b, 0xdb, 0xcb, 0x40,
+	0x59, 0xe9, 0xea, 0x22, 0x00, 0x7b, 0xf4, 0xc3, 0xf1, 0x04, 0xf7, 0x89, 0x87, 0x81, 0xd2, 0x1f,
+	0xd3, 0x47, 0xde, 0xae, 0xa1, 0x83, 0x70, 0x00, 0x86, 0x17, 0x56, 0x93, 0x0e, 0xb3, 0x49, 0x9b,
+	0x5b, 0x34, 0x95, 0x3d, 0x0a, 0x83, 0xee, 0x2b, 0xec, 0x5c, 0x2c, 0x03, 0xae, 0x4b, 0x86, 0xc1,
+	0x4c, 0x5a, 0x3c, 0x79, 0x49, 0x7d, 0x82, 0x60, 0xc8, 0xe7, 0x46, 0xf9, 0x7e, 0x26, 0x9d, 0xd3,
+	0xaa, 0x15, 0xcb, 0xd8, 0xc9, 0x69, 0x45, 0xf2, 0x40, 0x93, 0xf6, 0xc1, 0x53, 0x9f, 0x74, 0x52,
+	0x1c, 0x90, 0x8e, 0x5c, 0x22, 0x9a, 0xff, 0xac, 0x1f, 0x07, 0xec, 0xb9, 0x55, 0xdf, 0x76, 0xda,
+	0x0b, 0x10, 0x6f, 0xbc, 0x64, 0x8c, 0xcf, 0x42, 0x54, 0x24, 0x56, 0x8c, 0x57, 0xbe, 0x1f, 0x0f,
+	0x37, 0x3f, 0x87, 0xa7, 0x39, 0x29, 0x1f, 0x48, 0x39, 0x4b, 0xbd, 0xc4, 0xa2, 0x16, 0xbe, 0xad,
+	0x78, 0xaf, 0xcd, 0xe3, 0x67, 0x00, 0x17, 0x58, 0xbb, 0xcc, 0x6e, 0xe2, 0xbb, 0x62, 0xb6, 0xde,
+	0x6c, 0xec, 0xa7, 0x35, 0x14, 0x74, 0xea, 0xae, 0x49, 0x29, 0x5e, 0x70, 0x30, 0x70, 0x5d, 0x4f,
+	0x7d, 0x23, 0x00, 0x23, 0xbe, 0xf7, 0xf0, 0xf1, 0x05, 0xe8, 0x73, 0x1e, 0x83, 0x54, 0xad, 0xcd,
+	0x3d, 0x62, 0x69, 0xfb, 0xa3, 0x12, 0x14, 0x17, 0xfe, 0x22, 0x04, 0xaf, 0x6d, 0xdb, 0x0b, 0xd1,
+	0xe2, 0x5b, 0x06, 0x8b, 0xdb, 0x56, 0x5e, 0xbb, 0x4e, 0x2a, 0x33, 0xf5, 0x7b, 0xfe, 0xf3, 0x5d,
+	0x12, 0x85, 0xc3, 0x2f, 0x41, 0x0f, 0xe7, 0x53, 0xa4, 0xba, 0x9d, 0x6f, 0xbe, 0x7e, 0x02, 0x9a,
+	0xef, 0x92, 0x04, 0xba, 0xec, 0x11, 0xef, 0x6b, 0x85, 0x56, 0xeb, 0xf6, 0x87, 0x41, 0x18, 0xca,
+	0xcd, 0x2e, 0x73, 0x5f, 0xc1, 0xbf, 0xf4, 0xc2, 0xe2, 0xa8, 0x3c, 0xf4, 0xea, 0xd5, 0xf5, 0xb2,
+	0x5a, 0x90, 0x55, 0x5d, 0x88, 0xe3, 0xac, 0x2f, 0x6b, 0xae, 0xfd, 0x74, 0xd2, 0x8d, 0x65, 0x95,
+	0x41, 0x2f, 0xac, 0xce, 0x77, 0x49, 0x11, 0x8e, 0x69, 0x41, 0xc7, 0x57, 0x21, 0x2a, 0xb0, 0xb2,
+	0x1d, 0x2c, 0xd8, 0x66, 0xff, 0x6d, 0x8f, 0x97, 0xee, 0x77, 0xf3, 0x5d, 0x12, 0xe8, 0xce, 0x2f,
+	0x7c, 0x0c, 0x42, 0xba, 0x66, 0x58, 0x4c, 0x8e, 0xfd, 0x5c, 0xcd, 0x42, 0xc7, 0x03, 0xc7, 0xba,
+	0xd8, 0xcb, 0xc1, 0xe3, 0xa1, 0xc4, 0xcf, 0x7f, 0x1e, 0x94, 0xd8, 0x88, 0xe9, 0x5f, 0x43, 0x77,
+	0x6b, 0xe8, 0xeb, 0x08, 0x2e, 0x42, 0x88, 0xce, 0xf5, 0xf8, 0xb3, 0x70, 0x06, 0x46, 0x5d, 0xf3,
+	0xcd, 0xf4, 0x72, 0x22, 0xc9, 0x85, 0x55, 0x38, 0xe0, 0xe1, 0x38, 0x03, 0xa2, 0x67, 0x76, 0x79,
+	0x0d, 0x87, 0xaf, 0x54, 0xae, 0x57, 0xb4, 0xed, 0x0a, 0x9c, 0x82, 0x30, 0xe5, 0xe0, 0xd4, 0xc2,
+	0x6a, 0xe6, 0x28, 0xf4, 0x39, 0x68, 0x26, 0x55, 0x1d, 0x86, 0x5d, 0xc0, 0x93, 0x74, 0xbf, 0x65,
+	0x75, 0xea, 0x18, 0x84, 0x56, 0x35, 0xc3, 0xca, 0xf4, 0x70, 0x96, 0xb3, 0x87, 0x9d, 0x5c, 0x6c,
+	0xc8, 0xae, 0x43, 0x89, 0x55, 0xfa, 0x69, 0xbd, 0x7c, 0xf1, 0x47, 0xdd, 0x30, 0xd8, 0x14, 0x83,
+	0xe0, 0x97, 0xbd, 0x12, 0x45, 0x0f, 0x24, 0x51, 0x8f, 0x3c, 0x4f, 0x42, 0x4f, 0x45, 0x93, 0xad,
+	0xf2, 0x5e, 0x5f, 0x51, 0xe8, 0xae, 0x68, 0xf9, 0xb2, 0x89, 0x5f, 0x80, 0x70, 0xd5, 0x24, 0x6c,
+	0x7c, 0xa8, 0xcd, 0xd3, 0x04, 0x37, 0x13, 0x57, 0x74, 0x6f, 0xcc, 0xcf, 0xc2, 0x7b, 0xaa, 0xc2,
+	0x55, 0x93, 0x50, 0x94, 0x6f, 0x22, 0x88, 0x89, 0xf1, 0xfc, 0x43, 0x41, 0xf6, 0x25, 0x96, 0x0b,
+	0x1d, 0x1b, 0x49, 0xa3, 0x5e, 0xbb, 0x8e, 0x48, 0xfc, 0xe3, 0xf8, 0x7e, 0xcd, 0x05, 0x61, 0xe2,
+	0x69, 0x18, 0xdd, 0xd0, 0x98, 0xdb, 0x16, 0x8c, 0x38, 0xf9, 0x52, 0x0f, 0xcf, 0x84, 0x58, 0x90,
+	0x36, 0xcc, 0xc7, 0x70, 0x62, 0x4e, 0xde, 0xa4, 0xc0, 0xa8, 0x03, 0xc4, 0x6b, 0xd7, 0x96, 0xba,
+	0x45, 0xb4, 0xaa, 0x25, 0x3e, 0xb8, 0x74, 0xe2, 0x47, 0x35, 0x14, 0x3c, 0x77, 0xda, 0xa4, 0xd4,
+	0x23, 0x46, 0xcf, 0x07, 0xc1, 0xe0, 0xd4, 0xe9, 0x2d, 0xf1, 0x63, 0x97, 0xfe, 0x30, 0x5d, 0x05,
+	0xe3, 0x61, 0x4d, 0x20, 0x67, 0x98, 0xf2, 0x1c, 0x11, 0x7e, 0x03, 0x86, 0x78, 0xd4, 0xcc, 0xe9,
+	0x78, 0xdf, 0x86, 0xcc, 0x74, 0x26, 0x25, 0xce, 0xb5, 0x1d, 0x17, 0x78, 0xc2, 0x02, 0x69, 0x90,
+	0xc5, 0xce, 0x6c, 0x80, 0x5d, 0xfa, 0x38, 0x2c, 0xd2, 0xe5, 0x7a, 0xed, 0x80, 0x86, 0xc1, 0x01,
+	0xaa, 0xaf, 0x67, 0xd2, 0x4f, 0xf2, 0x10, 0x21, 0xf5, 0x2d, 0x04, 0x07, 0xdb, 0xe0, 0xc5, 0x33,
+	0x30, 0x6e, 0xfb, 0xdb, 0xf5, 0x1d, 0x8b, 0xc8, 0x86, 0x52, 0x29, 0x39, 0x47, 0xca, 0x76, 0x2a,
+	0x4a, 0x23, 0x78, 0x69, 0x4c, 0x8c, 0xcb, 0xee, 0x58, 0x44, 0xa2, 0xa3, 0x84, 0x04, 0xf0, 0x49,
+	0x18, 0xd8, 0x26, 0xeb, 0xa6, 0x56, 0xb8, 0x4e, 0x2c, 0x7e, 0x4e, 0x60, 0x27, 0xa7, 0x0c, 0x2e,
+	0xe6, 0x74, 0xb2, 0xd4, 0x6a, 0xba, 0xe7, 0xe3, 0x67, 0x59, 0x4e, 0xfc, 0xb3, 0x10, 0xc4, 0x72,
+	0x06, 0x51, 0x2c, 0xe2, 0xa4, 0x8c, 0x89, 0x86, 0x94, 0xf1, 0x51, 0x2e, 0xd7, 0x9c, 0xcb, 0x3d,
+	0xe6, 0x97, 0xcb, 0x79, 0x33, 0xb8, 0xab, 0x0f, 0x37, 0x83, 0xf3, 0xe4, 0x6d, 0x2f, 0x3f, 0xcc,
+	0xbc, 0xcd, 0x9d, 0xb1, 0x4d, 0x0f, 0xde, 0x7d, 0xb6, 0xa1, 0x84, 0x90, 0x3d, 0xee, 0x17, 0x04,
+	0x8f, 0x7c, 0xe5, 0x3f, 0x51, 0x73, 0xf3, 0xbe, 0x23, 0xe2, 0xff, 0x0a, 0xc1, 0x80, 0x28, 0x65,
+	0x3e, 0xd2, 0xbf, 0x47, 0xfa, 0xf7, 0x99, 0xeb, 0xdf, 0xb7, 0x23, 0x10, 0xbd, 0x44, 0xac, 0x47,
+	0xba, 0xf7, 0x48, 0xf7, 0xfe, 0x87, 0x55, 0x93, 0xfe, 0xef, 0x16, 0x7c, 0x3e, 0x5b, 0x17, 0xb1,
+	0xd8, 0x13, 0xf9, 0x30, 0x1c, 0xff, 0xd7, 0x70, 0x6a, 0x17, 0xc1, 0xc8, 0x92, 0x5a, 0x56, 0x0a,
+	0xb9, 0xd9, 0xe5, 0xcb, 0xc4, 0x32, 0xd4, 0x82, 0xc9, 0xcb, 0x04, 0x78, 0x11, 0x82, 0x96, 0x52,
+	0x12, 0x8f, 0x23, 0x3b, 0x3d, 0x4a, 0xf4, 0x62, 0xca, 0x2b, 0x25, 0x89, 0x22, 0xc1, 0xa3, 0xd0,
+	0x73, 0x43, 0x29, 0x57, 0xc5, 0xd1, 0x48, 0xaf, 0x24, 0x7e, 0xe1, 0xd7, 0x5d, 0xcf, 0x51, 0x82,
+	0x8c, 0xd0, 0xcc, 0x7d, 0x11, 0xb2, 0x9f, 0x8e, 0xb0, 0xc5, 0xaf, 0x3f, 0x4b, 0xe9, 0xb9, 0x5b,
+	0x43, 0x81, 0x38, 0x4a, 0x7d, 0x15, 0xc1, 0x44, 0x03, 0x84, 0x7d, 0xb7, 0xf3, 0x92, 0xa1, 0x55,
+	0xf5, 0xec, 0x0e, 0x5e, 0xf2, 0xbc, 0x05, 0xbd, 0xff, 0xe9, 0xf2, 0x47, 0x67, 0xc3, 0xd0, 0xcd,
+	0x66, 0xc8, 0x0f, 0xd3, 0x25, 0xfe, 0x23, 0x25, 0xc1, 0xa1, 0x16, 0x5c, 0xb0, 0x4b, 0xcd, 0xd4,
+	0x52, 0x9d, 0xef, 0x35, 0xf3, 0x72, 0x87, 0x54, 0x6f, 0x68, 0x81, 0xf3, 0x47, 0x08, 0x0e, 0xb7,
+	0x40, 0xba, 0x46, 0x0c, 0x95, 0x98, 0x58, 0x86, 0x48, 0x89, 0x4e, 0x52, 0x5e, 0xdf, 0x11, 0x5f,
+	0x49, 0x9d, 0xbd, 0xaf, 0xd9, 0x35, 0x48, 0x4c, 0x0a, 0x97, 0x84, 0xe8, 0x5e, 0xae, 0x33, 0x46,
+	0xb1, 0x67, 0x1f, 0x08, 0x3b, 0x93, 0x84, 0x3d, 0xb9, 0xdf, 0x0d, 0xc0, 0xc1, 0x16, 0xe3, 0x66,
+	0x15, 0x4b, 0xc1, 0x2f, 0x42, 0x88, 0x2a, 0xbf, 0x58, 0xb4, 0xfb, 0x23, 0x7c, 0x51, 0x25, 0xe5,
+	0xe2, 0x1a, 0x29, 0x93, 0x82, 0xa5, 0x19, 0x12, 0xc3, 0x47, 0x95, 0xa1, 0x5a, 0x51, 0x79, 0xfd,
+	0xee, 0x3e, 0x95, 0xe1, 0x4a, 0x45, 0xb5, 0x24, 0x86, 0x05, 0xbf, 0x0a, 0x3d, 0x26, 0x5b, 0x0a,
+	0xf1, 0x7d, 0xd6, 0xdc, 0x03, 0x09, 0x88, 0xaf, 0xaa, 0x24, 0x50, 0x1e, 0x9f, 0x87, 0x7e, 0x6f,
+	0x39, 0x2e, 0x06, 0x50, 0xbf, 0x4f, 0x15, 0xef, 0xc2, 0x51, 0x08, 0x1b, 0x64, 0x83, 0x18, 0xc4,
+	0x88, 0x23, 0x0c, 0xd0, 0xc3, 0xef, 0x5c, 0xc5, 0x03, 0x74, 0x20, 0xfb, 0xb8, 0x90, 0x52, 0x22,
+	0x15, 0x2b, 0x1e, 0x3c, 0xfe, 0x23, 0xd4, 0xa4, 0x9e, 0x1e, 0xd9, 0xe0, 0x11, 0x18, 0x94, 0xe6,
+	0x5e, 0xb8, 0x32, 0xb7, 0x96, 0x97, 0xf3, 0x2b, 0xf9, 0x99, 0x25, 0x79, 0xed, 0xca, 0xe5, 0x78,
+	0x17, 0x1e, 0x05, 0x6c, 0x37, 0x5f, 0x9c, 0x59, 0x58, 0x9a, 0x9b, 0x65, 0xed, 0x08, 0x0f, 0xc1,
+	0x80, 0xdd, 0x3e, 0xf5, 0xf2, 0xcb, 0xac, 0x31, 0xe0, 0x6e, 0xcc, 0x88, 0xc6, 0xa0, 0xbb, 0xf1,
+	0x8c, 0x68, 0x0c, 0xb9, 0x1b, 0x9f, 0x14, 0x8d, 0xdd, 0xee, 0xc6, 0xb3, 0xa2, 0xb1, 0x07, 0xc7,
+	0xa1, 0x6f, 0x76, 0x26, 0x3f, 0x23, 0xaf, 0x5c, 0xc9, 0xb3, 0x96, 0x30, 0x6d, 0x59, 0x9a, 0xc9,
+	0xcf, 0x2d, 0xe7, 0x5e, 0x91, 0x2f, 0xcf, 0xcd, 0x2c, 0xc7, 0x23, 0xc7, 0xbf, 0x89, 0x00, 0x37,
+	0x5b, 0x2b, 0x3e, 0xc0, 0x0e, 0xbf, 0xe5, 0xd9, 0x85, 0xb5, 0xbc, 0xb4, 0x90, 0xbd, 0x92, 0x5f,
+	0x58, 0x59, 0x96, 0x97, 0x67, 0x2e, 0xcf, 0xc5, 0xbb, 0x30, 0x86, 0x58, 0x6e, 0x26, 0x37, 0x3f,
+	0x27, 0xcf, 0x2f, 0xe4, 0xe5, 0xfc, 0x2b, 0xab, 0x73, 0xde, 0x29, 0xe5, 0x56, 0xae, 0x2c, 0xe7,
+	0xa5, 0x57, 0xe2, 0x01, 0x4a, 0x8c, 0x46, 0x16, 0xf2, 0x8b, 0x73, 0xd2, 0xda, 0xc2, 0xca, 0x72,
+	0x3c, 0x88, 0x07, 0x20, 0x9a, 0x5f, 0x5a, 0x73, 0x1a, 0x42, 0x54, 0xd4, 0xab, 0x2b, 0xab, 0xb2,
+	0x34, 0x77, 0x89, 0xfe, 0xee, 0xc6, 0x61, 0x08, 0xae, 0xae, 0xac, 0xc6, 0x7b, 0x8e, 0x5f, 0x6e,
+	0xd2, 0x6f, 0xb7, 0x27, 0xc3, 0xc3, 0x10, 0x5f, 0x59, 0x9d, 0x93, 0x66, 0xf2, 0x2b, 0x12, 0x63,
+	0x41, 0x5e, 0x58, 0x8e, 0x77, 0xe1, 0x04, 0x0c, 0x7b, 0x5b, 0x97, 0x57, 0xf2, 0xb4, 0x07, 0x1d,
+	0x7f, 0xa6, 0x71, 0x92, 0x54, 0x0b, 0x71, 0x2f, 0x74, 0x33, 0x6e, 0xe3, 0x5d, 0xf4, 0xdf, 0xec,
+	0x2b, 0xf9, 0xb9, 0xb5, 0x38, 0xa2, 0x6c, 0x5f, 0x5e, 0x58, 0x5a, 0x5a, 0x58, 0x9b, 0xcb, 0xad,
+	0x2c, 0xcf, 0xae, 0xc5, 0x03, 0xd9, 0xdf, 0x42, 0xf7, 0xde, 0x9d, 0xe8, 0x7a, 0xe7, 0xdd, 0x89,
+	0xae, 0x8f, 0xde, 0x9d, 0x40, 0x6f, 0xee, 0x4e, 0xa0, 0x6f, 0xef, 0x4e, 0xa0, 0x1f, 0xec, 0x4e,
+	0xa0, 0x7b, 0xbb, 0x13, 0xe8, 0x9d, 0xdd, 0x09, 0xf4, 0xe3, 0xdd, 0x09, 0xf4, 0xfe, 0xee, 0x44,
+	0xd7, 0x47, 0xbb, 0x13, 0xe8, 0xd7, 0xdf, 0x9b, 0xe8, 0xba, 0xf3, 0xde, 0x04, 0xba, 0xf7, 0xde,
+	0x44, 0xd7, 0x3b, 0xef, 0x4d, 0x74, 0x5d, 0xbd, 0x5a, 0xd2, 0xf4, 0xeb, 0xa5, 0xc9, 0x1b, 0x1a,
+	0xdd, 0x3d, 0x0c, 0x65, 0xb2, 0x6a, 0x9e, 0x62, 0xff, 0x6c, 0x68, 0xc6, 0xd6, 0x49, 0xdd, 0xd0,
+	0x6e, 0xa8, 0x45, 0x62, 0x9c, 0xb4, 0xbb, 0x4f, 0xe9, 0xeb, 0x25, 0xed, 0x14, 0xb9, 0x69, 0xd9,
+	0xdf, 0x75, 0x6f, 0xf7, 0x51, 0xf5, 0xf5, 0x1e, 0xf6, 0xf5, 0xef, 0x33, 0xff, 0x1d, 0x00, 0x00,
+	0xff, 0xff, 0xf0, 0x48, 0x14, 0xe9, 0x67, 0x5f, 0x00, 0x00,
 }
 
 func (x HeaderOptions) String() string {
@@ -4631,6 +5629,906 @@ func (this *HeaderControlType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *WebApplicationFirewall) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*WebApplicationFirewall)
+	if !ok {
+		that2, ok := that.(WebApplicationFirewall)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.WafChoice == nil {
+		if this.WafChoice != nil {
+			return false
+		}
+	} else if this.WafChoice == nil {
+		return false
+	} else if !this.WafChoice.Equal(that1.WafChoice) {
+		return false
+	}
+	if len(this.WafExclusionRules) != len(that1.WafExclusionRules) {
+		return false
+	}
+	for i := range this.WafExclusionRules {
+		if !this.WafExclusionRules[i].Equal(that1.WafExclusionRules[i]) {
+			return false
+		}
+	}
+	if len(this.DataGuardRules) != len(that1.DataGuardRules) {
+		return false
+	}
+	for i := range this.DataGuardRules {
+		if !this.DataGuardRules[i].Equal(that1.DataGuardRules[i]) {
+			return false
+		}
+	}
+	if !this.CsrfPolicy.Equal(that1.CsrfPolicy) {
+		return false
+	}
+	if len(this.GraphqlRules) != len(that1.GraphqlRules) {
+		return false
+	}
+	for i := range this.GraphqlRules {
+		if !this.GraphqlRules[i].Equal(that1.GraphqlRules[i]) {
+			return false
+		}
+	}
+	if len(this.ProtectedCookies) != len(that1.ProtectedCookies) {
+		return false
+	}
+	for i := range this.ProtectedCookies {
+		if !this.ProtectedCookies[i].Equal(that1.ProtectedCookies[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *WebApplicationFirewall_DisableWaf) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*WebApplicationFirewall_DisableWaf)
+	if !ok {
+		that2, ok := that.(WebApplicationFirewall_DisableWaf)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableWaf.Equal(that1.DisableWaf) {
+		return false
+	}
+	return true
+}
+func (this *WebApplicationFirewall_AppFirewall) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*WebApplicationFirewall_AppFirewall)
+	if !ok {
+		that2, ok := that.(WebApplicationFirewall_AppFirewall)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AppFirewall.Equal(that1.AppFirewall) {
+		return false
+	}
+	return true
+}
+func (this *WebApplicationFirewall_AppFirewallOnCacheMiss) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*WebApplicationFirewall_AppFirewallOnCacheMiss)
+	if !ok {
+		that2, ok := that.(WebApplicationFirewall_AppFirewallOnCacheMiss)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AppFirewallOnCacheMiss.Equal(that1.AppFirewallOnCacheMiss) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.ServicePolicyChoice == nil {
+		if this.ServicePolicyChoice != nil {
+			return false
+		}
+	} else if this.ServicePolicyChoice == nil {
+		return false
+	} else if !this.ServicePolicyChoice.Equal(that1.ServicePolicyChoice) {
+		return false
+	}
+	if that1.IpReputationChoice == nil {
+		if this.IpReputationChoice != nil {
+			return false
+		}
+	} else if this.IpReputationChoice == nil {
+		return false
+	} else if !this.IpReputationChoice.Equal(that1.IpReputationChoice) {
+		return false
+	}
+	if that1.UserIdChoice == nil {
+		if this.UserIdChoice != nil {
+			return false
+		}
+	} else if this.UserIdChoice == nil {
+		return false
+	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
+		return false
+	}
+	if that1.MaliciousUserDetectionChoice == nil {
+		if this.MaliciousUserDetectionChoice != nil {
+			return false
+		}
+	} else if this.MaliciousUserDetectionChoice == nil {
+		return false
+	} else if !this.MaliciousUserDetectionChoice.Equal(that1.MaliciousUserDetectionChoice) {
+		return false
+	}
+	if that1.ChallengeType == nil {
+		if this.ChallengeType != nil {
+			return false
+		}
+	} else if this.ChallengeType == nil {
+		return false
+	} else if !this.ChallengeType.Equal(that1.ChallengeType) {
+		return false
+	}
+	if that1.RateLimitChoice == nil {
+		if this.RateLimitChoice != nil {
+			return false
+		}
+	} else if this.RateLimitChoice == nil {
+		return false
+	} else if !this.RateLimitChoice.Equal(that1.RateLimitChoice) {
+		return false
+	}
+	if len(this.TrustedClients) != len(that1.TrustedClients) {
+		return false
+	}
+	for i := range this.TrustedClients {
+		if !this.TrustedClients[i].Equal(that1.TrustedClients[i]) {
+			return false
+		}
+	}
+	if len(this.BlockedClients) != len(that1.BlockedClients) {
+		return false
+	}
+	for i := range this.BlockedClients {
+		if !this.BlockedClients[i].Equal(that1.BlockedClients[i]) {
+			return false
+		}
+	}
+	if !this.CorsPolicy.Equal(that1.CorsPolicy) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_ServicePoliciesFromNamespace) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_ServicePoliciesFromNamespace)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_ServicePoliciesFromNamespace)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ServicePoliciesFromNamespace.Equal(that1.ServicePoliciesFromNamespace) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_NoServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_NoServicePolicies)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_NoServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoServicePolicies.Equal(that1.NoServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_ActiveServicePolicies) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_ActiveServicePolicies)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_ActiveServicePolicies)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActiveServicePolicies.Equal(that1.ActiveServicePolicies) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_DisableIpReputation) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_DisableIpReputation)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_DisableIpReputation)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableIpReputation.Equal(that1.DisableIpReputation) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_EnableIpReputation) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_EnableIpReputation)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_EnableIpReputation)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableIpReputation.Equal(that1.EnableIpReputation) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_IpReputationOnCacheMiss) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_IpReputationOnCacheMiss)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_IpReputationOnCacheMiss)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.IpReputationOnCacheMiss.Equal(that1.IpReputationOnCacheMiss) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_UserIdClientIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_UserIdClientIp)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_UserIdClientIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdClientIp.Equal(that1.UserIdClientIp) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_UserIdentification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_UserIdentification)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_UserIdentification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UserIdentification.Equal(that1.UserIdentification) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_DisableMaliciousUserDetection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_DisableMaliciousUserDetection)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_DisableMaliciousUserDetection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableMaliciousUserDetection.Equal(that1.DisableMaliciousUserDetection) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_EnableMaliciousUserDetection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_EnableMaliciousUserDetection)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_EnableMaliciousUserDetection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableMaliciousUserDetection.Equal(that1.EnableMaliciousUserDetection) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_MaliciousUserDetectionOnCacheMiss) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_MaliciousUserDetectionOnCacheMiss)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_MaliciousUserDetectionOnCacheMiss)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.MaliciousUserDetectionOnCacheMiss.Equal(that1.MaliciousUserDetectionOnCacheMiss) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_NoChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_NoChallenge)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_NoChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoChallenge.Equal(that1.NoChallenge) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_EnableChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_EnableChallenge)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_EnableChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableChallenge.Equal(that1.EnableChallenge) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_ChallengeOnCacheMiss) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_ChallengeOnCacheMiss)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_ChallengeOnCacheMiss)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ChallengeOnCacheMiss.Equal(that1.ChallengeOnCacheMiss) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_JsChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_JsChallenge)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_JsChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.JsChallenge.Equal(that1.JsChallenge) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_CaptchaChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_CaptchaChallenge)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_CaptchaChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CaptchaChallenge.Equal(that1.CaptchaChallenge) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_PolicyBasedChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_PolicyBasedChallenge)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_PolicyBasedChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PolicyBasedChallenge.Equal(that1.PolicyBasedChallenge) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_DisableRateLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_DisableRateLimit)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_DisableRateLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableRateLimit.Equal(that1.DisableRateLimit) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_ApiRateLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_ApiRateLimit)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_ApiRateLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiRateLimit.Equal(that1.ApiRateLimit) {
+		return false
+	}
+	return true
+}
+func (this *CommonSecurityControls_RateLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CommonSecurityControls_RateLimit)
+	if !ok {
+		that2, ok := that.(CommonSecurityControls_RateLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RateLimit.Equal(that1.RateLimit) {
+		return false
+	}
+	return true
+}
+func (this *ApiProtection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiProtection)
+	if !ok {
+		that2, ok := that.(ApiProtection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.ApiDefinitionChoice == nil {
+		if this.ApiDefinitionChoice != nil {
+			return false
+		}
+	} else if this.ApiDefinitionChoice == nil {
+		return false
+	} else if !this.ApiDefinitionChoice.Equal(that1.ApiDefinitionChoice) {
+		return false
+	}
+	if !this.ApiProtectionRules.Equal(that1.ApiProtectionRules) {
+		return false
+	}
+	if !this.JwtValidation.Equal(that1.JwtValidation) {
+		return false
+	}
+	if that1.ApiDiscoveryChoice == nil {
+		if this.ApiDiscoveryChoice != nil {
+			return false
+		}
+	} else if this.ApiDiscoveryChoice == nil {
+		return false
+	} else if !this.ApiDiscoveryChoice.Equal(that1.ApiDiscoveryChoice) {
+		return false
+	}
+	return true
+}
+func (this *ApiProtection_DisableApiDefinition) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiProtection_DisableApiDefinition)
+	if !ok {
+		that2, ok := that.(ApiProtection_DisableApiDefinition)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableApiDefinition.Equal(that1.DisableApiDefinition) {
+		return false
+	}
+	return true
+}
+func (this *ApiProtection_ApiSpecification) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiProtection_ApiSpecification)
+	if !ok {
+		that2, ok := that.(ApiProtection_ApiSpecification)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiSpecification.Equal(that1.ApiSpecification) {
+		return false
+	}
+	return true
+}
+func (this *ApiProtection_ApiSpecificationOnCacheMiss) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiProtection_ApiSpecificationOnCacheMiss)
+	if !ok {
+		that2, ok := that.(ApiProtection_ApiSpecificationOnCacheMiss)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiSpecificationOnCacheMiss.Equal(that1.ApiSpecificationOnCacheMiss) {
+		return false
+	}
+	return true
+}
+func (this *ApiProtection_EnableApiDiscovery) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiProtection_EnableApiDiscovery)
+	if !ok {
+		that2, ok := that.(ApiProtection_EnableApiDiscovery)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableApiDiscovery.Equal(that1.EnableApiDiscovery) {
+		return false
+	}
+	return true
+}
+func (this *ApiProtection_DisableApiDiscovery) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiProtection_DisableApiDiscovery)
+	if !ok {
+		that2, ok := that.(ApiProtection_DisableApiDiscovery)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableApiDiscovery.Equal(that1.DisableApiDiscovery) {
+		return false
+	}
+	return true
+}
+func (this *ApiProtection_ApiDiscoveryOnCacheMiss) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiProtection_ApiDiscoveryOnCacheMiss)
+	if !ok {
+		that2, ok := that.(ApiProtection_ApiDiscoveryOnCacheMiss)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiDiscoveryOnCacheMiss.Equal(that1.ApiDiscoveryOnCacheMiss) {
+		return false
+	}
+	return true
+}
 func (this *SecurityOptionsType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4657,6 +6555,15 @@ func (this *SecurityOptionsType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AuthOptions.Equal(that1.AuthOptions) {
+		return false
+	}
+	if !this.WebAppFirewall.Equal(that1.WebAppFirewall) {
+		return false
+	}
+	if !this.ApiProtection.Equal(that1.ApiProtection) {
+		return false
+	}
+	if !this.CommonSecurityControls.Equal(that1.CommonSecurityControls) {
 		return false
 	}
 	return true
@@ -7184,11 +9091,327 @@ func (this *HeaderControlType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *WebApplicationFirewall) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 12)
+	s = append(s, "&cdn_loadbalancer.WebApplicationFirewall{")
+	if this.WafChoice != nil {
+		s = append(s, "WafChoice: "+fmt.Sprintf("%#v", this.WafChoice)+",\n")
+	}
+	if this.WafExclusionRules != nil {
+		s = append(s, "WafExclusionRules: "+fmt.Sprintf("%#v", this.WafExclusionRules)+",\n")
+	}
+	if this.DataGuardRules != nil {
+		s = append(s, "DataGuardRules: "+fmt.Sprintf("%#v", this.DataGuardRules)+",\n")
+	}
+	if this.CsrfPolicy != nil {
+		s = append(s, "CsrfPolicy: "+fmt.Sprintf("%#v", this.CsrfPolicy)+",\n")
+	}
+	if this.GraphqlRules != nil {
+		s = append(s, "GraphqlRules: "+fmt.Sprintf("%#v", this.GraphqlRules)+",\n")
+	}
+	if this.ProtectedCookies != nil {
+		s = append(s, "ProtectedCookies: "+fmt.Sprintf("%#v", this.ProtectedCookies)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *WebApplicationFirewall_DisableWaf) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.WebApplicationFirewall_DisableWaf{` +
+		`DisableWaf:` + fmt.Sprintf("%#v", this.DisableWaf) + `}`}, ", ")
+	return s
+}
+func (this *WebApplicationFirewall_AppFirewall) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.WebApplicationFirewall_AppFirewall{` +
+		`AppFirewall:` + fmt.Sprintf("%#v", this.AppFirewall) + `}`}, ", ")
+	return s
+}
+func (this *WebApplicationFirewall_AppFirewallOnCacheMiss) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.WebApplicationFirewall_AppFirewallOnCacheMiss{` +
+		`AppFirewallOnCacheMiss:` + fmt.Sprintf("%#v", this.AppFirewallOnCacheMiss) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 27)
+	s = append(s, "&cdn_loadbalancer.CommonSecurityControls{")
+	if this.ServicePolicyChoice != nil {
+		s = append(s, "ServicePolicyChoice: "+fmt.Sprintf("%#v", this.ServicePolicyChoice)+",\n")
+	}
+	if this.IpReputationChoice != nil {
+		s = append(s, "IpReputationChoice: "+fmt.Sprintf("%#v", this.IpReputationChoice)+",\n")
+	}
+	if this.UserIdChoice != nil {
+		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
+	}
+	if this.MaliciousUserDetectionChoice != nil {
+		s = append(s, "MaliciousUserDetectionChoice: "+fmt.Sprintf("%#v", this.MaliciousUserDetectionChoice)+",\n")
+	}
+	if this.ChallengeType != nil {
+		s = append(s, "ChallengeType: "+fmt.Sprintf("%#v", this.ChallengeType)+",\n")
+	}
+	if this.RateLimitChoice != nil {
+		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
+	}
+	if this.TrustedClients != nil {
+		s = append(s, "TrustedClients: "+fmt.Sprintf("%#v", this.TrustedClients)+",\n")
+	}
+	if this.BlockedClients != nil {
+		s = append(s, "BlockedClients: "+fmt.Sprintf("%#v", this.BlockedClients)+",\n")
+	}
+	if this.CorsPolicy != nil {
+		s = append(s, "CorsPolicy: "+fmt.Sprintf("%#v", this.CorsPolicy)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CommonSecurityControls_ServicePoliciesFromNamespace) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_ServicePoliciesFromNamespace{` +
+		`ServicePoliciesFromNamespace:` + fmt.Sprintf("%#v", this.ServicePoliciesFromNamespace) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_NoServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_NoServicePolicies{` +
+		`NoServicePolicies:` + fmt.Sprintf("%#v", this.NoServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_ActiveServicePolicies) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_ActiveServicePolicies{` +
+		`ActiveServicePolicies:` + fmt.Sprintf("%#v", this.ActiveServicePolicies) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_DisableIpReputation) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_DisableIpReputation{` +
+		`DisableIpReputation:` + fmt.Sprintf("%#v", this.DisableIpReputation) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_EnableIpReputation) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_EnableIpReputation{` +
+		`EnableIpReputation:` + fmt.Sprintf("%#v", this.EnableIpReputation) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_IpReputationOnCacheMiss) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_IpReputationOnCacheMiss{` +
+		`IpReputationOnCacheMiss:` + fmt.Sprintf("%#v", this.IpReputationOnCacheMiss) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_UserIdClientIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_UserIdClientIp{` +
+		`UserIdClientIp:` + fmt.Sprintf("%#v", this.UserIdClientIp) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_UserIdentification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_UserIdentification{` +
+		`UserIdentification:` + fmt.Sprintf("%#v", this.UserIdentification) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_DisableMaliciousUserDetection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_DisableMaliciousUserDetection{` +
+		`DisableMaliciousUserDetection:` + fmt.Sprintf("%#v", this.DisableMaliciousUserDetection) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_EnableMaliciousUserDetection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_EnableMaliciousUserDetection{` +
+		`EnableMaliciousUserDetection:` + fmt.Sprintf("%#v", this.EnableMaliciousUserDetection) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_MaliciousUserDetectionOnCacheMiss) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_MaliciousUserDetectionOnCacheMiss{` +
+		`MaliciousUserDetectionOnCacheMiss:` + fmt.Sprintf("%#v", this.MaliciousUserDetectionOnCacheMiss) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_NoChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_NoChallenge{` +
+		`NoChallenge:` + fmt.Sprintf("%#v", this.NoChallenge) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_EnableChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_EnableChallenge{` +
+		`EnableChallenge:` + fmt.Sprintf("%#v", this.EnableChallenge) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_ChallengeOnCacheMiss) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_ChallengeOnCacheMiss{` +
+		`ChallengeOnCacheMiss:` + fmt.Sprintf("%#v", this.ChallengeOnCacheMiss) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_JsChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_JsChallenge{` +
+		`JsChallenge:` + fmt.Sprintf("%#v", this.JsChallenge) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_CaptchaChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_CaptchaChallenge{` +
+		`CaptchaChallenge:` + fmt.Sprintf("%#v", this.CaptchaChallenge) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_PolicyBasedChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_PolicyBasedChallenge{` +
+		`PolicyBasedChallenge:` + fmt.Sprintf("%#v", this.PolicyBasedChallenge) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_DisableRateLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_DisableRateLimit{` +
+		`DisableRateLimit:` + fmt.Sprintf("%#v", this.DisableRateLimit) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_ApiRateLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_ApiRateLimit{` +
+		`ApiRateLimit:` + fmt.Sprintf("%#v", this.ApiRateLimit) + `}`}, ", ")
+	return s
+}
+func (this *CommonSecurityControls_RateLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.CommonSecurityControls_RateLimit{` +
+		`RateLimit:` + fmt.Sprintf("%#v", this.RateLimit) + `}`}, ", ")
+	return s
+}
+func (this *ApiProtection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 12)
+	s = append(s, "&cdn_loadbalancer.ApiProtection{")
+	if this.ApiDefinitionChoice != nil {
+		s = append(s, "ApiDefinitionChoice: "+fmt.Sprintf("%#v", this.ApiDefinitionChoice)+",\n")
+	}
+	if this.ApiProtectionRules != nil {
+		s = append(s, "ApiProtectionRules: "+fmt.Sprintf("%#v", this.ApiProtectionRules)+",\n")
+	}
+	if this.JwtValidation != nil {
+		s = append(s, "JwtValidation: "+fmt.Sprintf("%#v", this.JwtValidation)+",\n")
+	}
+	if this.ApiDiscoveryChoice != nil {
+		s = append(s, "ApiDiscoveryChoice: "+fmt.Sprintf("%#v", this.ApiDiscoveryChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApiProtection_DisableApiDefinition) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.ApiProtection_DisableApiDefinition{` +
+		`DisableApiDefinition:` + fmt.Sprintf("%#v", this.DisableApiDefinition) + `}`}, ", ")
+	return s
+}
+func (this *ApiProtection_ApiSpecification) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.ApiProtection_ApiSpecification{` +
+		`ApiSpecification:` + fmt.Sprintf("%#v", this.ApiSpecification) + `}`}, ", ")
+	return s
+}
+func (this *ApiProtection_ApiSpecificationOnCacheMiss) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.ApiProtection_ApiSpecificationOnCacheMiss{` +
+		`ApiSpecificationOnCacheMiss:` + fmt.Sprintf("%#v", this.ApiSpecificationOnCacheMiss) + `}`}, ", ")
+	return s
+}
+func (this *ApiProtection_EnableApiDiscovery) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.ApiProtection_EnableApiDiscovery{` +
+		`EnableApiDiscovery:` + fmt.Sprintf("%#v", this.EnableApiDiscovery) + `}`}, ", ")
+	return s
+}
+func (this *ApiProtection_DisableApiDiscovery) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.ApiProtection_DisableApiDiscovery{` +
+		`DisableApiDiscovery:` + fmt.Sprintf("%#v", this.DisableApiDiscovery) + `}`}, ", ")
+	return s
+}
+func (this *ApiProtection_ApiDiscoveryOnCacheMiss) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cdn_loadbalancer.ApiProtection_ApiDiscoveryOnCacheMiss{` +
+		`ApiDiscoveryOnCacheMiss:` + fmt.Sprintf("%#v", this.ApiDiscoveryOnCacheMiss) + `}`}, ", ")
+	return s
+}
 func (this *SecurityOptionsType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 10)
 	s = append(s, "&cdn_loadbalancer.SecurityOptionsType{")
 	if this.IpFiltering != nil {
 		s = append(s, "IpFiltering: "+fmt.Sprintf("%#v", this.IpFiltering)+",\n")
@@ -7198,6 +9421,15 @@ func (this *SecurityOptionsType) GoString() string {
 	}
 	if this.AuthOptions != nil {
 		s = append(s, "AuthOptions: "+fmt.Sprintf("%#v", this.AuthOptions)+",\n")
+	}
+	if this.WebAppFirewall != nil {
+		s = append(s, "WebAppFirewall: "+fmt.Sprintf("%#v", this.WebAppFirewall)+",\n")
+	}
+	if this.ApiProtection != nil {
+		s = append(s, "ApiProtection: "+fmt.Sprintf("%#v", this.ApiProtection)+",\n")
+	}
+	if this.CommonSecurityControls != nil {
+		s = append(s, "CommonSecurityControls: "+fmt.Sprintf("%#v", this.CommonSecurityControls)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -8359,6 +10591,923 @@ func (m *HeaderControlType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *WebApplicationFirewall) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *WebApplicationFirewall) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WebApplicationFirewall) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.WafChoice != nil {
+		{
+			size := m.WafChoice.Size()
+			i -= size
+			if _, err := m.WafChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.ProtectedCookies) > 0 {
+		for iNdEx := len(m.ProtectedCookies) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ProtectedCookies[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.GraphqlRules) > 0 {
+		for iNdEx := len(m.GraphqlRules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.GraphqlRules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if m.CsrfPolicy != nil {
+		{
+			size, err := m.CsrfPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.DataGuardRules) > 0 {
+		for iNdEx := len(m.DataGuardRules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.DataGuardRules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.WafExclusionRules) > 0 {
+		for iNdEx := len(m.WafExclusionRules) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.WafExclusionRules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *WebApplicationFirewall_DisableWaf) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WebApplicationFirewall_DisableWaf) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableWaf != nil {
+		{
+			size, err := m.DisableWaf.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *WebApplicationFirewall_AppFirewall) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WebApplicationFirewall_AppFirewall) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AppFirewall != nil {
+		{
+			size, err := m.AppFirewall.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *WebApplicationFirewall_AppFirewallOnCacheMiss) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *WebApplicationFirewall_AppFirewallOnCacheMiss) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AppFirewallOnCacheMiss != nil {
+		{
+			size, err := m.AppFirewallOnCacheMiss.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CommonSecurityControls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ChallengeType != nil {
+		{
+			size := m.ChallengeType.Size()
+			i -= size
+			if _, err := m.ChallengeType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.MaliciousUserDetectionChoice != nil {
+		{
+			size := m.MaliciousUserDetectionChoice.Size()
+			i -= size
+			if _, err := m.MaliciousUserDetectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.IpReputationChoice != nil {
+		{
+			size := m.IpReputationChoice.Size()
+			i -= size
+			if _, err := m.IpReputationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.CorsPolicy != nil {
+		{
+			size, err := m.CorsPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xd2
+	}
+	if len(m.BlockedClients) > 0 {
+		for iNdEx := len(m.BlockedClients) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BlockedClients[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xca
+		}
+	}
+	if len(m.TrustedClients) > 0 {
+		for iNdEx := len(m.TrustedClients) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TrustedClients[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1
+			i--
+			dAtA[i] = 0xc2
+		}
+	}
+	if m.RateLimitChoice != nil {
+		{
+			size := m.RateLimitChoice.Size()
+			i -= size
+			if _, err := m.RateLimitChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.UserIdChoice != nil {
+		{
+			size := m.UserIdChoice.Size()
+			i -= size
+			if _, err := m.UserIdChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ServicePolicyChoice != nil {
+		{
+			size := m.ServicePolicyChoice.Size()
+			i -= size
+			if _, err := m.ServicePolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CommonSecurityControls_ServicePoliciesFromNamespace) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_ServicePoliciesFromNamespace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ServicePoliciesFromNamespace != nil {
+		{
+			size, err := m.ServicePoliciesFromNamespace.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_NoServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_NoServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoServicePolicies != nil {
+		{
+			size, err := m.NoServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_ActiveServicePolicies) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_ActiveServicePolicies) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActiveServicePolicies != nil {
+		{
+			size, err := m.ActiveServicePolicies.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_DisableIpReputation) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_DisableIpReputation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableIpReputation != nil {
+		{
+			size, err := m.DisableIpReputation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_EnableIpReputation) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_EnableIpReputation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableIpReputation != nil {
+		{
+			size, err := m.EnableIpReputation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_UserIdClientIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_UserIdClientIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdClientIp != nil {
+		{
+			size, err := m.UserIdClientIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_UserIdentification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_UserIdentification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UserIdentification != nil {
+		{
+			size, err := m.UserIdentification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_DisableMaliciousUserDetection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_DisableMaliciousUserDetection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableMaliciousUserDetection != nil {
+		{
+			size, err := m.DisableMaliciousUserDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_EnableMaliciousUserDetection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_EnableMaliciousUserDetection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableMaliciousUserDetection != nil {
+		{
+			size, err := m.EnableMaliciousUserDetection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_NoChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_NoChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoChallenge != nil {
+		{
+			size, err := m.NoChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_EnableChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_EnableChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableChallenge != nil {
+		{
+			size, err := m.EnableChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_JsChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_JsChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.JsChallenge != nil {
+		{
+			size, err := m.JsChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_CaptchaChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_CaptchaChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CaptchaChallenge != nil {
+		{
+			size, err := m.CaptchaChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_PolicyBasedChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_PolicyBasedChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PolicyBasedChallenge != nil {
+		{
+			size, err := m.PolicyBasedChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_DisableRateLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_DisableRateLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableRateLimit != nil {
+		{
+			size, err := m.DisableRateLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xaa
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_ApiRateLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_ApiRateLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiRateLimit != nil {
+		{
+			size, err := m.ApiRateLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xb2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_RateLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_RateLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RateLimit != nil {
+		{
+			size, err := m.RateLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xba
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_IpReputationOnCacheMiss) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_IpReputationOnCacheMiss) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.IpReputationOnCacheMiss != nil {
+		{
+			size, err := m.IpReputationOnCacheMiss.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_MaliciousUserDetectionOnCacheMiss) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_MaliciousUserDetectionOnCacheMiss) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.MaliciousUserDetectionOnCacheMiss != nil {
+		{
+			size, err := m.MaliciousUserDetectionOnCacheMiss.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CommonSecurityControls_ChallengeOnCacheMiss) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CommonSecurityControls_ChallengeOnCacheMiss) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ChallengeOnCacheMiss != nil {
+		{
+			size, err := m.ChallengeOnCacheMiss.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiProtection) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiProtection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiProtection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ApiDiscoveryChoice != nil {
+		{
+			size := m.ApiDiscoveryChoice.Size()
+			i -= size
+			if _, err := m.ApiDiscoveryChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ApiDefinitionChoice != nil {
+		{
+			size := m.ApiDefinitionChoice.Size()
+			i -= size
+			if _, err := m.ApiDefinitionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.JwtValidation != nil {
+		{
+			size, err := m.JwtValidation.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.ApiProtectionRules != nil {
+		{
+			size, err := m.ApiProtectionRules.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ApiProtection_DisableApiDefinition) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiProtection_DisableApiDefinition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableApiDefinition != nil {
+		{
+			size, err := m.DisableApiDefinition.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiProtection_ApiSpecification) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiProtection_ApiSpecification) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiSpecification != nil {
+		{
+			size, err := m.ApiSpecification.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiProtection_EnableApiDiscovery) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiProtection_EnableApiDiscovery) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableApiDiscovery != nil {
+		{
+			size, err := m.EnableApiDiscovery.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiProtection_DisableApiDiscovery) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiProtection_DisableApiDiscovery) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableApiDiscovery != nil {
+		{
+			size, err := m.DisableApiDiscovery.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiProtection_ApiSpecificationOnCacheMiss) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiProtection_ApiSpecificationOnCacheMiss) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiSpecificationOnCacheMiss != nil {
+		{
+			size, err := m.ApiSpecificationOnCacheMiss.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ApiProtection_ApiDiscoveryOnCacheMiss) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiProtection_ApiDiscoveryOnCacheMiss) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiDiscoveryOnCacheMiss != nil {
+		{
+			size, err := m.ApiDiscoveryOnCacheMiss.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *SecurityOptionsType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8379,6 +11528,42 @@ func (m *SecurityOptionsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ApiProtection != nil {
+		{
+			size, err := m.ApiProtection.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	if m.CommonSecurityControls != nil {
+		{
+			size, err := m.CommonSecurityControls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.WebAppFirewall != nil {
+		{
+			size, err := m.WebAppFirewall.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
 	if m.AuthOptions != nil {
 		{
 			size, err := m.AuthOptions.MarshalToSizedBuffer(dAtA[:i])
@@ -11407,6 +14592,460 @@ func (m *HeaderControlType) Size() (n int) {
 	return n
 }
 
+func (m *WebApplicationFirewall) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.WafChoice != nil {
+		n += m.WafChoice.Size()
+	}
+	if len(m.WafExclusionRules) > 0 {
+		for _, e := range m.WafExclusionRules {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.DataGuardRules) > 0 {
+		for _, e := range m.DataGuardRules {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.CsrfPolicy != nil {
+		l = m.CsrfPolicy.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.GraphqlRules) > 0 {
+		for _, e := range m.GraphqlRules {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ProtectedCookies) > 0 {
+		for _, e := range m.ProtectedCookies {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *WebApplicationFirewall_DisableWaf) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableWaf != nil {
+		l = m.DisableWaf.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *WebApplicationFirewall_AppFirewall) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AppFirewall != nil {
+		l = m.AppFirewall.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *WebApplicationFirewall_AppFirewallOnCacheMiss) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AppFirewallOnCacheMiss != nil {
+		l = m.AppFirewallOnCacheMiss.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePolicyChoice != nil {
+		n += m.ServicePolicyChoice.Size()
+	}
+	if m.IpReputationChoice != nil {
+		n += m.IpReputationChoice.Size()
+	}
+	if m.UserIdChoice != nil {
+		n += m.UserIdChoice.Size()
+	}
+	if m.MaliciousUserDetectionChoice != nil {
+		n += m.MaliciousUserDetectionChoice.Size()
+	}
+	if m.ChallengeType != nil {
+		n += m.ChallengeType.Size()
+	}
+	if m.RateLimitChoice != nil {
+		n += m.RateLimitChoice.Size()
+	}
+	if len(m.TrustedClients) > 0 {
+		for _, e := range m.TrustedClients {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.BlockedClients) > 0 {
+		for _, e := range m.BlockedClients {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.CorsPolicy != nil {
+		l = m.CorsPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CommonSecurityControls_ServicePoliciesFromNamespace) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ServicePoliciesFromNamespace != nil {
+		l = m.ServicePoliciesFromNamespace.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_NoServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoServicePolicies != nil {
+		l = m.NoServicePolicies.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_ActiveServicePolicies) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActiveServicePolicies != nil {
+		l = m.ActiveServicePolicies.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_DisableIpReputation) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableIpReputation != nil {
+		l = m.DisableIpReputation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_EnableIpReputation) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableIpReputation != nil {
+		l = m.EnableIpReputation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_UserIdClientIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdClientIp != nil {
+		l = m.UserIdClientIp.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_UserIdentification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UserIdentification != nil {
+		l = m.UserIdentification.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_DisableMaliciousUserDetection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableMaliciousUserDetection != nil {
+		l = m.DisableMaliciousUserDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_EnableMaliciousUserDetection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableMaliciousUserDetection != nil {
+		l = m.EnableMaliciousUserDetection.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_NoChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoChallenge != nil {
+		l = m.NoChallenge.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_EnableChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableChallenge != nil {
+		l = m.EnableChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_JsChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.JsChallenge != nil {
+		l = m.JsChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_CaptchaChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CaptchaChallenge != nil {
+		l = m.CaptchaChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_PolicyBasedChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PolicyBasedChallenge != nil {
+		l = m.PolicyBasedChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_DisableRateLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableRateLimit != nil {
+		l = m.DisableRateLimit.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_ApiRateLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiRateLimit != nil {
+		l = m.ApiRateLimit.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_RateLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RateLimit != nil {
+		l = m.RateLimit.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_IpReputationOnCacheMiss) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IpReputationOnCacheMiss != nil {
+		l = m.IpReputationOnCacheMiss.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_MaliciousUserDetectionOnCacheMiss) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MaliciousUserDetectionOnCacheMiss != nil {
+		l = m.MaliciousUserDetectionOnCacheMiss.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CommonSecurityControls_ChallengeOnCacheMiss) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ChallengeOnCacheMiss != nil {
+		l = m.ChallengeOnCacheMiss.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiProtection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDefinitionChoice != nil {
+		n += m.ApiDefinitionChoice.Size()
+	}
+	if m.ApiProtectionRules != nil {
+		l = m.ApiProtectionRules.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.JwtValidation != nil {
+		l = m.JwtValidation.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ApiDiscoveryChoice != nil {
+		n += m.ApiDiscoveryChoice.Size()
+	}
+	return n
+}
+
+func (m *ApiProtection_DisableApiDefinition) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableApiDefinition != nil {
+		l = m.DisableApiDefinition.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiProtection_ApiSpecification) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiSpecification != nil {
+		l = m.ApiSpecification.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiProtection_EnableApiDiscovery) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableApiDiscovery != nil {
+		l = m.EnableApiDiscovery.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiProtection_DisableApiDiscovery) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableApiDiscovery != nil {
+		l = m.DisableApiDiscovery.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiProtection_ApiSpecificationOnCacheMiss) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiSpecificationOnCacheMiss != nil {
+		l = m.ApiSpecificationOnCacheMiss.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ApiProtection_ApiDiscoveryOnCacheMiss) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiDiscoveryOnCacheMiss != nil {
+		l = m.ApiDiscoveryOnCacheMiss.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *SecurityOptionsType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -11423,6 +15062,18 @@ func (m *SecurityOptionsType) Size() (n int) {
 	}
 	if m.AuthOptions != nil {
 		l = m.AuthOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.WebAppFirewall != nil {
+		l = m.WebAppFirewall.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.CommonSecurityControls != nil {
+		l = m.CommonSecurityControls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ApiProtection != nil {
+		l = m.ApiProtection.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -12819,6 +16470,372 @@ func (this *HeaderControlType) String() string {
 	}, "")
 	return s
 }
+func (this *WebApplicationFirewall) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForWafExclusionRules := "[]*SimpleWafExclusionRule{"
+	for _, f := range this.WafExclusionRules {
+		repeatedStringForWafExclusionRules += strings.Replace(fmt.Sprintf("%v", f), "SimpleWafExclusionRule", "policy.SimpleWafExclusionRule", 1) + ","
+	}
+	repeatedStringForWafExclusionRules += "}"
+	repeatedStringForDataGuardRules := "[]*SimpleDataGuardRule{"
+	for _, f := range this.DataGuardRules {
+		repeatedStringForDataGuardRules += strings.Replace(fmt.Sprintf("%v", f), "SimpleDataGuardRule", "policy.SimpleDataGuardRule", 1) + ","
+	}
+	repeatedStringForDataGuardRules += "}"
+	repeatedStringForGraphqlRules := "[]*GraphQLRule{"
+	for _, f := range this.GraphqlRules {
+		repeatedStringForGraphqlRules += strings.Replace(fmt.Sprintf("%v", f), "GraphQLRule", "policy.GraphQLRule", 1) + ","
+	}
+	repeatedStringForGraphqlRules += "}"
+	repeatedStringForProtectedCookies := "[]*CookieManipulationOptionType{"
+	for _, f := range this.ProtectedCookies {
+		repeatedStringForProtectedCookies += strings.Replace(fmt.Sprintf("%v", f), "CookieManipulationOptionType", "schema.CookieManipulationOptionType", 1) + ","
+	}
+	repeatedStringForProtectedCookies += "}"
+	s := strings.Join([]string{`&WebApplicationFirewall{`,
+		`WafChoice:` + fmt.Sprintf("%v", this.WafChoice) + `,`,
+		`WafExclusionRules:` + repeatedStringForWafExclusionRules + `,`,
+		`DataGuardRules:` + repeatedStringForDataGuardRules + `,`,
+		`CsrfPolicy:` + strings.Replace(fmt.Sprintf("%v", this.CsrfPolicy), "CsrfPolicy", "schema.CsrfPolicy", 1) + `,`,
+		`GraphqlRules:` + repeatedStringForGraphqlRules + `,`,
+		`ProtectedCookies:` + repeatedStringForProtectedCookies + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *WebApplicationFirewall_DisableWaf) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&WebApplicationFirewall_DisableWaf{`,
+		`DisableWaf:` + strings.Replace(fmt.Sprintf("%v", this.DisableWaf), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *WebApplicationFirewall_AppFirewall) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&WebApplicationFirewall_AppFirewall{`,
+		`AppFirewall:` + strings.Replace(fmt.Sprintf("%v", this.AppFirewall), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *WebApplicationFirewall_AppFirewallOnCacheMiss) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&WebApplicationFirewall_AppFirewallOnCacheMiss{`,
+		`AppFirewallOnCacheMiss:` + strings.Replace(fmt.Sprintf("%v", this.AppFirewallOnCacheMiss), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForTrustedClients := "[]*SimpleClientSrcRule{"
+	for _, f := range this.TrustedClients {
+		repeatedStringForTrustedClients += strings.Replace(fmt.Sprintf("%v", f), "SimpleClientSrcRule", "common_waf.SimpleClientSrcRule", 1) + ","
+	}
+	repeatedStringForTrustedClients += "}"
+	repeatedStringForBlockedClients := "[]*SimpleClientSrcRule{"
+	for _, f := range this.BlockedClients {
+		repeatedStringForBlockedClients += strings.Replace(fmt.Sprintf("%v", f), "SimpleClientSrcRule", "common_waf.SimpleClientSrcRule", 1) + ","
+	}
+	repeatedStringForBlockedClients += "}"
+	s := strings.Join([]string{`&CommonSecurityControls{`,
+		`ServicePolicyChoice:` + fmt.Sprintf("%v", this.ServicePolicyChoice) + `,`,
+		`IpReputationChoice:` + fmt.Sprintf("%v", this.IpReputationChoice) + `,`,
+		`UserIdChoice:` + fmt.Sprintf("%v", this.UserIdChoice) + `,`,
+		`MaliciousUserDetectionChoice:` + fmt.Sprintf("%v", this.MaliciousUserDetectionChoice) + `,`,
+		`ChallengeType:` + fmt.Sprintf("%v", this.ChallengeType) + `,`,
+		`RateLimitChoice:` + fmt.Sprintf("%v", this.RateLimitChoice) + `,`,
+		`TrustedClients:` + repeatedStringForTrustedClients + `,`,
+		`BlockedClients:` + repeatedStringForBlockedClients + `,`,
+		`CorsPolicy:` + strings.Replace(fmt.Sprintf("%v", this.CorsPolicy), "CorsPolicy", "schema.CorsPolicy", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_ServicePoliciesFromNamespace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_ServicePoliciesFromNamespace{`,
+		`ServicePoliciesFromNamespace:` + strings.Replace(fmt.Sprintf("%v", this.ServicePoliciesFromNamespace), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_NoServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_NoServicePolicies{`,
+		`NoServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.NoServicePolicies), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_ActiveServicePolicies) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_ActiveServicePolicies{`,
+		`ActiveServicePolicies:` + strings.Replace(fmt.Sprintf("%v", this.ActiveServicePolicies), "ServicePolicyList", "common_waf.ServicePolicyList", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_DisableIpReputation) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_DisableIpReputation{`,
+		`DisableIpReputation:` + strings.Replace(fmt.Sprintf("%v", this.DisableIpReputation), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_EnableIpReputation) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_EnableIpReputation{`,
+		`EnableIpReputation:` + strings.Replace(fmt.Sprintf("%v", this.EnableIpReputation), "IPThreatCategoryListType", "common_waf.IPThreatCategoryListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_UserIdClientIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_UserIdClientIp{`,
+		`UserIdClientIp:` + strings.Replace(fmt.Sprintf("%v", this.UserIdClientIp), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_UserIdentification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_UserIdentification{`,
+		`UserIdentification:` + strings.Replace(fmt.Sprintf("%v", this.UserIdentification), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_DisableMaliciousUserDetection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_DisableMaliciousUserDetection{`,
+		`DisableMaliciousUserDetection:` + strings.Replace(fmt.Sprintf("%v", this.DisableMaliciousUserDetection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_EnableMaliciousUserDetection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_EnableMaliciousUserDetection{`,
+		`EnableMaliciousUserDetection:` + strings.Replace(fmt.Sprintf("%v", this.EnableMaliciousUserDetection), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_NoChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_NoChallenge{`,
+		`NoChallenge:` + strings.Replace(fmt.Sprintf("%v", this.NoChallenge), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_EnableChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_EnableChallenge{`,
+		`EnableChallenge:` + strings.Replace(fmt.Sprintf("%v", this.EnableChallenge), "EnableChallenge", "common_waf.EnableChallenge", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_JsChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_JsChallenge{`,
+		`JsChallenge:` + strings.Replace(fmt.Sprintf("%v", this.JsChallenge), "JavascriptChallengeType", "virtual_host.JavascriptChallengeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_CaptchaChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_CaptchaChallenge{`,
+		`CaptchaChallenge:` + strings.Replace(fmt.Sprintf("%v", this.CaptchaChallenge), "CaptchaChallengeType", "virtual_host.CaptchaChallengeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_PolicyBasedChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_PolicyBasedChallenge{`,
+		`PolicyBasedChallenge:` + strings.Replace(fmt.Sprintf("%v", this.PolicyBasedChallenge), "PolicyBasedChallenge", "common_waf.PolicyBasedChallenge", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_DisableRateLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_DisableRateLimit{`,
+		`DisableRateLimit:` + strings.Replace(fmt.Sprintf("%v", this.DisableRateLimit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_ApiRateLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_ApiRateLimit{`,
+		`ApiRateLimit:` + strings.Replace(fmt.Sprintf("%v", this.ApiRateLimit), "APIRateLimit", "common_waf.APIRateLimit", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_RateLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_RateLimit{`,
+		`RateLimit:` + strings.Replace(fmt.Sprintf("%v", this.RateLimit), "RateLimitConfigType", "common_waf.RateLimitConfigType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_IpReputationOnCacheMiss) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_IpReputationOnCacheMiss{`,
+		`IpReputationOnCacheMiss:` + strings.Replace(fmt.Sprintf("%v", this.IpReputationOnCacheMiss), "IPThreatCategoryListType", "common_waf.IPThreatCategoryListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_MaliciousUserDetectionOnCacheMiss) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_MaliciousUserDetectionOnCacheMiss{`,
+		`MaliciousUserDetectionOnCacheMiss:` + strings.Replace(fmt.Sprintf("%v", this.MaliciousUserDetectionOnCacheMiss), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CommonSecurityControls_ChallengeOnCacheMiss) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CommonSecurityControls_ChallengeOnCacheMiss{`,
+		`ChallengeOnCacheMiss:` + strings.Replace(fmt.Sprintf("%v", this.ChallengeOnCacheMiss), "EnableChallenge", "common_waf.EnableChallenge", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiProtection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiProtection{`,
+		`ApiDefinitionChoice:` + fmt.Sprintf("%v", this.ApiDefinitionChoice) + `,`,
+		`ApiProtectionRules:` + strings.Replace(fmt.Sprintf("%v", this.ApiProtectionRules), "APIProtectionRules", "common_waf.APIProtectionRules", 1) + `,`,
+		`JwtValidation:` + strings.Replace(fmt.Sprintf("%v", this.JwtValidation), "JWTValidation", "common_waf.JWTValidation", 1) + `,`,
+		`ApiDiscoveryChoice:` + fmt.Sprintf("%v", this.ApiDiscoveryChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiProtection_DisableApiDefinition) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiProtection_DisableApiDefinition{`,
+		`DisableApiDefinition:` + strings.Replace(fmt.Sprintf("%v", this.DisableApiDefinition), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiProtection_ApiSpecification) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiProtection_ApiSpecification{`,
+		`ApiSpecification:` + strings.Replace(fmt.Sprintf("%v", this.ApiSpecification), "APISpecificationSettings", "common_waf.APISpecificationSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiProtection_EnableApiDiscovery) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiProtection_EnableApiDiscovery{`,
+		`EnableApiDiscovery:` + strings.Replace(fmt.Sprintf("%v", this.EnableApiDiscovery), "ApiDiscoverySetting", "common_waf.ApiDiscoverySetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiProtection_DisableApiDiscovery) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiProtection_DisableApiDiscovery{`,
+		`DisableApiDiscovery:` + strings.Replace(fmt.Sprintf("%v", this.DisableApiDiscovery), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiProtection_ApiSpecificationOnCacheMiss) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiProtection_ApiSpecificationOnCacheMiss{`,
+		`ApiSpecificationOnCacheMiss:` + strings.Replace(fmt.Sprintf("%v", this.ApiSpecificationOnCacheMiss), "APISpecificationSettings", "common_waf.APISpecificationSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiProtection_ApiDiscoveryOnCacheMiss) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiProtection_ApiDiscoveryOnCacheMiss{`,
+		`ApiDiscoveryOnCacheMiss:` + strings.Replace(fmt.Sprintf("%v", this.ApiDiscoveryOnCacheMiss), "ApiDiscoverySetting", "common_waf.ApiDiscoverySetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *SecurityOptionsType) String() string {
 	if this == nil {
 		return "nil"
@@ -12827,6 +16844,9 @@ func (this *SecurityOptionsType) String() string {
 		`IpFiltering:` + strings.Replace(this.IpFiltering.String(), "IpFilteringOptions", "IpFilteringOptions", 1) + `,`,
 		`GeoFiltering:` + strings.Replace(this.GeoFiltering.String(), "GeoFilteringOptions", "GeoFilteringOptions", 1) + `,`,
 		`AuthOptions:` + strings.Replace(this.AuthOptions.String(), "AuthenticationOptions", "AuthenticationOptions", 1) + `,`,
+		`WebAppFirewall:` + strings.Replace(this.WebAppFirewall.String(), "WebApplicationFirewall", "WebApplicationFirewall", 1) + `,`,
+		`CommonSecurityControls:` + strings.Replace(this.CommonSecurityControls.String(), "CommonSecurityControls", "CommonSecurityControls", 1) + `,`,
+		`ApiProtection:` + strings.Replace(this.ApiProtection.String(), "ApiProtection", "ApiProtection", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -14288,6 +18308,1528 @@ func (m *HeaderControlType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *WebApplicationFirewall) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: WebApplicationFirewall: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: WebApplicationFirewall: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableWaf", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.WafChoice = &WebApplicationFirewall_DisableWaf{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppFirewall", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.WafChoice = &WebApplicationFirewall_AppFirewall{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WafExclusionRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WafExclusionRules = append(m.WafExclusionRules, &policy.SimpleWafExclusionRule{})
+			if err := m.WafExclusionRules[len(m.WafExclusionRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DataGuardRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DataGuardRules = append(m.DataGuardRules, &policy.SimpleDataGuardRule{})
+			if err := m.DataGuardRules[len(m.DataGuardRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CsrfPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CsrfPolicy == nil {
+				m.CsrfPolicy = &schema.CsrfPolicy{}
+			}
+			if err := m.CsrfPolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GraphqlRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GraphqlRules = append(m.GraphqlRules, &policy.GraphQLRule{})
+			if err := m.GraphqlRules[len(m.GraphqlRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProtectedCookies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProtectedCookies = append(m.ProtectedCookies, &schema.CookieManipulationOptionType{})
+			if err := m.ProtectedCookies[len(m.ProtectedCookies)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AppFirewallOnCacheMiss", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.WafChoice = &WebApplicationFirewall_AppFirewallOnCacheMiss{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CommonSecurityControls) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CommonSecurityControls: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CommonSecurityControls: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePoliciesFromNamespace", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CommonSecurityControls_ServicePoliciesFromNamespace{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CommonSecurityControls_NoServicePolicies{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveServicePolicies", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ServicePolicyList{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServicePolicyChoice = &CommonSecurityControls_ActiveServicePolicies{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableIpReputation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpReputationChoice = &CommonSecurityControls_DisableIpReputation{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableIpReputation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.IPThreatCategoryListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpReputationChoice = &CommonSecurityControls_EnableIpReputation{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserIdClientIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UserIdChoice = &CommonSecurityControls_UserIdClientIp{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UserIdentification", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.UserIdChoice = &CommonSecurityControls_UserIdentification{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableMaliciousUserDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaliciousUserDetectionChoice = &CommonSecurityControls_DisableMaliciousUserDetection{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableMaliciousUserDetection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaliciousUserDetectionChoice = &CommonSecurityControls_EnableMaliciousUserDetection{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeType = &CommonSecurityControls_NoChallenge{v}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.EnableChallenge{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeType = &CommonSecurityControls_EnableChallenge{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JsChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &virtual_host.JavascriptChallengeType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeType = &CommonSecurityControls_JsChallenge{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CaptchaChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &virtual_host.CaptchaChallengeType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeType = &CommonSecurityControls_CaptchaChallenge{v}
+			iNdEx = postIndex
+		case 19:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PolicyBasedChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.PolicyBasedChallenge{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeType = &CommonSecurityControls_PolicyBasedChallenge{v}
+			iNdEx = postIndex
+		case 21:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableRateLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RateLimitChoice = &CommonSecurityControls_DisableRateLimit{v}
+			iNdEx = postIndex
+		case 22:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.APIRateLimit{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RateLimitChoice = &CommonSecurityControls_ApiRateLimit{v}
+			iNdEx = postIndex
+		case 23:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RateLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.RateLimitConfigType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RateLimitChoice = &CommonSecurityControls_RateLimit{v}
+			iNdEx = postIndex
+		case 24:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TrustedClients", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TrustedClients = append(m.TrustedClients, &common_waf.SimpleClientSrcRule{})
+			if err := m.TrustedClients[len(m.TrustedClients)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 25:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockedClients", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BlockedClients = append(m.BlockedClients, &common_waf.SimpleClientSrcRule{})
+			if err := m.BlockedClients[len(m.BlockedClients)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 26:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CorsPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CorsPolicy == nil {
+				m.CorsPolicy = &schema.CorsPolicy{}
+			}
+			if err := m.CorsPolicy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 27:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IpReputationOnCacheMiss", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.IPThreatCategoryListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpReputationChoice = &CommonSecurityControls_IpReputationOnCacheMiss{v}
+			iNdEx = postIndex
+		case 28:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaliciousUserDetectionOnCacheMiss", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaliciousUserDetectionChoice = &CommonSecurityControls_MaliciousUserDetectionOnCacheMiss{v}
+			iNdEx = postIndex
+		case 29:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ChallengeOnCacheMiss", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.EnableChallenge{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ChallengeType = &CommonSecurityControls_ChallengeOnCacheMiss{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiProtection) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiProtection: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiProtection: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableApiDefinition", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDefinitionChoice = &ApiProtection_DisableApiDefinition{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiSpecification", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.APISpecificationSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDefinitionChoice = &ApiProtection_ApiSpecification{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiProtectionRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiProtectionRules == nil {
+				m.ApiProtectionRules = &common_waf.APIProtectionRules{}
+			}
+			if err := m.ApiProtectionRules.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field JwtValidation", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.JwtValidation == nil {
+				m.JwtValidation = &common_waf.JWTValidation{}
+			}
+			if err := m.JwtValidation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableApiDiscovery", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ApiDiscoverySetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDiscoveryChoice = &ApiProtection_EnableApiDiscovery{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableApiDiscovery", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDiscoveryChoice = &ApiProtection_DisableApiDiscovery{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiSpecificationOnCacheMiss", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.APISpecificationSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDefinitionChoice = &ApiProtection_ApiSpecificationOnCacheMiss{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiDiscoveryOnCacheMiss", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ApiDiscoverySetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ApiDiscoveryChoice = &ApiProtection_ApiDiscoveryOnCacheMiss{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *SecurityOptionsType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -14422,6 +19964,114 @@ func (m *SecurityOptionsType) Unmarshal(dAtA []byte) error {
 				m.AuthOptions = &AuthenticationOptions{}
 			}
 			if err := m.AuthOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WebAppFirewall", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.WebAppFirewall == nil {
+				m.WebAppFirewall = &WebApplicationFirewall{}
+			}
+			if err := m.WebAppFirewall.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CommonSecurityControls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CommonSecurityControls == nil {
+				m.CommonSecurityControls = &CommonSecurityControls{}
+			}
+			if err := m.CommonSecurityControls.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiProtection", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiProtection == nil {
+				m.ApiProtection = &ApiProtection{}
+			}
+			if err := m.ApiProtection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

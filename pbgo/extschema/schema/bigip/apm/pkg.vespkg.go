@@ -103,14 +103,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bigip.apm.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigip.apm.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
@@ -119,18 +119,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigip.apm.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bigip.apm.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.aws_site_type_choice.apm_aws_site.nodes.#.mgmt_subnet.subnet_param.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 

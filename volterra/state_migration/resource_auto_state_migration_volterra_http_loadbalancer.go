@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
+func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
 
@@ -67,6 +67,130 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"cloud_edge_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cloud_edge": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ipv4_vip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6_vip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"site": {
 
 										Type:     schema.TypeSet,
@@ -87,6 +211,82 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 												"network": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"site_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
 												"site": {
@@ -192,6 +392,82 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 												"network": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"virtual_site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"virtual_site_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
 												"virtual_site": {
@@ -1749,6 +2025,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -1989,6 +2275,78 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																Type:       schema.TypeBool,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
 															},
 
 															"name": {
@@ -2304,6 +2662,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -2544,6 +2912,78 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																Type:       schema.TypeBool,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
 															},
 
 															"name": {
@@ -3254,8 +3694,9 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 												},
 
 												"reload_header_name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3520,7 +3961,84 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																			Type:     schema.TypeSet,
 																			Optional: true,
 																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{},
+																				Schema: map[string]*schema.Schema{
+
+																					"disable_transaction_result": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"transaction_result": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"failure_conditions": {
+
+																									Type:     schema.TypeList,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"success_conditions": {
+
+																									Type:     schema.TypeList,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
 																			},
 																		},
 
@@ -4364,7 +4882,94 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{},
+																				Schema: map[string]*schema.Schema{
+
+																					"disable_transaction_result": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"transaction_result": {
+
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"failure_conditions": {
+
+																									Type:       schema.TypeList,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"success_conditions": {
+
+																									Type:       schema.TypeList,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
 																			},
 																		},
 
@@ -5672,6 +6277,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																				Type: schema.TypeString,
 																			},
 																		},
+
+																		"ipv6_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
 																	},
 																},
 															},
@@ -6450,78 +7065,6 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 				},
 			},
 
-			"disable_ddos_detection": {
-
-				Type:       schema.TypeBool,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-			},
-
-			"enable_ddos_detection": {
-
-				Type:       schema.TypeSet,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"disable_auto_mitigation": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"enable_auto_mitigation": {
-
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"block": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"js_challenge": {
-
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"cookie_expiry": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"custom_page": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"js_script_delay": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
 			"ddos_mitigation_rules": {
 
 				Type:     schema.TypeList,
@@ -6659,6 +7202,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 									},
 
 									"ip_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"ipv6_prefixes": {
 
 										Type: schema.TypeList,
 
@@ -7467,6 +8020,13 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
+									"legacy_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"preserve_case_header_transformation": {
 
 										Type:       schema.TypeBool,
@@ -7486,31 +8046,65 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 
 						"http_protocol_options": {
 
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeSet,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"http_protocol_enable_v1_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"header_transformation": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"default_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"legacy_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"preserve_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"proper_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 
 									"http_protocol_enable_v1_v2": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"http_protocol_enable_v2_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -8206,6 +8800,13 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
+									"legacy_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"preserve_case_header_transformation": {
 
 										Type:       schema.TypeBool,
@@ -8225,31 +8826,65 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 
 						"http_protocol_options": {
 
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeSet,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"http_protocol_enable_v1_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"header_transformation": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"default_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"legacy_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"preserve_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"proper_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 
 									"http_protocol_enable_v1_v2": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"http_protocol_enable_v2_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -8883,78 +9518,6 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 															"name": {
 																Type:       schema.TypeString,
 																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"disable_ddos_detection": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"enable_ddos_detection": {
-
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"disable_auto_mitigation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"enable_auto_mitigation": {
-
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"block": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"js_challenge": {
-
-													Type:       schema.TypeSet,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"cookie_expiry": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"custom_page": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"js_script_delay": {
-																Type:       schema.TypeInt,
-																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
@@ -9735,6 +10298,13 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
+												"legacy_header_transformation": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"preserve_case_header_transformation": {
 
 													Type:       schema.TypeBool,
@@ -9767,9 +10337,52 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 
 									"http1_config": {
 
-										Type:       schema.TypeBool,
+										Type:       schema.TypeSet,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"header_transformation": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"default_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"legacy_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"preserve_case_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"proper_case_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 
 									"http2_options": {
@@ -9861,6 +10474,27 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 									"panic_threshold": {
 
 										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"disable_proxy_protocol": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"proxy_protocol_v1": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"proxy_protocol_v2": {
+
+										Type:       schema.TypeBool,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
@@ -10306,6 +10940,33 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
+												"segment": {
+
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
 												"ip": {
 
 													Type:       schema.TypeString,
@@ -10426,6 +11087,33 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 													Type:       schema.TypeBool,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"segment": {
+
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
 												},
 
 												"refresh_interval": {
@@ -11456,6 +12144,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 														Type: schema.TypeString,
 													},
 												},
+
+												"ipv6_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
 											},
 										},
 									},
@@ -11853,6 +12551,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -12149,6 +12857,78 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 													},
 												},
 
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
 												"query_params": {
 
 													Type:     schema.TypeList,
@@ -12429,6 +13209,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																				Type: schema.TypeString,
 																			},
 																		},
+
+																		"ipv6_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
 																	},
 																},
 															},
@@ -12700,6 +13490,78 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																			Type:       schema.TypeBool,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"jwt_claims": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_matcher": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"check_not_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"check_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"item": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
 																		},
 
 																		"name": {
@@ -13065,6 +13927,16 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -13351,6 +14223,78 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 																Type:       schema.TypeBool,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
 															},
 
 															"name": {
@@ -14838,22 +15782,19 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 
 												"regex_rewrite": {
 
-													Type:       schema.TypeSet,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeSet,
+													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"pattern": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 
 															"substitution": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 														},
 													},
@@ -15229,13 +16170,13 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 				Optional: true,
 			},
 
-			"disable_threat_intelligence": {
+			"disable_threat_mesh": {
 
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
 
-			"enable_threat_intelligence": {
+			"enable_threat_mesh": {
 
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -15258,7 +16199,7 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Required: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -15659,14 +16600,68 @@ func ResourceHttpLoadbalancerInstanceResourceV0() *schema.Resource {
 	}
 }
 
-func ResourceHttpLoadbalancerInstanceStateUpgradeV0(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
-	for _, v := range rawState["enable_ddos_detection"].([]interface{}) {
-		a := v.(map[string]interface{})
-		value, ok := a["enable_auto_mitigation"]
-		if ok {
-			if reflect.TypeOf(value).Kind() == reflect.Bool {
-				a["enable_auto_mitigation"] = []interface{}{map[string]interface{}{
-					"block": a["enable_auto_mitigation"].(bool),
+func ResourceHttpLoadbalancerInstanceStateUpgradeV1(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+	httpsAutoCert, ok := rawState["https_auto_cert"].([]interface{})
+	if !ok {
+		return rawState, nil
+	}
+
+	for _, v := range httpsAutoCert {
+		a, ok := v.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		httpProtocolOptions, ok := a["http_protocol_options"].([]interface{})
+		if !ok {
+			continue
+		}
+
+		for _, va := range httpProtocolOptions {
+			aa, ok := va.(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			value, ok := aa["http_protocol_enable_v1_only"]
+			if ok && reflect.TypeOf(value).Kind() == reflect.Bool {
+				aa["http_protocol_enable_v1_only"] = []interface{}{map[string]interface{}{
+					"header_transformation": []interface{}{map[string]interface{}{
+						"legacy_header_transformation": true,
+					}},
+				}}
+			}
+		}
+	}
+
+	defaultPool, ok := rawState["default_pool"].([]interface{})
+	if !ok {
+		return rawState, nil
+	}
+
+	for _, v := range defaultPool {
+		a, ok := v.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		advancedOptions, ok := a["advanced_options"].([]interface{})
+		if !ok {
+			continue
+		}
+
+		for _, va := range advancedOptions {
+			aa, ok := va.(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			value, ok := aa["http1_config"]
+			if ok && reflect.TypeOf(value).Kind() == reflect.Bool {
+				aa["http1_config"] = []interface{}{map[string]interface{}{
+					"header_transformation": []interface{}{map[string]interface{}{
+						"legacy_header_transformation": true,
+					}},
 				}}
 			}
 		}

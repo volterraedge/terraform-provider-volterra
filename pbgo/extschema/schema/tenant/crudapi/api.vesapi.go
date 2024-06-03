@@ -3106,10 +3106,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3243,6 +3247,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Clear Secret"
                 }
             }
+        },
+        "schemaSignupOrigin": {
+            "type": "string",
+            "description": "x-required\nSignupOrigin indicates, from which platform signup is originated, example f5xc, aws..etc\n\n - ORIGIN_UNKNOWN: ORIGIN_UNKNOWN\n\nIndicates, the origin of the signup is unknown\n - ORIGIN_F5XC: ORIGIN_F5XC\n\nORIGIN_F5XC as an origin indicates, signup is initiated from console or by internal scaling/testing/support teams using private API\n - ORIGIN_AWS: ORIGIN_AWS\n\nORIGIN_AWS as an origin indicates, signup is initiated from AWS marketplace \u0026 it comes to eywaprime via tsahik",
+            "title": "SignupOrigin",
+            "enum": [
+                "ORIGIN_UNKNOWN",
+                "ORIGIN_F5XC",
+                "ORIGIN_AWS"
+            ],
+            "default": "ORIGIN_UNKNOWN",
+            "x-displayname": "Signup Origin",
+            "x-ves-proto-enum": "ves.io.schema.SignupOrigin"
         },
         "schemaStatusMetaType": {
             "type": "object",
@@ -3675,16 +3692,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "addon_services_subscribed": {
                     "type": "array",
-                    "description": " List of addon service names currently subscribed by the tenant.\n\nExample: - \"shape-bot\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n",
+                    "description": " List of addon service names currently subscribed by the tenant.\n\nExample: - \"shape-bot\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
                     "title": "Addon Services Subscribed",
-                    "maxItems": 32,
+                    "maxItems": 128,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Addon Services Subscribed",
                     "x-ves-example": "shape-bot",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "32"
+                        "ves.io.schema.rules.repeated.max_items": "128"
                     }
                 },
                 "company_name": {
@@ -3755,6 +3772,16 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/tenantSubCA"
                     },
                     "x-displayname": "K8S Server Sub CAs"
+                },
+                "origin": {
+                    "description": " origin of the signup, from which platform signup is originated, example f5xc, aws..etc\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Origin",
+                    "$ref": "#/definitions/schemaSignupOrigin",
+                    "x-displayname": "Origin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "plan_type": {
                     "description": " Type of the billing plan the tenant is subscribed to. Value can be one of FREE, INDIVIDUAL, TEAM, ORGANIZATION.",
@@ -3934,6 +3961,19 @@ var APISwaggerJSON string = `{
                     "title": "Version",
                     "format": "int64",
                     "x-displayname": "Version"
+                }
+            }
+        },
+        "tenantTenantControlConfig": {
+            "type": "object",
+            "description": "x-displayName: \"TenantControlConfig\"\nConfiguration for tenant controller",
+            "title": "TenantControlConfig",
+            "properties": {
+                "tenant_node_percent": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Tenant Node selection percentage\"\nConfigure part of multinode RE to process configuration for this tenant",
+                    "title": "Tenant Node Selection  percentage",
+                    "format": "int32"
                 }
             }
         },

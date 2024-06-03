@@ -554,8 +554,8 @@ type BusinessLogicMarkupSetting struct {
 	// Include or Exclude data in machine learning from traffic with redirect response in API Discovery
 	//
 	// x-displayName: "Learn from Traffic with Redirect Response"
-	// By default, API Discovery only learns API Endpoints and patterns from traffic with response code 200
-	// On enabling this, the AI engine will learn API Endpoints from traffic with response code 3xx in addition to 200
+	// By default, API Discovery only learns API Endpoints and patterns from traffic with response code 2xx
+	// On enabling this, the AI engine will learn API Endpoints from traffic with response code 3xx in addition to 2xx
 	//
 	// Types that are valid to be assigned to LearnFromRedirectTraffic:
 	//	*BusinessLogicMarkupSetting_Disable

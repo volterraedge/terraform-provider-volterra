@@ -386,7 +386,7 @@ func (c *CustomAPIRestClient) doRPCCDNCachePurge(ctx context.Context, callOpts *
 		_ = q
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
-		q.Add("pattern", fmt.Sprintf("%v", req.Pattern))
+		q.Add("pattern_type", fmt.Sprintf("%v", req.PatternType))
 		q.Add("purge_epoch_timestamp", fmt.Sprintf("%v", req.PurgeEpochTimestamp))
 		q.Add("purge_type", fmt.Sprintf("%v", req.PurgeType))
 
@@ -2768,6 +2768,7 @@ var CustomAPISwaggerJSON string = `{
             "description": "CDN Cache Purge",
             "title": "Cache Purge Request",
             "x-displayname": "Cache Purge",
+            "x-ves-oneof-field-pattern_type": "[\"hostname\",\"pattern\",\"purge_all\",\"url\"]",
             "x-ves-oneof-field-purge_type": "[\"hard_purge\",\"soft_purge\"]",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest",
             "properties": {
@@ -2777,18 +2778,48 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Hard Purge"
                 },
+                "hostname": {
+                    "type": "string",
+                    "description": "Exclusive with [pattern purge_all url]\n Format: string.\n Purge cache with origin domain name that matches with configured cache key\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "title": "Hostname",
+                    "x-displayname": "Hostname",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.vh_domain": "true"
+                    }
+                },
                 "pattern": {
                     "type": "string",
-                    "description": " Format: string\n Purge only the objects whos name matches the pattern\n\nExample: - \"*.ts\"-",
+                    "description": "Exclusive with [hostname purge_all url]\n Format: string.\n Purge only the objects with cache key matching the pattern\n\nExample: - \"*.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
                     "title": "Regex Pattern to match",
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Pattern (RegEx)",
-                    "x-ves-example": "*.ts"
+                    "x-ves-example": "*.ts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                },
+                "purge_all": {
+                    "description": "Exclusive with [hostname pattern url]\n purge cache for a specific distribution",
+                    "title": "Purge All",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Purge All"
                 },
                 "soft_purge": {
                     "description": "Exclusive with [hard_purge]\n Invalidate the Cache entries",
                     "title": "Soft Purge",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Soft Purge"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Exclusive with [hostname pattern purge_all]\n Format: string.\n Purge cache with uri/path or in combination with origin-domain/path that is configured in cache key\n\nExample: - \"/path1\"-",
+                    "title": "URL",
+                    "x-displayname": "URL",
+                    "x-ves-example": "/path1"
                 }
             }
         },

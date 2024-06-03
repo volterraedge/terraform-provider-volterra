@@ -25,7 +25,8 @@ resource "volterra_fast_acl" "example" {
   site_acl {
     fast_acl_rules {
       action {
-        // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
+        // One of the arguments from this list "simple_action policer_action protocol_policer_action" can be set
+
         simple_action = "simple_action"
       }
 
@@ -40,7 +41,8 @@ resource "volterra_fast_acl" "example" {
       name = "value"
 
       port {
-        // One of the arguments from this list "all user_defined dns" must be set
+        // One of the arguments from this list "all user_defined dns" can be set
+
         all = true
       }
 
@@ -54,9 +56,11 @@ resource "volterra_fast_acl" "example" {
     }
 
     // One of the arguments from this list "outside_network inside_network" must be set
-    inside_network = true
+
+    outside_network = true
 
     // One of the arguments from this list "interface_services vip_services all_services" must be set
+
     interface_services = true
   }
 }
@@ -106,7 +110,7 @@ Reference to protocol based policer object.
 
 List of IP addresses to match with destination.
 
-###### One of the arguments from this list "ipv6, ipv4" can be set
+###### One of the arguments from this list "ipv4, ipv6" can be set
 
 `ipv4` - (Optional) IPv4 Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
@@ -218,7 +222,7 @@ L4 port numbers to match.
 
 CE applies Fast ACLs with network type selector as "site_local" and "site_local_inside" only.
 
-###### One of the arguments from this list "public, site_local, site_local_inside" can be set
+###### One of the arguments from this list "site_local, site_local_inside, public" can be set
 
 `public` - (Optional) Indicates use of public network (`Bool`).
 
@@ -254,7 +258,7 @@ Fast ACL rules to match.
 
 `port` - (Optional) L4 port numbers to match. See [Fast Acl Rules Port ](#fast-acl-rules-port) below for details.
 
-###### One of the arguments from this list "prefix, ip_prefix_set" must be set
+###### One of the arguments from this list "ip_prefix_set, prefix" must be set
 
 `ip_prefix_set` - (Optional) Reference to IP prefix set object. See [Source Ip Prefix Set ](#source-ip-prefix-set) below for details.
 
@@ -292,7 +296,7 @@ Fast ACL rules to match.
 
 `port` - (Optional) L4 port numbers to match. See [Fast Acl Rules Port ](#fast-acl-rules-port) below for details.
 
-###### One of the arguments from this list "ip_prefix_set, prefix" must be set
+###### One of the arguments from this list "prefix, ip_prefix_set" must be set
 
 `ip_prefix_set` - (Optional) Reference to IP prefix set object. See [Source Ip Prefix Set ](#source-ip-prefix-set) below for details.
 
@@ -314,7 +318,7 @@ ACL will be applied at regional edge sites.
 
 `fast_acl_rules` - (Optional) Fast ACL rules to match. See [Re Acl Fast Acl Rules ](#re-acl-fast-acl-rules) below for details.
 
-###### One of the arguments from this list "all_public_vips, default_tenant_vip, selected_tenant_vip" must be set
+###### One of the arguments from this list "selected_tenant_vip, all_public_vips, default_tenant_vip" must be set
 
 `all_public_vips` - (Optional) Apply this Fast ACL to all public vips (`Bool`).
 
@@ -334,7 +338,7 @@ ACL will be applied at customer edge sites.
 
 `outside_network` - (Optional) Site Local Outside network (`Bool`).
 
-###### One of the arguments from this list "interface_services, vip_services, all_services" must be set
+###### One of the arguments from this list "vip_services, all_services, interface_services" must be set
 
 `all_services` - (Optional) Port and protocol is picked up from advertise policies (`Bool`).
 

@@ -1157,9 +1157,11 @@ var DefaultClientIPHeadersValidator = func() *ValidateClientIPHeaders {
 
 	vrhClientIpHeaders := v.ClientIpHeadersValidationRuleHandler
 	rulesClientIpHeaders := map[string]string{
+		"ves.io.schema.rules.message.required":                "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
 		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
 		"ves.io.schema.rules.repeated.max_items":              "5",
+		"ves.io.schema.rules.repeated.min_items":              "1",
 		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhClientIpHeaders(rulesClientIpHeaders)
@@ -1500,6 +1502,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetZtnaProxyConfigurationsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurationsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -1864,6 +1872,24 @@ func (m *CreateSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetZtnaProxyConfigurationsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetZtnaProxyConfigurations() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetZtnaProxyConfigurations().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurations().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ztna_proxy_configurations." + dri.DRField
 	}
 	return drInfos, err
 
@@ -2708,6 +2734,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["http_protocol_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_protocol_options"))
+		if err := fv(ctx, m.GetHttpProtocolOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
@@ -2961,6 +2996,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["ztna_proxy_configurations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ztna_proxy_configurations"))
+		if err := fv(ctx, m.GetZtnaProxyConfigurations(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3209,6 +3253,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["api_spec"] = ApiSpecValidator().Validate
 
 	v.FldValidators["domain_cert_map"] = DomainCertificatesValidator().Validate
+
+	v.FldValidators["http_protocol_options"] = HttpProtocolOptionsValidator().Validate
+
+	v.FldValidators["ztna_proxy_configurations"] = ZtnaProxyConfigurationValidator().Validate
 
 	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
@@ -4548,6 +4596,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetZtnaProxyConfigurationsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurationsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -4908,6 +4962,24 @@ func (m *GetSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetZtnaProxyConfigurationsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetZtnaProxyConfigurations() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetZtnaProxyConfigurations().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurations().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ztna_proxy_configurations." + dri.DRField
 	}
 	return drInfos, err
 
@@ -5810,6 +5882,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["http_protocol_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_protocol_options"))
+		if err := fv(ctx, m.GetHttpProtocolOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
@@ -6081,6 +6162,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["ztna_proxy_configurations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ztna_proxy_configurations"))
+		if err := fv(ctx, m.GetZtnaProxyConfigurations(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -6321,7 +6411,11 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["domain_cert_map"] = DomainCertificatesValidator().Validate
 
+	v.FldValidators["http_protocol_options"] = HttpProtocolOptionsValidator().Validate
+
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
+
+	v.FldValidators["ztna_proxy_configurations"] = ZtnaProxyConfigurationValidator().Validate
 
 	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
@@ -6529,6 +6623,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetZtnaProxyConfigurationsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurationsDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -7272,6 +7372,24 @@ func (m *GlobalSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetZtnaProxyConfigurationsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetZtnaProxyConfigurations() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetZtnaProxyConfigurations().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurations().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ztna_proxy_configurations." + dri.DRField
 	}
 	return drInfos, err
 
@@ -8192,6 +8310,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["advertise_on_public"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("advertise_on_public"))
+		if err := fv(ctx, m.GetAdvertiseOnPublic(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["advertise_policies"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("advertise_policies"))
@@ -8476,6 +8603,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("ddos_auto_mitigation_action"),
 				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -9026,6 +9164,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["use_threat_mesh"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("use_threat_mesh"))
+		if err := fv(ctx, m.GetUseThreatMesh(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["user_domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("user_domains"))
 		if err := fv(ctx, m.GetUserDomains(), vOpts...); err != nil {
@@ -9055,6 +9202,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("waf_type"))
 		if err := fv(ctx, m.GetWafType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ztna_proxy_configurations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ztna_proxy_configurations"))
+		if err := fv(ctx, m.GetZtnaProxyConfigurations(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9403,6 +9559,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
+	v.FldValidators["ztna_proxy_configurations"] = ZtnaProxyConfigurationValidator().Validate
+
 	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
 	return v
@@ -9410,6 +9568,86 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Http1ProtocolOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Http1ProtocolOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Http1ProtocolOptions) DeepCopy() *Http1ProtocolOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Http1ProtocolOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Http1ProtocolOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Http1ProtocolOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return Http1ProtocolOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttp1ProtocolOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttp1ProtocolOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Http1ProtocolOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Http1ProtocolOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["header_transformation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation"))
+		if err := fv(ctx, m.GetHeaderTransformation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttp1ProtocolOptionsValidator = func() *ValidateHttp1ProtocolOptions {
+	v := &ValidateHttp1ProtocolOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["header_transformation"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
+	return v
+}()
+
+func Http1ProtocolOptionsValidator() db.Validator {
+	return DefaultHttp1ProtocolOptionsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -9547,6 +9785,8 @@ var DefaultHttpProtocolOptionsValidator = func() *ValidateHttpProtocolOptions {
 		panic(errMsg)
 	}
 	v.FldValidators["http_protocol_choice"] = vFn
+
+	v.FldValidators["http_protocol_choice.http_protocol_enable_v1_only"] = Http1ProtocolOptionsValidator().Validate
 
 	return v
 }()
@@ -10422,6 +10662,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetZtnaProxyConfigurationsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurationsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -10782,6 +11028,24 @@ func (m *ReplaceSpecType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "waf_type." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetZtnaProxyConfigurationsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetZtnaProxyConfigurations() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetZtnaProxyConfigurations().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetZtnaProxyConfigurations().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ztna_proxy_configurations." + dri.DRField
 	}
 	return drInfos, err
 
@@ -11626,6 +11890,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["http_protocol_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_protocol_options"))
+		if err := fv(ctx, m.GetHttpProtocolOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["idle_timeout"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("idle_timeout"))
@@ -11879,6 +12152,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["ztna_proxy_configurations"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ztna_proxy_configurations"))
+		if err := fv(ctx, m.GetZtnaProxyConfigurations(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -12127,6 +12409,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["api_spec"] = ApiSpecValidator().Validate
 
 	v.FldValidators["domain_cert_map"] = DomainCertificatesValidator().Validate
+
+	v.FldValidators["http_protocol_options"] = HttpProtocolOptionsValidator().Validate
+
+	v.FldValidators["ztna_proxy_configurations"] = ZtnaProxyConfigurationValidator().Validate
 
 	v.FldValidators["dns_proxy_configuration"] = DNSProxyConfigurationValidator().Validate
 
@@ -13295,6 +13581,329 @@ func VirtualHostIDValidator() db.Validator {
 	return DefaultVirtualHostIDValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *ZtnaProxyConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ZtnaProxyConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ZtnaProxyConfiguration) DeepCopy() *ZtnaProxyConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ZtnaProxyConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ZtnaProxyConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ZtnaProxyConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ZtnaProxyConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ZtnaProxyConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetZtnaApplicationConfigDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetZtnaApplicationConfigDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetZtnaPolicyConfigDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetZtnaPolicyConfigDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *ZtnaProxyConfiguration) GetZtnaApplicationConfigDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetZtnaApplicationConfig()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ZtnaProxyConfiguration.ztna_application_config[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ztna_application.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ztna_application_config",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetZtnaApplicationConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ZtnaProxyConfiguration) GetZtnaApplicationConfigDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "ztna_application.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: ztna_application")
+	}
+	for _, ref := range m.GetZtnaApplicationConfig() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *ZtnaProxyConfiguration) GetZtnaPolicyConfigDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetZtnaPolicyConfig()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ZtnaProxyConfiguration.ztna_policy_config[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ztna.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ztna_policy_config",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetZtnaPolicyConfigDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ZtnaProxyConfiguration) GetZtnaPolicyConfigDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "ztna.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: ztna")
+	}
+	for _, ref := range m.GetZtnaPolicyConfig() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateZtnaProxyConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateZtnaProxyConfiguration) ZtnaPolicyConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ztna_policy_config")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ztna_policy_config")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ztna_policy_config")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ztna_policy_config")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateZtnaProxyConfiguration) ZtnaApplicationConfigValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ztna_application_config")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ztna_application_config")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ztna_application_config")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ztna_application_config")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateZtnaProxyConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ZtnaProxyConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ZtnaProxyConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ztna_application_config"]; exists {
+		vOpts := append(opts, db.WithValidateField("ztna_application_config"))
+		if err := fv(ctx, m.GetZtnaApplicationConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ztna_policy_config"]; exists {
+		vOpts := append(opts, db.WithValidateField("ztna_policy_config"))
+		if err := fv(ctx, m.GetZtnaPolicyConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultZtnaProxyConfigurationValidator = func() *ValidateZtnaProxyConfiguration {
+	v := &ValidateZtnaProxyConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhZtnaPolicyConfig := v.ZtnaPolicyConfigValidationRuleHandler
+	rulesZtnaPolicyConfig := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "50",
+	}
+	vFn, err = vrhZtnaPolicyConfig(rulesZtnaPolicyConfig)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ZtnaProxyConfiguration.ztna_policy_config: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ztna_policy_config"] = vFn
+
+	vrhZtnaApplicationConfig := v.ZtnaApplicationConfigValidationRuleHandler
+	rulesZtnaApplicationConfig := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhZtnaApplicationConfig(rulesZtnaApplicationConfig)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ZtnaProxyConfiguration.ztna_application_config: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ztna_application_config"] = vFn
+
+	return v
+}()
+
+func ZtnaProxyConfigurationValidator() db.Validator {
+	return DefaultZtnaProxyConfigurationValidator
+}
+
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetAuthenticationChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.AuthenticationChoice.(type) {
@@ -13582,6 +14191,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Domains = f.GetDomains()
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
+	m.HttpProtocolOptions = f.GetHttpProtocolOptions()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
@@ -13601,6 +14211,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetTlsCertificatesChoiceFromGlobalSpecType(f)
 	m.UserIdentification = f.GetUserIdentification()
 	m.WafType = f.GetWafType()
+	m.ZtnaProxyConfigurations = f.GetZtnaProxyConfigurations()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -13638,6 +14249,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Domains = m1.Domains
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.HeaderTransformationType = m1.HeaderTransformationType
+	f.HttpProtocolOptions = m1.HttpProtocolOptions
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
@@ -13657,6 +14269,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetTlsCertificatesChoiceToGlobalSpecType(f)
 	f.UserIdentification = m1.UserIdentification
 	f.WafType = m1.WafType
+	f.ZtnaProxyConfigurations = m1.ZtnaProxyConfigurations
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -13995,6 +14608,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HostName = f.GetHostName()
+	m.HttpProtocolOptions = f.GetHttpProtocolOptions()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
@@ -14016,6 +14630,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.Type = f.GetType()
 	m.UserIdentification = f.GetUserIdentification()
 	m.WafType = f.GetWafType()
+	m.ZtnaProxyConfigurations = f.GetZtnaProxyConfigurations()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -14059,6 +14674,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HostName = m1.HostName
+	f.HttpProtocolOptions = m1.HttpProtocolOptions
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
@@ -14080,6 +14696,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.Type = m1.Type
 	f.UserIdentification = m1.UserIdentification
 	f.WafType = m1.WafType
+	f.ZtnaProxyConfigurations = m1.ZtnaProxyConfigurations
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -14377,6 +14994,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Domains = f.GetDomains()
 	m.DynamicReverseProxy = f.GetDynamicReverseProxy()
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
+	m.HttpProtocolOptions = f.GetHttpProtocolOptions()
 	m.IdleTimeout = f.GetIdleTimeout()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
@@ -14396,6 +15014,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetTlsCertificatesChoiceFromGlobalSpecType(f)
 	m.UserIdentification = f.GetUserIdentification()
 	m.WafType = f.GetWafType()
+	m.ZtnaProxyConfigurations = f.GetZtnaProxyConfigurations()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -14433,6 +15052,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Domains = m1.Domains
 	f.DynamicReverseProxy = m1.DynamicReverseProxy
 	f.HeaderTransformationType = m1.HeaderTransformationType
+	f.HttpProtocolOptions = m1.HttpProtocolOptions
 	f.IdleTimeout = m1.IdleTimeout
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
@@ -14452,6 +15072,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetTlsCertificatesChoiceToGlobalSpecType(f)
 	f.UserIdentification = m1.UserIdentification
 	f.WafType = m1.WafType
+	f.ZtnaProxyConfigurations = m1.ZtnaProxyConfigurations
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

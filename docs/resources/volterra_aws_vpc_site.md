@@ -21,8 +21,17 @@ resource "volterra_aws_vpc_site" "example" {
   namespace  = "staging"
   aws_region = ["us-east-1"]
 
-  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
-  default_blocked_services = true
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
+
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" can be set
+
+      web_user_interface = true
+
+      network_type = "network_type"
+    }
+  }
 
   // One of the arguments from this list "aws_cred" must be set
 
@@ -31,29 +40,67 @@ resource "volterra_aws_vpc_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
+
   // One of the arguments from this list "private_connectivity direct_connect_disabled direct_connect_enabled" must be set
-  direct_connect_disabled = true
+
+  direct_connect_enabled {
+    // One of the arguments from this list "auto_asn custom_asn" must be set
+
+    auto_asn = true
+
+    // One of the arguments from this list "hosted_vifs standard_vifs manual_gw" must be set
+
+    hosted_vifs {
+      // One of the arguments from this list "site_registration_over_internet site_registration_over_direct_connect" can be set
+
+      site_registration_over_internet = true
+
+      vif_list {
+        vif_id = "dxvif-fgwtckim"
+
+        // One of the arguments from this list "same_as_site_region other_region" must be set
+
+        same_as_site_region = true
+      }
+
+      vifs = ["value"]
+    }
+  }
 
   // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
 
-  egress_virtual_private_gateway {
-    // One of the arguments from this list "vgw_id" must be set
-    vgw_id = "vgw_id"
-  }
-  instance_type = ["a1.xlarge"]
+  egress_gateway_default = true
+  instance_type          = ["a1.xlarge"]
+
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+
   disable_internet_vip = true
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+
   // One of the arguments from this list "f5xc_security_group custom_security_group" must be set
-  f5xc_security_group = true
+
+  custom_security_group {
+    inside_security_group_id = "sg-0db952838ba829943"
+
+    outside_security_group_id = "sg-0db952838ba829943"
+  }
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
 
   ingress_gw {
     allowed_vip_port {
-      // One of the arguments from this list "use_http_https_port custom_ports disable_allowed_vip_port use_http_port use_https_port" must be set
-      use_http_port = true
+      // One of the arguments from this list "use_http_port use_https_port use_http_https_port custom_ports disable_allowed_vip_port" can be set
+
+      custom_ports {
+        port_ranges = "80, 8080-8085"
+      }
     }
 
     aws_certified_hw = "aws-byol-voltmesh"
@@ -64,7 +111,7 @@ resource "volterra_aws_vpc_site" "example" {
       disk_size = "80"
 
       local_subnet {
-        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
+        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -76,12 +123,15 @@ resource "volterra_aws_vpc_site" "example" {
 
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l3_enhanced perf_mode_l7_enhanced" must be set
+
       perf_mode_l7_enhanced = true
     }
   }
   ssh_key = ["ssh-rsa AAAAB..."]
-  // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  nodes_per_az = "2"
+
+  // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
+
+  no_worker_nodes = true
 }
 
 ```
@@ -113,7 +163,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Allow access to DNS, SSH & WebUI services on Site (`Bool`).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (`Bool`).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -140,6 +190,8 @@ Argument Reference
 `disable_internet_vip` - (Optional) VIPs cannot be advertised to the internet directly on this Site (`Bool`).
 
 `enable_internet_vip` - (Optional) VIPs can be advertised to the internet directly on this Site (`Bool`).
+
+`kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -193,6 +245,16 @@ custom dns configure to the CE site.
 
 `outside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in outside network (`String`).
 
+### Kubernetes Upgrade Drain
+
+Enable Kubernetes Drain during OS or SW upgrade.
+
+###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
+
+`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+
+`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+
 ### Offline Survivability Mode
 
 Enable/Disable offline survivability mode.
@@ -207,7 +269,7 @@ Enable/Disable offline survivability mode.
 
 Operating System Details.
 
-###### One of the arguments from this list "operating_system_version, default_os_version" must be set
+###### One of the arguments from this list "default_os_version, operating_system_version" must be set
 
 `default_os_version` - (Optional) Will assign latest available OS version (`Bool`).
 
@@ -217,7 +279,7 @@ Operating System Details.
 
 F5XC Software Details.
 
-###### One of the arguments from this list "default_sw_version, volterra_software_version" must be set
+###### One of the arguments from this list "volterra_software_version, default_sw_version" must be set
 
 `default_sw_version` - (Optional) Will assign latest available SW version (`Bool`).
 
@@ -521,7 +583,7 @@ Global network connections.
 
 `slo_to_global_dr` - (Optional) Site local outside is connected directly to a given global network. See [Connection Choice Slo To Global Dr ](#connection-choice-slo-to-global-dr) below for details.
 
-###### One of the arguments from this list "enable_forward_proxy, disable_forward_proxy" can be set
+###### One of the arguments from this list "disable_forward_proxy, enable_forward_proxy" can be set
 
 `disable_forward_proxy` - (Optional) Forward Proxy is disabled for this connector (`Bool`).(Deprecated)
 
@@ -543,7 +605,7 @@ List of Hosted VIF Config.
 
 Allowed VIP Port Configuration for Outside Network.
 
-###### One of the arguments from this list "use_http_https_port, custom_ports, disable_allowed_vip_port, use_http_port, use_https_port" can be set
+###### One of the arguments from this list "custom_ports, disable_allowed_vip_port, use_http_port, use_https_port, use_http_https_port" can be set
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Port Choice Custom Ports ](#port-choice-custom-ports) below for details.
 
@@ -593,7 +655,7 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-###### One of the arguments from this list "perf_mode_l3_enhanced, perf_mode_l7_enhanced" must be set
+###### One of the arguments from this list "perf_mode_l7_enhanced, perf_mode_l3_enhanced" must be set
 
 `perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
@@ -603,7 +665,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 Allowed VIP Port Configuration.
 
-###### One of the arguments from this list "disable_allowed_vip_port, use_http_port, use_https_port, use_http_https_port, custom_ports" can be set
+###### One of the arguments from this list "use_https_port, use_http_https_port, custom_ports, disable_allowed_vip_port, use_http_port" can be set
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Port Choice Custom Ports ](#port-choice-custom-ports) below for details.
 
@@ -680,6 +742,28 @@ Domain value or regular expression to match.
 ### K8s Cluster Choice No K8s Cluster
 
 Site Local K8s API access is disabled.
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+
+Disable Node by Node Upgrade during Software or OS version upgrade.
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
+
+Enable Node by Node Upgrade during Software or OS version upgrade.
+
+###### One of the arguments from this list "drain_max_unavailable_node_percentage, drain_max_unavailable_node_count" must be set
+
+`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+
+`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
+
+`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+
+###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Name Choice Autogenerate
 
@@ -895,7 +979,7 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+###### One of the arguments from this list "disable_ocsp_stapling, custom_hash_algorithms, use_system_defaults" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -957,7 +1041,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (`Bool`).
 
-###### One of the arguments from this list "no_network_policy, active_network_policies, active_enhanced_firewall_policies" must be set
+###### One of the arguments from this list "active_network_policies, active_enhanced_firewall_policies, no_network_policy" must be set
 
 `active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
 
@@ -1007,7 +1091,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
 
-###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
+###### One of the arguments from this list "active_forward_proxy_policies, forward_proxy_allow_all, no_forward_proxy" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
@@ -1027,7 +1111,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (`Bool`).
 
-###### One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy, active_network_policies" must be set
+###### One of the arguments from this list "no_network_policy, active_network_policies, active_enhanced_firewall_policies" must be set
 
 `active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
 
@@ -1079,7 +1163,7 @@ No TLS interception is enabled for this network connector.
 
 Specify TLS interception configuration for the network connector.
 
-###### One of the arguments from this list "policy, enable_for_all_domains" must be set
+###### One of the arguments from this list "enable_for_all_domains, policy" must be set
 
 `enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
 
@@ -1100,6 +1184,14 @@ Specify TLS interception configuration for the network connector.
 ### Trusted Ca Choice Volterra Trusted Ca
 
 F5XC Root CA Certificate for validating upstream server certificate.
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Ver Ipv4
 

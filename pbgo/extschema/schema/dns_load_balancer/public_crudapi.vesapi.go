@@ -2485,26 +2485,44 @@ var APISwaggerJSON string = `{
             "title": "DNS Load Balancing Rule",
             "x-displayname": "Load Balancing Rule",
             "x-ves-oneof-field-action_choice": "[\"pool\"]",
-            "x-ves-oneof-field-client_choice": "[\"asn_list\",\"geo_location_label_selector\",\"geo_location_set\"]",
+            "x-ves-oneof-field-client_choice": "[\"asn_list\",\"asn_matcher\",\"geo_location_label_selector\",\"geo_location_set\",\"ip_prefix_list\",\"ip_prefix_set\"]",
             "x-ves-proto-message": "ves.io.schema.dns_load_balancer.LoadBalancingRule",
             "properties": {
                 "asn_list": {
-                    "description": "Exclusive with [geo_location_label_selector geo_location_set]\n List of 4-byte ASN values.\n The rule evaluates to true if the origin ASN is present in the ASN list.",
+                    "description": "Exclusive with [asn_matcher geo_location_label_selector geo_location_set ip_prefix_list ip_prefix_set]\n List of 4-byte ASN values.\n The rule evaluates to true if the origin ASN is present in the ASN list.",
                     "title": "asn list",
                     "$ref": "#/definitions/policyAsnMatchList",
                     "x-displayname": "ASN List"
                 },
+                "asn_matcher": {
+                    "description": "Exclusive with [asn_list geo_location_label_selector geo_location_set ip_prefix_list ip_prefix_set]\n List of references to BGP ASN Set objects.\n The rule evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.",
+                    "title": "asn matcher",
+                    "$ref": "#/definitions/policyAsnMatcherType",
+                    "x-displayname": "BGP ASN Sets"
+                },
                 "geo_location_label_selector": {
-                    "description": "Exclusive with [asn_list geo_location_set]\n A label selector that decsribes the expected set of geo-geo_locations for the clients. The selected geo_locations are matched\n with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.",
+                    "description": "Exclusive with [asn_list asn_matcher geo_location_set ip_prefix_list ip_prefix_set]\n A label selector that describes the expected set of geo locations for the clients. The selected geo locations are matched\n with the translated geo locations derived from incoming EDNS0 client-subnet in the DNS request.",
                     "title": "geo_location label selector",
                     "$ref": "#/definitions/schemaLabelSelectorType",
                     "x-displayname": "Geo Locations by label selector"
                 },
                 "geo_location_set": {
-                    "description": "Exclusive with [asn_list geo_location_label_selector]\n Select the pre-defined geo location set. The selected locations in the geo location set are matched\n with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.",
+                    "description": "Exclusive with [asn_list asn_matcher geo_location_label_selector ip_prefix_list ip_prefix_set]\n Select the pre-defined geo location set. The selected locations in the geo location set are matched\n with the translated geo locations derived from incoming EDNS0 client-subnet in the DNS request.",
                     "title": "geo_location selector",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Geo Location Set selector"
+                },
+                "ip_prefix_list": {
+                    "description": "Exclusive with [asn_list asn_matcher geo_location_label_selector geo_location_set ip_prefix_set]\n List of IP Prefix values.\n The rule evaluates to true if the EDNS0 client subnet is covered by one or more of the IP prefixes in the\n IP Prefix list.",
+                    "title": "IP prefix list",
+                    "$ref": "#/definitions/policyPrefixMatchList",
+                    "x-displayname": "IP Prefix List"
+                },
+                "ip_prefix_set": {
+                    "description": "Exclusive with [asn_list asn_matcher geo_location_label_selector geo_location_set ip_prefix_list]\n List of references to IP Prefix Set objects.\n The rule evaluates to true if the EDNS0 client subnet is covered by one or more of the IP prefixes in the\n IP Prefix set.",
+                    "title": "IP prefix set",
+                    "$ref": "#/definitions/policyIpMatcherType",
+                    "x-displayname": "IP Prefix Sets"
                 },
                 "pool": {
                     "description": "Exclusive with []\n Use this pool for the Load Balancing.",
@@ -2736,14 +2754,14 @@ var APISwaggerJSON string = `{
         },
         "policyAsnMatchList": {
             "type": "object",
-            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.",
+            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer.",
             "title": "Asn Match List",
             "x-displayname": "ASN Match List",
             "x-ves-proto-message": "ves.io.schema.policy.AsnMatchList",
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "as numbers",
                     "minItems": 1,
                     "maxItems": 16,
@@ -2765,15 +2783,105 @@ var APISwaggerJSON string = `{
         },
         "policyAsnMatcherType": {
             "type": "object",
-            "description": "x-displayName: \"ASN Matcher\"\nMatch any AS number contained in the list of bgp_asn_sets.",
+            "description": "Match any AS number contained in the list of bgp_asn_sets.",
             "title": "asn matcher type",
+            "x-displayname": "ASN Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.AsnMatcherType",
             "properties": {
                 "asn_sets": {
                     "type": "array",
-                    "description": "x-displayName: \"BGP ASN Sets\"\nx-required\nA list of references to bgp_asn_set objects.",
+                    "description": " A list of references to bgp_asn_set objects.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "asn_sets",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP ASN Sets",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
+                }
+            }
+        },
+        "policyIpMatcherType": {
+            "type": "object",
+            "description": "Match any ip prefix contained in the list of ip_prefix_sets.\nThe result of the match is inverted if invert_matcher is true.",
+            "title": "ip matcher type",
+            "x-displayname": "IP Prefix Matcher",
+            "x-ves-proto-message": "ves.io.schema.policy.IpMatcherType",
+            "properties": {
+                "invert_matcher": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert IP Matcher"
+                },
+                "prefix_sets": {
+                    "type": "array",
+                    "description": " A list of references to ip_prefix_set objects.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 4\n",
+                    "title": "prefix_sets",
+                    "maxItems": 4,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "IP Prefix Sets",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "4"
+                    }
+                }
+            }
+        },
+        "policyPrefixMatchList": {
+            "type": "object",
+            "description": "List of IP Prefix strings to match against.",
+            "title": "IP Prefix Match List",
+            "x-displayname": "IP Prefix Match List",
+            "x-ves-proto-message": "ves.io.schema.policy.PrefixMatchList",
+            "properties": {
+                "invert_match": {
+                    "type": "boolean",
+                    "description": " Invert the match result.",
+                    "title": "invert_matcher",
+                    "format": "boolean",
+                    "x-displayname": "Invert Match Result"
+                },
+                "ip_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv4 prefix strings.\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ip prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
@@ -2966,10 +3074,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3026,10 +3138,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3088,10 +3204,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",

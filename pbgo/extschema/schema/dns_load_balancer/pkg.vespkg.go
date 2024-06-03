@@ -70,12 +70,10 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []string{
-		"spec.rule_list.rules.#.asn_matcher",
 		"spec.rule_list.rules.#.nxdomain",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_load_balancer.API.Replace"] = []string{
-		"spec.rule_list.rules.#.asn_matcher",
 		"spec.rule_list.rules.#.nxdomain",
 	}
 

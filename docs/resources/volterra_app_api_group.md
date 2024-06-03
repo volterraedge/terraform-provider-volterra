@@ -28,13 +28,7 @@ resource "volterra_app_api_group" "example" {
 
   // One of the arguments from this list "generic http_loadbalancer api_definition" must be set
 
-  http_loadbalancer {
-    http_loadbalancer {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  generic = true
 }
 
 ```

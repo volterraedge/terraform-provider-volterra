@@ -4320,6 +4320,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["main_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("main_nodes"))
+		for idx, item := range m.GetMainNodes() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["multus_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("multus_enabled"))
@@ -6059,6 +6071,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["launch_ike_in_namespace"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("launch_ike_in_namespace"))
@@ -6835,6 +6856,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -9178,7 +9201,7 @@ var DefaultPublishVIPParamsPerAzValidator = func() *ValidatePublishVIPParamsPerA
 
 	vrhAzName := v.AzNameValidationRuleHandler
 	rulesAzName := map[string]string{
-		"ves.io.schema.rules.string.pattern": "^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$",
+		"ves.io.schema.rules.string.pattern": "^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-(?:gov-)?[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$",
 	}
 	vFn, err = vrhAzName(rulesAzName)
 	if err != nil {
@@ -10933,6 +10956,15 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["verNodeIp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("verNodeIp"))
+		if err := fv(ctx, m.GetVerNodeIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["verNodeName"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("verNodeName"))
@@ -11950,6 +11982,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.IpsecSslNodesFqdn = f.GetIpsecSslNodesFqdn()
 
 	m.LocalK8SAccessEnabled = f.GetLocalK8SAccessEnabled()
+	m.MainNodes = f.GetMainNodes()
 	m.MultusEnabled = f.GetMultusEnabled()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
@@ -12007,6 +12040,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.IpsecSslNodesFqdn = m1.IpsecSslNodesFqdn
 
 	f.LocalK8SAccessEnabled = m1.LocalK8SAccessEnabled
+	f.MainNodes = m1.MainNodes
 	f.MultusEnabled = m1.MultusEnabled
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver

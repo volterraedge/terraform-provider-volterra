@@ -116,7 +116,7 @@ Specification for the rule including match predicates and actions..
 
 `action` - (Required) Action to be enforced if all the predicates evaluates to true. (`String`).
 
-###### One of the arguments from this list "client_selector, client_name_matcher, client_name" must be set
+###### One of the arguments from this list "client_name, client_selector, client_name_matcher" must be set
 
 `client_name` - (Optional) This predicate evaluates to true if client name matches the configured name (`String`).
 

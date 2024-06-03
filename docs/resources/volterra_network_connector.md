@@ -20,16 +20,12 @@ resource "volterra_network_connector" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "sli_to_slo_dr sli_to_global_dr sli_to_global_snat slo_to_global_dr slo_to_global_snat sli_to_slo_snat" must be set
+  // One of the arguments from this list "sli_to_slo_snat sli_to_slo_dr sli_to_global_dr sli_to_global_snat slo_to_global_dr slo_to_global_snat" must be set
 
-  slo_to_global_dr {
-    global_vn {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  sli_to_slo_dr = true
+
   // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
+
   disable_forward_proxy = true
 }
 
@@ -304,7 +300,7 @@ F5XC certificates for generating intermediate certificate for TLS interception..
 
 SNAT configuration to connect to global network.
 
-###### One of the arguments from this list "snat_pool, snat_pool_allocator, interface_ip" must be set
+###### One of the arguments from this list "interface_ip, snat_pool, snat_pool_allocator" must be set
 
 `interface_ip` - (Optional) Interface IP of the outgoing interface will be used for SNAT (`Bool`).
 

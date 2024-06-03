@@ -24,7 +24,7 @@ resource "volterra_bgp" "example" {
     asn = "64512"
 
     bgp_router_id {
-      // One of the arguments from this list "ipv4 ipv6" must be set
+      // One of the arguments from this list "ipv4 ipv6" can be set
 
       ipv4 {
         addr = "192.168.1.1"
@@ -36,6 +36,7 @@ resource "volterra_bgp" "example" {
     bgp_router_id_type = "bgp_router_id_type"
 
     // One of the arguments from this list "local_address from_site ip_address" must be set
+
     local_address = true
   }
 
@@ -49,37 +50,43 @@ resource "volterra_bgp" "example" {
     }
 
     // One of the arguments from this list "passive_mode_disabled passive_mode_enabled" must be set
-    passive_mode_disabled = true
 
+    passive_mode_disabled = true
     target_service = "value"
 
-    // One of the arguments from this list "external internal" must be set
+    // One of the arguments from this list "internal external" must be set
 
     external {
-      // One of the arguments from this list "address subnet_begin_offset subnet_end_offset from_site default_gateway disable" must be set
-      from_site = true
+      // One of the arguments from this list "from_site default_gateway disable address subnet_begin_offset subnet_end_offset" must be set
+
+      subnet_begin_offset = "subnet_begin_offset"
 
       // One of the arguments from this list "default_gateway_v6 disable_v6 address_ipv6 subnet_begin_offset_v6 subnet_end_offset_v6 from_site_v6" must be set
-      subnet_end_offset_v6 = "subnet_end_offset_v6"
 
+      from_site_v6 = true
       asn = "64512"
 
-      // One of the arguments from this list "md5_auth_key no_authentication" must be set
-      no_authentication = true
+      // One of the arguments from this list "no_authentication md5_auth_key" can be set
 
+      no_authentication = true
       family_inet {
         // One of the arguments from this list "enable disable" must be set
+
         enable = true
       }
-
       family_inet_v6 {
         // One of the arguments from this list "enable disable" must be set
+
         enable = true
       }
 
       // One of the arguments from this list "interface interface_list inside_interfaces outside_interfaces" must be set
-      outside_interfaces = true
 
+      interface {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
       port = "179"
     }
   }
@@ -89,6 +96,7 @@ resource "volterra_bgp" "example" {
 
     site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+
       disable_internet_vip = true
 
       network_type = "network_type"
@@ -279,7 +287,7 @@ All interfaces in the site local outside network..
 
 Parameters for IPv6 VPN Unicast family..
 
-###### One of the arguments from this list "disable, enable" must be set
+###### One of the arguments from this list "enable, disable" must be set
 
 `disable` - (Optional) Disable the IPv6 Unicast family. (`Bool`).(Deprecated)
 
@@ -379,7 +387,7 @@ Direct reference to site object.
 
 Direct reference to virtual site object.
 
-###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
+###### One of the arguments from this list "enable_internet_vip, disable_internet_vip" must be set
 
 `disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
 
@@ -411,7 +419,7 @@ Enable the IPv4 Unicast family..
 
 External BGP peer..
 
-###### One of the arguments from this list "default_gateway, disable, address, subnet_begin_offset, subnet_end_offset, from_site" must be set
+###### One of the arguments from this list "address, subnet_begin_offset, subnet_end_offset, from_site, default_gateway, disable" must be set
 
 `address` - (Optional) Specify IPV4 peer address. (`String`).
 
@@ -467,7 +475,7 @@ External BGP peer..
 
 Internal BGP peer..
 
-###### One of the arguments from this list "address, from_site, dns_name" must be set
+###### One of the arguments from this list "from_site, dns_name, address" must be set
 
 `address` - (Optional) Specify peer address. (`String`).
 

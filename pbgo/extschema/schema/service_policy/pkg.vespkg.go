@@ -88,7 +88,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
 		"spec.rule_list.rules.#.spec.shape_protected_endpoint_action",
-		"spec.rule_list.rules.#.spec.threat_intelligence_action",
+		"spec.rule_list.rules.#.spec.threat_mesh_action",
 		"spec.rule_list.rules.#.spec.url_matcher",
 		"spec.rule_list.rules.#.spec.virtual_host_matcher",
 		"spec.rule_list.rules.#.spec.waf_action.data_guard_control",
@@ -100,25 +100,25 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.service_policy.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.simple_rules.#.threat_intelligence_action",
+			FieldPath:           "spec.simple_rules.#.threat_mesh_action",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
@@ -126,30 +126,30 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.simple_rules.#.threat_intelligence_action",
+			FieldPath:           "spec.simple_rules.#.threat_mesh_action",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
@@ -157,14 +157,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "items.#.get_spec.simple_rules.#.threat_intelligence_action",
+			FieldPath:           "items.#.get_spec.simple_rules.#.threat_mesh_action",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
@@ -195,7 +195,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
 		"spec.rule_list.rules.#.spec.shape_protected_endpoint_action",
-		"spec.rule_list.rules.#.spec.threat_intelligence_action",
+		"spec.rule_list.rules.#.spec.threat_mesh_action",
 		"spec.rule_list.rules.#.spec.url_matcher",
 		"spec.rule_list.rules.#.spec.virtual_host_matcher",
 		"spec.rule_list.rules.#.spec.waf_action.data_guard_control",
@@ -207,11 +207,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.service_policy.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.allow_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 

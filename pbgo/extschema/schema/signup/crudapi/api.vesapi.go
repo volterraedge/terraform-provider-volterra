@@ -2848,6 +2848,25 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "infraprotect_informationPolicer": {
+            "type": "object",
+            "description": "Policer config for bandwidth restrictions",
+            "title": "Policer Config",
+            "x-displayname": "Policer Config",
+            "x-ves-proto-message": "ves.io.schema.infraprotect_information.Policer",
+            "properties": {
+                "bandwidth_max_mb": {
+                    "type": "integer",
+                    "description": " Bandwidth max allowed for a customer defined by contract\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 9999\n",
+                    "title": "Bandwidth Max",
+                    "format": "int64",
+                    "x-displayname": "Bandwidth Max in MB",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "9999"
+                    }
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -3092,10 +3111,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3667,7 +3690,7 @@ var APISwaggerJSON string = `{
         "schemainfraprotect_informationGlobalSpecType": {
             "type": "object",
             "description": "Organisation information",
-            "title": "information",
+            "title": "Information",
             "x-displayname": "Information",
             "x-ves-oneof-field-as_path_choice": "[\"as_path_choice_full\",\"as_path_choice_none\",\"as_path_choice_origin\"]",
             "x-ves-oneof-field-default_tunnel_bgp_secret_choice": "[\"default_tunnel_bgp_secret\",\"default_tunnel_bgp_secret_none\"]",
@@ -3719,6 +3742,12 @@ var APISwaggerJSON string = `{
                     "title": "No default tunnel BGP secret",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No default tunnel BGP secret"
+                },
+                "policer": {
+                    "description": " Policer config for bandwidth restrictions",
+                    "title": "Policer Config",
+                    "$ref": "#/definitions/infraprotect_informationPolicer",
+                    "x-displayname": "Policer Config"
                 },
                 "prefixes": {
                     "type": "array",
@@ -3826,12 +3855,6 @@ var APISwaggerJSON string = `{
                     "title": "crm_details",
                     "$ref": "#/definitions/schemaCRMInfo",
                     "x-displayname": "CrmDetails"
-                },
-                "crm_info": {
-                    "description": " message to include crm info in TEEM pipeline.\n This field is deprecated. use CrmDetails instead",
-                    "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfo",
-                    "x-displayname": "CrmInfo"
                 },
                 "currency": {
                     "type": "string",
@@ -4086,13 +4109,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Type"
                 }
             }
-        },
-        "signupCrmInfo": {
-            "type": "object",
-            "description": "Deprecated: use the CRMInfo defined in schema/types.proto",
-            "title": "fileds of crm info meesage",
-            "x-displayname": "Crm Info",
-            "x-ves-proto-message": "ves.io.schema.signup.CrmInfo"
         },
         "signupSpecType": {
             "type": "object",

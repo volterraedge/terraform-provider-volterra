@@ -118,7 +118,7 @@ The custom data detection config specifies targets, scopes & the pattern to be d
 
 `custom_sections` - (Optional) x-displayName: "Custom Sections". See [Section Choice Custom Sections ](#section-choice-custom-sections) below for details.
 
-###### One of the arguments from this list "any_target, api_endpoint_target, base_path, api_group" must be set
+###### One of the arguments from this list "api_group, any_target, api_endpoint_target, base_path" must be set
 
 `any_target` - (Optional) The rule will be applied for all requests on this LB. (`Bool`).
 
@@ -152,7 +152,7 @@ Pattern for key/field..
 
 Pattern for value..
 
-###### One of the arguments from this list "exact_value, regex_value" must be set
+###### One of the arguments from this list "regex_value, exact_value" must be set
 
 `exact_value` - (Optional) Pattern value to be detected. (`String`).
 

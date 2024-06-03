@@ -980,6 +980,17 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
+	case *ServiceChoice_Sahaya:
+		if fv, exists := v.FldValidators["choice.sahaya"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Sahaya).Sahaya
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("sahaya"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *ServiceChoice_Clearview:
 		if fv, exists := v.FldValidators["choice.clearview"]; exists {
 			val := m.GetChoice().(*ServiceChoice_Clearview).Clearview

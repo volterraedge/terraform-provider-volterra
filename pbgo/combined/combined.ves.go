@@ -21,6 +21,10 @@ import (
 	ves_io_schema_address_allocator_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/address_allocator/crudapi"
 	ves_io_schema_advertise_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
 	ves_io_schema_advertise_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy/crudapi"
+	ves_io_schema_ai_assistant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant"
+	ves_io_schema_ai_assistant_common "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/common"
+	ves_io_schema_ai_assistant_explain_log_record "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/explain_log_record"
+	ves_io_schema_ai_assistant_gen_dashboard_filter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/gen_dashboard_filter"
 	ves_io_schema_alert_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
 	ves_io_schema_alert_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy/crudapi"
 	ves_io_schema_alert_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy_set"
@@ -90,6 +94,7 @@ import (
 	ves_io_schema_dns_load_balancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer/crudapi"
 	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 	ves_io_schema_dns_zone_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/crudapi"
+	ves_io_schema_dns_zone_rrset "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset"
 	ves_io_schema_dos_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation"
 	ves_io_schema_dos_mitigation_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation/crudapi"
 	ves_io_schema_downstream_cos "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/downstream_cos"
@@ -102,6 +107,8 @@ import (
 	ves_io_schema_fast_acl_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl/crudapi"
 	ves_io_schema_fast_acl_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule"
 	ves_io_schema_fast_acl_rule_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule/crudapi"
+	ves_io_schema_filter_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/filter_set"
+	ves_io_schema_filter_set_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/filter_set/crudapi"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_fleet_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet/crudapi"
 	ves_io_schema_flow_exporter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_exporter"
@@ -158,6 +165,8 @@ import (
 	ves_io_schema_malicious_user_mitigation_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation/crudapi"
 	ves_io_schema_marketplace_aws_account "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/aws_account"
 	ves_io_schema_marketplace_aws_account_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/aws_account/crudapi"
+	ves_io_schema_marketplace_xc_saas_asb_message "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas/asb/message"
+	ves_io_schema_marketplace_xc_saas_asb_message_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas/asb/message/crudapi"
 	ves_io_schema_namespace "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 	ves_io_schema_namespace_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace/crudapi"
 	ves_io_schema_network_connector "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector"
@@ -210,6 +219,8 @@ import (
 	ves_io_schema_site_mesh_group_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group/crudapi"
 	ves_io_schema_stored_object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/stored_object"
 	ves_io_schema_stored_object_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/stored_object/crudapi"
+	ves_io_schema_subscription "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subscription"
+	ves_io_schema_subscription_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subscription/crudapi"
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_tenant_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant/crudapi"
 	ves_io_schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
@@ -271,6 +282,7 @@ import (
 	ves_io_schema_views_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
 	ves_io_schema_views_cdn_loadbalancer_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/access_log"
 	ves_io_schema_views_cdn_loadbalancer_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/crudapi"
+	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	ves_io_schema_views_forward_proxy_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy"
 	ves_io_schema_views_forward_proxy_policy_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy/crudapi"
 	ves_io_schema_views_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
@@ -308,6 +320,10 @@ import (
 	ves_io_schema_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf"
 	ves_io_schema_waf_signatures_changelog "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_signatures_changelog"
 	ves_io_schema_waf_signatures_changelog_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_signatures_changelog/crudapi"
+	ves_io_schema_ztna "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna"
+	ves_io_schema_ztna_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna/crudapi"
+	ves_io_schema_ztna_application "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna_application"
+	ves_io_schema_ztna_application_crudapi "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna_application/crudapi"
 )
 
 var (
@@ -342,6 +358,10 @@ func init() {
 	ves_io_schema_address_allocator_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_advertise_policy.InitializeMDRegistry(MDR, true)
 	ves_io_schema_advertise_policy_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ai_assistant.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ai_assistant_common.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ai_assistant_explain_log_record.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ai_assistant_gen_dashboard_filter.InitializeMDRegistry(MDR, true)
 	ves_io_schema_alert_policy.InitializeMDRegistry(MDR, true)
 	ves_io_schema_alert_policy_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_alert_policy_set.InitializeMDRegistry(MDR, true)
@@ -411,6 +431,7 @@ func init() {
 	ves_io_schema_dns_load_balancer_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_dns_zone.InitializeMDRegistry(MDR, true)
 	ves_io_schema_dns_zone_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_dns_zone_rrset.InitializeMDRegistry(MDR, true)
 	ves_io_schema_dos_mitigation.InitializeMDRegistry(MDR, true)
 	ves_io_schema_dos_mitigation_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_downstream_cos.InitializeMDRegistry(MDR, true)
@@ -423,6 +444,8 @@ func init() {
 	ves_io_schema_fast_acl_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_fast_acl_rule.InitializeMDRegistry(MDR, true)
 	ves_io_schema_fast_acl_rule_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_filter_set.InitializeMDRegistry(MDR, true)
+	ves_io_schema_filter_set_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_fleet.InitializeMDRegistry(MDR, true)
 	ves_io_schema_fleet_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_flow_exporter.InitializeMDRegistry(MDR, true)
@@ -479,6 +502,8 @@ func init() {
 	ves_io_schema_malicious_user_mitigation_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_marketplace_aws_account.InitializeMDRegistry(MDR, true)
 	ves_io_schema_marketplace_aws_account_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_marketplace_xc_saas_asb_message.InitializeMDRegistry(MDR, true)
+	ves_io_schema_marketplace_xc_saas_asb_message_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_namespace.InitializeMDRegistry(MDR, true)
 	ves_io_schema_namespace_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_network_connector.InitializeMDRegistry(MDR, true)
@@ -531,6 +556,8 @@ func init() {
 	ves_io_schema_site_mesh_group_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_stored_object.InitializeMDRegistry(MDR, true)
 	ves_io_schema_stored_object_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_subscription.InitializeMDRegistry(MDR, true)
+	ves_io_schema_subscription_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_tenant.InitializeMDRegistry(MDR, true)
 	ves_io_schema_tenant_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_token.InitializeMDRegistry(MDR, true)
@@ -592,6 +619,7 @@ func init() {
 	ves_io_schema_views_cdn_loadbalancer.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_cdn_loadbalancer_access_log.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_cdn_loadbalancer_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_views_common_waf.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_forward_proxy_policy.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_forward_proxy_policy_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_schema_views_gcp_vpc_site.InitializeMDRegistry(MDR, true)
@@ -629,6 +657,10 @@ func init() {
 	ves_io_schema_waf.InitializeMDRegistry(MDR, true)
 	ves_io_schema_waf_signatures_changelog.InitializeMDRegistry(MDR, true)
 	ves_io_schema_waf_signatures_changelog_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ztna.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ztna_crudapi.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ztna_application.InitializeMDRegistry(MDR, true)
+	ves_io_schema_ztna_application_crudapi.InitializeMDRegistry(MDR, true)
 	ves_io_tpv.InitializeMDRegistry(MDR, false)
 
 	// Set singleton functions in MDRegistry

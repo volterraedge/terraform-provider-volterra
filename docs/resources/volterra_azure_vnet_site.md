@@ -21,6 +21,7 @@ resource "volterra_azure_vnet_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
+
   default_blocked_services = true
 
   // One of the arguments from this list "azure_cred" must be set
@@ -30,25 +31,30 @@ resource "volterra_azure_vnet_site" "example" {
     namespace = "staging"
     tenant    = "acmecorp"
   }
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+
   logs_streaming_disabled = true
   machine_type            = ["Standard_D3_v2"]
-  // One of the arguments from this list "alternate_region azure_region" must be set
-  alternate_region = "northcentralus"
+
+  // One of the arguments from this list "azure_region alternate_region" must be set
+
+  azure_region = "eastus"
   resource_group = ["my-resources"]
 
   // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster ingress_gw_ar ingress_egress_gw_ar voltstack_cluster_ar" must be set
 
-  ingress_gw_ar {
+  voltstack_cluster {
     accelerated_networking {
       // One of the arguments from this list "disable enable" must be set
+
       disable = true
     }
 
-    azure_certified_hw = "azure-byol-voltmesh"
+    az_nodes {
+      azure_az = "1"
 
-    node {
-      fault_domain = "1"
+      disk_size = "80"
 
       local_subnet {
         // One of the arguments from this list "subnet_param subnet" must be set
@@ -59,16 +65,45 @@ resource "volterra_azure_vnet_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
-      node_number = "1"
-
-      update_domain = "1"
     }
 
-    performance_enhancement_mode {
-      // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
-      perf_mode_l7_enhanced = true
+    azure_certified_hw = "azure-byol-voltstack-combo"
+
+    // One of the arguments from this list "no_dc_cluster_group dc_cluster_group" must be set
+
+    dc_cluster_group {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
+
+    // One of the arguments from this list "active_forward_proxy_policies forward_proxy_allow_all no_forward_proxy" must be set
+
+    no_forward_proxy = true
+
+    // One of the arguments from this list "no_global_network global_network_list" must be set
+
+    no_global_network = true
+
+    // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+
+    no_k8s_cluster = true
+
+    // One of the arguments from this list "active_network_policies active_enhanced_firewall_policies no_network_policy" must be set
+
+    no_network_policy = true
+
+    // One of the arguments from this list "no_outside_static_routes outside_static_routes" must be set
+
+    no_outside_static_routes = true
+
+    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
+
+    sm_connection_public_ip = true
+
+    // One of the arguments from this list "default_storage storage_class_list" must be set
+
+    default_storage = true
   }
   ssh_key = ["ssh-rsa AAAAB..."]
   vnet {
@@ -76,13 +111,16 @@ resource "volterra_azure_vnet_site" "example" {
 
     new_vnet {
       // One of the arguments from this list "name autogenerate" must be set
+
       name = "name"
 
       primary_ipv4 = "10.1.0.0/16"
     }
   }
+
   // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-  no_worker_nodes = true
+
+  nodes_per_az = "2"
 }
 
 ```
@@ -112,7 +150,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Allow access to DNS, SSH & WebUI services on Site (`Bool`).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (`Bool`).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -121,6 +159,8 @@ Argument Reference
 `azure_cred` - (Optional) Reference to Azure credentials for automatic deployment. See [ref](#ref) below for details.
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+
+`kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -184,6 +224,16 @@ custom dns configure to the CE site.
 
 `outside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in outside network (`String`).
 
+### Kubernetes Upgrade Drain
+
+Enable Kubernetes Drain during OS or SW upgrade.
+
+###### One of the arguments from this list "enable_upgrade_drain, disable_upgrade_drain" must be set
+
+`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+
+`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+
 ### Offline Survivability Mode
 
 Enable/Disable offline survivability mode.
@@ -208,7 +258,7 @@ Operating System Details.
 
 F5XC Software Details.
 
-###### One of the arguments from this list "volterra_software_version, default_sw_version" must be set
+###### One of the arguments from this list "default_sw_version, volterra_software_version" must be set
 
 `default_sw_version` - (Optional) Will assign latest available SW version (`Bool`).
 
@@ -414,7 +464,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -472,7 +522,7 @@ Express Route is enabled on this site.
 
 `connections` - (Required) Add the ExpressRoute Circuit Connections to this site. See [Express Route Enabled Connections ](#express-route-enabled-connections) below for details.
 
-###### One of the arguments from this list "site_registration_over_express_route, site_registration_over_internet" can be set
+###### One of the arguments from this list "site_registration_over_internet, site_registration_over_express_route" can be set
 
 `site_registration_over_express_route` - (Optional) Site Registration and Site to RE tunnels go over the Azure Express Route. See [Connectivity Options Site Registration Over Express Route ](#connectivity-options-site-registration-over-express-route) below for details.
 
@@ -554,7 +604,7 @@ Forward Proxy is enabled for this connector.
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 
-###### One of the arguments from this list "tls_intercept, no_interception" can be set
+###### One of the arguments from this list "no_interception, tls_intercept" can be set
 
 `no_interception` - (Optional) No TLS interception is enabled for this network connector (`Bool`).(Deprecated)
 
@@ -632,7 +682,7 @@ This VNet is a standalone VNet.
 
 disruption will be seen.
 
-###### One of the arguments from this list "disable, enable" must be set
+###### One of the arguments from this list "enable, disable" must be set
 
 `disable` - (Optional) infrastructure. (`Bool`).
 
@@ -688,7 +738,7 @@ Ingress/Egress Gateway (Two Interface) Node information..
 
 Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-###### One of the arguments from this list "perf_mode_l7_enhanced, perf_mode_l3_enhanced" must be set
+###### One of the arguments from this list "perf_mode_l3_enhanced, perf_mode_l7_enhanced" must be set
 
 `perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
@@ -698,7 +748,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 disruption will be seen.
 
-###### One of the arguments from this list "enable, disable" must be set
+###### One of the arguments from this list "disable, enable" must be set
 
 `disable` - (Optional) infrastructure. (`Bool`).
 
@@ -790,7 +840,7 @@ Policy to enable/disable specific domains, with implicit enable all domains.
 
 Domain value or regular expression to match.
 
-###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
+###### One of the arguments from this list "regex_value, exact_value, suffix_value" must be set
 
 `exact_value` - (Optional) Exact domain name. (`String`).
 
@@ -801,6 +851,28 @@ Domain value or regular expression to match.
 ### K8s Cluster Choice No K8s Cluster
 
 Site Local K8s API access is disabled.
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+
+Disable Node by Node Upgrade during Software or OS version upgrade.
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
+
+Enable Node by Node Upgrade during Software or OS version upgrade.
+
+###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+
+`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+
+`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
+
+`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+
+###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Name Choice Autogenerate
 
@@ -846,7 +918,7 @@ Subnets for the inside interface of the node.
 
 Subnets for the site local interface of the node.
 
-###### One of the arguments from this list "subnet_param, subnet" must be set
+###### One of the arguments from this list "subnet, subnet_param" must be set
 
 `subnet` - (Optional) Information about existing subnet.. See [Choice Subnet ](#choice-subnet) below for details.
 
@@ -896,7 +968,7 @@ Authorization Key created by the circuit owner.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -1038,7 +1110,7 @@ Certificates for generating intermediate certificate for TLS interception..
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "disable_ocsp_stapling, custom_hash_algorithms, use_system_defaults" can be set
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -1070,7 +1142,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `azure_certified_hw` - (Required) Name for Azure certified hardware. (`String`).
 
-###### One of the arguments from this list "dc_cluster_group_inside_vn, no_dc_cluster_group, dc_cluster_group_outside_vn" must be set
+###### One of the arguments from this list "dc_cluster_group_outside_vn, dc_cluster_group_inside_vn, no_dc_cluster_group" must be set
 
 `dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
 
@@ -1098,7 +1170,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `not_hub` - (Optional) This VNet is a standalone VNet (`Bool`).
 
-###### One of the arguments from this list "inside_static_routes, no_inside_static_routes" must be set
+###### One of the arguments from this list "no_inside_static_routes, inside_static_routes" must be set
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Route Choice Inside Static Routes ](#inside-static-route-choice-inside-static-routes) below for details.
 
@@ -1142,7 +1214,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
 
-###### One of the arguments from this list "active_forward_proxy_policies, forward_proxy_allow_all, no_forward_proxy" must be set
+###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
@@ -1162,13 +1234,13 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `not_hub` - (Optional) This VNet is a standalone VNet (`Bool`).
 
-###### One of the arguments from this list "inside_static_routes, no_inside_static_routes" must be set
+###### One of the arguments from this list "no_inside_static_routes, inside_static_routes" must be set
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Route Choice Inside Static Routes ](#inside-static-route-choice-inside-static-routes) below for details.
 
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (`Bool`).
 
-###### One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy, active_network_policies" must be set
+###### One of the arguments from this list "no_network_policy, active_network_policies, active_enhanced_firewall_policies" must be set
 
 `active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
 
@@ -1232,7 +1304,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
 
-###### One of the arguments from this list "forward_proxy_allow_all, no_forward_proxy, active_forward_proxy_policies" must be set
+###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
@@ -1260,7 +1332,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (`Bool`).
 
-###### One of the arguments from this list "outside_static_routes, no_outside_static_routes" must be set
+###### One of the arguments from this list "no_outside_static_routes, outside_static_routes" must be set
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (`Bool`).
 
@@ -1406,7 +1478,7 @@ No TLS interception is enabled for this network connector.
 
 Specify TLS interception configuration for the network connector.
 
-###### One of the arguments from this list "enable_for_all_domains, policy" must be set
+###### One of the arguments from this list "policy, enable_for_all_domains" must be set
 
 `enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
 
@@ -1427,6 +1499,14 @@ Specify TLS interception configuration for the network connector.
 ### Trusted Ca Choice Volterra Trusted Ca
 
 F5XC Root CA Certificate for validating upstream server certificate.
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Ver Ipv4
 

@@ -53,72 +53,33 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq"] = ListAvailableAPIDefinitionsReqValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp"] = ListAvailableAPIDefinitionsRespValidator()
 
-	vr["ves.io.schema.views.http_loadbalancer.APIEndpointProtectionRule"] = APIEndpointProtectionRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.APIGroupProtectionRule"] = APIGroupProtectionRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.APIGroups"] = APIGroupsValidator()
-	vr["ves.io.schema.views.http_loadbalancer.APIProtectionRuleAction"] = APIProtectionRuleActionValidator()
-	vr["ves.io.schema.views.http_loadbalancer.APIProtectionRules"] = APIProtectionRulesValidator()
-	vr["ves.io.schema.views.http_loadbalancer.APIRateLimit"] = APIRateLimitValidator()
-	vr["ves.io.schema.views.http_loadbalancer.APISpecificationSettings"] = APISpecificationSettingsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.AdvancedOptionsType"] = AdvancedOptionsTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ApiDefinitionList"] = ApiDefinitionListValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ApiDiscoverySetting"] = ApiDiscoverySettingValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ApiEndpointDetails"] = ApiEndpointDetailsValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ApiEndpointRule"] = ApiEndpointRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.AppEndpointType"] = AppEndpointTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.Audiences"] = AudiencesValidator()
-	vr["ves.io.schema.views.http_loadbalancer.AutoMitigationAction"] = AutoMitigationActionValidator()
-	vr["ves.io.schema.views.http_loadbalancer.BasePathsType"] = BasePathsTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.BotAdvancedMobileSDKConfigType"] = BotAdvancedMobileSDKConfigTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedPolicyType"] = BotDefenseAdvancedPolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedType"] = BotDefenseAdvancedTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.BypassRateLimitingRule"] = BypassRateLimitingRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.BypassRateLimitingRules"] = BypassRateLimitingRulesValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType"] = CSDJavaScriptInsertAllWithExceptionsTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertType"] = CSDJavaScriptInsertTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertionRule"] = CSDJavaScriptInsertionRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ChallengeRule"] = ChallengeRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ChallengeRuleList"] = ChallengeRuleListValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ClientSideDefensePolicyType"] = ClientSideDefensePolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ClientSideDefenseType"] = ClientSideDefenseTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CreateSpecType"] = CreateSpecTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.CustomFallThroughMode"] = CustomFallThroughModeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.CustomIpAllowedList"] = CustomIpAllowedListValidator()
 	vr["ves.io.schema.views.http_loadbalancer.DDoSClientSource"] = DDoSClientSourceValidator()
 	vr["ves.io.schema.views.http_loadbalancer.DDoSMitigationRule"] = DDoSMitigationRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.EnableChallenge"] = EnableChallengeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.EnableDDoSDetectionSetting"] = EnableDDoSDetectionSettingValidator()
-	vr["ves.io.schema.views.http_loadbalancer.FallThroughRule"] = FallThroughRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.HashPolicyListType"] = HashPolicyListTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.HttpHeaderMatcherList"] = HttpHeaderMatcherListValidator()
-	vr["ves.io.schema.views.http_loadbalancer.IPThreatCategoryListType"] = IPThreatCategoryListTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.InlineRateLimiter"] = InlineRateLimiterValidator()
-	vr["ves.io.schema.views.http_loadbalancer.JWKS"] = JWKSValidator()
-	vr["ves.io.schema.views.http_loadbalancer.JWTValidation"] = JWTValidationValidator()
-	vr["ves.io.schema.views.http_loadbalancer.MandatoryClaims"] = MandatoryClaimsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = MirrorPolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MobileSDKConfigType"] = MobileSDKConfigTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MobileTrafficIdentifierType"] = MobileTrafficIdentifierTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.OpenApiFallThroughMode"] = OpenApiFallThroughModeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings"] = OpenApiValidationAllSpecEndpointsSettingsValidator()
-	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationCommonSettings"] = OpenApiValidationCommonSettingsValidator()
-	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationMode"] = OpenApiValidationModeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActive"] = OpenApiValidationModeActiveValidator()
-	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationModeActiveResponse"] = OpenApiValidationModeActiveResponseValidator()
-	vr["ves.io.schema.views.http_loadbalancer.OpenApiValidationRule"] = OpenApiValidationRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.OriginServerSubsetRuleListType"] = OriginServerSubsetRuleListTypeValidator()
-	vr["ves.io.schema.views.http_loadbalancer.PolicyBasedChallenge"] = PolicyBasedChallengeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ProtectedAppEndpointType"] = ProtectedAppEndpointTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = ProxyTypeHttpValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ProxyTypeHttps"] = ProxyTypeHttpsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ProxyTypeHttpsAutoCerts"] = ProxyTypeHttpsAutoCertsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.Query"] = QueryValidator()
-	vr["ves.io.schema.views.http_loadbalancer.RateLimitConfigType"] = RateLimitConfigTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RequestBody"] = RequestBodyValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ReservedClaims"] = ReservedClaimsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteSimpleAdvancedOptions"] = RouteSimpleAdvancedOptionsValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteType"] = RouteTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteTypeCustomRoute"] = RouteTypeCustomRouteValidator()
@@ -126,8 +87,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.RouteTypeRedirect"] = RouteTypeRedirectValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteTypeSimple"] = RouteTypeSimpleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.RouteTypeSimpleWithDefaultOriginPool"] = RouteTypeSimpleWithDefaultOriginPoolValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ServerUrlRule"] = ServerUrlRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ServicePolicyList"] = ServicePolicyListValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ShapeBotDefensePolicyType"] = ShapeBotDefensePolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ShapeBotDefenseType"] = ShapeBotDefenseTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ShapeJavaScriptExclusionRule"] = ShapeJavaScriptExclusionRuleValidator()
@@ -135,14 +94,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType"] = ShapeJavaScriptInsertAllWithExceptionsTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertType"] = ShapeJavaScriptInsertTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertionRule"] = ShapeJavaScriptInsertionRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.SimpleClientSrcRule"] = SimpleClientSrcRuleValidator()
 	vr["ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting"] = SingleLoadBalancerAppSettingValidator()
-	vr["ves.io.schema.views.http_loadbalancer.Target"] = TargetValidator()
-	vr["ves.io.schema.views.http_loadbalancer.TokenLocation"] = TokenLocationValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ValidateApiBySpecRule"] = ValidateApiBySpecRuleValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ValidationPropertySetting"] = ValidationPropertySettingValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ValidationSettingForHeaders"] = ValidationSettingForHeadersValidator()
-	vr["ves.io.schema.views.http_loadbalancer.ValidationSettingForQueryParameters"] = ValidationSettingForQueryParametersValidator()
 	vr["ves.io.schema.views.http_loadbalancer.WebMobileTrafficType"] = WebMobileTrafficTypeValidator()
 
 }
@@ -163,16 +115,44 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []svcfw.SubscriptionField{
 		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_definition",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_definitions",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_definition_choice.api_specification",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.api_discovery_choice.enable_api_discovery",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.client_side_defense_choice.client_side_defense",
 			AddonServices: []string{"client-side-defense"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.ip_reputation_choice.enable_ip_reputation",
+			AddonServices: []string{"f5xc-waap-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.malicious_user_detection_choice.enable_malicious_user_detection",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.waf_choice.app_firewall",
+			AddonServices: []string{"f5xc-waap-standard"},
 		},
 	}
 
@@ -202,8 +182,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cors_policy.max_age",
 		"spec.data_guard_rules.#.metadata.disable",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
-		"spec.default_pool.advanced_options.disable_lb_source_ip_persistance",
-		"spec.default_pool.advanced_options.enable_lb_source_ip_persistance",
+		"spec.default_pool.advanced_options.header_transformation_type",
 		"spec.default_pool.origin_servers.#.k8s_service.service_selector",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
@@ -214,12 +193,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.graphql_rules.#.graphql_settings.max_value_length",
 		"spec.graphql_rules.#.graphql_settings.policy_name",
 		"spec.graphql_rules.#.metadata.disable",
-		"spec.https.http_protocol_options",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
-		"spec.https_auto_cert.http_protocol_options",
 		"spec.jwt_validation.auth_server_uri",
 		"spec.jwt_validation.jwks",
 		"spec.jwt_validation.token_location.cookie",
@@ -268,58 +245,46 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.threat_intelligence_choice",
+			FieldPath:           "spec.threat_mesh_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
@@ -327,58 +292,46 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.threat_intelligence_choice",
+			FieldPath:           "spec.threat_mesh_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
@@ -394,170 +347,134 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "create_form.spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.threat_intelligence_choice",
+			FieldPath:           "create_form.spec.threat_mesh_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "replace_form.spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.threat_intelligence_choice",
+			FieldPath:           "replace_form.spec.threat_mesh_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.threat_intelligence_choice",
+			FieldPath:           "spec.threat_mesh_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
@@ -569,74 +486,90 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.http_loadbalancer.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "items.#.get_spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.threat_intelligence_choice",
+			FieldPath:           "items.#.get_spec.threat_mesh_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
 
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []svcfw.SubscriptionField{
 		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_definition",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_definitions",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_definition_choice.api_specification",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.api_discovery_choice.enable_api_discovery",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.client_side_defense_choice.client_side_defense",
 			AddonServices: []string{"client-side-defense"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.ip_reputation_choice.enable_ip_reputation",
+			AddonServices: []string{"f5xc-waap-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.malicious_user_detection_choice.enable_malicious_user_detection",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.waf_choice.app_firewall",
+			AddonServices: []string{"f5xc-waap-standard"},
 		},
 	}
 
@@ -662,8 +595,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cors_policy.max_age",
 		"spec.data_guard_rules.#.metadata.disable",
 		"spec.ddos_mitigation_rules.#.metadata.disable",
-		"spec.default_pool.advanced_options.disable_lb_source_ip_persistance",
-		"spec.default_pool.advanced_options.enable_lb_source_ip_persistance",
+		"spec.default_pool.advanced_options.header_transformation_type",
 		"spec.default_pool.origin_servers.#.k8s_service.service_selector",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.default_pool.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
@@ -674,12 +606,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.graphql_rules.#.graphql_settings.max_value_length",
 		"spec.graphql_rules.#.graphql_settings.policy_name",
 		"spec.graphql_rules.#.metadata.disable",
-		"spec.https.http_protocol_options",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.secret_encoding_type",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.vault_secret_info",
 		"spec.https.tls_parameters.tls_certificates.#.private_key.wingman_secret_info",
-		"spec.https_auto_cert.http_protocol_options",
 		"spec.jwt_validation.auth_server_uri",
 		"spec.jwt_validation.jwks",
 		"spec.jwt_validation.token_location.cookie",
@@ -728,58 +658,46 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_network.v6_vip_choice",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.api_rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.default_pool.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.default_pool.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.rate_limit.ip_allowed_list.ipv6_prefixes.#",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
-			FieldPath:           "spec.single_lb_app.enable_ddos_detection.enable_auto_mitigation.js_challenge",
-			AllowedEnvironments: []string{"devtest", "test"},
-		},
-		{
-			FieldPath:           "spec.threat_intelligence_choice",
+			FieldPath:           "spec.threat_mesh_choice",
 			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}

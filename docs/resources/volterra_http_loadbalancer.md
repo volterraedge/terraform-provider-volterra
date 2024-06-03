@@ -21,21 +21,23 @@ resource "volterra_http_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
-  do_not_advertise = true
 
-  // One of the arguments from this list "disable_api_definition api_definition api_specification api_definitions" must be set
+  advertise_on_public_default_vip = true
+
+  // One of the arguments from this list "api_definition api_specification api_definitions disable_api_definition" must be set
+
   disable_api_definition = true
 
-  // One of the arguments from this list "enable_api_discovery disable_api_discovery" must be set
+  // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
 
   enable_api_discovery {
     discovered_api_settings {
       purge_duration_for_inactive_discovered_apis = "2"
     }
 
-    // One of the arguments from this list "enable_learn_from_redirect_traffic disable_learn_from_redirect_traffic" must be set
-    disable_learn_from_redirect_traffic = true
+    // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
 
+    disable_learn_from_redirect_traffic = true
     sensitive_data_detection_rules {
       custom_sensitive_data_detection_rules {
         metadata {
@@ -48,18 +50,24 @@ resource "volterra_http_loadbalancer" "example" {
 
         sensitive_data_detection_config {
           // One of the arguments from this list "specific_domain any_domain" must be set
+
           any_domain = true
 
           // One of the arguments from this list "key_pattern value_pattern key_value_pattern" must be set
 
           key_pattern {
             // One of the arguments from this list "exact_value regex_value" must be set
-            exact_value = "x-volt-header"
+
+            regex_value = "'^new.*$', 'san f.*', '.* del .*'"
           }
+
           // One of the arguments from this list "all_sections all_request_sections all_response_sections custom_sections" must be set
+
           all_sections = true
+
           // One of the arguments from this list "any_target api_endpoint_target base_path api_group" must be set
-          any_target = true
+
+          api_group = "oas-all-operations"
         }
 
         sensitive_data_type {
@@ -72,98 +80,56 @@ resource "volterra_http_loadbalancer" "example" {
       }
     }
   }
+
   // One of the arguments from this list "no_challenge enable_challenge js_challenge captcha_challenge policy_based_challenge" must be set
+
   no_challenge = true
-  // One of the arguments from this list "enable_ddos_detection disable_ddos_detection" must be set
-  disable_ddos_detection = true
   domains = ["www.foo.com"]
+
   // One of the arguments from this list "round_robin least_active random source_ip_stickiness cookie_stickiness ring_hash" must be set
-  round_robin = true
 
-  // One of the arguments from this list "l7_ddos_action_default l7_ddos_action_block l7_ddos_action_js_challenge l7_ddos_action_none" must be set
+  random = true
 
-  l7_ddos_action_js_challenge {
-    cookie_expiry = "1000"
+  // One of the arguments from this list "l7_ddos_action_js_challenge l7_ddos_action_none l7_ddos_action_default l7_ddos_action_block" must be set
 
-    custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
+  l7_ddos_action_none = true
 
-    js_script_delay = "1000"
+  // One of the arguments from this list "https_auto_cert https http" must be set
+
+  http {
+    dns_volterra_managed = true
+
+    // One of the arguments from this list "port_ranges port" must be set
+
+    port_ranges = "80,443,8080-8191,9080"
   }
 
-  // One of the arguments from this list "http https_auto_cert https" must be set
-
-  https_auto_cert {
-    add_hsts = true
-
-    connection_idle_timeout = "60000"
-
-    // One of the arguments from this list "non_default_loadbalancer default_loadbalancer" must be set
-    non_default_loadbalancer = true
-
-    header_transformation_type {
-      // One of the arguments from this list "default_header_transformation proper_case_header_transformation preserve_case_header_transformation" must be set
-      default_header_transformation = true
-    }
-
-    http_protocol_options {
-      // One of the arguments from this list "http_protocol_enable_v1_only http_protocol_enable_v2_only http_protocol_enable_v1_v2" must be set
-      http_protocol_enable_v1_only = true
-    }
-
-    http_redirect = true
-
-    // One of the arguments from this list "use_mtls no_mtls" must be set
-    no_mtls = true
-
-    // One of the arguments from this list "disable_path_normalize enable_path_normalize" must be set
-    enable_path_normalize = true
-
-    // One of the arguments from this list "port port_ranges" must be set
-    port = "port"
-
-    // One of the arguments from this list "pass_through default_header server_name append_server_name" must be set
-    default_header = true
-
-    tls_config {
-      // One of the arguments from this list "default_security medium_security low_security custom_security" must be set
-      default_security = true
-    }
-  }
   // One of the arguments from this list "enable_malicious_user_detection disable_malicious_user_detection" must be set
+
   enable_malicious_user_detection = true
 
   // One of the arguments from this list "disable_rate_limit api_rate_limit rate_limit" must be set
 
-  rate_limit {
-    // One of the arguments from this list "no_ip_allowed_list ip_allowed_list custom_ip_allowed_list" must be set
-    no_ip_allowed_list = true
+  disable_rate_limit = true
 
-    // One of the arguments from this list "no_policies policies" must be set
+  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
 
-    policies {
-      policies {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
-    rate_limiter {
-      burst_multiplier = "1"
+  no_service_policies = true
 
-      total_number = "1"
+  // One of the arguments from this list "disable_threat_mesh enable_threat_mesh" must be set
 
-      unit = "unit"
-    }
-  }
-  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
-  service_policies_from_namespace = true
-  // One of the arguments from this list "disable_threat_intelligence enable_threat_intelligence" must be set
-  disable_threat_intelligence = true
-  // One of the arguments from this list "enable_trust_client_ip_headers disable_trust_client_ip_headers" must be set
+  disable_threat_mesh = true
+
+  // One of the arguments from this list "disable_trust_client_ip_headers enable_trust_client_ip_headers" must be set
+
   disable_trust_client_ip_headers = true
+
   // One of the arguments from this list "user_id_client_ip user_identification" must be set
+
   user_id_client_ip = true
+
   // One of the arguments from this list "disable_waf app_firewall" must be set
+
   disable_waf = true
 }
 
@@ -239,10 +205,6 @@ Argument Reference
 `csrf_policy` - (Optional) Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).. See [Csrf Policy ](#csrf-policy) below for details.
 
 `data_guard_rules` - (Optional) Note: App Firewall should be enabled, to use Data Guard feature.. See [Data Guard Rules ](#data-guard-rules) below for details.
-
-`disable_ddos_detection` - (Optional) x-displayName: "Disable" (`Bool`).(Deprecated)
-
-`enable_ddos_detection` - (Optional) x-displayName: "Enable". See [Ddos Detection Choice Enable Ddos Detection ](#ddos-detection-choice-enable-ddos-detection) below for details.(Deprecated)
 
 `ddos_mitigation_rules` - (Optional) Define manual mitigation rules to block L7 DDoS attacks.. See [Ddos Mitigation Rules ](#ddos-mitigation-rules) below for details.
 
@@ -322,9 +284,9 @@ Argument Reference
 
 `system_default_timeouts` - (Optional) Default Settings for Slow DDoS Mitigation (`Bool`).
 
-`disable_threat_intelligence` - (Optional) x-displayName: "Disable" (`Bool`).
+`disable_threat_mesh` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`enable_threat_intelligence` - (Optional) x-displayName: "Enable" (`Bool`).
+`enable_threat_mesh` - (Optional) x-displayName: "Enable" (`Bool`).
 
 `disable_trust_client_ip_headers` - (Optional) x-displayName: "Disable" (`Bool`).
 
@@ -362,7 +324,7 @@ Define rules to block IP Prefixes or AS numbers..
 
 `waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (`Bool`).(Deprecated)
 
-`actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).The rules are SKIP_PROCESSING_WAF, SKIP_PROCESSING_BOT, SKIP_PROCESSING_MUM, SKIP_PROCESSING_IP_REPUTATION, SKIP_PROCESSING_API_PROTECTION, SKIP_PROCESSING_OAS_VALIDATION, SKIP_PROCESSING_DDOS_PROTECTION.
+`actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
 ###### One of the arguments from this list "ip_prefix, as_number, http_header, user_identifier" must be set
 
@@ -422,7 +384,7 @@ Note: App Firewall should be enabled, to use Data Guard feature..
 
 `skip_data_guard` - (Optional) x-displayName: "Skip" (`Bool`).
 
-###### One of the arguments from this list "any_domain, exact_value, suffix_value" must be set
+###### One of the arguments from this list "suffix_value, any_domain, exact_value" must be set
 
 `any_domain` - (Optional) Enable Data Guard for any domain (`Bool`).
 
@@ -446,7 +408,7 @@ Define manual mitigation rules to block L7 DDoS attacks..
 
 `block` - (Optional) Block user for a duration determined by the expiration time (`Bool`).
 
-###### One of the arguments from this list "ddos_client_source, ip_prefix_list" must be set
+###### One of the arguments from this list "ip_prefix_list, ddos_client_source" must be set
 
 `ddos_client_source` - (Optional) Combination of Region, ASN and TLS Fingerprints. See [Mitigation Choice Ddos Client Source ](#mitigation-choice-ddos-client-source) below for details.
 
@@ -472,7 +434,7 @@ Origin Pools used when no route is specified (default route).
 
 queries and prevent GraphQL tailored attacks..
 
-###### One of the arguments from this list "exact_value, suffix_value, any_domain" must be set
+###### One of the arguments from this list "suffix_value, any_domain, exact_value" must be set
 
 `any_domain` - (Optional) Enable GraphQL inspection for any domain (`Bool`).
 
@@ -498,7 +460,7 @@ tokens or tokens that are not yet valid..
 
 `action` - (Required) x-required. See [Jwt Validation Action ](#jwt-validation-action) below for details.
 
-###### One of the arguments from this list "jwks_config, auth_server_uri, jwks" must be set
+###### One of the arguments from this list "auth_server_uri, jwks, jwks_config" must be set
 
 `auth_server_uri` - (Optional) JWKS URI will be will be retrieved from this URI (`String`).(Deprecated)
 
@@ -536,7 +498,7 @@ More options like header manipulation, compression etc..
 
 `max_request_header_size` - (Optional) such load balancers is used for all the load balancers in question. (`Int`).
 
-###### One of the arguments from this list "enable_path_normalize, disable_path_normalize" can be set
+###### One of the arguments from this list "disable_path_normalize, enable_path_normalize" can be set
 
 `disable_path_normalize` - (Optional) x-displayName: "Disable" (`Bool`).(Deprecated)
 
@@ -550,7 +512,7 @@ More options like header manipulation, compression etc..
 
 `response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
 
-###### One of the arguments from this list "enable_strict_sni_host_header_check, additional_domains" can be set
+###### One of the arguments from this list "additional_domains, enable_strict_sni_host_header_check" can be set
 
 `additional_domains` - (Optional) Wildcard names are supported in the suffix or prefix form. See [Strict Sni Host Header Check Choice Additional Domains ](#strict-sni-host-header-check-choice-additional-domains) below for details.(Deprecated)
 
@@ -628,9 +590,9 @@ Define rules to skip processing of one or more features such as WAF, Bot Defense
 
 `waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (`Bool`).(Deprecated)
 
-`actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).The rules are SKIP_PROCESSING_WAF, SKIP_PROCESSING_BOT, SKIP_PROCESSING_MUM, SKIP_PROCESSING_IP_REPUTATION, SKIP_PROCESSING_API_PROTECTION, SKIP_PROCESSING_OAS_VALIDATION, SKIP_PROCESSING_DDOS_PROTECTION.
+`actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
-###### One of the arguments from this list "ip_prefix, as_number, http_header, user_identifier" must be set
+###### One of the arguments from this list "http_header, user_identifier, ip_prefix, as_number" must be set
 
 `as_number` - (Optional) RFC 6793 defined 4-byte AS number (`Int`).
 
@@ -680,23 +642,9 @@ When an exclusion rule is matched, then this exclusion rule takes effect and no 
 
 Allow the request to proceed..
 
-### Action Block
-
-x-displayName: "Block".
-
 ### Action Deny
 
 Deny the request..
-
-### Action Js Challenge
-
-x-displayName: "JavaScript Challenge".
-
-`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
-
-`custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
-
-`js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
 
 ### Action Choice Action Block
 
@@ -810,7 +758,7 @@ resources from a server at a different origin.
 
 Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.)..
 
-###### One of the arguments from this list "all_load_balancer_domains, custom_domain_list, disabled" must be set
+###### One of the arguments from this list "custom_domain_list, disabled, all_load_balancer_domains" must be set
 
 `all_load_balancer_domains` - (Optional) Add All load balancer domains to source origin (allow) list. (`Bool`).
 
@@ -822,9 +770,11 @@ Because CSRF attacks specifically target state-changing requests, the policy onl
 
 Settings to normalize the headers of upstream requests..
 
-###### One of the arguments from this list "default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
 
 `default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
 
 `preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
@@ -852,7 +802,7 @@ Headers are key-value pairs to be added to HTTP response being sent towards down
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-###### One of the arguments from this list "secret_value, value" must be set
+###### One of the arguments from this list "value, secret_value" must be set
 
 `secret_value` - (Optional) Secret Value of the HTTP header.. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
 
@@ -874,9 +824,11 @@ Advertise this load balancer on public network.
 
 Where should this load balancer be available.
 
-###### One of the arguments from this list "virtual_site_segment, cloud_edge_segment, segment, site, virtual_site, vk8s_service, virtual_network, site_segment" must be set
+###### One of the arguments from this list "cloud_edge_segment, segment, site, virtual_site, vk8s_service, virtual_network, site_segment, virtual_site_segment" must be set
 
 `site` - (Optional) Advertise on a customer site and a given network.. See [Choice Site ](#choice-site) below for details.
+
+`site_segment` - (Optional) Advertise on a segment on a site. See [Choice Site Segment ](#choice-site-segment) below for details.
 
 `virtual_network` - (Optional) Advertise on a virtual network. See [Choice Virtual Network ](#choice-virtual-network) below for details.
 
@@ -884,7 +836,7 @@ Where should this load balancer be available.
 
 `vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Choice Vk8s Service ](#choice-vk8s-service) below for details.
 
-###### One of the arguments from this list "use_default_port, port" must be set
+###### One of the arguments from this list "port, use_default_port" must be set
 
 `port` - (Optional) TCP port to Listen. (`Int`).
 
@@ -924,7 +876,7 @@ Specify API definition and OpenAPI Validation.
 
 `api_definition` - (Required) Specify API definition which includes application API paths and methods derived from swagger files.. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "validation_disabled, validation_all_spec_endpoints, validation_custom_list" must be set
+###### One of the arguments from this list "validation_all_spec_endpoints, validation_custom_list, validation_disabled" must be set
 
 `validation_all_spec_endpoints` - (Optional) All other API endpoints would proceed according to "Fall Through Mode". See [Validation Target Choice Validation All Spec Endpoints ](#validation-target-choice-validation-all-spec-endpoints) below for details.
 
@@ -986,7 +938,7 @@ The predicate evaluates to true if the actual HTTP method belongs is present in 
 
 Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc..
 
-###### One of the arguments from this list "ip_threat_category_list, client_selector, any_client" must be set
+###### One of the arguments from this list "client_selector, any_client, ip_threat_category_list" must be set
 
 `any_client` - (Optional) Any Client (`Bool`).
 
@@ -994,7 +946,7 @@ Conditions related to the origin of the request, such as client IP, TLS fingerpr
 
 `ip_threat_category_list` - (Optional) IP threat categories to choose from. See [Client Choice Ip Threat Category List ](#client-choice-ip-threat-category-list) below for details.
 
-###### One of the arguments from this list "ip_matcher, asn_list, asn_matcher, any_ip, ip_prefix_list" must be set
+###### One of the arguments from this list "asn_matcher, any_ip, ip_prefix_list, ip_matcher, asn_list" must be set
 
 `any_ip` - (Optional) Any Source IP (`Bool`).
 
@@ -1026,6 +978,8 @@ Conditions related to the request, such as query parameters, headers, etc..
 
 `headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Request Matcher Headers ](#request-matcher-headers) below for details.
 
+`jwt_claims` - (Optional) Note that this feature only works on LBs with JWT Validation feature enabled.. See [Request Matcher Jwt Claims ](#request-matcher-jwt-claims) below for details.
+
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Request Matcher Query Params ](#request-matcher-query-params) below for details.
 
 ### Api Groups Rules Action
@@ -1042,7 +996,7 @@ The action to take if the input request matches the rule..
 
 Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc..
 
-###### One of the arguments from this list "client_selector, any_client, ip_threat_category_list" must be set
+###### One of the arguments from this list "any_client, ip_threat_category_list, client_selector" must be set
 
 `any_client` - (Optional) Any Client (`Bool`).
 
@@ -1050,7 +1004,7 @@ Conditions related to the origin of the request, such as client IP, TLS fingerpr
 
 `ip_threat_category_list` - (Optional) IP threat categories to choose from. See [Client Choice Ip Threat Category List ](#client-choice-ip-threat-category-list) below for details.
 
-###### One of the arguments from this list "any_ip, ip_prefix_list, ip_matcher, asn_list, asn_matcher" must be set
+###### One of the arguments from this list "asn_matcher, any_ip, ip_prefix_list, ip_matcher, asn_list" must be set
 
 `any_ip` - (Optional) Any Source IP (`Bool`).
 
@@ -1081,6 +1035,8 @@ Conditions related to the request, such as query parameters, headers, etc..
 `cookie_matchers` - (Optional) Note that all specified cookie matcher predicates must evaluate to true.. See [Request Matcher Cookie Matchers ](#request-matcher-cookie-matchers) below for details.
 
 `headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Request Matcher Headers ](#request-matcher-headers) below for details.
+
+`jwt_claims` - (Optional) Note that this feature only works on LBs with JWT Validation feature enabled.. See [Request Matcher Jwt Claims ](#request-matcher-jwt-claims) below for details.
 
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Request Matcher Query Params ](#request-matcher-query-params) below for details.
 
@@ -1118,7 +1074,7 @@ For API groups, refer to API Definition which includes API groups derived from u
 
 `client_matcher` - (Optional) Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.. See [Api Groups Rules Client Matcher ](#api-groups-rules-client-matcher) below for details.
 
-###### One of the arguments from this list "specific_domain, any_domain" must be set
+###### One of the arguments from this list "any_domain, specific_domain" must be set
 
 `any_domain` - (Optional) The rule will apply for all domains. (`Bool`).
 
@@ -1258,7 +1214,7 @@ any_asn.
 
 asn_list.
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Asn Choice Asn Matcher
 
@@ -1276,20 +1232,6 @@ x-displayName: "Exact Match".
 
 x-displayName: "Disable".
 
-### Auto Mitigation Choice Disable Auto Mitigation
-
-x-displayName: "Disable".
-
-### Auto Mitigation Choice Enable Auto Mitigation
-
-x-displayName: "Enable".
-
-###### One of the arguments from this list "block, js_challenge" must be set
-
-`block` - (Optional) x-displayName: "Block" (`Bool`).
-
-`js_challenge` - (Optional) x-displayName: "JavaScript Challenge". See [Action Js Challenge ](#action-js-challenge) below for details.
-
 ### Blocked Clients Metadata
 
 Common attributes for the rule including name and description..
@@ -1304,7 +1246,7 @@ Common attributes for the rule including name and description..
 
 Bot Defense Policy..
 
-###### One of the arguments from this list "js_insertion_rules, disable_js_insert, js_insert_all_pages, js_insert_all_pages_except" must be set
+###### One of the arguments from this list "disable_js_insert, js_insert_all_pages, js_insert_all_pages_except, js_insertion_rules" must be set
 
 `disable_js_insert` - (Optional) Disable JavaScript insertion. (`Bool`).
 
@@ -1318,7 +1260,7 @@ Bot Defense Policy..
 
 `js_download_path` - (Optional) Customize Bot Defense Client JavaScript path. If not specified, default `/common.js` (`String`).
 
-###### One of the arguments from this list "mobile_sdk_config, disable_mobile_sdk" must be set
+###### One of the arguments from this list "disable_mobile_sdk, mobile_sdk_config" must be set
 
 `disable_mobile_sdk` - (Optional) Disable Mobile SDK. (`Bool`).
 
@@ -1406,7 +1348,7 @@ This category defines rules per URL or API group. If request matches any of thes
 
 `client_matcher` - (Optional) Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.. See [Bypass Rate Limiting Rules Client Matcher ](#bypass-rate-limiting-rules-client-matcher) below for details.
 
-###### One of the arguments from this list "any_url, base_path, api_endpoint, api_groups" must be set
+###### One of the arguments from this list "api_endpoint, api_groups, any_url, base_path" must be set
 
 `any_url` - (Optional) Any URL (`Bool`).
 
@@ -1416,7 +1358,7 @@ This category defines rules per URL or API group. If request matches any of thes
 
 `base_path` - (Optional) The base path which this validation applies to (`String`).
 
-###### One of the arguments from this list "any_domain, specific_domain" must be set
+###### One of the arguments from this list "specific_domain, any_domain" must be set
 
 `any_domain` - (Optional) The rule will apply for all domains. (`Bool`).
 
@@ -1457,6 +1399,8 @@ Conditions related to the request, such as query parameters, headers, etc..
 `cookie_matchers` - (Optional) Note that all specified cookie matcher predicates must evaluate to true.. See [Request Matcher Cookie Matchers ](#request-matcher-cookie-matchers) below for details.
 
 `headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Request Matcher Headers ](#request-matcher-headers) below for details.
+
+`jwt_claims` - (Optional) Note that this feature only works on LBs with JWT Validation feature enabled.. See [Request Matcher Jwt Claims ](#request-matcher-jwt-claims) below for details.
 
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Request Matcher Query Params ](#request-matcher-query-params) below for details.
 
@@ -1568,7 +1512,7 @@ Specifies the settings for policy rule based challenge.
 
 `rule_list` - (Optional) list challenge rules to be used in policy based challenge. See [Policy Based Challenge Rule List ](#policy-based-challenge-rule-list) below for details.
 
-###### One of the arguments from this list "default_temporary_blocking_parameters, temporary_user_blocking" can be set
+###### One of the arguments from this list "temporary_user_blocking, default_temporary_blocking_parameters" can be set
 
 `default_temporary_blocking_parameters` - (Optional) Use default parameters (`Bool`).(Deprecated)
 
@@ -1640,7 +1584,7 @@ Specify origin server with K8s service name and site information.
 
 `vk8s_networks` - (Optional) origin server are on vK8s network on the site (`Bool`).
 
-###### One of the arguments from this list "service_selector, service_name" must be set
+###### One of the arguments from this list "service_name, service_selector" must be set
 
 `service_name` - (Optional) Both namespace and cluster-id are optional. (`String`).
 
@@ -1660,11 +1604,13 @@ TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
 
 Specify origin server with private or public IP address and site information.
 
-###### One of the arguments from this list "inside_network, outside_network" must be set
+###### One of the arguments from this list "inside_network, outside_network, segment" must be set
 
 `inside_network` - (Optional) Inside network on the site (`Bool`).
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
+
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
 
 ###### One of the arguments from this list "ip, ipv6" must be set
 
@@ -1680,11 +1626,13 @@ Specify origin server with private or public DNS name and site information.
 
 `dns_name` - (Required) DNS Name (`String`).
 
-###### One of the arguments from this list "inside_network, outside_network" must be set
+###### One of the arguments from this list "inside_network, outside_network, segment" must be set
 
 `inside_network` - (Optional) Inside network on the site (`Bool`).
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
+
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
 
 `refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
 
@@ -1694,7 +1642,7 @@ Specify origin server with private or public DNS name and site information.
 
 Specify origin server with public IP.
 
-###### One of the arguments from this list "ipv6, ip" must be set
+###### One of the arguments from this list "ip, ipv6" must be set
 
 `ip` - (Optional) Public IPV4 address (`String`).
 
@@ -1730,7 +1678,7 @@ A simple route matches on path and/or HTTP method and forwards the matching traf
 
 `headers` - (Optional) List of (key, value) headers. See [Simple Route Headers ](#simple-route-headers) below for details.
 
-###### One of the arguments from this list "disable_host_rewrite, auto_host_rewrite, host_rewrite" must be set
+###### One of the arguments from this list "auto_host_rewrite, host_rewrite, disable_host_rewrite" must be set
 
 `auto_host_rewrite` - (Optional) Host header will be swapped with hostname of upstream host chosen by the cluster (`Bool`).
 
@@ -1758,6 +1706,18 @@ Advertise on a customer site and a given network..
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
+### Choice Site Segment
+
+Advertise on a segment on a site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
+`site` - (Required) x-required. See [ref](#ref) below for details.
+
 ### Choice Virtual Network
 
 Advertise on a virtual network.
@@ -1774,7 +1734,7 @@ Advertise on a virtual network.
 
 `specific_vip` - (Optional) Use given IPV4 address as VIP on virtual Network (`String`).
 
-`virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
+`virtual_network` - (Required) Select network reference. See [ref](#ref) below for details.
 
 ### Choice Virtual Site
 
@@ -1968,7 +1928,7 @@ The custom data detection config specifies targets, scopes & the pattern to be d
 
 `specific_domain` - (Optional) For example: api.example.com (`String`).(Deprecated)
 
-###### One of the arguments from this list "key_pattern, value_pattern, key_value_pattern" must be set
+###### One of the arguments from this list "value_pattern, key_value_pattern, key_pattern" must be set
 
 `key_pattern` - (Optional) Search for pattern across all field names in the specified sections.. See [Pattern Choice Key Pattern ](#pattern-choice-key-pattern) below for details.
 
@@ -2028,7 +1988,7 @@ URI path matcher..
 
 The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Ddos Client Source Tls Fingerprint Matcher
 
@@ -2039,20 +1999,6 @@ The predicate evaluates to true if the TLS fingerprint matches any of the exact 
 `exact_values` - (Optional) A list of exact TLS JA3 fingerprints to match the input TLS JA3 fingerprint against. (`String`).
 
 `excluded_values` - (Optional) or more known TLS fingerprint classes in the enclosing matcher. (`String`).
-
-### Ddos Detection Choice Disable Ddos Detection
-
-x-displayName: "Disable".
-
-### Ddos Detection Choice Enable Ddos Detection
-
-x-displayName: "Enable".
-
-###### One of the arguments from this list "enable_auto_mitigation, disable_auto_mitigation" can be set
-
-`disable_auto_mitigation` - (Optional) x-displayName: "Disable" (`Bool`).
-
-`enable_auto_mitigation` - (Optional) x-displayName: "Enable". See [Auto Mitigation Choice Enable Auto Mitigation ](#auto-mitigation-choice-enable-auto-mitigation) below for details.
 
 ### Ddos Mitigation Rules Metadata
 
@@ -2086,25 +2032,25 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
 
-`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Advanced Options Header Transformation Type ](#advanced-options-header-transformation-type) below for details.
+`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Advanced Options Header Transformation Type ](#advanced-options-header-transformation-type) below for details.(Deprecated)
 
 `http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
 
-###### One of the arguments from this list "http2_options, auto_http_config, http1_config" must be set
+###### One of the arguments from this list "auto_http_config, http1_config, http2_options" must be set
 
 `auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (`Bool`).
 
-`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (`Bool`).
+`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections. See [Http Protocol Type Http1 Config ](#http-protocol-type-http1-config) below for details.
 
 `http2_options` - (Optional) Enable HTTP/2 for upstream connections.. See [Http Protocol Type Http2 Options ](#http-protocol-type-http2-options) below for details.
 
-###### One of the arguments from this list "disable_lb_source_ip_persistance, enable_lb_source_ip_persistance" can be set
+###### One of the arguments from this list "enable_lb_source_ip_persistance, disable_lb_source_ip_persistance" can be set
 
-`disable_lb_source_ip_persistance` - (Optional) Disable LB source IP persistance (`Bool`).(Deprecated)
+`disable_lb_source_ip_persistance` - (Optional) Disable LB source IP persistence (`Bool`).
 
-`enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistance (`Bool`).(Deprecated)
+`enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistence (`Bool`).
 
-###### One of the arguments from this list "outlier_detection, disable_outlier_detection" must be set
+###### One of the arguments from this list "disable_outlier_detection, outlier_detection" must be set
 
 `disable_outlier_detection` - (Optional) Outlier detection is disabled (`Bool`).
 
@@ -2116,6 +2062,14 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `panic_threshold` - (Optional) all endpoints will be considered for load balancing ignoring its health status. (`Int`).
 
+###### One of the arguments from this list "proxy_protocol_v1, proxy_protocol_v2, disable_proxy_protocol" can be set
+
+`disable_proxy_protocol` - (Optional) Disable Proxy Protocol for upstream connections (`Bool`).
+
+`proxy_protocol_v1` - (Optional) Enable Proxy Protocol Version 1 for upstream connections (`Bool`).
+
+`proxy_protocol_v2` - (Optional) Enable Proxy Protocol Version 2 for upstream connections (`Bool`).
+
 ###### One of the arguments from this list "disable_subsets, enable_subsets" must be set
 
 `disable_subsets` - (Optional) Subset load balancing is disabled. All eligible origin servers will be considered for load balancing. (`Bool`).
@@ -2126,7 +2080,7 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 List of origin servers in this pool.
 
-###### One of the arguments from this list "segment_name, public_ip, public_name, private_ip, k8s_service, vn_private_name, segment_ip, private_name, consul_service, custom_endpoint_object, vn_private_ip" must be set
+###### One of the arguments from this list "public_name, private_ip, k8s_service, custom_endpoint_object, vn_private_name, public_ip, private_name, consul_service, vn_private_ip" must be set
 
 `consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Choice Consul Service ](#choice-consul-service) below for details.
 
@@ -2214,7 +2168,7 @@ The port on which the request is received.
 
 URI path of route.
 
-###### One of the arguments from this list "prefix, path, regex" must be set
+###### One of the arguments from this list "path, regex, prefix" must be set
 
 `path` - (Optional) Exact path value to match (`String`).
 
@@ -2298,7 +2252,7 @@ Common attributes for the rule including name and description..
 
 URI path matcher..
 
-###### One of the arguments from this list "regex, prefix, path" must be set
+###### One of the arguments from this list "prefix, path, regex" must be set
 
 `path` - (Optional) Exact path value to match (`String`).
 
@@ -2320,7 +2274,7 @@ Custom rules for any unprotected end point.
 
 x-displayName: "Custom Fall Through Rule List".
 
-###### One of the arguments from this list "action_report, action_block, action_skip" must be set
+###### One of the arguments from this list "action_block, action_skip, action_report" must be set
 
 `action_block` - (Optional) Block the request and issue an API security event (`Bool`).
 
@@ -2366,7 +2320,7 @@ x-displayName: "Account Management".
 
 x-displayName: "Authentication".
 
-###### One of the arguments from this list "login, login_mfa, login_partner, logout, token_refresh" must be set
+###### One of the arguments from this list "login_partner, logout, token_refresh, login, login_mfa" must be set
 
 `login` - (Optional) x-displayName: "Login". See [Label Choice Login ](#label-choice-login) below for details.
 
@@ -2400,7 +2354,7 @@ x-displayName: "Flight".
 
 x-displayName: "Specify Endpoint label category".
 
-###### One of the arguments from this list "financial_services, search, flight, authentication, account_management, profile_management, shopping_gift_cards" must be set
+###### One of the arguments from this list "authentication, account_management, profile_management, shopping_gift_cards, financial_services, search, flight" must be set
 
 `account_management` - (Optional) x-displayName: "Account Management". See [Flow Label Choice Account Management ](#flow-label-choice-account-management) below for details.
 
@@ -2420,7 +2374,7 @@ x-displayName: "Specify Endpoint label category".
 
 x-displayName: "Profile Management".
 
-###### One of the arguments from this list "create, update, view" must be set
+###### One of the arguments from this list "view, create, update" must be set
 
 `create` - (Optional) x-displayName: "Profile Creation" (`Bool`).
 
@@ -2446,7 +2400,7 @@ x-displayName: "Search".
 
 x-displayName: "Shopping & Gift Cards".
 
-###### One of the arguments from this list "shop_make_payment, shop_price_inquiry, shop_purchase_gift_card, shop_update_quantity, shop_enter_drawing_submission, gift_card_make_purchase_with_gift_card, shop_add_to_cart, shop_promo_code_validation, shop_checkout, shop_order, shop_choose_seat, gift_card_validation" can be set
+###### One of the arguments from this list "shop_purchase_gift_card, shop_choose_seat, shop_enter_drawing_submission, gift_card_make_purchase_with_gift_card, shop_add_to_cart, shop_promo_code_validation, shop_checkout, shop_make_payment, shop_order, shop_price_inquiry, shop_update_quantity, gift_card_validation" can be set
 
 `gift_card_make_purchase_with_gift_card` - (Optional) x-displayName: "Purchase with Gift Card" (`Bool`).
 
@@ -2488,7 +2442,7 @@ System flags Good Bot Traffic, but mitigation is handled in the same manner as m
 
 GraphQL configuration..
 
-###### One of the arguments from this list "enable_introspection, disable_introspection" must be set
+###### One of the arguments from this list "disable_introspection, enable_introspection" must be set
 
 `disable_introspection` - (Optional) Disable introspection queries for the load balancer. (`Bool`).
 
@@ -2522,7 +2476,7 @@ Use load balancer hash policy for this route.
 
 Consistent hashing algorithm, ring hash, is used to select origin server.
 
-###### One of the arguments from this list "add_httponly, ignore_httponly" can be set
+###### One of the arguments from this list "ignore_httponly, add_httponly" can be set
 
 `add_httponly` - (Optional) Add httponly attribute (`Bool`).
 
@@ -2566,6 +2520,10 @@ Configure hash policy specific for this route.
 
 Normalize the headers to lower case.
 
+### Header Transformation Choice Legacy Header Transformation
+
+Use old header transformation if configured earlier.
+
 ### Header Transformation Choice Preserve Case Header Transformation
 
 Preserves the original case of headers without any modifications..
@@ -2586,6 +2544,20 @@ Host header will be swapped with hostname of upstream host chosen by the cluster
 
 Host header is not modified.
 
+### Http1 Config Header Transformation
+
+the stateful formatter will take effect, and the stateless formatter will be disregarded..
+
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+
 ### Http Header Headers
 
 List of HTTP header name and value pairs.
@@ -2594,7 +2566,7 @@ List of HTTP header name and value pairs.
 
 `name` - (Required) Name of the header (`String`).
 
-###### One of the arguments from this list "regex, presence, exact" can be set
+###### One of the arguments from this list "exact, regex, presence" can be set
 
 `exact` - (Optional) Header value to match exactly (`String`).
 
@@ -2606,6 +2578,8 @@ List of HTTP header name and value pairs.
 
 Enable HTTP/1.1 for downstream connections.
 
+`header_transformation` - (Optional) the stateful formatter will take effect, and the stateless formatter will be disregarded.. See [Http Protocol Enable V1 Only Header Transformation ](#http-protocol-enable-v1-only-header-transformation) below for details.
+
 ### Http Protocol Choice Http Protocol Enable V1 V2
 
 Enable both HTTP/1.1 and HTTP/2 for downstream connections.
@@ -2614,6 +2588,20 @@ Enable both HTTP/1.1 and HTTP/2 for downstream connections.
 
 Enable HTTP/2 for downstream connections.
 
+### Http Protocol Enable V1 Only Header Transformation
+
+the stateful formatter will take effect, and the stateless formatter will be disregarded..
+
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+
 ### Http Protocol Type Auto Http Config
 
 and will use whichever protocol is negotiated by ALPN with the upstream..
@@ -2621,6 +2609,8 @@ and will use whichever protocol is negotiated by ALPN with the upstream..
 ### Http Protocol Type Http1 Config
 
 Enable HTTP/1.1 for upstream connections.
+
+`header_transformation` - (Optional) the stateful formatter will take effect, and the stateless formatter will be disregarded.. See [Http1 Config Header Transformation ](#http1-config-header-transformation) below for details.
 
 ### Http Protocol Type Http2 Options
 
@@ -2640,9 +2630,11 @@ Ignore httponly attribute.
 
 Header transformation options for response headers to the client.
 
-###### One of the arguments from this list "default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+###### One of the arguments from this list "preserve_case_header_transformation, legacy_header_transformation, default_header_transformation, proper_case_header_transformation" must be set
 
 `default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
 
 `preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
@@ -2654,7 +2646,7 @@ HTTP protocol configuration options for downstream connections..
 
 ###### One of the arguments from this list "http_protocol_enable_v1_only, http_protocol_enable_v2_only, http_protocol_enable_v1_v2" must be set
 
-`http_protocol_enable_v1_only` - (Optional) Enable HTTP/1.1 for downstream connections (`Bool`).
+`http_protocol_enable_v1_only` - (Optional) Enable HTTP/1.1 for downstream connections. See [Http Protocol Choice Http Protocol Enable V1 Only ](#http-protocol-choice-http-protocol-enable-v1-only) below for details.
 
 `http_protocol_enable_v1_v2` - (Optional) Enable both HTTP/1.1 and HTTP/2 for downstream connections (`Bool`).
 
@@ -2664,9 +2656,11 @@ HTTP protocol configuration options for downstream connections..
 
 Header transformation options for response headers to the client.
 
-###### One of the arguments from this list "default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
 
 `default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
 
 `preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
@@ -2676,9 +2670,9 @@ Header transformation options for response headers to the client.
 
 HTTP protocol configuration options for downstream connections..
 
-###### One of the arguments from this list "http_protocol_enable_v1_only, http_protocol_enable_v2_only, http_protocol_enable_v1_v2" must be set
+###### One of the arguments from this list "http_protocol_enable_v1_v2, http_protocol_enable_v1_only, http_protocol_enable_v2_only" must be set
 
-`http_protocol_enable_v1_only` - (Optional) Enable HTTP/1.1 for downstream connections (`Bool`).
+`http_protocol_enable_v1_only` - (Optional) Enable HTTP/1.1 for downstream connections. See [Http Protocol Choice Http Protocol Enable V1 Only ](#http-protocol-choice-http-protocol-enable-v1-only) below for details.
 
 `http_protocol_enable_v1_v2` - (Optional) Enable both HTTP/1.1 and HTTP/2 for downstream connections (`Bool`).
 
@@ -2688,7 +2682,7 @@ HTTP protocol configuration options for downstream connections..
 
 Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
-###### One of the arguments from this list "custom_security, default_security, medium_security, low_security" must be set
+###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 
@@ -2720,7 +2714,7 @@ List of IP(s) for which rate limiting will be disabled..
 
 ### Ip Allowed List Choice No Ip Allowed List
 
-There is no skip rules for rate limiting, all clients go through rate limiting..
+There is no ip allowed list for rate limiting, all clients go through rate limiting..
 
 ### Ip Asn Choice Any Ip
 
@@ -2730,7 +2724,7 @@ Any Source IP.
 
 The predicate evaluates to true if the origin ASN is present in the ASN list..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Ip Asn Choice Asn Matcher
 
@@ -2868,7 +2862,7 @@ Optional JavaScript insertions exclude list of domain and path matchers..
 
 Optional JavaScript insertions exclude list of domain and path matchers..
 
-###### One of the arguments from this list "domain, any_domain" must be set
+###### One of the arguments from this list "any_domain, domain" must be set
 
 `any_domain` - (Optional) Any Domain. (`Bool`).
 
@@ -2940,13 +2934,13 @@ the token validation of these claims should be disabled..
 
 `audience_disable` - (Optional) x-displayName: "Disable" (`Bool`).
 
-###### One of the arguments from this list "issuer_disable, issuer" must be set
+###### One of the arguments from this list "issuer, issuer_disable" must be set
 
 `issuer` - (Optional) x-displayName: "Exact Match" (`String`).
 
 `issuer_disable` - (Optional) x-displayName: "Disable" (`Bool`).
 
-###### One of the arguments from this list "validate_period_enable, validate_period_disable" must be set
+###### One of the arguments from this list "validate_period_disable, validate_period_enable" must be set
 
 `validate_period_disable` - (Optional) x-displayName: "Disable" (`Bool`).
 
@@ -2982,7 +2976,7 @@ Define where in the HTTP request the JWT token will be extracted.
 
 Site or Virtual site where this origin server is located.
 
-###### One of the arguments from this list "virtual_site, site" must be set
+###### One of the arguments from this list "site, virtual_site" must be set
 
 `site` - (Optional) Reference to site object. See [ref](#ref) below for details.
 
@@ -3132,11 +3126,11 @@ x-displayName: "Profile View".
 
 ### Lb Source Ip Persistance Choice Disable Lb Source Ip Persistance
 
-Disable LB source IP persistance.
+Disable LB source IP persistence.
 
 ### Lb Source Ip Persistance Choice Enable Lb Source Ip Persistance
 
-Enable LB source IP persistance.
+Enable LB source IP persistence.
 
 ### Learn From Redirect Traffic Disable Learn From Redirect Traffic
 
@@ -3166,7 +3160,7 @@ User is responsible for managing DNS to this load balancer..
 
 `connection_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 2 minutes. (`Int`).
 
-###### One of the arguments from this list "default_loadbalancer, non_default_loadbalancer" can be set
+###### One of the arguments from this list "non_default_loadbalancer, default_loadbalancer" can be set
 
 `default_loadbalancer` - (Optional) x-displayName: "Yes" (`Bool`).
 
@@ -3174,7 +3168,7 @@ User is responsible for managing DNS to this load balancer..
 
 `header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Https Header Transformation Type ](#https-header-transformation-type) below for details.(Deprecated)
 
-`http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Https Http Protocol Options ](#https-http-protocol-options) below for details.(Deprecated)
+`http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Https Http Protocol Options ](#https-http-protocol-options) below for details.
 
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
@@ -3184,13 +3178,13 @@ User is responsible for managing DNS to this load balancer..
 
 `enable_path_normalize` - (Optional) x-displayName: "Enable" (`Bool`).
 
-###### One of the arguments from this list "port_ranges, port" must be set
+###### One of the arguments from this list "port, port_ranges" must be set
 
 `port` - (Optional) HTTPS port to Listen. (`Int`).
 
 `port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
-###### One of the arguments from this list "pass_through, default_header, server_name, append_server_name" can be set
+###### One of the arguments from this list "default_header, server_name, append_server_name, pass_through" can be set
 
 `append_server_name` - (Optional) If header value is already present, it is not overwritten and passed as-is. (`String`).
 
@@ -3200,7 +3194,7 @@ User is responsible for managing DNS to this load balancer..
 
 `server_name` - (Optional) This will overwrite existing values, if any, for the server header. (`String`).
 
-###### One of the arguments from this list "tls_parameters, tls_cert_params" must be set
+###### One of the arguments from this list "tls_cert_params, tls_parameters" must be set
 
 `tls_cert_params` - (Optional) Select/Add one or more TLS Certificate objects to associate with this Load Balancer. See [Tls Certificates Choice Tls Cert Params ](#tls-certificates-choice-tls-cert-params) below for details.
 
@@ -3222,7 +3216,7 @@ or a DNS CNAME record should be created in your DNS provider's portal(only for D
 
 `header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Https Auto Cert Header Transformation Type ](#https-auto-cert-header-transformation-type) below for details.(Deprecated)
 
-`http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Https Auto Cert Http Protocol Options ](#https-auto-cert-http-protocol-options) below for details.(Deprecated)
+`http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Https Auto Cert Http Protocol Options ](#https-auto-cert-http-protocol-options) below for details.
 
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
 
@@ -3238,7 +3232,7 @@ or a DNS CNAME record should be created in your DNS provider's portal(only for D
 
 `enable_path_normalize` - (Optional) x-displayName: "Enable" (`Bool`).
 
-###### One of the arguments from this list "port_ranges, port" can be set
+###### One of the arguments from this list "port, port_ranges" can be set
 
 `port` - (Optional) HTTPS port to Listen. (`Int`).
 
@@ -3350,13 +3344,7 @@ ML Config applied on this load balancer.
 
 `enable_discovery` - (Optional) x-displayName: "Enable". See [Api Discovery Choice Enable Discovery ](#api-discovery-choice-enable-discovery) below for details.
 
-###### One of the arguments from this list "enable_ddos_detection, disable_ddos_detection" can be set
-
-`disable_ddos_detection` - (Optional) x-displayName: "Disable" (`Bool`).(Deprecated)
-
-`enable_ddos_detection` - (Optional) x-displayName: "Enable". See [Ddos Detection Choice Enable Ddos Detection ](#ddos-detection-choice-enable-ddos-detection) below for details.(Deprecated)
-
-###### One of the arguments from this list "enable_malicious_user_detection, disable_malicious_user_detection" must be set
+###### One of the arguments from this list "disable_malicious_user_detection, enable_malicious_user_detection" must be set
 
 `disable_malicious_user_detection` - (Optional) x-displayName: "Disable" (`Bool`).
 
@@ -3392,7 +3380,7 @@ Mobile SDK configuration.
 
 `mobile_identifier` - (Optional) Mobile traffic identifier type.. See [Mobile Sdk Config Mobile Identifier ](#mobile-sdk-config-mobile-identifier) below for details.
 
-`reload_header_name` - (Required) Header that is used for SDK configuration sync. (`String`).
+`reload_header_name` - (Optional) Header that is used for SDK configuration sync. (`String`).(Deprecated)
 
 ### Mobile Sdk Config Mobile Identifier
 
@@ -3514,7 +3502,7 @@ x-displayName: "Enable".
 
 `no_crl` - (Optional) Client certificate revocation status is not verified (`Bool`).
 
-###### One of the arguments from this list "trusted_ca, trusted_ca_url" must be set
+###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
 
 `trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Load Balancer. See [ref](#ref) below for details.
 
@@ -3630,7 +3618,7 @@ Multiple Origin Pools with weights and priorities.
 
 When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated..
 
-###### One of the arguments from this list "asn_matcher, any_asn, asn_list" must be set
+###### One of the arguments from this list "any_asn, asn_list, asn_matcher" must be set
 
 `any_asn` - (Optional) Any origin ASN. (`Bool`).
 
@@ -3796,7 +3784,7 @@ List of protected application endpoints (max 128 items)..
 
 List of protected endpoints (max 128 items).
 
-###### One of the arguments from this list "web_client, mobile_client, web_mobile_client" must be set
+###### One of the arguments from this list "web_mobile_client, web_client, mobile_client" must be set
 
 `mobile_client` - (Optional) Mobile traffic channel. (`Bool`).
 
@@ -3914,7 +3902,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 Site or Virtual site where this origin server is located.
 
-###### One of the arguments from this list "site, virtual_site" must be set
+###### One of the arguments from this list "virtual_site, site" must be set
 
 `site` - (Optional) Reference to site object. See [ref](#ref) below for details.
 
@@ -3966,7 +3954,7 @@ Common attributes for the rule including name and description..
 
 Mitigation action..
 
-###### One of the arguments from this list "none, block, redirect, flag" can be set
+###### One of the arguments from this list "redirect, flag, none, block" can be set
 
 `block` - (Optional) Block bot request and send response with custom content.. See [Action Type Block ](#action-type-block) below for details.
 
@@ -3980,7 +3968,7 @@ Mitigation action..
 
 Matching URI path of the route..
 
-###### One of the arguments from this list "path, regex, prefix" must be set
+###### One of the arguments from this list "prefix, path, regex" must be set
 
 `path` - (Optional) Exact path value to match (`String`).
 
@@ -4013,6 +4001,18 @@ Request Body.
 `exact_value` - (Optional) Exact query value to match (`String`).
 
 `regex_value` - (Optional) Regular expression of query match (e.g. the value .* will match on all query) (`String`).
+
+### Proxy Protocol Choice Disable Proxy Protocol
+
+Disable Proxy Protocol for upstream connections.
+
+### Proxy Protocol Choice Proxy Protocol V1
+
+Enable Proxy Protocol Version 1 for upstream connections.
+
+### Proxy Protocol Choice Proxy Protocol V2
+
+Enable Proxy Protocol Version 2 for upstream connections.
 
 ### Query Params Remove All Params
 
@@ -4052,7 +4052,7 @@ Define rate limiting for one or more API endpoints.
 
 `ip_allowed_list` - (Optional) List of IP(s) for which rate limiting will be disabled.. See [Ip Allowed List Choice Ip Allowed List ](#ip-allowed-list-choice-ip-allowed-list) below for details.
 
-`no_ip_allowed_list` - (Optional) There is no skip rules for rate limiting, all clients go through rate limiting. (`Bool`).
+`no_ip_allowed_list` - (Optional) There is no ip allowed list for rate limiting, all clients go through rate limiting. (`Bool`).
 
 `server_url_rules` - (Optional) For matching also specific endpoints you can use the API endpoint rules set bellow.. See [Api Rate Limit Server Url Rules ](#api-rate-limit-server-url-rules) below for details.
 
@@ -4098,7 +4098,7 @@ List of (key, value) headers.
 
 `name` - (Required) Name of the header (`String`).
 
-###### One of the arguments from this list "exact, regex, presence" can be set
+###### One of the arguments from this list "regex, presence, exact" can be set
 
 `exact` - (Optional) Header value to match exactly (`String`).
 
@@ -4140,7 +4140,7 @@ Send redirect response.
 
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
-###### One of the arguments from this list "remove_all_params, replace_params, strip_query_params, all_params, retain_all_params" can be set
+###### One of the arguments from this list "replace_params, strip_query_params, all_params, retain_all_params, remove_all_params" can be set
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).(Deprecated)
 
@@ -4176,7 +4176,7 @@ Note that all specified cookie matcher predicates must evaluate to true..
 
 `invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
 
-###### One of the arguments from this list "check_present, check_not_present, item, presence" must be set
+###### One of the arguments from this list "presence, check_present, check_not_present, item" must be set
 
 `check_not_present` - (Optional) Check that the cookie is not present. (`Bool`).
 
@@ -4194,7 +4194,7 @@ Note that all specified header predicates must evaluate to true..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "presence, check_present, check_not_present, item" must be set
+###### One of the arguments from this list "check_not_present, item, presence, check_present" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
@@ -4205,6 +4205,22 @@ Note that all specified header predicates must evaluate to true..
 `presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
+
+### Request Matcher Jwt Claims
+
+Note that this feature only works on LBs with JWT Validation feature enabled..
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+###### One of the arguments from this list "check_not_present, item, check_present" must be set
+
+`check_not_present` - (Optional) Check that the JWT Claim is not present. (`Bool`).
+
+`check_present` - (Optional) Check that the JWT Claim is present. (`Bool`).
+
+`item` - (Optional) Criteria for matching the values for the JWT Claim. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
+
+`name` - (Required) JWT claim name. (`String`).
 
 ### Request Matcher Query Params
 
@@ -4324,7 +4340,7 @@ Common attributes for the rule including name and description..
 
 URI path matcher..
 
-###### One of the arguments from this list "regex, prefix, path" must be set
+###### One of the arguments from this list "prefix, path, regex" must be set
 
 `path` - (Optional) Exact path value to match (`String`).
 
@@ -4376,7 +4392,7 @@ Specification for the rule including match predicates and actions..
 
 `http_method` - (Optional)http_method. See [Spec Http Method ](#spec-http-method) below for details.
 
-###### One of the arguments from this list "any_ip, ip_prefix_list, ip_matcher" can be set
+###### One of the arguments from this list "ip_prefix_list, ip_matcher, any_ip" can be set
 
 `any_ip` - (Optional)any_ip (`Bool`).
 
@@ -4538,7 +4554,7 @@ Conditions related to the origin of the request, such as client IP, TLS fingerpr
 
 `ip_threat_category_list` - (Optional) IP threat categories to choose from. See [Client Choice Ip Threat Category List ](#client-choice-ip-threat-category-list) below for details.
 
-###### One of the arguments from this list "asn_matcher, any_ip, ip_prefix_list, ip_matcher, asn_list" must be set
+###### One of the arguments from this list "any_ip, ip_prefix_list, ip_matcher, asn_list, asn_matcher" must be set
 
 `any_ip` - (Optional) Any Source IP (`Bool`).
 
@@ -4559,6 +4575,8 @@ Conditions related to the request, such as query parameters, headers, etc..
 `cookie_matchers` - (Optional) Note that all specified cookie matcher predicates must evaluate to true.. See [Request Matcher Cookie Matchers ](#request-matcher-cookie-matchers) below for details.
 
 `headers` - (Optional) Note that all specified header predicates must evaluate to true.. See [Request Matcher Headers ](#request-matcher-headers) below for details.
+
+`jwt_claims` - (Optional) Note that this feature only works on LBs with JWT Validation feature enabled.. See [Request Matcher Jwt Claims ](#request-matcher-jwt-claims) below for details.
 
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Request Matcher Query Params ](#request-matcher-query-params) below for details.
 
@@ -4658,7 +4676,7 @@ Configure Advanced per route options.
 
 `prefix_rewrite` - (Optional) the query string) will be swapped with this value. (`String`).
 
-`regex_rewrite` - (Optional) with the substitution value.. See [Rewrite Choice Regex Rewrite ](#rewrite-choice-regex-rewrite) below for details.(Deprecated)
+`regex_rewrite` - (Optional) with the substitution value.. See [Rewrite Choice Regex Rewrite ](#rewrite-choice-regex-rewrite) below for details.
 
 ###### One of the arguments from this list "disable_spdy, enable_spdy" must be set
 
@@ -4676,7 +4694,7 @@ Configure Advanced per route options.
 
 `inherited_waf` - (Optional) Hence no custom configuration is applied on the route (`Bool`).
 
-###### One of the arguments from this list "web_socket_config, disable_web_socket_config" must be set
+###### One of the arguments from this list "disable_web_socket_config, web_socket_config" must be set
 
 `disable_web_socket_config` - (Optional) Websocket upgrade is disabled (`Bool`).
 
@@ -4772,7 +4790,7 @@ arg_matchers.
 
 `invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
 
-###### One of the arguments from this list "check_not_present, item, presence, check_present" must be set
+###### One of the arguments from this list "item, presence, check_present, check_not_present" must be set
 
 `check_not_present` - (Optional) Check that the argument is not present. (`Bool`).
 
@@ -4826,7 +4844,7 @@ headers.
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "presence, check_present, check_not_present, item" must be set
+###### One of the arguments from this list "item, presence, check_present, check_not_present" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
@@ -4870,7 +4888,7 @@ query_params.
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
-###### One of the arguments from this list "presence, check_present, check_not_present, item" must be set
+###### One of the arguments from this list "item, presence, check_present, check_not_present" must be set
 
 `check_not_present` - (Optional) Check that the query parameter is not present. (`Bool`).
 
@@ -4974,7 +4992,7 @@ Specifies configuration for temporary user blocking resulting from malicious use
 
 Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
-###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 
@@ -5046,7 +5064,7 @@ x-displayName: "Enable".
 
 `use_mtls_obj` - (Optional) x-displayName: "Select/add a TLS Certificate object for client authentication". See [ref](#ref) below for details.
 
-###### One of the arguments from this list "use_server_verification, skip_server_verification, volterra_trusted_ca" must be set
+###### One of the arguments from this list "volterra_trusted_ca, use_server_verification, skip_server_verification" must be set
 
 `skip_server_verification` - (Optional) Skip origin server verification (`Bool`).
 
@@ -5072,7 +5090,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+###### One of the arguments from this list "custom_hash_algorithms, use_system_defaults, disable_ocsp_stapling" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -5136,7 +5154,7 @@ Collect transaction result..
 
 x-displayName: "Enable".
 
-`client_ip_headers` - (Optional) For X-Forwarded-For header, the system will read the IP address(rightmost - 1), as the client ip (`String`).
+`client_ip_headers` - (Required) For X-Forwarded-For header, the system will read the IP address(rightmost - 1), as the client ip (`String`).
 
 ### Trusted Clients Metadata
 
@@ -5156,7 +5174,7 @@ mTLS Client Certificate.
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "disable_ocsp_stapling, custom_hash_algorithms, use_system_defaults" can be set
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -5170,7 +5188,7 @@ mTLS Client Certificate.
 
 TLS parameters such as min/max TLS version and ciphers.
 
-###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
+###### One of the arguments from this list "custom_security, default_security, medium_security, low_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 
@@ -5196,7 +5214,7 @@ x-displayName: "Enable".
 
 Determine what to do with unprotected endpoints (not part of the API Inventory or doesn't have a specific rule in custom rules).
 
-###### One of the arguments from this list "fall_through_mode_allow, fall_through_mode_custom" must be set
+###### One of the arguments from this list "fall_through_mode_custom, fall_through_mode_allow" must be set
 
 `fall_through_mode_allow` - (Optional) Allow any unprotected end point (`Bool`).
 
@@ -5248,7 +5266,7 @@ Determine what to do with unprotected endpoints (not in the OpenAPI specificatio
 
 x-displayName: "Validation List".
 
-###### One of the arguments from this list "api_endpoint, base_path, api_group" must be set
+###### One of the arguments from this list "api_group, api_endpoint, base_path" must be set
 
 `api_endpoint` - (Optional) The API endpoint (Path + Method) which this validation applies to. See [Condition Type Choice Api Endpoint ](#condition-type-choice-api-endpoint) below for details.
 
@@ -5270,7 +5288,7 @@ x-displayName: "Validation List".
 
 OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement.
 
-###### One of the arguments from this list "oversized_body_fail_validation, oversized_body_skip_validation" can be set
+###### One of the arguments from this list "oversized_body_skip_validation, oversized_body_fail_validation" can be set
 
 `oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (`Bool`).
 
@@ -5350,7 +5368,7 @@ Secret Value of the HTTP header..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -5406,7 +5424,7 @@ Common attributes for the rule including name and description..
 
 Header that is used by mobile traffic..
 
-###### One of the arguments from this list "check_not_present, item, check_present" must be set
+###### One of the arguments from this list "check_present, check_not_present, item" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 

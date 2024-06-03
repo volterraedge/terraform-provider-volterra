@@ -1630,6 +1630,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -1833,6 +1842,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -2616,6 +2627,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -2950,6 +2970,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
 
@@ -3623,6 +3645,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -4017,6 +4048,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4457,6 +4490,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -4617,6 +4659,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -5170,6 +5214,38 @@ func (v *ValidateServicesVPCReplaceType) InternetVipChoiceValidationRuleHandler(
 	return validatorFn, nil
 }
 
+func (v *ValidateServicesVPCReplaceType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) ServiceVpcChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_vpc_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) ServiceVpcChoiceVpcIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_VpcId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
+	}
+	return oValidatorFn_VpcId, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) TgwChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateServicesVPCReplaceType) WorkerNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5193,6 +5269,94 @@ func (v *ValidateServicesVPCReplaceType) WorkerNodesTotalNodesValidationRuleHand
 	return oValidatorFn_TotalNodes, nil
 }
 
+func (v *ValidateServicesVPCReplaceType) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) InstanceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for instance_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AWSVPCTwoInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSVPCTwoInterfaceNodeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated az_nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items az_nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateServicesVPCReplaceType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateServicesVPCReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ServicesVPCReplaceType)
 	if !ok {
@@ -5205,6 +5369,23 @@ func (v *ValidateServicesVPCReplaceType) Validate(ctx context.Context, pm interf
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["aws_region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_region"))
+		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["az_nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("az_nodes"))
+		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["deployment"]; exists {
@@ -5243,6 +5424,24 @@ func (v *ValidateServicesVPCReplaceType) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["disk_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disk_size"))
+		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["instance_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("instance_type"))
+		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
 		val := m.GetInternetVipChoice()
 		vOpts := append(opts,
@@ -5271,6 +5470,123 @@ func (v *ValidateServicesVPCReplaceType) Validate(ctx context.Context, pm interf
 			vOpts := append(opts,
 				db.WithValidateField("internet_vip_choice"),
 				db.WithValidateField("enable_internet_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["security_group_choice"]; exists {
+		val := m.GetSecurityGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("security_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSecurityGroupChoice().(type) {
+	case *ServicesVPCReplaceType_F5XcSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.f5xc_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*ServicesVPCReplaceType_F5XcSecurityGroup).F5XcSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("f5xc_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCReplaceType_CustomSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.custom_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*ServicesVPCReplaceType_CustomSecurityGroup).CustomSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("custom_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_vpc_choice"]; exists {
+		val := m.GetServiceVpcChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_vpc_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServiceVpcChoice().(type) {
+	case *ServicesVPCReplaceType_NewVpc:
+		if fv, exists := v.FldValidators["service_vpc_choice.new_vpc"]; exists {
+			val := m.GetServiceVpcChoice().(*ServicesVPCReplaceType_NewVpc).NewVpc
+			vOpts := append(opts,
+				db.WithValidateField("service_vpc_choice"),
+				db.WithValidateField("new_vpc"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCReplaceType_VpcId:
+		if fv, exists := v.FldValidators["service_vpc_choice.vpc_id"]; exists {
+			val := m.GetServiceVpcChoice().(*ServicesVPCReplaceType_VpcId).VpcId
+			vOpts := append(opts,
+				db.WithValidateField("service_vpc_choice"),
+				db.WithValidateField("vpc_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ssh_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssh_key"))
+		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_choice"]; exists {
+		val := m.GetTgwChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tgw_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTgwChoice().(type) {
+	case *ServicesVPCReplaceType_NewTgw:
+		if fv, exists := v.FldValidators["tgw_choice.new_tgw"]; exists {
+			val := m.GetTgwChoice().(*ServicesVPCReplaceType_NewTgw).NewTgw
+			vOpts := append(opts,
+				db.WithValidateField("tgw_choice"),
+				db.WithValidateField("new_tgw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServicesVPCReplaceType_ExistingTgw:
+		if fv, exists := v.FldValidators["tgw_choice.existing_tgw"]; exists {
+			val := m.GetTgwChoice().(*ServicesVPCReplaceType_ExistingTgw).ExistingTgw
+			vOpts := append(opts,
+				db.WithValidateField("tgw_choice"),
+				db.WithValidateField("existing_tgw"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5363,6 +5679,52 @@ var DefaultServicesVPCReplaceTypeValidator = func() *ValidateServicesVPCReplaceT
 	}
 	v.FldValidators["internet_vip_choice"] = vFn
 
+	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
+	rulesSecurityGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSecurityGroupChoice(rulesSecurityGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.security_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["security_group_choice"] = vFn
+
+	vrhServiceVpcChoice := v.ServiceVpcChoiceValidationRuleHandler
+	rulesServiceVpcChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhServiceVpcChoice(rulesServiceVpcChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.service_vpc_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_vpc_choice"] = vFn
+
+	vrhServiceVpcChoiceVpcId := v.ServiceVpcChoiceVpcIdValidationRuleHandler
+	rulesServiceVpcChoiceVpcId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.pattern": "^(vpc-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFnMap["service_vpc_choice.vpc_id"], err = vrhServiceVpcChoiceVpcId(rulesServiceVpcChoiceVpcId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ServicesVPCReplaceType.service_vpc_choice_vpc_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["service_vpc_choice.vpc_id"] = vFnMap["service_vpc_choice.vpc_id"]
+
+	vrhTgwChoice := v.TgwChoiceValidationRuleHandler
+	rulesTgwChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTgwChoice(rulesTgwChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.tgw_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_choice"] = vFn
+
 	vrhWorkerNodes := v.WorkerNodesValidationRuleHandler
 	rulesWorkerNodes := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5398,7 +5760,71 @@ var DefaultServicesVPCReplaceTypeValidator = func() *ValidateServicesVPCReplaceT
 	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
 	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
 
+	vrhAwsRegion := v.AwsRegionValidationRuleHandler
+	rulesAwsRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAwsRegion(rulesAwsRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.aws_region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_region"] = vFn
+
+	vrhInstanceType := v.InstanceTypeValidationRuleHandler
+	rulesInstanceType := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhInstanceType(rulesInstanceType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.instance_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["instance_type"] = vFn
+
+	vrhSshKey := v.SshKeyValidationRuleHandler
+	rulesSshKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhSshKey(rulesSshKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.ssh_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ssh_key"] = vFn
+
+	vrhAzNodes := v.AzNodesValidationRuleHandler
+	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhAzNodes(rulesAzNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.az_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_nodes"] = vFn
+
+	vrhDiskSize := v.DiskSizeValidationRuleHandler
+	rulesDiskSize := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "64000",
+	}
+	vFn, err = vrhDiskSize(rulesDiskSize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ServicesVPCReplaceType.disk_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["disk_size"] = vFn
+
 	v.FldValidators["deployment.aws_cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["security_group_choice.custom_security_group"] = ves_io_schema_views.SecurityGroupTypeValidator().Validate
+
+	v.FldValidators["service_vpc_choice.new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
+
+	v.FldValidators["tgw_choice.new_tgw"] = TGWParamsTypeValidator().Validate
+	v.FldValidators["tgw_choice.existing_tgw"] = ExistingTGWTypeValidator().Validate
 
 	return v
 }()
@@ -6120,6 +6546,7 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 	rulesSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -7605,6 +8032,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.Coordinates = f.GetCoordinates()
 	m.CustomDns = f.GetCustomDns()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
@@ -7636,6 +8064,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.Coordinates = m1.Coordinates
 	f.CustomDns = m1.CustomDns
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
@@ -7783,6 +8212,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
 	m.DirectConnectInfo = f.GetDirectConnectInfo()
 	m.ErrorDescription = f.GetErrorDescription()
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
@@ -7825,6 +8255,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
 	f.DirectConnectInfo = m1.DirectConnectInfo
 	f.ErrorDescription = m1.ErrorDescription
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
@@ -7988,6 +8419,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Coordinates = f.GetCoordinates()
 	m.CustomDns = f.GetCustomDns()
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
@@ -8027,6 +8459,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Coordinates = m1.Coordinates
 	f.CustomDns = m1.CustomDns
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
@@ -8114,6 +8547,111 @@ func (r *ServicesVPCReplaceType) GetInternetVipChoiceFromServicesVPCType(o *Serv
 }
 
 // create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
+func (r *ServicesVPCReplaceType) SetSecurityGroupChoiceToServicesVPCType(o *ServicesVPCType) error {
+	switch of := r.SecurityGroupChoice.(type) {
+	case nil:
+		o.SecurityGroupChoice = nil
+
+	case *ServicesVPCReplaceType_CustomSecurityGroup:
+		o.SecurityGroupChoice = &ServicesVPCType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *ServicesVPCReplaceType_F5XcSecurityGroup:
+		o.SecurityGroupChoice = &ServicesVPCType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ServicesVPCReplaceType) GetSecurityGroupChoiceFromServicesVPCType(o *ServicesVPCType) error {
+	switch of := o.SecurityGroupChoice.(type) {
+	case nil:
+		r.SecurityGroupChoice = nil
+
+	case *ServicesVPCType_CustomSecurityGroup:
+		r.SecurityGroupChoice = &ServicesVPCReplaceType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *ServicesVPCType_F5XcSecurityGroup:
+		r.SecurityGroupChoice = &ServicesVPCReplaceType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
+func (r *ServicesVPCReplaceType) SetServiceVpcChoiceToServicesVPCType(o *ServicesVPCType) error {
+	switch of := r.ServiceVpcChoice.(type) {
+	case nil:
+		o.ServiceVpcChoice = nil
+
+	case *ServicesVPCReplaceType_NewVpc:
+		o.ServiceVpcChoice = &ServicesVPCType_NewVpc{NewVpc: of.NewVpc}
+
+	case *ServicesVPCReplaceType_VpcId:
+		o.ServiceVpcChoice = &ServicesVPCType_VpcId{VpcId: of.VpcId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ServicesVPCReplaceType) GetServiceVpcChoiceFromServicesVPCType(o *ServicesVPCType) error {
+	switch of := o.ServiceVpcChoice.(type) {
+	case nil:
+		r.ServiceVpcChoice = nil
+
+	case *ServicesVPCType_NewVpc:
+		r.ServiceVpcChoice = &ServicesVPCReplaceType_NewVpc{NewVpc: of.NewVpc}
+
+	case *ServicesVPCType_VpcId:
+		r.ServiceVpcChoice = &ServicesVPCReplaceType_VpcId{VpcId: of.VpcId}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
+func (r *ServicesVPCReplaceType) SetTgwChoiceToServicesVPCType(o *ServicesVPCType) error {
+	switch of := r.TgwChoice.(type) {
+	case nil:
+		o.TgwChoice = nil
+
+	case *ServicesVPCReplaceType_ExistingTgw:
+		o.TgwChoice = &ServicesVPCType_ExistingTgw{ExistingTgw: of.ExistingTgw}
+
+	case *ServicesVPCReplaceType_NewTgw:
+		o.TgwChoice = &ServicesVPCType_NewTgw{NewTgw: of.NewTgw}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ServicesVPCReplaceType) GetTgwChoiceFromServicesVPCType(o *ServicesVPCType) error {
+	switch of := o.TgwChoice.(type) {
+	case nil:
+		r.TgwChoice = nil
+
+	case *ServicesVPCType_ExistingTgw:
+		r.TgwChoice = &ServicesVPCReplaceType_ExistingTgw{ExistingTgw: of.ExistingTgw}
+
+	case *ServicesVPCType_NewTgw:
+		r.TgwChoice = &ServicesVPCReplaceType_NewTgw{NewTgw: of.NewTgw}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ServicesVPCReplaceType from ServicesVPCType for oneof fields
 func (r *ServicesVPCReplaceType) SetWorkerNodesToServicesVPCType(o *ServicesVPCType) error {
 	switch of := r.WorkerNodes.(type) {
 	case nil:
@@ -8158,8 +8696,16 @@ func (m *ServicesVPCReplaceType) fromServicesVPCType(f *ServicesVPCType, withDee
 	if f == nil {
 		return
 	}
+	m.AwsRegion = f.GetAwsRegion()
+	m.AzNodes = f.GetAzNodes()
 	m.GetDeploymentFromServicesVPCType(f)
+	m.DiskSize = f.GetDiskSize()
+	m.InstanceType = f.GetInstanceType()
 	m.GetInternetVipChoiceFromServicesVPCType(f)
+	m.GetSecurityGroupChoiceFromServicesVPCType(f)
+	m.GetServiceVpcChoiceFromServicesVPCType(f)
+	m.SshKey = f.GetSshKey()
+	m.GetTgwChoiceFromServicesVPCType(f)
 	m.GetWorkerNodesFromServicesVPCType(f)
 }
 
@@ -8178,8 +8724,16 @@ func (m *ServicesVPCReplaceType) toServicesVPCType(f *ServicesVPCType, withDeepC
 	}
 	_ = m1
 
+	f.AwsRegion = m1.AwsRegion
+	f.AzNodes = m1.AzNodes
 	m1.SetDeploymentToServicesVPCType(f)
+	f.DiskSize = m1.DiskSize
+	f.InstanceType = m1.InstanceType
 	m1.SetInternetVipChoiceToServicesVPCType(f)
+	m1.SetSecurityGroupChoiceToServicesVPCType(f)
+	m1.SetServiceVpcChoiceToServicesVPCType(f)
+	f.SshKey = m1.SshKey
+	m1.SetTgwChoiceToServicesVPCType(f)
 	m1.SetWorkerNodesToServicesVPCType(f)
 }
 

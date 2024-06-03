@@ -382,32 +382,27 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 
 															"trusted_ca_list": {
 
-																Type:       schema.TypeList,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeList,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"kind": {
-																			Type:       schema.TypeString,
-																			Computed:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Computed: true,
 																		},
 
 																		"name": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																		"namespace": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																		"tenant": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Type:     schema.TypeString,
+																			Optional: true,
 																		},
 																	},
 																},

@@ -26,8 +26,12 @@ resource "volterra_k8s_cluster_role" "example" {
     policy_rule {
       // One of the arguments from this list "resource_list non_resource_url_list" must be set
 
-      non_resource_url_list {
-        urls = ["value"]
+      resource_list {
+        api_groups = ["rbac.authorization.k8s.io"]
+
+        resource_instances = ["admin"]
+
+        resource_types = ["role"]
 
         verbs = ["get"]
       }

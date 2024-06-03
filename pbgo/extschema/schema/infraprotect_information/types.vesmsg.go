@@ -226,6 +226,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["policer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("policer"))
+		if err := fv(ctx, m.GetPolicer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["prefixes"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("prefixes"))
@@ -399,6 +408,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["tunnel_f5_ip_usage_choice"] = vFn
 
 	v.FldValidators["default_tunnel_bgp_secret_choice.default_tunnel_bgp_secret"] = ves_io_schema.SecretTypeValidator().Validate
+
+	v.FldValidators["policer"] = PolicerValidator().Validate
 
 	return v
 }()
@@ -609,6 +620,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["policer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("policer"))
+		if err := fv(ctx, m.GetPolicer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["prefixes"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("prefixes"))
@@ -783,11 +803,120 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["default_tunnel_bgp_secret_choice.default_tunnel_bgp_secret"] = ves_io_schema.SecretTypeValidator().Validate
 
+	v.FldValidators["policer"] = PolicerValidator().Validate
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Policer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Policer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Policer) DeepCopy() *Policer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Policer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Policer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Policer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PolicerValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePolicer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePolicer) BandwidthMaxMbValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bandwidth_max_mb")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePolicer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Policer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Policer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bandwidth_max_mb"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bandwidth_max_mb"))
+		if err := fv(ctx, m.GetBandwidthMaxMb(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPolicerValidator = func() *ValidatePolicer {
+	v := &ValidatePolicer{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBandwidthMaxMb := v.BandwidthMaxMbValidationRuleHandler
+	rulesBandwidthMaxMb := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "9999",
+	}
+	vFn, err = vrhBandwidthMaxMb(rulesBandwidthMaxMb)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Policer.bandwidth_max_mb: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bandwidth_max_mb"] = vFn
+
+	return v
+}()
+
+func PolicerValidator() db.Validator {
+	return DefaultPolicerValidator
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -950,6 +1079,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetAsPathChoiceFromGlobalSpecType(f)
 	m.Asn = f.GetAsn()
 	m.GetDefaultTunnelBgpSecretChoiceFromGlobalSpecType(f)
+	m.Policer = f.GetPolicer()
 	m.Prefixes = f.GetPrefixes()
 	m.PrimaryNetworkName = f.GetPrimaryNetworkName()
 	m.GetRouteAdvertisementManagementChoiceFromGlobalSpecType(f)
@@ -976,6 +1106,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetAsPathChoiceToGlobalSpecType(f)
 	f.Asn = m1.Asn
 	m1.SetDefaultTunnelBgpSecretChoiceToGlobalSpecType(f)
+	f.Policer = m1.Policer
 	f.Prefixes = m1.Prefixes
 	f.PrimaryNetworkName = m1.PrimaryNetworkName
 	m1.SetRouteAdvertisementManagementChoiceToGlobalSpecType(f)

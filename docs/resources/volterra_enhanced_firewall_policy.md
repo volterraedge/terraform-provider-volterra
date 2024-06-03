@@ -20,8 +20,13 @@ resource "volterra_enhanced_firewall_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "denied_destinations rule_list allow_all allowed_sources allowed_destinations deny_all denied_sources" must be set
-  allow_all = true
+  // One of the arguments from this list "denied_sources denied_destinations rule_list allow_all allowed_sources allowed_destinations deny_all" must be set
+
+  denied_destinations {
+    ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
+
+    prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
+  }
 }
 
 ```
@@ -58,6 +63,26 @@ Argument Reference
 `deny_all` - (Optional) Deny all connections from any source to any destination (`Bool`).
 
 `rule_list` - (Optional) Custom Enhanced Firewall Policy Rule Selection. See [Rule Choice Rule List ](#rule-choice-rule-list) below for details.
+
+`segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Segment Policy ](#segment-policy) below for details.
+
+### Segment Policy
+
+Skip the configuration or set option as Any to ignore corresponding segment match.
+
+###### One of the arguments from this list "dst_any, intra_segment, dst_segments" can be set
+
+`dst_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`dst_segments` - (Optional) Traffic is matched against destination segment in selected segments. See [Dst Segment Choice Dst Segments ](#dst-segment-choice-dst-segments) below for details.
+
+`intra_segment` - (Optional) Traffic is matched for source and destination on the same segment (`Bool`).
+
+###### One of the arguments from this list "src_any, src_segments" can be set
+
+`src_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`src_segments` - (Optional) Source traffic is matched against selected segments. See [Src Segment Choice Src Segments ](#src-segment-choice-src-segments) below for details.
 
 ### Action Choice Allow
 
@@ -125,6 +150,20 @@ All addresses reachable in site-local inside interfaces.
 
 All addresses reachable in site-local outside interfaces.
 
+### Dst Segment Choice Dst Any
+
+Traffic is not matched against any segment.
+
+### Dst Segment Choice Dst Segments
+
+Traffic is matched against destination segment in selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
+
+### Dst Segment Choice Intra Segment
+
+Traffic is matched for source and destination on the same segment.
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -187,7 +226,7 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `advanced_action` - (Optional) Log any connection matching the rule. See [Rules Advanced Action ](#rules-advanced-action) below for details.
 
-###### One of the arguments from this list "destination_aws_vpc_ids, destination_aws_subnet_ids, all_destinations, inside_destinations, all_sli_vips, destination_namespace, destination_label_selector, all_slo_vips, destination_prefix_list, destination_ip_prefix_set, outside_destinations" must be set
+###### One of the arguments from this list "all_destinations, outside_destinations, all_slo_vips, destination_aws_vpc_ids, all_sli_vips, destination_aws_subnet_ids, destination_prefix_list, destination_ip_prefix_set, inside_destinations, destination_namespace, destination_label_selector" must be set
 
 `all_destinations` - (Optional) Any address that matches 0/0 ip prefix (`Bool`).
 
@@ -215,7 +254,7 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Rules Metadata ](#rules-metadata) below for details.
 
-###### One of the arguments from this list "all_sources, source_namespace, source_label_selector, source_aws_vpc_ids, source_prefix_list, source_ip_prefix_set, inside_sources, outside_sources, source_aws_subnet_ids" must be set
+###### One of the arguments from this list "all_sources, source_ip_prefix_set, outside_sources, source_label_selector, source_aws_vpc_ids, source_aws_subnet_ids, source_prefix_list, inside_sources, source_namespace" must be set
 
 `all_sources` - (Optional) Any address that matches 0/0 ip prefix (`Bool`).
 
@@ -233,7 +272,7 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `source_namespace` - (Optional) All addresses in a namespace (`String`).(Deprecated)
 
-`source_prefix_list` - (Optional) Addresses that match one of the prefix in the list. See [Source Choice Source Prefix List ](#source-choice-source-prefix-list) below for details.
+`source_prefix_list` - (Optional) list contains sublist of both v4 and v6 prfix list. See [Source Choice Source Prefix List ](#source-choice-source-prefix-list) below for details.
 
 ###### One of the arguments from this list "all_traffic, all_tcp_traffic, all_udp_traffic, applications, protocol_port_range" must be set
 
@@ -307,11 +346,21 @@ These labels can be cloud tags defined on the vpc resource, labels on the global
 
 ### Source Choice Source Prefix List
 
-Addresses that match one of the prefix in the list.
+list contains sublist of both v4 and v6 prfix list.
 
 `ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Src Segment Choice Src Any
+
+Traffic is not matched against any segment.
+
+### Src Segment Choice Src Segments
+
+Source traffic is matched against selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
 
 ### Traffic Choice All Tcp Traffic
 

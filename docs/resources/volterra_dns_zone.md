@@ -30,21 +30,18 @@ resource "volterra_dns_zone" "example" {
 
       ttl = "3600"
 
-      // One of the arguments from this list "aaaa_record ptr_record txt_record lb_record cds_record tlsa_record cname_record mx_record srv_record afsdb_record loc_record caa_record eui48_record sshfp_record eui64_record cert_record dlv_record a_record alias_record ns_record naptr_record ds_record" must be set
+      // One of the arguments from this list "cert_record alias_record caa_record mx_record txt_record eui48_record eui64_record tlsa_record a_record srv_record lb_record cds_record afsdb_record dlv_record cname_record ds_record sshfp_record aaaa_record ns_record ptr_record naptr_record loc_record" must be set
 
-      lb_record {
-        name = "www or mail or * or ww* or *ab"
+      a_record {
+        name = "www or mail or * or corp.web or *.b"
 
-        value {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+        values = ["1.1.1.1"]
       }
     }
 
     dnssec_mode {
       // One of the arguments from this list "disable enable" must be set
+
       disable = true
     }
 
@@ -62,17 +59,26 @@ resource "volterra_dns_zone" "example" {
 
         ttl = "3600"
 
-        // One of the arguments from this list "cname_record mx_record srv_record afsdb_record loc_record tlsa_record caa_record eui48_record sshfp_record dlv_record a_record alias_record ns_record naptr_record ds_record eui64_record cert_record aaaa_record ptr_record txt_record lb_record cds_record" must be set
+        // One of the arguments from this list "cert_record alias_record caa_record mx_record txt_record eui48_record eui64_record tlsa_record a_record srv_record lb_record cds_record afsdb_record dlv_record cname_record ds_record sshfp_record aaaa_record ns_record ptr_record naptr_record loc_record" must be set
 
-        ptr_record {
-          name = "www or mail or * or corp.web or *.b"
+        cert_record {
+          name = "www or mail or * or ww* or *ab"
 
-          values = ["my.example.com"]
+          values {
+            algorithm = "3"
+
+            cert_key_tag = "3"
+
+            cert_type = "PKIX"
+
+            certificate = "Ab100cFg"
+          }
         }
       }
     }
 
-    // One of the arguments from this list "soa_parameters default_soa_parameters" must be set
+    // One of the arguments from this list "default_soa_parameters soa_parameters" can be set
+
     default_soa_parameters = true
   }
 }
@@ -308,7 +314,7 @@ default_rr_set_group.
 
 `ttl` - (Optional) x-example: "3600" (`Int`).
 
-###### One of the arguments from this list "ns_record, naptr_record, ds_record, eui64_record, cert_record, dlv_record, a_record, alias_record, txt_record, lb_record, cds_record, aaaa_record, ptr_record, srv_record, afsdb_record, loc_record, tlsa_record, cname_record, mx_record, sshfp_record, caa_record, eui48_record" must be set
+###### One of the arguments from this list "cert_record, alias_record, caa_record, mx_record, txt_record, eui48_record, eui64_record, tlsa_record, a_record, srv_record, lb_record, cds_record, afsdb_record, dlv_record, cname_record, ds_record, sshfp_record, aaaa_record, ns_record, ptr_record, naptr_record, loc_record" must be set
 
 `a_record` - (Optional) x-displayName: "A". See [Type Record Set A Record ](#type-record-set-a-record) below for details.
 
@@ -400,7 +406,7 @@ Collection of DNS resource record sets.
 
 `ttl` - (Optional) x-example: "3600" (`Int`).
 
-###### One of the arguments from this list "txt_record, lb_record, cds_record, aaaa_record, ptr_record, srv_record, afsdb_record, loc_record, tlsa_record, cname_record, mx_record, sshfp_record, caa_record, eui48_record, ns_record, naptr_record, ds_record, eui64_record, cert_record, dlv_record, a_record, alias_record" must be set
+###### One of the arguments from this list "cname_record, ds_record, sshfp_record, aaaa_record, ns_record, ptr_record, naptr_record, loc_record, tlsa_record, cert_record, alias_record, caa_record, mx_record, txt_record, eui48_record, eui64_record, a_record, srv_record, lb_record, cds_record, afsdb_record, dlv_record" must be set
 
 `a_record` - (Optional) x-displayName: "A". See [Type Record Set A Record ](#type-record-set-a-record) below for details.
 
@@ -454,7 +460,7 @@ x-displayName: "TSIG key value in base 64 format".
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 

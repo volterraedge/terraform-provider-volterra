@@ -939,6 +939,15 @@ func (v *ValidateAzureVnetIngressEgressGwARReplaceType) Validate(ctx context.Con
 
 	}
 
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["outside_static_route_choice"]; exists {
 		val := m.GetOutsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -1138,6 +1147,8 @@ var DefaultAzureVnetIngressEgressGwARReplaceTypeValidator = func() *ValidateAzur
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["node"] = ves_io_schema_views.AzureVnetTwoInterfaceNodeARTypeValidator().Validate
 
 	v.FldValidators["performance_enhancement_mode"] = ves_io_schema_views.PerformanceEnhancementModeTypeValidator().Validate
 
@@ -8694,6 +8705,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -9131,6 +9151,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	rulesSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -9196,6 +9217,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -10684,6 +10707,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -11199,6 +11231,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	rulesSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -11272,6 +11305,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["cloud_site_info"] = AzureVnetSiteInfoTypeValidator().Validate
 
@@ -12098,6 +12133,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -12649,6 +12693,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	rulesSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -12726,6 +12771,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -13191,6 +13238,29 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) RegionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for region_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) RegionChoiceAzureRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AzureRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for azure_region")
+	}
+	return oValidatorFn_AzureRegion, nil
+}
+func (v *ValidateReplaceSpecType) RegionChoiceAlternateRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AlternateRegion, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for alternate_region")
+	}
+	return oValidatorFn_AlternateRegion, nil
+}
+
 func (v *ValidateReplaceSpecType) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -13220,6 +13290,67 @@ func (v *ValidateReplaceSpecType) WorkerNodesTotalNodesValidationRuleHandler(rul
 		return nil, errors.Wrap(err, "ValidationRuleHandler for total_nodes")
 	}
 	return oValidatorFn_TotalNodes, nil
+}
+
+func (v *ValidateReplaceSpecType) ResourceGroupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for resource_group")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) VnetValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for vnet")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.AzureVnetChoiceTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) MachineTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for machine_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -13345,6 +13476,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["disk_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disk_size"))
+		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -13381,10 +13530,64 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["machine_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("machine_type"))
+		if err := fv(ctx, m.GetMachineType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["offline_survivability_mode"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("offline_survivability_mode"))
 		if err := fv(ctx, m.GetOfflineSurvivabilityMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["region_choice"]; exists {
+		val := m.GetRegionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("region_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRegionChoice().(type) {
+	case *ReplaceSpecType_AzureRegion:
+		if fv, exists := v.FldValidators["region_choice.azure_region"]; exists {
+			val := m.GetRegionChoice().(*ReplaceSpecType_AzureRegion).AzureRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("azure_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AlternateRegion:
+		if fv, exists := v.FldValidators["region_choice.alternate_region"]; exists {
+			val := m.GetRegionChoice().(*ReplaceSpecType_AlternateRegion).AlternateRegion
+			vOpts := append(opts,
+				db.WithValidateField("region_choice"),
+				db.WithValidateField("alternate_region"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["resource_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("resource_group"))
+		if err := fv(ctx, m.GetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
 
@@ -13466,6 +13669,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ssh_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssh_key"))
+		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet"))
+		if err := fv(ctx, m.GetVnet(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -13565,6 +13786,39 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
 
+	vrhRegionChoice := v.RegionChoiceValidationRuleHandler
+	rulesRegionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRegionChoice(rulesRegionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.region_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["region_choice"] = vFn
+
+	vrhRegionChoiceAzureRegion := v.RegionChoiceAzureRegionValidationRuleHandler
+	rulesRegionChoiceAzureRegion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFnMap["region_choice.azure_region"], err = vrhRegionChoiceAzureRegion(rulesRegionChoiceAzureRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.region_choice_azure_region: %s", err)
+		panic(errMsg)
+	}
+	vrhRegionChoiceAlternateRegion := v.RegionChoiceAlternateRegionValidationRuleHandler
+	rulesRegionChoiceAlternateRegion := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFnMap["region_choice.alternate_region"], err = vrhRegionChoiceAlternateRegion(rulesRegionChoiceAlternateRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field ReplaceSpecType.region_choice_alternate_region: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["region_choice.azure_region"] = vFnMap["region_choice.azure_region"]
+	v.FldValidators["region_choice.alternate_region"] = vFnMap["region_choice.alternate_region"]
+
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -13611,6 +13865,66 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
 	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
 
+	vrhResourceGroup := v.ResourceGroupValidationRuleHandler
+	rulesResourceGroup := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhResourceGroup(rulesResourceGroup)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.resource_group: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["resource_group"] = vFn
+
+	vrhVnet := v.VnetValidationRuleHandler
+	rulesVnet := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVnet(rulesVnet)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.vnet: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vnet"] = vFn
+
+	vrhMachineType := v.MachineTypeValidationRuleHandler
+	rulesMachineType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhMachineType(rulesMachineType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.machine_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["machine_type"] = vFn
+
+	vrhSshKey := v.SshKeyValidationRuleHandler
+	rulesSshKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhSshKey(rulesSshKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ssh_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ssh_key"] = vFn
+
+	vrhDiskSize := v.DiskSizeValidationRuleHandler
+	rulesDiskSize := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "4095",
+	}
+	vFn, err = vrhDiskSize(rulesDiskSize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.disk_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["disk_size"] = vFn
+
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -13638,6 +13952,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -14349,6 +14665,7 @@ func (m *AzureVnetIngressEgressGwARReplaceType) fromAzureVnetIngressEgressGwARTy
 	m.GetHubChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetInsideStaticRouteChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetIngressEgressGwARType(f)
+	m.Node = f.GetNode()
 	m.GetOutsideStaticRouteChoiceFromAzureVnetIngressEgressGwARType(f)
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 	m.GetSiteMeshGroupChoiceFromAzureVnetIngressEgressGwARType(f)
@@ -14375,6 +14692,7 @@ func (m *AzureVnetIngressEgressGwARReplaceType) toAzureVnetIngressEgressGwARType
 	m1.SetHubChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetInsideStaticRouteChoiceToAzureVnetIngressEgressGwARType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetIngressEgressGwARType(f)
+	f.Node = m1.Node
 	m1.SetOutsideStaticRouteChoiceToAzureVnetIngressEgressGwARType(f)
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 	m1.SetSiteMeshGroupChoiceToAzureVnetIngressEgressGwARType(f)
@@ -15577,6 +15895,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.CustomDns = f.GetCustomDns()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MachineType = f.GetMachineType()
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -15612,6 +15931,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.CustomDns = m1.CustomDns
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MachineType = m1.MachineType
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -15892,6 +16212,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.DiskSize = f.GetDiskSize()
 	m.ErrorDescription = f.GetErrorDescription()
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MachineType = f.GetMachineType()
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
@@ -15935,6 +16256,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetDeploymentToGlobalSpecType(f)
 	f.DiskSize = m1.DiskSize
 	f.ErrorDescription = m1.ErrorDescription
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MachineType = m1.MachineType
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
@@ -16061,6 +16383,41 @@ func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecT
 
 	case *GlobalSpecType_LogsStreamingDisabled:
 		r.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetRegionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RegionChoice.(type) {
+	case nil:
+		o.RegionChoice = nil
+
+	case *ReplaceSpecType_AlternateRegion:
+		o.RegionChoice = &GlobalSpecType_AlternateRegion{AlternateRegion: of.AlternateRegion}
+
+	case *ReplaceSpecType_AzureRegion:
+		o.RegionChoice = &GlobalSpecType_AzureRegion{AzureRegion: of.AzureRegion}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetRegionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RegionChoice.(type) {
+	case nil:
+		r.RegionChoice = nil
+
+	case *GlobalSpecType_AlternateRegion:
+		r.RegionChoice = &ReplaceSpecType_AlternateRegion{AlternateRegion: of.AlternateRegion}
+
+	case *GlobalSpecType_AzureRegion:
+		r.RegionChoice = &ReplaceSpecType_AzureRegion{AzureRegion: of.AzureRegion}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -16231,9 +16588,16 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.Coordinates = f.GetCoordinates()
 	m.CustomDns = f.GetCustomDns()
 	m.GetDeploymentFromGlobalSpecType(f)
+	m.DiskSize = f.GetDiskSize()
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
+	m.MachineType = f.GetMachineType()
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
+	m.GetRegionChoiceFromGlobalSpecType(f)
+	m.ResourceGroup = f.GetResourceGroup()
 	m.GetSiteTypeFromGlobalSpecType(f)
+	m.SshKey = f.GetSshKey()
+	m.Vnet = f.GetVnet()
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
@@ -16257,9 +16621,16 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.Coordinates = m1.Coordinates
 	f.CustomDns = m1.CustomDns
 	m1.SetDeploymentToGlobalSpecType(f)
+	f.DiskSize = m1.DiskSize
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
+	f.MachineType = m1.MachineType
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
+	m1.SetRegionChoiceToGlobalSpecType(f)
+	f.ResourceGroup = m1.ResourceGroup
 	m1.SetSiteTypeToGlobalSpecType(f)
+	f.SshKey = m1.SshKey
+	f.Vnet = m1.Vnet
 	m1.SetWorkerNodesToGlobalSpecType(f)
 }
 

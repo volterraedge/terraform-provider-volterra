@@ -152,6 +152,15 @@ func (v *ValidateAWSAccountSignupRequest) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["account_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("account_id"))
+		if err := fv(ctx, m.GetAccountId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["company_details"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("company_details"))

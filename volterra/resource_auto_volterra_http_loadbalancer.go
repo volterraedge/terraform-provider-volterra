@@ -25,11 +25,13 @@ import (
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
+	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 )
 
 // resourceVolterraHttpLoadbalancer is implementation of Volterra's HttpLoadbalancer resources
@@ -98,6 +100,130 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"cloud_edge_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cloud_edge": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ipv4_vip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6_vip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"site": {
 
 										Type:     schema.TypeSet,
@@ -118,6 +244,82 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"network": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"site_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
 												"site": {
@@ -223,6 +425,82 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												"network": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"virtual_site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"virtual_site_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
 												"virtual_site": {
@@ -1780,6 +2058,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -2020,6 +2308,78 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																Type:       schema.TypeBool,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
 															},
 
 															"name": {
@@ -2335,6 +2695,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -2575,6 +2945,78 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																Type:       schema.TypeBool,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
 															},
 
 															"name": {
@@ -3285,8 +3727,9 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 												},
 
 												"reload_header_name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3551,7 +3994,84 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			Type:     schema.TypeSet,
 																			Optional: true,
 																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{},
+																				Schema: map[string]*schema.Schema{
+
+																					"disable_transaction_result": {
+
+																						Type:     schema.TypeBool,
+																						Optional: true,
+																					},
+
+																					"transaction_result": {
+
+																						Type:     schema.TypeSet,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"failure_conditions": {
+
+																									Type:     schema.TypeList,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"success_conditions": {
+
+																									Type:     schema.TypeList,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
 																			},
 																		},
 
@@ -4395,7 +4915,94 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{},
+																				Schema: map[string]*schema.Schema{
+
+																					"disable_transaction_result": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"transaction_result": {
+
+																						Type:       schema.TypeSet,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"failure_conditions": {
+
+																									Type:       schema.TypeList,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"success_conditions": {
+
+																									Type:       schema.TypeList,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"regex_values": {
+
+																												Type: schema.TypeList,
+
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+
+																											"status": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
 																			},
 																		},
 
@@ -5703,6 +6310,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																				Type: schema.TypeString,
 																			},
 																		},
+
+																		"ipv6_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
 																	},
 																},
 															},
@@ -6481,78 +7098,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 
-			"disable_ddos_detection": {
-
-				Type:       schema.TypeBool,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-			},
-
-			"enable_ddos_detection": {
-
-				Type:       schema.TypeSet,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"disable_auto_mitigation": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"enable_auto_mitigation": {
-
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"block": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"js_challenge": {
-
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"cookie_expiry": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"custom_page": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"js_script_delay": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
 			"ddos_mitigation_rules": {
 
 				Type:     schema.TypeList,
@@ -6690,6 +7235,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									},
 
 									"ip_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"ipv6_prefixes": {
 
 										Type: schema.TypeList,
 
@@ -7498,6 +8053,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
+									"legacy_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"preserve_case_header_transformation": {
 
 										Type:       schema.TypeBool,
@@ -7517,31 +8079,65 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"http_protocol_options": {
 
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeSet,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"http_protocol_enable_v1_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"header_transformation": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"default_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"legacy_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"preserve_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"proper_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 
 									"http_protocol_enable_v1_v2": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"http_protocol_enable_v2_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -8237,6 +8833,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
+									"legacy_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"preserve_case_header_transformation": {
 
 										Type:       schema.TypeBool,
@@ -8256,31 +8859,65 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 						"http_protocol_options": {
 
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeSet,
+							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"http_protocol_enable_v1_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"header_transformation": {
+
+													Type:     schema.TypeSet,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"default_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"legacy_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"preserve_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"proper_case_header_transformation": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 
 									"http_protocol_enable_v1_v2": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"http_protocol_enable_v2_only": {
 
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 								},
 							},
@@ -8914,78 +9551,6 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 															"name": {
 																Type:       schema.TypeString,
 																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"disable_ddos_detection": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"enable_ddos_detection": {
-
-							Type:       schema.TypeSet,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"disable_auto_mitigation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"enable_auto_mitigation": {
-
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"block": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"js_challenge": {
-
-													Type:       schema.TypeSet,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"cookie_expiry": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"custom_page": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"js_script_delay": {
-																Type:       schema.TypeInt,
-																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
@@ -9766,6 +10331,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
+												"legacy_header_transformation": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"preserve_case_header_transformation": {
 
 													Type:       schema.TypeBool,
@@ -9798,9 +10370,52 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 									"http1_config": {
 
-										Type:       schema.TypeBool,
+										Type:       schema.TypeSet,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"header_transformation": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"default_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"legacy_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"preserve_case_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"proper_case_header_transformation": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
 									},
 
 									"http2_options": {
@@ -9892,6 +10507,27 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 									"panic_threshold": {
 
 										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"disable_proxy_protocol": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"proxy_protocol_v1": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"proxy_protocol_v2": {
+
+										Type:       schema.TypeBool,
 										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
@@ -10337,6 +10973,33 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
+												"segment": {
+
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
 												"ip": {
 
 													Type:       schema.TypeString,
@@ -10457,6 +11120,33 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													Type:       schema.TypeBool,
 													Optional:   true,
 													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"segment": {
+
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
 												},
 
 												"refresh_interval": {
@@ -11487,6 +12177,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 														Type: schema.TypeString,
 													},
 												},
+
+												"ipv6_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
 											},
 										},
 									},
@@ -11884,6 +12584,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -12180,6 +12890,78 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 													},
 												},
 
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
 												"query_params": {
 
 													Type:     schema.TypeList,
@@ -12460,6 +13242,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																				Type: schema.TypeString,
 																			},
 																		},
+
+																		"ipv6_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
 																	},
 																},
 															},
@@ -12731,6 +13523,78 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																			Type:       schema.TypeBool,
 																			Optional:   true,
 																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"jwt_claims": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_matcher": {
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"check_not_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"check_present": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"item": {
+
+																			Type:     schema.TypeSet,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional: true,
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
 																		},
 
 																		"name": {
@@ -13096,6 +13960,16 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																	Type: schema.TypeString,
 																},
 															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
 														},
 													},
 												},
@@ -13382,6 +14256,78 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 																Type:       schema.TypeBool,
 																Optional:   true,
 																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_not_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"check_present": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"item": {
+
+																Type:     schema.TypeSet,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
 															},
 
 															"name": {
@@ -14869,22 +15815,19 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 												"regex_rewrite": {
 
-													Type:       schema.TypeSet,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeSet,
+													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"pattern": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 
 															"substitution": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 														},
 													},
@@ -15260,13 +16203,13 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
-			"disable_threat_intelligence": {
+			"disable_threat_mesh": {
 
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
 
-			"enable_threat_intelligence": {
+			"enable_threat_mesh": {
 
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -15289,7 +16232,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 							Type: schema.TypeList,
 
-							Optional: true,
+							Required: true,
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -15687,12 +16630,12 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 				},
 			},
 		},
-		SchemaVersion: 1,
+		SchemaVersion: 2,
         StateUpgraders: []schema.StateUpgrader{
             {
-                Type:    statemigration.ResourceHttpLoadbalancerInstanceResourceV0().CoreConfigSchema().ImpliedType(),
-                Upgrade: statemigration.ResourceHttpLoadbalancerInstanceStateUpgradeV0,
-                Version: 0,
+                Type:    statemigration.ResourceHttpLoadbalancerInstanceResourceV1().CoreConfigSchema().ImpliedType(),
+                Upgrade: statemigration.ResourceHttpLoadbalancerInstanceStateUpgradeV1,
+                Version: 1,
             },
         },
 
@@ -15820,6 +16763,81 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								sl := v.(*schema.Set).List()
 								site := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.Site.Site = site
+								for _, set := range sl {
+									siteMapStrToI := set.(map[string]interface{})
+
+									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+										site.Name = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										site.Namespace = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										site.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
+						choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ipv6 = v.(string)
+
+							}
+
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								segment := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Segment = segment
+								for _, set := range sl {
+									segmentMapStrToI := set.(map[string]interface{})
+
+									if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+										segment.Name = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										segment.Namespace = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										segment.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								site := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Site = site
 								for _, set := range sl {
 									siteMapStrToI := set.(map[string]interface{})
 
@@ -16197,7 +17215,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		apiDefinitionChoiceTypeFound = true
 		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ApiDefinitions{}
-		apiDefinitionChoiceInt.ApiDefinitions = &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
+		apiDefinitionChoiceInt.ApiDefinitions = &ves_io_schema_views_common_waf.ApiDefinitionList{}
 		createSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -16238,7 +17256,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		apiDefinitionChoiceTypeFound = true
 		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ApiSpecification{}
-		apiDefinitionChoiceInt.ApiSpecification = &ves_io_schema_views_http_loadbalancer.APISpecificationSettings{}
+		apiDefinitionChoiceInt.ApiSpecification = &ves_io_schema_views_common_waf.APISpecificationSettings{}
 		createSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -16272,8 +17290,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["validation_all_spec_endpoints"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
 
 				validationTargetChoiceTypeFound = true
-				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationAllSpecEndpoints{}
-				validationTargetChoiceInt.ValidationAllSpecEndpoints = &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings{}
+				validationTargetChoiceInt := &ves_io_schema_views_common_waf.APISpecificationSettings_ValidationAllSpecEndpoints{}
+				validationTargetChoiceInt.ValidationAllSpecEndpoints = &ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettings{}
 				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -16283,7 +17301,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						fallThroughMode := &ves_io_schema_views_common_waf.OpenApiFallThroughMode{}
 						validationTargetChoiceInt.ValidationAllSpecEndpoints.FallThroughMode = fallThroughMode
 						for _, set := range sl {
 							fallThroughModeMapStrToI := set.(map[string]interface{})
@@ -16295,7 +17313,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								fallThroughModeChoiceTypeFound = true
 
 								if v.(bool) {
-									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}
 									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
 									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 								}
@@ -16305,8 +17323,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := fallThroughModeMapStrToI["fall_through_mode_custom"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
 
 								fallThroughModeChoiceTypeFound = true
-								fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeCustom{}
-								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_http_loadbalancer.CustomFallThroughMode{}
+								fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeCustom{}
+								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_common_waf.CustomFallThroughMode{}
 								fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -16316,10 +17334,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
 
 										sl := v.([]interface{})
-										openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.FallThroughRule, len(sl))
+										openApiValidationRules := make([]*ves_io_schema_views_common_waf.FallThroughRule, len(sl))
 										fallThroughModeChoiceInt.FallThroughModeCustom.OpenApiValidationRules = openApiValidationRules
 										for i, set := range sl {
-											openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.FallThroughRule{}
+											openApiValidationRules[i] = &ves_io_schema_views_common_waf.FallThroughRule{}
 											openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 											actionChoiceTypeFound := false
@@ -16329,7 +17347,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionBlock{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionBlock{}
 													actionChoiceInt.ActionBlock = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -16341,7 +17359,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}
 													actionChoiceInt.ActionReport = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -16353,7 +17371,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionSkip{}
 													actionChoiceInt.ActionSkip = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -16365,8 +17383,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
-												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
 												sl := v.(*schema.Set).List()
@@ -16396,7 +17414,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiGroup{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiGroup{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -16407,7 +17425,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_BasePath{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_BasePath{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -16458,7 +17476,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings_OversizedBodyFailValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettings_OversizedBodyFailValidation{}
 							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationAllSpecEndpoints.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -16470,7 +17488,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings_OversizedBodySkipValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettings_OversizedBodySkipValidation{}
 							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationAllSpecEndpoints.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -16480,7 +17498,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						settings := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings{}
 						validationTargetChoiceInt.ValidationAllSpecEndpoints.Settings = settings
 						for _, set := range sl {
 							settingsMapStrToI := set.(map[string]interface{})
@@ -16492,7 +17510,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
 									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -16504,7 +17522,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
 									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -16516,8 +17534,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
 
 								propertyValidationSettingsChoiceTypeFound = true
-								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
-								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_common_waf.ValidationPropertySetting{}
 								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -16527,7 +17545,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										headers := &ves_io_schema_views_common_waf.ValidationSettingForHeaders{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
 										for _, set := range sl {
 											headersMapStrToI := set.(map[string]interface{})
@@ -16539,7 +17557,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}
 													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -16551,7 +17569,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
 													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -16565,7 +17583,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										queryParameters := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
 										for _, set := range sl {
 											queryParametersMapStrToI := set.(map[string]interface{})
@@ -16577,7 +17595,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
 													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -16589,7 +17607,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
 													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -16609,7 +17627,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								propertyValidationSettingsChoiceTypeFound = true
 
 								if v.(bool) {
-									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
 									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
 									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 								}
@@ -16623,7 +17641,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["validation_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+						validationMode := &ves_io_schema_views_common_waf.OpenApiValidationMode{}
 						validationTargetChoiceInt.ValidationAllSpecEndpoints.ValidationMode = validationMode
 						for _, set := range sl {
 							validationModeMapStrToI := set.(map[string]interface{})
@@ -16633,8 +17651,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := validationModeMapStrToI["response_validation_mode_active"]; ok && !isIntfNil(v) && !responseValidationModeChoiceTypeFound {
 
 								responseValidationModeChoiceTypeFound = true
-								responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ResponseValidationModeActive{}
-								responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse{}
+								responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ResponseValidationModeActive{}
+								responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse{}
 								validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -16658,7 +17676,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementBlock{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementBlock{}
 											validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 											responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -16670,7 +17688,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementReport{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}
 											validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 											responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -16686,7 +17704,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								responseValidationModeChoiceTypeFound = true
 
 								if v.(bool) {
-									responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipResponseValidation{}
+									responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}
 									responseValidationModeChoiceInt.SkipResponseValidation = &ves_io_schema.Empty{}
 									validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 								}
@@ -16700,7 +17718,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								validationModeChoiceTypeFound = true
 
 								if v.(bool) {
-									validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+									validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipValidation{}
 									validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
 									validationMode.ValidationModeChoice = validationModeChoiceInt
 								}
@@ -16710,8 +17728,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
 
 								validationModeChoiceTypeFound = true
-								validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
-								validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+								validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ValidationModeActive{}
+								validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActive{}
 								validationMode.ValidationModeChoice = validationModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -16735,7 +17753,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementBlock{}
 											validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -16747,7 +17765,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}
 											validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -16769,8 +17787,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["validation_custom_list"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
 
 				validationTargetChoiceTypeFound = true
-				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationCustomList{}
-				validationTargetChoiceInt.ValidationCustomList = &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule{}
+				validationTargetChoiceInt := &ves_io_schema_views_common_waf.APISpecificationSettings_ValidationCustomList{}
+				validationTargetChoiceInt.ValidationCustomList = &ves_io_schema_views_common_waf.ValidateApiBySpecRule{}
 				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -16780,7 +17798,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						fallThroughMode := &ves_io_schema_views_common_waf.OpenApiFallThroughMode{}
 						validationTargetChoiceInt.ValidationCustomList.FallThroughMode = fallThroughMode
 						for _, set := range sl {
 							fallThroughModeMapStrToI := set.(map[string]interface{})
@@ -16792,7 +17810,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								fallThroughModeChoiceTypeFound = true
 
 								if v.(bool) {
-									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}
 									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
 									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 								}
@@ -16802,8 +17820,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := fallThroughModeMapStrToI["fall_through_mode_custom"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
 
 								fallThroughModeChoiceTypeFound = true
-								fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeCustom{}
-								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_http_loadbalancer.CustomFallThroughMode{}
+								fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeCustom{}
+								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_common_waf.CustomFallThroughMode{}
 								fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -16813,10 +17831,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
 
 										sl := v.([]interface{})
-										openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.FallThroughRule, len(sl))
+										openApiValidationRules := make([]*ves_io_schema_views_common_waf.FallThroughRule, len(sl))
 										fallThroughModeChoiceInt.FallThroughModeCustom.OpenApiValidationRules = openApiValidationRules
 										for i, set := range sl {
-											openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.FallThroughRule{}
+											openApiValidationRules[i] = &ves_io_schema_views_common_waf.FallThroughRule{}
 											openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 											actionChoiceTypeFound := false
@@ -16826,7 +17844,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionBlock{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionBlock{}
 													actionChoiceInt.ActionBlock = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -16838,7 +17856,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}
 													actionChoiceInt.ActionReport = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -16850,7 +17868,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionSkip{}
 													actionChoiceInt.ActionSkip = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -16862,8 +17880,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
-												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
 												sl := v.(*schema.Set).List()
@@ -16893,7 +17911,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiGroup{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiGroup{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -16904,7 +17922,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_BasePath{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_BasePath{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -16951,10 +17969,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
-						openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.OpenApiValidationRule, len(sl))
+						openApiValidationRules := make([]*ves_io_schema_views_common_waf.OpenApiValidationRule, len(sl))
 						validationTargetChoiceInt.ValidationCustomList.OpenApiValidationRules = openApiValidationRules
 						for i, set := range sl {
-							openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule{}
+							openApiValidationRules[i] = &ves_io_schema_views_common_waf.OpenApiValidationRule{}
 							openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 							conditionTypeChoiceTypeFound := false
@@ -16962,8 +17980,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpoint{}
-								conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+								conditionTypeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_ApiEndpoint{}
+								conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -16993,7 +18011,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiGroup{}
+								conditionTypeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_ApiGroup{}
 
 								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -17004,7 +18022,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_BasePath{}
+								conditionTypeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_BasePath{}
 
 								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -17019,7 +18037,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								domainChoiceTypeFound = true
 
 								if v.(bool) {
-									domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_AnyDomain{}
+									domainChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_AnyDomain{}
 									domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 									openApiValidationRules[i].DomainChoice = domainChoiceInt
 								}
@@ -17029,7 +18047,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_SpecificDomain{}
+								domainChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_SpecificDomain{}
 
 								openApiValidationRules[i].DomainChoice = domainChoiceInt
 
@@ -17064,7 +18082,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["validation_mode"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
-								validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+								validationMode := &ves_io_schema_views_common_waf.OpenApiValidationMode{}
 								openApiValidationRules[i].ValidationMode = validationMode
 								for _, set := range sl {
 									validationModeMapStrToI := set.(map[string]interface{})
@@ -17074,8 +18092,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := validationModeMapStrToI["response_validation_mode_active"]; ok && !isIntfNil(v) && !responseValidationModeChoiceTypeFound {
 
 										responseValidationModeChoiceTypeFound = true
-										responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ResponseValidationModeActive{}
-										responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse{}
+										responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ResponseValidationModeActive{}
+										responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse{}
 										validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 
 										sl := v.(*schema.Set).List()
@@ -17099,7 +18117,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementBlock{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementBlock{}
 													validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 													responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -17111,7 +18129,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementReport{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}
 													validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 													responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -17127,7 +18145,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 										responseValidationModeChoiceTypeFound = true
 
 										if v.(bool) {
-											responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipResponseValidation{}
+											responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}
 											responseValidationModeChoiceInt.SkipResponseValidation = &ves_io_schema.Empty{}
 											validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 										}
@@ -17141,7 +18159,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 										validationModeChoiceTypeFound = true
 
 										if v.(bool) {
-											validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+											validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipValidation{}
 											validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
 											validationMode.ValidationModeChoice = validationModeChoiceInt
 										}
@@ -17151,8 +18169,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
 
 										validationModeChoiceTypeFound = true
-										validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
-										validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+										validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ValidationModeActive{}
+										validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActive{}
 										validationMode.ValidationModeChoice = validationModeChoiceInt
 
 										sl := v.(*schema.Set).List()
@@ -17176,7 +18194,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementBlock{}
 													validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -17188,7 +18206,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}
 													validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -17214,7 +18232,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule_OversizedBodyFailValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.ValidateApiBySpecRule_OversizedBodyFailValidation{}
 							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationCustomList.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -17226,7 +18244,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule_OversizedBodySkipValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.ValidateApiBySpecRule_OversizedBodySkipValidation{}
 							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationCustomList.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -17236,7 +18254,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						settings := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings{}
 						validationTargetChoiceInt.ValidationCustomList.Settings = settings
 						for _, set := range sl {
 							settingsMapStrToI := set.(map[string]interface{})
@@ -17248,7 +18266,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
 									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -17260,7 +18278,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
 									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -17272,8 +18290,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
 
 								propertyValidationSettingsChoiceTypeFound = true
-								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
-								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_common_waf.ValidationPropertySetting{}
 								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -17283,7 +18301,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										headers := &ves_io_schema_views_common_waf.ValidationSettingForHeaders{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
 										for _, set := range sl {
 											headersMapStrToI := set.(map[string]interface{})
@@ -17295,7 +18313,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}
 													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -17307,7 +18325,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
 													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -17321,7 +18339,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										queryParameters := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
 										for _, set := range sl {
 											queryParametersMapStrToI := set.(map[string]interface{})
@@ -17333,7 +18351,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
 													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -17345,7 +18363,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
 													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -17365,7 +18383,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								propertyValidationSettingsChoiceTypeFound = true
 
 								if v.(bool) {
-									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
 									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
 									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 								}
@@ -17385,7 +18403,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				validationTargetChoiceTypeFound = true
 
 				if v.(bool) {
-					validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationDisabled{}
+					validationTargetChoiceInt := &ves_io_schema_views_common_waf.APISpecificationSettings_ValidationDisabled{}
 					validationTargetChoiceInt.ValidationDisabled = &ves_io_schema.Empty{}
 					apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 				}
@@ -17428,7 +18446,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		apiDiscoveryChoiceTypeFound = true
 		apiDiscoveryChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableApiDiscovery{}
-		apiDiscoveryChoiceInt.EnableApiDiscovery = &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting{}
+		apiDiscoveryChoiceInt.EnableApiDiscovery = &ves_io_schema_views_common_waf.ApiDiscoverySetting{}
 		createSpec.ApiDiscoveryChoice = apiDiscoveryChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -17458,7 +18476,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				learnFromRedirectTrafficTypeFound = true
 
 				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
+					learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
 					learnFromRedirectTrafficInt.DisableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 					apiDiscoveryChoiceInt.EnableApiDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
@@ -17470,7 +18488,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				learnFromRedirectTrafficTypeFound = true
 
 				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
+					learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 					learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 					apiDiscoveryChoiceInt.EnableApiDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
@@ -17901,7 +18919,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("api_protection_rules"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		apiProtectionRules := &ves_io_schema_views_http_loadbalancer.APIProtectionRules{}
+		apiProtectionRules := &ves_io_schema_views_common_waf.APIProtectionRules{}
 		createSpec.ApiProtectionRules = apiProtectionRules
 		for _, set := range sl {
 			apiProtectionRulesMapStrToI := set.(map[string]interface{})
@@ -17909,16 +18927,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := apiProtectionRulesMapStrToI["api_endpoint_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule, len(sl))
+				apiEndpointRules := make([]*ves_io_schema_views_common_waf.APIEndpointProtectionRule, len(sl))
 				apiProtectionRules.ApiEndpointRules = apiEndpointRules
 				for i, set := range sl {
-					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule{}
+					apiEndpointRules[i] = &ves_io_schema_views_common_waf.APIEndpointProtectionRule{}
 					apiEndpointRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiEndpointRulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						action := &ves_io_schema_views_common_waf.APIProtectionRuleAction{}
 						apiEndpointRules[i].Action = action
 						for _, set := range sl {
 							actionMapStrToI := set.(map[string]interface{})
@@ -17930,7 +18948,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Allow{}
 									actionInt.Allow = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -17942,7 +18960,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Deny{}
 									actionInt.Deny = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -18274,7 +19292,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.APIEndpointProtectionRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							apiEndpointRules[i].DomainChoice = domainChoiceInt
 						}
@@ -18284,7 +19302,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.APIEndpointProtectionRule_SpecificDomain{}
 
 						apiEndpointRules[i].DomainChoice = domainChoiceInt
 
@@ -18530,6 +19548,98 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -18644,16 +19754,16 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := apiProtectionRulesMapStrToI["api_groups_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				apiGroupsRules := make([]*ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule, len(sl))
+				apiGroupsRules := make([]*ves_io_schema_views_common_waf.APIGroupProtectionRule, len(sl))
 				apiProtectionRules.ApiGroupsRules = apiGroupsRules
 				for i, set := range sl {
-					apiGroupsRules[i] = &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule{}
+					apiGroupsRules[i] = &ves_io_schema_views_common_waf.APIGroupProtectionRule{}
 					apiGroupsRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiGroupsRulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						action := &ves_io_schema_views_common_waf.APIProtectionRuleAction{}
 						apiGroupsRules[i].Action = action
 						for _, set := range sl {
 							actionMapStrToI := set.(map[string]interface{})
@@ -18665,7 +19775,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Allow{}
 									actionInt.Allow = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -18677,7 +19787,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Deny{}
 									actionInt.Deny = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -18987,7 +20097,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.APIGroupProtectionRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							apiGroupsRules[i].DomainChoice = domainChoiceInt
 						}
@@ -18997,7 +20107,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := apiGroupsRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.APIGroupProtectionRule_SpecificDomain{}
 
 						apiGroupsRules[i].DomainChoice = domainChoiceInt
 
@@ -19243,6 +20353,98 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -19362,10 +20564,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("blocked_clients"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		blockedClients := make([]*ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule, len(sl))
+		blockedClients := make([]*ves_io_schema_views_common_waf.SimpleClientSrcRule, len(sl))
 		createSpec.BlockedClients = blockedClients
 		for i, set := range sl {
-			blockedClients[i] = &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule{}
+			blockedClients[i] = &ves_io_schema_views_common_waf.SimpleClientSrcRule{}
 			blockedClientsMapStrToI := set.(map[string]interface{})
 
 			actionChoiceTypeFound := false
@@ -19375,7 +20577,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_BotSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_BotSkipProcessing{}
 					actionChoiceInt.BotSkipProcessing = &ves_io_schema.Empty{}
 					blockedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -19387,7 +20589,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_SkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_SkipProcessing{}
 					actionChoiceInt.SkipProcessing = &ves_io_schema.Empty{}
 					blockedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -19399,7 +20601,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_WafSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_WafSkipProcessing{}
 					actionChoiceInt.WafSkipProcessing = &ves_io_schema.Empty{}
 					blockedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -19408,9 +20610,9 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			if v, ok := blockedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
 
-				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				actionsList := []ves_io_schema_views_common_waf.ClientSrcRuleAction{}
 				for _, j := range v.([]interface{}) {
-					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+					actionsList = append(actionsList, ves_io_schema_views_common_waf.ClientSrcRuleAction(ves_io_schema_views_common_waf.ClientSrcRuleAction_value[j.(string)]))
 				}
 				blockedClients[i].Actions = actionsList
 
@@ -19421,7 +20623,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["as_number"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_AsNumber{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_AsNumber{}
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -19432,8 +20634,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
-				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_common_waf.HttpHeaderMatcherList{}
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -19503,7 +20705,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["ip_prefix"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_IpPrefix{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_IpPrefix{}
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -19514,7 +20716,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_UserIdentifier{}
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -22568,7 +23770,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		challengeTypeTypeFound = true
 		challengeTypeInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableChallenge{}
-		challengeTypeInt.EnableChallenge = &ves_io_schema_views_http_loadbalancer.EnableChallenge{}
+		challengeTypeInt.EnableChallenge = &ves_io_schema_views_common_waf.EnableChallenge{}
 		createSpec.ChallengeType = challengeTypeInt
 
 		sl := v.(*schema.Set).List()
@@ -22580,7 +23782,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["captcha_challenge_parameters"]; ok && !isIntfNil(v) && !captchaChallengeParametersChoiceTypeFound {
 
 				captchaChallengeParametersChoiceTypeFound = true
-				captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_CaptchaChallengeParameters{}
+				captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_CaptchaChallengeParameters{}
 				captchaChallengeParametersChoiceInt.CaptchaChallengeParameters = &ves_io_schema_virtual_host.CaptchaChallengeType{}
 				challengeTypeInt.EnableChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 
@@ -22609,7 +23811,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				captchaChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_DefaultCaptchaChallengeParameters{}
+					captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_DefaultCaptchaChallengeParameters{}
 					captchaChallengeParametersChoiceInt.DefaultCaptchaChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.EnableChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 				}
@@ -22623,7 +23825,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				jsChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_DefaultJsChallengeParameters{}
+					jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_DefaultJsChallengeParameters{}
 					jsChallengeParametersChoiceInt.DefaultJsChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.EnableChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 				}
@@ -22633,7 +23835,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["js_challenge_parameters"]; ok && !isIntfNil(v) && !jsChallengeParametersChoiceTypeFound {
 
 				jsChallengeParametersChoiceTypeFound = true
-				jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_JsChallengeParameters{}
+				jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_JsChallengeParameters{}
 				jsChallengeParametersChoiceInt.JsChallengeParameters = &ves_io_schema_virtual_host.JavascriptChallengeType{}
 				challengeTypeInt.EnableChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 
@@ -22670,7 +23872,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				maliciousUserMitigationChoiceTypeFound = true
 
 				if v.(bool) {
-					maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_DefaultMitigationSettings{}
+					maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_DefaultMitigationSettings{}
 					maliciousUserMitigationChoiceInt.DefaultMitigationSettings = &ves_io_schema.Empty{}
 					challengeTypeInt.EnableChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 				}
@@ -22680,7 +23882,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["malicious_user_mitigation"]; ok && !isIntfNil(v) && !maliciousUserMitigationChoiceTypeFound {
 
 				maliciousUserMitigationChoiceTypeFound = true
-				maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_MaliciousUserMitigation{}
+				maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_MaliciousUserMitigation{}
 				maliciousUserMitigationChoiceInt.MaliciousUserMitigation = &ves_io_schema_views.ObjectRefType{}
 				challengeTypeInt.EnableChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 
@@ -22763,7 +23965,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		challengeTypeTypeFound = true
 		challengeTypeInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_PolicyBasedChallenge{}
-		challengeTypeInt.PolicyBasedChallenge = &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge{}
+		challengeTypeInt.PolicyBasedChallenge = &ves_io_schema_views_common_waf.PolicyBasedChallenge{}
 		createSpec.ChallengeType = challengeTypeInt
 
 		sl := v.(*schema.Set).List()
@@ -22775,7 +23977,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["captcha_challenge_parameters"]; ok && !isIntfNil(v) && !captchaChallengeParametersChoiceTypeFound {
 
 				captchaChallengeParametersChoiceTypeFound = true
-				captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_CaptchaChallengeParameters{}
+				captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_CaptchaChallengeParameters{}
 				captchaChallengeParametersChoiceInt.CaptchaChallengeParameters = &ves_io_schema_virtual_host.CaptchaChallengeType{}
 				challengeTypeInt.PolicyBasedChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 
@@ -22804,7 +24006,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				captchaChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultCaptchaChallengeParameters{}
+					captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultCaptchaChallengeParameters{}
 					captchaChallengeParametersChoiceInt.DefaultCaptchaChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 				}
@@ -22818,7 +24020,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				challengeChoiceTypeFound = true
 
 				if v.(bool) {
-					challengeChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_AlwaysEnableCaptchaChallenge{}
+					challengeChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_AlwaysEnableCaptchaChallenge{}
 					challengeChoiceInt.AlwaysEnableCaptchaChallenge = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.ChallengeChoice = challengeChoiceInt
 				}
@@ -22830,7 +24032,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				challengeChoiceTypeFound = true
 
 				if v.(bool) {
-					challengeChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_AlwaysEnableJsChallenge{}
+					challengeChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_AlwaysEnableJsChallenge{}
 					challengeChoiceInt.AlwaysEnableJsChallenge = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.ChallengeChoice = challengeChoiceInt
 				}
@@ -22842,7 +24044,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				challengeChoiceTypeFound = true
 
 				if v.(bool) {
-					challengeChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_NoChallenge{}
+					challengeChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_NoChallenge{}
 					challengeChoiceInt.NoChallenge = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.ChallengeChoice = challengeChoiceInt
 				}
@@ -22856,7 +24058,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				jsChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultJsChallengeParameters{}
+					jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultJsChallengeParameters{}
 					jsChallengeParametersChoiceInt.DefaultJsChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 				}
@@ -22866,7 +24068,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["js_challenge_parameters"]; ok && !isIntfNil(v) && !jsChallengeParametersChoiceTypeFound {
 
 				jsChallengeParametersChoiceTypeFound = true
-				jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_JsChallengeParameters{}
+				jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_JsChallengeParameters{}
 				jsChallengeParametersChoiceInt.JsChallengeParameters = &ves_io_schema_virtual_host.JavascriptChallengeType{}
 				challengeTypeInt.PolicyBasedChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 
@@ -22903,7 +24105,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				maliciousUserMitigationChoiceTypeFound = true
 
 				if v.(bool) {
-					maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultMitigationSettings{}
+					maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultMitigationSettings{}
 					maliciousUserMitigationChoiceInt.DefaultMitigationSettings = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 				}
@@ -22913,7 +24115,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["malicious_user_mitigation"]; ok && !isIntfNil(v) && !maliciousUserMitigationChoiceTypeFound {
 
 				maliciousUserMitigationChoiceTypeFound = true
-				maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_MaliciousUserMitigation{}
+				maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_MaliciousUserMitigation{}
 				maliciousUserMitigationChoiceInt.MaliciousUserMitigation = &ves_io_schema_views.ObjectRefType{}
 				challengeTypeInt.PolicyBasedChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 
@@ -22946,7 +24148,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["rule_list"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				ruleList := &ves_io_schema_views_http_loadbalancer.ChallengeRuleList{}
+				ruleList := &ves_io_schema_views_common_waf.ChallengeRuleList{}
 				challengeTypeInt.PolicyBasedChallenge.RuleList = ruleList
 				for _, set := range sl {
 					ruleListMapStrToI := set.(map[string]interface{})
@@ -22954,10 +24156,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := ruleListMapStrToI["rules"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
-						rules := make([]*ves_io_schema_views_http_loadbalancer.ChallengeRule, len(sl))
+						rules := make([]*ves_io_schema_views_common_waf.ChallengeRule, len(sl))
 						ruleList.Rules = rules
 						for i, set := range sl {
-							rules[i] = &ves_io_schema_views_http_loadbalancer.ChallengeRule{}
+							rules[i] = &ves_io_schema_views_common_waf.ChallengeRule{}
 							rulesMapStrToI := set.(map[string]interface{})
 
 							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
@@ -23936,7 +25138,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				temporaryBlockingParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					temporaryBlockingParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultTemporaryBlockingParameters{}
+					temporaryBlockingParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultTemporaryBlockingParameters{}
 					temporaryBlockingParametersChoiceInt.DefaultTemporaryBlockingParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.TemporaryBlockingParametersChoice = temporaryBlockingParametersChoiceInt
 				}
@@ -23946,7 +25148,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["temporary_user_blocking"]; ok && !isIntfNil(v) && !temporaryBlockingParametersChoiceTypeFound {
 
 				temporaryBlockingParametersChoiceTypeFound = true
-				temporaryBlockingParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_TemporaryUserBlocking{}
+				temporaryBlockingParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_TemporaryUserBlocking{}
 				temporaryBlockingParametersChoiceInt.TemporaryUserBlocking = &ves_io_schema_virtual_host.TemporaryUserBlockingType{}
 				challengeTypeInt.PolicyBasedChallenge.TemporaryBlockingParametersChoice = temporaryBlockingParametersChoiceInt
 
@@ -24768,113 +25970,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						path.PathMatch = pathMatchInt
 
 						pathMatchInt.Regex = v.(string)
-
-					}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	//ddos_detection_choice
-
-	ddosDetectionChoiceTypeFound := false
-
-	if v, ok := d.GetOk("disable_ddos_detection"); ok && !ddosDetectionChoiceTypeFound {
-
-		ddosDetectionChoiceTypeFound = true
-
-		if v.(bool) {
-			ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableDdosDetection{}
-			ddosDetectionChoiceInt.DisableDdosDetection = &ves_io_schema.Empty{}
-			createSpec.DdosDetectionChoice = ddosDetectionChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("enable_ddos_detection"); ok && !ddosDetectionChoiceTypeFound {
-
-		ddosDetectionChoiceTypeFound = true
-		ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableDdosDetection{}
-		ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
-		createSpec.DdosDetectionChoice = ddosDetectionChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			autoMitigationChoiceTypeFound := false
-
-			if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-				autoMitigationChoiceTypeFound = true
-
-				if v.(bool) {
-					autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
-					autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
-					ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-				autoMitigationChoiceTypeFound = true
-				autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
-				autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema_views_http_loadbalancer.AutoMitigationAction{}
-				ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					actionTypeFound := false
-
-					if v, ok := cs["block"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-						actionTypeFound = true
-
-						if v.(bool) {
-							actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_Block{}
-							actionInt.Block = &ves_io_schema.Empty{}
-							autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-						}
-
-					}
-
-					if v, ok := cs["js_challenge"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-						actionTypeFound = true
-						actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_JsChallenge{}
-						actionInt.JsChallenge = &ves_io_schema_virtual_host.JavascriptChallengeType{}
-						autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
-
-								actionInt.JsChallenge.CookieExpiry = uint32(v.(int))
-
-							}
-
-							if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
-
-								actionInt.JsChallenge.CustomPage = v.(string)
-
-							}
-
-							if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
-
-								actionInt.JsChallenge.JsScriptDelay = uint32(v.(int))
-
-							}
-
-						}
 
 					}
 
@@ -25731,7 +26826,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		ipReputationChoiceTypeFound = true
 		ipReputationChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableIpReputation{}
-		ipReputationChoiceInt.EnableIpReputation = &ves_io_schema_views_http_loadbalancer.IPThreatCategoryListType{}
+		ipReputationChoiceInt.EnableIpReputation = &ves_io_schema_views_common_waf.IPThreatCategoryListType{}
 		createSpec.IpReputationChoice = ipReputationChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -25756,7 +26851,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("jwt_validation"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		jwtValidation := &ves_io_schema_views_http_loadbalancer.JWTValidation{}
+		jwtValidation := &ves_io_schema_views_common_waf.JWTValidation{}
 		createSpec.JwtValidation = jwtValidation
 		for _, set := range sl {
 			jwtValidationMapStrToI := set.(map[string]interface{})
@@ -25804,7 +26899,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["auth_server_uri"]; ok && !isIntfNil(v) && !jwksConfigurationTypeFound {
 
 				jwksConfigurationTypeFound = true
-				jwksConfigurationInt := &ves_io_schema_views_http_loadbalancer.JWTValidation_AuthServerUri{}
+				jwksConfigurationInt := &ves_io_schema_views_common_waf.JWTValidation_AuthServerUri{}
 
 				jwtValidation.JwksConfiguration = jwksConfigurationInt
 
@@ -25815,7 +26910,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["jwks"]; ok && !isIntfNil(v) && !jwksConfigurationTypeFound {
 
 				jwksConfigurationTypeFound = true
-				jwksConfigurationInt := &ves_io_schema_views_http_loadbalancer.JWTValidation_Jwks{}
+				jwksConfigurationInt := &ves_io_schema_views_common_waf.JWTValidation_Jwks{}
 
 				jwtValidation.JwksConfiguration = jwksConfigurationInt
 
@@ -25826,8 +26921,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["jwks_config"]; ok && !isIntfNil(v) && !jwksConfigurationTypeFound {
 
 				jwksConfigurationTypeFound = true
-				jwksConfigurationInt := &ves_io_schema_views_http_loadbalancer.JWTValidation_JwksConfig{}
-				jwksConfigurationInt.JwksConfig = &ves_io_schema_views_http_loadbalancer.JWKS{}
+				jwksConfigurationInt := &ves_io_schema_views_common_waf.JWTValidation_JwksConfig{}
+				jwksConfigurationInt.JwksConfig = &ves_io_schema_views_common_waf.JWKS{}
 				jwtValidation.JwksConfiguration = jwksConfigurationInt
 
 				sl := v.(*schema.Set).List()
@@ -25847,7 +26942,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["mandatory_claims"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				mandatoryClaims := &ves_io_schema_views_http_loadbalancer.MandatoryClaims{}
+				mandatoryClaims := &ves_io_schema_views_common_waf.MandatoryClaims{}
 				jwtValidation.MandatoryClaims = mandatoryClaims
 				for _, set := range sl {
 					mandatoryClaimsMapStrToI := set.(map[string]interface{})
@@ -25867,7 +26962,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["reserved_claims"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				reservedClaims := &ves_io_schema_views_http_loadbalancer.ReservedClaims{}
+				reservedClaims := &ves_io_schema_views_common_waf.ReservedClaims{}
 				jwtValidation.ReservedClaims = reservedClaims
 				for _, set := range sl {
 					reservedClaimsMapStrToI := set.(map[string]interface{})
@@ -25877,8 +26972,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := reservedClaimsMapStrToI["audience"]; ok && !isIntfNil(v) && !audienceValidationTypeFound {
 
 						audienceValidationTypeFound = true
-						audienceValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_Audience{}
-						audienceValidationInt.Audience = &ves_io_schema_views_http_loadbalancer.Audiences{}
+						audienceValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_Audience{}
+						audienceValidationInt.Audience = &ves_io_schema_views_common_waf.Audiences{}
 						reservedClaims.AudienceValidation = audienceValidationInt
 
 						sl := v.(*schema.Set).List()
@@ -25904,7 +26999,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						audienceValidationTypeFound = true
 
 						if v.(bool) {
-							audienceValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_AudienceDisable{}
+							audienceValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_AudienceDisable{}
 							audienceValidationInt.AudienceDisable = &ves_io_schema.Empty{}
 							reservedClaims.AudienceValidation = audienceValidationInt
 						}
@@ -25916,7 +27011,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := reservedClaimsMapStrToI["issuer"]; ok && !isIntfNil(v) && !issuerValidationTypeFound {
 
 						issuerValidationTypeFound = true
-						issuerValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_Issuer{}
+						issuerValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_Issuer{}
 
 						reservedClaims.IssuerValidation = issuerValidationInt
 
@@ -25929,7 +27024,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						issuerValidationTypeFound = true
 
 						if v.(bool) {
-							issuerValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_IssuerDisable{}
+							issuerValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_IssuerDisable{}
 							issuerValidationInt.IssuerDisable = &ves_io_schema.Empty{}
 							reservedClaims.IssuerValidation = issuerValidationInt
 						}
@@ -25943,7 +27038,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						validatePeriodTypeFound = true
 
 						if v.(bool) {
-							validatePeriodInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_ValidatePeriodDisable{}
+							validatePeriodInt := &ves_io_schema_views_common_waf.ReservedClaims_ValidatePeriodDisable{}
 							validatePeriodInt.ValidatePeriodDisable = &ves_io_schema.Empty{}
 							reservedClaims.ValidatePeriod = validatePeriodInt
 						}
@@ -25955,7 +27050,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						validatePeriodTypeFound = true
 
 						if v.(bool) {
-							validatePeriodInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_ValidatePeriodEnable{}
+							validatePeriodInt := &ves_io_schema_views_common_waf.ReservedClaims_ValidatePeriodEnable{}
 							validatePeriodInt.ValidatePeriodEnable = &ves_io_schema.Empty{}
 							reservedClaims.ValidatePeriod = validatePeriodInt
 						}
@@ -25969,7 +27064,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["target"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				target := &ves_io_schema_views_http_loadbalancer.Target{}
+				target := &ves_io_schema_views_common_waf.Target{}
 				jwtValidation.Target = target
 				for _, set := range sl {
 					targetMapStrToI := set.(map[string]interface{})
@@ -25981,7 +27076,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						targetTypeFound = true
 
 						if v.(bool) {
-							targetInt := &ves_io_schema_views_http_loadbalancer.Target_AllEndpoint{}
+							targetInt := &ves_io_schema_views_common_waf.Target_AllEndpoint{}
 							targetInt.AllEndpoint = &ves_io_schema.Empty{}
 							target.Target = targetInt
 						}
@@ -25991,8 +27086,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := targetMapStrToI["api_groups"]; ok && !isIntfNil(v) && !targetTypeFound {
 
 						targetTypeFound = true
-						targetInt := &ves_io_schema_views_http_loadbalancer.Target_ApiGroups{}
-						targetInt.ApiGroups = &ves_io_schema_views_http_loadbalancer.APIGroups{}
+						targetInt := &ves_io_schema_views_common_waf.Target_ApiGroups{}
+						targetInt.ApiGroups = &ves_io_schema_views_common_waf.APIGroups{}
 						target.Target = targetInt
 
 						sl := v.(*schema.Set).List()
@@ -26016,8 +27111,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := targetMapStrToI["base_paths"]; ok && !isIntfNil(v) && !targetTypeFound {
 
 						targetTypeFound = true
-						targetInt := &ves_io_schema_views_http_loadbalancer.Target_BasePaths{}
-						targetInt.BasePaths = &ves_io_schema_views_http_loadbalancer.BasePathsType{}
+						targetInt := &ves_io_schema_views_common_waf.Target_BasePaths{}
+						targetInt.BasePaths = &ves_io_schema_views_common_waf.BasePathsType{}
 						target.Target = targetInt
 
 						sl := v.(*schema.Set).List()
@@ -26045,7 +27140,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["token_location"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				tokenLocation := &ves_io_schema_views_http_loadbalancer.TokenLocation{}
+				tokenLocation := &ves_io_schema_views_common_waf.TokenLocation{}
 				jwtValidation.TokenLocation = tokenLocation
 				for _, set := range sl {
 					tokenLocationMapStrToI := set.(map[string]interface{})
@@ -26057,7 +27152,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						tokenLocationTypeFound = true
 
 						if v.(bool) {
-							tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_BearerToken{}
+							tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_BearerToken{}
 							tokenLocationInt.BearerToken = &ves_io_schema.Empty{}
 							tokenLocation.TokenLocation = tokenLocationInt
 						}
@@ -26067,7 +27162,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := tokenLocationMapStrToI["cookie"]; ok && !isIntfNil(v) && !tokenLocationTypeFound {
 
 						tokenLocationTypeFound = true
-						tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_Cookie{}
+						tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_Cookie{}
 
 						tokenLocation.TokenLocation = tokenLocationInt
 
@@ -26078,7 +27173,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := tokenLocationMapStrToI["header"]; ok && !isIntfNil(v) && !tokenLocationTypeFound {
 
 						tokenLocationTypeFound = true
-						tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_Header{}
+						tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_Header{}
 
 						tokenLocation.TokenLocation = tokenLocationInt
 
@@ -26089,7 +27184,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := tokenLocationMapStrToI["query_param"]; ok && !isIntfNil(v) && !tokenLocationTypeFound {
 
 						tokenLocationTypeFound = true
-						tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_QueryParam{}
+						tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_QueryParam{}
 
 						tokenLocation.TokenLocation = tokenLocationInt
 
@@ -26298,6 +27393,18 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
 					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 						headerTransformationChoiceTypeFound = true
@@ -26339,11 +27446,76 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
 
 						httpProtocolChoiceTypeFound = true
+						httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+						httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema_virtual_host.Http1ProtocolOptions{}
+						httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 
-						if v.(bool) {
-							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
-							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
-							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								headerTransformation := &ves_io_schema.HeaderTransformationType{}
+								httpProtocolChoiceInt.HttpProtocolEnableV1Only.HeaderTransformation = headerTransformation
+								for _, set := range sl {
+									headerTransformationMapStrToI := set.(map[string]interface{})
+
+									headerTransformationChoiceTypeFound := false
+
+									if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+											headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+											headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+											headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+											headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -27345,6 +28517,18 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
 					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 						headerTransformationChoiceTypeFound = true
@@ -27386,11 +28570,76 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
 
 						httpProtocolChoiceTypeFound = true
+						httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+						httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema_virtual_host.Http1ProtocolOptions{}
+						httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 
-						if v.(bool) {
-							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
-							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
-							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								headerTransformation := &ves_io_schema.HeaderTransformationType{}
+								httpProtocolChoiceInt.HttpProtocolEnableV1Only.HeaderTransformation = headerTransformation
+								for _, set := range sl {
+									headerTransformationMapStrToI := set.(map[string]interface{})
+
+									headerTransformationChoiceTypeFound := false
+
+									if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+											headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+											headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+											headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+											headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -27875,7 +29124,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 				apiDiscoveryChoiceTypeFound = true
 				apiDiscoveryChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDiscovery{}
-				apiDiscoveryChoiceInt.EnableDiscovery = &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting{}
+				apiDiscoveryChoiceInt.EnableDiscovery = &ves_io_schema_views_common_waf.ApiDiscoverySetting{}
 				mlConfigChoiceInt.SingleLbApp.ApiDiscoveryChoice = apiDiscoveryChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -27905,7 +29154,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						learnFromRedirectTrafficTypeFound = true
 
 						if v.(bool) {
-							learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
+							learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
 							learnFromRedirectTrafficInt.DisableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 							apiDiscoveryChoiceInt.EnableDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 						}
@@ -27917,7 +29166,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						learnFromRedirectTrafficTypeFound = true
 
 						if v.(bool) {
-							learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
+							learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 							learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 							apiDiscoveryChoiceInt.EnableDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 						}
@@ -28330,111 +29579,6 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 									if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
 										disabledBuiltInRules[i].Name = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			ddosDetectionChoiceTypeFound := false
-
-			if v, ok := cs["disable_ddos_detection"]; ok && !isIntfNil(v) && !ddosDetectionChoiceTypeFound {
-
-				ddosDetectionChoiceTypeFound = true
-
-				if v.(bool) {
-					ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_DisableDdosDetection{}
-					ddosDetectionChoiceInt.DisableDdosDetection = &ves_io_schema.Empty{}
-					mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["enable_ddos_detection"]; ok && !isIntfNil(v) && !ddosDetectionChoiceTypeFound {
-
-				ddosDetectionChoiceTypeFound = true
-				ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDdosDetection{}
-				ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
-				mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					autoMitigationChoiceTypeFound := false
-
-					if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-						autoMitigationChoiceTypeFound = true
-
-						if v.(bool) {
-							autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
-							autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
-							ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-						autoMitigationChoiceTypeFound = true
-						autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
-						autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema_views_http_loadbalancer.AutoMitigationAction{}
-						ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							actionTypeFound := false
-
-							if v, ok := cs["block"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-								actionTypeFound = true
-
-								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_Block{}
-									actionInt.Block = &ves_io_schema.Empty{}
-									autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-								}
-
-							}
-
-							if v, ok := cs["js_challenge"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-								actionTypeFound = true
-								actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_JsChallenge{}
-								actionInt.JsChallenge = &ves_io_schema_virtual_host.JavascriptChallengeType{}
-								autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
-
-										actionInt.JsChallenge.CookieExpiry = uint32(v.(int))
-
-									}
-
-									if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
-
-										actionInt.JsChallenge.CustomPage = v.(string)
-
-									}
-
-									if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
-
-										actionInt.JsChallenge.JsScriptDelay = uint32(v.(int))
-
 									}
 
 								}
@@ -29412,6 +30556,18 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
 							if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 								headerTransformationChoiceTypeFound = true
@@ -29461,11 +30617,76 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
 
 						httpProtocolTypeTypeFound = true
+						httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+						httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
+						advancedOptions.HttpProtocolType = httpProtocolTypeInt
 
-						if v.(bool) {
-							httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
-							httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
-							advancedOptions.HttpProtocolType = httpProtocolTypeInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								headerTransformation := &ves_io_schema.HeaderTransformationType{}
+								httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+								for _, set := range sl {
+									headerTransformationMapStrToI := set.(map[string]interface{})
+
+									headerTransformationChoiceTypeFound := false
+
+									if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+											headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+											headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+											headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+											headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -29598,6 +30819,44 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						advancedOptions.PanicThresholdType = panicThresholdTypeInt
 
 						panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+					}
+
+					proxyProtocolChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_proxy_protocol"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+						proxyProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableProxyProtocol{}
+							proxyProtocolChoiceInt.DisableProxyProtocol = &ves_io_schema.Empty{}
+							advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["proxy_protocol_v1"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+						proxyProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV1{}
+							proxyProtocolChoiceInt.ProxyProtocolV1 = &ves_io_schema.Empty{}
+							advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["proxy_protocol_v2"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+						proxyProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV2{}
+							proxyProtocolChoiceInt.ProxyProtocolV2 = &ves_io_schema.Empty{}
+							advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+						}
 
 					}
 
@@ -30151,6 +31410,39 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+								networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Segment{}
+								networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+								choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
 							privateIpChoiceTypeFound := false
 
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
@@ -30298,6 +31590,39 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_OutsideNetwork{}
 									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
 									choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+								networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_Segment{}
+								networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+								choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Tenant = v.(string)
+
+									}
+
 								}
 
 							}
@@ -31803,7 +33128,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		rateLimitChoiceTypeFound = true
 		rateLimitChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ApiRateLimit{}
-		rateLimitChoiceInt.ApiRateLimit = &ves_io_schema_views_http_loadbalancer.APIRateLimit{}
+		rateLimitChoiceInt.ApiRateLimit = &ves_io_schema_views_common_waf.APIRateLimit{}
 		createSpec.RateLimitChoice = rateLimitChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -31813,10 +33138,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["api_endpoint_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.ApiEndpointRule, len(sl))
+				apiEndpointRules := make([]*ves_io_schema_views_common_waf.ApiEndpointRule, len(sl))
 				rateLimitChoiceInt.ApiRateLimit.ApiEndpointRules = apiEndpointRules
 				for i, set := range sl {
-					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.ApiEndpointRule{}
+					apiEndpointRules[i] = &ves_io_schema_views_common_waf.ApiEndpointRule{}
 					apiEndpointRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiEndpointRulesMapStrToI["api_endpoint_method"]; ok && !isIntfNil(v) {
@@ -32144,7 +33469,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							apiEndpointRules[i].DomainChoice = domainChoiceInt
 						}
@@ -32154,7 +33479,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_SpecificDomain{}
 
 						apiEndpointRules[i].DomainChoice = domainChoiceInt
 
@@ -32167,8 +33492,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_InlineRateLimiter{}
-						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_common_waf.InlineRateLimiter{}
 						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
 						sl := v.(*schema.Set).List()
@@ -32180,7 +33505,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
 
 								countByChoiceTypeFound = true
-								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_RefUserId{}
 								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
 								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 
@@ -32215,7 +33540,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								countByChoiceTypeFound = true
 
 								if v.(bool) {
-									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}
 									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
 									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 								}
@@ -32241,7 +33566,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_RefRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_RefRateLimiter{}
 						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
 						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
@@ -32485,6 +33810,98 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -32601,8 +34018,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["bypass_rate_limiting_rules"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_BypassRateLimitingRules{}
-				ipAllowedListChoiceInt.BypassRateLimitingRules = &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRules{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_BypassRateLimitingRules{}
+				ipAllowedListChoiceInt.BypassRateLimitingRules = &ves_io_schema_views_common_waf.BypassRateLimitingRules{}
 				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -32612,10 +34029,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["bypass_rate_limiting_rules"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
-						bypassRateLimitingRules := make([]*ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule, len(sl))
+						bypassRateLimitingRules := make([]*ves_io_schema_views_common_waf.BypassRateLimitingRule, len(sl))
 						ipAllowedListChoiceInt.BypassRateLimitingRules.BypassRateLimitingRules = bypassRateLimitingRules
 						for i, set := range sl {
-							bypassRateLimitingRules[i] = &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule{}
+							bypassRateLimitingRules[i] = &ves_io_schema_views_common_waf.BypassRateLimitingRule{}
 							bypassRateLimitingRulesMapStrToI := set.(map[string]interface{})
 
 							if v, ok := bypassRateLimitingRulesMapStrToI["client_matcher"]; ok && !isIntfNil(v) {
@@ -32909,7 +34326,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								destinationTypeTypeFound = true
 
 								if v.(bool) {
-									destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_AnyUrl{}
+									destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_AnyUrl{}
 									destinationTypeInt.AnyUrl = &ves_io_schema.Empty{}
 									bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 								}
@@ -32919,8 +34336,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !destinationTypeTypeFound {
 
 								destinationTypeTypeFound = true
-								destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_ApiEndpoint{}
-								destinationTypeInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+								destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_ApiEndpoint{}
+								destinationTypeInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 								bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 
 								sl := v.(*schema.Set).List()
@@ -32950,8 +34367,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["api_groups"]; ok && !isIntfNil(v) && !destinationTypeTypeFound {
 
 								destinationTypeTypeFound = true
-								destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_ApiGroups{}
-								destinationTypeInt.ApiGroups = &ves_io_schema_views_http_loadbalancer.APIGroups{}
+								destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_ApiGroups{}
+								destinationTypeInt.ApiGroups = &ves_io_schema_views_common_waf.APIGroups{}
 								bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 
 								sl := v.(*schema.Set).List()
@@ -32975,7 +34392,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !destinationTypeTypeFound {
 
 								destinationTypeTypeFound = true
-								destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_BasePath{}
+								destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_BasePath{}
 
 								bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 
@@ -32990,7 +34407,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								domainChoiceTypeFound = true
 
 								if v.(bool) {
-									domainChoiceInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_AnyDomain{}
+									domainChoiceInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_AnyDomain{}
 									domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 									bypassRateLimitingRules[i].DomainChoice = domainChoiceInt
 								}
@@ -33000,7 +34417,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_SpecificDomain{}
+								domainChoiceInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_SpecificDomain{}
 
 								bypassRateLimitingRules[i].DomainChoice = domainChoiceInt
 
@@ -33222,6 +34639,98 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 									}
 
+									if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+										requestMatcher.JwtClaims = jwtClaims
+										for i, set := range sl {
+											jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+											jwtClaimsMapStrToI := set.(map[string]interface{})
+
+											if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+												jwtClaims[i].InvertMatcher = w.(bool)
+											}
+
+											matchTypeFound := false
+
+											if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+													matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+													jwtClaims[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+													matchInt.CheckPresent = &ves_io_schema.Empty{}
+													jwtClaims[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+												matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+												matchInt.Item = &ves_io_schema_policy.MatcherType{}
+												jwtClaims[i].Match = matchInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														matchInt.Item.Transformers = transformersList
+
+													}
+
+												}
+
+											}
+
+											if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+												jwtClaims[i].Name = w.(string)
+											}
+
+										}
+
+									}
+
 									if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 										sl := v.([]interface{})
@@ -33340,8 +34849,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["custom_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_CustomIpAllowedList{}
-				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_http_loadbalancer.CustomIpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_CustomIpAllowedList{}
+				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_common_waf.CustomIpAllowedList{}
 				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -33381,7 +34890,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_IpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_IpAllowedList{}
 				ipAllowedListChoiceInt.IpAllowedList = &ves_io_schema_views.PrefixStringListType{}
 				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
@@ -33418,7 +34927,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				ipAllowedListChoiceTypeFound = true
 
 				if v.(bool) {
-					ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_NoIpAllowedList{}
+					ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_NoIpAllowedList{}
 					ipAllowedListChoiceInt.NoIpAllowedList = &ves_io_schema.Empty{}
 					rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 				}
@@ -33428,10 +34937,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["server_url_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				serverUrlRules := make([]*ves_io_schema_views_http_loadbalancer.ServerUrlRule, len(sl))
+				serverUrlRules := make([]*ves_io_schema_views_common_waf.ServerUrlRule, len(sl))
 				rateLimitChoiceInt.ApiRateLimit.ServerUrlRules = serverUrlRules
 				for i, set := range sl {
-					serverUrlRules[i] = &ves_io_schema_views_http_loadbalancer.ServerUrlRule{}
+					serverUrlRules[i] = &ves_io_schema_views_common_waf.ServerUrlRule{}
 					serverUrlRulesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := serverUrlRulesMapStrToI["api_group"]; ok && !isIntfNil(w) {
@@ -33733,7 +35242,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							serverUrlRules[i].DomainChoice = domainChoiceInt
 						}
@@ -33743,7 +35252,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := serverUrlRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_SpecificDomain{}
 
 						serverUrlRules[i].DomainChoice = domainChoiceInt
 
@@ -33756,8 +35265,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := serverUrlRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_InlineRateLimiter{}
-						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_common_waf.InlineRateLimiter{}
 						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
 						sl := v.(*schema.Set).List()
@@ -33769,7 +35278,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
 
 								countByChoiceTypeFound = true
-								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_RefUserId{}
 								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
 								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 
@@ -33804,7 +35313,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 								countByChoiceTypeFound = true
 
 								if v.(bool) {
-									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}
 									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
 									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 								}
@@ -33830,7 +35339,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 					if v, ok := serverUrlRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_RefRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_RefRateLimiter{}
 						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
 						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
@@ -34074,6 +35583,98 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -34205,7 +35806,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		rateLimitChoiceTypeFound = true
 		rateLimitChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_RateLimit{}
-		rateLimitChoiceInt.RateLimit = &ves_io_schema_views_http_loadbalancer.RateLimitConfigType{}
+		rateLimitChoiceInt.RateLimit = &ves_io_schema_views_common_waf.RateLimitConfigType{}
 		createSpec.RateLimitChoice = rateLimitChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -34217,8 +35818,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["custom_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_CustomIpAllowedList{}
-				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_http_loadbalancer.CustomIpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_CustomIpAllowedList{}
+				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_common_waf.CustomIpAllowedList{}
 				rateLimitChoiceInt.RateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -34258,7 +35859,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_IpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_IpAllowedList{}
 				ipAllowedListChoiceInt.IpAllowedList = &ves_io_schema_views.PrefixStringListType{}
 				rateLimitChoiceInt.RateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
@@ -34295,7 +35896,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				ipAllowedListChoiceTypeFound = true
 
 				if v.(bool) {
-					ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_NoIpAllowedList{}
+					ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_NoIpAllowedList{}
 					ipAllowedListChoiceInt.NoIpAllowedList = &ves_io_schema.Empty{}
 					rateLimitChoiceInt.RateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 				}
@@ -34309,7 +35910,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				policyChoiceTypeFound = true
 
 				if v.(bool) {
-					policyChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_NoPolicies{}
+					policyChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_NoPolicies{}
 					policyChoiceInt.NoPolicies = &ves_io_schema.Empty{}
 					rateLimitChoiceInt.RateLimit.PolicyChoice = policyChoiceInt
 				}
@@ -34319,7 +35920,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["policies"]; ok && !isIntfNil(v) && !policyChoiceTypeFound {
 
 				policyChoiceTypeFound = true
-				policyChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_Policies{}
+				policyChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_Policies{}
 				policyChoiceInt.Policies = &ves_io_schema_views_rate_limiter_policy.PolicyList{}
 				rateLimitChoiceInt.RateLimit.PolicyChoice = policyChoiceInt
 
@@ -36535,7 +38136,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 		servicePolicyChoiceTypeFound = true
 		servicePolicyChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_ActiveServicePolicies{}
-		servicePolicyChoiceInt.ActiveServicePolicies = &ves_io_schema_views_http_loadbalancer.ServicePolicyList{}
+		servicePolicyChoiceInt.ActiveServicePolicies = &ves_io_schema_views_common_waf.ServicePolicyList{}
 		createSpec.ServicePolicyChoice = servicePolicyChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -36658,30 +38259,30 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	//threat_intelligence_choice
+	//threat_mesh_choice
 
-	threatIntelligenceChoiceTypeFound := false
+	threatMeshChoiceTypeFound := false
 
-	if v, ok := d.GetOk("disable_threat_intelligence"); ok && !threatIntelligenceChoiceTypeFound {
+	if v, ok := d.GetOk("disable_threat_mesh"); ok && !threatMeshChoiceTypeFound {
 
-		threatIntelligenceChoiceTypeFound = true
+		threatMeshChoiceTypeFound = true
 
 		if v.(bool) {
-			threatIntelligenceChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableThreatIntelligence{}
-			threatIntelligenceChoiceInt.DisableThreatIntelligence = &ves_io_schema.Empty{}
-			createSpec.ThreatIntelligenceChoice = threatIntelligenceChoiceInt
+			threatMeshChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_DisableThreatMesh{}
+			threatMeshChoiceInt.DisableThreatMesh = &ves_io_schema.Empty{}
+			createSpec.ThreatMeshChoice = threatMeshChoiceInt
 		}
 
 	}
 
-	if v, ok := d.GetOk("enable_threat_intelligence"); ok && !threatIntelligenceChoiceTypeFound {
+	if v, ok := d.GetOk("enable_threat_mesh"); ok && !threatMeshChoiceTypeFound {
 
-		threatIntelligenceChoiceTypeFound = true
+		threatMeshChoiceTypeFound = true
 
 		if v.(bool) {
-			threatIntelligenceChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableThreatIntelligence{}
-			threatIntelligenceChoiceInt.EnableThreatIntelligence = &ves_io_schema.Empty{}
-			createSpec.ThreatIntelligenceChoice = threatIntelligenceChoiceInt
+			threatMeshChoiceInt := &ves_io_schema_views_http_loadbalancer.CreateSpecType_EnableThreatMesh{}
+			threatMeshChoiceInt.EnableThreatMesh = &ves_io_schema.Empty{}
+			createSpec.ThreatMeshChoice = threatMeshChoiceInt
 		}
 
 	}
@@ -36731,10 +38332,10 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("trusted_clients"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		trustedClients := make([]*ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule, len(sl))
+		trustedClients := make([]*ves_io_schema_views_common_waf.SimpleClientSrcRule, len(sl))
 		createSpec.TrustedClients = trustedClients
 		for i, set := range sl {
-			trustedClients[i] = &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule{}
+			trustedClients[i] = &ves_io_schema_views_common_waf.SimpleClientSrcRule{}
 			trustedClientsMapStrToI := set.(map[string]interface{})
 
 			actionChoiceTypeFound := false
@@ -36744,7 +38345,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_BotSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_BotSkipProcessing{}
 					actionChoiceInt.BotSkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -36756,7 +38357,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_SkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_SkipProcessing{}
 					actionChoiceInt.SkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -36768,7 +38369,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_WafSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_WafSkipProcessing{}
 					actionChoiceInt.WafSkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -36777,9 +38378,9 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 
 			if v, ok := trustedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
 
-				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				actionsList := []ves_io_schema_views_common_waf.ClientSrcRuleAction{}
 				for _, j := range v.([]interface{}) {
-					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+					actionsList = append(actionsList, ves_io_schema_views_common_waf.ClientSrcRuleAction(ves_io_schema_views_common_waf.ClientSrcRuleAction_value[j.(string)]))
 				}
 				trustedClients[i].Actions = actionsList
 
@@ -36790,7 +38391,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["as_number"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_AsNumber{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_AsNumber{}
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -36801,8 +38402,8 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
-				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_common_waf.HttpHeaderMatcherList{}
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -36872,7 +38473,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["ip_prefix"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_IpPrefix{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_IpPrefix{}
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -36883,7 +38484,7 @@ func resourceVolterraHttpLoadbalancerCreate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_UserIdentifier{}
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -37330,6 +38931,8 @@ func setHttpLoadbalancerFields(client *APIClient, d *schema.ResourceData, resp v
 
 	d.Set("namespace", metadata.GetNamespace())
 
+	drift.DriftDetectionSpec(d, resp)
+
 	return nil
 }
 
@@ -37451,6 +39054,81 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								sl := v.(*schema.Set).List()
 								site := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.Site.Site = site
+								for _, set := range sl {
+									siteMapStrToI := set.(map[string]interface{})
+
+									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+										site.Name = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										site.Namespace = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										site.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
+						choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ipv6 = v.(string)
+
+							}
+
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								segment := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Segment = segment
+								for _, set := range sl {
+									segmentMapStrToI := set.(map[string]interface{})
+
+									if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+										segment.Name = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										segment.Namespace = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										segment.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								site := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Site = site
 								for _, set := range sl {
 									siteMapStrToI := set.(map[string]interface{})
 
@@ -37826,7 +39504,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		apiDefinitionChoiceTypeFound = true
 		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ApiDefinitions{}
-		apiDefinitionChoiceInt.ApiDefinitions = &ves_io_schema_views_http_loadbalancer.ApiDefinitionList{}
+		apiDefinitionChoiceInt.ApiDefinitions = &ves_io_schema_views_common_waf.ApiDefinitionList{}
 		updateSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -37867,7 +39545,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		apiDefinitionChoiceTypeFound = true
 		apiDefinitionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ApiSpecification{}
-		apiDefinitionChoiceInt.ApiSpecification = &ves_io_schema_views_http_loadbalancer.APISpecificationSettings{}
+		apiDefinitionChoiceInt.ApiSpecification = &ves_io_schema_views_common_waf.APISpecificationSettings{}
 		updateSpec.ApiDefinitionChoice = apiDefinitionChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -37901,8 +39579,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["validation_all_spec_endpoints"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
 
 				validationTargetChoiceTypeFound = true
-				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationAllSpecEndpoints{}
-				validationTargetChoiceInt.ValidationAllSpecEndpoints = &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings{}
+				validationTargetChoiceInt := &ves_io_schema_views_common_waf.APISpecificationSettings_ValidationAllSpecEndpoints{}
+				validationTargetChoiceInt.ValidationAllSpecEndpoints = &ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettings{}
 				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -37912,7 +39590,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						fallThroughMode := &ves_io_schema_views_common_waf.OpenApiFallThroughMode{}
 						validationTargetChoiceInt.ValidationAllSpecEndpoints.FallThroughMode = fallThroughMode
 						for _, set := range sl {
 							fallThroughModeMapStrToI := set.(map[string]interface{})
@@ -37924,7 +39602,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								fallThroughModeChoiceTypeFound = true
 
 								if v.(bool) {
-									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}
 									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
 									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 								}
@@ -37934,8 +39612,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := fallThroughModeMapStrToI["fall_through_mode_custom"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
 
 								fallThroughModeChoiceTypeFound = true
-								fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeCustom{}
-								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_http_loadbalancer.CustomFallThroughMode{}
+								fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeCustom{}
+								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_common_waf.CustomFallThroughMode{}
 								fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -37945,10 +39623,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
 
 										sl := v.([]interface{})
-										openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.FallThroughRule, len(sl))
+										openApiValidationRules := make([]*ves_io_schema_views_common_waf.FallThroughRule, len(sl))
 										fallThroughModeChoiceInt.FallThroughModeCustom.OpenApiValidationRules = openApiValidationRules
 										for i, set := range sl {
-											openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.FallThroughRule{}
+											openApiValidationRules[i] = &ves_io_schema_views_common_waf.FallThroughRule{}
 											openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 											actionChoiceTypeFound := false
@@ -37958,7 +39636,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionBlock{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionBlock{}
 													actionChoiceInt.ActionBlock = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -37970,7 +39648,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}
 													actionChoiceInt.ActionReport = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -37982,7 +39660,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionSkip{}
 													actionChoiceInt.ActionSkip = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -37994,8 +39672,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
-												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
 												sl := v.(*schema.Set).List()
@@ -38025,7 +39703,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiGroup{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiGroup{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -38036,7 +39714,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_BasePath{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_BasePath{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -38087,7 +39765,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings_OversizedBodyFailValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettings_OversizedBodyFailValidation{}
 							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationAllSpecEndpoints.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -38099,7 +39777,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationAllSpecEndpointsSettings_OversizedBodySkipValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationAllSpecEndpointsSettings_OversizedBodySkipValidation{}
 							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationAllSpecEndpoints.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -38109,7 +39787,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						settings := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings{}
 						validationTargetChoiceInt.ValidationAllSpecEndpoints.Settings = settings
 						for _, set := range sl {
 							settingsMapStrToI := set.(map[string]interface{})
@@ -38121,7 +39799,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
 									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -38133,7 +39811,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
 									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -38145,8 +39823,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
 
 								propertyValidationSettingsChoiceTypeFound = true
-								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
-								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_common_waf.ValidationPropertySetting{}
 								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -38156,7 +39834,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										headers := &ves_io_schema_views_common_waf.ValidationSettingForHeaders{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
 										for _, set := range sl {
 											headersMapStrToI := set.(map[string]interface{})
@@ -38168,7 +39846,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}
 													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -38180,7 +39858,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
 													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -38194,7 +39872,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										queryParameters := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
 										for _, set := range sl {
 											queryParametersMapStrToI := set.(map[string]interface{})
@@ -38206,7 +39884,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
 													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -38218,7 +39896,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
 													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -38238,7 +39916,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								propertyValidationSettingsChoiceTypeFound = true
 
 								if v.(bool) {
-									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
 									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
 									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 								}
@@ -38252,7 +39930,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["validation_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+						validationMode := &ves_io_schema_views_common_waf.OpenApiValidationMode{}
 						validationTargetChoiceInt.ValidationAllSpecEndpoints.ValidationMode = validationMode
 						for _, set := range sl {
 							validationModeMapStrToI := set.(map[string]interface{})
@@ -38262,8 +39940,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := validationModeMapStrToI["response_validation_mode_active"]; ok && !isIntfNil(v) && !responseValidationModeChoiceTypeFound {
 
 								responseValidationModeChoiceTypeFound = true
-								responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ResponseValidationModeActive{}
-								responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse{}
+								responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ResponseValidationModeActive{}
+								responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse{}
 								validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -38287,7 +39965,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementBlock{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementBlock{}
 											validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 											responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -38299,7 +39977,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementReport{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}
 											validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 											responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -38315,7 +39993,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								responseValidationModeChoiceTypeFound = true
 
 								if v.(bool) {
-									responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipResponseValidation{}
+									responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}
 									responseValidationModeChoiceInt.SkipResponseValidation = &ves_io_schema.Empty{}
 									validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 								}
@@ -38329,7 +40007,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								validationModeChoiceTypeFound = true
 
 								if v.(bool) {
-									validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+									validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipValidation{}
 									validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
 									validationMode.ValidationModeChoice = validationModeChoiceInt
 								}
@@ -38339,8 +40017,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
 
 								validationModeChoiceTypeFound = true
-								validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
-								validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+								validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ValidationModeActive{}
+								validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActive{}
 								validationMode.ValidationModeChoice = validationModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -38364,7 +40042,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementBlock{}
 											validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -38376,7 +40054,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 										validationEnforcementTypeTypeFound = true
 
 										if v.(bool) {
-											validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+											validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}
 											validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 											validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 										}
@@ -38398,8 +40076,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["validation_custom_list"]; ok && !isIntfNil(v) && !validationTargetChoiceTypeFound {
 
 				validationTargetChoiceTypeFound = true
-				validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationCustomList{}
-				validationTargetChoiceInt.ValidationCustomList = &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule{}
+				validationTargetChoiceInt := &ves_io_schema_views_common_waf.APISpecificationSettings_ValidationCustomList{}
+				validationTargetChoiceInt.ValidationCustomList = &ves_io_schema_views_common_waf.ValidateApiBySpecRule{}
 				apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -38409,7 +40087,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["fall_through_mode"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						fallThroughMode := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode{}
+						fallThroughMode := &ves_io_schema_views_common_waf.OpenApiFallThroughMode{}
 						validationTargetChoiceInt.ValidationCustomList.FallThroughMode = fallThroughMode
 						for _, set := range sl {
 							fallThroughModeMapStrToI := set.(map[string]interface{})
@@ -38421,7 +40099,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								fallThroughModeChoiceTypeFound = true
 
 								if v.(bool) {
-									fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeAllow{}
+									fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeAllow{}
 									fallThroughModeChoiceInt.FallThroughModeAllow = &ves_io_schema.Empty{}
 									fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 								}
@@ -38431,8 +40109,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := fallThroughModeMapStrToI["fall_through_mode_custom"]; ok && !isIntfNil(v) && !fallThroughModeChoiceTypeFound {
 
 								fallThroughModeChoiceTypeFound = true
-								fallThroughModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiFallThroughMode_FallThroughModeCustom{}
-								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_http_loadbalancer.CustomFallThroughMode{}
+								fallThroughModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiFallThroughMode_FallThroughModeCustom{}
+								fallThroughModeChoiceInt.FallThroughModeCustom = &ves_io_schema_views_common_waf.CustomFallThroughMode{}
 								fallThroughMode.FallThroughModeChoice = fallThroughModeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -38442,10 +40120,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
 
 										sl := v.([]interface{})
-										openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.FallThroughRule, len(sl))
+										openApiValidationRules := make([]*ves_io_schema_views_common_waf.FallThroughRule, len(sl))
 										fallThroughModeChoiceInt.FallThroughModeCustom.OpenApiValidationRules = openApiValidationRules
 										for i, set := range sl {
-											openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.FallThroughRule{}
+											openApiValidationRules[i] = &ves_io_schema_views_common_waf.FallThroughRule{}
 											openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 											actionChoiceTypeFound := false
@@ -38455,7 +40133,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionBlock{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionBlock{}
 													actionChoiceInt.ActionBlock = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -38467,7 +40145,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionReport{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionReport{}
 													actionChoiceInt.ActionReport = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -38479,7 +40157,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												actionChoiceTypeFound = true
 
 												if v.(bool) {
-													actionChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ActionSkip{}
+													actionChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ActionSkip{}
 													actionChoiceInt.ActionSkip = &ves_io_schema.Empty{}
 													openApiValidationRules[i].ActionChoice = actionChoiceInt
 												}
@@ -38491,8 +40169,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiEndpoint{}
-												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiEndpoint{}
+												conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
 												sl := v.(*schema.Set).List()
@@ -38522,7 +40200,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_ApiGroup{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_ApiGroup{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -38533,7 +40211,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 											if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 												conditionTypeChoiceTypeFound = true
-												conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.FallThroughRule_BasePath{}
+												conditionTypeChoiceInt := &ves_io_schema_views_common_waf.FallThroughRule_BasePath{}
 
 												openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -38580,10 +40258,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["open_api_validation_rules"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
-						openApiValidationRules := make([]*ves_io_schema_views_http_loadbalancer.OpenApiValidationRule, len(sl))
+						openApiValidationRules := make([]*ves_io_schema_views_common_waf.OpenApiValidationRule, len(sl))
 						validationTargetChoiceInt.ValidationCustomList.OpenApiValidationRules = openApiValidationRules
 						for i, set := range sl {
-							openApiValidationRules[i] = &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule{}
+							openApiValidationRules[i] = &ves_io_schema_views_common_waf.OpenApiValidationRule{}
 							openApiValidationRulesMapStrToI := set.(map[string]interface{})
 
 							conditionTypeChoiceTypeFound := false
@@ -38591,8 +40269,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiEndpoint{}
-								conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+								conditionTypeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_ApiEndpoint{}
+								conditionTypeChoiceInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -38622,7 +40300,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["api_group"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_ApiGroup{}
+								conditionTypeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_ApiGroup{}
 
 								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -38633,7 +40311,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !conditionTypeChoiceTypeFound {
 
 								conditionTypeChoiceTypeFound = true
-								conditionTypeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_BasePath{}
+								conditionTypeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_BasePath{}
 
 								openApiValidationRules[i].ConditionTypeChoice = conditionTypeChoiceInt
 
@@ -38648,7 +40326,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								domainChoiceTypeFound = true
 
 								if v.(bool) {
-									domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_AnyDomain{}
+									domainChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_AnyDomain{}
 									domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 									openApiValidationRules[i].DomainChoice = domainChoiceInt
 								}
@@ -38658,7 +40336,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationRule_SpecificDomain{}
+								domainChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationRule_SpecificDomain{}
 
 								openApiValidationRules[i].DomainChoice = domainChoiceInt
 
@@ -38693,7 +40371,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := openApiValidationRulesMapStrToI["validation_mode"]; ok && !isIntfNil(v) {
 
 								sl := v.(*schema.Set).List()
-								validationMode := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode{}
+								validationMode := &ves_io_schema_views_common_waf.OpenApiValidationMode{}
 								openApiValidationRules[i].ValidationMode = validationMode
 								for _, set := range sl {
 									validationModeMapStrToI := set.(map[string]interface{})
@@ -38703,8 +40381,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := validationModeMapStrToI["response_validation_mode_active"]; ok && !isIntfNil(v) && !responseValidationModeChoiceTypeFound {
 
 										responseValidationModeChoiceTypeFound = true
-										responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ResponseValidationModeActive{}
-										responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse{}
+										responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ResponseValidationModeActive{}
+										responseValidationModeChoiceInt.ResponseValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse{}
 										validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 
 										sl := v.(*schema.Set).List()
@@ -38728,7 +40406,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementBlock{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementBlock{}
 													validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 													responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -38740,7 +40418,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActiveResponse_EnforcementReport{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActiveResponse_EnforcementReport{}
 													validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 													responseValidationModeChoiceInt.ResponseValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -38756,7 +40434,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 										responseValidationModeChoiceTypeFound = true
 
 										if v.(bool) {
-											responseValidationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipResponseValidation{}
+											responseValidationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipResponseValidation{}
 											responseValidationModeChoiceInt.SkipResponseValidation = &ves_io_schema.Empty{}
 											validationMode.ResponseValidationModeChoice = responseValidationModeChoiceInt
 										}
@@ -38770,7 +40448,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 										validationModeChoiceTypeFound = true
 
 										if v.(bool) {
-											validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_SkipValidation{}
+											validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_SkipValidation{}
 											validationModeChoiceInt.SkipValidation = &ves_io_schema.Empty{}
 											validationMode.ValidationModeChoice = validationModeChoiceInt
 										}
@@ -38780,8 +40458,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := validationModeMapStrToI["validation_mode_active"]; ok && !isIntfNil(v) && !validationModeChoiceTypeFound {
 
 										validationModeChoiceTypeFound = true
-										validationModeChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationMode_ValidationModeActive{}
-										validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive{}
+										validationModeChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationMode_ValidationModeActive{}
+										validationModeChoiceInt.ValidationModeActive = &ves_io_schema_views_common_waf.OpenApiValidationModeActive{}
 										validationMode.ValidationModeChoice = validationModeChoiceInt
 
 										sl := v.(*schema.Set).List()
@@ -38805,7 +40483,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementBlock{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementBlock{}
 													validationEnforcementTypeInt.EnforcementBlock = &ves_io_schema.Empty{}
 													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -38817,7 +40495,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												validationEnforcementTypeTypeFound = true
 
 												if v.(bool) {
-													validationEnforcementTypeInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationModeActive_EnforcementReport{}
+													validationEnforcementTypeInt := &ves_io_schema_views_common_waf.OpenApiValidationModeActive_EnforcementReport{}
 													validationEnforcementTypeInt.EnforcementReport = &ves_io_schema.Empty{}
 													validationModeChoiceInt.ValidationModeActive.ValidationEnforcementType = validationEnforcementTypeInt
 												}
@@ -38843,7 +40521,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule_OversizedBodyFailValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.ValidateApiBySpecRule_OversizedBodyFailValidation{}
 							oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationCustomList.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -38855,7 +40533,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						oversizedBodyChoiceTypeFound = true
 
 						if v.(bool) {
-							oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidateApiBySpecRule_OversizedBodySkipValidation{}
+							oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.ValidateApiBySpecRule_OversizedBodySkipValidation{}
 							oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 							validationTargetChoiceInt.ValidationCustomList.OversizedBodyChoice = oversizedBodyChoiceInt
 						}
@@ -38865,7 +40543,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["settings"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						settings := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings{}
+						settings := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings{}
 						validationTargetChoiceInt.ValidationCustomList.Settings = settings
 						for _, set := range sl {
 							settingsMapStrToI := set.(map[string]interface{})
@@ -38877,7 +40555,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodyFailValidation{}
 									oversizedBodyChoiceInt.OversizedBodyFailValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -38889,7 +40567,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								oversizedBodyChoiceTypeFound = true
 
 								if v.(bool) {
-									oversizedBodyChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
+									oversizedBodyChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_OversizedBodySkipValidation{}
 									oversizedBodyChoiceInt.OversizedBodySkipValidation = &ves_io_schema.Empty{}
 									settings.OversizedBodyChoice = oversizedBodyChoiceInt
 								}
@@ -38901,8 +40579,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := settingsMapStrToI["property_validation_settings_custom"]; ok && !isIntfNil(v) && !propertyValidationSettingsChoiceTypeFound {
 
 								propertyValidationSettingsChoiceTypeFound = true
-								propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
-								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_http_loadbalancer.ValidationPropertySetting{}
+								propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsCustom{}
+								propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom = &ves_io_schema_views_common_waf.ValidationPropertySetting{}
 								settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 
 								sl := v.(*schema.Set).List()
@@ -38912,7 +40590,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["headers"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										headers := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders{}
+										headers := &ves_io_schema_views_common_waf.ValidationSettingForHeaders{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.Headers = headers
 										for _, set := range sl {
 											headersMapStrToI := set.(map[string]interface{})
@@ -38924,7 +40602,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_AllowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_AllowAdditionalHeaders{}
 													additionalHeadersChoiceInt.AllowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -38936,7 +40614,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalHeadersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalHeadersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
+													additionalHeadersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForHeaders_DisallowAdditionalHeaders{}
 													additionalHeadersChoiceInt.DisallowAdditionalHeaders = &ves_io_schema.Empty{}
 													headers.AdditionalHeadersChoice = additionalHeadersChoiceInt
 												}
@@ -38950,7 +40628,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									if v, ok := cs["query_parameters"]; ok && !isIntfNil(v) {
 
 										sl := v.(*schema.Set).List()
-										queryParameters := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters{}
+										queryParameters := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters{}
 										propertyValidationSettingsChoiceInt.PropertyValidationSettingsCustom.QueryParameters = queryParameters
 										for _, set := range sl {
 											queryParametersMapStrToI := set.(map[string]interface{})
@@ -38962,7 +40640,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_AllowAdditionalParameters{}
 													additionalParametersChoiceInt.AllowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -38974,7 +40652,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 												additionalParametersChoiceTypeFound = true
 
 												if v.(bool) {
-													additionalParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
+													additionalParametersChoiceInt := &ves_io_schema_views_common_waf.ValidationSettingForQueryParameters_DisallowAdditionalParameters{}
 													additionalParametersChoiceInt.DisallowAdditionalParameters = &ves_io_schema.Empty{}
 													queryParameters.AdditionalParametersChoice = additionalParametersChoiceInt
 												}
@@ -38994,7 +40672,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								propertyValidationSettingsChoiceTypeFound = true
 
 								if v.(bool) {
-									propertyValidationSettingsChoiceInt := &ves_io_schema_views_http_loadbalancer.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
+									propertyValidationSettingsChoiceInt := &ves_io_schema_views_common_waf.OpenApiValidationCommonSettings_PropertyValidationSettingsDefault{}
 									propertyValidationSettingsChoiceInt.PropertyValidationSettingsDefault = &ves_io_schema.Empty{}
 									settings.PropertyValidationSettingsChoice = propertyValidationSettingsChoiceInt
 								}
@@ -39014,7 +40692,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				validationTargetChoiceTypeFound = true
 
 				if v.(bool) {
-					validationTargetChoiceInt := &ves_io_schema_views_http_loadbalancer.APISpecificationSettings_ValidationDisabled{}
+					validationTargetChoiceInt := &ves_io_schema_views_common_waf.APISpecificationSettings_ValidationDisabled{}
 					validationTargetChoiceInt.ValidationDisabled = &ves_io_schema.Empty{}
 					apiDefinitionChoiceInt.ApiSpecification.ValidationTargetChoice = validationTargetChoiceInt
 				}
@@ -39055,7 +40733,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		apiDiscoveryChoiceTypeFound = true
 		apiDiscoveryChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableApiDiscovery{}
-		apiDiscoveryChoiceInt.EnableApiDiscovery = &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting{}
+		apiDiscoveryChoiceInt.EnableApiDiscovery = &ves_io_schema_views_common_waf.ApiDiscoverySetting{}
 		updateSpec.ApiDiscoveryChoice = apiDiscoveryChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -39085,7 +40763,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				learnFromRedirectTrafficTypeFound = true
 
 				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
+					learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
 					learnFromRedirectTrafficInt.DisableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 					apiDiscoveryChoiceInt.EnableApiDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
@@ -39097,7 +40775,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				learnFromRedirectTrafficTypeFound = true
 
 				if v.(bool) {
-					learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
+					learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 					learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 					apiDiscoveryChoiceInt.EnableApiDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 				}
@@ -39527,7 +41205,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("api_protection_rules"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		apiProtectionRules := &ves_io_schema_views_http_loadbalancer.APIProtectionRules{}
+		apiProtectionRules := &ves_io_schema_views_common_waf.APIProtectionRules{}
 		updateSpec.ApiProtectionRules = apiProtectionRules
 		for _, set := range sl {
 			apiProtectionRulesMapStrToI := set.(map[string]interface{})
@@ -39535,16 +41213,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := apiProtectionRulesMapStrToI["api_endpoint_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule, len(sl))
+				apiEndpointRules := make([]*ves_io_schema_views_common_waf.APIEndpointProtectionRule, len(sl))
 				apiProtectionRules.ApiEndpointRules = apiEndpointRules
 				for i, set := range sl {
-					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule{}
+					apiEndpointRules[i] = &ves_io_schema_views_common_waf.APIEndpointProtectionRule{}
 					apiEndpointRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiEndpointRulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						action := &ves_io_schema_views_common_waf.APIProtectionRuleAction{}
 						apiEndpointRules[i].Action = action
 						for _, set := range sl {
 							actionMapStrToI := set.(map[string]interface{})
@@ -39556,7 +41234,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Allow{}
 									actionInt.Allow = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -39568,7 +41246,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Deny{}
 									actionInt.Deny = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -39900,7 +41578,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.APIEndpointProtectionRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							apiEndpointRules[i].DomainChoice = domainChoiceInt
 						}
@@ -39910,7 +41588,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIEndpointProtectionRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.APIEndpointProtectionRule_SpecificDomain{}
 
 						apiEndpointRules[i].DomainChoice = domainChoiceInt
 
@@ -40156,6 +41834,98 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -40270,16 +42040,16 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := apiProtectionRulesMapStrToI["api_groups_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				apiGroupsRules := make([]*ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule, len(sl))
+				apiGroupsRules := make([]*ves_io_schema_views_common_waf.APIGroupProtectionRule, len(sl))
 				apiProtectionRules.ApiGroupsRules = apiGroupsRules
 				for i, set := range sl {
-					apiGroupsRules[i] = &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule{}
+					apiGroupsRules[i] = &ves_io_schema_views_common_waf.APIGroupProtectionRule{}
 					apiGroupsRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiGroupsRulesMapStrToI["action"]; ok && !isIntfNil(v) {
 
 						sl := v.(*schema.Set).List()
-						action := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction{}
+						action := &ves_io_schema_views_common_waf.APIProtectionRuleAction{}
 						apiGroupsRules[i].Action = action
 						for _, set := range sl {
 							actionMapStrToI := set.(map[string]interface{})
@@ -40291,7 +42061,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Allow{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Allow{}
 									actionInt.Allow = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -40303,7 +42073,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								actionTypeFound = true
 
 								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.APIProtectionRuleAction_Deny{}
+									actionInt := &ves_io_schema_views_common_waf.APIProtectionRuleAction_Deny{}
 									actionInt.Deny = &ves_io_schema.Empty{}
 									action.Action = actionInt
 								}
@@ -40613,7 +42383,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.APIGroupProtectionRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							apiGroupsRules[i].DomainChoice = domainChoiceInt
 						}
@@ -40623,7 +42393,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := apiGroupsRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.APIGroupProtectionRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.APIGroupProtectionRule_SpecificDomain{}
 
 						apiGroupsRules[i].DomainChoice = domainChoiceInt
 
@@ -40869,6 +42639,98 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -40987,10 +42849,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("blocked_clients"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		blockedClients := make([]*ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule, len(sl))
+		blockedClients := make([]*ves_io_schema_views_common_waf.SimpleClientSrcRule, len(sl))
 		updateSpec.BlockedClients = blockedClients
 		for i, set := range sl {
-			blockedClients[i] = &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule{}
+			blockedClients[i] = &ves_io_schema_views_common_waf.SimpleClientSrcRule{}
 			blockedClientsMapStrToI := set.(map[string]interface{})
 
 			actionChoiceTypeFound := false
@@ -41000,7 +42862,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_BotSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_BotSkipProcessing{}
 					actionChoiceInt.BotSkipProcessing = &ves_io_schema.Empty{}
 					blockedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -41012,7 +42874,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_SkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_SkipProcessing{}
 					actionChoiceInt.SkipProcessing = &ves_io_schema.Empty{}
 					blockedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -41024,7 +42886,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_WafSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_WafSkipProcessing{}
 					actionChoiceInt.WafSkipProcessing = &ves_io_schema.Empty{}
 					blockedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -41033,9 +42895,9 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			if v, ok := blockedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
 
-				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				actionsList := []ves_io_schema_views_common_waf.ClientSrcRuleAction{}
 				for _, j := range v.([]interface{}) {
-					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+					actionsList = append(actionsList, ves_io_schema_views_common_waf.ClientSrcRuleAction(ves_io_schema_views_common_waf.ClientSrcRuleAction_value[j.(string)]))
 				}
 				blockedClients[i].Actions = actionsList
 
@@ -41046,7 +42908,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["as_number"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_AsNumber{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_AsNumber{}
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -41057,8 +42919,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
-				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_common_waf.HttpHeaderMatcherList{}
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -41128,7 +42990,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["ip_prefix"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_IpPrefix{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_IpPrefix{}
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -41139,7 +43001,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := blockedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_UserIdentifier{}
 
 				blockedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -44189,7 +46051,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		challengeTypeTypeFound = true
 		challengeTypeInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableChallenge{}
-		challengeTypeInt.EnableChallenge = &ves_io_schema_views_http_loadbalancer.EnableChallenge{}
+		challengeTypeInt.EnableChallenge = &ves_io_schema_views_common_waf.EnableChallenge{}
 		updateSpec.ChallengeType = challengeTypeInt
 
 		sl := v.(*schema.Set).List()
@@ -44201,7 +46063,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["captcha_challenge_parameters"]; ok && !isIntfNil(v) && !captchaChallengeParametersChoiceTypeFound {
 
 				captchaChallengeParametersChoiceTypeFound = true
-				captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_CaptchaChallengeParameters{}
+				captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_CaptchaChallengeParameters{}
 				captchaChallengeParametersChoiceInt.CaptchaChallengeParameters = &ves_io_schema_virtual_host.CaptchaChallengeType{}
 				challengeTypeInt.EnableChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 
@@ -44230,7 +46092,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				captchaChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_DefaultCaptchaChallengeParameters{}
+					captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_DefaultCaptchaChallengeParameters{}
 					captchaChallengeParametersChoiceInt.DefaultCaptchaChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.EnableChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 				}
@@ -44244,7 +46106,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				jsChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_DefaultJsChallengeParameters{}
+					jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_DefaultJsChallengeParameters{}
 					jsChallengeParametersChoiceInt.DefaultJsChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.EnableChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 				}
@@ -44254,7 +46116,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["js_challenge_parameters"]; ok && !isIntfNil(v) && !jsChallengeParametersChoiceTypeFound {
 
 				jsChallengeParametersChoiceTypeFound = true
-				jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_JsChallengeParameters{}
+				jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_JsChallengeParameters{}
 				jsChallengeParametersChoiceInt.JsChallengeParameters = &ves_io_schema_virtual_host.JavascriptChallengeType{}
 				challengeTypeInt.EnableChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 
@@ -44291,7 +46153,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				maliciousUserMitigationChoiceTypeFound = true
 
 				if v.(bool) {
-					maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_DefaultMitigationSettings{}
+					maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_DefaultMitigationSettings{}
 					maliciousUserMitigationChoiceInt.DefaultMitigationSettings = &ves_io_schema.Empty{}
 					challengeTypeInt.EnableChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 				}
@@ -44301,7 +46163,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["malicious_user_mitigation"]; ok && !isIntfNil(v) && !maliciousUserMitigationChoiceTypeFound {
 
 				maliciousUserMitigationChoiceTypeFound = true
-				maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableChallenge_MaliciousUserMitigation{}
+				maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.EnableChallenge_MaliciousUserMitigation{}
 				maliciousUserMitigationChoiceInt.MaliciousUserMitigation = &ves_io_schema_views.ObjectRefType{}
 				challengeTypeInt.EnableChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 
@@ -44384,7 +46246,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		challengeTypeTypeFound = true
 		challengeTypeInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_PolicyBasedChallenge{}
-		challengeTypeInt.PolicyBasedChallenge = &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge{}
+		challengeTypeInt.PolicyBasedChallenge = &ves_io_schema_views_common_waf.PolicyBasedChallenge{}
 		updateSpec.ChallengeType = challengeTypeInt
 
 		sl := v.(*schema.Set).List()
@@ -44396,7 +46258,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["captcha_challenge_parameters"]; ok && !isIntfNil(v) && !captchaChallengeParametersChoiceTypeFound {
 
 				captchaChallengeParametersChoiceTypeFound = true
-				captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_CaptchaChallengeParameters{}
+				captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_CaptchaChallengeParameters{}
 				captchaChallengeParametersChoiceInt.CaptchaChallengeParameters = &ves_io_schema_virtual_host.CaptchaChallengeType{}
 				challengeTypeInt.PolicyBasedChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 
@@ -44425,7 +46287,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				captchaChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					captchaChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultCaptchaChallengeParameters{}
+					captchaChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultCaptchaChallengeParameters{}
 					captchaChallengeParametersChoiceInt.DefaultCaptchaChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.CaptchaChallengeParametersChoice = captchaChallengeParametersChoiceInt
 				}
@@ -44439,7 +46301,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				challengeChoiceTypeFound = true
 
 				if v.(bool) {
-					challengeChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_AlwaysEnableCaptchaChallenge{}
+					challengeChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_AlwaysEnableCaptchaChallenge{}
 					challengeChoiceInt.AlwaysEnableCaptchaChallenge = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.ChallengeChoice = challengeChoiceInt
 				}
@@ -44451,7 +46313,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				challengeChoiceTypeFound = true
 
 				if v.(bool) {
-					challengeChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_AlwaysEnableJsChallenge{}
+					challengeChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_AlwaysEnableJsChallenge{}
 					challengeChoiceInt.AlwaysEnableJsChallenge = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.ChallengeChoice = challengeChoiceInt
 				}
@@ -44463,7 +46325,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				challengeChoiceTypeFound = true
 
 				if v.(bool) {
-					challengeChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_NoChallenge{}
+					challengeChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_NoChallenge{}
 					challengeChoiceInt.NoChallenge = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.ChallengeChoice = challengeChoiceInt
 				}
@@ -44477,7 +46339,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				jsChallengeParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultJsChallengeParameters{}
+					jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultJsChallengeParameters{}
 					jsChallengeParametersChoiceInt.DefaultJsChallengeParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 				}
@@ -44487,7 +46349,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["js_challenge_parameters"]; ok && !isIntfNil(v) && !jsChallengeParametersChoiceTypeFound {
 
 				jsChallengeParametersChoiceTypeFound = true
-				jsChallengeParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_JsChallengeParameters{}
+				jsChallengeParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_JsChallengeParameters{}
 				jsChallengeParametersChoiceInt.JsChallengeParameters = &ves_io_schema_virtual_host.JavascriptChallengeType{}
 				challengeTypeInt.PolicyBasedChallenge.JsChallengeParametersChoice = jsChallengeParametersChoiceInt
 
@@ -44524,7 +46386,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				maliciousUserMitigationChoiceTypeFound = true
 
 				if v.(bool) {
-					maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultMitigationSettings{}
+					maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultMitigationSettings{}
 					maliciousUserMitigationChoiceInt.DefaultMitigationSettings = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 				}
@@ -44534,7 +46396,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["malicious_user_mitigation"]; ok && !isIntfNil(v) && !maliciousUserMitigationChoiceTypeFound {
 
 				maliciousUserMitigationChoiceTypeFound = true
-				maliciousUserMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_MaliciousUserMitigation{}
+				maliciousUserMitigationChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_MaliciousUserMitigation{}
 				maliciousUserMitigationChoiceInt.MaliciousUserMitigation = &ves_io_schema_views.ObjectRefType{}
 				challengeTypeInt.PolicyBasedChallenge.MaliciousUserMitigationChoice = maliciousUserMitigationChoiceInt
 
@@ -44567,7 +46429,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["rule_list"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				ruleList := &ves_io_schema_views_http_loadbalancer.ChallengeRuleList{}
+				ruleList := &ves_io_schema_views_common_waf.ChallengeRuleList{}
 				challengeTypeInt.PolicyBasedChallenge.RuleList = ruleList
 				for _, set := range sl {
 					ruleListMapStrToI := set.(map[string]interface{})
@@ -44575,10 +46437,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := ruleListMapStrToI["rules"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
-						rules := make([]*ves_io_schema_views_http_loadbalancer.ChallengeRule, len(sl))
+						rules := make([]*ves_io_schema_views_common_waf.ChallengeRule, len(sl))
 						ruleList.Rules = rules
 						for i, set := range sl {
-							rules[i] = &ves_io_schema_views_http_loadbalancer.ChallengeRule{}
+							rules[i] = &ves_io_schema_views_common_waf.ChallengeRule{}
 							rulesMapStrToI := set.(map[string]interface{})
 
 							if v, ok := rulesMapStrToI["metadata"]; ok && !isIntfNil(v) {
@@ -45557,7 +47419,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				temporaryBlockingParametersChoiceTypeFound = true
 
 				if v.(bool) {
-					temporaryBlockingParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_DefaultTemporaryBlockingParameters{}
+					temporaryBlockingParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_DefaultTemporaryBlockingParameters{}
 					temporaryBlockingParametersChoiceInt.DefaultTemporaryBlockingParameters = &ves_io_schema.Empty{}
 					challengeTypeInt.PolicyBasedChallenge.TemporaryBlockingParametersChoice = temporaryBlockingParametersChoiceInt
 				}
@@ -45567,7 +47429,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["temporary_user_blocking"]; ok && !isIntfNil(v) && !temporaryBlockingParametersChoiceTypeFound {
 
 				temporaryBlockingParametersChoiceTypeFound = true
-				temporaryBlockingParametersChoiceInt := &ves_io_schema_views_http_loadbalancer.PolicyBasedChallenge_TemporaryUserBlocking{}
+				temporaryBlockingParametersChoiceInt := &ves_io_schema_views_common_waf.PolicyBasedChallenge_TemporaryUserBlocking{}
 				temporaryBlockingParametersChoiceInt.TemporaryUserBlocking = &ves_io_schema_virtual_host.TemporaryUserBlockingType{}
 				challengeTypeInt.PolicyBasedChallenge.TemporaryBlockingParametersChoice = temporaryBlockingParametersChoiceInt
 
@@ -46384,111 +48246,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						path.PathMatch = pathMatchInt
 
 						pathMatchInt.Regex = v.(string)
-
-					}
-
-				}
-
-			}
-
-		}
-
-	}
-
-	ddosDetectionChoiceTypeFound := false
-
-	if v, ok := d.GetOk("disable_ddos_detection"); ok && !ddosDetectionChoiceTypeFound {
-
-		ddosDetectionChoiceTypeFound = true
-
-		if v.(bool) {
-			ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableDdosDetection{}
-			ddosDetectionChoiceInt.DisableDdosDetection = &ves_io_schema.Empty{}
-			updateSpec.DdosDetectionChoice = ddosDetectionChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("enable_ddos_detection"); ok && !ddosDetectionChoiceTypeFound {
-
-		ddosDetectionChoiceTypeFound = true
-		ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableDdosDetection{}
-		ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
-		updateSpec.DdosDetectionChoice = ddosDetectionChoiceInt
-
-		sl := v.(*schema.Set).List()
-		for _, set := range sl {
-			cs := set.(map[string]interface{})
-
-			autoMitigationChoiceTypeFound := false
-
-			if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-				autoMitigationChoiceTypeFound = true
-
-				if v.(bool) {
-					autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
-					autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
-					ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-				autoMitigationChoiceTypeFound = true
-				autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
-				autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema_views_http_loadbalancer.AutoMitigationAction{}
-				ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					actionTypeFound := false
-
-					if v, ok := cs["block"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-						actionTypeFound = true
-
-						if v.(bool) {
-							actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_Block{}
-							actionInt.Block = &ves_io_schema.Empty{}
-							autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-						}
-
-					}
-
-					if v, ok := cs["js_challenge"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-						actionTypeFound = true
-						actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_JsChallenge{}
-						actionInt.JsChallenge = &ves_io_schema_virtual_host.JavascriptChallengeType{}
-						autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
-
-								actionInt.JsChallenge.CookieExpiry = uint32(v.(int))
-
-							}
-
-							if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
-
-								actionInt.JsChallenge.CustomPage = v.(string)
-
-							}
-
-							if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
-
-								actionInt.JsChallenge.JsScriptDelay = uint32(v.(int))
-
-							}
-
-						}
 
 					}
 
@@ -47337,7 +49094,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		ipReputationChoiceTypeFound = true
 		ipReputationChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableIpReputation{}
-		ipReputationChoiceInt.EnableIpReputation = &ves_io_schema_views_http_loadbalancer.IPThreatCategoryListType{}
+		ipReputationChoiceInt.EnableIpReputation = &ves_io_schema_views_common_waf.IPThreatCategoryListType{}
 		updateSpec.IpReputationChoice = ipReputationChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -47361,7 +49118,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("jwt_validation"); ok && !isIntfNil(v) {
 
 		sl := v.(*schema.Set).List()
-		jwtValidation := &ves_io_schema_views_http_loadbalancer.JWTValidation{}
+		jwtValidation := &ves_io_schema_views_common_waf.JWTValidation{}
 		updateSpec.JwtValidation = jwtValidation
 		for _, set := range sl {
 			jwtValidationMapStrToI := set.(map[string]interface{})
@@ -47409,7 +49166,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["auth_server_uri"]; ok && !isIntfNil(v) && !jwksConfigurationTypeFound {
 
 				jwksConfigurationTypeFound = true
-				jwksConfigurationInt := &ves_io_schema_views_http_loadbalancer.JWTValidation_AuthServerUri{}
+				jwksConfigurationInt := &ves_io_schema_views_common_waf.JWTValidation_AuthServerUri{}
 
 				jwtValidation.JwksConfiguration = jwksConfigurationInt
 
@@ -47420,7 +49177,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["jwks"]; ok && !isIntfNil(v) && !jwksConfigurationTypeFound {
 
 				jwksConfigurationTypeFound = true
-				jwksConfigurationInt := &ves_io_schema_views_http_loadbalancer.JWTValidation_Jwks{}
+				jwksConfigurationInt := &ves_io_schema_views_common_waf.JWTValidation_Jwks{}
 
 				jwtValidation.JwksConfiguration = jwksConfigurationInt
 
@@ -47431,8 +49188,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["jwks_config"]; ok && !isIntfNil(v) && !jwksConfigurationTypeFound {
 
 				jwksConfigurationTypeFound = true
-				jwksConfigurationInt := &ves_io_schema_views_http_loadbalancer.JWTValidation_JwksConfig{}
-				jwksConfigurationInt.JwksConfig = &ves_io_schema_views_http_loadbalancer.JWKS{}
+				jwksConfigurationInt := &ves_io_schema_views_common_waf.JWTValidation_JwksConfig{}
+				jwksConfigurationInt.JwksConfig = &ves_io_schema_views_common_waf.JWKS{}
 				jwtValidation.JwksConfiguration = jwksConfigurationInt
 
 				sl := v.(*schema.Set).List()
@@ -47452,7 +49209,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["mandatory_claims"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				mandatoryClaims := &ves_io_schema_views_http_loadbalancer.MandatoryClaims{}
+				mandatoryClaims := &ves_io_schema_views_common_waf.MandatoryClaims{}
 				jwtValidation.MandatoryClaims = mandatoryClaims
 				for _, set := range sl {
 					mandatoryClaimsMapStrToI := set.(map[string]interface{})
@@ -47472,7 +49229,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["reserved_claims"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				reservedClaims := &ves_io_schema_views_http_loadbalancer.ReservedClaims{}
+				reservedClaims := &ves_io_schema_views_common_waf.ReservedClaims{}
 				jwtValidation.ReservedClaims = reservedClaims
 				for _, set := range sl {
 					reservedClaimsMapStrToI := set.(map[string]interface{})
@@ -47482,8 +49239,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := reservedClaimsMapStrToI["audience"]; ok && !isIntfNil(v) && !audienceValidationTypeFound {
 
 						audienceValidationTypeFound = true
-						audienceValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_Audience{}
-						audienceValidationInt.Audience = &ves_io_schema_views_http_loadbalancer.Audiences{}
+						audienceValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_Audience{}
+						audienceValidationInt.Audience = &ves_io_schema_views_common_waf.Audiences{}
 						reservedClaims.AudienceValidation = audienceValidationInt
 
 						sl := v.(*schema.Set).List()
@@ -47509,7 +49266,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						audienceValidationTypeFound = true
 
 						if v.(bool) {
-							audienceValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_AudienceDisable{}
+							audienceValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_AudienceDisable{}
 							audienceValidationInt.AudienceDisable = &ves_io_schema.Empty{}
 							reservedClaims.AudienceValidation = audienceValidationInt
 						}
@@ -47521,7 +49278,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := reservedClaimsMapStrToI["issuer"]; ok && !isIntfNil(v) && !issuerValidationTypeFound {
 
 						issuerValidationTypeFound = true
-						issuerValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_Issuer{}
+						issuerValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_Issuer{}
 
 						reservedClaims.IssuerValidation = issuerValidationInt
 
@@ -47534,7 +49291,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						issuerValidationTypeFound = true
 
 						if v.(bool) {
-							issuerValidationInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_IssuerDisable{}
+							issuerValidationInt := &ves_io_schema_views_common_waf.ReservedClaims_IssuerDisable{}
 							issuerValidationInt.IssuerDisable = &ves_io_schema.Empty{}
 							reservedClaims.IssuerValidation = issuerValidationInt
 						}
@@ -47548,7 +49305,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						validatePeriodTypeFound = true
 
 						if v.(bool) {
-							validatePeriodInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_ValidatePeriodDisable{}
+							validatePeriodInt := &ves_io_schema_views_common_waf.ReservedClaims_ValidatePeriodDisable{}
 							validatePeriodInt.ValidatePeriodDisable = &ves_io_schema.Empty{}
 							reservedClaims.ValidatePeriod = validatePeriodInt
 						}
@@ -47560,7 +49317,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						validatePeriodTypeFound = true
 
 						if v.(bool) {
-							validatePeriodInt := &ves_io_schema_views_http_loadbalancer.ReservedClaims_ValidatePeriodEnable{}
+							validatePeriodInt := &ves_io_schema_views_common_waf.ReservedClaims_ValidatePeriodEnable{}
 							validatePeriodInt.ValidatePeriodEnable = &ves_io_schema.Empty{}
 							reservedClaims.ValidatePeriod = validatePeriodInt
 						}
@@ -47574,7 +49331,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["target"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				target := &ves_io_schema_views_http_loadbalancer.Target{}
+				target := &ves_io_schema_views_common_waf.Target{}
 				jwtValidation.Target = target
 				for _, set := range sl {
 					targetMapStrToI := set.(map[string]interface{})
@@ -47586,7 +49343,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						targetTypeFound = true
 
 						if v.(bool) {
-							targetInt := &ves_io_schema_views_http_loadbalancer.Target_AllEndpoint{}
+							targetInt := &ves_io_schema_views_common_waf.Target_AllEndpoint{}
 							targetInt.AllEndpoint = &ves_io_schema.Empty{}
 							target.Target = targetInt
 						}
@@ -47596,8 +49353,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := targetMapStrToI["api_groups"]; ok && !isIntfNil(v) && !targetTypeFound {
 
 						targetTypeFound = true
-						targetInt := &ves_io_schema_views_http_loadbalancer.Target_ApiGroups{}
-						targetInt.ApiGroups = &ves_io_schema_views_http_loadbalancer.APIGroups{}
+						targetInt := &ves_io_schema_views_common_waf.Target_ApiGroups{}
+						targetInt.ApiGroups = &ves_io_schema_views_common_waf.APIGroups{}
 						target.Target = targetInt
 
 						sl := v.(*schema.Set).List()
@@ -47621,8 +49378,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := targetMapStrToI["base_paths"]; ok && !isIntfNil(v) && !targetTypeFound {
 
 						targetTypeFound = true
-						targetInt := &ves_io_schema_views_http_loadbalancer.Target_BasePaths{}
-						targetInt.BasePaths = &ves_io_schema_views_http_loadbalancer.BasePathsType{}
+						targetInt := &ves_io_schema_views_common_waf.Target_BasePaths{}
+						targetInt.BasePaths = &ves_io_schema_views_common_waf.BasePathsType{}
 						target.Target = targetInt
 
 						sl := v.(*schema.Set).List()
@@ -47650,7 +49407,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := jwtValidationMapStrToI["token_location"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
-				tokenLocation := &ves_io_schema_views_http_loadbalancer.TokenLocation{}
+				tokenLocation := &ves_io_schema_views_common_waf.TokenLocation{}
 				jwtValidation.TokenLocation = tokenLocation
 				for _, set := range sl {
 					tokenLocationMapStrToI := set.(map[string]interface{})
@@ -47662,7 +49419,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						tokenLocationTypeFound = true
 
 						if v.(bool) {
-							tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_BearerToken{}
+							tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_BearerToken{}
 							tokenLocationInt.BearerToken = &ves_io_schema.Empty{}
 							tokenLocation.TokenLocation = tokenLocationInt
 						}
@@ -47672,7 +49429,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := tokenLocationMapStrToI["cookie"]; ok && !isIntfNil(v) && !tokenLocationTypeFound {
 
 						tokenLocationTypeFound = true
-						tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_Cookie{}
+						tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_Cookie{}
 
 						tokenLocation.TokenLocation = tokenLocationInt
 
@@ -47683,7 +49440,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := tokenLocationMapStrToI["header"]; ok && !isIntfNil(v) && !tokenLocationTypeFound {
 
 						tokenLocationTypeFound = true
-						tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_Header{}
+						tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_Header{}
 
 						tokenLocation.TokenLocation = tokenLocationInt
 
@@ -47694,7 +49451,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := tokenLocationMapStrToI["query_param"]; ok && !isIntfNil(v) && !tokenLocationTypeFound {
 
 						tokenLocationTypeFound = true
-						tokenLocationInt := &ves_io_schema_views_http_loadbalancer.TokenLocation_QueryParam{}
+						tokenLocationInt := &ves_io_schema_views_common_waf.TokenLocation_QueryParam{}
 
 						tokenLocation.TokenLocation = tokenLocationInt
 
@@ -47899,6 +49656,18 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
 					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 						headerTransformationChoiceTypeFound = true
@@ -47940,11 +49709,76 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
 
 						httpProtocolChoiceTypeFound = true
+						httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+						httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema_virtual_host.Http1ProtocolOptions{}
+						httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 
-						if v.(bool) {
-							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
-							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
-							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								headerTransformation := &ves_io_schema.HeaderTransformationType{}
+								httpProtocolChoiceInt.HttpProtocolEnableV1Only.HeaderTransformation = headerTransformation
+								for _, set := range sl {
+									headerTransformationMapStrToI := set.(map[string]interface{})
+
+									headerTransformationChoiceTypeFound := false
+
+									if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+											headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+											headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+											headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+											headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -48946,6 +50780,18 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 					}
 
+					if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
 					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 						headerTransformationChoiceTypeFound = true
@@ -48987,11 +50833,76 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
 
 						httpProtocolChoiceTypeFound = true
+						httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+						httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema_virtual_host.Http1ProtocolOptions{}
+						httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 
-						if v.(bool) {
-							httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
-							httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema.Empty{}
-							httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								headerTransformation := &ves_io_schema.HeaderTransformationType{}
+								httpProtocolChoiceInt.HttpProtocolEnableV1Only.HeaderTransformation = headerTransformation
+								for _, set := range sl {
+									headerTransformationMapStrToI := set.(map[string]interface{})
+
+									headerTransformationChoiceTypeFound := false
+
+									if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+											headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+											headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+											headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+											headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -49471,7 +51382,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 				apiDiscoveryChoiceTypeFound = true
 				apiDiscoveryChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDiscovery{}
-				apiDiscoveryChoiceInt.EnableDiscovery = &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting{}
+				apiDiscoveryChoiceInt.EnableDiscovery = &ves_io_schema_views_common_waf.ApiDiscoverySetting{}
 				mlConfigChoiceInt.SingleLbApp.ApiDiscoveryChoice = apiDiscoveryChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -49501,7 +51412,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						learnFromRedirectTrafficTypeFound = true
 
 						if v.(bool) {
-							learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
+							learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_DisableLearnFromRedirectTraffic{}
 							learnFromRedirectTrafficInt.DisableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 							apiDiscoveryChoiceInt.EnableDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 						}
@@ -49513,7 +51424,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						learnFromRedirectTrafficTypeFound = true
 
 						if v.(bool) {
-							learnFromRedirectTrafficInt := &ves_io_schema_views_http_loadbalancer.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
+							learnFromRedirectTrafficInt := &ves_io_schema_views_common_waf.ApiDiscoverySetting_EnableLearnFromRedirectTraffic{}
 							learnFromRedirectTrafficInt.EnableLearnFromRedirectTraffic = &ves_io_schema.Empty{}
 							apiDiscoveryChoiceInt.EnableDiscovery.LearnFromRedirectTraffic = learnFromRedirectTrafficInt
 						}
@@ -49926,111 +51837,6 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 									if w, ok := disabledBuiltInRulesMapStrToI["name"]; ok && !isIntfNil(w) {
 										disabledBuiltInRules[i].Name = w.(string)
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-
-			}
-
-			ddosDetectionChoiceTypeFound := false
-
-			if v, ok := cs["disable_ddos_detection"]; ok && !isIntfNil(v) && !ddosDetectionChoiceTypeFound {
-
-				ddosDetectionChoiceTypeFound = true
-
-				if v.(bool) {
-					ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_DisableDdosDetection{}
-					ddosDetectionChoiceInt.DisableDdosDetection = &ves_io_schema.Empty{}
-					mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
-				}
-
-			}
-
-			if v, ok := cs["enable_ddos_detection"]; ok && !isIntfNil(v) && !ddosDetectionChoiceTypeFound {
-
-				ddosDetectionChoiceTypeFound = true
-				ddosDetectionChoiceInt := &ves_io_schema_views_http_loadbalancer.SingleLoadBalancerAppSetting_EnableDdosDetection{}
-				ddosDetectionChoiceInt.EnableDdosDetection = &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting{}
-				mlConfigChoiceInt.SingleLbApp.DdosDetectionChoice = ddosDetectionChoiceInt
-
-				sl := v.(*schema.Set).List()
-				for _, set := range sl {
-					cs := set.(map[string]interface{})
-
-					autoMitigationChoiceTypeFound := false
-
-					if v, ok := cs["disable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-						autoMitigationChoiceTypeFound = true
-
-						if v.(bool) {
-							autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_DisableAutoMitigation{}
-							autoMitigationChoiceInt.DisableAutoMitigation = &ves_io_schema.Empty{}
-							ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-						}
-
-					}
-
-					if v, ok := cs["enable_auto_mitigation"]; ok && !isIntfNil(v) && !autoMitigationChoiceTypeFound {
-
-						autoMitigationChoiceTypeFound = true
-						autoMitigationChoiceInt := &ves_io_schema_views_http_loadbalancer.EnableDDoSDetectionSetting_EnableAutoMitigation{}
-						autoMitigationChoiceInt.EnableAutoMitigation = &ves_io_schema_views_http_loadbalancer.AutoMitigationAction{}
-						ddosDetectionChoiceInt.EnableDdosDetection.AutoMitigationChoice = autoMitigationChoiceInt
-
-						sl := v.(*schema.Set).List()
-						for _, set := range sl {
-							cs := set.(map[string]interface{})
-
-							actionTypeFound := false
-
-							if v, ok := cs["block"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-								actionTypeFound = true
-
-								if v.(bool) {
-									actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_Block{}
-									actionInt.Block = &ves_io_schema.Empty{}
-									autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-								}
-
-							}
-
-							if v, ok := cs["js_challenge"]; ok && !isIntfNil(v) && !actionTypeFound {
-
-								actionTypeFound = true
-								actionInt := &ves_io_schema_views_http_loadbalancer.AutoMitigationAction_JsChallenge{}
-								actionInt.JsChallenge = &ves_io_schema_virtual_host.JavascriptChallengeType{}
-								autoMitigationChoiceInt.EnableAutoMitigation.Action = actionInt
-
-								sl := v.(*schema.Set).List()
-								for _, set := range sl {
-									cs := set.(map[string]interface{})
-
-									if v, ok := cs["cookie_expiry"]; ok && !isIntfNil(v) {
-
-										actionInt.JsChallenge.CookieExpiry = uint32(v.(int))
-
-									}
-
-									if v, ok := cs["custom_page"]; ok && !isIntfNil(v) {
-
-										actionInt.JsChallenge.CustomPage = v.(string)
-
-									}
-
-									if v, ok := cs["js_script_delay"]; ok && !isIntfNil(v) {
-
-										actionInt.JsChallenge.JsScriptDelay = uint32(v.(int))
-
 									}
 
 								}
@@ -51005,6 +52811,18 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
 							if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 								headerTransformationChoiceTypeFound = true
@@ -51054,11 +52872,76 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
 
 						httpProtocolTypeTypeFound = true
+						httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+						httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
+						advancedOptions.HttpProtocolType = httpProtocolTypeInt
 
-						if v.(bool) {
-							httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
-							httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
-							advancedOptions.HttpProtocolType = httpProtocolTypeInt
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								headerTransformation := &ves_io_schema.HeaderTransformationType{}
+								httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+								for _, set := range sl {
+									headerTransformationMapStrToI := set.(map[string]interface{})
+
+									headerTransformationChoiceTypeFound := false
+
+									if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+											headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+											headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+											headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+									if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+										headerTransformationChoiceTypeFound = true
+
+										if v.(bool) {
+											headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+											headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+											headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+										}
+
+									}
+
+								}
+
+							}
+
 						}
 
 					}
@@ -51191,6 +53074,44 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						advancedOptions.PanicThresholdType = panicThresholdTypeInt
 
 						panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+					}
+
+					proxyProtocolChoiceTypeFound := false
+
+					if v, ok := advancedOptionsMapStrToI["disable_proxy_protocol"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+						proxyProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableProxyProtocol{}
+							proxyProtocolChoiceInt.DisableProxyProtocol = &ves_io_schema.Empty{}
+							advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["proxy_protocol_v1"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+						proxyProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV1{}
+							proxyProtocolChoiceInt.ProxyProtocolV1 = &ves_io_schema.Empty{}
+							advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+						}
+
+					}
+
+					if v, ok := advancedOptionsMapStrToI["proxy_protocol_v2"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+						proxyProtocolChoiceTypeFound = true
+
+						if v.(bool) {
+							proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV2{}
+							proxyProtocolChoiceInt.ProxyProtocolV2 = &ves_io_schema.Empty{}
+							advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+						}
 
 					}
 
@@ -51744,6 +53665,39 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+								networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Segment{}
+								networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+								choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Tenant = v.(string)
+
+									}
+
+								}
+
+							}
+
 							privateIpChoiceTypeFound := false
 
 							if v, ok := cs["ip"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
@@ -51891,6 +53845,39 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 									networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_OutsideNetwork{}
 									networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
 									choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+								networkChoiceTypeFound = true
+								networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_Segment{}
+								networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+								choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Name = v.(string)
+
+									}
+
+									if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Namespace = v.(string)
+
+									}
+
+									if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+										networkChoiceInt.Segment.Tenant = v.(string)
+
+									}
+
 								}
 
 							}
@@ -53392,7 +55379,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		rateLimitChoiceTypeFound = true
 		rateLimitChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ApiRateLimit{}
-		rateLimitChoiceInt.ApiRateLimit = &ves_io_schema_views_http_loadbalancer.APIRateLimit{}
+		rateLimitChoiceInt.ApiRateLimit = &ves_io_schema_views_common_waf.APIRateLimit{}
 		updateSpec.RateLimitChoice = rateLimitChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -53402,10 +55389,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["api_endpoint_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				apiEndpointRules := make([]*ves_io_schema_views_http_loadbalancer.ApiEndpointRule, len(sl))
+				apiEndpointRules := make([]*ves_io_schema_views_common_waf.ApiEndpointRule, len(sl))
 				rateLimitChoiceInt.ApiRateLimit.ApiEndpointRules = apiEndpointRules
 				for i, set := range sl {
-					apiEndpointRules[i] = &ves_io_schema_views_http_loadbalancer.ApiEndpointRule{}
+					apiEndpointRules[i] = &ves_io_schema_views_common_waf.ApiEndpointRule{}
 					apiEndpointRulesMapStrToI := set.(map[string]interface{})
 
 					if v, ok := apiEndpointRulesMapStrToI["api_endpoint_method"]; ok && !isIntfNil(v) {
@@ -53733,7 +55720,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							apiEndpointRules[i].DomainChoice = domainChoiceInt
 						}
@@ -53743,7 +55730,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_SpecificDomain{}
 
 						apiEndpointRules[i].DomainChoice = domainChoiceInt
 
@@ -53756,8 +55743,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_InlineRateLimiter{}
-						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_common_waf.InlineRateLimiter{}
 						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
 						sl := v.(*schema.Set).List()
@@ -53769,7 +55756,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
 
 								countByChoiceTypeFound = true
-								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_RefUserId{}
 								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
 								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 
@@ -53804,7 +55791,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								countByChoiceTypeFound = true
 
 								if v.(bool) {
-									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}
 									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
 									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 								}
@@ -53830,7 +55817,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := apiEndpointRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ApiEndpointRule_RefRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ApiEndpointRule_RefRateLimiter{}
 						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
 						apiEndpointRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
@@ -54074,6 +56061,98 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -54190,8 +56269,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["bypass_rate_limiting_rules"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_BypassRateLimitingRules{}
-				ipAllowedListChoiceInt.BypassRateLimitingRules = &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRules{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_BypassRateLimitingRules{}
+				ipAllowedListChoiceInt.BypassRateLimitingRules = &ves_io_schema_views_common_waf.BypassRateLimitingRules{}
 				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -54201,10 +56280,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := cs["bypass_rate_limiting_rules"]; ok && !isIntfNil(v) {
 
 						sl := v.([]interface{})
-						bypassRateLimitingRules := make([]*ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule, len(sl))
+						bypassRateLimitingRules := make([]*ves_io_schema_views_common_waf.BypassRateLimitingRule, len(sl))
 						ipAllowedListChoiceInt.BypassRateLimitingRules.BypassRateLimitingRules = bypassRateLimitingRules
 						for i, set := range sl {
-							bypassRateLimitingRules[i] = &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule{}
+							bypassRateLimitingRules[i] = &ves_io_schema_views_common_waf.BypassRateLimitingRule{}
 							bypassRateLimitingRulesMapStrToI := set.(map[string]interface{})
 
 							if v, ok := bypassRateLimitingRulesMapStrToI["client_matcher"]; ok && !isIntfNil(v) {
@@ -54498,7 +56577,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								destinationTypeTypeFound = true
 
 								if v.(bool) {
-									destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_AnyUrl{}
+									destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_AnyUrl{}
 									destinationTypeInt.AnyUrl = &ves_io_schema.Empty{}
 									bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 								}
@@ -54508,8 +56587,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["api_endpoint"]; ok && !isIntfNil(v) && !destinationTypeTypeFound {
 
 								destinationTypeTypeFound = true
-								destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_ApiEndpoint{}
-								destinationTypeInt.ApiEndpoint = &ves_io_schema_views_http_loadbalancer.ApiEndpointDetails{}
+								destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_ApiEndpoint{}
+								destinationTypeInt.ApiEndpoint = &ves_io_schema_views_common_waf.ApiEndpointDetails{}
 								bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 
 								sl := v.(*schema.Set).List()
@@ -54539,8 +56618,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["api_groups"]; ok && !isIntfNil(v) && !destinationTypeTypeFound {
 
 								destinationTypeTypeFound = true
-								destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_ApiGroups{}
-								destinationTypeInt.ApiGroups = &ves_io_schema_views_http_loadbalancer.APIGroups{}
+								destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_ApiGroups{}
+								destinationTypeInt.ApiGroups = &ves_io_schema_views_common_waf.APIGroups{}
 								bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 
 								sl := v.(*schema.Set).List()
@@ -54564,7 +56643,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["base_path"]; ok && !isIntfNil(v) && !destinationTypeTypeFound {
 
 								destinationTypeTypeFound = true
-								destinationTypeInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_BasePath{}
+								destinationTypeInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_BasePath{}
 
 								bypassRateLimitingRules[i].DestinationType = destinationTypeInt
 
@@ -54579,7 +56658,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								domainChoiceTypeFound = true
 
 								if v.(bool) {
-									domainChoiceInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_AnyDomain{}
+									domainChoiceInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_AnyDomain{}
 									domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 									bypassRateLimitingRules[i].DomainChoice = domainChoiceInt
 								}
@@ -54589,7 +56668,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := bypassRateLimitingRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_views_http_loadbalancer.BypassRateLimitingRule_SpecificDomain{}
+								domainChoiceInt := &ves_io_schema_views_common_waf.BypassRateLimitingRule_SpecificDomain{}
 
 								bypassRateLimitingRules[i].DomainChoice = domainChoiceInt
 
@@ -54811,6 +56890,98 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 									}
 
+									if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+										requestMatcher.JwtClaims = jwtClaims
+										for i, set := range sl {
+											jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+											jwtClaimsMapStrToI := set.(map[string]interface{})
+
+											if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+												jwtClaims[i].InvertMatcher = w.(bool)
+											}
+
+											matchTypeFound := false
+
+											if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+													matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+													jwtClaims[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+
+												if v.(bool) {
+													matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+													matchInt.CheckPresent = &ves_io_schema.Empty{}
+													jwtClaims[i].Match = matchInt
+												}
+
+											}
+
+											if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+												matchTypeFound = true
+												matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+												matchInt.Item = &ves_io_schema_policy.MatcherType{}
+												jwtClaims[i].Match = matchInt
+
+												sl := v.(*schema.Set).List()
+												for _, set := range sl {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.ExactValues = ls
+
+													}
+
+													if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = v.(string)
+														}
+														matchInt.Item.RegexValues = ls
+
+													}
+
+													if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+														transformersList := []ves_io_schema_policy.Transformer{}
+														for _, j := range v.([]interface{}) {
+															transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+														}
+														matchInt.Item.Transformers = transformersList
+
+													}
+
+												}
+
+											}
+
+											if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+												jwtClaims[i].Name = w.(string)
+											}
+
+										}
+
+									}
+
 									if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 										sl := v.([]interface{})
@@ -54929,8 +57100,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["custom_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_CustomIpAllowedList{}
-				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_http_loadbalancer.CustomIpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_CustomIpAllowedList{}
+				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_common_waf.CustomIpAllowedList{}
 				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -54970,7 +57141,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_IpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_IpAllowedList{}
 				ipAllowedListChoiceInt.IpAllowedList = &ves_io_schema_views.PrefixStringListType{}
 				rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
@@ -55007,7 +57178,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				ipAllowedListChoiceTypeFound = true
 
 				if v.(bool) {
-					ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.APIRateLimit_NoIpAllowedList{}
+					ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.APIRateLimit_NoIpAllowedList{}
 					ipAllowedListChoiceInt.NoIpAllowedList = &ves_io_schema.Empty{}
 					rateLimitChoiceInt.ApiRateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 				}
@@ -55017,10 +57188,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["server_url_rules"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
-				serverUrlRules := make([]*ves_io_schema_views_http_loadbalancer.ServerUrlRule, len(sl))
+				serverUrlRules := make([]*ves_io_schema_views_common_waf.ServerUrlRule, len(sl))
 				rateLimitChoiceInt.ApiRateLimit.ServerUrlRules = serverUrlRules
 				for i, set := range sl {
-					serverUrlRules[i] = &ves_io_schema_views_http_loadbalancer.ServerUrlRule{}
+					serverUrlRules[i] = &ves_io_schema_views_common_waf.ServerUrlRule{}
 					serverUrlRulesMapStrToI := set.(map[string]interface{})
 
 					if w, ok := serverUrlRulesMapStrToI["api_group"]; ok && !isIntfNil(w) {
@@ -55322,7 +57493,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 						domainChoiceTypeFound = true
 
 						if v.(bool) {
-							domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_AnyDomain{}
+							domainChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_AnyDomain{}
 							domainChoiceInt.AnyDomain = &ves_io_schema.Empty{}
 							serverUrlRules[i].DomainChoice = domainChoiceInt
 						}
@@ -55332,7 +57503,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := serverUrlRulesMapStrToI["specific_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
 
 						domainChoiceTypeFound = true
-						domainChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_SpecificDomain{}
+						domainChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_SpecificDomain{}
 
 						serverUrlRules[i].DomainChoice = domainChoiceInt
 
@@ -55345,8 +57516,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := serverUrlRulesMapStrToI["inline_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_InlineRateLimiter{}
-						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_http_loadbalancer.InlineRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_InlineRateLimiter{}
+						rateLimiterChoiceInt.InlineRateLimiter = &ves_io_schema_views_common_waf.InlineRateLimiter{}
 						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
 						sl := v.(*schema.Set).List()
@@ -55358,7 +57529,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 							if v, ok := cs["ref_user_id"]; ok && !isIntfNil(v) && !countByChoiceTypeFound {
 
 								countByChoiceTypeFound = true
-								countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_RefUserId{}
+								countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_RefUserId{}
 								countByChoiceInt.RefUserId = &ves_io_schema_views.ObjectRefType{}
 								rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 
@@ -55393,7 +57564,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 								countByChoiceTypeFound = true
 
 								if v.(bool) {
-									countByChoiceInt := &ves_io_schema_views_http_loadbalancer.InlineRateLimiter_UseHttpLbUserId{}
+									countByChoiceInt := &ves_io_schema_views_common_waf.InlineRateLimiter_UseHttpLbUserId{}
 									countByChoiceInt.UseHttpLbUserId = &ves_io_schema.Empty{}
 									rateLimiterChoiceInt.InlineRateLimiter.CountByChoice = countByChoiceInt
 								}
@@ -55419,7 +57590,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 					if v, ok := serverUrlRulesMapStrToI["ref_rate_limiter"]; ok && !isIntfNil(v) && !rateLimiterChoiceTypeFound {
 
 						rateLimiterChoiceTypeFound = true
-						rateLimiterChoiceInt := &ves_io_schema_views_http_loadbalancer.ServerUrlRule_RefRateLimiter{}
+						rateLimiterChoiceInt := &ves_io_schema_views_common_waf.ServerUrlRule_RefRateLimiter{}
 						rateLimiterChoiceInt.RefRateLimiter = &ves_io_schema_views.ObjectRefType{}
 						serverUrlRules[i].RateLimiterChoice = rateLimiterChoiceInt
 
@@ -55663,6 +57834,98 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 							}
 
+							if v, ok := requestMatcherMapStrToI["jwt_claims"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								jwtClaims := make([]*ves_io_schema_policy.JWTClaimMatcherType, len(sl))
+								requestMatcher.JwtClaims = jwtClaims
+								for i, set := range sl {
+									jwtClaims[i] = &ves_io_schema_policy.JWTClaimMatcherType{}
+									jwtClaimsMapStrToI := set.(map[string]interface{})
+
+									if w, ok := jwtClaimsMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
+										jwtClaims[i].InvertMatcher = w.(bool)
+									}
+
+									matchTypeFound := false
+
+									if v, ok := jwtClaimsMapStrToI["check_not_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckNotPresent{}
+											matchInt.CheckNotPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["check_present"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+
+										if v.(bool) {
+											matchInt := &ves_io_schema_policy.JWTClaimMatcherType_CheckPresent{}
+											matchInt.CheckPresent = &ves_io_schema.Empty{}
+											jwtClaims[i].Match = matchInt
+										}
+
+									}
+
+									if v, ok := jwtClaimsMapStrToI["item"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+										matchTypeFound = true
+										matchInt := &ves_io_schema_policy.JWTClaimMatcherType_Item{}
+										matchInt.Item = &ves_io_schema_policy.MatcherType{}
+										jwtClaims[i].Match = matchInt
+
+										sl := v.(*schema.Set).List()
+										for _, set := range sl {
+											cs := set.(map[string]interface{})
+
+											if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.ExactValues = ls
+
+											}
+
+											if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+												ls := make([]string, len(v.([]interface{})))
+												for i, v := range v.([]interface{}) {
+													ls[i] = v.(string)
+												}
+												matchInt.Item.RegexValues = ls
+
+											}
+
+											if v, ok := cs["transformers"]; ok && !isIntfNil(v) {
+
+												transformersList := []ves_io_schema_policy.Transformer{}
+												for _, j := range v.([]interface{}) {
+													transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
+												}
+												matchInt.Item.Transformers = transformersList
+
+											}
+
+										}
+
+									}
+
+									if w, ok := jwtClaimsMapStrToI["name"]; ok && !isIntfNil(w) {
+										jwtClaims[i].Name = w.(string)
+									}
+
+								}
+
+							}
+
 							if v, ok := requestMatcherMapStrToI["query_params"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -55794,7 +58057,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		rateLimitChoiceTypeFound = true
 		rateLimitChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_RateLimit{}
-		rateLimitChoiceInt.RateLimit = &ves_io_schema_views_http_loadbalancer.RateLimitConfigType{}
+		rateLimitChoiceInt.RateLimit = &ves_io_schema_views_common_waf.RateLimitConfigType{}
 		updateSpec.RateLimitChoice = rateLimitChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -55806,8 +58069,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["custom_ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_CustomIpAllowedList{}
-				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_http_loadbalancer.CustomIpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_CustomIpAllowedList{}
+				ipAllowedListChoiceInt.CustomIpAllowedList = &ves_io_schema_views_common_waf.CustomIpAllowedList{}
 				rateLimitChoiceInt.RateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -55847,7 +58110,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["ip_allowed_list"]; ok && !isIntfNil(v) && !ipAllowedListChoiceTypeFound {
 
 				ipAllowedListChoiceTypeFound = true
-				ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_IpAllowedList{}
+				ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_IpAllowedList{}
 				ipAllowedListChoiceInt.IpAllowedList = &ves_io_schema_views.PrefixStringListType{}
 				rateLimitChoiceInt.RateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 
@@ -55884,7 +58147,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				ipAllowedListChoiceTypeFound = true
 
 				if v.(bool) {
-					ipAllowedListChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_NoIpAllowedList{}
+					ipAllowedListChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_NoIpAllowedList{}
 					ipAllowedListChoiceInt.NoIpAllowedList = &ves_io_schema.Empty{}
 					rateLimitChoiceInt.RateLimit.IpAllowedListChoice = ipAllowedListChoiceInt
 				}
@@ -55898,7 +58161,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				policyChoiceTypeFound = true
 
 				if v.(bool) {
-					policyChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_NoPolicies{}
+					policyChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_NoPolicies{}
 					policyChoiceInt.NoPolicies = &ves_io_schema.Empty{}
 					rateLimitChoiceInt.RateLimit.PolicyChoice = policyChoiceInt
 				}
@@ -55908,7 +58171,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := cs["policies"]; ok && !isIntfNil(v) && !policyChoiceTypeFound {
 
 				policyChoiceTypeFound = true
-				policyChoiceInt := &ves_io_schema_views_http_loadbalancer.RateLimitConfigType_Policies{}
+				policyChoiceInt := &ves_io_schema_views_common_waf.RateLimitConfigType_Policies{}
 				policyChoiceInt.Policies = &ves_io_schema_views_rate_limiter_policy.PolicyList{}
 				rateLimitChoiceInt.RateLimit.PolicyChoice = policyChoiceInt
 
@@ -58121,7 +60384,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 		servicePolicyChoiceTypeFound = true
 		servicePolicyChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_ActiveServicePolicies{}
-		servicePolicyChoiceInt.ActiveServicePolicies = &ves_io_schema_views_http_loadbalancer.ServicePolicyList{}
+		servicePolicyChoiceInt.ActiveServicePolicies = &ves_io_schema_views_common_waf.ServicePolicyList{}
 		updateSpec.ServicePolicyChoice = servicePolicyChoiceInt
 
 		sl := v.(*schema.Set).List()
@@ -58242,28 +60505,28 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	threatIntelligenceChoiceTypeFound := false
+	threatMeshChoiceTypeFound := false
 
-	if v, ok := d.GetOk("disable_threat_intelligence"); ok && !threatIntelligenceChoiceTypeFound {
+	if v, ok := d.GetOk("disable_threat_mesh"); ok && !threatMeshChoiceTypeFound {
 
-		threatIntelligenceChoiceTypeFound = true
+		threatMeshChoiceTypeFound = true
 
 		if v.(bool) {
-			threatIntelligenceChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableThreatIntelligence{}
-			threatIntelligenceChoiceInt.DisableThreatIntelligence = &ves_io_schema.Empty{}
-			updateSpec.ThreatIntelligenceChoice = threatIntelligenceChoiceInt
+			threatMeshChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_DisableThreatMesh{}
+			threatMeshChoiceInt.DisableThreatMesh = &ves_io_schema.Empty{}
+			updateSpec.ThreatMeshChoice = threatMeshChoiceInt
 		}
 
 	}
 
-	if v, ok := d.GetOk("enable_threat_intelligence"); ok && !threatIntelligenceChoiceTypeFound {
+	if v, ok := d.GetOk("enable_threat_mesh"); ok && !threatMeshChoiceTypeFound {
 
-		threatIntelligenceChoiceTypeFound = true
+		threatMeshChoiceTypeFound = true
 
 		if v.(bool) {
-			threatIntelligenceChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableThreatIntelligence{}
-			threatIntelligenceChoiceInt.EnableThreatIntelligence = &ves_io_schema.Empty{}
-			updateSpec.ThreatIntelligenceChoice = threatIntelligenceChoiceInt
+			threatMeshChoiceInt := &ves_io_schema_views_http_loadbalancer.ReplaceSpecType_EnableThreatMesh{}
+			threatMeshChoiceInt.EnableThreatMesh = &ves_io_schema.Empty{}
+			updateSpec.ThreatMeshChoice = threatMeshChoiceInt
 		}
 
 	}
@@ -58310,10 +60573,10 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 	if v, ok := d.GetOk("trusted_clients"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
-		trustedClients := make([]*ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule, len(sl))
+		trustedClients := make([]*ves_io_schema_views_common_waf.SimpleClientSrcRule, len(sl))
 		updateSpec.TrustedClients = trustedClients
 		for i, set := range sl {
-			trustedClients[i] = &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule{}
+			trustedClients[i] = &ves_io_schema_views_common_waf.SimpleClientSrcRule{}
 			trustedClientsMapStrToI := set.(map[string]interface{})
 
 			actionChoiceTypeFound := false
@@ -58323,7 +60586,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_BotSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_BotSkipProcessing{}
 					actionChoiceInt.BotSkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -58335,7 +60598,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_SkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_SkipProcessing{}
 					actionChoiceInt.SkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -58347,7 +60610,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 				actionChoiceTypeFound = true
 
 				if v.(bool) {
-					actionChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_WafSkipProcessing{}
+					actionChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_WafSkipProcessing{}
 					actionChoiceInt.WafSkipProcessing = &ves_io_schema.Empty{}
 					trustedClients[i].ActionChoice = actionChoiceInt
 				}
@@ -58356,9 +60619,9 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 
 			if v, ok := trustedClientsMapStrToI["actions"]; ok && !isIntfNil(v) {
 
-				actionsList := []ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction{}
+				actionsList := []ves_io_schema_views_common_waf.ClientSrcRuleAction{}
 				for _, j := range v.([]interface{}) {
-					actionsList = append(actionsList, ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction(ves_io_schema_views_http_loadbalancer.ClientSrcRuleAction_value[j.(string)]))
+					actionsList = append(actionsList, ves_io_schema_views_common_waf.ClientSrcRuleAction(ves_io_schema_views_common_waf.ClientSrcRuleAction_value[j.(string)]))
 				}
 				trustedClients[i].Actions = actionsList
 
@@ -58369,7 +60632,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["as_number"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_AsNumber{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_AsNumber{}
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -58380,8 +60643,8 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["http_header"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_HttpHeader{}
-				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_http_loadbalancer.HttpHeaderMatcherList{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_HttpHeader{}
+				clientSourceChoiceInt.HttpHeader = &ves_io_schema_views_common_waf.HttpHeaderMatcherList{}
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
 				sl := v.(*schema.Set).List()
@@ -58451,7 +60714,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["ip_prefix"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_IpPrefix{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_IpPrefix{}
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 
@@ -58462,7 +60725,7 @@ func resourceVolterraHttpLoadbalancerUpdate(d *schema.ResourceData, meta interfa
 			if v, ok := trustedClientsMapStrToI["user_identifier"]; ok && !isIntfNil(v) && !clientSourceChoiceTypeFound {
 
 				clientSourceChoiceTypeFound = true
-				clientSourceChoiceInt := &ves_io_schema_views_http_loadbalancer.SimpleClientSrcRule_UserIdentifier{}
+				clientSourceChoiceInt := &ves_io_schema_views_common_waf.SimpleClientSrcRule_UserIdentifier{}
 
 				trustedClients[i].ClientSourceChoice = clientSourceChoiceInt
 

@@ -3379,10 +3379,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3969,7 +3973,22 @@ var APISwaggerJSON string = `{
             "description": "Reference to Root CA Certificate",
             "title": "Root CA Certificate",
             "x-displayname": "Root CA Certificate Reference",
-            "x-ves-proto-message": "ves.io.schema.TrustedCAList"
+            "x-ves-proto-message": "ves.io.schema.TrustedCAList",
+            "properties": {
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": " Reference to Root CA Certificate\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Root CA Certificate",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Root CA Certificate Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
         },
         "schemaVSiteRefType": {
             "type": "object",

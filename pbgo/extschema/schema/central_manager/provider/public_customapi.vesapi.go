@@ -953,10 +953,10 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Disk Metrics"
                 },
                 "disk_total": {
-                    "type": "integer",
+                    "type": "string",
                     "description": " Total disk\n\nExample: -  48000000-",
                     "title": "disk_total",
-                    "format": "int32",
+                    "format": "uint64",
                     "x-displayname": "Disk total"
                 },
                 "memory": {
@@ -969,10 +969,10 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Memory Metrics"
                 },
                 "memory_total": {
-                    "type": "integer",
+                    "type": "string",
                     "description": " Total memory\n\nExample: - 12888-",
                     "title": "memory_total",
-                    "format": "int32",
+                    "format": "uint64",
                     "x-displayname": "Memory total"
                 },
                 "name": {

@@ -28,19 +28,18 @@ resource "volterra_alert_policy" "example" {
 
   routes {
     // One of the arguments from this list "send dont_send" must be set
+
     send = true
 
-    // One of the arguments from this list "severity group alertname alertname_regex custom any" must be set
+    // One of the arguments from this list "severity group alertname alertname_regex custom any" can be set
 
-    group {
-      groups = ["groups"]
+    severity {
+      severities = ["severities"]
     }
     notification_parameters {
-      // One of the arguments from this list "default individual ves_io_group custom" must be set
+      // One of the arguments from this list "custom default individual ves_io_group" must be set
 
-      custom {
-        labels = ["value"]
-      }
+      default = true
 
       group_interval = "1m"
 
@@ -82,7 +81,7 @@ Argument Reference
 
 Notification parameters to decide how and when the alerts should be sent to the receivers..
 
-###### One of the arguments from this list "ves_io_group, custom, default, individual" must be set
+###### One of the arguments from this list "default, individual, ves_io_group, custom" must be set
 
 `custom` - (Optional) Specify set of labels for grouping the alerts. See [Group By Custom ](#group-by-custom) below for details.
 
@@ -108,7 +107,7 @@ The routes are evaluated in the specified order and terminates on the first matc
 
 `send` - (Optional) Send the alert (`Bool`).
 
-###### One of the arguments from this list "any, severity, group, alertname, alertname_regex, custom" can be set
+###### One of the arguments from this list "custom, any, severity, group, alertname, alertname_regex" can be set
 
 `alertname` - (Optional) Matches the alertname of the alert (`String`).
 
@@ -146,7 +145,7 @@ AlertLabel to configure the alert policy rule.
 
 Alertname Matcher.
 
-###### One of the arguments from this list "regex_match, exact_match" must be set
+###### One of the arguments from this list "exact_match, regex_match" must be set
 
 `exact_match` - (Optional) Equality match value for the label (`String`).
 

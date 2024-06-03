@@ -28,7 +28,8 @@ resource "volterra_app_setting" "example" {
     }
 
     business_logic_markup_setting {
-      // One of the arguments from this list "enable disable" must be set
+      // One of the arguments from this list "enable disable" can be set
+
       enable = true
     }
 
@@ -41,19 +42,23 @@ resource "volterra_app_setting" "example" {
     }
 
     user_behavior_analysis_setting {
-      // One of the arguments from this list "enable_learning disable_learning" must be set
-      enable_learning = true
+      // One of the arguments from this list "disable_learning enable_learning" must be set
 
-      // One of the arguments from this list "disable_detection enable_detection" must be set
+      disable_learning = true
+
+      // One of the arguments from this list "enable_detection disable_detection" must be set
 
       enable_detection {
-        // One of the arguments from this list "exclude_bola_detection bola_detection_manual bola_detection_automatic" must be set
-        exclude_bola_detection = true
+        // One of the arguments from this list "exclude_bola_detection bola_detection_manual bola_detection_automatic" can be set
+
+        bola_detection_automatic = true
 
         // One of the arguments from this list "include_bot_defense_activity exclude_bot_defense_activity" must be set
+
         include_bot_defense_activity = true
 
         // One of the arguments from this list "cooling_off_period" must be set
+
         cooling_off_period = "cooling_off_period"
 
         // One of the arguments from this list "include_failed_login_activity exclude_failed_login_activity" must be set
@@ -67,13 +72,25 @@ resource "volterra_app_setting" "example" {
         include_forbidden_activity {
           forbidden_requests_threshold = "10"
         }
+
         // One of the arguments from this list "include_ip_reputation exclude_ip_reputation" must be set
+
         include_ip_reputation = true
-        // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_custom include_non_existent_url_activity_automatic" must be set
-        exclude_non_existent_url_activity = true
+
+        // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_custom include_non_existent_url_activity_automatic" can be set
+
+        include_non_existent_url_activity_automatic {
+          // One of the arguments from this list "low medium high" must be set
+
+          low = true
+        }
+
         // One of the arguments from this list "include_rate_limit exclude_rate_limit" must be set
+
         include_rate_limit = true
+
         // One of the arguments from this list "include_waf_activity exclude_waf_activity" must be set
+
         include_waf_activity = true
       }
     }
@@ -159,7 +176,7 @@ Detect Enumeration attack automatically..
 
 Detect Enumeration attack using user defined threshold..
 
-###### One of the arguments from this list "threshold_level_1, threshold_level_2, threshold_level_3, threshold_level_4, threshold_level_5, threshold_level_6" must be set
+###### One of the arguments from this list "threshold_level_3, threshold_level_4, threshold_level_5, threshold_level_6, threshold_level_1, threshold_level_2" must be set
 
 `threshold_level_1` - (Optional) Detected in range: 10 - 150 (`Bool`).
 
@@ -245,7 +262,7 @@ Enable AI based malicious user detection.
 
 `exclude_bola_detection` - (Optional) Disable Enumeration attack detection (`Bool`).(Deprecated)
 
-###### One of the arguments from this list "include_bot_defense_activity, exclude_bot_defense_activity" must be set
+###### One of the arguments from this list "exclude_bot_defense_activity, include_bot_defense_activity" must be set
 
 `exclude_bot_defense_activity` - (Optional) Exclude Bot Defense activity in malicious user detection (`Bool`).
 
@@ -267,13 +284,13 @@ Enable AI based malicious user detection.
 
 `include_forbidden_activity` - (Optional) Include forbidden activity by policy in malicious user detection. See [Forbidden Activity Choice Include Forbidden Activity ](#forbidden-activity-choice-include-forbidden-activity) below for details.
 
-###### One of the arguments from this list "exclude_ip_reputation, include_ip_reputation" must be set
+###### One of the arguments from this list "include_ip_reputation, exclude_ip_reputation" must be set
 
 `exclude_ip_reputation` - (Optional) Exclude IP Reputation in malicious user detection (`Bool`).
 
 `include_ip_reputation` - (Optional) Include IP Reputation in malicious user detection (`Bool`).
 
-###### One of the arguments from this list "include_non_existent_url_activity_automatic, exclude_non_existent_url_activity, include_non_existent_url_activity_custom" can be set
+###### One of the arguments from this list "exclude_non_existent_url_activity, include_non_existent_url_activity_custom, include_non_existent_url_activity_automatic" can be set
 
 `exclude_non_existent_url_activity` - (Optional) Exclude Non-Existent URL activity in malicious user detection (`Bool`).(Deprecated)
 

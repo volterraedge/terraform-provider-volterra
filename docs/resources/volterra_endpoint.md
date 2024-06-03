@@ -90,7 +90,7 @@ Specifies name and TTL used for DNS resolution..
 
 `discovery_type` - (Required) Specifies whether the discovery is from Kubernetes or Consul cluster (`String`).
 
-###### One of the arguments from this list "service_name, service_selector" can be set
+###### One of the arguments from this list "service_selector, service_name" can be set
 
 `service_name` - (Optional) discovery objects of the site. (`String`).
 
@@ -118,7 +118,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Direct reference to site object.
 
-###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
+###### One of the arguments from this list "enable_internet_vip, disable_internet_vip" must be set
 
 `disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
 

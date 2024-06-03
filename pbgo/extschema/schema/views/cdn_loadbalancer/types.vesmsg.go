@@ -17,8 +17,10 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
@@ -82,6 +84,33 @@ func (m *AdvancedOptionsType) DeepCopyProto() proto.Message {
 
 func (m *AdvancedOptionsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return AdvancedOptionsTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AdvancedOptionsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSecurityOptionsDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *AdvancedOptionsType) GetSecurityOptionsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSecurityOptions() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSecurityOptions().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSecurityOptions().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "security_options." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateAdvancedOptionsType struct {
@@ -169,6 +198,337 @@ var DefaultAdvancedOptionsTypeValidator = func() *ValidateAdvancedOptionsType {
 
 func AdvancedOptionsTypeValidator() db.Validator {
 	return DefaultAdvancedOptionsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiProtection) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiProtection) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ApiProtection) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetJwtValidation().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ApiProtection.jwt_validation")
+	}
+
+	return nil
+}
+
+func (m *ApiProtection) DeepCopy() *ApiProtection {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiProtection{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiProtection) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiProtection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiProtectionValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiProtection) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApiProtection) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *ApiProtection_DisableApiDefinition:
+
+		return nil, nil
+
+	case *ApiProtection_ApiSpecification:
+
+		drInfos, err := m.GetApiSpecification().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ApiProtection_ApiSpecificationOnCacheMiss:
+
+		drInfos, err := m.GetApiSpecificationOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecificationOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ApiProtection) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateApiProtection struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiProtection) ApiDefinitionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_definition_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateApiProtection) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateApiProtection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiProtection)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiProtection got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_definition_choice"]; exists {
+		val := m.GetApiDefinitionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_definition_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDefinitionChoice().(type) {
+	case *ApiProtection_DisableApiDefinition:
+		if fv, exists := v.FldValidators["api_definition_choice.disable_api_definition"]; exists {
+			val := m.GetApiDefinitionChoice().(*ApiProtection_DisableApiDefinition).DisableApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("disable_api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiProtection_ApiSpecification:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification"]; exists {
+			val := m.GetApiDefinitionChoice().(*ApiProtection_ApiSpecification).ApiSpecification
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiProtection_ApiSpecificationOnCacheMiss:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification_on_cache_miss"]; exists {
+			val := m.GetApiDefinitionChoice().(*ApiProtection_ApiSpecificationOnCacheMiss).ApiSpecificationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ApiProtection_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ApiProtection_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiProtection_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ApiProtection_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiProtection_ApiDiscoveryOnCacheMiss:
+		if fv, exists := v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ApiProtection_ApiDiscoveryOnCacheMiss).ApiDiscoveryOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("api_discovery_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["jwt_validation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("jwt_validation"))
+		if err := fv(ctx, m.GetJwtValidation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiProtectionValidator = func() *ValidateApiProtection {
+	v := &ValidateApiProtection{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
+	rulesApiDefinitionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDefinitionChoice(rulesApiDefinitionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiProtection.api_definition_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition_choice"] = vFn
+
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiProtection.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
+	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+	v.FldValidators["api_definition_choice.api_specification_on_cache_miss"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+	v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = ves_io_schema_views_common_waf.APIProtectionRulesValidator().Validate
+
+	v.FldValidators["jwt_validation"] = ves_io_schema_views_common_waf.JWTValidationValidator().Validate
+
+	return v
+}()
+
+func ApiProtectionValidator() db.Validator {
+	return DefaultApiProtectionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3351,6 +3711,866 @@ func CdnOriginPoolTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CommonSecurityControls) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CommonSecurityControls) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CommonSecurityControls) DeepCopy() *CommonSecurityControls {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CommonSecurityControls{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CommonSecurityControls) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CommonSecurityControls) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CommonSecurityControlsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CommonSecurityControls) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CommonSecurityControls) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *CommonSecurityControls_NoChallenge:
+
+		return nil, nil
+
+	case *CommonSecurityControls_EnableChallenge:
+
+		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CommonSecurityControls_JsChallenge:
+
+		return nil, nil
+
+	case *CommonSecurityControls_CaptchaChallenge:
+
+		return nil, nil
+
+	case *CommonSecurityControls_PolicyBasedChallenge:
+
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CommonSecurityControls_ChallengeOnCacheMiss:
+
+		drInfos, err := m.GetChallengeOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetChallengeOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "challenge_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CommonSecurityControls) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *CommonSecurityControls_DisableRateLimit:
+
+		return nil, nil
+
+	case *CommonSecurityControls_ApiRateLimit:
+
+		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CommonSecurityControls_RateLimit:
+
+		drInfos, err := m.GetRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CommonSecurityControls) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *CommonSecurityControls_ServicePoliciesFromNamespace:
+
+		return nil, nil
+
+	case *CommonSecurityControls_NoServicePolicies:
+
+		return nil, nil
+
+	case *CommonSecurityControls_ActiveServicePolicies:
+
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+func (m *CommonSecurityControls) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *CommonSecurityControls_UserIdClientIp:
+
+		return nil, nil
+
+	case *CommonSecurityControls_UserIdentification:
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetUserIdChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CommonSecurityControls) GetUserIdChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUserIdChoice().(type) {
+	case *CommonSecurityControls_UserIdClientIp:
+
+	case *CommonSecurityControls_UserIdentification:
+		refdType, err := d.TypeForEntryKind("", "", "user_identification.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: user_identification")
+		}
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "user_identification.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateCommonSecurityControls struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCommonSecurityControls) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for blocked_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated blocked_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocked_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CommonSecurityControls)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CommonSecurityControls got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["blocked_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("blocked_clients"))
+		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_type"]; exists {
+		val := m.GetChallengeType()
+		vOpts := append(opts,
+			db.WithValidateField("challenge_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChallengeType().(type) {
+	case *CommonSecurityControls_NoChallenge:
+		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
+			val := m.GetChallengeType().(*CommonSecurityControls_NoChallenge).NoChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("no_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_EnableChallenge:
+		if fv, exists := v.FldValidators["challenge_type.enable_challenge"]; exists {
+			val := m.GetChallengeType().(*CommonSecurityControls_EnableChallenge).EnableChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("enable_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_JsChallenge:
+		if fv, exists := v.FldValidators["challenge_type.js_challenge"]; exists {
+			val := m.GetChallengeType().(*CommonSecurityControls_JsChallenge).JsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_CaptchaChallenge:
+		if fv, exists := v.FldValidators["challenge_type.captcha_challenge"]; exists {
+			val := m.GetChallengeType().(*CommonSecurityControls_CaptchaChallenge).CaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_PolicyBasedChallenge:
+		if fv, exists := v.FldValidators["challenge_type.policy_based_challenge"]; exists {
+			val := m.GetChallengeType().(*CommonSecurityControls_PolicyBasedChallenge).PolicyBasedChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("policy_based_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_ChallengeOnCacheMiss:
+		if fv, exists := v.FldValidators["challenge_type.challenge_on_cache_miss"]; exists {
+			val := m.GetChallengeType().(*CommonSecurityControls_ChallengeOnCacheMiss).ChallengeOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("challenge_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy"))
+		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetIpReputationChoice().(type) {
+	case *CommonSecurityControls_DisableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.disable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*CommonSecurityControls_DisableIpReputation).DisableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("disable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_EnableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.enable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*CommonSecurityControls_EnableIpReputation).EnableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("enable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_IpReputationOnCacheMiss:
+		if fv, exists := v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"]; exists {
+			val := m.GetIpReputationChoice().(*CommonSecurityControls_IpReputationOnCacheMiss).IpReputationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("ip_reputation_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *CommonSecurityControls_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CommonSecurityControls_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CommonSecurityControls_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_MaliciousUserDetectionOnCacheMiss:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.malicious_user_detection_on_cache_miss"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CommonSecurityControls_MaliciousUserDetectionOnCacheMiss).MaliciousUserDetectionOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("malicious_user_detection_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
+		val := m.GetRateLimitChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rate_limit_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRateLimitChoice().(type) {
+	case *CommonSecurityControls_DisableRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.disable_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*CommonSecurityControls_DisableRateLimit).DisableRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("disable_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_ApiRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.api_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*CommonSecurityControls_ApiRateLimit).ApiRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("api_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_RateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*CommonSecurityControls_RateLimit).RateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *CommonSecurityControls_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*CommonSecurityControls_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*CommonSecurityControls_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*CommonSecurityControls_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_clients"))
+		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_id_choice"]; exists {
+		val := m.GetUserIdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("user_id_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUserIdChoice().(type) {
+	case *CommonSecurityControls_UserIdClientIp:
+		if fv, exists := v.FldValidators["user_id_choice.user_id_client_ip"]; exists {
+			val := m.GetUserIdChoice().(*CommonSecurityControls_UserIdClientIp).UserIdClientIp
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_id_client_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_UserIdentification:
+		if fv, exists := v.FldValidators["user_id_choice.user_identification"]; exists {
+			val := m.GetUserIdChoice().(*CommonSecurityControls_UserIdentification).UserIdentification
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_identification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCommonSecurityControlsValidator = func() *ValidateCommonSecurityControls {
+	v := &ValidateCommonSecurityControls{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
+	rulesChallengeType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChallengeType(rulesChallengeType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.challenge_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_type"] = vFn
+
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.malicious_user_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malicious_user_detection_choice"] = vFn
+
+	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
+	rulesRateLimitChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.rate_limit_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
+	rulesUserIdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.user_id_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_id_choice"] = vFn
+
+	vrhTrustedClients := v.TrustedClientsValidationRuleHandler
+	rulesTrustedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhTrustedClients(rulesTrustedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.trusted_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_clients"] = vFn
+
+	vrhBlockedClients := v.BlockedClientsValidationRuleHandler
+	rulesBlockedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhBlockedClients(rulesBlockedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.blocked_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_clients"] = vFn
+
+	v.FldValidators["challenge_type.enable_challenge"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
+	v.FldValidators["challenge_type.challenge_on_cache_miss"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+
+	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+	v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["rate_limit_choice.api_rate_limit"] = ves_io_schema_views_common_waf.APIRateLimitValidator().Validate
+	v.FldValidators["rate_limit_choice.rate_limit"] = ves_io_schema_views_common_waf.RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ves_io_schema_views_common_waf.ServicePolicyListValidator().Validate
+
+	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
+
+	return v
+}()
+
+func CommonSecurityControlsValidator() db.Validator {
+	return DefaultCommonSecurityControlsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3413,7 +4633,38 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetOriginPoolDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetOriginPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetMoreOption().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -4108,7 +5359,38 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetOriginPoolDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetOriginPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetMoreOption().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -4496,6 +5778,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetOriginPoolDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetOriginPoolDRefInfo() FAILED")
 	} else {
@@ -4509,6 +5797,24 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetMoreOption().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -6538,7 +7844,38 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetOriginPoolDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetOriginPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetOriginPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetMoreOptionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMoreOption() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetMoreOption().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMoreOption().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "more_option." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -6820,6 +8157,10 @@ func (m *SecurityOptionsType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting SecurityOptionsType.auth_options")
 	}
 
+	if err := m.GetApiProtection().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SecurityOptionsType.api_protection")
+	}
+
 	return nil
 }
 
@@ -6850,6 +8191,88 @@ func (m *SecurityOptionsType) Validate(ctx context.Context, opts ...db.ValidateO
 	return SecurityOptionsTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *SecurityOptionsType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiProtectionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCommonSecurityControlsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCommonSecurityControlsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWebAppFirewallDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWebAppFirewallDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SecurityOptionsType) GetApiProtectionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtection() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtection().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtection().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SecurityOptionsType) GetCommonSecurityControlsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCommonSecurityControls() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetCommonSecurityControls().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCommonSecurityControls().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "common_security_controls." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SecurityOptionsType) GetWebAppFirewallDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetWebAppFirewall() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetWebAppFirewall().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetWebAppFirewall().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "web_app_firewall." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 type ValidateSecurityOptionsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -6868,10 +8291,28 @@ func (v *ValidateSecurityOptionsType) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_protection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection"))
+		if err := fv(ctx, m.GetApiProtection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["auth_options"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("auth_options"))
 		if err := fv(ctx, m.GetAuthOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["common_security_controls"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("common_security_controls"))
+		if err := fv(ctx, m.GetCommonSecurityControls(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6895,6 +8336,15 @@ func (v *ValidateSecurityOptionsType) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["web_app_firewall"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("web_app_firewall"))
+		if err := fv(ctx, m.GetWebAppFirewall(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -6908,11 +8358,562 @@ var DefaultSecurityOptionsTypeValidator = func() *ValidateSecurityOptionsType {
 
 	v.FldValidators["auth_options"] = AuthenticationOptionsValidator().Validate
 
+	v.FldValidators["web_app_firewall"] = WebApplicationFirewallValidator().Validate
+
+	v.FldValidators["common_security_controls"] = CommonSecurityControlsValidator().Validate
+
+	v.FldValidators["api_protection"] = ApiProtectionValidator().Validate
+
 	return v
 }()
 
 func SecurityOptionsTypeValidator() db.Validator {
 	return DefaultSecurityOptionsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WebApplicationFirewall) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WebApplicationFirewall) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WebApplicationFirewall) DeepCopy() *WebApplicationFirewall {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WebApplicationFirewall{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WebApplicationFirewall) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WebApplicationFirewall) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WebApplicationFirewallValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WebApplicationFirewall) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWafChoiceDRefInfo()
+
+}
+
+func (m *WebApplicationFirewall) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *WebApplicationFirewall_DisableWaf:
+
+		return nil, nil
+
+	case *WebApplicationFirewall_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *WebApplicationFirewall_AppFirewallOnCacheMiss:
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall_on_cache_miss",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WebApplicationFirewall) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafChoice().(type) {
+	case *WebApplicationFirewall_DisableWaf:
+
+	case *WebApplicationFirewall_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *WebApplicationFirewall_AppFirewallOnCacheMiss:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateWebApplicationFirewall struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWebApplicationFirewall) WafChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateWebApplicationFirewall) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_exclusion_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleWafExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleWafExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_exclusion_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_exclusion_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWebApplicationFirewall) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWebApplicationFirewall) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWebApplicationFirewall) ProtectedCookiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for protected_cookies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for protected_cookies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated protected_cookies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items protected_cookies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWebApplicationFirewall) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WebApplicationFirewall)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WebApplicationFirewall got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protected_cookies"]; exists {
+		vOpts := append(opts, db.WithValidateField("protected_cookies"))
+		if err := fv(ctx, m.GetProtectedCookies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_choice"]; exists {
+		val := m.GetWafChoice()
+		vOpts := append(opts,
+			db.WithValidateField("waf_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafChoice().(type) {
+	case *WebApplicationFirewall_DisableWaf:
+		if fv, exists := v.FldValidators["waf_choice.disable_waf"]; exists {
+			val := m.GetWafChoice().(*WebApplicationFirewall_DisableWaf).DisableWaf
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("disable_waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WebApplicationFirewall_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*WebApplicationFirewall_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WebApplicationFirewall_AppFirewallOnCacheMiss:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall_on_cache_miss"]; exists {
+			val := m.GetWafChoice().(*WebApplicationFirewall_AppFirewallOnCacheMiss).AppFirewallOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_rules"))
+		if err := fv(ctx, m.GetWafExclusionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWebApplicationFirewallValidator = func() *ValidateWebApplicationFirewall {
+	v := &ValidateWebApplicationFirewall{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhWafChoice := v.WafChoiceValidationRuleHandler
+	rulesWafChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWafChoice(rulesWafChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WebApplicationFirewall.waf_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_choice"] = vFn
+
+	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
+	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhWafExclusionRules(rulesWafExclusionRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WebApplicationFirewall.waf_exclusion_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_exclusion_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WebApplicationFirewall.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
+
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WebApplicationFirewall.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
+
+	vrhProtectedCookies := v.ProtectedCookiesValidationRuleHandler
+	rulesProtectedCookies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhProtectedCookies(rulesProtectedCookies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WebApplicationFirewall.protected_cookies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protected_cookies"] = vFn
+
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall_on_cache_miss"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	return v
+}()
+
+func WebApplicationFirewallValidator() db.Validator {
+	return DefaultWebApplicationFirewallValidator
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields

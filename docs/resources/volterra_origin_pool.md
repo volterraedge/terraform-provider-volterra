@@ -23,16 +23,12 @@ resource "volterra_origin_pool" "example" {
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
-    // One of the arguments from this list "segment_ip private_name consul_service custom_endpoint_object vn_private_ip vn_private_name public_ip public_name private_ip k8s_service segment_name" must be set
+    // One of the arguments from this list "consul_service vn_private_ip public_ip private_name k8s_service custom_endpoint_object vn_private_name public_name private_ip" must be set
 
-    vn_private_name {
-      dns_name = "value"
+    public_ip {
+      // One of the arguments from this list "ip ipv6" must be set
 
-      private_network {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
+      ip = "8.8.8.8"
     }
 
     labels = {
@@ -40,10 +36,12 @@ resource "volterra_origin_pool" "example" {
     }
   }
 
-  // One of the arguments from this list "lb_port port automatic_port" must be set
+  // One of the arguments from this list "port automatic_port lb_port" must be set
+
   lb_port = true
 
-  // One of the arguments from this list "use_tls no_tls" must be set
+  // One of the arguments from this list "no_tls use_tls" must be set
+
   no_tls = true
 }
 
@@ -106,23 +104,23 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
 
-`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Advanced Options Header Transformation Type ](#advanced-options-header-transformation-type) below for details.
+`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Advanced Options Header Transformation Type ](#advanced-options-header-transformation-type) below for details.(Deprecated)
 
 `http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
 
-###### One of the arguments from this list "auto_http_config, http1_config, http2_options" must be set
+###### One of the arguments from this list "http1_config, http2_options, auto_http_config" must be set
 
 `auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (`Bool`).
 
-`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (`Bool`).
+`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections. See [Http Protocol Type Http1 Config ](#http-protocol-type-http1-config) below for details.
 
 `http2_options` - (Optional) Enable HTTP/2 for upstream connections.. See [Http Protocol Type Http2 Options ](#http-protocol-type-http2-options) below for details.
 
 ###### One of the arguments from this list "enable_lb_source_ip_persistance, disable_lb_source_ip_persistance" can be set
 
-`disable_lb_source_ip_persistance` - (Optional) Disable LB source IP persistance (`Bool`).(Deprecated)
+`disable_lb_source_ip_persistance` - (Optional) Disable LB source IP persistence (`Bool`).
 
-`enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistance (`Bool`).(Deprecated)
+`enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistence (`Bool`).
 
 ###### One of the arguments from this list "disable_outlier_detection, outlier_detection" must be set
 
@@ -136,6 +134,14 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `panic_threshold` - (Optional) all endpoints will be considered for load balancing ignoring its health status. (`Int`).
 
+###### One of the arguments from this list "disable_proxy_protocol, proxy_protocol_v1, proxy_protocol_v2" can be set
+
+`disable_proxy_protocol` - (Optional) Disable Proxy Protocol for upstream connections (`Bool`).
+
+`proxy_protocol_v1` - (Optional) Enable Proxy Protocol Version 1 for upstream connections (`Bool`).
+
+`proxy_protocol_v2` - (Optional) Enable Proxy Protocol Version 2 for upstream connections (`Bool`).
+
 ###### One of the arguments from this list "disable_subsets, enable_subsets" must be set
 
 `disable_subsets` - (Optional) Subset load balancing is disabled. All eligible origin servers will be considered for load balancing. (`Bool`).
@@ -146,7 +152,7 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 List of origin servers in this pool.
 
-###### One of the arguments from this list "public_name, private_ip, k8s_service, segment_name, public_ip, consul_service, custom_endpoint_object, vn_private_ip, vn_private_name, segment_ip, private_name" must be set
+###### One of the arguments from this list "custom_endpoint_object, vn_private_name, public_name, private_ip, k8s_service, vn_private_ip, public_ip, private_name, consul_service" must be set
 
 `consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Choice Consul Service ](#choice-consul-service) below for details.
 
@@ -172,9 +178,11 @@ List of origin servers in this pool.
 
 Settings to normalize the headers of upstream requests..
 
-###### One of the arguments from this list "default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
 
 `default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
 
 `preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
@@ -218,7 +226,7 @@ TLS v1.2+ with PFS ciphers and strong crypto algorithms..
 
 Specify origin server with K8s service name and site information.
 
-###### One of the arguments from this list "outside_network, vk8s_networks, inside_network" must be set
+###### One of the arguments from this list "inside_network, outside_network, vk8s_networks" must be set
 
 `inside_network` - (Optional) Inside network on the site (`Bool`).
 
@@ -226,7 +234,7 @@ Specify origin server with K8s service name and site information.
 
 `vk8s_networks` - (Optional) origin server are on vK8s network on the site (`Bool`).
 
-###### One of the arguments from this list "service_selector, service_name" must be set
+###### One of the arguments from this list "service_name, service_selector" must be set
 
 `service_name` - (Optional) Both namespace and cluster-id are optional. (`String`).
 
@@ -246,13 +254,15 @@ TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
 
 Specify origin server with private or public IP address and site information.
 
-###### One of the arguments from this list "inside_network, outside_network" must be set
+###### One of the arguments from this list "inside_network, outside_network, segment" must be set
 
 `inside_network` - (Optional) Inside network on the site (`Bool`).
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-###### One of the arguments from this list "ip, ipv6" must be set
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+
+###### One of the arguments from this list "ipv6, ip" must be set
 
 `ip` - (Optional) Private IPV4 address (`String`).
 
@@ -266,11 +276,13 @@ Specify origin server with private or public DNS name and site information.
 
 `dns_name` - (Required) DNS Name (`String`).
 
-###### One of the arguments from this list "inside_network, outside_network" must be set
+###### One of the arguments from this list "segment, inside_network, outside_network" must be set
 
 `inside_network` - (Optional) Inside network on the site (`Bool`).
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
+
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
 
 `refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
 
@@ -300,7 +312,7 @@ Specify origin server IP address on virtual network other than inside or outside
 
 `virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "ip, ipv6" must be set
+###### One of the arguments from this list "ipv6, ip" must be set
 
 `ip` - (Optional) IPV4 address (`String`).
 
@@ -370,6 +382,10 @@ Request will be failed and error returned, as if cluster has no origin servers..
 
 Normalize the headers to lower case.
 
+### Header Transformation Choice Legacy Header Transformation
+
+Use old header transformation if configured earlier.
+
 ### Header Transformation Choice Preserve Case Header Transformation
 
 Preserves the original case of headers without any modifications..
@@ -378,6 +394,20 @@ Preserves the original case of headers without any modifications..
 
 For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
 
+### Http1 Config Header Transformation
+
+the stateful formatter will take effect, and the stateless formatter will be disregarded..
+
+###### One of the arguments from this list "preserve_case_header_transformation, legacy_header_transformation, default_header_transformation, proper_case_header_transformation" must be set
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+
 ### Http Protocol Type Auto Http Config
 
 and will use whichever protocol is negotiated by ALPN with the upstream..
@@ -385,6 +415,8 @@ and will use whichever protocol is negotiated by ALPN with the upstream..
 ### Http Protocol Type Http1 Config
 
 Enable HTTP/1.1 for upstream connections.
+
+`header_transformation` - (Optional) the stateful formatter will take effect, and the stateless formatter will be disregarded.. See [Http1 Config Header Transformation ](#http1-config-header-transformation) below for details.
 
 ### Http Protocol Type Http2 Options
 
@@ -404,11 +436,11 @@ Site or Virtual site where this origin server is located.
 
 ### Lb Source Ip Persistance Choice Disable Lb Source Ip Persistance
 
-Disable LB source IP persistance.
+Disable LB source IP persistence.
 
 ### Lb Source Ip Persistance Choice Enable Lb Source Ip Persistance
 
-Enable LB source IP persistance.
+Enable LB source IP persistence.
 
 ### Mtls Choice No Mtls
 
@@ -472,7 +504,7 @@ Disable panic threshold. Only healthy endpoints are considered for load balancin
 
 Site or Virtual site where this origin server is located.
 
-###### One of the arguments from this list "virtual_site, site" must be set
+###### One of the arguments from this list "site, virtual_site" must be set
 
 `site` - (Optional) Reference to site object. See [ref](#ref) below for details.
 
@@ -497,6 +529,18 @@ Site or Virtual site where this origin server is located.
 `site` - (Optional) Reference to site object. See [ref](#ref) below for details.
 
 `virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
+
+### Proxy Protocol Choice Disable Proxy Protocol
+
+Disable Proxy Protocol for upstream connections.
+
+### Proxy Protocol Choice Proxy Protocol V1
+
+Enable Proxy Protocol Version 1 for upstream connections.
+
+### Proxy Protocol Choice Proxy Protocol V2
+
+Enable Proxy Protocol Version 2 for upstream connections.
 
 ### Ref
 
@@ -618,7 +662,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 x-displayName: "Enable".
 
-###### One of the arguments from this list "use_mtls_obj, no_mtls, use_mtls" must be set
+###### One of the arguments from this list "use_mtls, use_mtls_obj, no_mtls" must be set
 
 `no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
 
@@ -626,7 +670,7 @@ x-displayName: "Enable".
 
 `use_mtls_obj` - (Optional) x-displayName: "Select/add a TLS Certificate object for client authentication". See [ref](#ref) below for details.
 
-###### One of the arguments from this list "volterra_trusted_ca, use_server_verification, skip_server_verification" must be set
+###### One of the arguments from this list "skip_server_verification, volterra_trusted_ca, use_server_verification" must be set
 
 `skip_server_verification` - (Optional) Skip origin server verification (`Bool`).
 
@@ -634,7 +678,7 @@ x-displayName: "Enable".
 
 `volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC Default Root CA Certificate (`Bool`).
 
-###### One of the arguments from this list "sni, use_host_header_as_sni, disable_sni" must be set
+###### One of the arguments from this list "disable_sni, sni, use_host_header_as_sni" must be set
 
 `disable_sni` - (Optional) Do not use SNI. (`Bool`).
 
@@ -652,7 +696,7 @@ mTLS Client Certificate.
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+###### One of the arguments from this list "disable_ocsp_stapling, custom_hash_algorithms, use_system_defaults" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -666,7 +710,7 @@ mTLS Client Certificate.
 
 TLS parameters such as min/max TLS version and ciphers.
 
-###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
+###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 

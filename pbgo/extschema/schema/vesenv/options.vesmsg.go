@@ -1992,6 +1992,28 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *ServiceSlugChoice_GenAi:
+		if fv, exists := v.FldValidators["choice.gen_ai"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_GenAi).GenAi
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("gen_ai"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_SyncCloudData:
+		if fv, exists := v.FldValidators["choice.sync_cloud_data"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_SyncCloudData).SyncCloudData
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("sync_cloud_data"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

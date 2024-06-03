@@ -1723,12 +1723,12 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$\n",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-(?:gov-)?[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-east-2a",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.pattern": "^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$"
+                        "ves.io.schema.rules.string.pattern": "^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-(?:gov-)?[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$"
                     }
                 },
                 "inside_vip": {

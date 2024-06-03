@@ -22,10 +22,10 @@ resource "volterra_forward_proxy_policy" "example" {
 
   // One of the arguments from this list "any_proxy network_connector proxy_label_selector drp_http_connect" must be set
 
-  proxy_label_selector {
-    expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-  }
-  // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
+  any_proxy = true
+
+  // One of the arguments from this list "allow_list deny_list rule_list allow_all" must be set
+
   allow_all = true
 }
 
@@ -66,6 +66,26 @@ Argument Reference
 
 `rule_list` - (Optional) List of custom rules. See [Rule Choice Rule List ](#rule-choice-rule-list) below for details.
 
+`segment_policy` - (Optional) Skip the configuration or set option as Any to ignore corresponding segment match. See [Segment Policy ](#segment-policy) below for details.
+
+### Segment Policy
+
+Skip the configuration or set option as Any to ignore corresponding segment match.
+
+###### One of the arguments from this list "dst_any, intra_segment, dst_segments" can be set
+
+`dst_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`dst_segments` - (Optional) Traffic is matched against destination segment in selected segments. See [Dst Segment Choice Dst Segments ](#dst-segment-choice-dst-segments) below for details.
+
+`intra_segment` - (Optional) Traffic is matched for source and destination on the same segment (`Bool`).
+
+###### One of the arguments from this list "src_any, src_segments" can be set
+
+`src_any` - (Optional) Traffic is not matched against any segment (`Bool`).
+
+`src_segments` - (Optional) Source traffic is matched against selected segments. See [Src Segment Choice Src Segments ](#src-segment-choice-src-segments) below for details.
+
 ### Allow List Dest List
 
 L4 destinations for non-HTTP and non-TLS connections and TLS connections without SNI.
@@ -78,7 +98,7 @@ L4 destinations for non-HTTP and non-TLS connections and TLS connections without
 
 URLs for HTTP connections.
 
-###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
+###### One of the arguments from this list "regex_value, exact_value, suffix_value" must be set
 
 `exact_value` - (Optional) Exact domain name (`String`).
 
@@ -86,7 +106,7 @@ URLs for HTTP connections.
 
 `suffix_value` - (Optional) Suffix of domain names e.g "xyz.com" will match "*.xyz.com" (`String`).
 
-###### One of the arguments from this list "path_exact_value, path_prefix_value, path_regex_value, any_path" must be set
+###### One of the arguments from this list "path_prefix_value, path_regex_value, any_path, path_exact_value" must be set
 
 `any_path` - (Optional) All paths are considered match (`Bool`).
 
@@ -154,7 +174,7 @@ URLs for HTTP connections.
 
 Domains in SNI for TLS connections.
 
-###### One of the arguments from this list "regex_value, exact_value, suffix_value" must be set
+###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
 
 `exact_value` - (Optional) Exact domain name. (`String`).
 
@@ -170,7 +190,7 @@ Match on all destinations.
 
 The ASN is obtained by performing a lookup for the destination IPv4 Address in a GeoIP DB..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Destination Choice Dst Label Selector
 
@@ -204,6 +224,20 @@ URL categories to choose, so that the corresponding label selector expressions c
 
 `url_categories` - (Required) List of url categories to be selected (`List of Strings`).
 
+### Dst Segment Choice Dst Any
+
+Traffic is not matched against any segment.
+
+### Dst Segment Choice Dst Segments
+
+Traffic is matched against destination segment in selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
+
+### Dst Segment Choice Intra Segment
+
+Traffic is matched for source and destination on the same segment.
+
 ### Http Connect Choice No Http Connect Port
 
 Ignore destination ports for connections.
@@ -220,7 +254,7 @@ In case of an HTTP Connect, the destination port is extracted from the connect d
 
 URLs for HTTP connections.
 
-###### One of the arguments from this list "suffix_value, regex_value, exact_value" must be set
+###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
 
 `exact_value` - (Optional) Exact domain name (`String`).
 
@@ -262,7 +296,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 List of allowed connections.
 
-###### One of the arguments from this list "default_action_deny, default_action_allow, default_action_next_policy" must be set
+###### One of the arguments from this list "default_action_next_policy, default_action_deny, default_action_allow" must be set
 
 `default_action_allow` - (Optional) Allow all connections (`Bool`).
 
@@ -280,7 +314,7 @@ List of allowed connections.
 
 List of denied connections.
 
-###### One of the arguments from this list "default_action_deny, default_action_allow, default_action_next_policy" must be set
+###### One of the arguments from this list "default_action_next_policy, default_action_deny, default_action_allow" must be set
 
 `default_action_allow` - (Optional) Allow all connections (`Bool`).
 
@@ -306,7 +340,7 @@ List of custom rules.
 
 `action` - (Required) Action to be enforced if the input request matches the rule. (`String`).
 
-###### One of the arguments from this list "tls_list, dst_asn_set, url_category_list, dst_prefix_list, dst_asn_list, dst_label_selector, all_destinations, http_list, dst_ip_prefix_set" must be set
+###### One of the arguments from this list "dst_label_selector, all_destinations, dst_ip_prefix_set, dst_asn_list, dst_asn_set, url_category_list, tls_list, http_list, dst_prefix_list" must be set
 
 `all_destinations` - (Optional) Match on all destinations (`Bool`).
 
@@ -352,7 +386,7 @@ List of custom rules.
 
 `namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
 
-`prefix_list` - (Optional) list of ip prefixes that are representing source of traffic seen by proxy. See [Source Choice Prefix List ](#source-choice-prefix-list) below for details.
+`prefix_list` - (Optional) list is a sublist of both V4 and V6 prefix list. See [Source Choice Prefix List ](#source-choice-prefix-list) below for details.
 
 ### Rules Metadata
 
@@ -380,11 +414,21 @@ Sources is set of prefixes determined by label selector expression.
 
 ### Source Choice Prefix List
 
-list of ip prefixes that are representing source of traffic seen by proxy.
+list is a sublist of both V4 and V6 prefix list.
 
 `ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Src Segment Choice Src Any
+
+Traffic is not matched against any segment.
+
+### Src Segment Choice Src Segments
+
+Source traffic is matched against selected segments.
+
+`segments` - (Required) Select list of segments. See [ref](#ref) below for details.
 
 ### Tls List Tls List
 

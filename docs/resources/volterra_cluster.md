@@ -56,7 +56,7 @@ Argument Reference
 
 `fallback_policy` - (Optional) metadata defined as default_set (`String`).
 
-`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Header Transformation Type ](#header-transformation-type) below for details.
+`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Header Transformation Type ](#header-transformation-type) below for details.(Deprecated)
 
 `health_checks` - (Optional) List of references to healthcheck object for this cluster.. See [ref](#ref) below for details.
 
@@ -64,7 +64,7 @@ Argument Reference
 
 `auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (`Bool`).
 
-`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections (`Bool`).
+`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections. See [Http Protocol Type Http1 Config ](#http-protocol-type-http1-config) below for details.
 
 `http2_options` - (Optional) Enable HTTP/2 for upstream connections. See [Http Protocol Type Http2 Options ](#http-protocol-type-http2-options) below for details.
 
@@ -75,6 +75,12 @@ Argument Reference
 `no_panic_threshold` - (Optional) Disable panic threshold. Only healthy endpoints are considered for loadbalancing. (`Bool`).
 
 `panic_threshold` - (Optional) all endpoints will be considered for loadbalancing ignoring its health status. (`Int`).
+
+`disable_proxy_protocol` - (Optional) Disable Proxy Protocol for upstream connections (`Bool`).
+
+`proxy_protocol_v1` - (Optional) Enable Proxy Protocol V1 for upstream connections (`Bool`).
+
+`proxy_protocol_v2` - (Optional) Enable Proxy Protocol V2 for upstream connections (`Bool`).
 
 `tls_parameters` - (Optional) TLS parameters to access upstream endpoints for this cluster. See [Tls Parameters ](#tls-parameters) below for details.
 
@@ -102,9 +108,11 @@ allows to apply back pressure on downstream quickly..
 
 Settings to normalize the headers of upstream requests..
 
-###### One of the arguments from this list "default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
 
 `default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
 
 `preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
@@ -128,7 +136,7 @@ healthy load balancing set. Outlier detection is a form of passive health checki
 
 TLS parameters to access upstream endpoints for this cluster.
 
-###### One of the arguments from this list "disable_sni, sni, use_host_header_as_sni" must be set
+###### One of the arguments from this list "sni, use_host_header_as_sni, disable_sni" must be set
 
 `disable_sni` - (Optional) Do not use SNI.. See [Sni Choice Disable Sni ](#sni-choice-disable-sni) below for details.
 
@@ -182,7 +190,7 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-###### One of the arguments from this list "trusted_ca, trusted_ca_url" must be set
+###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
 
 `trusted_ca` - (Optional) Root CA Certificate. See [Trusted Ca Choice Trusted Ca ](#trusted-ca-choice-trusted-ca) below for details.
 
@@ -196,6 +204,10 @@ and list of Subject Alt Names for verification.
 
 Normalize the headers to lower case.
 
+### Header Transformation Choice Legacy Header Transformation
+
+Use old header transformation if configured earlier.
+
 ### Header Transformation Choice Preserve Case Header Transformation
 
 Preserves the original case of headers without any modifications..
@@ -203,6 +215,26 @@ Preserves the original case of headers without any modifications..
 ### Header Transformation Choice Proper Case Header Transformation
 
 For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
+
+### Http1 Config Header Transformation
+
+the stateful formatter will take effect, and the stateless formatter will be disregarded..
+
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+
+### Http Protocol Type Http1 Config
+
+Enable HTTP/1.1 for upstream connections.
+
+`header_transformation` - (Optional) the stateful formatter will take effect, and the stateless formatter will be disregarded.. See [Http1 Config Header Transformation ](#http1-config-header-transformation) below for details.
 
 ### Http Protocol Type Http2 Options
 
@@ -298,7 +330,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -342,7 +374,7 @@ Common TLS parameters used in upstream connections.
 
 Root CA Certificate.
 
-`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.(Deprecated)
+`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.
 
 Attribute Reference
 -------------------

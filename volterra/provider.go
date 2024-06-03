@@ -45,6 +45,7 @@ const (
 	setCloudSiteInfo          = "volterra_set_cloud_site_info"
 	setKnownLabelKey          = "volterra_known_label_key"
 	setKnownLabel             = "volterra_known_label"
+	setDnsZoneRRSET           = "volterra_dns_zone_record"
 )
 
 // Provider returns a terraform.ResourceProvider.
@@ -228,5 +229,6 @@ func getResourceMap() map[string]*schema.Resource {
 	resourceMap[setCloudSiteInfo] = resourceVolterraSetCloudSiteInfo()
 	resourceMap[setKnownLabelKey] = resourceVolterraSetKnownLabelKey()
 	resourceMap[setKnownLabel] = resourceVolterraSetKnownLabel()
+	resourceMap[setDnsZoneRRSET] = resourceVolterraSetRRSETRecord()
 	return resourceMap
 }

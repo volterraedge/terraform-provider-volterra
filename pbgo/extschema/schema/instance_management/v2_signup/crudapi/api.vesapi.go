@@ -2814,12 +2814,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "infraprotect_informationPolicer": {
+            "type": "object",
+            "description": "Policer config for bandwidth restrictions",
+            "title": "Policer Config",
+            "x-displayname": "Policer Config",
+            "x-ves-proto-message": "ves.io.schema.infraprotect_information.Policer",
+            "properties": {
+                "bandwidth_max_mb": {
+                    "type": "integer",
+                    "description": " Bandwidth max allowed for a customer defined by contract\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 9999\n",
+                    "title": "Bandwidth Max",
+                    "format": "int64",
+                    "x-displayname": "Bandwidth Max in MB",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "9999"
+                    }
+                }
+            }
+        },
         "instance_managementv2_signupGlobalSpecType": {
             "type": "object",
             "description": "desired state of Signup",
             "title": "Signup specification",
             "x-displayname": "Signup",
-            "x-ves-oneof-field-source_choice": "[\"source_internal_scaling\",\"source_internal_sre\",\"source_public\"]",
+            "x-ves-oneof-field-signup_type": "[\"signup_type_internal_scaling\",\"signup_type_internal_sre\",\"signup_type_public\"]",
             "x-ves-proto-message": "ves.io.schema.instance_management.v2_signup.GlobalSpecType",
             "properties": {
                 "account_details": {
@@ -2862,23 +2881,33 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "source_internal_scaling": {
-                    "description": "Exclusive with [source_internal_sre source_public]\n For internal use ONLY\n payload for the request made internally for scaling",
-                    "title": "Source Internal Scaling",
-                    "$ref": "#/definitions/signupSourceInternalScaling",
-                    "x-displayname": "Source Internal Scaling"
+                "origin": {
+                    "description": " origin of the signup, from which platform signup is originated, example f5xc, aws..etc\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Origin",
+                    "$ref": "#/definitions/schemaSignupOrigin",
+                    "x-displayname": "Origin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
-                "source_internal_sre": {
-                    "description": "Exclusive with [source_internal_scaling source_public]\n For internal use ONLY\n payload for the request made internally, probably via SRE",
-                    "title": "Source Internal SRE",
-                    "$ref": "#/definitions/signupSourceInternalSre",
-                    "x-displayname": "Source Internal SRE"
+                "signup_type_internal_scaling": {
+                    "description": "Exclusive with [signup_type_internal_sre signup_type_public]\n For internal use ONLY\n payload for the request made internally for scaling",
+                    "title": "Signup Type Internal Scaling",
+                    "$ref": "#/definitions/signupSignupTypeInternalScaling",
+                    "x-displayname": "Signup Type Internal Scaling"
                 },
-                "source_public": {
-                    "description": "Exclusive with [source_internal_scaling source_internal_sre]\n payload for the public request, made either via the dashboard or the CMD line",
-                    "title": "Source Public",
-                    "$ref": "#/definitions/signupSourcePublic",
-                    "x-displayname": "Source Public"
+                "signup_type_internal_sre": {
+                    "description": "Exclusive with [signup_type_internal_scaling signup_type_public]\n For internal use ONLY\n payload for the request made internally, probably via SRE",
+                    "title": "Signup Type Internal SRE",
+                    "$ref": "#/definitions/signupSignupTypeInternalSre",
+                    "x-displayname": "Signup Type Internal SRE"
+                },
+                "signup_type_public": {
+                    "description": "Exclusive with [signup_type_internal_scaling signup_type_internal_sre]\n payload for the public request, made either via the dashboard or the CMD line",
+                    "title": "Signup Type Public",
+                    "$ref": "#/definitions/signupSignupTypePublic",
+                    "x-displayname": "Signup Type Public"
                 },
                 "user_details": {
                     "description": " details of the user\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3081,10 +3110,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3203,6 +3236,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Clear Secret"
                 }
             }
+        },
+        "schemaSignupOrigin": {
+            "type": "string",
+            "description": "x-required\nSignupOrigin indicates, from which platform signup is originated, example f5xc, aws..etc\n\n - ORIGIN_UNKNOWN: ORIGIN_UNKNOWN\n\nIndicates, the origin of the signup is unknown\n - ORIGIN_F5XC: ORIGIN_F5XC\n\nORIGIN_F5XC as an origin indicates, signup is initiated from console or by internal scaling/testing/support teams using private API\n - ORIGIN_AWS: ORIGIN_AWS\n\nORIGIN_AWS as an origin indicates, signup is initiated from AWS marketplace \u0026 it comes to eywaprime via tsahik",
+            "title": "SignupOrigin",
+            "enum": [
+                "ORIGIN_UNKNOWN",
+                "ORIGIN_F5XC",
+                "ORIGIN_AWS"
+            ],
+            "default": "ORIGIN_UNKNOWN",
+            "x-displayname": "Signup Origin",
+            "x-ves-proto-enum": "ves.io.schema.SignupOrigin"
         },
         "schemaStatusType": {
             "type": "object",
@@ -3479,7 +3525,7 @@ var APISwaggerJSON string = `{
         "schemainfraprotect_informationGlobalSpecType": {
             "type": "object",
             "description": "Organisation information",
-            "title": "information",
+            "title": "Information",
             "x-displayname": "Information",
             "x-ves-oneof-field-as_path_choice": "[\"as_path_choice_full\",\"as_path_choice_none\",\"as_path_choice_origin\"]",
             "x-ves-oneof-field-default_tunnel_bgp_secret_choice": "[\"default_tunnel_bgp_secret\",\"default_tunnel_bgp_secret_none\"]",
@@ -3531,6 +3577,12 @@ var APISwaggerJSON string = `{
                     "title": "No default tunnel BGP secret",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No default tunnel BGP secret"
+                },
+                "policer": {
+                    "description": " Policer config for bandwidth restrictions",
+                    "title": "Policer Config",
+                    "$ref": "#/definitions/infraprotect_informationPolicer",
+                    "x-displayname": "Policer Config"
                 },
                 "prefixes": {
                     "type": "array",
@@ -3811,13 +3863,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "signupCrmInfoV2": {
-            "type": "object",
-            "description": "Deprecated: use the CRMInfo defined in schema/types.proto",
-            "title": "fields of crm info message",
-            "x-displayname": "Crm Info",
-            "x-ves-proto-message": "ves.io.schema.signup.CrmInfoV2"
-        },
         "signupInternalMeta": {
             "type": "object",
             "description": "we use it to store derived internal information like f5xc instance, kc instance",
@@ -3859,41 +3904,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "signupMarketplaceAws": {
+        "signupSignupTypeInternalScaling": {
             "type": "object",
-            "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for AWS Marketplace",
-            "title": "Marketplace Aws",
-            "properties": {
-                "crm_details": {
-                    "description": "x-displayName: \"CRM Details\"\nx-required\nThis field holds CRM information",
-                    "title": "CRM Details",
-                    "$ref": "#/definitions/schemaCRMInfo"
-                }
-            }
+            "title": "Signup Type Internal Scaling",
+            "x-displayname": "Signup Type Internal Scaling",
+            "x-ves-proto-message": "ves.io.schema.signup.SignupTypeInternalScaling"
         },
-        "signupSourceInternalScaling": {
+        "signupSignupTypeInternalSre": {
             "type": "object",
-            "title": "Source Internal Scaling",
-            "x-displayname": "Source Internal Scaling",
-            "x-ves-proto-message": "ves.io.schema.signup.SourceInternalScaling"
-        },
-        "signupSourceInternalSre": {
-            "type": "object",
-            "title": "Source Internal SRE",
-            "x-displayname": "Source Internal SRE",
-            "x-ves-proto-message": "ves.io.schema.signup.SourceInternalSre",
+            "title": "Signup Type Internal SRE",
+            "x-displayname": "Signup Type Internal SRE",
+            "x-ves-proto-message": "ves.io.schema.signup.SignupTypeInternalSre",
             "properties": {
                 "crm_details": {
                     "description": " This field holds CRM information",
                     "title": "CRM Details",
                     "$ref": "#/definitions/schemaCRMInfo",
                     "x-displayname": "CRM Details"
-                },
-                "crm_info": {
-                    "description": " this field holds the CRM info\n This field is deprecated. use CrmDetails instead",
-                    "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfoV2",
-                    "x-displayname": "CRM Info"
                 },
                 "f5xc_instance_name": {
                     "type": "string",
@@ -3905,6 +3932,13 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64"
                     }
+                },
+                "is_demo_tenant": {
+                    "type": "boolean",
+                    "description": " Indicates whether signup is for demo tenant or not.",
+                    "title": "Is Demo Tenant",
+                    "format": "boolean",
+                    "x-displayname": "Is Demo Tenant"
                 },
                 "kc_instance_name": {
                     "type": "string",
@@ -3919,27 +3953,27 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "signupSourceInternalSso": {
+        "signupSignupTypeInternalSso": {
             "type": "object",
-            "description": "x-displayName: \"Source Internal SSO\"",
-            "title": "Source Internal SSO"
+            "description": "x-displayName: \"Signup Type Internal SSO\"",
+            "title": "Signup Type Internal SSO"
         },
-        "signupSourceMarketplace": {
+        "signupSignupTypeMarketplace": {
             "type": "object",
-            "description": "x-displayName: \"Source Marketplace\"\npayload for the creation request, for Marketplace source",
-            "title": "Source Marketplace",
+            "description": "x-displayName: \"Signup Type Marketplace\"\npayload for the creation request, for Marketplace Signup Type",
+            "title": "Signup Type Marketplace",
             "properties": {
-                "marketplace_aws": {
-                    "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for Aws Marketplace",
-                    "title": "MarketplaceAws",
-                    "$ref": "#/definitions/signupMarketplaceAws"
+                "crm_details": {
+                    "description": "x-displayName: \"CRM Details\"\nx-required\nThis field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo"
                 }
             }
         },
-        "signupSourceMsp": {
+        "signupSignupTypeMsp": {
             "type": "object",
-            "description": "x-displayName: \"Source MSP\"",
-            "title": "Source MSP",
+            "description": "x-displayName: \"Signup Type MSP\"",
+            "title": "Signup Type MSP",
             "properties": {
                 "child_tenant_obj_name": {
                     "type": "string",
@@ -3950,18 +3984,13 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"CRM Details\"\nThis field holds CRM information",
                     "title": "CRM Details",
                     "$ref": "#/definitions/schemaCRMInfo"
-                },
-                "crm_info": {
-                    "description": "x-displayName: \"CRM Info\"\nthis field holds the CRM info\nThis field is deprecated. use CrmDetails instead",
-                    "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfoV2"
                 }
             }
         },
-        "signupSourcePlanTransition": {
+        "signupSignupTypePlanTransition": {
             "type": "object",
-            "description": "x-displayName: \"Source Plan Transition\"\nSourcePlanTransition can be only used for Free to Individual plan transition signups",
-            "title": "Source Plan Transition",
+            "description": "x-displayName: \"Signup Type Plan Transition\"\nSignupTypePlanTransition can be only used for Free to Individual plan transition signups",
+            "title": "Signup Type Plan Transition",
             "properties": {
                 "is_sso_enabled": {
                     "type": "boolean",
@@ -3971,11 +4000,11 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "signupSourcePublic": {
+        "signupSignupTypePublic": {
             "type": "object",
-            "title": "Source Public",
-            "x-displayname": "Source Public",
-            "x-ves-proto-message": "ves.io.schema.signup.SourcePublic"
+            "title": "Signup Type Public",
+            "x-displayname": "Signup Type Public",
+            "x-ves-proto-message": "ves.io.schema.signup.SignupTypePublic"
         },
         "signupUserMeta": {
             "type": "object",

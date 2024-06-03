@@ -1766,7 +1766,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Create"
             },
             "x-displayname": "Cloud Connect",
@@ -1867,7 +1866,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Replace"
             },
             "x-displayname": "Cloud Connect",
@@ -1984,7 +1982,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.List"
             },
             "x-displayname": "Cloud Connect",
@@ -2095,7 +2092,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Get"
             },
             "delete": {
@@ -2189,7 +2185,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Delete"
             },
             "x-displayname": "Cloud Connect",
@@ -2242,12 +2237,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
                     "x-displayname": "Installed Routes"
                 },
-                "state": {
-                    "type": "string",
-                    "description": " Attachment State",
-                    "title": "Attachment State",
-                    "x-displayname": "Attachment State"
-                },
                 "subnets": {
                     "type": "array",
                     "description": " Network Interfaces created along with the attachment",
@@ -2262,6 +2251,18 @@ var APISwaggerJSON string = `{
                     "description": " TGW Attachment ID",
                     "title": "TGW Attachment ID",
                     "x-displayname": "TGW Attachment ID"
+                },
+                "vpc_cidr": {
+                    "type": "string",
+                    "description": " VPC CIDR",
+                    "title": "VPC CIDR",
+                    "x-displayname": "VPC CIDR"
+                },
+                "vpc_deployment_state": {
+                    "description": " VPC deployment state",
+                    "title": "Deployment State",
+                    "$ref": "#/definitions/cloud_connectCloudConnectVPCStateType",
+                    "x-displayname": "Deployment State"
                 },
                 "vpc_id": {
                     "type": "string",
@@ -2511,6 +2512,264 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAzureAttachmentsListStatusType": {
+            "type": "object",
+            "description": "Azure VEspokeNT Attachment List Status Type",
+            "title": "Azure spoke Attachment List Status Type",
+            "x-displayname": "Azure spoke Attachment List Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureAttachmentsListStatusType",
+            "properties": {
+                "attachment_status": {
+                    "type": "array",
+                    "description": " Azure spoke Attachment Status Type",
+                    "title": "Azure spoke Attachment Status Type",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAzureAttachmentsStatusType"
+                    },
+                    "x-displayname": "Azure spoke Attachment Status"
+                }
+            }
+        },
+        "cloud_connectAzureAttachmentsStatusType": {
+            "type": "object",
+            "description": "Azure Attachment Status Type",
+            "title": "Azure Attachment Status Type",
+            "x-displayname": "Azure Attachment Status Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureAttachmentsStatusType",
+            "properties": {
+                "creation_time": {
+                    "type": "string",
+                    "description": " Attachment Creation Time",
+                    "title": "Attachment Creation Time",
+                    "format": "date-time",
+                    "x-displayname": "Attachment Creation Time"
+                },
+                "deployment_status": {
+                    "type": "string",
+                    "description": " Attachment Deployment Status",
+                    "title": "Attachment Deployment Status",
+                    "x-displayname": "Attachment Deployment Status"
+                },
+                "hub_owner_subscriptionid": {
+                    "type": "string",
+                    "description": " Hub Owner Subscription",
+                    "title": "Hub Owner subscription",
+                    "x-displayname": "Hub Owner Subscription"
+                },
+                "hub_vnet_name": {
+                    "type": "string",
+                    "description": " Hub VNET Name",
+                    "title": "Hub VNET Name",
+                    "x-displayname": "Hub VNET Name"
+                },
+                "installed_routes": {
+                    "title": "x-displayName: \"Installed Routes\"\nRoutes",
+                    "$ref": "#/definitions/cloud_connectAzureRouteTableWithStaticRouteListType"
+                },
+                "peering_state": {
+                    "type": "string",
+                    "description": " Hub VNET Peering state",
+                    "title": "Hub VNET Peering state",
+                    "x-displayname": "Hub VNET Peering state"
+                },
+                "peering_sync_level": {
+                    "type": "string",
+                    "description": " Hub VNET peering sync level",
+                    "title": "Hub VNET peering sync level",
+                    "x-displayname": "Hub VNET peering sync level"
+                },
+                "provisioning_state": {
+                    "type": "string",
+                    "description": " Hub VNET Provisioning state",
+                    "title": "Hub VNET Provisioning state",
+                    "x-displayname": "Hub VNET Provisioning state"
+                },
+                "spoke_vnet_id": {
+                    "type": "string",
+                    "description": " Spoke VNET ID",
+                    "title": "Spoke VNET ID",
+                    "x-displayname": "Spoke VNET ID"
+                },
+                "subnets": {
+                    "type": "array",
+                    "description": " Network Interfaces created along with the attachment",
+                    "title": "Subnets",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectSubnetStatusType"
+                    },
+                    "x-displayname": "Network Interfaces"
+                },
+                "vnet_attachment_id": {
+                    "type": "string",
+                    "description": " VNET Attachment ID",
+                    "title": "VNET Attachment ID",
+                    "x-displayname": "VNET Attachment ID"
+                }
+            }
+        },
+        "cloud_connectAzureRouteTableWithStaticRoute": {
+            "type": "object",
+            "description": "Azure Route Table with Static Route",
+            "title": "Azure Route Table",
+            "x-displayname": "Azure Route Table with Static Route",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureRouteTableWithStaticRoute",
+            "properties": {
+                "route_table_id": {
+                    "type": "string",
+                    "description": " Route table ID\n\nExample: - \"rt-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(rt-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Route table ID",
+                    "maxLength": 64,
+                    "x-displayname": "Route table ID",
+                    "x-ves-example": "rt-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(rt-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                },
+                "static_routes": {
+                    "type": "array",
+                    "description": " List of Static Routes\n\nExample: - \"10.1.1.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "static_routes",
+                    "minItems": 1,
+                    "maxItems": 50,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Static Routes",
+                    "x-ves-example": "10.1.1.0/24",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "50",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectAzureRouteTableWithStaticRouteListType": {
+            "type": "object",
+            "description": "List Azure Route Table with Static Route",
+            "title": "List Azure Route Table with Static Route",
+            "x-displayname": "List Azure Route Table with Static Route",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureRouteTableWithStaticRouteListType",
+            "properties": {
+                "route_tables": {
+                    "type": "array",
+                    "description": " Route Tables with static routes\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of route tables with static routes",
+                    "minItems": 1,
+                    "maxItems": 200,
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAzureRouteTableWithStaticRoute"
+                    },
+                    "x-displayname": "List of route tables with static routes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "200",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectAzureVNETAttachmentType": {
+            "type": "object",
+            "title": "Azure VNET attachment",
+            "x-displayname": "Azure VNET Attachment",
+            "x-ves-oneof-field-routing_choice": "[\"custom_routing\",\"manual_routing\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureVNETAttachmentType",
+            "properties": {
+                "custom_routing": {
+                    "description": "Exclusive with [manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
+                    "title": "Advertise Custom CIDRs",
+                    "$ref": "#/definitions/cloud_connectAzureRouteTableWithStaticRouteListType",
+                    "x-displayname": "Advertise Custom CIDRs"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [custom_routing]\n No route tables will be programmed by F5. User will manage routing",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Manual"
+                },
+                "subscription_id": {
+                    "type": "string",
+                    "description": " Enter the Subscription ID of the VNET to be attached\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Subscription ID",
+                    "maxLength": 64,
+                    "x-displayname": "Subscription ID",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "vnet_id": {
+                    "type": "string",
+                    "description": " Enter the vnet ID of the VNET to be attached\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "VNET ID",
+                    "maxLength": 64,
+                    "x-displayname": "VNET ID",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                }
+            }
+        },
+        "cloud_connectAzureVNETSiteType": {
+            "type": "object",
+            "description": "Cloud Connect Azure VNET Site Type",
+            "title": "Cloud Connect Azure VNET Site Type",
+            "x-displayname": "Azure VNET Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureVNETSiteType",
+            "properties": {
+                "site": {
+                    "description": " Azure VNET Site Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Azure VNET Site Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Azure VNET Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "vnet_attachments": {
+                    "description": " Spoke VNETs to be attached to the Azure Hub VNET Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VNETs",
+                    "$ref": "#/definitions/cloud_connectAzureVnetAttachmentListType",
+                    "x-displayname": "Spoke VNETs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectAzureVnetAttachmentListType": {
+            "type": "object",
+            "title": "VNET Attachments",
+            "x-displayname": "VNET Attachments",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureVnetAttachmentListType",
+            "properties": {
+                "vnet_list": {
+                    "type": "array",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n",
+                    "title": "vnet_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectAzureVNETAttachmentType"
+                    },
+                    "x-displayname": "VNET List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128"
+                    }
+                }
+            }
+        },
         "cloud_connectCloudConnectState": {
             "type": "string",
             "description": "State of the CloudConnect connections\n\n - DOWN: Down\n\nCloudConnect and their corresponding vpc attachments are down\n - DEGRADED: Degraded\n\nSome of vpc attachments with the CloudConnect are down\n - UP: Up\n\nCloudConnect and their corresponding vpc attachments are available and healthy",
@@ -2529,16 +2788,37 @@ var APISwaggerJSON string = `{
             "description": "Cloud Connect Status",
             "title": "Cloud Connect Status",
             "x-displayname": "Status",
-            "x-ves-oneof-field-cloud_connect_deployment": "[\"cloud_connect_aws_site\"]",
+            "x-ves-oneof-field-cloud_connect_deployment": "[\"cloud_connect_aws_site\",\"cloud_connect_azure_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudConnectStatusType",
             "properties": {
                 "cloud_connect_aws_site": {
-                    "description": "Exclusive with []\n Cloud Connect to AWS Sites",
+                    "description": "Exclusive with [cloud_connect_azure_site]\n Cloud Connect to AWS Sites",
                     "title": "Cloud Connect Attached to AWS TGW Site",
                     "$ref": "#/definitions/cloud_connectAWSAttachmentsListStatusType",
                     "x-displayname": "Cloud Connect to AWS TGW Site"
+                },
+                "cloud_connect_azure_site": {
+                    "description": "Exclusive with [cloud_connect_aws_site]\n Cloud Connect to Azure VNET Sites",
+                    "title": "Cloud Connect Attached to Azure VNET Site",
+                    "$ref": "#/definitions/cloud_connectAzureAttachmentsListStatusType",
+                    "x-displayname": "Cloud Connect to AAzure VNET Site"
                 }
             }
+        },
+        "cloud_connectCloudConnectVPCStateType": {
+            "type": "string",
+            "description": "Cloud Connect VPC State Type\n\n - AVAILABLE: Available\n\nCloud Connect vpc attachment is in available state.\n - PENDING: Pending\n\nCloud Connect vpc attachment is in flight.\n - FAILED: Failed\n\nCloud Connect vpc attachment has failed.\n - DELETED: Deleted\n\nCloud Connect vpc attachment has been deleted.\n - DELETING: Deleting\n\nCloud Connect vpc attachment is being deleted.",
+            "title": "Cloud Connect VPC State",
+            "enum": [
+                "AVAILABLE",
+                "PENDING",
+                "FAILED",
+                "DELETED",
+                "DELETING"
+            ],
+            "default": "AVAILABLE",
+            "x-displayname": "Cloud Connect VPC State",
+            "x-ves-proto-enum": "ves.io.schema.cloud_connect.CloudConnectVPCStateType"
         },
         "cloud_connectCloudLinkListType": {
             "type": "object",
@@ -2571,7 +2851,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the TLS Cloud Connect",
                     "title": "spec",
-                    "$ref": "#/definitions/cloud_connectCreateSpecType",
+                    "$ref": "#/definitions/schemacloud_connectCreateSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2589,7 +2869,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the TLS Cloud Connect",
                     "title": "spec",
-                    "$ref": "#/definitions/cloud_connectGetSpecType",
+                    "$ref": "#/definitions/schemacloud_connectGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "system_metadata": {
@@ -2597,30 +2877,6 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "cloud_connectCreateSpecType": {
-            "type": "object",
-            "description": "Shape of the Cloud Connect specification",
-            "title": "Create Cloud Connect",
-            "x-displayname": "Create Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
-            "properties": {
-                "aws_tgw_site": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
-                    "x-displayname": "AWS TGW Site"
-                },
-                "segment": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
                 }
             }
         },
@@ -2639,10 +2895,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "All RouteTables"
                 },
                 "selective_route_tables": {
-                    "description": "Exclusive with [all_route_tables]\n Override default route for selective route tables",
-                    "title": "Override for selective route tables",
+                    "description": "Exclusive with [all_route_tables]\n Override default route for selective route tables for AWS",
+                    "title": "Override for selective route tables for AWS TGW",
                     "$ref": "#/definitions/cloud_connectAWSDefaultRoutesRouteTable",
-                    "x-displayname": "Selective RouteTables"
+                    "x-displayname": "Selective RouteTables for AWS"
                 }
             }
         },
@@ -2731,7 +2987,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the TLS Cloud Connect",
                     "title": "spec",
-                    "$ref": "#/definitions/cloud_connectGetSpecType",
+                    "$ref": "#/definitions/schemacloud_connectGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -2765,35 +3021,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "cloud_connectGetSpecType": {
-            "type": "object",
-            "description": "Shape of the Cloud Connect specification",
-            "title": "Get Cloud Connect",
-            "x-displayname": "Get Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
-            "properties": {
-                "aws_tgw_site": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
-                    "x-displayname": "AWS TGW Site"
-                },
-                "segment": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "state": {
-                    "description": " State of the vpc attachments with the Cloud Connect deployment",
-                    "$ref": "#/definitions/cloud_connectCloudConnectState",
-                    "x-displayname": "Cloud Connect State"
-                }
-            }
         },
         "cloud_connectListResponse": {
             "type": "object",
@@ -2851,7 +3078,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/cloud_connectGetSpecType",
+                    "$ref": "#/definitions/schemacloud_connectGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -2991,7 +3218,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the TLS Cloud Connect",
                     "title": "spec",
-                    "$ref": "#/definitions/cloud_connectReplaceSpecType",
+                    "$ref": "#/definitions/schemacloud_connectReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -2999,30 +3226,6 @@ var APISwaggerJSON string = `{
         "cloud_connectReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceResponse"
-        },
-        "cloud_connectReplaceSpecType": {
-            "type": "object",
-            "description": "Shape of the Cloud Connect specification",
-            "title": "Replace Cloud Connect",
-            "x-displayname": "Replace Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
-            "properties": {
-                "aws_tgw_site": {
-                    "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType",
-                    "x-displayname": "AWS TGW Site"
-                },
-                "segment": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
         },
         "cloud_connectStatusObject": {
             "type": "object",
@@ -3399,10 +3602,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3459,10 +3666,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3521,10 +3732,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3796,6 +4011,95 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemacloud_connectCreateSpecType": {
+            "type": "object",
+            "description": "Shape of the Cloud Connect specification",
+            "title": "Create Cloud Connect",
+            "x-displayname": "Create Cloud Connect",
+            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
+            "properties": {
+                "aws_tgw_site": {
+                    "description": "Exclusive with []\n",
+                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
+                },
+                "azure_vnet_site": {
+                    "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
+                    "x-displayname": "Azure VNET  Site"
+                },
+                "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "schemacloud_connectGetSpecType": {
+            "type": "object",
+            "description": "Shape of the Cloud Connect specification",
+            "title": "Get Cloud Connect",
+            "x-displayname": "Get Cloud Connect",
+            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
+            "properties": {
+                "aws_tgw_site": {
+                    "description": "Exclusive with []\n",
+                    "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
+                },
+                "azure_vnet_site": {
+                    "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
+                    "x-displayname": "Azure VNET  Site"
+                },
+                "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "state": {
+                    "description": " State of the vpc attachments with the Cloud Connect deployment",
+                    "$ref": "#/definitions/cloud_connectCloudConnectState",
+                    "x-displayname": "Cloud Connect State"
+                }
+            }
+        },
+        "schemacloud_connectReplaceSpecType": {
+            "type": "object",
+            "description": "Shape of the Cloud Connect specification",
+            "title": "Replace Cloud Connect",
+            "x-displayname": "Replace Cloud Connect",
+            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
+            "properties": {
+                "aws_tgw_site": {
+                    "description": "Exclusive with []\n",
+                    "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType",
+                    "x-displayname": "AWS TGW Site"
+                },
+                "azure_vnet_site": {
+                    "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
+                    "x-displayname": "Azure VNET  Site"
+                },
+                "segment": {
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -3839,6 +4143,25 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
                     }
+                }
+            }
+        },
+        "siteCoordinates": {
+            "type": "object",
+            "description": "x-displayName: \"Site Coordinates\"\nCoordinates of the site which provides the site physical location",
+            "title": "Site Coordinates",
+            "properties": {
+                "latitude": {
+                    "type": "number",
+                    "description": "x-displayName: \"Latitude\"\nx-example: \"10.0\"\nLatitude of the site location",
+                    "title": "latitude",
+                    "format": "float"
+                },
+                "longitude": {
+                    "type": "number",
+                    "description": "x-displayName: \"Longitude\"\nx-example: \"20.0\"\nlongitude of site location",
+                    "title": "longitude",
+                    "format": "float"
                 }
             }
         }

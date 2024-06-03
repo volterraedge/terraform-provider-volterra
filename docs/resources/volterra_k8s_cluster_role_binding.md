@@ -29,11 +29,7 @@ resource "volterra_k8s_cluster_role_binding" "example" {
   subjects {
     // One of the arguments from this list "user service_account group" must be set
 
-    service_account {
-      name = "cd-app-controller"
-
-      namespace = "cd-app-namespace"
-    }
+    user = "user1@example.com"
   }
 }
 

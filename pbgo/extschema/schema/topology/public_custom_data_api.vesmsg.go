@@ -1248,6 +1248,726 @@ func MetricTypeDataValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NetworkRouteTableData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkRouteTableData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkRouteTableData) DeepCopy() *NetworkRouteTableData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkRouteTableData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkRouteTableData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkRouteTableData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkRouteTableDataValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NetworkRouteTableData) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetRouteTableDataDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRouteTableDataDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSubnetDataDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSubnetDataDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *NetworkRouteTableData) GetRouteTableDataDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRouteTableData() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetRouteTableData().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRouteTableData().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "route_table_data." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *NetworkRouteTableData) GetSubnetDataDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSubnetData() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSubnetData() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSubnetData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("subnet_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateNetworkRouteTableData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkRouteTableData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkRouteTableData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkRouteTableData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["route_table_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_table_data"))
+		if err := fv(ctx, m.GetRouteTableData(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet_data"))
+		for idx, item := range m.GetSubnetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkRouteTableDataValidator = func() *ValidateNetworkRouteTableData {
+	v := &ValidateNetworkRouteTableData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NetworkRouteTableDataValidator() db.Validator {
+	return DefaultNetworkRouteTableDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkRouteTableMetaData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkRouteTableMetaData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkRouteTableMetaData) DeepCopy() *NetworkRouteTableMetaData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkRouteTableMetaData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkRouteTableMetaData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkRouteTableMetaData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkRouteTableMetaDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNetworkRouteTableMetaData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkRouteTableMetaData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkRouteTableMetaData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkRouteTableMetaData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["route_table_metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_table_metadata"))
+		if err := fv(ctx, m.GetRouteTableMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet_metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet_metadata"))
+		for idx, item := range m.GetSubnetMetadata() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkRouteTableMetaDataValidator = func() *ValidateNetworkRouteTableMetaData {
+	v := &ValidateNetworkRouteTableMetaData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NetworkRouteTableMetaDataValidator() db.Validator {
+	return DefaultNetworkRouteTableMetaDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkRouteTablesRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkRouteTablesRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkRouteTablesRequest) DeepCopy() *NetworkRouteTablesRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkRouteTablesRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkRouteTablesRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkRouteTablesRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkRouteTablesRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNetworkRouteTablesRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkRouteTablesRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNetworkRouteTablesRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkRouteTablesRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkRouteTablesRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["regions"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("regions"))
+		for idx, item := range m.GetRegions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_table_ids"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_table_ids"))
+		for idx, item := range m.GetRouteTableIds() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet_cidrs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet_cidrs"))
+		for idx, item := range m.GetSubnetCidrs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet_ids"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet_ids"))
+		for idx, item := range m.GetSubnetIds() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkRouteTablesRequestValidator = func() *ValidateNetworkRouteTablesRequest {
+	v := &ValidateNetworkRouteTablesRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhId := v.IdValidationRuleHandler
+	rulesId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhId(rulesId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NetworkRouteTablesRequest.id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["id"] = vFn
+
+	return v
+}()
+
+func NetworkRouteTablesRequestValidator() db.Validator {
+	return DefaultNetworkRouteTablesRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkRouteTablesResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkRouteTablesResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkRouteTablesResponse) DeepCopy() *NetworkRouteTablesResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkRouteTablesResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkRouteTablesResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkRouteTablesResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkRouteTablesResponseValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NetworkRouteTablesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDataDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *NetworkRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRoutesData() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutesData() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutesData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateNetworkRouteTablesResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkRouteTablesResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkRouteTablesResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkRouteTablesResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["routes_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("routes_data"))
+		for idx, item := range m.GetRoutesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkRouteTablesResponseValidator = func() *ValidateNetworkRouteTablesResponse {
+	v := &ValidateNetworkRouteTablesResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NetworkRouteTablesResponseValidator() db.Validator {
+	return DefaultNetworkRouteTablesResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkRoutesData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkRoutesData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkRoutesData) DeepCopy() *NetworkRoutesData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkRoutesData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkRoutesData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkRoutesData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkRoutesDataValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NetworkRoutesData) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRouteTablesDataDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *NetworkRoutesData) GetRouteTablesDataDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRouteTablesData() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRouteTablesData() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRouteTablesData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("route_tables_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateNetworkRoutesData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkRoutesData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkRoutesData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkRoutesData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["network_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("network_id"))
+		if err := fv(ctx, m.GetNetworkId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_tables_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_tables_data"))
+		for idx, item := range m.GetRouteTablesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkRoutesDataValidator = func() *ValidateNetworkRoutesData {
+	v := &ValidateNetworkRoutesData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NetworkRoutesDataValidator() db.Validator {
+	return DefaultNetworkRoutesDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NetworkRoutesMetaData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NetworkRoutesMetaData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NetworkRoutesMetaData) DeepCopy() *NetworkRoutesMetaData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NetworkRoutesMetaData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NetworkRoutesMetaData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NetworkRoutesMetaData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NetworkRoutesMetaDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNetworkRoutesMetaData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNetworkRoutesMetaData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NetworkRoutesMetaData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NetworkRoutesMetaData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["network_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("network_id"))
+		if err := fv(ctx, m.GetNetworkId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_tables_metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_tables_metadata"))
+		for idx, item := range m.GetRouteTablesMetadata() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNetworkRoutesMetaDataValidator = func() *ValidateNetworkRoutesMetaData {
+	v := &ValidateNetworkRoutesMetaData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NetworkRoutesMetaDataValidator() db.Validator {
+	return DefaultNetworkRoutesMetaDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *NetworkSummaryInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1585,6 +2305,7 @@ func (v *ValidateNode) Validate(ctx context.Context, pm interface{}, opts ...db.
 var DefaultNodeValidator = func() *ValidateNode {
 	v := &ValidateNode{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["node_type.instance"] = NodeTypeInstanceValidator().Validate
 	v.FldValidators["node_type.site_mesh_group"] = NodeTypeSiteMeshGroupValidator().Validate
 
 	return v
@@ -1934,6 +2655,8 @@ func (v *ValidateNodeTypeInstance) Validate(ctx context.Context, pm interface{},
 // Well-known symbol for default validator implementation
 var DefaultNodeTypeInstanceValidator = func() *ValidateNodeTypeInstance {
 	v := &ValidateNodeTypeInstance{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["info"] = InstanceTypeValidator().Validate
 
 	return v
 }()
@@ -2555,6 +3278,120 @@ func NodeTypeTransitGatewayValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RouteTableData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RouteTableData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RouteTableData) DeepCopy() *RouteTableData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RouteTableData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RouteTableData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RouteTableData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RouteTableDataValidator().Validate(ctx, m, opts...)
+}
+
+func (m *RouteTableData) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRouteTableDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *RouteTableData) GetRouteTableDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRouteTable() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetRouteTable().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRouteTable().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "route_table." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateRouteTableData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRouteTableData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RouteTableData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RouteTableData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_table"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_table"))
+		if err := fv(ctx, m.GetRouteTable(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRouteTableDataValidator = func() *ValidateRouteTableData {
+	v := &ValidateRouteTableData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RouteTableDataValidator() db.Validator {
+	return DefaultRouteTableDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RouteTableMetaData) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3144,6 +3981,194 @@ func SiteMeshTopologyRequestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SiteNetworksRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteNetworksRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteNetworksRequest) DeepCopy() *SiteNetworksRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteNetworksRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteNetworksRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteNetworksRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteNetworksRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSiteNetworksRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteNetworksRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSiteNetworksRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteNetworksRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteNetworksRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteNetworksRequestValidator = func() *ValidateSiteNetworksRequest {
+	v := &ValidateSiteNetworksRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SiteNetworksRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func SiteNetworksRequestValidator() db.Validator {
+	return DefaultSiteNetworksRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SiteNetworksResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteNetworksResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteNetworksResponse) DeepCopy() *SiteNetworksResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteNetworksResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteNetworksResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteNetworksResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteNetworksResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSiteNetworksResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteNetworksResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteNetworksResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteNetworksResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["routes_metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("routes_metadata"))
+		for idx, item := range m.GetRoutesMetadata() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteNetworksResponseValidator = func() *ValidateSiteNetworksResponse {
+	v := &ValidateSiteNetworksResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SiteNetworksResponseValidator() db.Validator {
+	return DefaultSiteNetworksResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteSummaryInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3214,6 +4239,18 @@ func (v *ValidateSiteSummaryInfo) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("node_count"))
 		if err := fv(ctx, m.GetNodeCount(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_info"))
+		for idx, item := range m.GetNodeInfo() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -3355,6 +4392,207 @@ var DefaultSiteTopologyRequestValidator = func() *ValidateSiteTopologyRequest {
 
 func SiteTopologyRequestValidator() db.Validator {
 	return DefaultSiteTopologyRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SubnetData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SubnetData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SubnetData) DeepCopy() *SubnetData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SubnetData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SubnetData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SubnetData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SubnetDataValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SubnetData) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSubnetDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SubnetData) GetSubnetDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSubnet() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSubnet().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSubnet().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "subnet." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateSubnetData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSubnetData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SubnetData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SubnetData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("subnet"))
+		if err := fv(ctx, m.GetSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSubnetDataValidator = func() *ValidateSubnetData {
+	v := &ValidateSubnetData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SubnetDataValidator() db.Validator {
+	return DefaultSubnetDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SubnetMetaData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SubnetMetaData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SubnetMetaData) DeepCopy() *SubnetMetaData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SubnetMetaData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SubnetMetaData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SubnetMetaData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SubnetMetaDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSubnetMetaData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSubnetMetaData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SubnetMetaData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SubnetMetaData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cloud_resource_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_resource_id"))
+		if err := fv(ctx, m.GetCloudResourceId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSubnetMetaDataValidator = func() *ValidateSubnetMetaData {
+	v := &ValidateSubnetMetaData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SubnetMetaDataValidator() db.Validator {
+	return DefaultSubnetMetaDataValidator
 }
 
 // augmented methods on protoc/std generated struct

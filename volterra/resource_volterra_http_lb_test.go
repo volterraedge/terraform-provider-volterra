@@ -2,10 +2,8 @@
 package volterra
 
 import (
-	"context"
 	"fmt"
 	"os"
-	"reflect"
 	"testing"
 
 	"github.com/google/uuid"
@@ -26,7 +24,6 @@ import (
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	vh_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
-	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/server"
 )
@@ -53,7 +50,7 @@ func TestHTTPLB(t *testing.T) {
 		client.WithTenant(tenantName),
 		client.WithCreatorClass("test"),
 		client.WithCreatorID("test-"+t.Name()))
-	tenantObj := mkDBObjTenant(tenantName, uuid.New().String())
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-waap-standard"))
 	f.MustCreateEntry(tenantObj)
 
 	nsName := "default"
@@ -279,10 +276,15 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		    rules {
 		      metadata {
 		        name = "allow-ns"
+				disable = false
 		      }
 
 		      spec {
 		        action = "ALLOW"
+				any_client           = false
+                any_dst_asn          = false
+                any_dst_ip           = false
+                scheme               = []
 		        client_selector {
 		          expressions = [
 		           "name.ves.io/namespace in (foo)"
@@ -293,6 +295,8 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		        challenge_action = "DEFAULT_CHALLENGE"
 		        waf_action {
 		        none = true
+				waf_in_monitoring_mode = false
+                waf_skip_processing    = false
 		        }
 		      }
 		    }
@@ -300,6 +304,11 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		}
 		resource "volterra_http_loadbalancer" "%[1]s" {
 		  name = "%[1]s"
+		  disable_api_definition           = true
+          disable_api_discovery            = true      
+          disable_malicious_user_detection = true
+          disable_trust_client_ip_headers  = true
+		  l7_ddos_action_default           = true
 		  namespace = volterra_namespace.app.name
 		  labels = {
 			  "ves.io/app_type" = volterra_app_type.app_type.name
@@ -314,11 +323,15 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  disable_rate_limit = false
 		  app_firewall {
 		    name      = volterra_app_firewall.app_fwd_athena.name
+			namespace = "%[2]s"
+			tenant    = "tenant1"
 		  }
 		  no_service_policies = false
 		  active_service_policies {
 		    policies {
 		      name = volterra_service_policy.allow_ns.name
+			  namespace = "%[2]s"
+			  tenant    = "tenant1"
 		    }
 		  }
 		  round_robin = true
@@ -327,33 +340,39 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  user_identification {
 		    name = volterra_user_identification.%[1]s.name
 		    namespace = "%[2]s"
+			tenant    = "tenant1"
 		  }
 		  rate_limit {
+			no_ip_allowed_list = false
+			no_policies        = false
 		    ip_allowed_list {
+			  ipv6_prefixes = []
 		      prefixes = ["8.8.8.8/32"]
 		    }
 		    policies {
 		      policies {
 			name = volterra_rate_limiter_policy.%[1]s.name
 			namespace = "%[2]s"
+			tenant    = "tenant1"
 		      }
 		    }
 		  }
 		  more_option {
-		    disable_default_error_pages         = false
-		    disable_path_normalize              = true
-		    enable_path_normalize               = false
-		    enable_strict_sni_host_header_check = false
-		    idle_timeout                        = %[5]d
-		    max_request_header_size             = 80
-		    request_headers_to_remove           = []
-		    response_headers_to_remove          = []
+			custom_errors                       = {}
+			disable_default_error_pages         = false
+			disable_path_normalize              = true
+			enable_path_normalize               = false
+			enable_strict_sni_host_header_check = false
+			idle_timeout                        = %[5]d
+			max_request_header_size             = 80
+			request_headers_to_remove           = []
+			response_headers_to_remove          = []
 
-		    request_headers_to_add {
-		      append = false
-		      name   = "X-real-ip"
-		      value  = "$[client_address]"
-		    }
+			request_headers_to_add {
+				append = false
+				name   = "X-real-ip"
+				value  = "$[client_address]"
+			}
 		  }
 		}
 		resource "volterra_api_definition" "example" {
@@ -498,6 +517,13 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 		}
 		resource "volterra_http_loadbalancer" "%[1]s" {
 		  name = "%[1]s"
+		  disable_api_definition           = true
+          disable_api_discovery            = true       
+          disable_malicious_user_detection = true
+          disable_trust_client_ip_headers  = true
+		  l7_ddos_action_default           = true
+		  disable_waf                      = true 
+		  user_id_client_ip                = true
 		  namespace = volterra_namespace.app.name
 		  labels = {
 			  "new-test"        = "true"
@@ -505,7 +531,17 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 		  advertise_on_public_default_vip = true
 		  no_challenge = true
 		  https_auto_cert {
-			port_ranges= "80,443"
+			add_hsts                 = true 
+			connection_idle_timeout  = 120000 
+			default_header           = false
+			default_loadbalancer     = false
+			disable_path_normalize   = false
+			enable_path_normalize    = true
+			http_redirect            = true
+			no_mtls                  = true
+			non_default_loadbalancer = true
+			pass_through             = false
+			port_ranges = "80,443"
 		  }
 		  disable_rate_limit = true
 		  no_service_policies = true
@@ -518,37 +554,4 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 			namespace = "%[4]s"
 		}
 		`, name, namespace, existLbName, existNsName, timeout)
-}
-
-func TestResourceHttpLoadbalancerInstanceStateUpgradeV0(t *testing.T) {
-	rawState := map[string]interface{}{
-		"enable_ddos_detection": []interface{}{
-			map[string]interface{}{
-				"disable_auto_mitigation": true,
-				"enable_auto_mitigation":  true,
-			},
-		},
-	}
-
-	// Expected output state after upgrade
-	expectedState := map[string]interface{}{
-		"enable_ddos_detection": []interface{}{
-			map[string]interface{}{
-				"disable_auto_mitigation": true,
-				"enable_auto_mitigation": []interface{}{
-					map[string]interface{}{
-						"block": true,
-					},
-				},
-			},
-		},
-	}
-
-	updatedState, err := statemigration.ResourceHttpLoadbalancerInstanceStateUpgradeV0(context.Background(), rawState, nil)
-	if err != nil {
-		t.Fatalf("error during state upgrade: %v", err)
-	}
-	if !reflect.DeepEqual(updatedState, expectedState) {
-		t.Fatalf("expected state:\n%#v\ngot:\n%#v\n", expectedState, updatedState)
-	}
 }

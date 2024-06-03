@@ -817,6 +817,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -1037,6 +1043,24 @@ func (m *CreateSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateCreateSpecType struct {
@@ -1986,6 +2010,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_selector"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
@@ -2277,6 +2310,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
 
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
+
 	return v
 }()
 
@@ -2359,6 +2394,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -2583,6 +2624,24 @@ func (m *GetSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Interfac
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateGetSpecType struct {
@@ -3532,6 +3591,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_selector"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
@@ -3823,6 +3891,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
 
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
+
 	return v
 }()
 
@@ -3911,6 +3981,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4180,6 +4256,24 @@ func (m *GlobalSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inter
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateGlobalSpecType struct {
@@ -5259,6 +5353,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_selector"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
@@ -5277,10 +5380,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["threat_intelligence_action"]; exists {
+	if fv, exists := v.FldValidators["threat_mesh_action"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("threat_intelligence_action"))
-		if err := fv(ctx, m.GetThreatIntelligenceAction(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("threat_mesh_action"))
+		if err := fv(ctx, m.GetThreatMeshAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5596,7 +5699,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["openapi_validation_action"] = ves_io_schema_policy.OpenApiValidationActionValidator().Validate
 
-	v.FldValidators["threat_intelligence_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+	v.FldValidators["threat_mesh_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -6376,6 +6481,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSegmentPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -6596,6 +6707,24 @@ func (m *ReplaceSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Inte
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetSegmentPolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentPolicy() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentPolicy().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentPolicy().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_policy." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateReplaceSpecType struct {
@@ -7545,6 +7674,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["segment_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_policy"))
+		if err := fv(ctx, m.GetSegmentPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["server_selector"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("server_selector"))
@@ -7835,6 +7973,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["ip_reputation_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["request_constraints"] = ves_io_schema_policy.RequestConstraintTypeValidator().Validate
+
+	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
 
 	return v
 }()
@@ -8322,6 +8462,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.RateLimiter = f.GetRateLimiter()
 	m.RequestConstraints = f.GetRequestConstraints()
 	m.Scheme = f.GetScheme()
+	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
@@ -8397,6 +8538,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.RateLimiter = m1.RateLimiter
 	f.RequestConstraints = m1.RequestConstraints
 	f.Scheme = m1.Scheme
+	f.SegmentPolicy = m1.SegmentPolicy
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
@@ -8695,6 +8837,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.RateLimiter = f.GetRateLimiter()
 	m.RequestConstraints = f.GetRequestConstraints()
 	m.Scheme = f.GetScheme()
+	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
@@ -8770,6 +8913,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.RateLimiter = m1.RateLimiter
 	f.RequestConstraints = m1.RequestConstraints
 	f.Scheme = m1.Scheme
+	f.SegmentPolicy = m1.SegmentPolicy
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher
@@ -9215,6 +9359,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.RateLimiter = f.GetRateLimiter()
 	m.RequestConstraints = f.GetRequestConstraints()
 	m.Scheme = f.GetScheme()
+	m.SegmentPolicy = f.GetSegmentPolicy()
 	m.ServerSelector = f.GetServerSelector()
 	m.ShapeProtectedEndpointAction = f.GetShapeProtectedEndpointAction()
 	m.TlsFingerprintMatcher = f.GetTlsFingerprintMatcher()
@@ -9290,6 +9435,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.RateLimiter = m1.RateLimiter
 	f.RequestConstraints = m1.RequestConstraints
 	f.Scheme = m1.Scheme
+	f.SegmentPolicy = m1.SegmentPolicy
 	f.ServerSelector = m1.ServerSelector
 	f.ShapeProtectedEndpointAction = m1.ShapeProtectedEndpointAction
 	f.TlsFingerprintMatcher = m1.TlsFingerprintMatcher

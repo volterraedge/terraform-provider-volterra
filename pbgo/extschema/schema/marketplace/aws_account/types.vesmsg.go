@@ -66,28 +66,28 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetSignupDRefInfo()
+	return m.GetTenantDRefInfo()
 
 }
 
-func (m *GlobalSpecType) GetSignupDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetSignup()
+func (m *GlobalSpecType) GetTenantDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTenant()
 	if len(refs) == 0 {
 		return nil, nil
 	}
 	drInfos := make([]db.DRefInfo, 0, len(refs))
 	for i, ref := range refs {
 		if ref == nil {
-			return nil, fmt.Errorf("GlobalSpecType.signup[%d] has a nil value", i)
+			return nil, fmt.Errorf("GlobalSpecType.tenant[%d] has a nil value", i)
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "signup.Object",
+			RefdType:   "tenant.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
 			RefdName:   ref.Name,
-			DRField:    "signup",
+			DRField:    "tenant",
 			Ref:        ref,
 		})
 	}
@@ -95,14 +95,14 @@ func (m *GlobalSpecType) GetSignupDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-// GetSignupDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetSignupDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+// GetTenantDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetTenantDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "signup.Object")
+	refdType, err := d.TypeForEntryKind("", "", "tenant.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: signup")
+		return nil, errors.Wrap(err, "Cannot find type for kind: tenant")
 	}
-	for _, ref := range m.GetSignup() {
+	for _, ref := range m.GetTenant() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -149,12 +149,12 @@ func (v *ValidateGlobalSpecType) ProductCodeValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) SignupValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for signup")
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tenant")
 	}
 	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
@@ -169,7 +169,7 @@ func (v *ValidateGlobalSpecType) SignupValidationRuleHandler(rules map[string]st
 	}
 	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for signup")
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tenant")
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
@@ -186,10 +186,10 @@ func (v *ValidateGlobalSpecType) SignupValidationRuleHandler(rules map[string]st
 			l = append(l, strVal)
 		}
 		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated signup")
+			return errors.Wrap(err, "repeated tenant")
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items signup")
+			return errors.Wrap(err, "items tenant")
 		}
 		return nil
 	}
@@ -238,9 +238,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["signup"]; exists {
-		vOpts := append(opts, db.WithValidateField("signup"))
-		if err := fv(ctx, m.GetSignup(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["signup_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("signup_id"))
+		if err := fv(ctx, m.GetSignupId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -250,6 +251,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("subscription_status"))
 		if err := fv(ctx, m.GetSubscriptionStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant"]; exists {
+		vOpts := append(opts, db.WithValidateField("tenant"))
+		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
 			return err
 		}
 
@@ -306,16 +315,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["product_code"] = vFn
 
-	vrhSignup := v.SignupValidationRuleHandler
-	rulesSignup := map[string]string{
+	vrhTenant := v.TenantValidationRuleHandler
+	rulesTenant := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "1",
 	}
-	vFn, err = vrhSignup(rulesSignup)
+	vFn, err = vrhTenant(rulesTenant)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.signup: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.tenant: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["signup"] = vFn
+	v.FldValidators["tenant"] = vFn
 
 	return v
 }()

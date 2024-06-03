@@ -36,6 +36,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.more_option.cache_ttl_options",
+		"spec.gc_spec.more_option.security_options.api_protection.jwt_validation.jwks",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Create"] = []string{
@@ -45,6 +46,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.more_option.cache_ttl_options",
+		"spec.gc_spec.more_option.security_options.api_protection.jwt_validation.jwks",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Create"] = "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectCreateReq"
@@ -56,6 +58,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.more_option.cache_ttl_options",
+		"spec.gc_spec.more_option.security_options.api_protection.jwt_validation.jwks",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.List"] = []string{
@@ -65,6 +68,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"items.#.spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.more_option.cache_ttl_options",
+		"items.#.spec.gc_spec.more_option.security_options.api_protection.jwt_validation.jwks",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.ListStream"] = []string{
@@ -74,6 +78,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"items.#.spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.more_option.cache_ttl_options",
+		"items.#.spec.gc_spec.more_option.security_options.api_protection.jwt_validation.jwks",
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"] = []string{
@@ -83,6 +88,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.more_option.cache_ttl_options",
+		"spec.gc_spec.more_option.security_options.api_protection.jwt_validation.jwks",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"] = []string{
@@ -92,6 +98,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.more_option.cache_options.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
 		"spec.gc_spec.more_option.cache_options.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.more_option.cache_ttl_options",
+		"spec.gc_spec.more_option.security_options.api_protection.jwt_validation.jwks",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"] = "ves.io.schema.views.cdn_loadbalancer.crudapi.ObjectReplaceReq"

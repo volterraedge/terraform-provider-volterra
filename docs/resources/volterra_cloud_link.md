@@ -31,69 +31,15 @@ resource "volterra_cloud_link" "example" {
 
     // One of the arguments from this list "byoc f5xc_managed" must be set
 
-    byoc {
-      connections {
-        auth_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "value"
+    f5xc_managed {}
 
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
-
-          clear_secret_info {
-            provider = "box-provider"
-
-            url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-          }
-        }
-
-        bgp_asn = "64512"
-
-        connection_id = "dxcon-a2h48678"
-
-        coordinates {
-          latitude = "10.0"
-
-          longitude = "20.0"
-        }
-
-        enable_sitelink = true
-
-        // One of the arguments from this list "ipv4 ipv6" must be set
-
-        ipv4 {
-          aws_router_peer_address = "10.1.0.0/31"
-
-          router_peer_address = "10.1.0.0/31"
-        }
-        jumbo_mtu = true
-        metadata {
-          description = "Virtual Host for acmecorp website"
-
-          disable = true
-
-          name = "acmecorp-web"
-        }
-        region = "us-east-1"
-        // One of the arguments from this list "system_generated_name user_assigned_name" must be set
-        user_assigned_name = "user_assigned_name"
-        tags = {
-          "key1" = "value1"
-        }
-        virtual_interface_type = "virtual_interface_type"
-        vlan = "700"
-      }
-    }
     // One of the arguments from this list "auto custom_asn" must be set
+
     auto = true
   }
+
   // One of the arguments from this list "disabled enabled" must be set
+
   disabled = true
 }
 
@@ -216,13 +162,13 @@ CloudLink for AWS Cloud.
 
 `aws_cred` - (Required) Reference to AWS cloud account credential object used to deploy CloudLink specific object. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "f5xc_managed, byoc" must be set
+###### One of the arguments from this list "byoc, f5xc_managed" must be set
 
 `byoc` - (Optional) Assumption is that this given AWS account already has direct connect connection provisioned. See [Cloud Link Type Byoc ](#cloud-link-type-byoc) below for details.
 
 `f5xc_managed` - (Optional) F5 XC will manage end to end AWS Direct Connect Connection and making it ready to be consumed by the site.. See [Cloud Link Type F5xc Managed ](#cloud-link-type-f5xc-managed) below for details.(Deprecated)
 
-###### One of the arguments from this list "auto, custom_asn" must be set
+###### One of the arguments from this list "custom_asn, auto" must be set
 
 `auto` - (Optional) F5XC will automatically generate an ASN to create a Direct Connect Gateway (`Bool`).(Deprecated)
 

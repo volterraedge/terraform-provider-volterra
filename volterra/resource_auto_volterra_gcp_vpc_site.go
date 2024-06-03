@@ -217,6 +217,64 @@ func resourceVolterraGcpVpcSite() *schema.Resource {
 				Required: true,
 			},
 
+			"kubernetes_upgrade_drain": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_upgrade_drain": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_upgrade_drain": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"drain_max_unavailable_node_count": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"drain_max_unavailable_node_percentage": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"drain_node_timeout": {
+										Type:     schema.TypeInt,
+										Required: true,
+									},
+
+									"disable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"enable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"log_receiver": {
 
 				Type:     schema.TypeSet,
@@ -3183,6 +3241,104 @@ func resourceVolterraGcpVpcSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 		createSpec.InstanceType =
 			v.(string)
+
+	}
+
+	//kubernetes_upgrade_drain
+	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
+		createSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
+		for _, set := range sl {
+			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+
+			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+
+				if v.(bool) {
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+				}
+
+			}
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
+				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					drainMaxUnavailableChoiceTypeFound := false
+
+					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+					}
+
+					vegaUpgradeModeToggleChoiceTypeFound := false
+
+					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+		}
 
 	}
 
@@ -7149,6 +7305,124 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	if v, ok := d.GetOk("disk_size"); ok && !isIntfNil(v) {
+
+		updateSpec.DiskSize =
+			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("gcp_region"); ok && !isIntfNil(v) {
+
+		updateSpec.GcpRegion =
+			v.(string)
+
+	}
+
+	if v, ok := d.GetOk("instance_type"); ok && !isIntfNil(v) {
+
+		updateSpec.InstanceType =
+			v.(string)
+
+	}
+
+	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
+		updateSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
+		for _, set := range sl {
+			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+
+			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+
+				if v.(bool) {
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+				}
+
+			}
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
+				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					drainMaxUnavailableChoiceTypeFound := false
+
+					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+					}
+
+					vegaUpgradeModeToggleChoiceTypeFound := false
+
+					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	logsReceiverChoiceTypeFound := false
 
 	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
@@ -7193,6 +7467,13 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			logsReceiverChoiceInt.LogsStreamingDisabled = &ves_io_schema.Empty{}
 			updateSpec.LogsReceiverChoice = logsReceiverChoiceInt
 		}
+
+	}
+
+	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) {
+
+		updateSpec.NodesPerAz =
+			uint32(v.(int))
 
 	}
 
@@ -7470,6 +7751,16 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGw.ForwardProxyChoice = forwardProxyChoiceInt
 				}
+
+			}
+
+			if v, ok := cs["gcp_zone_names"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				siteTypeInt.IngressEgressGw.GcpZoneNames = ls
 
 			}
 
@@ -8081,6 +8372,83 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["inside_network"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				insideNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
+				siteTypeInt.IngressEgressGw.InsideNetwork = insideNetwork
+				for _, set := range sl {
+					insideNetworkMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := insideNetworkMapStrToI["existing_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_ExistingNetwork{}
+						choiceInt.ExistingNetwork = &ves_io_schema_views.GCPVPCNetworkType{}
+						insideNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := insideNetworkMapStrToI["new_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetwork{}
+						choiceInt.NewNetwork = &ves_io_schema_views.GCPVPCNetworkParamsType{}
+						insideNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := insideNetworkMapStrToI["new_network_autogenerate"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetworkAutogenerate{}
+						choiceInt.NewNetworkAutogenerate = &ves_io_schema_views.GCPVPCNetworkAutogenerateParamsType{}
+						insideNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetworkAutogenerate.Autogenerate = v.(bool)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			insideStaticRouteChoiceTypeFound := false
 
 			if v, ok := cs["inside_static_routes"]; ok && !isIntfNil(v) && !insideStaticRouteChoiceTypeFound {
@@ -8345,6 +8713,68 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["inside_subnet"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				insideSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
+				siteTypeInt.IngressEgressGw.InsideSubnet = insideSubnet
+				for _, set := range sl {
+					insideSubnetMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := insideSubnetMapStrToI["existing_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_ExistingSubnet{}
+						choiceInt.ExistingSubnet = &ves_io_schema_views.GCPSubnetType{}
+						insideSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := insideSubnetMapStrToI["new_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_NewSubnet{}
+						choiceInt.NewSubnet = &ves_io_schema_views.GCPSubnetParamsType{}
+						insideSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.PrimaryIpv4 = v.(string)
+
+							}
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			networkPolicyChoiceTypeFound := false
 
 			if v, ok := cs["active_enhanced_firewall_policies"]; ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
@@ -8437,6 +8867,89 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					networkPolicyChoiceInt := &ves_io_schema_views_gcp_vpc_site.GCPVPCIngressEgressGwReplaceType_NoNetworkPolicy{}
 					networkPolicyChoiceInt.NoNetworkPolicy = &ves_io_schema.Empty{}
 					siteTypeInt.IngressEgressGw.NetworkPolicyChoice = networkPolicyChoiceInt
+				}
+
+			}
+
+			if v, ok := cs["node_number"]; ok && !isIntfNil(v) {
+
+				siteTypeInt.IngressEgressGw.NodeNumber = uint32(v.(int))
+
+			}
+
+			if v, ok := cs["outside_network"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				outsideNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
+				siteTypeInt.IngressEgressGw.OutsideNetwork = outsideNetwork
+				for _, set := range sl {
+					outsideNetworkMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := outsideNetworkMapStrToI["existing_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_ExistingNetwork{}
+						choiceInt.ExistingNetwork = &ves_io_schema_views.GCPVPCNetworkType{}
+						outsideNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := outsideNetworkMapStrToI["new_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetwork{}
+						choiceInt.NewNetwork = &ves_io_schema_views.GCPVPCNetworkParamsType{}
+						outsideNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := outsideNetworkMapStrToI["new_network_autogenerate"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetworkAutogenerate{}
+						choiceInt.NewNetworkAutogenerate = &ves_io_schema_views.GCPVPCNetworkAutogenerateParamsType{}
+						outsideNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetworkAutogenerate.Autogenerate = v.(bool)
+
+							}
+
+						}
+
+					}
+
 				}
 
 			}
@@ -8705,6 +9218,68 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["outside_subnet"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				outsideSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
+				siteTypeInt.IngressEgressGw.OutsideSubnet = outsideSubnet
+				for _, set := range sl {
+					outsideSubnetMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := outsideSubnetMapStrToI["existing_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_ExistingSubnet{}
+						choiceInt.ExistingSubnet = &ves_io_schema_views.GCPSubnetType{}
+						outsideSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := outsideSubnetMapStrToI["new_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_NewSubnet{}
+						choiceInt.NewSubnet = &ves_io_schema_views.GCPSubnetParamsType{}
+						outsideSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.PrimaryIpv4 = v.(string)
+
+							}
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
 
 				sl := v.(*schema.Set).List()
@@ -8812,6 +9387,161 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			if v, ok := cs["gcp_zone_names"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				siteTypeInt.IngressGw.GcpZoneNames = ls
+
+			}
+
+			if v, ok := cs["local_network"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
+				siteTypeInt.IngressGw.LocalNetwork = localNetwork
+				for _, set := range sl {
+					localNetworkMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := localNetworkMapStrToI["existing_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_ExistingNetwork{}
+						choiceInt.ExistingNetwork = &ves_io_schema_views.GCPVPCNetworkType{}
+						localNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := localNetworkMapStrToI["new_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetwork{}
+						choiceInt.NewNetwork = &ves_io_schema_views.GCPVPCNetworkParamsType{}
+						localNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := localNetworkMapStrToI["new_network_autogenerate"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetworkAutogenerate{}
+						choiceInt.NewNetworkAutogenerate = &ves_io_schema_views.GCPVPCNetworkAutogenerateParamsType{}
+						localNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetworkAutogenerate.Autogenerate = v.(bool)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["local_subnet"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				localSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
+				siteTypeInt.IngressGw.LocalSubnet = localSubnet
+				for _, set := range sl {
+					localSubnetMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := localSubnetMapStrToI["existing_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_ExistingSubnet{}
+						choiceInt.ExistingSubnet = &ves_io_schema_views.GCPSubnetType{}
+						localSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := localSubnetMapStrToI["new_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_NewSubnet{}
+						choiceInt.NewSubnet = &ves_io_schema_views.GCPSubnetParamsType{}
+						localSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.PrimaryIpv4 = v.(string)
+
+							}
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["node_number"]; ok && !isIntfNil(v) {
+
+				siteTypeInt.IngressGw.NodeNumber = uint32(v.(int))
+
+			}
 
 			if v, ok := cs["performance_enhancement_mode"]; ok && !isIntfNil(v) {
 
@@ -9006,6 +9736,16 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					forwardProxyChoiceInt.NoForwardProxy = &ves_io_schema.Empty{}
 					siteTypeInt.VoltstackCluster.ForwardProxyChoice = forwardProxyChoiceInt
 				}
+
+			}
+
+			if v, ok := cs["gcp_zone_names"]; ok && !isIntfNil(v) {
+
+				ls := make([]string, len(v.([]interface{})))
+				for i, v := range v.([]interface{}) {
+					ls[i] = v.(string)
+				}
+				siteTypeInt.VoltstackCluster.GcpZoneNames = ls
 
 			}
 
@@ -9713,6 +10453,12 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["node_number"]; ok && !isIntfNil(v) {
+
+				siteTypeInt.VoltstackCluster.NodeNumber = uint32(v.(int))
+
+			}
+
 			outsideStaticRouteChoiceTypeFound := false
 
 			if v, ok := cs["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
@@ -9977,6 +10723,145 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if v, ok := cs["site_local_network"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				siteLocalNetwork := &ves_io_schema_views.GCPVPCNetworkChoiceType{}
+				siteTypeInt.VoltstackCluster.SiteLocalNetwork = siteLocalNetwork
+				for _, set := range sl {
+					siteLocalNetworkMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := siteLocalNetworkMapStrToI["existing_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_ExistingNetwork{}
+						choiceInt.ExistingNetwork = &ves_io_schema_views.GCPVPCNetworkType{}
+						siteLocalNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := siteLocalNetworkMapStrToI["new_network"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetwork{}
+						choiceInt.NewNetwork = &ves_io_schema_views.GCPVPCNetworkParamsType{}
+						siteLocalNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetwork.Name = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := siteLocalNetworkMapStrToI["new_network_autogenerate"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCNetworkChoiceType_NewNetworkAutogenerate{}
+						choiceInt.NewNetworkAutogenerate = &ves_io_schema_views.GCPVPCNetworkAutogenerateParamsType{}
+						siteLocalNetwork.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewNetworkAutogenerate.Autogenerate = v.(bool)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := cs["site_local_subnet"]; ok && !isIntfNil(v) {
+
+				sl := v.(*schema.Set).List()
+				siteLocalSubnet := &ves_io_schema_views.GCPVPCSubnetChoiceType{}
+				siteTypeInt.VoltstackCluster.SiteLocalSubnet = siteLocalSubnet
+				for _, set := range sl {
+					siteLocalSubnetMapStrToI := set.(map[string]interface{})
+
+					choiceTypeFound := false
+
+					if v, ok := siteLocalSubnetMapStrToI["existing_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_ExistingSubnet{}
+						choiceInt.ExistingSubnet = &ves_io_schema_views.GCPSubnetType{}
+						siteLocalSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.ExistingSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := siteLocalSubnetMapStrToI["new_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.GCPVPCSubnetChoiceType_NewSubnet{}
+						choiceInt.NewSubnet = &ves_io_schema_views.GCPSubnetParamsType{}
+						siteLocalSubnet.Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.PrimaryIpv4 = v.(string)
+
+							}
+
+							if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+								choiceInt.NewSubnet.SubnetName = v.(string)
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			siteMeshGroupChoiceTypeFound := false
 
 			if v, ok := cs["sm_connection_public_ip"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
@@ -10004,6 +10889,13 @@ func resourceVolterraGcpVpcSiteUpdate(d *schema.ResourceData, meta interface{}) 
 			}
 
 		}
+
+	}
+
+	if v, ok := d.GetOk("ssh_key"); ok && !isIntfNil(v) {
+
+		updateSpec.SshKey =
+			v.(string)
 
 	}
 

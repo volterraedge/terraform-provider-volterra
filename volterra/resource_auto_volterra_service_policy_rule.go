@@ -18,6 +18,7 @@ import (
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraServicePolicyRule is implementation of Volterra's ServicePolicyRule resources
@@ -700,6 +701,17 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 								Type: schema.TypeString,
 							},
 						},
+
+						"ipv6_prefixes": {
+
+							Type: schema.TypeList,
+
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
 					},
 				},
 			},
@@ -908,6 +920,16 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						},
 
 						"ip_prefixes": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"ipv6_prefixes": {
 
 							Type: schema.TypeList,
 
@@ -1486,6 +1508,110 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
+				},
+			},
+
+			"segment_policy": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"dst_any": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"dst_segments": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"segments": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"intra_segment": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"src_any": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"src_segments": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"segments": {
+
+										Type:     schema.TypeList,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:     schema.TypeString,
+													Computed: true,
+												},
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 
@@ -3962,6 +4088,141 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			ls[i] = v.(string)
 		}
 		createSpec.Scheme = ls
+
+	}
+
+	//segment_policy
+	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		segmentPolicy := &ves_io_schema_policy.SegmentPolicyType{}
+		createSpec.SegmentPolicy = segmentPolicy
+		for _, set := range sl {
+			segmentPolicyMapStrToI := set.(map[string]interface{})
+
+			dstSegmentChoiceTypeFound := false
+
+			if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+
+				dstSegmentChoiceTypeFound = true
+
+				if v.(bool) {
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
+					dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
+					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+				}
+
+			}
+
+			if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+
+				dstSegmentChoiceTypeFound = true
+				dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
+				dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
+				segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+
+				dstSegmentChoiceTypeFound = true
+
+				if v.(bool) {
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
+					dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+				}
+
+			}
+
+			srcSegmentChoiceTypeFound := false
+
+			if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+				srcSegmentChoiceTypeFound = true
+
+				if v.(bool) {
+					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
+					srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+					segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+				}
+
+			}
+
+			if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+				srcSegmentChoiceTypeFound = true
+				srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
+				srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
+				segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
 
 	}
 
@@ -6540,6 +6801,140 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			ls[i] = v.(string)
 		}
 		updateSpec.Scheme = ls
+
+	}
+
+	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		segmentPolicy := &ves_io_schema_policy.SegmentPolicyType{}
+		updateSpec.SegmentPolicy = segmentPolicy
+		for _, set := range sl {
+			segmentPolicyMapStrToI := set.(map[string]interface{})
+
+			dstSegmentChoiceTypeFound := false
+
+			if v, ok := segmentPolicyMapStrToI["dst_any"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+
+				dstSegmentChoiceTypeFound = true
+
+				if v.(bool) {
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstAny{}
+					dstSegmentChoiceInt.DstAny = &ves_io_schema.Empty{}
+					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+				}
+
+			}
+
+			if v, ok := segmentPolicyMapStrToI["dst_segments"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+
+				dstSegmentChoiceTypeFound = true
+				dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_DstSegments{}
+				dstSegmentChoiceInt.DstSegments = &ves_io_schema_views.SegmentRefList{}
+				segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := segmentPolicyMapStrToI["intra_segment"]; ok && !isIntfNil(v) && !dstSegmentChoiceTypeFound {
+
+				dstSegmentChoiceTypeFound = true
+
+				if v.(bool) {
+					dstSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_IntraSegment{}
+					dstSegmentChoiceInt.IntraSegment = &ves_io_schema.Empty{}
+					segmentPolicy.DstSegmentChoice = dstSegmentChoiceInt
+				}
+
+			}
+
+			srcSegmentChoiceTypeFound := false
+
+			if v, ok := segmentPolicyMapStrToI["src_any"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+				srcSegmentChoiceTypeFound = true
+
+				if v.(bool) {
+					srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcAny{}
+					srcSegmentChoiceInt.SrcAny = &ves_io_schema.Empty{}
+					segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+				}
+
+			}
+
+			if v, ok := segmentPolicyMapStrToI["src_segments"]; ok && !isIntfNil(v) && !srcSegmentChoiceTypeFound {
+
+				srcSegmentChoiceTypeFound = true
+				srcSegmentChoiceInt := &ves_io_schema_policy.SegmentPolicyType_SrcSegments{}
+				srcSegmentChoiceInt.SrcSegments = &ves_io_schema_views.SegmentRefList{}
+				segmentPolicy.SrcSegmentChoice = srcSegmentChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["segments"]; ok && !isIntfNil(v) {
+
+						sl := v.([]interface{})
+						segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+						srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
+						for i, ps := range sl {
+
+							sMapToStrVal := ps.(map[string]interface{})
+							segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Name = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								segmentsInt[i].Tenant = v.(string)
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
 
 	}
 

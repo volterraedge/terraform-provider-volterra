@@ -819,6 +819,43 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetProxyProtocolType().(type) {
+	case *CreateSpecType_DisableProxyProtocol:
+		if fv, exists := v.FldValidators["proxy_protocol_type.disable_proxy_protocol"]; exists {
+			val := m.GetProxyProtocolType().(*CreateSpecType_DisableProxyProtocol).DisableProxyProtocol
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("disable_proxy_protocol"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ProxyProtocolV1:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v1"]; exists {
+			val := m.GetProxyProtocolType().(*CreateSpecType_ProxyProtocolV1).ProxyProtocolV1
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v1"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ProxyProtocolV2:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v2"]; exists {
+			val := m.GetProxyProtocolType().(*CreateSpecType_ProxyProtocolV2).ProxyProtocolV2
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -920,6 +957,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
+
+	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
 
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
 
@@ -1691,6 +1730,43 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetProxyProtocolType().(type) {
+	case *GetSpecType_DisableProxyProtocol:
+		if fv, exists := v.FldValidators["proxy_protocol_type.disable_proxy_protocol"]; exists {
+			val := m.GetProxyProtocolType().(*GetSpecType_DisableProxyProtocol).DisableProxyProtocol
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("disable_proxy_protocol"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ProxyProtocolV1:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v1"]; exists {
+			val := m.GetProxyProtocolType().(*GetSpecType_ProxyProtocolV1).ProxyProtocolV1
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v1"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ProxyProtocolV2:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v2"]; exists {
+			val := m.GetProxyProtocolType().(*GetSpecType_ProxyProtocolV2).ProxyProtocolV2
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -1792,6 +1868,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
+
+	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
 
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
 
@@ -2441,6 +2519,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	switch m.GetProxyProtocolType().(type) {
+	case *GlobalSpecType_DisableProxyProtocol:
+		if fv, exists := v.FldValidators["proxy_protocol_type.disable_proxy_protocol"]; exists {
+			val := m.GetProxyProtocolType().(*GlobalSpecType_DisableProxyProtocol).DisableProxyProtocol
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("disable_proxy_protocol"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ProxyProtocolV1:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v1"]; exists {
+			val := m.GetProxyProtocolType().(*GlobalSpecType_ProxyProtocolV1).ProxyProtocolV1
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v1"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ProxyProtocolV2:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v2"]; exists {
+			val := m.GetProxyProtocolType().(*GlobalSpecType_ProxyProtocolV2).ProxyProtocolV2
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -2543,6 +2658,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
 
+	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
+
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
@@ -2556,6 +2673,86 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Http1ProtocolOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Http1ProtocolOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Http1ProtocolOptions) DeepCopy() *Http1ProtocolOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Http1ProtocolOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Http1ProtocolOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Http1ProtocolOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return Http1ProtocolOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttp1ProtocolOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttp1ProtocolOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Http1ProtocolOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Http1ProtocolOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["header_transformation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_transformation"))
+		if err := fv(ctx, m.GetHeaderTransformation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttp1ProtocolOptionsValidator = func() *ValidateHttp1ProtocolOptions {
+	v := &ValidateHttp1ProtocolOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["header_transformation"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
+	return v
+}()
+
+func Http1ProtocolOptionsValidator() db.Validator {
+	return DefaultHttp1ProtocolOptionsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3452,6 +3649,43 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	switch m.GetProxyProtocolType().(type) {
+	case *ReplaceSpecType_DisableProxyProtocol:
+		if fv, exists := v.FldValidators["proxy_protocol_type.disable_proxy_protocol"]; exists {
+			val := m.GetProxyProtocolType().(*ReplaceSpecType_DisableProxyProtocol).DisableProxyProtocol
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("disable_proxy_protocol"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ProxyProtocolV1:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v1"]; exists {
+			val := m.GetProxyProtocolType().(*ReplaceSpecType_ProxyProtocolV1).ProxyProtocolV1
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v1"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ProxyProtocolV2:
+		if fv, exists := v.FldValidators["proxy_protocol_type.proxy_protocol_v2"]; exists {
+			val := m.GetProxyProtocolType().(*ReplaceSpecType_ProxyProtocolV2).ProxyProtocolV2
+			vOpts := append(opts,
+				db.WithValidateField("proxy_protocol_type"),
+				db.WithValidateField("proxy_protocol_v2"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_parameters"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_parameters"))
@@ -3554,6 +3788,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["http_idle_timeout"] = vFn
 
+	v.FldValidators["http_protocol_type.http1_config"] = Http1ProtocolOptionsValidator().Validate
+
 	v.FldValidators["circuit_breaker"] = CircuitBreakerValidator().Validate
 
 	v.FldValidators["tls_parameters"] = ves_io_schema.UpstreamTlsParamsTypeValidator().Validate
@@ -3645,6 +3881,47 @@ func (r *CreateSpecType) GetPanicThresholdTypeFromGlobalSpecType(o *GlobalSpecTy
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetProxyProtocolTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ProxyProtocolType.(type) {
+	case nil:
+		o.ProxyProtocolType = nil
+
+	case *CreateSpecType_DisableProxyProtocol:
+		o.ProxyProtocolType = &GlobalSpecType_DisableProxyProtocol{DisableProxyProtocol: of.DisableProxyProtocol}
+
+	case *CreateSpecType_ProxyProtocolV1:
+		o.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV1{ProxyProtocolV1: of.ProxyProtocolV1}
+
+	case *CreateSpecType_ProxyProtocolV2:
+		o.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV2{ProxyProtocolV2: of.ProxyProtocolV2}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetProxyProtocolTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ProxyProtocolType.(type) {
+	case nil:
+		r.ProxyProtocolType = nil
+
+	case *GlobalSpecType_DisableProxyProtocol:
+		r.ProxyProtocolType = &CreateSpecType_DisableProxyProtocol{DisableProxyProtocol: of.DisableProxyProtocol}
+
+	case *GlobalSpecType_ProxyProtocolV1:
+		r.ProxyProtocolType = &CreateSpecType_ProxyProtocolV1{ProxyProtocolV1: of.ProxyProtocolV1}
+
+	case *GlobalSpecType_ProxyProtocolV2:
+		r.ProxyProtocolType = &CreateSpecType_ProxyProtocolV2{ProxyProtocolV2: of.ProxyProtocolV2}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -3663,6 +3940,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
+	m.GetProxyProtocolTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
 }
 
@@ -3695,6 +3973,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
+	m1.SetProxyProtocolTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
 }
 
@@ -3817,6 +4096,47 @@ func (r *GetSpecType) GetPanicThresholdTypeFromGlobalSpecType(o *GlobalSpecType)
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetProxyProtocolTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ProxyProtocolType.(type) {
+	case nil:
+		o.ProxyProtocolType = nil
+
+	case *GetSpecType_DisableProxyProtocol:
+		o.ProxyProtocolType = &GlobalSpecType_DisableProxyProtocol{DisableProxyProtocol: of.DisableProxyProtocol}
+
+	case *GetSpecType_ProxyProtocolV1:
+		o.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV1{ProxyProtocolV1: of.ProxyProtocolV1}
+
+	case *GetSpecType_ProxyProtocolV2:
+		o.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV2{ProxyProtocolV2: of.ProxyProtocolV2}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetProxyProtocolTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ProxyProtocolType.(type) {
+	case nil:
+		r.ProxyProtocolType = nil
+
+	case *GlobalSpecType_DisableProxyProtocol:
+		r.ProxyProtocolType = &GetSpecType_DisableProxyProtocol{DisableProxyProtocol: of.DisableProxyProtocol}
+
+	case *GlobalSpecType_ProxyProtocolV1:
+		r.ProxyProtocolType = &GetSpecType_ProxyProtocolV1{ProxyProtocolV1: of.ProxyProtocolV1}
+
+	case *GlobalSpecType_ProxyProtocolV2:
+		r.ProxyProtocolType = &GetSpecType_ProxyProtocolV2{ProxyProtocolV2: of.ProxyProtocolV2}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -3836,6 +4156,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
+	m.GetProxyProtocolTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
 }
 
@@ -3869,6 +4190,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
+	m1.SetProxyProtocolTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
 }
 
@@ -3956,6 +4278,47 @@ func (r *ReplaceSpecType) GetPanicThresholdTypeFromGlobalSpecType(o *GlobalSpecT
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetProxyProtocolTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ProxyProtocolType.(type) {
+	case nil:
+		o.ProxyProtocolType = nil
+
+	case *ReplaceSpecType_DisableProxyProtocol:
+		o.ProxyProtocolType = &GlobalSpecType_DisableProxyProtocol{DisableProxyProtocol: of.DisableProxyProtocol}
+
+	case *ReplaceSpecType_ProxyProtocolV1:
+		o.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV1{ProxyProtocolV1: of.ProxyProtocolV1}
+
+	case *ReplaceSpecType_ProxyProtocolV2:
+		o.ProxyProtocolType = &GlobalSpecType_ProxyProtocolV2{ProxyProtocolV2: of.ProxyProtocolV2}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetProxyProtocolTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ProxyProtocolType.(type) {
+	case nil:
+		r.ProxyProtocolType = nil
+
+	case *GlobalSpecType_DisableProxyProtocol:
+		r.ProxyProtocolType = &ReplaceSpecType_DisableProxyProtocol{DisableProxyProtocol: of.DisableProxyProtocol}
+
+	case *GlobalSpecType_ProxyProtocolV1:
+		r.ProxyProtocolType = &ReplaceSpecType_ProxyProtocolV1{ProxyProtocolV1: of.ProxyProtocolV1}
+
+	case *GlobalSpecType_ProxyProtocolV2:
+		r.ProxyProtocolType = &ReplaceSpecType_ProxyProtocolV2{ProxyProtocolV2: of.ProxyProtocolV2}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -3974,6 +4337,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.LoadbalancerAlgorithm = f.GetLoadbalancerAlgorithm()
 	m.OutlierDetection = f.GetOutlierDetection()
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
+	m.GetProxyProtocolTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
 }
 
@@ -4006,6 +4370,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.LoadbalancerAlgorithm = m1.LoadbalancerAlgorithm
 	f.OutlierDetection = m1.OutlierDetection
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
+	m1.SetProxyProtocolTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
 }
 

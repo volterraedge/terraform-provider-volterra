@@ -5872,10 +5872,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -6538,6 +6542,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/fleetFleetInterfaceListType",
                     "x-displayname": "List of Interfaces"
                 },
+                "kubernetes_upgrade_drain": {
+                    "description": " Enable Kubernetes Drain during OS or SW upgrade",
+                    "title": "Enable Drain",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
+                },
                 "legacy_devices": {
                     "description": "Exclusive with [default_interfaces interface_list]\n Add device for all interfaces belonging to this fleet",
                     "title": "Legacy Device Config",
@@ -6734,6 +6744,77 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
                     }
+                }
+            }
+        },
+        "viewsKubernetesUpgradeDrain": {
+            "type": "object",
+            "description": "Node by Node Upgrade during Software or OS version upgrade",
+            "title": "Node by Node Upgrade",
+            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
+            "properties": {
+                "disable_upgrade_drain": {
+                    "description": "Exclusive with [enable_upgrade_drain]\n Disable  Node by Node Upgrade during Software or OS version upgrade",
+                    "title": "Disable upgrade drain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Node by Node Upgrade"
+                },
+                "enable_upgrade_drain": {
+                    "description": "Exclusive with [disable_upgrade_drain]\n Enable Node by Node Upgrade during Software or OS version upgrade",
+                    "title": "Enable Node by Node Upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
+                    "x-displayname": "Enable Node by Node Upgrade"
+                }
+            }
+        },
+        "viewsKubernetesUpgradeDrainConfig": {
+            "type": "object",
+            "description": "Node by Node upgrade config during Software or OS version upgrade",
+            "title": "Node by Node Upgrade",
+            "x-displayname": "Node by Node Upgrade Config",
+            "x-ves-oneof-field-drain_max_unavailable_choice": "[\"drain_max_unavailable_node_count\"]",
+            "x-ves-oneof-field-vega_upgrade_mode_toggle_choice": "[\"disable_vega_upgrade_mode\",\"enable_vega_upgrade_mode\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrainConfig",
+            "properties": {
+                "disable_vega_upgrade_mode": {
+                    "description": "Exclusive with [enable_vega_upgrade_mode]\n Disable Vega Upgrade Mode",
+                    "title": "Disable Vega Upgrade Mode",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Vega Upgrade Mode"
+                },
+                "drain_max_unavailable_node_count": {
+                    "type": "integer",
+                    "description": "Exclusive with []\n Max unavailable worker node count during Software or OS version upgrade\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
+                    "title": "Max Unavailable Node Count",
+                    "format": "int64",
+                    "x-displayname": "Max Unavailable Worker Node Count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "5000"
+                    }
+                },
+                "drain_node_timeout": {
+                    "type": "integer",
+                    "description": " Second to wait before skipping a pod eviction, equivalent to -skip-wait-for-delete-timeout- option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
+                    "title": "Pod Eviction Timeout",
+                    "format": "int64",
+                    "x-displayname": "Pod Eviction Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "900"
+                    }
+                },
+                "enable_vega_upgrade_mode": {
+                    "description": "Exclusive with [disable_vega_upgrade_mode]\n Enable Vega Upgrade Mode\n When enabled, vega will inform RE to stop traffic to the specific node.",
+                    "title": "Enable Vega Upgrade Mode",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Vega Upgrade Mode"
                 }
             }
         },

@@ -34,16 +34,8 @@ resource "volterra_certificate" "example" {
 
     // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-    vault_secret_info {
-      key = "key_pem"
-
-      location = "v1/data/vhost_key"
-
-      provider = "vault-vh-provider"
-
-      secret_encoding = "secret_encoding"
-
-      version = "1"
+    wingman_secret_info {
+      name = "ChargeBack-API-Key"
     }
   }
 }

@@ -1940,10 +1940,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -2002,10 +2006,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -2404,6 +2412,33 @@ var APISwaggerJSON string = `{
             "default": "VIRTUAL_NETWORK_SITE_LOCAL",
             "x-displayname": "Virtual Network Type",
             "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
+        },
+        "schemasiteNode": {
+            "type": "object",
+            "description": "Node Information for connectivity across sites.",
+            "title": "Node",
+            "x-displayname": "Node",
+            "x-ves-proto-message": "ves.io.schema.site.Node",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the master/main node on the site.",
+                    "title": "name",
+                    "x-displayname": "Node name"
+                },
+                "sli_address": {
+                    "type": "string",
+                    "description": " Site Local Inside IP address.",
+                    "title": "sli_address",
+                    "x-displayname": "Site Local Inside IP addresses"
+                },
+                "slo_address": {
+                    "type": "string",
+                    "description": " Site Local Outside IP address.",
+                    "title": "slo_address",
+                    "x-displayname": "Site Local Outside IP addresses"
+                }
+            }
         },
         "siteActiveState": {
             "type": "string",
@@ -3473,6 +3508,14 @@ var APISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Local K8s Cluster Access Enabled"
                 },
+                "main_nodes": {
+                    "type": "array",
+                    "description": " Connectivity information of main/master nodes to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
+                    "items": {
+                        "$ref": "#/definitions/schemasiteNode"
+                    },
+                    "x-displayname": "Main Nodes"
+                },
                 "multus_enabled": {
                     "type": "boolean",
                     "description": " Indicates that Multus cni is enabled on the site",
@@ -4266,12 +4309,12 @@ var APISwaggerJSON string = `{
             "properties": {
                 "az_name": {
                     "type": "string",
-                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$\n",
+                    "description": " Name of the Availability zone\n\nExample: - \"us-east-2a\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.pattern: ^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-(?:gov-)?[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$\n",
                     "title": "AZ Name",
                     "x-displayname": "AZ Name",
                     "x-ves-example": "us-east-2a",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.pattern": "^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$"
+                        "ves.io.schema.rules.string.pattern": "^[1-5]{1}$|^AzureAlternateRegion$|^[a-z]{2}-(?:gov-)?[a-z0-9]{4,20}-[a-z0-9]{2}$|^[a-z]{4,15}-[a-z0-9]{4,20}-[a-z]{1}$"
                     }
                 },
                 "inside_vip": {
@@ -5045,6 +5088,12 @@ var APISwaggerJSON string = `{
                     "description": " url identifies the other end of the Ver for tunnel origination/termination",
                     "title": "url",
                     "x-displayname": "URL"
+                },
+                "verNodeIp": {
+                    "type": "string",
+                    "description": " The VER node IP in the local site from which the connection is setup",
+                    "title": "verNodeIP",
+                    "x-displayname": "VER Node IP"
                 },
                 "verNodeName": {
                     "type": "string",

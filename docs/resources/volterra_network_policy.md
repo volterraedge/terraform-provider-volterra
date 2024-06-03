@@ -21,8 +21,9 @@ resource "volterra_network_policy" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "any outside_endpoints inside_endpoints interface namespace label_selector prefix_list" must be set
-    any = true
+    // One of the arguments from this list "namespace label_selector prefix_list any outside_endpoints inside_endpoints interface" must be set
+
+    outside_endpoints = true
   }
 }
 
@@ -55,7 +56,7 @@ Argument Reference
 
 Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints..
 
-###### One of the arguments from this list "label_selector, prefix_list, any, outside_endpoints, inside_endpoints, interface, namespace" must be set
+###### One of the arguments from this list "namespace, label_selector, prefix_list, any, outside_endpoints, inside_endpoints, interface" must be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
@@ -205,7 +206,7 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Egress Rules Metadata ](#egress-rules-metadata) below for details.
 
-###### One of the arguments from this list "ip_prefix_set, any, prefix_list, outside_endpoints, inside_endpoints, namespace, label_selector" can be set
+###### One of the arguments from this list "label_selector, ip_prefix_set, any, prefix_list, outside_endpoints, inside_endpoints, namespace" can be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
@@ -225,7 +226,7 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).(Deprecated)
 
-###### One of the arguments from this list "applications, protocol_port_range, all_traffic, all_tcp_traffic, all_udp_traffic" can be set
+###### One of the arguments from this list "all_traffic, all_tcp_traffic, all_udp_traffic, applications, protocol_port_range" can be set
 
 `all_tcp_traffic` - (Optional) Select all TCP traffic to match (`Bool`).
 
@@ -251,7 +252,7 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Ingress Rules Metadata ](#ingress-rules-metadata) below for details.
 
-###### One of the arguments from this list "outside_endpoints, inside_endpoints, namespace, label_selector, ip_prefix_set, any, prefix_list" can be set
+###### One of the arguments from this list "any, prefix_list, outside_endpoints, inside_endpoints, namespace, label_selector, ip_prefix_set" can be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
@@ -271,7 +272,7 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).(Deprecated)
 
-###### One of the arguments from this list "all_udp_traffic, applications, protocol_port_range, all_traffic, all_tcp_traffic" can be set
+###### One of the arguments from this list "all_traffic, all_tcp_traffic, all_udp_traffic, applications, protocol_port_range" can be set
 
 `all_tcp_traffic` - (Optional) Select all TCP traffic to match (`Bool`).
 

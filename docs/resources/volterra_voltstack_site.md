@@ -21,20 +21,24 @@ resource "volterra_voltstack_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
+
   default_blocked_services = true
 
-  // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+  // One of the arguments from this list "bond_device_list no_bond_devices" must be set
+
   no_bond_devices = true
 
   // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+
   disable_gpu = true
 
   // One of the arguments from this list "no_k8s_cluster k8s_cluster" must be set
+
   no_k8s_cluster = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
 
+  logs_streaming_disabled = true
   master_node_configuration {
     name = "master-0"
 
@@ -42,15 +46,19 @@ resource "volterra_voltstack_site" "example" {
   }
 
   // One of the arguments from this list "default_network_config custom_network_config" must be set
+
   default_network_config = true
 
-  // One of the arguments from this list "sriov_interfaces default_sriov_interface" must be set
+  // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
+
   default_sriov_interface = true
 
   // One of the arguments from this list "default_storage_config custom_storage_config" must be set
+
   default_storage_config = true
 
-  // One of the arguments from this list "usb_policy deny_all_usb allow_all_usb" must be set
+  // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
+
   deny_all_usb          = true
   volterra_certified_hw = ["isv-8000-series-voltstack-combo"]
 }
@@ -99,6 +107,8 @@ Argument Reference
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
 `no_k8s_cluster` - (Optional) Site Local K8s API access is disabled (`Bool`).
+
+`kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
 `local_control_plane` - (Optional) Site Local control plane is enabled. See [Local Control Plane Choice Local Control Plane ](#local-control-plane-choice-local-control-plane) below for details.(Deprecated)
 
@@ -164,6 +174,16 @@ custom dns configure to the CE site.
 
 `outside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in outside network (`String`).
 
+### Kubernetes Upgrade Drain
+
+Enable Kubernetes Drain during OS or SW upgrade.
+
+###### One of the arguments from this list "enable_upgrade_drain, disable_upgrade_drain" must be set
+
+`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+
+`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+
 ### Master Node Configuration
 
 Configuration of master nodes.
@@ -176,7 +196,7 @@ Configuration of master nodes.
 
 Enable/Disable offline survivability mode.
 
-###### One of the arguments from this list "enable_offline_survivability_mode, no_offline_survivability_mode" must be set
+###### One of the arguments from this list "no_offline_survivability_mode, enable_offline_survivability_mode" must be set
 
 `enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (`Bool`).
 
@@ -216,7 +236,7 @@ DHCP Server is configured for this interface, Interface IP from DHCP server conf
 
 `fixed_ip_map` - (Optional) Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address (`String`).
 
-###### One of the arguments from this list "interface_ip_map, automatic_from_start, automatic_from_end" must be set
+###### One of the arguments from this list "automatic_from_start, automatic_from_end, interface_ip_map" must be set
 
 `automatic_from_end` - (Optional) Assign automatically from End of the first network in the list (`Bool`).
 
@@ -298,7 +318,7 @@ auto configuration routers.
 
 System behaves like Auto config Router and provides auto config parameters.
 
-###### One of the arguments from this list "stateful, network_prefix" must be set
+###### One of the arguments from this list "network_prefix, stateful" must be set
 
 `network_prefix` - (Optional) Nework prefix that is used as Prefix information (`String`).
 
@@ -372,7 +392,7 @@ Backend configuration for ONTAP SAN.
 
 `client_private_key` - (Optional) Please Enter value of client private key. Used for certificate-based auth.. See [Netapp Backend Ontap San Client Private Key ](#netapp-backend-ontap-san-client-private-key) below for details.
 
-###### One of the arguments from this list "data_lif_ip, data_lif_dns_name" can be set
+###### One of the arguments from this list "data_lif_dns_name, data_lif_ip" can be set
 
 `data_lif_dns_name` - (Optional) Backend Data LIF IP Address's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
@@ -458,7 +478,7 @@ List of bond devices.
 
 `devices` - (Required) Ethernet devices that will make up this bond (`String`).
 
-###### One of the arguments from this list "lacp, active_backup" must be set
+###### One of the arguments from this list "active_backup, lacp" must be set
 
 `active_backup` - (Optional) Configure active/backup based bond device (`Bool`).
 
@@ -546,7 +566,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -762,7 +782,7 @@ For FlashArrays you must set the "mgmt_endpoint" and "api_token".
 
 `labels` - (Optional) The labels are optional, and can be any key-value pair for use with the PSO "fleet" provisioner. (`String`).
 
-###### One of the arguments from this list "mgmt_dns_name, mgmt_ip" must be set
+###### One of the arguments from this list "mgmt_ip, mgmt_dns_name" must be set
 
 `mgmt_dns_name` - (Optional) Management Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
@@ -800,7 +820,7 @@ For FlashBlades you must set the "mgmt_endpoint", "api_token" and nfs_endpoint.
 
 `mgmt_ip` - (Optional) Management Endpoint is reachable at the given ip address (`String`).
 
-###### One of the arguments from this list "nfs_endpoint_ip, nfs_endpoint_dns_name" must be set
+###### One of the arguments from this list "nfs_endpoint_dns_name, nfs_endpoint_ip" must be set
 
 `nfs_endpoint_dns_name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
@@ -954,7 +974,7 @@ Policy to enable/disable specific domains, with implicit enable all domains.
 
 Domain value or regular expression to match.
 
-###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
+###### One of the arguments from this list "suffix_value, regex_value, exact_value" must be set
 
 `exact_value` - (Optional) Exact domain name. (`String`).
 
@@ -998,7 +1018,7 @@ Fallback management interfaces can be made into dedicated management interface.
 
 `mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
 
-###### One of the arguments from this list "node, cluster" must be set
+###### One of the arguments from this list "cluster, node" must be set
 
 `cluster` - (Optional) Configuration will apply to given device on all nodes of the site. (`Bool`).
 
@@ -1012,7 +1032,7 @@ Interface configuration is done based on certified hardware for this site.
 
 Ethernet interface configuration..
 
-###### One of the arguments from this list "static_ip, dhcp_client, dhcp_server" must be set
+###### One of the arguments from this list "dhcp_server, static_ip, dhcp_client" must be set
 
 `dhcp_client` - (Optional) Interface gets it IP address from external DHCP server (`Bool`).
 
@@ -1030,7 +1050,7 @@ Ethernet interface configuration..
 
 `static_ipv6_address` - (Optional) Interface IP is configured statically. See [Ipv6 Address Choice Static Ipv6 Address ](#ipv6-address-choice-static-ipv6-address) below for details.
 
-###### One of the arguments from this list "monitor_disabled, monitor" can be set
+###### One of the arguments from this list "monitor, monitor_disabled" can be set
 
 `monitor` - (Optional) Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.. See [Monitoring Choice Monitor ](#monitoring-choice-monitor) below for details.
 
@@ -1038,11 +1058,13 @@ Ethernet interface configuration..
 
 `mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
 
-###### One of the arguments from this list "site_local_network, site_local_inside_network, inside_network, storage_network, srv6_network, ip_fabric_network, segment_network" must be set
+###### One of the arguments from this list "inside_network, storage_network, srv6_network, ip_fabric_network, segment_network, site_local_network, site_local_inside_network" must be set
 
 `inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.(Deprecated)
 
 `ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (`Bool`).(Deprecated)
+
+`segment_network` - (Optional) x-displayName: "Segment". See [ref](#ref) below for details.
 
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (`Bool`).
 
@@ -1052,7 +1074,7 @@ Ethernet interface configuration..
 
 `storage_network` - (Optional) Interface belongs to site local network inside (`Bool`).
 
-###### One of the arguments from this list "node, cluster" must be set
+###### One of the arguments from this list "cluster, node" must be set
 
 `cluster` - (Optional) Configuration will apply to given device on all nodes of the site. (`Bool`).
 
@@ -1108,7 +1130,7 @@ Loopback device..
 
 `site_local_network` - (Optional) Interface belongs to site local network (outside) (`Bool`).
 
-###### One of the arguments from this list "node, cluster" must be set
+###### One of the arguments from this list "cluster, node" must be set
 
 `cluster` - (Optional) Configuration will apply to given device on all nodes of the site. (`Bool`).
 
@@ -1152,7 +1174,7 @@ Configure network interfaces for this App Stack site.
 
 `description` - (Optional) Description for this Interface (`String`).
 
-###### One of the arguments from this list "ethernet_interface, dedicated_interface, dedicated_management_interface, tunnel_interface, loopback_interface" must be set
+###### One of the arguments from this list "tunnel_interface, loopback_interface, ethernet_interface, dedicated_interface, dedicated_management_interface" must be set
 
 `dedicated_interface` - (Optional) Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet. See [Interface Choice Dedicated Interface ](#interface-choice-dedicated-interface) below for details.
 
@@ -1221,6 +1243,28 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+
+Disable Node by Node Upgrade during Software or OS version upgrade.
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
+
+Enable Node by Node Upgrade during Software or OS version upgrade.
+
+###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+
+`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+
+`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
+
+`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+
+###### One of the arguments from this list "enable_vega_upgrade_mode, disable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Lacp Choice Active Backup
 
@@ -1330,7 +1374,7 @@ List of QoS volume defaults types.
 
 `export_policy` - (Optional) Export policy to use. (`String`).
 
-###### One of the arguments from this list "qos_policy, adaptive_qos_policy, no_qos" must be set
+###### One of the arguments from this list "no_qos, qos_policy, adaptive_qos_policy" must be set
 
 `adaptive_qos_policy` - (Optional) Enter Adaptive QoS Policy Name (`String`).
 
@@ -1362,7 +1406,7 @@ Please Enter value of client private key. Used for certificate-based auth..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -1450,7 +1494,7 @@ Use custom networking configuration.
 
 `no_forward_proxy` - (Optional) Disable Forward Proxy for this site (`Bool`).
 
-###### One of the arguments from this list "global_network_list, no_global_network" must be set
+###### One of the arguments from this list "no_global_network, global_network_list" must be set
 
 `global_network_list` - (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
 
@@ -1486,7 +1530,7 @@ Use custom networking configuration.
 
 `sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
 
-###### One of the arguments from this list "default_sli_config, sli_config" can be set
+###### One of the arguments from this list "sli_config, default_sli_config" can be set
 
 `default_sli_config` - (Optional) Use default configuration for site local network (`Bool`).(Deprecated)
 
@@ -1668,7 +1712,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Dns information that needs to added in the RouterAdvetisement.
 
-###### One of the arguments from this list "local_dns, configured_list" must be set
+###### One of the arguments from this list "configured_list, local_dns" must be set
 
 `configured_list` - (Optional) Configured address outside network range - external dns server. See [Dns Choice Configured List ](#dns-choice-configured-list) below for details.
 
@@ -1750,13 +1794,13 @@ Use default configuration for site local network.
 
 Configuration for site local inside network.
 
-###### One of the arguments from this list "no_static_routes, static_routes" must be set
+###### One of the arguments from this list "static_routes, no_static_routes" must be set
 
 `no_static_routes` - (Optional) Static Routes disabled for site local inside network. (`Bool`).
 
 `static_routes` - (Optional) Manage static routes for site local inside network.. See [Static Route Choice Static Routes ](#static-route-choice-static-routes) below for details.
 
-###### One of the arguments from this list "static_v6_routes, no_v6_static_routes" must be set
+###### One of the arguments from this list "no_v6_static_routes, static_v6_routes" must be set
 
 `no_v6_static_routes` - (Optional) Static IPv6 Routes disabled for site local inside network. (`Bool`).
 
@@ -1780,7 +1824,7 @@ Configuration for site local network.
 
 `labels` - (Optional) Add Labels for this network, these labels can be used in firewall policy (`String`).
 
-###### One of the arguments from this list "no_static_routes, static_routes" must be set
+###### One of the arguments from this list "static_routes, no_static_routes" must be set
 
 `no_static_routes` - (Optional) Static Routes disabled for site local network. (`Bool`).
 
@@ -1812,7 +1856,7 @@ Use custom SR-IOV interfaces Configuration.
 
 List of networks from which DHCP server can allocate ip addresses.
 
-###### One of the arguments from this list "network_prefix_allocator, network_prefix" must be set
+###### One of the arguments from this list "network_prefix, network_prefix_allocator" must be set
 
 `network_prefix` - (Optional) Network Prefix to be used for IPV6 address auto configuration (`String`).
 
@@ -1990,7 +2034,7 @@ List of custom storage devices.
 
 `advanced_advanced_parameters` - (Optional) Map of parameter name and string value (`String`).
 
-###### One of the arguments from this list "pure_service_orchestrator, custom_storage, hpe_storage, netapp_trident" must be set
+###### One of the arguments from this list "netapp_trident, pure_service_orchestrator, custom_storage, hpe_storage" must be set
 
 `custom_storage` - (Optional) Device configuration for Custom Storage (`Bool`).
 
@@ -2052,11 +2096,13 @@ Configure storage interface for this App Stack site.
 
 `mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
 
-###### One of the arguments from this list "srv6_network, ip_fabric_network, segment_network, site_local_network, site_local_inside_network, inside_network, storage_network" must be set
+###### One of the arguments from this list "site_local_inside_network, inside_network, storage_network, srv6_network, ip_fabric_network, segment_network, site_local_network" must be set
 
 `inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.(Deprecated)
 
 `ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (`Bool`).(Deprecated)
+
+`segment_network` - (Optional) x-displayName: "Segment". See [ref](#ref) below for details.
 
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (`Bool`).
 
@@ -2094,19 +2140,19 @@ No TLS interception is enabled for this network connector.
 
 Specify TLS interception configuration for the network connector.
 
-###### One of the arguments from this list "policy, enable_for_all_domains" must be set
+###### One of the arguments from this list "enable_for_all_domains, policy" must be set
 
 `enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
 
 `policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Interception Policy Choice Policy ](#interception-policy-choice-policy) below for details.
 
-###### One of the arguments from this list "custom_certificate, volterra_certificate" must be set
+###### One of the arguments from this list "volterra_certificate, custom_certificate" must be set
 
 `custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Signing Cert Choice Custom Certificate ](#signing-cert-choice-custom-certificate) below for details.
 
 `volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (`Bool`).
 
-###### One of the arguments from this list "trusted_ca_url, volterra_trusted_ca" must be set
+###### One of the arguments from this list "volterra_trusted_ca, trusted_ca_url" must be set
 
 `trusted_ca_url` - (Optional) Custom Root CA Certificate for validating upstream server certificate (`String`).
 
@@ -2120,7 +2166,7 @@ F5XC Root CA Certificate for validating upstream server certificate.
 
 Interface IP is configured statically.
 
-###### One of the arguments from this list "node_static_ip, cluster_static_ip, fleet_static_ip" must be set
+###### One of the arguments from this list "cluster_static_ip, fleet_static_ip, node_static_ip" must be set
 
 `cluster_static_ip` - (Optional) Static IP configuration for a specific node. See [Network Prefix Choice Cluster Static Ip ](#network-prefix-choice-cluster-static-ip) below for details.
 
@@ -2136,7 +2182,7 @@ CHAP initiator secret. Required if useCHAP=true.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -2154,7 +2200,7 @@ CHAP target initiator secret. Required if useCHAP=true.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -2163,6 +2209,14 @@ CHAP target initiator secret. Required if useCHAP=true.
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Vlan Choice Untagged
 

@@ -14,6 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_signup "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/signup"
 )
 
@@ -79,10 +80,10 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGlobalSpecType) SourceChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGlobalSpecType) SignupTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for source_choice")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for signup_type")
 	}
 	return validatorFn, nil
 }
@@ -192,6 +193,22 @@ func (v *ValidateGlobalSpecType) InternalMetaValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) OriginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.SignupOrigin)
+		return int32(i)
+	}
+	// ves_io_schema.SignupOrigin_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.SignupOrigin_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for origin")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -242,89 +259,98 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["source_choice"]; exists {
-		val := m.GetSourceChoice()
+	if fv, exists := v.FldValidators["origin"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin"))
+		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["signup_type"]; exists {
+		val := m.GetSignupType()
 		vOpts := append(opts,
-			db.WithValidateField("source_choice"),
+			db.WithValidateField("signup_type"),
 		)
 		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
 		}
 	}
 
-	switch m.GetSourceChoice().(type) {
-	case *GlobalSpecType_SourcePublic:
-		if fv, exists := v.FldValidators["source_choice.source_public"]; exists {
-			val := m.GetSourceChoice().(*GlobalSpecType_SourcePublic).SourcePublic
+	switch m.GetSignupType().(type) {
+	case *GlobalSpecType_SignupTypePublic:
+		if fv, exists := v.FldValidators["signup_type.signup_type_public"]; exists {
+			val := m.GetSignupType().(*GlobalSpecType_SignupTypePublic).SignupTypePublic
 			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_public"),
+				db.WithValidateField("signup_type"),
+				db.WithValidateField("signup_type_public"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GlobalSpecType_SourceInternalSre:
-		if fv, exists := v.FldValidators["source_choice.source_internal_sre"]; exists {
-			val := m.GetSourceChoice().(*GlobalSpecType_SourceInternalSre).SourceInternalSre
+	case *GlobalSpecType_SignupTypeInternalSre:
+		if fv, exists := v.FldValidators["signup_type.signup_type_internal_sre"]; exists {
+			val := m.GetSignupType().(*GlobalSpecType_SignupTypeInternalSre).SignupTypeInternalSre
 			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_internal_sre"),
+				db.WithValidateField("signup_type"),
+				db.WithValidateField("signup_type_internal_sre"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GlobalSpecType_SourceInternalScaling:
-		if fv, exists := v.FldValidators["source_choice.source_internal_scaling"]; exists {
-			val := m.GetSourceChoice().(*GlobalSpecType_SourceInternalScaling).SourceInternalScaling
+	case *GlobalSpecType_SignupTypeInternalScaling:
+		if fv, exists := v.FldValidators["signup_type.signup_type_internal_scaling"]; exists {
+			val := m.GetSignupType().(*GlobalSpecType_SignupTypeInternalScaling).SignupTypeInternalScaling
 			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_internal_scaling"),
+				db.WithValidateField("signup_type"),
+				db.WithValidateField("signup_type_internal_scaling"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GlobalSpecType_SourcePlanTransition:
-		if fv, exists := v.FldValidators["source_choice.source_plan_transition"]; exists {
-			val := m.GetSourceChoice().(*GlobalSpecType_SourcePlanTransition).SourcePlanTransition
+	case *GlobalSpecType_SignupTypePlanTransition:
+		if fv, exists := v.FldValidators["signup_type.signup_type_plan_transition"]; exists {
+			val := m.GetSignupType().(*GlobalSpecType_SignupTypePlanTransition).SignupTypePlanTransition
 			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_plan_transition"),
+				db.WithValidateField("signup_type"),
+				db.WithValidateField("signup_type_plan_transition"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GlobalSpecType_SourceMsp:
-		if fv, exists := v.FldValidators["source_choice.source_msp"]; exists {
-			val := m.GetSourceChoice().(*GlobalSpecType_SourceMsp).SourceMsp
+	case *GlobalSpecType_SignupTypeMsp:
+		if fv, exists := v.FldValidators["signup_type.signup_type_msp"]; exists {
+			val := m.GetSignupType().(*GlobalSpecType_SignupTypeMsp).SignupTypeMsp
 			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_msp"),
+				db.WithValidateField("signup_type"),
+				db.WithValidateField("signup_type_msp"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GlobalSpecType_SourceInternalSso:
-		if fv, exists := v.FldValidators["source_choice.source_internal_sso"]; exists {
-			val := m.GetSourceChoice().(*GlobalSpecType_SourceInternalSso).SourceInternalSso
+	case *GlobalSpecType_SignupTypeInternalSso:
+		if fv, exists := v.FldValidators["signup_type.signup_type_internal_sso"]; exists {
+			val := m.GetSignupType().(*GlobalSpecType_SignupTypeInternalSso).SignupTypeInternalSso
 			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_internal_sso"),
+				db.WithValidateField("signup_type"),
+				db.WithValidateField("signup_type_internal_sso"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
-	case *GlobalSpecType_SourceMarketplace:
-		if fv, exists := v.FldValidators["source_choice.source_marketplace"]; exists {
-			val := m.GetSourceChoice().(*GlobalSpecType_SourceMarketplace).SourceMarketplace
+	case *GlobalSpecType_SignupTypeMarketplace:
+		if fv, exists := v.FldValidators["signup_type.signup_type_marketplace"]; exists {
+			val := m.GetSignupType().(*GlobalSpecType_SignupTypeMarketplace).SignupTypeMarketplace
 			vOpts := append(opts,
-				db.WithValidateField("source_choice"),
-				db.WithValidateField("source_marketplace"),
+				db.WithValidateField("signup_type"),
+				db.WithValidateField("signup_type_marketplace"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -357,16 +383,16 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhSourceChoice := v.SourceChoiceValidationRuleHandler
-	rulesSourceChoice := map[string]string{
+	vrhSignupType := v.SignupTypeValidationRuleHandler
+	rulesSignupType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhSourceChoice(rulesSourceChoice)
+	vFn, err = vrhSignupType(rulesSignupType)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.source_choice: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.signup_type: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["source_choice"] = vFn
+	v.FldValidators["signup_type"] = vFn
 
 	vrhCompanyDetails := v.CompanyDetailsValidationRuleHandler
 	rulesCompanyDetails := map[string]string{
@@ -423,9 +449,20 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["internal_meta"] = vFn
 
-	v.FldValidators["source_choice.source_internal_sre"] = ves_io_schema_signup.SourceInternalSreValidator().Validate
-	v.FldValidators["source_choice.source_msp"] = ves_io_schema_signup.SourceMspValidator().Validate
-	v.FldValidators["source_choice.source_marketplace"] = ves_io_schema_signup.SourceMarketplaceValidator().Validate
+	vrhOrigin := v.OriginValidationRuleHandler
+	rulesOrigin := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOrigin(rulesOrigin)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.origin: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin"] = vFn
+
+	v.FldValidators["signup_type.signup_type_internal_sre"] = ves_io_schema_signup.SignupTypeInternalSreValidator().Validate
+	v.FldValidators["signup_type.signup_type_msp"] = ves_io_schema_signup.SignupTypeMspValidator().Validate
+	v.FldValidators["signup_type.signup_type_marketplace"] = ves_io_schema_signup.SignupTypeMarketplaceValidator().Validate
 
 	return v
 }()

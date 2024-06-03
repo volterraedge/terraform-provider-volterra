@@ -22,6 +22,9 @@ import (
 )
 
 const (
+	getRegRPCFQN = "ves.io.schema.registration.CustomAPI.Get"
+	getRegURI    = "/public/namespaces/system/registrations/%s"
+
 	listRegRPCFQN = "ves.io.schema.registration.CustomAPI.ListRegistrationsByState"
 	listRegURI    = "/public/namespaces/system/listregistrationsbystate"
 
@@ -198,7 +201,14 @@ func resourceVolterraRegistrationApprovalCreate(d *schema.ResourceData, meta int
 func resourceVolterraRegistrationApprovalRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 	regName := d.Get("registration_name").(string)
-	_, err := client.GetObject(context.Background(), ves_io_schema_registration.ObjectType, svcfw.SystemNSVal, regName)
+	approvalReq := &ves_io_schema_registration.GetRequest{Name: regName, Namespace: svcfw.SystemNSVal}
+
+	log.Printf("[DEBUG] Deleting Volterra Registration obj with name %+v in namespace %+v", approvalReq.Name, approvalReq.Namespace)
+	yamlReq, err := codec.ToYAML(approvalReq)
+	if err != nil {
+		return fmt.Errorf("Error marshalling rpc response to yaml: %s", err)
+	}
+	_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(getRegURI, regName), getRegRPCFQN, yamlReq)
 	if err != nil {
 		if strings.Contains(err.Error(), "status code 404") {
 			log.Printf("[INFO] Registration %s no longer exists", d.Id())

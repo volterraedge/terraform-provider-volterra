@@ -441,6 +441,17 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_LbSipPersistence:
+		if fv, exists := v.FldValidators["choice.lb_sip_persistence"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_LbSipPersistence).LbSipPersistence
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("lb_sip_persistence"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

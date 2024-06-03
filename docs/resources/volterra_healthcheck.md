@@ -20,20 +20,12 @@ resource "volterra_healthcheck" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "http_health_check tcp_health_check dns_proxy_tcp_health_check dns_proxy_udp_health_check dns_health_check dns_proxy_icmp_health_check" must be set
+  // One of the arguments from this list "dns_health_check dns_proxy_icmp_health_check http_health_check tcp_health_check dns_proxy_tcp_health_check dns_proxy_udp_health_check" must be set
 
-  dns_health_check {
-    expected_rcode = "no-error"
+  dns_proxy_tcp_health_check {
+    expected_response = ".*"
 
-    expected_record_type = "REQUESTED_QUERY_TYPE"
-
-    expected_response = "10.0.0.1"
-
-    query_name = "www.example.com"
-
-    query_type = "A"
-
-    reverse = true
+    send_payload = "send_payload"
   }
   healthy_threshold   = ["2"]
   interval            = ["10"]
@@ -124,7 +116,7 @@ Specifies send string and expected response payload pattern for UDP health Check
 
 `headers` - (Optional) health checked cluster. This is a list of key-value pairs. (`String`).
 
-###### One of the arguments from this list "host_header, use_origin_server_name" must be set
+###### One of the arguments from this list "use_origin_server_name, host_header" must be set
 
 `host_header` - (Optional) The value of the host header. (`String`).
 

@@ -82,7 +82,7 @@ Define the threat levels and the corresponding mitigation actions to be taken.
 
 The action to be taken at the specified threat level.
 
-###### One of the arguments from this list "none, alert_only, javascript_challenge, captcha_challenge, block_temporarily" must be set
+###### One of the arguments from this list "block_temporarily, none, alert_only, javascript_challenge, captcha_challenge" must be set
 
 `alert_only` - (Optional) Generate alert while not taking any invasive actions (`Bool`).(Deprecated)
 
@@ -98,7 +98,7 @@ The action to be taken at the specified threat level.
 
 The threat level at which mitigation actions will be taken.
 
-###### One of the arguments from this list "high, low, medium" must be set
+###### One of the arguments from this list "low, medium, high" must be set
 
 `high` - (Optional) (`Bool`).
 

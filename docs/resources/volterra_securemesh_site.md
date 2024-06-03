@@ -21,14 +21,16 @@ resource "volterra_securemesh_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services blocked_services" must be set
+
   default_blocked_services = true
 
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+
   no_bond_devices = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
 
+  logs_streaming_disabled = true
   master_node_configuration {
     name = "master-0"
 
@@ -37,48 +39,8 @@ resource "volterra_securemesh_site" "example" {
 
   // One of the arguments from this list "default_network_config custom_network_config" must be set
 
-  custom_network_config {
-    bgp_peer_address = "10.1.1.1"
-
-    bgp_peer_address_v6 = "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326"
-
-    bgp_router_id = "10.1.1.1"
-
-    // One of the arguments from this list "forward_proxy_allow_all no_forward_proxy active_forward_proxy_policies" must be set
-    no_forward_proxy = true
-
-    // One of the arguments from this list "no_global_network global_network_list" must be set
-
-    global_network_list {
-      global_network_connections {
-        // One of the arguments from this list "sli_to_global_dr slo_to_global_dr" must be set
-
-        sli_to_global_dr {
-          global_vn {
-            name      = "test1"
-            namespace = "staging"
-            tenant    = "acmecorp"
-          }
-        }
-
-        // One of the arguments from this list "disable_forward_proxy enable_forward_proxy" must be set
-        disable_forward_proxy = true
-      }
-    }
-    // One of the arguments from this list "default_interface_config interface_list" must be set
-    default_interface_config = true
-    // One of the arguments from this list "active_network_policies active_enhanced_firewall_policies no_network_policy" must be set
-    no_network_policy = true
-    // One of the arguments from this list "sm_connection_public_ip sm_connection_pvt_ip" must be set
-    sm_connection_public_ip = true
-    // One of the arguments from this list "default_sli_config sli_config" must be set
-    default_sli_config = true
-    // One of the arguments from this list "default_config slo_config" must be set
-    default_config = true
-    tunnel_dead_timeout = "0"
-    vip_vrrp_mode = "vip_vrrp_mode"
-  }
-  volterra_certified_hw = ["isv-8000-series-voltmesh"]
+  default_network_config = true
+  volterra_certified_hw  = ["isv-8000-series-voltmesh"]
 }
 
 ```
@@ -114,6 +76,8 @@ Argument Reference
 
 `coordinates` - (Optional) Coordinates of the site, longitude and latitude. See [Coordinates ](#coordinates) below for details.
 
+`kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
+
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (`Bool`).
@@ -143,6 +107,16 @@ Coordinates of the site, longitude and latitude.
 `latitude` - (Optional) Latitude of the site location (`Float`).
 
 `longitude` - (Optional) longitude of site location (`Float`).
+
+### Kubernetes Upgrade Drain
+
+Enable Kubernetes Drain during OS or SW upgrade.
+
+###### One of the arguments from this list "enable_upgrade_drain, disable_upgrade_drain" must be set
+
+`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+
+`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Master Node Configuration
 
@@ -206,7 +180,7 @@ DHCP Server is configured for this interface, Interface IP from DHCP server conf
 
 `fixed_ip_map` - (Optional) Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address (`String`).
 
-###### One of the arguments from this list "interface_ip_map, automatic_from_start, automatic_from_end" must be set
+###### One of the arguments from this list "automatic_from_start, automatic_from_end, interface_ip_map" must be set
 
 `automatic_from_end` - (Optional) Assign automatically from End of the first network in the list (`Bool`).
 
@@ -222,7 +196,7 @@ works along with Router Advertisement' Managed flag.
 
 `fixed_ip_map` - (Optional) Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address (`String`).
 
-###### One of the arguments from this list "automatic_from_start, automatic_from_end, interface_ip_map" must be set
+###### One of the arguments from this list "automatic_from_end, interface_ip_map, automatic_from_start" must be set
 
 `automatic_from_end` - (Optional) Assign automatically from End of the first network in the list (`Bool`).
 
@@ -234,7 +208,7 @@ works along with Router Advertisement' Managed flag.
 
 Interface IP is configured statically.
 
-###### One of the arguments from this list "node_static_ip, cluster_static_ip, fleet_static_ip" must be set
+###### One of the arguments from this list "fleet_static_ip, node_static_ip, cluster_static_ip" must be set
 
 `cluster_static_ip` - (Optional) Static IP configuration for a specific node. See [Network Prefix Choice Cluster Static Ip ](#network-prefix-choice-cluster-static-ip) below for details.
 
@@ -262,7 +236,7 @@ System behaves like Auto config Router and provides auto config parameters.
 
 Use custom blocked services configuration.
 
-###### One of the arguments from this list "ssh, web_user_interface, dns" can be set
+###### One of the arguments from this list "web_user_interface, dns, ssh" can be set
 
 `dns` - (Optional) Matches DNS port 53 (`Bool`).
 
@@ -344,7 +318,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -396,7 +370,7 @@ List of networks from which DHCP server can allocate ip addresses.
 
 `same_as_dgw` - (Optional) DNS server address is same as default gateway address (`Bool`).
 
-###### One of the arguments from this list "last_address, dgw_address, first_address" must be set
+###### One of the arguments from this list "first_address, last_address, dgw_address" must be set
 
 `dgw_address` - (Optional) Configured address from the network prefix is chosen as default gateway. (`String`).
 
@@ -424,7 +398,7 @@ Configured address outside network range - external dns server.
 
 Choose the address from the network prefix range as dns server.
 
-###### One of the arguments from this list "first_address, last_address, configured_address" must be set
+###### One of the arguments from this list "last_address, configured_address, first_address" must be set
 
 `configured_address` - (Optional) Configured address from the network prefix is chosen as dns server (`String`).
 
@@ -542,7 +516,7 @@ Networking configuration for dedicated interface is configured locally on site e
 
 `device` - (Required) Name of the device for which interface is configured. Use wwan0 for 4G/LTE. (`String`).
 
-###### One of the arguments from this list "monitor, monitor_disabled" can be set
+###### One of the arguments from this list "monitor_disabled, monitor" can be set
 
 `monitor` - (Optional) Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.. See [Monitoring Choice Monitor ](#monitoring-choice-monitor) below for details.
 
@@ -596,7 +570,7 @@ Ethernet interface configuration..
 
 `device` - (Required) Interface configuration for the ethernet device (`String`).
 
-###### One of the arguments from this list "ipv6_auto_config, no_ipv6_address, static_ipv6_address" can be set
+###### One of the arguments from this list "no_ipv6_address, static_ipv6_address, ipv6_auto_config" can be set
 
 `ipv6_auto_config` - (Optional) Configuration corresponding to IPV6 auto configuration. See [Ipv6 Address Choice Ipv6 Auto Config ](#ipv6-address-choice-ipv6-auto-config) below for details.
 
@@ -604,7 +578,7 @@ Ethernet interface configuration..
 
 `static_ipv6_address` - (Optional) Interface IP is configured statically. See [Ipv6 Address Choice Static Ipv6 Address ](#ipv6-address-choice-static-ipv6-address) below for details.
 
-###### One of the arguments from this list "monitor_disabled, monitor" can be set
+###### One of the arguments from this list "monitor, monitor_disabled" can be set
 
 `monitor` - (Optional) Link Quality Monitoring parameters. Choosing the option will enable link quality monitoring.. See [Monitoring Choice Monitor ](#monitoring-choice-monitor) below for details.
 
@@ -612,11 +586,13 @@ Ethernet interface configuration..
 
 `mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
 
-###### One of the arguments from this list "site_local_network, site_local_inside_network, inside_network, storage_network, srv6_network, ip_fabric_network, segment_network" must be set
+###### One of the arguments from this list "srv6_network, ip_fabric_network, segment_network, site_local_network, site_local_inside_network, inside_network, storage_network" must be set
 
 `inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.(Deprecated)
 
 `ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (`Bool`).(Deprecated)
+
+`segment_network` - (Optional) x-displayName: "Segment". See [ref](#ref) below for details.
 
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (`Bool`).
 
@@ -700,7 +676,7 @@ Configure network interfaces for this Secure Mesh site.
 
 `description` - (Optional) Description for this Interface (`String`).
 
-###### One of the arguments from this list "ethernet_interface, dedicated_interface, dedicated_management_interface, loopback_interface" must be set
+###### One of the arguments from this list "dedicated_interface, dedicated_management_interface, loopback_interface, ethernet_interface" must be set
 
 `dedicated_interface` - (Optional) Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet. See [Interface Choice Dedicated Interface ](#interface-choice-dedicated-interface) below for details.
 
@@ -736,7 +712,7 @@ Configured address for every node.
 
 Configuration corresponding to IPV6 auto configuration.
 
-###### One of the arguments from this list "router, host" must be set
+###### One of the arguments from this list "host, router" must be set
 
 `host` - (Optional) auto configuration routers (`Bool`).
 
@@ -757,6 +733,28 @@ Interface IP is configured statically.
 `fleet_static_ip` - (Optional) Static IP configuration for the fleet. See [Network Prefix Choice Fleet Static Ip ](#network-prefix-choice-fleet-static-ip) below for details.(Deprecated)
 
 `node_static_ip` - (Optional) Static IP configuration for the Node. See [Network Prefix Choice Node Static Ip ](#network-prefix-choice-node-static-ip) below for details.
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+
+Disable Node by Node Upgrade during Software or OS version upgrade.
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
+
+Enable Node by Node Upgrade during Software or OS version upgrade.
+
+###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+
+`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+
+`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
+
+`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+
+###### One of the arguments from this list "enable_vega_upgrade_mode, disable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Lacp Choice Active Backup
 
@@ -794,7 +792,7 @@ Use custom networking configuration.
 
 `bgp_router_id` - (Optional) fetch BGP router ID from site object. (`String`).(Deprecated)
 
-###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
+###### One of the arguments from this list "forward_proxy_allow_all, no_forward_proxy, active_forward_proxy_policies" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
@@ -814,7 +812,7 @@ Use custom networking configuration.
 
 `interface_list` - (Optional) Add all interfaces belonging to this site. See [Interface Choice Interface List ](#interface-choice-interface-list) below for details.
 
-###### One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy, active_network_policies" must be set
+###### One of the arguments from this list "active_network_policies, active_enhanced_firewall_policies, no_network_policy" must be set
 
 `active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
 
@@ -828,7 +826,7 @@ Use custom networking configuration.
 
 `sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
 
-###### One of the arguments from this list "default_sli_config, sli_config" can be set
+###### One of the arguments from this list "sli_config, default_sli_config" can be set
 
 `default_sli_config` - (Optional) Use default configuration for site local network (`Bool`).
 
@@ -1002,7 +1000,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Dns information that needs to added in the RouterAdvetisement.
 
-###### One of the arguments from this list "configured_list, local_dns" must be set
+###### One of the arguments from this list "local_dns, configured_list" must be set
 
 `configured_list` - (Optional) Configured address outside network range - external dns server. See [Dns Choice Configured List ](#dns-choice-configured-list) below for details.
 
@@ -1084,7 +1082,7 @@ Use default configuration for site local network.
 
 Configuration for site local inside network.
 
-###### One of the arguments from this list "dc_cluster_group, no_dc_cluster_group" must be set
+###### One of the arguments from this list "no_dc_cluster_group, dc_cluster_group" must be set
 
 `dc_cluster_group` - (Optional) This site is member of dc cluster group via network. See [ref](#ref) below for details.
 
@@ -1208,7 +1206,7 @@ List of IPv6 static routes.
 
 `ip_prefixes` - (Required) List of IPv6 route prefixes that have common next hop and attributes (`String`).
 
-###### One of the arguments from this list "ip_address, interface, default_gateway" must be set
+###### One of the arguments from this list "interface, default_gateway, ip_address" must be set
 
 `default_gateway` - (Optional) Traffic matching the ip prefixes is sent to default gateway (`Bool`).
 
@@ -1245,6 +1243,14 @@ Specify TLS interception configuration for the network connector.
 ### Trusted Ca Choice Volterra Trusted Ca
 
 F5XC Root CA Certificate for validating upstream server certificate.
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Vlan Choice Untagged
 

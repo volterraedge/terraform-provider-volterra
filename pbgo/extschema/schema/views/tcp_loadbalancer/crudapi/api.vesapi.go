@@ -3156,10 +3156,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4442,9 +4446,9 @@ var APISwaggerJSON string = `{
                 },
                 "network": {
                     "description": " Select network types to be used on site\n By default VIP chosen as ip address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "SiteNetwork",
+                    "title": "Network",
                     "$ref": "#/definitions/viewsSiteNetwork",
-                    "x-displayname": "Site Network",
+                    "x-displayname": "Network",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -4655,10 +4659,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "virtual_network": {
-                    "description": " Select virtual network reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Virtual Network",
+                    "description": " Select network reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Network",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Network",
+                    "x-displayname": "Network",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -4676,9 +4680,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "network": {
                     "description": " Select network types to be used on site.\n IP address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "SiteNetwork",
+                    "title": "Network",
                     "$ref": "#/definitions/viewsSiteNetwork",
-                    "x-displayname": "Site Network",
+                    "x-displayname": "Network",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"

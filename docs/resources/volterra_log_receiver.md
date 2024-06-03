@@ -20,10 +20,11 @@ resource "volterra_log_receiver" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "splunk syslog data_dog" must be set
+  // One of the arguments from this list "syslog data_dog splunk" must be set
 
   syslog {
-    // One of the arguments from this list "syslog_rfc5424 syslog_rfc3164" must be set
+    // One of the arguments from this list "syslog_rfc3164 syslog_rfc5424" must be set
+
     syslog_rfc5424 = "500"
 
     // One of the arguments from this list "udp_server tcp_server tls_server" must be set
@@ -34,7 +35,9 @@ resource "volterra_log_receiver" "example" {
       server_name = "server.example.com"
     }
   }
-  // One of the arguments from this list "log_receiver_sites site_local" must be set
+
+  // One of the arguments from this list "site_local log_receiver_sites" must be set
+
   site_local = true
 }
 
@@ -123,7 +126,7 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 Stream log to Datadog receiver.
 
-###### One of the arguments from this list "trusted_ca_url, volterra_ca" must be set
+###### One of the arguments from this list "volterra_ca, trusted_ca_url" must be set
 
 `trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
 
@@ -143,7 +146,7 @@ Stream log to Datadog receiver.
 
 `port` - (Optional) Custom port number used for communication (`Int`).
 
-###### One of the arguments from this list "datadog_default_server, server_name" must be set
+###### One of the arguments from this list "server_name, datadog_default_server" must be set
 
 `datadog_default_server` - (Optional) Default Datadog server name (`Bool`).
 
@@ -153,7 +156,7 @@ Stream log to Datadog receiver.
 
 Stream log to Splunk HEC Receiver.
 
-###### One of the arguments from this list "splunk_server_ip, splunk_server_tls, splunk_server_name" must be set
+###### One of the arguments from this list "splunk_server_name, splunk_server_ip, splunk_server_tls" must be set
 
 `splunk_server_ip` - (Optional) Splunk HEC server ip address and port number. See [Server Name Choice Splunk Server Ip ](#server-name-choice-splunk-server-ip) below for details.
 
@@ -205,7 +208,7 @@ Syslog transport mode is TLS.
 
 `mtls_enable` - (Optional) Enable mTLS configuration. See [Mtls Choice Mtls Enable ](#mtls-choice-mtls-enable) below for details.
 
-###### One of the arguments from this list "default_syslog_tls_port, default_https_port, port" must be set
+###### One of the arguments from this list "default_https_port, port, default_syslog_tls_port" must be set
 
 `default_https_port` - (Optional) Default port number for HTTPS is 443. (`Bool`).
 
@@ -243,7 +246,7 @@ The data may be optionally secured using BlindFold..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -337,7 +340,7 @@ Fully qualified splunk HEC server name and port number.
 
 Splunk TLS Server Parameters.
 
-###### One of the arguments from this list "trusted_ca_url, volterra_ca" must be set
+###### One of the arguments from this list "volterra_ca, trusted_ca_url" must be set
 
 `trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).
 
@@ -367,7 +370,7 @@ Secret splunk HEC token.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 

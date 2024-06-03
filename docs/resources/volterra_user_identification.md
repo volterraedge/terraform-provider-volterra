@@ -21,8 +21,9 @@ resource "volterra_user_identification" "example" {
   namespace = "staging"
 
   rules {
-    // One of the arguments from this list "client_city http_header_name none client_country client_asn client_region ip_and_tls_fingerprint jwt_claim_name client_ip cookie_name ip_and_http_header_name query_param_key tls_fingerprint" must be set
-    client_ip = true
+    // One of the arguments from this list "ip_and_http_header_name ip_and_tls_fingerprint client_ip client_country client_region cookie_name jwt_claim_name query_param_key none client_asn tls_fingerprint client_city http_header_name" must be set
+
+    http_header_name = "http_header_name"
   }
 }
 
@@ -53,7 +54,7 @@ Argument Reference
 
 Evaluation of the rules is terminated once a user identifier has been extracted..
 
-###### One of the arguments from this list "client_ip, cookie_name, ip_and_http_header_name, ip_and_tls_fingerprint, jwt_claim_name, query_param_key, tls_fingerprint, http_header_name, none, client_country, client_city, client_asn, client_region" must be set
+###### One of the arguments from this list "cookie_name, client_country, client_region, query_param_key, jwt_claim_name, client_city, http_header_name, none, client_asn, tls_fingerprint, client_ip, ip_and_http_header_name, ip_and_tls_fingerprint" must be set
 
 `client_asn` - (Optional) The client ASN is obtained by performing a lookup for the client IP Address in a GeoIP DB. (`Bool`).
 

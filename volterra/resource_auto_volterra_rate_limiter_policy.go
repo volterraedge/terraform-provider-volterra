@@ -437,6 +437,16 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 														Type: schema.TypeString,
 													},
 												},
+
+												"ipv6_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
 											},
 										},
 									},

@@ -22,6 +22,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.infraprotect_information.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.infraprotect_information.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.infraprotect_information.Policer"] = PolicerValidator()
 
 }
 

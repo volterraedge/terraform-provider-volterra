@@ -2237,6 +2237,20 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsAllowedVIPPorts",
                     "x-displayname": "Allowed VIP Port Configuration for Inside Network"
                 },
+                "az_nodes": {
+                    "type": "array",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "title": "Nodes",
+                    "items": {
+                        "$ref": "#/definitions/viewsAWSVPCTwoInterfaceNodeType"
+                    },
+                    "x-displayname": "Ingress/Egress Gateway (two Interface) Nodes in AZ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                    }
+                },
                 "dc_cluster_group_inside_vn": {
                     "description": "Exclusive with [dc_cluster_group_outside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via inside network",
                     "title": "Member of DC cluster Group via Inside Network",
@@ -2506,6 +2520,20 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsAllowedVIPPorts",
                     "x-displayname": "Allowed VIP Port Configuration"
                 },
+                "az_nodes": {
+                    "type": "array",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "title": "Nodes",
+                    "items": {
+                        "$ref": "#/definitions/viewsAWSVPCOneInterfaceNodeType"
+                    },
+                    "x-displayname": "Ingress Gateway (One Interface) Nodes in AZ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                    }
+                },
                 "performance_enhancement_mode": {
                     "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
                     "title": "Performance Enhancement Choice",
@@ -2672,6 +2700,20 @@ var APISwaggerJSON string = `{
                     "title": "Allowed VIP Port Configuration",
                     "$ref": "#/definitions/viewsAllowedVIPPorts",
                     "x-displayname": "Allowed VIP Port Configuration"
+                },
+                "az_nodes": {
+                    "type": "array",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "title": "Nodes",
+                    "items": {
+                        "$ref": "#/definitions/viewsAWSVPCOneInterfaceNodeType"
+                    },
+                    "x-displayname": "App Stack Cluster (One Interface) Nodes in AZ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                    }
                 },
                 "dc_cluster_group": {
                     "description": "Exclusive with [no_dc_cluster_group]\n This site is member of dc cluster group connected via outside network",
@@ -3887,10 +3929,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3947,10 +3993,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4009,10 +4059,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -5716,6 +5770,77 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsKubernetesUpgradeDrain": {
+            "type": "object",
+            "description": "Node by Node Upgrade during Software or OS version upgrade",
+            "title": "Node by Node Upgrade",
+            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
+            "properties": {
+                "disable_upgrade_drain": {
+                    "description": "Exclusive with [enable_upgrade_drain]\n Disable  Node by Node Upgrade during Software or OS version upgrade",
+                    "title": "Disable upgrade drain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Node by Node Upgrade"
+                },
+                "enable_upgrade_drain": {
+                    "description": "Exclusive with [disable_upgrade_drain]\n Enable Node by Node Upgrade during Software or OS version upgrade",
+                    "title": "Enable Node by Node Upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
+                    "x-displayname": "Enable Node by Node Upgrade"
+                }
+            }
+        },
+        "viewsKubernetesUpgradeDrainConfig": {
+            "type": "object",
+            "description": "Node by Node upgrade config during Software or OS version upgrade",
+            "title": "Node by Node Upgrade",
+            "x-displayname": "Node by Node Upgrade Config",
+            "x-ves-oneof-field-drain_max_unavailable_choice": "[\"drain_max_unavailable_node_count\"]",
+            "x-ves-oneof-field-vega_upgrade_mode_toggle_choice": "[\"disable_vega_upgrade_mode\",\"enable_vega_upgrade_mode\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrainConfig",
+            "properties": {
+                "disable_vega_upgrade_mode": {
+                    "description": "Exclusive with [enable_vega_upgrade_mode]\n Disable Vega Upgrade Mode",
+                    "title": "Disable Vega Upgrade Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Vega Upgrade Mode"
+                },
+                "drain_max_unavailable_node_count": {
+                    "type": "integer",
+                    "description": "Exclusive with []\n Max unavailable worker node count during Software or OS version upgrade\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
+                    "title": "Max Unavailable Node Count",
+                    "format": "int64",
+                    "x-displayname": "Max Unavailable Worker Node Count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "5000"
+                    }
+                },
+                "drain_node_timeout": {
+                    "type": "integer",
+                    "description": " Second to wait before skipping a pod eviction, equivalent to -skip-wait-for-delete-timeout- option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
+                    "title": "Pod Eviction Timeout",
+                    "format": "int64",
+                    "x-displayname": "Pod Eviction Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "900"
+                    }
+                },
+                "enable_vega_upgrade_mode": {
+                    "description": "Exclusive with [disable_vega_upgrade_mode]\n Enable Vega Upgrade Mode\n When enabled, vega will inform RE to stop traffic to the specific node.",
+                    "title": "Enable Vega Upgrade Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Vega Upgrade Mode"
+                }
+            }
+        },
         "viewsL3PerformanceEnhancementType": {
             "type": "object",
             "description": "x-required\nL3 enhanced performance mode options",
@@ -6138,9 +6263,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled private_connectivity]\nDisable Private Connectivity to Site",
@@ -6214,6 +6339,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
+                "kubernetes_upgrade_drain": {
+                    "description": " Enable Kubernetes Drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -6258,14 +6388,16 @@ var APISwaggerJSON string = `{
                 },
                 "ssh_key": {
                     "type": "string",
-                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n",
+                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
                     "maxLength": 8192,
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB...",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "8192"
+                        "ves.io.schema.rules.string.max_len": "8192",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "sw": {
@@ -6381,9 +6513,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled private_connectivity]\nDisable Private Connectivity to Site",
@@ -6468,6 +6600,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
+                "kubernetes_upgrade_drain": {
+                    "description": " Enable Kubernetes Drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -6521,14 +6658,16 @@ var APISwaggerJSON string = `{
                 },
                 "ssh_key": {
                     "type": "string",
-                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n",
+                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
                     "maxLength": 8192,
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB...",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "8192"
+                        "ves.io.schema.rules.string.max_len": "8192",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "suggested_action": {
@@ -6585,8 +6724,10 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-blocked_services_choice": "[\"block_all_services\",\"blocked_services\",\"default_blocked_services\"]",
             "x-ves-oneof-field-deployment": "[\"aws_cred\"]",
             "x-ves-oneof-field-direct_connect_choice": "[\"direct_connect_disabled\",\"direct_connect_enabled\",\"private_connectivity\"]",
+            "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-internet_vip_choice": "[\"disable_internet_vip\",\"enable_internet_vip\"]",
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
+            "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-site_type": "[\"ingress_egress_gw\",\"ingress_gw\",\"voltstack_cluster\"]",
             "x-ves-oneof-field-worker_nodes": "[\"no_worker_nodes\",\"nodes_per_az\",\"total_nodes\"]",
             "x-ves-proto-message": "ves.io.schema.views.aws_vpc_site.ReplaceSpecType",
@@ -6605,6 +6746,16 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Reference to AWS credentials for automatic deployment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Cloud Credentials"
+                },
+                "aws_region": {
+                    "type": "string",
+                    "description": " Name for AWS Region.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "x-displayname": "AWS Region",
+                    "x-ves-example": "us-east-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "block_all_services": {
                     "description": "Exclusive with [blocked_services default_blocked_services]\n Block DNS, SSH \u0026 WebUI services on Site",
@@ -6627,10 +6778,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsCustomDNS",
                     "x-displayname": "Custom DNS"
                 },
+                "custom_security_group": {
+                    "description": "Exclusive with [f5xc_security_group]\n With this option, ingress and egress traffic will be controlled via security group ids.",
+                    "$ref": "#/definitions/viewsSecurityGroupType",
+                    "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
+                },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "direct_connect_disabled": {
                     "description": "Exclusive with [direct_connect_enabled private_connectivity]\nDisable Private Connectivity to Site",
@@ -6647,10 +6803,40 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable VIP Advertisement to Internet on Site"
                 },
+                "disk_size": {
+                    "type": "integer",
+                    "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 2048\n",
+                    "format": "int64",
+                    "x-displayname": "Cloud Disk Size",
+                    "x-ves-example": "80",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "2048"
+                    }
+                },
+                "egress_gateway_default": {
+                    "description": "Exclusive with [egress_nat_gw egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Internet Gateway.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Select this option to route site traffic through a Internet Gateway"
+                },
+                "egress_nat_gw": {
+                    "description": "Exclusive with [egress_gateway_default egress_virtual_private_gateway]\n With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.",
+                    "$ref": "#/definitions/viewsAWSNATGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Network Address Translation (NAT) Gateway."
+                },
+                "egress_virtual_private_gateway": {
+                    "description": "Exclusive with [egress_gateway_default egress_nat_gw]\n With this option, egress site traffic will be routed through an Virtual Private Gateway.",
+                    "$ref": "#/definitions/viewsAWSVirtualPrivateGatewaychoiceType",
+                    "x-displayname": "Select this option to route site traffic through a Virtual Private Gateway."
+                },
                 "enable_internet_vip": {
                     "description": "Exclusive with [disable_internet_vip]\n VIPs can be advertised to the internet directly on this Site",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable VIP Advertisement to Internet on Site"
+                },
+                "f5xc_security_group": {
+                    "description": "Exclusive with [custom_security_group]\n With this option, ingress and egress traffic will be controlled via f5xc created security group.",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Select this option to create and attach F5XC default security group"
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC.",
@@ -6663,6 +6849,23 @@ var APISwaggerJSON string = `{
                     "title": "Ingress Gateway",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCIngressGwReplaceType",
                     "x-displayname": "Ingress Gateway (One Interface)"
+                },
+                "instance_type": {
+                    "type": "string",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"a1.xlarge\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "maxLength": 64,
+                    "x-displayname": "AWS Instance Type for Node",
+                    "x-ves-example": "a1.xlarge",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "kubernetes_upgrade_drain": {
+                    "description": " Enable Kubernetes Drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
@@ -6700,6 +6903,20 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPrivateConnectConfigType",
                     "x-displayname": "Enable Private Connectivity"
                 },
+                "ssh_key": {
+                    "type": "string",
+                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 8192,
+                    "x-displayname": "Public SSH key",
+                    "x-ves-example": "ssh-rsa AAAAB...",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "8192",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
                 "total_nodes": {
                     "type": "integer",
                     "description": "Exclusive with [no_worker_nodes nodes_per_az]\n Total number of worker nodes to be deployed across all AZ's used in the Site\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 61\n",
@@ -6716,6 +6933,11 @@ var APISwaggerJSON string = `{
                     "title": "App Stack Cluster",
                     "$ref": "#/definitions/aws_vpc_siteAWSVPCVoltstackClusterReplaceType",
                     "x-displayname": "App Stack Cluster (One Interface)"
+                },
+                "vpc": {
+                    "description": " Choice of using existing VPC or create new VPC",
+                    "$ref": "#/definitions/viewsAWSVPCchoiceType",
+                    "x-displayname": "VPC"
                 }
             }
         }
