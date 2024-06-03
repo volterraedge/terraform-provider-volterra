@@ -43,6 +43,15 @@ func (c *CustomDataAPIGrpcClient) doRPCMetrics(ctx context.Context, yamlReq stri
 	return rsp, err
 }
 
+func (c *CustomDataAPIGrpcClient) doRPCMetricsAllNamespaces(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &MetricsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.app_firewall.MetricsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.MetricsAllNamespaces(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -75,6 +84,8 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["Metrics"] = ccl.doRPCMetrics
 
+	rpcFns["MetricsAllNamespaces"] = ccl.doRPCMetricsAllNamespaces
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -89,6 +100,101 @@ type CustomDataAPIRestClient struct {
 }
 
 func (c *CustomDataAPIRestClient) doRPCMetrics(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &MetricsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.app_firewall.MetricsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		for _, item := range req.FieldSelector {
+			q.Add("field_selector", fmt.Sprintf("%v", item))
+		}
+		q.Add("filter", fmt.Sprintf("%v", req.Filter))
+		for _, item := range req.GroupBy {
+			q.Add("group_by", fmt.Sprintf("%v", item))
+		}
+		q.Add("is_trend_request", fmt.Sprintf("%v", req.IsTrendRequest))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("range", fmt.Sprintf("%v", req.Range))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+		q.Add("step", fmt.Sprintf("%v", req.Step))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &MetricsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.app_firewall.MetricsResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataAPIRestClient) doRPCMetricsAllNamespaces(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
@@ -209,6 +315,8 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["Metrics"] = ccl.doRPCMetrics
 
+	rpcFns["MetricsAllNamespaces"] = ccl.doRPCMetricsAllNamespaces
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -224,6 +332,10 @@ type customDataAPIInprocClient struct {
 func (c *customDataAPIInprocClient) Metrics(ctx context.Context, in *MetricsRequest, opts ...grpc.CallOption) (*MetricsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_firewall.CustomDataAPI.Metrics")
 	return c.CustomDataAPIServer.Metrics(ctx, in)
+}
+func (c *customDataAPIInprocClient) MetricsAllNamespaces(ctx context.Context, in *MetricsRequest, opts ...grpc.CallOption) (*MetricsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.app_firewall.CustomDataAPI.MetricsAllNamespaces")
+	return c.CustomDataAPIServer.MetricsAllNamespaces(ctx, in)
 }
 
 func NewCustomDataAPIInprocClient(svc svcfw.Service) CustomDataAPIClient {
@@ -296,6 +408,55 @@ func (s *customDataAPISrv) Metrics(ctx context.Context, in *MetricsRequest) (*Me
 
 	return rsp, nil
 }
+func (s *customDataAPISrv) MetricsAllNamespaces(ctx context.Context, in *MetricsRequest) (*MetricsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.app_firewall.CustomDataAPI")
+	cah, ok := ah.(CustomDataAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPIServer", ah)
+	}
+
+	var (
+		rsp *MetricsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.app_firewall.MetricsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataAPI.MetricsAllNamespaces' operation on 'app_firewall'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.app_firewall.CustomDataAPI.MetricsAllNamespaces"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.MetricsAllNamespaces(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.app_firewall.MetricsResponse", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomDataAPIServer(svc svcfw.Service) CustomDataAPIServer {
 	return &customDataAPISrv{svc: svc}
@@ -320,6 +481,90 @@ var CustomDataAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/app_firewall/all_ns_metrics": {
+            "post": {
+                "summary": "MetricsAllNamespaces",
+                "description": "App Firewall metrics",
+                "operationId": "ves.io.schema.app_firewall.CustomDataAPI.MetricsAllNamespaces",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/app_firewallMetricsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/app_firewallMetricsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomDataAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-customdataapi-metricsallnamespaces"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.app_firewall.CustomDataAPI.MetricsAllNamespaces"
+            },
+            "x-displayname": "Application Firewall Custom Data API",
+            "x-ves-proto-service": "ves.io.schema.app_firewall.CustomDataAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/app_firewall/metrics": {
             "post": {
                 "summary": "Metrics",

@@ -21,24 +21,37 @@ resource "volterra_k8s_cluster" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_cluster_wide_apps cluster_wide_app_list" must be set
+
   no_cluster_wide_apps = true
 
   // One of the arguments from this list "use_default_cluster_role_bindings use_custom_cluster_role_bindings" must be set
-  use_default_cluster_role_bindings = true
+
+  use_custom_cluster_role_bindings {
+    cluster_role_bindings {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+  }
 
   // One of the arguments from this list "use_default_cluster_roles use_custom_cluster_role_list" must be set
+
   use_default_cluster_roles = true
 
   // One of the arguments from this list "cluster_scoped_access_deny cluster_scoped_access_permit" must be set
-  cluster_scoped_access_deny = true
+
+  cluster_scoped_access_permit = true
 
   // One of the arguments from this list "no_global_access global_access_enable" must be set
+
   no_global_access = true
 
   // One of the arguments from this list "no_insecure_registries insecure_registry_list" must be set
+
   no_insecure_registries = true
 
   // One of the arguments from this list "no_local_access local_access_config" must be set
+
   no_local_access = true
 
   // One of the arguments from this list "use_default_pod_security_admission use_custom_pod_security_admission" must be set
@@ -51,14 +64,10 @@ resource "volterra_k8s_cluster" "example" {
 
   // One of the arguments from this list "use_default_psp use_custom_psp_list" must be set
 
-  use_custom_psp_list {
-    pod_security_policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  use_default_psp = true
+
   // One of the arguments from this list "vk8s_namespace_access_deny vk8s_namespace_access_permit" must be set
+
   vk8s_namespace_access_deny = true
 }
 

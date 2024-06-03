@@ -2305,6 +2305,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Cluster",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
+            "x-ves-oneof-field-proxy_protocol_type": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.CreateSpecType",
             "properties": {
                 "auto_http_config": {
@@ -2335,6 +2336,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "32"
                     }
+                },
+                "disable_proxy_protocol": {
+                    "description": "Exclusive with [proxy_protocol_v1 proxy_protocol_v2]\n Disable Proxy Protocol for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Proxy Protocol"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both",
@@ -2370,11 +2376,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterSubsetFallbackPolicy",
                     "x-displayname": "Fallback Policy"
                 },
-                "header_transformation_type": {
-                    "description": " Settings to normalize the headers of upstream requests.",
-                    "$ref": "#/definitions/schemaHeaderTransformationType",
-                    "x-displayname": "Header Transformation Configuration"
-                },
                 "health_checks": {
                     "type": "array",
                     "description": " List of references to healthcheck object for this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -2389,7 +2390,7 @@ var APISwaggerJSON string = `{
                 },
                 "http1_config": {
                     "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/clusterHttp1ProtocolOptions",
                     "x-displayname": "HTTP/1.1"
                 },
                 "http2_options": {
@@ -2430,6 +2431,16 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "100"
                     }
+                },
+                "proxy_protocol_v1": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v2]\n Enable Proxy Protocol V1 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V1"
+                },
+                "proxy_protocol_v2": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v1]\n Enable Proxy Protocol V2 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V2"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -2603,8 +2614,9 @@ var APISwaggerJSON string = `{
             "title": "Get cluster",
             "x-displayname": "Get Cluster",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
-            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[]",
+            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[\"disable_lb_source_ip_persistance\",\"enable_lb_source_ip_persistance\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
+            "x-ves-oneof-field-proxy_protocol_type": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.GetSpecType",
             "properties": {
                 "auto_http_config": {
@@ -2635,6 +2647,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "32"
                     }
+                },
+                "disable_lb_source_ip_persistance": {
+                    "description": "Exclusive with [enable_lb_source_ip_persistance]\n Disable LB source IP persistence",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable LB Source IP persistence"
+                },
+                "disable_proxy_protocol": {
+                    "description": "Exclusive with [proxy_protocol_v1 proxy_protocol_v2]\n Disable Proxy Protocol for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Proxy Protocol"
+                },
+                "enable_lb_source_ip_persistance": {
+                    "description": "Exclusive with [disable_lb_source_ip_persistance]\n Enable LB source IP persistence",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable LB Source IP persistence"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both",
@@ -2670,11 +2697,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterSubsetFallbackPolicy",
                     "x-displayname": "Fallback Policy"
                 },
-                "header_transformation_type": {
-                    "description": " Settings to normalize the headers of upstream requests.",
-                    "$ref": "#/definitions/schemaHeaderTransformationType",
-                    "x-displayname": "Header Transformation Configuration"
-                },
                 "health_checks": {
                     "type": "array",
                     "description": " List of references to healthcheck object for this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -2689,7 +2711,7 @@ var APISwaggerJSON string = `{
                 },
                 "http1_config": {
                     "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/clusterHttp1ProtocolOptions",
                     "x-displayname": "HTTP/1.1"
                 },
                 "http2_options": {
@@ -2731,10 +2753,35 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "100"
                     }
                 },
+                "proxy_protocol_v1": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v2]\n Enable Proxy Protocol V1 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V1"
+                },
+                "proxy_protocol_v2": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v1]\n Enable Proxy Protocol V2 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V2"
+                },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
+                }
+            }
+        },
+        "clusterHttp1ProtocolOptions": {
+            "type": "object",
+            "description": "HTTP/1.1 Protocol options for upstream connections",
+            "title": "Http1ProtocolOptions",
+            "x-displayname": "HTTP/1.1 Protocol Options",
+            "x-ves-proto-message": "ves.io.schema.cluster.Http1ProtocolOptions",
+            "properties": {
+                "header_transformation": {
+                    "description": " Two mutually exclusive types of header key formatters are supported: Stateless\n (Default and Proper Case) and Stateful (Preserve Case) formatters. When a Stateless\n formatter is selected, it applies to the upstream request headers and when a\n Stateful formatter is selected, it applies to response headers sent to the client.\n It's essential to ensure that the same formatter type (either stateless or stateful)\n is applied on http load balancer. If different formatter types are applied, only\n the stateful formatter will take effect, and the stateless formatter will be disregarded.",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
                 }
             }
         },
@@ -2988,6 +3035,7 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Cluster",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
+            "x-ves-oneof-field-proxy_protocol_type": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
             "x-ves-proto-message": "ves.io.schema.cluster.ReplaceSpecType",
             "properties": {
                 "auto_http_config": {
@@ -3018,6 +3066,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.max_pairs": "32"
                     }
+                },
+                "disable_proxy_protocol": {
+                    "description": "Exclusive with [proxy_protocol_v1 proxy_protocol_v2]\n Disable Proxy Protocol for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Proxy Protocol"
                 },
                 "endpoint_selection": {
                     "description": " Policy for selection of endpoints from local site or remote site or both",
@@ -3053,11 +3106,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/clusterSubsetFallbackPolicy",
                     "x-displayname": "Fallback Policy"
                 },
-                "header_transformation_type": {
-                    "description": " Settings to normalize the headers of upstream requests.",
-                    "$ref": "#/definitions/schemaHeaderTransformationType",
-                    "x-displayname": "Header Transformation Configuration"
-                },
                 "health_checks": {
                     "type": "array",
                     "description": " List of references to healthcheck object for this cluster.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -3072,7 +3120,7 @@ var APISwaggerJSON string = `{
                 },
                 "http1_config": {
                     "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/clusterHttp1ProtocolOptions",
                     "x-displayname": "HTTP/1.1"
                 },
                 "http2_options": {
@@ -3113,6 +3161,16 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "100"
                     }
+                },
+                "proxy_protocol_v1": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v2]\n Enable Proxy Protocol V1 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V1"
+                },
+                "proxy_protocol_v2": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v1]\n Enable Proxy Protocol V2 for upstream connections",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V2"
                 },
                 "tls_parameters": {
                     "description": " TLS parameters to access upstream endpoints for this cluster",
@@ -3404,23 +3462,29 @@ var APISwaggerJSON string = `{
             "title": "HeaderTransformationType",
             "x-displayname": "Header Transformation",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"legacy_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
             "properties": {
                 "default_header_transformation": {
-                    "description": "Exclusive with [preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "description": "Exclusive with [legacy_header_transformation preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
                     "title": "Default header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
+                "legacy_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation proper_case_header_transformation]\n Use old header transformation if configured earlier",
+                    "title": "Legacy header transformations",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Legacy"
+                },
                 "preserve_case_header_transformation": {
-                    "description": "Exclusive with [default_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
+                    "description": "Exclusive with [default_header_transformation legacy_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
                     "title": "Preserve case header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Preserve Case"
                 },
                 "proper_case_header_transformation": {
-                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "description": "Exclusive with [default_header_transformation legacy_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
                     "title": "Proper case header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Proper Case"
@@ -3487,10 +3551,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3547,10 +3615,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3653,10 +3725,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4111,7 +4187,22 @@ var APISwaggerJSON string = `{
             "description": "Reference to Root CA Certificate",
             "title": "Root CA Certificate",
             "x-displayname": "Root CA Certificate Reference",
-            "x-ves-proto-message": "ves.io.schema.TrustedCAList"
+            "x-ves-proto-message": "ves.io.schema.TrustedCAList",
+            "properties": {
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": " Reference to Root CA Certificate\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Root CA Certificate",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Root CA Certificate Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
         },
         "schemaUpstreamCertificateParamsType": {
             "type": "object",

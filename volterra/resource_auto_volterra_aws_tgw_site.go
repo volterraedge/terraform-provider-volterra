@@ -551,6 +551,26 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"cloud_aggregated_prefix": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"dc_connect_aggregated_prefix": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
 						"hosted_vifs": {
 
 							Type:     schema.TypeSet,
@@ -681,6 +701,64 @@ func resourceVolterraAwsTgwSite() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+					},
+				},
+			},
+
+			"kubernetes_upgrade_drain": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_upgrade_drain": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_upgrade_drain": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"drain_max_unavailable_node_count": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"drain_max_unavailable_node_percentage": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"drain_node_timeout": {
+										Type:     schema.TypeInt,
+										Required: true,
+									},
+
+									"disable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"enable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
 						},
 					},
 				},
@@ -3055,6 +3133,104 @@ func resourceVolterraAwsTgwSiteCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	//kubernetes_upgrade_drain
+	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
+		createSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
+		for _, set := range sl {
+			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+
+			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+
+				if v.(bool) {
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+				}
+
+			}
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
+				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					drainMaxUnavailableChoiceTypeFound := false
+
+					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+					}
+
+					vegaUpgradeModeToggleChoiceTypeFound := false
+
+					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	//logs_receiver_choice
 
 	logsReceiverChoiceTypeFound := false
@@ -5106,6 +5282,204 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 		for _, set := range sl {
 			awsParametersMapStrToI := set.(map[string]interface{})
 
+			if w, ok := awsParametersMapStrToI["aws_region"]; ok && !isIntfNil(w) {
+				awsParameters.AwsRegion = w.(string)
+			}
+
+			if v, ok := awsParametersMapStrToI["az_nodes"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				azNodes := make([]*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, len(sl))
+				awsParameters.AzNodes = azNodes
+				for i, set := range sl {
+					azNodes[i] = &ves_io_schema_views.AWSVPCTwoInterfaceNodeType{}
+					azNodesMapStrToI := set.(map[string]interface{})
+
+					if w, ok := azNodesMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
+						azNodes[i].AwsAzName = w.(string)
+					}
+
+					choiceTypeFound := false
+
+					if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_InsideSubnet{}
+						choiceInt.InsideSubnet = &ves_io_schema_views.CloudSubnetType{}
+						azNodes[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := cs["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceIntNew := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+								choiceInt.InsideSubnet.Choice = choiceIntNew
+
+								choiceIntNew.ExistingSubnetId = v.(string)
+
+							}
+
+							if v, ok := cs["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceIntNew := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+								choiceIntNew.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+								choiceInt.InsideSubnet.Choice = choiceIntNew
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+										choiceIntNew.SubnetParam.Ipv4 = v.(string)
+
+									}
+
+									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+										choiceIntNew.SubnetParam.Ipv6 = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := azNodesMapStrToI["reserved_inside_subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+
+						if v.(bool) {
+							choiceInt := &ves_io_schema_views.AWSVPCTwoInterfaceNodeType_ReservedInsideSubnet{}
+							choiceInt.ReservedInsideSubnet = &ves_io_schema.Empty{}
+							azNodes[i].Choice = choiceInt
+						}
+
+					}
+
+					if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
+						azNodes[i].DiskSize = uint32(w.(int))
+					}
+
+					if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						outsideSubnet := &ves_io_schema_views.CloudSubnetType{}
+						azNodes[i].OutsideSubnet = outsideSubnet
+						for _, set := range sl {
+							outsideSubnetMapStrToI := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := outsideSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+								outsideSubnet.Choice = choiceInt
+
+								choiceInt.ExistingSubnetId = v.(string)
+
+							}
+
+							if v, ok := outsideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+								outsideSubnet.Choice = choiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv4 = v.(string)
+
+									}
+
+									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv6 = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := azNodesMapStrToI["workload_subnet"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						workloadSubnet := &ves_io_schema_views.CloudSubnetType{}
+						azNodes[i].WorkloadSubnet = workloadSubnet
+						for _, set := range sl {
+							workloadSubnetMapStrToI := set.(map[string]interface{})
+
+							choiceTypeFound := false
+
+							if v, ok := workloadSubnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_ExistingSubnetId{}
+
+								workloadSubnet.Choice = choiceInt
+
+								choiceInt.ExistingSubnetId = v.(string)
+
+							}
+
+							if v, ok := workloadSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.CloudSubnetType_SubnetParam{}
+								choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+								workloadSubnet.Choice = choiceInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv4 = v.(string)
+
+									}
+
+									if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+										choiceInt.SubnetParam.Ipv6 = v.(string)
+
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
 			deploymentTypeFound := false
 
 			if v, ok := awsParametersMapStrToI["assisted"]; ok && !isIntfNil(v) && !deploymentTypeFound {
@@ -5153,6 +5527,14 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 
 			}
 
+			if w, ok := awsParametersMapStrToI["disk_size"]; ok && !isIntfNil(w) {
+				awsParameters.DiskSize = uint32(w.(int))
+			}
+
+			if w, ok := awsParametersMapStrToI["instance_type"]; ok && !isIntfNil(w) {
+				awsParameters.InstanceType = w.(string)
+			}
+
 			internetVipChoiceTypeFound := false
 
 			if v, ok := awsParametersMapStrToI["disable_internet_vip"]; ok && !isIntfNil(v) && !internetVipChoiceTypeFound {
@@ -5175,6 +5557,207 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					internetVipChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_EnableInternetVip{}
 					internetVipChoiceInt.EnableInternetVip = &ves_io_schema.Empty{}
 					awsParameters.InternetVipChoice = internetVipChoiceInt
+				}
+
+			}
+
+			securityGroupChoiceTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
+
+				securityGroupChoiceTypeFound = true
+				securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_CustomSecurityGroup{}
+				securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
+				awsParameters.SecurityGroupChoice = securityGroupChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
+
+						securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
+
+					}
+
+					if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
+
+						securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
+
+				securityGroupChoiceTypeFound = true
+
+				if v.(bool) {
+					securityGroupChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_F5XcSecurityGroup{}
+					securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
+					awsParameters.SecurityGroupChoice = securityGroupChoiceInt
+				}
+
+			}
+
+			serviceVpcChoiceTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
+
+				serviceVpcChoiceTypeFound = true
+				serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NewVpc{}
+				serviceVpcChoiceInt.NewVpc = &ves_io_schema_views.AWSVPCParamsType{}
+				awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
+
+						serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
+
+					}
+
+					nameChoiceTypeFound := false
+
+					if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
+
+						nameChoiceTypeFound = true
+
+						if v.(bool) {
+							nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_Autogenerate{}
+							nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
+							serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["name_tag"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
+
+						nameChoiceTypeFound = true
+						nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_NameTag{}
+
+						serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
+
+						nameChoiceInt.NameTag = v.(string)
+
+					}
+
+					if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
+
+						serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
+
+					}
+
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["vpc_id"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
+
+				serviceVpcChoiceTypeFound = true
+				serviceVpcChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_VpcId{}
+
+				awsParameters.ServiceVpcChoice = serviceVpcChoiceInt
+
+				serviceVpcChoiceInt.VpcId = v.(string)
+
+			}
+
+			if w, ok := awsParametersMapStrToI["ssh_key"]; ok && !isIntfNil(w) {
+				awsParameters.SshKey = w.(string)
+			}
+
+			tgwChoiceTypeFound := false
+
+			if v, ok := awsParametersMapStrToI["existing_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
+
+				tgwChoiceTypeFound = true
+				tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_ExistingTgw{}
+				tgwChoiceInt.ExistingTgw = &ves_io_schema_views_aws_tgw_site.ExistingTGWType{}
+				awsParameters.TgwChoice = tgwChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
+
+						tgwChoiceInt.ExistingTgw.TgwAsn = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["tgw_id"]; ok && !isIntfNil(v) {
+
+						tgwChoiceInt.ExistingTgw.TgwId = v.(string)
+
+					}
+
+					if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
+
+						tgwChoiceInt.ExistingTgw.VolterraSiteAsn = uint32(v.(int))
+
+					}
+
+				}
+
+			}
+
+			if v, ok := awsParametersMapStrToI["new_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
+
+				tgwChoiceTypeFound = true
+				tgwChoiceInt := &ves_io_schema_views_aws_tgw_site.ServicesVPCReplaceType_NewTgw{}
+				tgwChoiceInt.NewTgw = &ves_io_schema_views_aws_tgw_site.TGWParamsType{}
+				awsParameters.TgwChoice = tgwChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					asnChoiceTypeFound := false
+
+					if v, ok := cs["system_generated"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+
+						if v.(bool) {
+							asnChoiceInt := &ves_io_schema_views_aws_tgw_site.TGWParamsType_SystemGenerated{}
+							asnChoiceInt.SystemGenerated = &ves_io_schema.Empty{}
+							tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["user_assigned"]; ok && !isIntfNil(v) && !asnChoiceTypeFound {
+
+						asnChoiceTypeFound = true
+						asnChoiceInt := &ves_io_schema_views_aws_tgw_site.TGWParamsType_UserAssigned{}
+						asnChoiceInt.UserAssigned = &ves_io_schema_views_aws_tgw_site.TGWAssignedASNType{}
+						tgwChoiceInt.NewTgw.AsnChoice = asnChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
+
+								asnChoiceInt.UserAssigned.TgwAsn = uint32(v.(int))
+
+							}
+
+							if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
+
+								asnChoiceInt.UserAssigned.VolterraSiteAsn = uint32(v.(int))
+
+							}
+
+						}
+
+					}
+
 				}
 
 			}
@@ -5604,6 +6187,103 @@ func resourceVolterraAwsTgwSiteUpdate(d *schema.ResourceData, meta interface{}) 
 					networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
 					networkOptionsInt.Outside = &ves_io_schema.Empty{}
 					directConnectChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
+		updateSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
+		for _, set := range sl {
+			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+
+			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+
+				if v.(bool) {
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+				}
+
+			}
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
+				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					drainMaxUnavailableChoiceTypeFound := false
+
+					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+					}
+
+					vegaUpgradeModeToggleChoiceTypeFound := false
+
+					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
 				}
 
 			}

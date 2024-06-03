@@ -2838,7 +2838,7 @@ var APISwaggerJSON string = `{
         "infraprotect_informationGlobalSpecType": {
             "type": "object",
             "description": "Organisation information",
-            "title": "information",
+            "title": "Information",
             "x-displayname": "Information",
             "x-ves-oneof-field-as_path_choice": "[\"as_path_choice_full\",\"as_path_choice_none\",\"as_path_choice_origin\"]",
             "x-ves-oneof-field-default_tunnel_bgp_secret_choice": "[\"default_tunnel_bgp_secret\",\"default_tunnel_bgp_secret_none\"]",
@@ -2890,6 +2890,12 @@ var APISwaggerJSON string = `{
                     "title": "No default tunnel BGP secret",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No default tunnel BGP secret"
+                },
+                "policer": {
+                    "description": " Policer config for bandwidth restrictions",
+                    "title": "Policer Config",
+                    "$ref": "#/definitions/infraprotect_informationPolicer",
+                    "x-displayname": "Policer Config"
                 },
                 "prefixes": {
                     "type": "array",
@@ -2944,6 +2950,25 @@ var APISwaggerJSON string = `{
                     "title": "uuid",
                     "x-displayname": "Uuid",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "infraprotect_informationPolicer": {
+            "type": "object",
+            "description": "Policer config for bandwidth restrictions",
+            "title": "Policer Config",
+            "x-displayname": "Policer Config",
+            "x-ves-proto-message": "ves.io.schema.infraprotect_information.Policer",
+            "properties": {
+                "bandwidth_max_mb": {
+                    "type": "integer",
+                    "description": " Bandwidth max allowed for a customer defined by contract\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 9999\n",
+                    "title": "Bandwidth Max",
+                    "format": "int64",
+                    "x-displayname": "Bandwidth Max in MB",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "9999"
+                    }
                 }
             }
         },
@@ -3237,10 +3262,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",

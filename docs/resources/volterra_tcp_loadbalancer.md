@@ -21,24 +21,31 @@ resource "volterra_tcp_loadbalancer" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public advertise_custom" must be set
+
   advertise_on_public_default_vip = true
 
   // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
-  retract_cluster = true
 
-  // One of the arguments from this list "hash_policy_choice_round_robin hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness" must be set
-  hash_policy_choice_source_ip_stickiness = true
+  do_not_retract_cluster = true
+
+  // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_source_ip_stickiness hash_policy_choice_round_robin" must be set
+
+  hash_policy_choice_least_active = true
 
   // One of the arguments from this list "tcp tls_tcp_auto_cert tls_tcp" must be set
+
   tcp = true
 
   // One of the arguments from this list "listen_port port_ranges" must be set
+
   listen_port = "0"
 
-  // One of the arguments from this list "service_policies_from_namespace no_service_policies active_service_policies" must be set
+  // One of the arguments from this list "no_service_policies active_service_policies service_policies_from_namespace" must be set
+
   service_policies_from_namespace = true
 
-  // One of the arguments from this list "no_sni sni default_lb_with_sni" must be set
+  // One of the arguments from this list "default_lb_with_sni no_sni sni" must be set
+
   no_sni = true
 }
 
@@ -149,6 +156,8 @@ Where should this load balancer be available.
 
 `site` - (Optional) Advertise on a customer site and a given network.. See [Choice Site ](#choice-site) below for details.
 
+`site_segment` - (Optional) Advertise on a segment on a site. See [Choice Site Segment ](#choice-site-segment) below for details.
+
 `virtual_network` - (Optional) Advertise on a virtual network. See [Choice Virtual Network ](#choice-virtual-network) below for details.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Choice Virtual Site ](#choice-virtual-site) below for details.
@@ -195,6 +204,18 @@ Advertise on a customer site and a given network..
 
 `site` - (Required) Reference to site object. See [ref](#ref) below for details.
 
+### Choice Site Segment
+
+Advertise on a segment on a site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
+`site` - (Required) x-required. See [ref](#ref) below for details.
+
 ### Choice Virtual Network
 
 Advertise on a virtual network.
@@ -211,7 +232,7 @@ Advertise on a virtual network.
 
 `specific_vip` - (Optional) Use given IPV4 address as VIP on virtual Network (`String`).
 
-`virtual_network` - (Required) Select virtual network reference. See [ref](#ref) below for details.
+`virtual_network` - (Required) Select network reference. See [ref](#ref) below for details.
 
 ### Choice Virtual Site
 
@@ -239,7 +260,7 @@ Client certificate revocation status is not verified.
 
 User is responsible for managing DNS to this load balancer..
 
-###### One of the arguments from this list "tls_cert_params, tls_parameters" must be set
+###### One of the arguments from this list "tls_parameters, tls_cert_params" must be set
 
 `tls_cert_params` - (Optional) Select/Add one or more TLS Certificate objects to associate with this Load Balancer. See [Tls Certificates Choice Tls Cert Params ](#tls-certificates-choice-tls-cert-params) below for details.
 
@@ -277,7 +298,7 @@ x-displayName: "Enable".
 
 `trusted_ca_url` - (Optional) Upload a Root CA Certificate specifically for this Load Balancer (`String`).
 
-###### One of the arguments from this list "xfcc_disabled, xfcc_options" can be set
+###### One of the arguments from this list "xfcc_options, xfcc_disabled" can be set
 
 `xfcc_disabled` - (Optional) No X-Forwarded-Client-Cert header will be added (`Bool`).
 
@@ -387,7 +408,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -447,7 +468,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
-###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 
@@ -461,7 +482,7 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
-###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
+###### One of the arguments from this list "custom_security, default_security, medium_security, low_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 

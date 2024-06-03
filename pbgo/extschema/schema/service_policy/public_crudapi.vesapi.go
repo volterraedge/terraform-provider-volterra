@@ -2584,14 +2584,14 @@ var APISwaggerJSON string = `{
         },
         "policyAsnMatchList": {
             "type": "object",
-            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.",
+            "description": "An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer.",
             "title": "Asn Match List",
             "x-displayname": "ASN Match List",
             "x-ves-proto-message": "ves.io.schema.policy.AsnMatchList",
             "properties": {
                 "as_numbers": {
                     "type": "array",
-                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer.\n\nExample: - \"[713, 7932, 847325, 4683, 15269, 1000001]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "as numbers",
                     "minItems": 1,
                     "maxItems": 16,
@@ -4506,7 +4506,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefixes": {
                     "type": "array",
-                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-example: \"10.0.0./24\"\nx-required\nDestination IPv4 prefixes.",
+                    "description": "x-displayName: \"IPv4 Prefixes\"\nx-example: \"10.0.0.1/24\"\nx-required\nDestination IPv4 prefixes.",
                     "title": "prefixes",
                     "items": {
                         "type": "string"
@@ -4627,10 +4627,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4687,10 +4691,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4749,10 +4757,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -5367,11 +5379,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
                 },
-                "segment_policy": {
-                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
-                    "$ref": "#/definitions/policySegmentPolicyType",
-                    "x-displayname": "Configure Segments"
-                },
                 "server_name": {
                     "type": "string",
                     "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
@@ -5438,11 +5445,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
                 },
-                "segment_policy": {
-                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
-                    "$ref": "#/definitions/policySegmentPolicyType",
-                    "x-displayname": "Configure Segments"
-                },
                 "server_name": {
                     "type": "string",
                     "description": "Exclusive with [any_server server_name_matcher server_selector]\n The expected name of the server to which the request API is directed. The actual names for the server are extracted from the HTTP Host header and the name\n of the virtual_host to which the request is directed. If the request is directed to a virtual K8s service, the actual names also contain the name of that\n service.\n The predicate evaluates to true if any of the actual names is the same as the expected server name.\n\nExample: - \"database.production.customer.volterra.us\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n",
@@ -5508,11 +5510,6 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [allow_all_requests allow_list deny_all_requests deny_list legacy_rule_list]\n",
                     "$ref": "#/definitions/service_policyRuleList",
                     "x-displayname": "Custom Rule List"
-                },
-                "segment_policy": {
-                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
-                    "$ref": "#/definitions/policySegmentPolicyType",
-                    "x-displayname": "Configure Segments"
                 },
                 "server_name": {
                     "type": "string",
@@ -5762,6 +5759,12 @@ var APISwaggerJSON string = `{
                     "title": "request constraints",
                     "$ref": "#/definitions/policyRequestConstraintType",
                     "x-displayname": "Request Constraints"
+                },
+                "segment_policy": {
+                    "description": " Select source and destination segments where rule is applied\n Skip the configuration or set option as Any to ignore corresponding segment match",
+                    "title": "Segments",
+                    "$ref": "#/definitions/policySegmentPolicyType",
+                    "x-displayname": "Configure Segments"
                 },
                 "tls_fingerprint_matcher": {
                     "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
@@ -6511,9 +6514,9 @@ var APISwaggerJSON string = `{
                     "title": "Shape Protected Endpoint Action",
                     "$ref": "#/definitions/policyShapeProtectedEndpointAction"
                 },
-                "threat_intelligence_action": {
-                    "description": "x-displayName: \"Threat Intelligence Action\"\nSpecifies how Threat Intelligence is handled",
-                    "title": "Threat Intelligence Action",
+                "threat_mesh_action": {
+                    "description": "x-displayName: \"Threat Mesh Action\"\nSpecifies how Threat Mesh is handled",
+                    "title": "Threat Mesh Action",
                     "$ref": "#/definitions/policyModifyAction"
                 },
                 "tls_fingerprint_matcher": {

@@ -20,19 +20,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.registration.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.registration.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.registration.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.registration.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.registration.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.registration.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.registration.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.registration.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.registration.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.registration.ReplaceResponse"] = ReplaceResponseValidator()
 
 	vr["ves.io.schema.registration.ApprovalReq"] = ApprovalReqValidator()
 	vr["ves.io.schema.registration.ConfigReq"] = ConfigReqValidator()
 	vr["ves.io.schema.registration.ConfigResp"] = ConfigRespValidator()
+	vr["ves.io.schema.registration.DeleteRequest"] = DeleteRequestValidator()
+	vr["ves.io.schema.registration.GetRequest"] = GetRequestValidator()
+	vr["ves.io.schema.registration.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.registration.ListBySiteReq"] = ListBySiteReqValidator()
+	vr["ves.io.schema.registration.ListRequest"] = ListRequestValidator()
+	vr["ves.io.schema.registration.ListResponse"] = ListResponseValidator()
+	vr["ves.io.schema.registration.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.registration.ListStateReq"] = ListStateReqValidator()
 	vr["ves.io.schema.registration.ObjectChangeResp"] = ObjectChangeRespValidator()
 	vr["ves.io.schema.registration.RegistrationCreateRequest"] = RegistrationCreateRequestValidator()
@@ -59,7 +59,7 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.API.Get"] = []string{
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.registration.CustomAPI.Get"] = []string{
 		"object",
 	}
 

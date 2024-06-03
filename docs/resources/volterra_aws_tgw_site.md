@@ -29,12 +29,11 @@ resource "volterra_aws_tgw_site" "example" {
       aws_az_name = "us-west-2a"
 
       // One of the arguments from this list "reserved_inside_subnet inside_subnet" must be set
+
       reserved_inside_subnet = true
-
       disk_size = "80"
-
       outside_subnet {
-        // One of the arguments from this list "existing_subnet_id subnet_param" must be set
+        // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
         subnet_param {
           ipv4 = "10.1.2.0/24"
@@ -42,7 +41,6 @@ resource "volterra_aws_tgw_site" "example" {
           ipv6 = "1234:568:abcd:9100::/64"
         }
       }
-
       workload_subnet {
         // One of the arguments from this list "subnet_param existing_subnet_id" must be set
 
@@ -63,31 +61,72 @@ resource "volterra_aws_tgw_site" "example" {
     }
     disk_size = "80"
     instance_type = "a1.xlarge"
-    // One of the arguments from this list "enable_internet_vip disable_internet_vip" must be set
+
+    // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+
     disable_internet_vip = true
+
     // One of the arguments from this list "f5xc_security_group custom_security_group" must be set
+
     f5xc_security_group = true
+
     // One of the arguments from this list "new_vpc vpc_id" must be set
-    vpc_id = "vpc-12345678901234567"
+
+    new_vpc {
+      allocate_ipv6 = true
+
+      // One of the arguments from this list "name_tag autogenerate" must be set
+
+      name_tag = "name_tag"
+      primary_ipv4 = "10.1.0.0/16"
+    }
     ssh_key = "ssh-rsa AAAAB..."
 
-    // One of the arguments from this list "new_tgw existing_tgw" must be set
+    // One of the arguments from this list "existing_tgw new_tgw" must be set
 
     new_tgw {
       // One of the arguments from this list "system_generated user_assigned" must be set
+
       system_generated = true
     }
-    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
-    nodes_per_az = "2"
+
+    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+
+    total_nodes = "1"
   }
 
-  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
-  default_blocked_services = true
+  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
 
-  // One of the arguments from this list "direct_connect_enabled private_connectivity direct_connect_disabled" must be set
-  direct_connect_disabled = true
+  block_all_services = true
+
+  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
+
+  direct_connect_enabled {
+    // One of the arguments from this list "auto_asn custom_asn" must be set
+
+    auto_asn = true
+
+    // One of the arguments from this list "standard_vifs manual_gw hosted_vifs" must be set
+
+    hosted_vifs {
+      // One of the arguments from this list "site_registration_over_internet site_registration_over_direct_connect" can be set
+
+      site_registration_over_internet = true
+
+      vif_list {
+        vif_id = "dxvif-fgwtckim"
+
+        // One of the arguments from this list "same_as_site_region other_region" must be set
+
+        other_region = "other_region"
+      }
+
+      vifs = ["value"]
+    }
+  }
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+
   logs_streaming_disabled = true
 }
 
@@ -118,7 +157,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration, to list the services which need to be blocked. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Allow access to DNS, SSH & WebUI services on Site (`Bool`).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (`Bool`).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -129,6 +168,8 @@ Argument Reference
 `direct_connect_enabled` - (Optional) Direct Connect Connection to Site is enabled(Legacy). See [Direct Connect Choice Direct Connect Enabled ](#direct-connect-choice-direct-connect-enabled) below for details.
 
 `private_connectivity` - (Optional) Enable Private Connectivity to Site via CloudLink. See [Direct Connect Choice Private Connectivity ](#direct-connect-choice-private-connectivity) below for details.
+
+`kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -170,7 +211,7 @@ Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
 
 `instance_type` - (Required) Instance size based on the performance. (`String`).
 
-###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
+###### One of the arguments from this list "enable_internet_vip, disable_internet_vip" must be set
 
 `disable_internet_vip` - (Optional) VIPs cannot be advertised to the internet directly on this Site (`Bool`).
 
@@ -224,6 +265,16 @@ custom dns configure to the CE site.
 
 `outside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in outside network (`String`).
 
+### Kubernetes Upgrade Drain
+
+Enable Kubernetes Drain during OS or SW upgrade.
+
+###### One of the arguments from this list "enable_upgrade_drain, disable_upgrade_drain" must be set
+
+`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+
+`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+
 ### Offline Survivability Mode
 
 Enable/Disable offline survivability mode.
@@ -258,7 +309,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 F5XC Software Details.
 
-###### One of the arguments from this list "volterra_software_version, default_sw_version" must be set
+###### One of the arguments from this list "default_sw_version, volterra_software_version" must be set
 
 `default_sw_version` - (Optional) Will assign latest available SW version (`Bool`).
 
@@ -268,7 +319,7 @@ F5XC Software Details.
 
 Security Configuration for transit gateway.
 
-###### One of the arguments from this list "east_west_service_policy_allow_all, no_east_west_policy, active_east_west_service_policies" must be set
+###### One of the arguments from this list "no_east_west_policy, active_east_west_service_policies, east_west_service_policy_allow_all" must be set
 
 `active_east_west_service_policies` - (Optional) Enable service policy so east-west traffic goes via proxy. See [East West Service Policy Choice Active East West Service Policies ](#east-west-service-policy-choice-active-east-west-service-policies) below for details.
 
@@ -276,7 +327,7 @@ Security Configuration for transit gateway.
 
 `no_east_west_policy` - (Optional) Disable service policy so that east-west traffic does not go via proxy (`Bool`).
 
-###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
+###### One of the arguments from this list "active_forward_proxy_policies, forward_proxy_allow_all, no_forward_proxy" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
@@ -314,7 +365,7 @@ Site Network related details will be configured.
 
 `no_global_network` - (Optional) No global network to connect (`Bool`).
 
-###### One of the arguments from this list "no_inside_static_routes, inside_static_routes" must be set
+###### One of the arguments from this list "inside_static_routes, no_inside_static_routes" must be set
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Route Choice Inside Static Routes ](#inside-static-route-choice-inside-static-routes) below for details.
 
@@ -326,7 +377,7 @@ Site Network related details will be configured.
 
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Route Choice Outside Static Routes ](#outside-static-route-choice-outside-static-routes) below for details.
 
-###### One of the arguments from this list "sm_connection_public_ip, sm_connection_pvt_ip" must be set
+###### One of the arguments from this list "sm_connection_pvt_ip, sm_connection_public_ip" must be set
 
 `sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
 
@@ -428,7 +479,7 @@ Matches the web user interface port.
 
 Select Existing Subnet or Create New.
 
-###### One of the arguments from this list "existing_subnet_id, subnet_param" must be set
+###### One of the arguments from this list "subnet_param, existing_subnet_id" must be set
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
@@ -488,7 +539,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -512,7 +563,7 @@ Nexthop for the route.
 
 List of route prefixes.
 
-###### One of the arguments from this list "ipv4, ipv6" must be set
+###### One of the arguments from this list "ipv6, ipv4" must be set
 
 `ipv4` - (Optional) IPv4 Subnet Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
@@ -550,7 +601,7 @@ Enable Private Connectivity to Site via CloudLink.
 
 `cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "inside, outside" can be set
+###### One of the arguments from this list "outside, inside" can be set
 
 `inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (`Bool`).
 
@@ -646,7 +697,7 @@ List of Hosted VIF Config.
 
 `vif_id` - (Required) AWS Direct Connect VIF ID that needs to be connected to the site (`String`).
 
-###### One of the arguments from this list "other_region, same_as_site_region" must be set
+###### One of the arguments from this list "same_as_site_region, other_region" must be set
 
 `other_region` - (Optional) Other Region (`String`).
 
@@ -686,7 +737,7 @@ Policy to enable/disable specific domains, with implicit enable all domains.
 
 Domain value or regular expression to match.
 
-###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
+###### One of the arguments from this list "suffix_value, regex_value, exact_value" must be set
 
 `exact_value` - (Optional) Exact domain name. (`String`).
 
@@ -701,6 +752,28 @@ VIPs cannot be advertised to the internet directly on this Site.
 ### Internet Vip Choice Enable Internet Vip
 
 VIPs can be advertised to the internet directly on this Site.
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+
+Disable Node by Node Upgrade during Software or OS version upgrade.
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
+
+Enable Node by Node Upgrade during Software or OS version upgrade.
+
+###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+
+`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+
+`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
+
+`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+
+###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Name Choice Autogenerate
 
@@ -798,7 +871,7 @@ L3 performance mode enhancement without jumbo frame.
 
 When the mode is toggled to l3 enhanced, traffic disruption will be seen.
 
-###### One of the arguments from this list "jumbo, no_jumbo" must be set
+###### One of the arguments from this list "no_jumbo, jumbo" must be set
 
 `jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (`Bool`).
 
@@ -814,7 +887,7 @@ List of ordered rules to enable or disable for TLS interception.
 
 `domain_match` - (Required) Domain value or regular expression to match. See [Interception Rules Domain Match ](#interception-rules-domain-match) below for details.
 
-###### One of the arguments from this list "disable_interception, enable_interception" must be set
+###### One of the arguments from this list "enable_interception, disable_interception" must be set
 
 `disable_interception` - (Optional) Disable Interception (`Bool`).
 
@@ -990,7 +1063,7 @@ Specify TLS interception configuration for the network connector.
 
 `policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Interception Policy Choice Policy ](#interception-policy-choice-policy) below for details.
 
-###### One of the arguments from this list "volterra_certificate, custom_certificate" must be set
+###### One of the arguments from this list "custom_certificate, volterra_certificate" must be set
 
 `custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Signing Cert Choice Custom Certificate ](#signing-cert-choice-custom-certificate) below for details.
 
@@ -1005,6 +1078,14 @@ Specify TLS interception configuration for the network connector.
 ### Trusted Ca Choice Volterra Trusted Ca
 
 F5XC Root CA Certificate for validating upstream server certificate.
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Ver Ipv4
 
@@ -1064,7 +1145,7 @@ Use same region as that of the Site.
 
 Allowed VIP Port Configuration.
 
-###### One of the arguments from this list "use_http_https_port, custom_ports, disable_allowed_vip_port, use_http_port, use_https_port" can be set
+###### One of the arguments from this list "use_https_port, use_http_https_port, custom_ports, disable_allowed_vip_port, use_http_port" can be set
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Port Choice Custom Ports ](#port-choice-custom-ports) below for details.
 
@@ -1080,7 +1161,7 @@ Allowed VIP Port Configuration.
 
 Allowed VIP Port Configuration for Inside Network.
 
-###### One of the arguments from this list "disable_allowed_vip_port, use_http_port, use_https_port, use_http_https_port, custom_ports" can be set
+###### One of the arguments from this list "use_http_https_port, custom_ports, disable_allowed_vip_port, use_http_port, use_https_port" can be set
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Port Choice Custom Ports ](#port-choice-custom-ports) below for details.
 

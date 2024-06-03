@@ -33,12 +33,10 @@ resource "volterra_container_registry" "example" {
 
     // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-    blindfold_secret_info {
-      decryption_provider = "value"
+    clear_secret_info {
+      provider = "box-provider"
 
-      location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-      store_provider = "value"
+      url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
     }
   }
 
@@ -83,7 +81,7 @@ Password for the above username.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 

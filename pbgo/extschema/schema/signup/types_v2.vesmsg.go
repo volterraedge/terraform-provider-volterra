@@ -741,295 +741,6 @@ func ContactMetaValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *CrmInfoV2) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *CrmInfoV2) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *CrmInfoV2) DeepCopy() *CrmInfoV2 {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &CrmInfoV2{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *CrmInfoV2) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *CrmInfoV2) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return CrmInfoV2Validator().Validate(ctx, m, opts...)
-}
-
-type ValidateCrmInfoV2 struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateCrmInfoV2) AccountIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for account_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfoV2) EntitlementIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for entitlement_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfoV2) SubscriptionIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for subscription_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfoV2) OrderTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for order_type")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfoV2) EntitledSkusValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepStringItemRules(rules)
-	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Item ValidationRuleHandler for entitled_skus")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for entitled_skus")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]string)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []string, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal := fmt.Sprintf("%v", elem)
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated entitled_skus")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items entitled_skus")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfoV2) CustomerIdentifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for customer_identifier")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfoV2) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*CrmInfoV2)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *CrmInfoV2 got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["account_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("account_id"))
-		if err := fv(ctx, m.GetAccountId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["customer_identifier"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("customer_identifier"))
-		if err := fv(ctx, m.GetCustomerIdentifier(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["entitled_skus"]; exists {
-		vOpts := append(opts, db.WithValidateField("entitled_skus"))
-		if err := fv(ctx, m.GetEntitledSkus(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["entitlement_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("entitlement_id"))
-		if err := fv(ctx, m.GetEntitlementId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["order_type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("order_type"))
-		if err := fv(ctx, m.GetOrderType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["subscription_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("subscription_id"))
-		if err := fv(ctx, m.GetSubscriptionId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultCrmInfoV2Validator = func() *ValidateCrmInfoV2 {
-	v := &ValidateCrmInfoV2{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhAccountId := v.AccountIdValidationRuleHandler
-	rulesAccountId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhAccountId(rulesAccountId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfoV2.account_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["account_id"] = vFn
-
-	vrhEntitlementId := v.EntitlementIdValidationRuleHandler
-	rulesEntitlementId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhEntitlementId(rulesEntitlementId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfoV2.entitlement_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["entitlement_id"] = vFn
-
-	vrhSubscriptionId := v.SubscriptionIdValidationRuleHandler
-	rulesSubscriptionId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhSubscriptionId(rulesSubscriptionId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfoV2.subscription_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["subscription_id"] = vFn
-
-	vrhOrderType := v.OrderTypeValidationRuleHandler
-	rulesOrderType := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhOrderType(rulesOrderType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfoV2.order_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["order_type"] = vFn
-
-	vrhEntitledSkus := v.EntitledSkusValidationRuleHandler
-	rulesEntitledSkus := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.max_len": "256",
-		"ves.io.schema.rules.repeated.max_items":            "64",
-	}
-	vFn, err = vrhEntitledSkus(rulesEntitledSkus)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfoV2.entitled_skus: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["entitled_skus"] = vFn
-
-	vrhCustomerIdentifier := v.CustomerIdentifierValidationRuleHandler
-	rulesCustomerIdentifier := map[string]string{
-		"ves.io.schema.rules.string.max_len": "255",
-	}
-	vFn, err = vrhCustomerIdentifier(rulesCustomerIdentifier)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfoV2.customer_identifier: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["customer_identifier"] = vFn
-
-	return v
-}()
-
-func CrmInfoV2Validator() db.Validator {
-	return DefaultCrmInfoV2Validator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *InternalMeta) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1197,15 +908,15 @@ func InternalMetaValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *MarketplaceAws) ToJSON() (string, error) {
+func (m *SignupTypeInternalScaling) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *MarketplaceAws) ToYAML() (string, error) {
+func (m *SignupTypeInternalScaling) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *MarketplaceAws) DeepCopy() *MarketplaceAws {
+func (m *SignupTypeInternalScaling) DeepCopy() *SignupTypeInternalScaling {
 	if m == nil {
 		return nil
 	}
@@ -1213,7 +924,7 @@ func (m *MarketplaceAws) DeepCopy() *MarketplaceAws {
 	if err != nil {
 		return nil
 	}
-	c := &MarketplaceAws{}
+	c := &SignupTypeInternalScaling{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1221,22 +932,317 @@ func (m *MarketplaceAws) DeepCopy() *MarketplaceAws {
 	return c
 }
 
-func (m *MarketplaceAws) DeepCopyProto() proto.Message {
+func (m *SignupTypeInternalScaling) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *MarketplaceAws) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return MarketplaceAwsValidator().Validate(ctx, m, opts...)
+func (m *SignupTypeInternalScaling) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignupTypeInternalScalingValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateMarketplaceAws struct {
+type ValidateSignupTypeInternalScaling struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateMarketplaceAws) CrmDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateSignupTypeInternalScaling) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignupTypeInternalScaling)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SignupTypeInternalScaling got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSignupTypeInternalScalingValidator = func() *ValidateSignupTypeInternalScaling {
+	v := &ValidateSignupTypeInternalScaling{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SignupTypeInternalScalingValidator() db.Validator {
+	return DefaultSignupTypeInternalScalingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SignupTypeInternalSre) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SignupTypeInternalSre) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SignupTypeInternalSre) DeepCopy() *SignupTypeInternalSre {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SignupTypeInternalSre{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SignupTypeInternalSre) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SignupTypeInternalSre) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignupTypeInternalSreValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSignupTypeInternalSre struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSignupTypeInternalSre) F5XcInstanceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for f5xc_instance_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSignupTypeInternalSre) KcInstanceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for kc_instance_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSignupTypeInternalSre) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignupTypeInternalSre)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SignupTypeInternalSre got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["crm_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("crm_details"))
+		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["f5xc_instance_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("f5xc_instance_name"))
+		if err := fv(ctx, m.GetF5XcInstanceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["is_demo_tenant"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("is_demo_tenant"))
+		if err := fv(ctx, m.GetIsDemoTenant(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["kc_instance_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kc_instance_name"))
+		if err := fv(ctx, m.GetKcInstanceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSignupTypeInternalSreValidator = func() *ValidateSignupTypeInternalSre {
+	v := &ValidateSignupTypeInternalSre{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhF5XcInstanceName := v.F5XcInstanceNameValidationRuleHandler
+	rulesF5XcInstanceName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhF5XcInstanceName(rulesF5XcInstanceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SignupTypeInternalSre.f5xc_instance_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["f5xc_instance_name"] = vFn
+
+	vrhKcInstanceName := v.KcInstanceNameValidationRuleHandler
+	rulesKcInstanceName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+	}
+	vFn, err = vrhKcInstanceName(rulesKcInstanceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SignupTypeInternalSre.kc_instance_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["kc_instance_name"] = vFn
+
+	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
+
+	return v
+}()
+
+func SignupTypeInternalSreValidator() db.Validator {
+	return DefaultSignupTypeInternalSreValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SignupTypeInternalSso) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SignupTypeInternalSso) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SignupTypeInternalSso) DeepCopy() *SignupTypeInternalSso {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SignupTypeInternalSso{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SignupTypeInternalSso) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SignupTypeInternalSso) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignupTypeInternalSsoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSignupTypeInternalSso struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSignupTypeInternalSso) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignupTypeInternalSso)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SignupTypeInternalSso got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSignupTypeInternalSsoValidator = func() *ValidateSignupTypeInternalSso {
+	v := &ValidateSignupTypeInternalSso{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SignupTypeInternalSsoValidator() db.Validator {
+	return DefaultSignupTypeInternalSsoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SignupTypeMarketplace) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SignupTypeMarketplace) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SignupTypeMarketplace) DeepCopy() *SignupTypeMarketplace {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SignupTypeMarketplace{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SignupTypeMarketplace) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SignupTypeMarketplace) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignupTypeMarketplaceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSignupTypeMarketplace struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSignupTypeMarketplace) CrmDetailsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1257,14 +1263,14 @@ func (v *ValidateMarketplaceAws) CrmDetailsValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
-func (v *ValidateMarketplaceAws) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*MarketplaceAws)
+func (v *ValidateSignupTypeMarketplace) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignupTypeMarketplace)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *MarketplaceAws got type %s", t)
+			return fmt.Errorf("Expected type *SignupTypeMarketplace got type %s", t)
 		}
 	}
 	if m == nil {
@@ -1284,8 +1290,8 @@ func (v *ValidateMarketplaceAws) Validate(ctx context.Context, pm interface{}, o
 }
 
 // Well-known symbol for default validator implementation
-var DefaultMarketplaceAwsValidator = func() *ValidateMarketplaceAws {
-	v := &ValidateMarketplaceAws{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultSignupTypeMarketplaceValidator = func() *ValidateSignupTypeMarketplace {
+	v := &ValidateSignupTypeMarketplace{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -1301,7 +1307,7 @@ var DefaultMarketplaceAwsValidator = func() *ValidateMarketplaceAws {
 	}
 	vFn, err = vrhCrmDetails(rulesCrmDetails)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for MarketplaceAws.crm_details: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SignupTypeMarketplace.crm_details: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["crm_details"] = vFn
@@ -1309,21 +1315,21 @@ var DefaultMarketplaceAwsValidator = func() *ValidateMarketplaceAws {
 	return v
 }()
 
-func MarketplaceAwsValidator() db.Validator {
-	return DefaultMarketplaceAwsValidator
+func SignupTypeMarketplaceValidator() db.Validator {
+	return DefaultSignupTypeMarketplaceValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *SourceInternalScaling) ToJSON() (string, error) {
+func (m *SignupTypeMsp) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *SourceInternalScaling) ToYAML() (string, error) {
+func (m *SignupTypeMsp) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *SourceInternalScaling) DeepCopy() *SourceInternalScaling {
+func (m *SignupTypeMsp) DeepCopy() *SignupTypeMsp {
 	if m == nil {
 		return nil
 	}
@@ -1331,7 +1337,7 @@ func (m *SourceInternalScaling) DeepCopy() *SourceInternalScaling {
 	if err != nil {
 		return nil
 	}
-	c := &SourceInternalScaling{}
+	c := &SignupTypeMsp{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1339,405 +1345,22 @@ func (m *SourceInternalScaling) DeepCopy() *SourceInternalScaling {
 	return c
 }
 
-func (m *SourceInternalScaling) DeepCopyProto() proto.Message {
+func (m *SignupTypeMsp) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *SourceInternalScaling) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SourceInternalScalingValidator().Validate(ctx, m, opts...)
+func (m *SignupTypeMsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignupTypeMspValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateSourceInternalScaling struct {
+type ValidateSignupTypeMsp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSourceInternalScaling) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SourceInternalScaling)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *SourceInternalScaling got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultSourceInternalScalingValidator = func() *ValidateSourceInternalScaling {
-	v := &ValidateSourceInternalScaling{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func SourceInternalScalingValidator() db.Validator {
-	return DefaultSourceInternalScalingValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *SourceInternalSre) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *SourceInternalSre) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *SourceInternalSre) DeepCopy() *SourceInternalSre {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &SourceInternalSre{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *SourceInternalSre) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *SourceInternalSre) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SourceInternalSreValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateSourceInternalSre struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateSourceInternalSre) F5XcInstanceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for f5xc_instance_name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSourceInternalSre) KcInstanceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for kc_instance_name")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateSourceInternalSre) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SourceInternalSre)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *SourceInternalSre got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["crm_details"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("crm_details"))
-		if err := fv(ctx, m.GetCrmDetails(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["crm_info"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("crm_info"))
-		if err := fv(ctx, m.GetCrmInfo(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["f5xc_instance_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("f5xc_instance_name"))
-		if err := fv(ctx, m.GetF5XcInstanceName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["kc_instance_name"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("kc_instance_name"))
-		if err := fv(ctx, m.GetKcInstanceName(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultSourceInternalSreValidator = func() *ValidateSourceInternalSre {
-	v := &ValidateSourceInternalSre{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhF5XcInstanceName := v.F5XcInstanceNameValidationRuleHandler
-	rulesF5XcInstanceName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhF5XcInstanceName(rulesF5XcInstanceName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceInternalSre.f5xc_instance_name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["f5xc_instance_name"] = vFn
-
-	vrhKcInstanceName := v.KcInstanceNameValidationRuleHandler
-	rulesKcInstanceName := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-	}
-	vFn, err = vrhKcInstanceName(rulesKcInstanceName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceInternalSre.kc_instance_name: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["kc_instance_name"] = vFn
-
-	v.FldValidators["crm_info"] = CrmInfoV2Validator().Validate
-
-	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
-
-	return v
-}()
-
-func SourceInternalSreValidator() db.Validator {
-	return DefaultSourceInternalSreValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *SourceInternalSso) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *SourceInternalSso) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *SourceInternalSso) DeepCopy() *SourceInternalSso {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &SourceInternalSso{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *SourceInternalSso) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *SourceInternalSso) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SourceInternalSsoValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateSourceInternalSso struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateSourceInternalSso) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SourceInternalSso)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *SourceInternalSso got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultSourceInternalSsoValidator = func() *ValidateSourceInternalSso {
-	v := &ValidateSourceInternalSso{FldValidators: map[string]db.ValidatorFunc{}}
-
-	return v
-}()
-
-func SourceInternalSsoValidator() db.Validator {
-	return DefaultSourceInternalSsoValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *SourceMarketplace) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *SourceMarketplace) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *SourceMarketplace) DeepCopy() *SourceMarketplace {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &SourceMarketplace{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *SourceMarketplace) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *SourceMarketplace) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SourceMarketplaceValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateSourceMarketplace struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateSourceMarketplace) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SourceMarketplace)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *SourceMarketplace got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	switch m.GetMarketplaceChoice().(type) {
-	case *SourceMarketplace_MarketplaceAws:
-		if fv, exists := v.FldValidators["marketplace_choice.marketplace_aws"]; exists {
-			val := m.GetMarketplaceChoice().(*SourceMarketplace_MarketplaceAws).MarketplaceAws
-			vOpts := append(opts,
-				db.WithValidateField("marketplace_choice"),
-				db.WithValidateField("marketplace_aws"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultSourceMarketplaceValidator = func() *ValidateSourceMarketplace {
-	v := &ValidateSourceMarketplace{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["marketplace_choice.marketplace_aws"] = MarketplaceAwsValidator().Validate
-
-	return v
-}()
-
-func SourceMarketplaceValidator() db.Validator {
-	return DefaultSourceMarketplaceValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *SourceMsp) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *SourceMsp) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *SourceMsp) DeepCopy() *SourceMsp {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &SourceMsp{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *SourceMsp) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *SourceMsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SourceMspValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateSourceMsp struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateSourceMsp) ChildTenantObjNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateSignupTypeMsp) ChildTenantObjNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
@@ -1747,14 +1370,14 @@ func (v *ValidateSourceMsp) ChildTenantObjNameValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateSourceMsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SourceMsp)
+func (v *ValidateSignupTypeMsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignupTypeMsp)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *SourceMsp got type %s", t)
+			return fmt.Errorf("Expected type *SignupTypeMsp got type %s", t)
 		}
 	}
 	if m == nil {
@@ -1779,21 +1402,12 @@ func (v *ValidateSourceMsp) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
-	if fv, exists := v.FldValidators["crm_info"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("crm_info"))
-		if err := fv(ctx, m.GetCrmInfo(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
 // Well-known symbol for default validator implementation
-var DefaultSourceMspValidator = func() *ValidateSourceMsp {
-	v := &ValidateSourceMsp{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultSignupTypeMspValidator = func() *ValidateSignupTypeMsp {
+	v := &ValidateSignupTypeMsp{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -1809,33 +1423,31 @@ var DefaultSourceMspValidator = func() *ValidateSourceMsp {
 	}
 	vFn, err = vrhChildTenantObjName(rulesChildTenantObjName)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SourceMsp.child_tenant_obj_name: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SignupTypeMsp.child_tenant_obj_name: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["child_tenant_obj_name"] = vFn
-
-	v.FldValidators["crm_info"] = CrmInfoV2Validator().Validate
 
 	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
 
 	return v
 }()
 
-func SourceMspValidator() db.Validator {
-	return DefaultSourceMspValidator
+func SignupTypeMspValidator() db.Validator {
+	return DefaultSignupTypeMspValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *SourcePlanTransition) ToJSON() (string, error) {
+func (m *SignupTypePlanTransition) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *SourcePlanTransition) ToYAML() (string, error) {
+func (m *SignupTypePlanTransition) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *SourcePlanTransition) DeepCopy() *SourcePlanTransition {
+func (m *SignupTypePlanTransition) DeepCopy() *SignupTypePlanTransition {
 	if m == nil {
 		return nil
 	}
@@ -1843,7 +1455,7 @@ func (m *SourcePlanTransition) DeepCopy() *SourcePlanTransition {
 	if err != nil {
 		return nil
 	}
-	c := &SourcePlanTransition{}
+	c := &SignupTypePlanTransition{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1851,29 +1463,29 @@ func (m *SourcePlanTransition) DeepCopy() *SourcePlanTransition {
 	return c
 }
 
-func (m *SourcePlanTransition) DeepCopyProto() proto.Message {
+func (m *SignupTypePlanTransition) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *SourcePlanTransition) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SourcePlanTransitionValidator().Validate(ctx, m, opts...)
+func (m *SignupTypePlanTransition) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignupTypePlanTransitionValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateSourcePlanTransition struct {
+type ValidateSignupTypePlanTransition struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSourcePlanTransition) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SourcePlanTransition)
+func (v *ValidateSignupTypePlanTransition) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignupTypePlanTransition)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *SourcePlanTransition got type %s", t)
+			return fmt.Errorf("Expected type *SignupTypePlanTransition got type %s", t)
 		}
 	}
 	if m == nil {
@@ -1893,27 +1505,27 @@ func (v *ValidateSourcePlanTransition) Validate(ctx context.Context, pm interfac
 }
 
 // Well-known symbol for default validator implementation
-var DefaultSourcePlanTransitionValidator = func() *ValidateSourcePlanTransition {
-	v := &ValidateSourcePlanTransition{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultSignupTypePlanTransitionValidator = func() *ValidateSignupTypePlanTransition {
+	v := &ValidateSignupTypePlanTransition{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func SourcePlanTransitionValidator() db.Validator {
-	return DefaultSourcePlanTransitionValidator
+func SignupTypePlanTransitionValidator() db.Validator {
+	return DefaultSignupTypePlanTransitionValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *SourcePublic) ToJSON() (string, error) {
+func (m *SignupTypePublic) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *SourcePublic) ToYAML() (string, error) {
+func (m *SignupTypePublic) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *SourcePublic) DeepCopy() *SourcePublic {
+func (m *SignupTypePublic) DeepCopy() *SignupTypePublic {
 	if m == nil {
 		return nil
 	}
@@ -1921,7 +1533,7 @@ func (m *SourcePublic) DeepCopy() *SourcePublic {
 	if err != nil {
 		return nil
 	}
-	c := &SourcePublic{}
+	c := &SignupTypePublic{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -1929,29 +1541,29 @@ func (m *SourcePublic) DeepCopy() *SourcePublic {
 	return c
 }
 
-func (m *SourcePublic) DeepCopyProto() proto.Message {
+func (m *SignupTypePublic) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *SourcePublic) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return SourcePublicValidator().Validate(ctx, m, opts...)
+func (m *SignupTypePublic) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SignupTypePublicValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateSourcePublic struct {
+type ValidateSignupTypePublic struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateSourcePublic) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*SourcePublic)
+func (v *ValidateSignupTypePublic) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SignupTypePublic)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *SourcePublic got type %s", t)
+			return fmt.Errorf("Expected type *SignupTypePublic got type %s", t)
 		}
 	}
 	if m == nil {
@@ -1962,14 +1574,14 @@ func (v *ValidateSourcePublic) Validate(ctx context.Context, pm interface{}, opt
 }
 
 // Well-known symbol for default validator implementation
-var DefaultSourcePublicValidator = func() *ValidateSourcePublic {
-	v := &ValidateSourcePublic{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultSignupTypePublicValidator = func() *ValidateSignupTypePublic {
+	v := &ValidateSignupTypePublic{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func SourcePublicValidator() db.Validator {
-	return DefaultSourcePublicValidator
+func SignupTypePublicValidator() db.Validator {
+	return DefaultSignupTypePublicValidator
 }
 
 // augmented methods on protoc/std generated struct

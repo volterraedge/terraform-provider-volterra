@@ -22,11 +22,7 @@ resource "volterra_virtual_host" "example" {
 
   // One of the arguments from this list "no_challenge js_challenge captcha_challenge" must be set
 
-  captcha_challenge {
-    cookie_expiry = "1000"
-
-    custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-  }
+  no_challenge = true
 }
 
 ```
@@ -98,6 +94,8 @@ Argument Reference
 
 `header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Header Transformation Type ](#header-transformation-type) below for details.(Deprecated)
 
+`http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Http Protocol Options ](#http-protocol-options) below for details.
+
 `idle_timeout` - (Optional) The default if not specified is 1 minute. (`Int`).
 
 `max_request_header_size` - (Optional) on any of the virtual hosts (`Int`).
@@ -148,6 +146,8 @@ Argument Reference
 
 `waf_type` - (Optional) waf_type is the App Firewall profile to use.. See [Waf Type ](#waf-type) below for details.
 
+`ztna_proxy_configurations` - (Optional) Advanced Ztna Proxy configuration containing policy and application configuration. See [Ztna Proxy Configurations ](#ztna-proxy-configurations) below for details.(Deprecated)
+
 ### Api Spec
 
 OpenAPI specification settings.
@@ -192,7 +192,7 @@ List of cookies to be modified from the HTTP response being sent towards downstr
 
 `enable_tampering_protection` - (Optional) x-displayName: "Enable" (`Bool`).
 
-###### One of the arguments from this list "ignore_httponly, add_httponly" can be set
+###### One of the arguments from this list "add_httponly, ignore_httponly" can be set
 
 `add_httponly` - (Optional) x-displayName: "Add" (`Bool`).
 
@@ -206,7 +206,7 @@ List of cookies to be modified from the HTTP response being sent towards downstr
 
 `name` - (Required) Name of the Cookie (`String`).
 
-###### One of the arguments from this list "ignore_samesite, samesite_strict, samesite_lax, samesite_none" can be set
+###### One of the arguments from this list "samesite_strict, samesite_lax, samesite_none, ignore_samesite" can be set
 
 `ignore_samesite` - (Optional) Ignore Samesite attribute (`Bool`).
 
@@ -216,7 +216,7 @@ List of cookies to be modified from the HTTP response being sent towards downstr
 
 `samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (`Bool`).
 
-###### One of the arguments from this list "ignore_secure, add_secure" can be set
+###### One of the arguments from this list "add_secure, ignore_secure" can be set
 
 `add_secure` - (Optional) x-displayName: "Add" (`Bool`).
 
@@ -292,13 +292,27 @@ request. The DNS response is cached for 60s by default..
 
 Header transformation options for response headers to the client.
 
-###### One of the arguments from this list "default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
 
 `default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
 
 `preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
 
 `proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+
+### Http Protocol Options
+
+HTTP protocol configuration options for downstream connections..
+
+###### One of the arguments from this list "http_protocol_enable_v1_only, http_protocol_enable_v2_only, http_protocol_enable_v1_v2" must be set
+
+`http_protocol_enable_v1_only` - (Optional) Enable HTTP/1.1 for downstream connections. See [Http Protocol Choice Http Protocol Enable V1 Only ](#http-protocol-choice-http-protocol-enable-v1-only) below for details.
+
+`http_protocol_enable_v1_v2` - (Optional) Enable both HTTP/1.1 and HTTP/2 for downstream connections (`Bool`).
+
+`http_protocol_enable_v2_only` - (Optional) Enable HTTP/2 for downstream connections (`Bool`).
 
 ### Request Headers To Add
 
@@ -322,7 +336,7 @@ Headers specified at this level are applied after headers from matched Route are
 
 `name` - (Required) Name of the HTTP header. (`String`).
 
-###### One of the arguments from this list "secret_value, value" must be set
+###### One of the arguments from this list "value, secret_value" must be set
 
 `secret_value` - (Optional) Secret Value of the HTTP header.. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
 
@@ -366,13 +380,21 @@ Specifies configuration for temporary user blocking resulting from malicious use
 
 waf_type is the App Firewall profile to use..
 
-###### One of the arguments from this list "app_firewall, disable_waf, inherit_waf" can be set
+###### One of the arguments from this list "disable_waf, inherit_waf, app_firewall" can be set
 
 `app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [Ref Type App Firewall ](#ref-type-app-firewall) below for details.
 
 `disable_waf` - (Optional) Any Application Firewall configuration will not be enforced (`Bool`).
 
 `inherit_waf` - (Optional) Any Application Firewall configuration that was configured on a higher level will be enforced (`Bool`).
+
+### Ztna Proxy Configurations
+
+Advanced Ztna Proxy configuration containing policy and application configuration.
+
+`ztna_application_config` - (Optional) Advance configuration of Ztna Application Configuration(Connectivity/Session/Message). See [ref](#ref) below for details.
+
+`ztna_policy_config` - (Optional) Advance configuration of Ztna Policy Configuration(Connectivity/Session/Message). See [ref](#ref) below for details.
 
 ### Allowed Domains All Load Balancer Domains
 
@@ -396,7 +418,7 @@ Primary HMAC Key.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -414,7 +436,7 @@ Secondary HMAC Key.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -488,7 +510,7 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-###### One of the arguments from this list "trusted_ca, trusted_ca_url" must be set
+###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
 
 `trusted_ca` - (Optional) Root CA Certificate. See [Trusted Ca Choice Trusted Ca ](#trusted-ca-choice-trusted-ca) below for details.
 
@@ -586,6 +608,10 @@ the RSA certificate for the domain, if any.
 
 Normalize the headers to lower case.
 
+### Header Transformation Choice Legacy Header Transformation
+
+Use old header transformation if configured earlier.
+
 ### Header Transformation Choice Preserve Case Header Transformation
 
 Preserves the original case of headers without any modifications..
@@ -593,6 +619,34 @@ Preserves the original case of headers without any modifications..
 ### Header Transformation Choice Proper Case Header Transformation
 
 For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
+
+### Http Protocol Choice Http Protocol Enable V1 Only
+
+Enable HTTP/1.1 for downstream connections.
+
+`header_transformation` - (Optional) the stateful formatter will take effect, and the stateless formatter will be disregarded.. See [Http Protocol Enable V1 Only Header Transformation ](#http-protocol-enable-v1-only-header-transformation) below for details.
+
+### Http Protocol Choice Http Protocol Enable V1 V2
+
+Enable both HTTP/1.1 and HTTP/2 for downstream connections.
+
+### Http Protocol Choice Http Protocol Enable V2 Only
+
+Enable HTTP/2 for downstream connections.
+
+### Http Protocol Enable V1 Only Header Transformation
+
+the stateful formatter will take effect, and the stateless formatter will be disregarded..
+
+###### One of the arguments from this list "legacy_header_transformation, default_header_transformation, proper_case_header_transformation, preserve_case_header_transformation" must be set
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
 
 ### Httponly Add Httponly
 
@@ -806,7 +860,7 @@ and list of Subject Alt Names for verification.
 
 `skip_hostname_verification` - (Optional) is not matched to the connecting hostname (`Bool`).
 
-###### One of the arguments from this list "trusted_ca_url, trusted_ca" must be set
+###### One of the arguments from this list "trusted_ca, trusted_ca_url" must be set
 
 `trusted_ca` - (Optional) Root CA Certificate. See [Trusted Ca Choice Trusted Ca ](#trusted-ca-choice-trusted-ca) below for details.
 
@@ -824,7 +878,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -886,7 +940,7 @@ Common TLS parameters used in both upstream and downstream connections.
 
 Root CA Certificate.
 
-`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.(Deprecated)
+`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.
 
 ### Value Choice Secret Value
 
@@ -896,7 +950,7 @@ Secret Value of the HTTP header..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 

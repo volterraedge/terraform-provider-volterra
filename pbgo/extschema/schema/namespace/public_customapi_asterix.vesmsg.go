@@ -24,6 +24,84 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiEndpointsStatsAllNSReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiEndpointsStatsAllNSReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiEndpointsStatsAllNSReq) DeepCopy() *ApiEndpointsStatsAllNSReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiEndpointsStatsAllNSReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiEndpointsStatsAllNSReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiEndpointsStatsAllNSReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiEndpointsStatsAllNSReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiEndpointsStatsAllNSReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiEndpointsStatsAllNSReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiEndpointsStatsAllNSReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiEndpointsStatsAllNSReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiEndpointsStatsAllNSReqValidator = func() *ValidateApiEndpointsStatsAllNSReq {
+	v := &ValidateApiEndpointsStatsAllNSReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ApiEndpointsStatsAllNSReqValidator() db.Validator {
+	return DefaultApiEndpointsStatsAllNSReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ApiEndpointsStatsNSReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

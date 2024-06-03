@@ -21,6 +21,7 @@ resource "volterra_nfv_service" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "disable_https_management https_management" must be set
+
   disable_https_management = true
 
   // One of the arguments from this list "f5_big_ip_aws_service palo_alto_fw_service" must be set
@@ -37,47 +38,54 @@ resource "volterra_nfv_service" "example" {
 
       secret_encoding_type = "secret_encoding_type"
 
-      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+      // One of the arguments from this list "wingman_secret_info blindfold_secret_info vault_secret_info clear_secret_info" must be set
 
-      wingman_secret_info {
-        name = "ChargeBack-API-Key"
+      blindfold_secret_info {
+        decryption_provider = "value"
+
+        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+        store_provider = "value"
       }
     }
 
     admin_username = "admin"
 
     endpoint_service {
-      // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
+      // One of the arguments from this list "advertise_on_slo_ip_external disable_advertise_on_slo_ip advertise_on_slo_ip" must be set
+
       disable_advertise_on_slo_ip = true
 
       // One of the arguments from this list "automatic_vip configured_vip" must be set
+
       automatic_vip = true
 
-      // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
-      default_tcp_ports = true
+      // One of the arguments from this list "no_tcp_ports default_tcp_ports http_port https_port custom_tcp_ports" must be set
+
+      https_port = true
 
       // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
 
-      custom_udp_ports {
-        ports = ["100-200"]
-      }
+      no_udp_ports = true
     }
 
     // One of the arguments from this list "market_place_image byol_image" must be set
 
     market_place_image {
-      // One of the arguments from this list "AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
-      AWAFPayG200Mbps = true
+      // One of the arguments from this list "best_plus_payg_1gbps AWAFPayG200Mbps AWAFPayG3Gbps BestPlusPayG200Mbps" must be set
+
+      best_plus_payg_1gbps = true
     }
     nodes {
       aws_az_name = "us-west-2a"
 
       // One of the arguments from this list "reserved_mgmt_subnet mgmt_subnet" must be set
-      reserved_mgmt_subnet = true
 
+      reserved_mgmt_subnet = true
       node_name = "node1"
 
       // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
+
       automatic_prefix = true
     }
 
@@ -95,7 +103,9 @@ resource "volterra_nfv_service" "example" {
       "key1" = "value1"
     }
   }
+
   // One of the arguments from this list "disable_ssh_access enabled_ssh_access" must be set
+
   disable_ssh_access = true
 }
 
@@ -188,7 +198,7 @@ Enable on Site local outside network, default VIP will be used.
 
 Enable On Site Local Outside Internet VIP.
 
-###### One of the arguments from this list "use_mtls, no_mtls" must be set
+###### One of the arguments from this list "no_mtls, use_mtls" must be set
 
 `no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
 
@@ -202,7 +212,7 @@ Enable On Site Local Outside Internet VIP.
 
 Enable on Site local inside and outside network, default VIP will be used.
 
-###### One of the arguments from this list "no_mtls, use_mtls" must be set
+###### One of the arguments from this list "use_mtls, no_mtls" must be set
 
 `no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
 
@@ -246,7 +256,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+###### One of the arguments from this list "custom_hash_algorithms, use_system_defaults, disable_ocsp_stapling" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -292,7 +302,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
-###### One of the arguments from this list "medium_security, low_security, custom_security, default_security" must be set
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 
@@ -342,7 +352,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "custom_hash_algorithms, use_system_defaults, disable_ocsp_stapling" can be set
+###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -400,7 +410,7 @@ Firewall Admin Password.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -418,7 +428,7 @@ Secret License data.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -490,7 +500,7 @@ Secret admin password for BIG ip.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -542,7 +552,7 @@ Specify how and where the service nodes are spawned.
 
 `aws_az_name` - (Required) The AWS Availability Zone must be consistent with the AWS Region chosen. Please select an AZ in the same Region as your TGW Site (`String`).
 
-###### One of the arguments from this list "mgmt_subnet, reserved_mgmt_subnet" must be set
+###### One of the arguments from this list "reserved_mgmt_subnet, mgmt_subnet" must be set
 
 `mgmt_subnet` - (Optional) Select Existing Subnet or Create New. See [Mgmt Subnet Choice Mgmt Subnet ](#mgmt-subnet-choice-mgmt-subnet) below for details.
 
@@ -560,7 +570,7 @@ Specify how and where the service nodes are spawned.
 
 Enable HTTPS based management.
 
-###### One of the arguments from this list "disable_local, do_not_advertise_on_internet, advertise_on_internet_default_vip, advertise_on_internet, advertise_on_slo_internet_vip, advertise_on_sli_vip, advertise_on_slo_vip, advertise_on_slo_sli" must be set
+###### One of the arguments from this list "advertise_on_slo_internet_vip, advertise_on_sli_vip, advertise_on_slo_vip, advertise_on_slo_sli, disable_local, do_not_advertise_on_internet, advertise_on_internet_default_vip, advertise_on_internet" must be set
 
 `advertise_on_internet` - (Optional) Advertise this loadbalancer on public network. See [Advertise Choice Advertise On Internet ](#advertise-choice-advertise-on-internet) below for details.
 
@@ -580,7 +590,7 @@ Enable HTTPS based management.
 
 `domain_suffix` - (Required) Domain suffix will be used along with node name to form URL to access node management (`String`).
 
-###### One of the arguments from this list "advertise_on_public, do_not_advertise, advertise_on_public_default_vip" can be set
+###### One of the arguments from this list "do_not_advertise, advertise_on_public_default_vip, advertise_on_public" can be set
 
 `advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Internet Choice Advertise On Public ](#internet-choice-advertise-on-public) below for details.(Deprecated)
 
@@ -648,7 +658,7 @@ Authorized Public SSH key which will be programmed on the node.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -896,7 +906,7 @@ Auto Setup API Access & Users. With this firewall api access and given admin use
 
 `admin_username` - (Required) Firewall Admin Username (`String`).
 
-###### One of the arguments from this list "manual_ssh_keys, autogenerated_ssh_keys" must be set
+###### One of the arguments from this list "autogenerated_ssh_keys, manual_ssh_keys" must be set
 
 `autogenerated_ssh_keys` - (Optional) Autogenerated SSH Keys, users will be able to download the keys after external service is created (`Bool`).(Deprecated)
 

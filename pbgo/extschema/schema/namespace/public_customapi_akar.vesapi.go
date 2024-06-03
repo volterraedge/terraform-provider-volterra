@@ -4419,24 +4419,24 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "ddos_auto_mitigation": {
                     "type": "boolean",
-                    "description": " Filter results with HTTP loadbalancers with DDoS Auto Mitigation",
-                    "title": "DDoS Auto Mitigation",
+                    "description": " Filter results with HTTP loadbalancers with L7 DDoS Auto Mitigation enabled",
+                    "title": "L7 DDoS Auto Mitigation",
                     "format": "boolean",
-                    "x-displayname": "DDoS Auto Mitigation"
+                    "x-displayname": "L7 DDoS Auto Mitigation"
                 },
                 "ddos_mitigation": {
                     "type": "boolean",
-                    "description": " Filter results with HTTP loadbalancers with DDoS Mitigation",
-                    "title": "DDoS Mitigation",
+                    "description": " Filter results with HTTP loadbalancers with DDoS Mitigation Rules configured",
+                    "title": "DDoS Mitigation Rules",
                     "format": "boolean",
-                    "x-displayname": "DDoS Mitigation"
+                    "x-displayname": "DDoS Mitigation Rules"
                 },
                 "ddos_protection": {
                     "type": "boolean",
-                    "description": " Filter results with HTTP loadbalancers with DDoS Protection configured",
-                    "title": "DDoS Protection",
+                    "description": " Filter results with HTTP loadbalancers with L7 DDoS detection enabled",
+                    "title": "L7 DDoS Detection",
                     "format": "boolean",
-                    "x-displayname": "DDoS Protection"
+                    "x-displayname": "L7 DDoS Detection"
                 },
                 "default_loadbalancer": {
                     "type": "boolean",
@@ -4603,10 +4603,10 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 },
                 "ddos_protection": {
                     "type": "integer",
-                    "description": " Number of HTTP loadbalancers with DDoS Protection configured",
-                    "title": "DDoS Protection",
+                    "description": " Number of HTTP loadbalancers with L7 DDoS Detection enabled",
+                    "title": "L7 DDoS Detection",
                     "format": "int64",
-                    "x-displayname": "DDoS Protection"
+                    "x-displayname": "L7 DDoS Detection"
                 },
                 "http_only": {
                     "type": "integer",
@@ -4769,22 +4769,22 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Data Guard Enabled or Disabled"
                 },
                 "ddos_auto_mitigation_enabled": {
-                    "description": " DDoS Auto Mitigation configured ",
-                    "title": "DDoS Auto Mitigation Status",
+                    "description": " L7 DDoS Auto Mitigation configured",
+                    "title": "L7 DDoS Auto Mitigation Status",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "DDoS Auto Mitigation Enabled or Disabled"
+                    "x-displayname": "L7 DDoS Auto Mitigation Enabled or Disabled"
                 },
                 "ddos_mitigation_enabled": {
-                    "description": " DDoS Mitigation configured ",
-                    "title": "DDoS Mitigation Status",
+                    "description": " DDoS Mitigation Rules configured",
+                    "title": "DDoS Mitigation Rules Status",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "DDoS Mitigation Enabled or Disabled"
+                    "x-displayname": "DDoS Mitigation Rules Configured"
                 },
                 "ddos_protection_enabled": {
-                    "description": " DDoS Detection configured",
-                    "title": "DDoS Detection Status",
+                    "description": " L7 DDoS detection configured",
+                    "title": "L7 DDoS Detection Status",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "DDoS Detection Enabled or Disabled"
+                    "x-displayname": "L7 DDoS Detection Enabled or Disabled"
                 },
                 "default_loadbalancer_enabled": {
                     "description": " Default Loadbalancer configured ",

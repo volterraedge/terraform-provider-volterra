@@ -7,6 +7,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/gogo/protobuf/types"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -139,6 +140,9 @@ type MauriceCustomAPI struct {
 	sf svcfw.Service
 }
 
+var _ schema_registration.CustomAPIServer = &MauriceCustomAPI{}
+
+// volterra.MauriceCustomAPI does not satisfy interface ves_io_schema_registration.CustomAPIServer
 func GetMauriceFixtureOpts(etcdURL string) []generic.ConfigOpt {
 
 	// custom modules
@@ -196,6 +200,18 @@ func GetMauriceFixtureOpts(etcdURL string) []generic.ConfigOpt {
 		//svcfw_test.WithCfgEtcdKeyPfx("/akar"),
 	))
 	return fcOpts
+}
+
+func (s *MauriceCustomAPI) Get(ctx context.Context, r *schema_registration.GetRequest) (*schema_registration.GetResponse, error) {
+	return &schema_registration.GetResponse{}, nil
+}
+
+func (s *MauriceCustomAPI) List(ctx context.Context, r *schema_registration.ListRequest) (*schema_registration.ListResponse, error) {
+	return nil, nil
+}
+
+func (s *MauriceCustomAPI) Delete(ctx context.Context, r *schema_registration.DeleteRequest) (*types.Empty, error) {
+	return nil, nil
 }
 
 func (s *MauriceCustomAPI) RegistrationApprove(ctx context.Context, r *schema_registration.ApprovalReq) (*schema_registration.ObjectChangeResp, error) {

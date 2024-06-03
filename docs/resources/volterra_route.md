@@ -21,21 +21,9 @@ resource "volterra_route" "example" {
   namespace = "staging"
 
   routes {
-    // One of the arguments from this list "bot_defense_javascript_injection inherited_bot_defense_javascript_injection" must be set
+    // One of the arguments from this list "inherited_bot_defense_javascript_injection bot_defense_javascript_injection" can be set
 
-    bot_defense_javascript_injection {
-      javascript_location = "javascript_location"
-
-      javascript_tags {
-        javascript_url = "https://www.example.com/login/common.js?single"
-
-        tag_attributes {
-          javascript_tag = "ID"
-
-          tag_value = "_imp_apg_dip_"
-        }
-      }
-    }
+    inherited_bot_defense_javascript_injection = true
 
     bot_defense_javascript_injection_inline_mode {
       element_selector = "value"
@@ -55,26 +43,30 @@ resource "volterra_route" "example" {
 
         name = "Content-Type"
 
-        // One of the arguments from this list "presence exact regex" must be set
+        // One of the arguments from this list "presence exact regex" can be set
+
         exact = "application/json"
       }
 
       http_method = "http_method"
 
       incoming_port {
-        // One of the arguments from this list "port port_ranges no_port_match" must be set
+        // One of the arguments from this list "port port_ranges no_port_match" can be set
+
         port = "6443"
       }
 
       path {
-        // One of the arguments from this list "path regex prefix" must be set
-        prefix = "/register/"
+        // One of the arguments from this list "prefix path regex" must be set
+
+        regex = "regex"
       }
 
       query_params {
         key = "assignee_username"
 
-        // One of the arguments from this list "regex exact" must be set
+        // One of the arguments from this list "exact regex" can be set
+
         exact = "exact"
       }
     }
@@ -85,6 +77,7 @@ resource "volterra_route" "example" {
       name = "value"
 
       // One of the arguments from this list "value secret_value" must be set
+
       value = "value"
     }
 
@@ -96,6 +89,7 @@ resource "volterra_route" "example" {
       name = "value"
 
       // One of the arguments from this list "value secret_value" must be set
+
       value = "value"
     }
 
@@ -112,9 +106,9 @@ resource "volterra_route" "example" {
         max_request_time = "30"
       }
 
-      // One of the arguments from this list "retract_cluster do_not_retract_cluster" must be set
-      retract_cluster = true
+      // One of the arguments from this list "retract_cluster do_not_retract_cluster" can be set
 
+      retract_cluster = true
       cors_policy {
         allow_credentials = true
 
@@ -134,15 +128,11 @@ resource "volterra_route" "example" {
 
         maximum_age = "-1"
       }
-
       csrf_policy {
-        // One of the arguments from this list "custom_domain_list disabled all_load_balancer_domains" must be set
+        // One of the arguments from this list "all_load_balancer_domains custom_domain_list disabled" must be set
 
-        custom_domain_list {
-          domains = ["www.foo.com"]
-        }
+        all_load_balancer_domains = true
       }
-
       destinations {
         cluster {
           name      = "test1"
@@ -158,21 +148,20 @@ resource "volterra_route" "example" {
 
         weight = "10"
       }
-
       endpoint_subsets = {
         "key1" = "value1"
       }
-
       hash_policy {
         // One of the arguments from this list "cookie source_ip header_name" must be set
+
         header_name = "host"
 
         terminal = true
       }
 
       // One of the arguments from this list "host_rewrite auto_host_rewrite" must be set
-      host_rewrite = "one.volterra.com"
 
+      host_rewrite = "one.volterra.com"
       mirror_policy {
         cluster {
           name      = "test1"
@@ -186,9 +175,7 @@ resource "volterra_route" "example" {
           numerator = "5"
         }
       }
-
       priority = "priority"
-
       retry_policy {
         back_off {
           base_interval = "5"
@@ -207,15 +194,13 @@ resource "volterra_route" "example" {
         retry_on = "5xx"
       }
 
-      // One of the arguments from this list "prefix_rewrite regex_rewrite" must be set
-      prefix_rewrite = "/"
+      // One of the arguments from this list "prefix_rewrite regex_rewrite" can be set
 
+      prefix_rewrite = "/"
       spdy_config {
         use_spdy = true
       }
-
       timeout = "2000"
-
       web_socket_config {
         idle_timeout = "2000"
 
@@ -225,20 +210,15 @@ resource "volterra_route" "example" {
       }
     }
     service_policy {
-      // One of the arguments from this list "disable context_extensions" must be set
+      // One of the arguments from this list "context_extensions disable" can be set
+
       disable = true
     }
     skip_lb_override = true
     waf_type {
-      // One of the arguments from this list "app_firewall disable_waf inherit_waf" must be set
+      // One of the arguments from this list "app_firewall disable_waf inherit_waf" can be set
 
-      app_firewall {
-        app_firewall {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-      }
+      disable_waf = true
     }
   }
 }
@@ -372,7 +352,7 @@ List of (key, value) headers.
 
 `name` - (Required) Name of the header (`String`).
 
-###### One of the arguments from this list "exact, regex, presence" can be set
+###### One of the arguments from this list "presence, exact, regex" can be set
 
 `exact` - (Optional) Header value to match exactly (`String`).
 
@@ -396,7 +376,7 @@ The port on which the request is received.
 
 URI path of route.
 
-###### One of the arguments from this list "regex, prefix, path" must be set
+###### One of the arguments from this list "prefix, path, regex" must be set
 
 `path` - (Optional) Exact path value to match (`String`).
 
@@ -438,7 +418,7 @@ Hash based on cookie.
 
 `path` - (Optional) will be set for the cookie (`String`).
 
-###### One of the arguments from this list "samesite_lax, samesite_none, ignore_samesite, samesite_strict" can be set
+###### One of the arguments from this list "samesite_strict, samesite_lax, samesite_none, ignore_samesite" can be set
 
 `ignore_samesite` - (Optional) Ignore Samesite attribute (`Bool`).
 
@@ -544,7 +524,7 @@ Send request to one of the destination from list of destinations.
 
 `prefix_rewrite` - (Optional) while requests to /register/public will be stripped to /public (`String`).
 
-`regex_rewrite` - (Optional) would transform "/service/foo/v1/api" into "/v1/api/instance/foo".. See [Route Destination Rewrite Regex Rewrite ](#route-destination-rewrite-regex-rewrite) below for details.(Deprecated)
+`regex_rewrite` - (Optional) would transform "/service/foo/v1/api" into "/v1/api/instance/foo".. See [Route Destination Rewrite Regex Rewrite ](#route-destination-rewrite-regex-rewrite) below for details.
 
 `spdy_config` - (Optional) SPDY configuration for each route. See [Route Destination Spdy Config ](#route-destination-spdy-config) below for details.
 
@@ -570,7 +550,7 @@ Send redirect response.
 
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
-###### One of the arguments from this list "retain_all_params, remove_all_params, replace_params, strip_query_params, all_params" can be set
+###### One of the arguments from this list "strip_query_params, all_params, retain_all_params, remove_all_params, replace_params" can be set
 
 `all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).(Deprecated)
 
@@ -650,7 +630,7 @@ sent to the cluster specified in the destination.
 
 route the request.
 
-###### One of the arguments from this list "header_name, cookie, source_ip" must be set
+###### One of the arguments from this list "cookie, source_ip, header_name" must be set
 
 `cookie` - (Optional) Hash based on cookie. See [Policy Specifier Cookie ](#policy-specifier-cookie) below for details.
 
@@ -764,7 +744,7 @@ enclosing VirtualHost object level.
 
 service policy configuration at route level which overrides configuration at virtual-host level.
 
-###### One of the arguments from this list "context_extensions, disable" can be set
+###### One of the arguments from this list "disable, context_extensions" can be set
 
 `context_extensions` - (Optional) sending additional information to the external authorization server.. See [Service Policy Choice Context Extensions ](#service-policy-choice-context-extensions) below for details.(Deprecated)
 
@@ -868,7 +848,7 @@ Secret Value of the HTTP header..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 

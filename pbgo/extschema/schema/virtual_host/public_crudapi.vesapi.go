@@ -3030,23 +3030,36 @@ var APISwaggerJSON string = `{
         },
         "schemaHeaderTransformationType": {
             "type": "object",
-            "description": "x-displayName: \"Header Transformation\"\nHeader Transformation options for HTTP/1.1 request/response headers",
+            "description": "Header Transformation options for HTTP/1.1 request/response headers",
             "title": "HeaderTransformationType",
+            "x-displayname": "Header Transformation",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"legacy_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
             "properties": {
                 "default_header_transformation": {
-                    "description": "x-displayName: \"Default\"\nNormalize the headers to lower case",
+                    "description": "Exclusive with [legacy_header_transformation preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
                     "title": "Default header transformation",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "legacy_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation proper_case_header_transformation]\n Use old header transformation if configured earlier",
+                    "title": "Legacy header transformations",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Legacy"
                 },
                 "preserve_case_header_transformation": {
-                    "description": "x-displayName: \"Preserve Case\"\nPreserves the original case of headers without any modifications.",
+                    "description": "Exclusive with [default_header_transformation legacy_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
                     "title": "Preserve case header transformation",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Preserve Case"
                 },
                 "proper_case_header_transformation": {
-                    "description": "x-displayName: \"Proper Case\"\nNormalize the headers to proper case words. The fist character and any character\nfollowing a special character will be capitalized if it’s an alpha character.\nFor example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "description": "Exclusive with [default_header_transformation legacy_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
                     "title": "Proper case header transformation",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proper Case"
                 }
             }
         },
@@ -3110,10 +3123,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3170,10 +3187,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3232,10 +3253,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3781,7 +3806,22 @@ var APISwaggerJSON string = `{
             "description": "Reference to Root CA Certificate",
             "title": "Root CA Certificate",
             "x-displayname": "Root CA Certificate Reference",
-            "x-ves-proto-message": "ves.io.schema.TrustedCAList"
+            "x-ves-proto-message": "ves.io.schema.TrustedCAList",
+            "properties": {
+                "trusted_ca_list": {
+                    "type": "array",
+                    "description": " Reference to Root CA Certificate\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Root CA Certificate",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Root CA Certificate Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
@@ -4123,6 +4163,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_path_normalize]\n Path normalization is enabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable path normalization"
+                },
+                "http_protocol_options": {
+                    "description": " HTTP protocol configuration options for downstream connections.",
+                    "$ref": "#/definitions/virtual_hostHttpProtocolOptions",
+                    "x-displayname": "HTTP Protocol Configuration"
                 },
                 "idle_timeout": {
                     "type": "integer",
@@ -4485,6 +4530,11 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Host Name",
                     "x-ves-example": "ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io"
                 },
+                "http_protocol_options": {
+                    "description": " HTTP protocol configuration options for downstream connections.",
+                    "$ref": "#/definitions/virtual_hostHttpProtocolOptions",
+                    "x-displayname": "HTTP Protocol Configuration"
+                },
                 "idle_timeout": {
                     "type": "integer",
                     "description": " Idle timeout is the amount of time that the loadbalancer will allow a stream to exist with\n no upstream or downstream activity.\n\n Idle timeout and Proxy Type:\n\n HTTP_PROXY, HTTPS_PROXY:\n Idle timer is started when the first byte is received on the connection.\n Each time an encode/decode event for headers or data is processed for the stream,\n the timer will be reset.\n If the timeout fires, the stream is terminated with a 504 (Gateway Timeout) error code if\n no upstream response header has been received, otherwise a stream reset occurs.\n The default idle timeout is 30 seconds\n\n TCP PROXY, TCP_PROXY_WITH_SNI, SMA_PROXY:\n The idle timeout is defined as the period in which there are no bytes sent or received on\n either the upstream or downstream connection.\n The default idle timeout is 1 hour.\n\n UDP PROXY:\n The idle timeout for sessions. Idle timeout is defined as the period in which there are no\n datagrams sent or received on the session.\n The default if not specified is 1 minute.\n\nExample: - \"2000\"-",
@@ -4690,6 +4740,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemavirtual_hostHttp1ProtocolOptions": {
+            "type": "object",
+            "description": "HTTP/1.1 Protocol options for downstream connections",
+            "title": "Http1ProtocolOptions",
+            "x-displayname": "HTTP/1.1 Protocol Options",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.Http1ProtocolOptions",
+            "properties": {
+                "header_transformation": {
+                    "description": " Two mutually exclusive types of header key formatters are supported: Stateless\n (Default and Proper Case) and Stateful (Preserve Case) formatters. When a Stateless\n formatter is selected, it applies to response headers sent to the client and when a\n Stateful formatter is selected, it applies to the upstream request headers.\n It's essential to ensure that the same formatter type (either stateless or stateful)\n is applied on origin pool. If different formatter types are applied, only\n the stateful formatter will take effect, and the stateless formatter will be disregarded.",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                }
+            }
+        },
         "schemavirtual_hostReplaceSpecType": {
             "type": "object",
             "description": "Replace a given virtual host in a given namespace.",
@@ -4835,6 +4900,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [disable_path_normalize]\n Path normalization is enabled",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable path normalization"
+                },
+                "http_protocol_options": {
+                    "description": " HTTP protocol configuration options for downstream connections.",
+                    "$ref": "#/definitions/virtual_hostHttpProtocolOptions",
+                    "x-displayname": "HTTP Protocol Configuration"
                 },
                 "idle_timeout": {
                     "type": "integer",
@@ -5618,6 +5688,35 @@ var APISwaggerJSON string = `{
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },
+        "virtual_hostHttpProtocolOptions": {
+            "type": "object",
+            "description": "HTTP protocol configuration options for downstream connections",
+            "title": "HttpProtocolOptions",
+            "x-displayname": "HTTP Protocol Configuration Options",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-http_protocol_choice": "[\"http_protocol_enable_v1_only\",\"http_protocol_enable_v1_v2\",\"http_protocol_enable_v2_only\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.HttpProtocolOptions",
+            "properties": {
+                "http_protocol_enable_v1_only": {
+                    "description": "Exclusive with [http_protocol_enable_v1_v2 http_protocol_enable_v2_only]\n Enable HTTP/1.1 for downstream connections",
+                    "title": "http_protocol_enable_v1_only",
+                    "$ref": "#/definitions/schemavirtual_hostHttp1ProtocolOptions",
+                    "x-displayname": "HTTP/1.1"
+                },
+                "http_protocol_enable_v1_v2": {
+                    "description": "Exclusive with [http_protocol_enable_v1_only http_protocol_enable_v2_only]\n Enable both HTTP/1.1 and HTTP/2 for downstream connections",
+                    "title": "http_protocol_enable_v1_v2",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/1.1 and HTTP/2"
+                },
+                "http_protocol_enable_v2_only": {
+                    "description": "Exclusive with [http_protocol_enable_v1_only http_protocol_enable_v1_v2]\n Enable HTTP/2 for downstream connections",
+                    "title": "http_protocol_enable_v2_only",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "HTTP/2"
+                }
+            }
+        },
         "virtual_hostJavascriptChallengeType": {
             "type": "object",
             "description": "\nEnables loadbalancer to perform client browser compatibility test by redirecting to a page\nwith Javascript.\n\nWith this feature enabled, only clients that are capable of executing Javascript(mostly browsers)\nwill be allowed to complete the HTTP request.\n\nWhen loadbalancer is configured to do Javascript Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have Javascript embedded in it.\nLoadbalancer chooses a set of random numbers for every new client and sends these numbers along with an\nencrypted answer with the request such that it embed these numbers as input in the Javascript.\nJavascript will run on the requestor browser and perform a complex Math operation.\nScript will submit the answer to loadbalancer. Loadbalancer will validate the answer by comparing the calculated\nanswer with the decrypted answer (which was encrypted when it was sent back as reply) and allow\nthe request to the upstream server only if the answer is correct.\nLoadbalancer will tag response header with a cookie to avoid Javascript challenge for subsequent requests.\n\nJavascript challenge serves following purposes\n   * Validate that the request is coming via a browser that is capable for running Javascript\n   * Force the browser to run a complex operation, f(X), that requires it to spend a large number\n     of CPU cycles. This is to slow down a potential DoS attacker by making it difficult to launch\n   a large request flood without having to spend even larger CPU cost at their end.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
@@ -5812,11 +5911,12 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostProxyType": {
             "type": "string",
-            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy\n - DNS_PROXY: DNS_PROXY\n\nInstall DNS proxy",
+            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy\n - DNS_PROXY: DNS_PROXY\n\nInstall DNS proxy\n - ZTNA_PROXY: ZTNA_PROXY\n\nInstall ZTNA proxy",
             "enum": [
                 "UDP_PROXY",
                 "SMA_PROXY",
-                "DNS_PROXY"
+                "DNS_PROXY",
+                "ZTNA_PROXY"
             ],
             "default": "HTTP_PROXY",
             "x-displayname": "Type of Proxy",
@@ -6049,6 +6149,29 @@ var APISwaggerJSON string = `{
             "default": "VIRTUAL_SERVICE",
             "x-displayname": "Virtual Host Type",
             "x-ves-proto-enum": "ves.io.schema.virtual_host.VirtualHostType"
+        },
+        "virtual_hostZtnaProxyConfiguration": {
+            "type": "object",
+            "description": "x-displayName: \"Ztna Proxy Configuration\"\nZtna Proxy Configuration contains Policy and Application Configuration",
+            "title": "Ztna Proxy Configuration",
+            "properties": {
+                "ztna_application_config": {
+                    "type": "array",
+                    "description": "x-displayName: \"Ztna Application Configuration\"\nAdvance configuration of Ztna Application Configuration(Connectivity/Session/Message)",
+                    "title": "Ztna Application Configuration",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
+                "ztna_policy_config": {
+                    "type": "array",
+                    "description": "x-displayName: \"Ztna Policy Configuration\"\nAdvance configuration of Ztna Policy Configuration(Connectivity/Session/Message)",
+                    "title": "Ztna Policy Configuration",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                }
+            }
         },
         "virtual_host_dns_infoDnsInfo": {
             "type": "object",

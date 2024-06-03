@@ -13,11 +13,12 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
-
+	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 )
 
 // resourceVolterraOriginPool is implementation of Volterra's OriginPool resources
@@ -123,27 +124,38 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 						"header_transformation_type": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"default_header_transformation": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"legacy_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"preserve_case_header_transformation": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"proper_case_header_transformation": {
 
-										Type:     schema.TypeBool,
-										Optional: true,
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -162,8 +174,46 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 						"http1_config": {
 
-							Type:     schema.TypeBool,
+							Type:     schema.TypeSet,
 							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"header_transformation": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"default_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"legacy_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"preserve_case_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"proper_case_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
 						},
 
 						"http2_options": {
@@ -183,16 +233,14 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 						"disable_lb_source_ip_persistance": {
 
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"enable_lb_source_ip_persistance": {
 
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 
 						"disable_outlier_detection": {
@@ -245,6 +293,24 @@ func resourceVolterraOriginPool() *schema.Resource {
 						"panic_threshold": {
 
 							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"disable_proxy_protocol": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"proxy_protocol_v1": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"proxy_protocol_v2": {
+
+							Type:     schema.TypeBool,
 							Optional: true,
 						},
 
@@ -633,6 +699,29 @@ func resourceVolterraOriginPool() *schema.Resource {
 										Optional: true,
 									},
 
+									"segment": {
+
+										Type:     schema.TypeSet,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+
 									"ip": {
 
 										Type:     schema.TypeString,
@@ -736,6 +825,29 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+
+									"segment": {
+
+										Type:     schema.TypeSet,
+										Required: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"namespace": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+												"tenant": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
 									},
 
 									"refresh_interval": {
@@ -1351,6 +1463,14 @@ func resourceVolterraOriginPool() *schema.Resource {
 				},
 			},
 		},
+		SchemaVersion: 1,
+		StateUpgraders: []schema.StateUpgrader{
+			{
+				Type:    statemigration.ResourceOriginPoolInstanceResourceV1().CoreConfigSchema().ImpliedType(),
+				Upgrade: statemigration.ResourceOriginPoolInstanceStateUpgradeV1,
+				Version: 0,
+			},
+		},
 	}
 }
 
@@ -1513,6 +1633,18 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
 					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 						headerTransformationChoiceTypeFound = true
@@ -1562,11 +1694,76 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
 
 				httpProtocolTypeTypeFound = true
+				httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+				httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
+				advancedOptions.HttpProtocolType = httpProtocolTypeInt
 
-				if v.(bool) {
-					httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
-					httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
-					advancedOptions.HttpProtocolType = httpProtocolTypeInt
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						headerTransformation := &ves_io_schema.HeaderTransformationType{}
+						httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+						for _, set := range sl {
+							headerTransformationMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 				}
 
 			}
@@ -1699,6 +1896,44 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 				advancedOptions.PanicThresholdType = panicThresholdTypeInt
 
 				panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+			}
+
+			proxyProtocolChoiceTypeFound := false
+
+			if v, ok := advancedOptionsMapStrToI["disable_proxy_protocol"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+				proxyProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableProxyProtocol{}
+					proxyProtocolChoiceInt.DisableProxyProtocol = &ves_io_schema.Empty{}
+					advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["proxy_protocol_v1"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+				proxyProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV1{}
+					proxyProtocolChoiceInt.ProxyProtocolV1 = &ves_io_schema.Empty{}
+					advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["proxy_protocol_v2"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+				proxyProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV2{}
+					proxyProtocolChoiceInt.ProxyProtocolV2 = &ves_io_schema.Empty{}
+					advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+				}
 
 			}
 
@@ -2258,6 +2493,39 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+						networkChoiceTypeFound = true
+						networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Segment{}
+						networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+						choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
 					privateIpChoiceTypeFound := false
 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
@@ -2405,6 +2673,39 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 							networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_OutsideNetwork{}
 							networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
 							choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+						networkChoiceTypeFound = true
+						networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_Segment{}
+						networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+						choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Tenant = v.(string)
+
+							}
+
 						}
 
 					}
@@ -3303,6 +3604,8 @@ func setOriginPoolFields(client *APIClient, d *schema.ResourceData, resp vesapi.
 
 	d.Set("namespace", metadata.GetNamespace())
 
+	drift.DriftDetectionSpec_OriginPool(d, resp)
+
 	return nil
 }
 
@@ -3464,6 +3767,18 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+						headerTransformationChoiceTypeFound = true
+
+						if v.(bool) {
+							headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+							headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+							headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+						}
+
+					}
+
 					if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 						headerTransformationChoiceTypeFound = true
@@ -3513,11 +3828,76 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 			if v, ok := advancedOptionsMapStrToI["http1_config"]; ok && !isIntfNil(v) && !httpProtocolTypeTypeFound {
 
 				httpProtocolTypeTypeFound = true
+				httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
+				httpProtocolTypeInt.Http1Config = &ves_io_schema_cluster.Http1ProtocolOptions{}
+				advancedOptions.HttpProtocolType = httpProtocolTypeInt
 
-				if v.(bool) {
-					httpProtocolTypeInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_Http1Config{}
-					httpProtocolTypeInt.Http1Config = &ves_io_schema.Empty{}
-					advancedOptions.HttpProtocolType = httpProtocolTypeInt
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						headerTransformation := &ves_io_schema.HeaderTransformationType{}
+						httpProtocolTypeInt.Http1Config.HeaderTransformation = headerTransformation
+						for _, set := range sl {
+							headerTransformationMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
 				}
 
 			}
@@ -3650,6 +4030,44 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 				advancedOptions.PanicThresholdType = panicThresholdTypeInt
 
 				panicThresholdTypeInt.PanicThreshold = uint32(v.(int))
+
+			}
+
+			proxyProtocolChoiceTypeFound := false
+
+			if v, ok := advancedOptionsMapStrToI["disable_proxy_protocol"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+				proxyProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_DisableProxyProtocol{}
+					proxyProtocolChoiceInt.DisableProxyProtocol = &ves_io_schema.Empty{}
+					advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["proxy_protocol_v1"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+				proxyProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV1{}
+					proxyProtocolChoiceInt.ProxyProtocolV1 = &ves_io_schema.Empty{}
+					advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+				}
+
+			}
+
+			if v, ok := advancedOptionsMapStrToI["proxy_protocol_v2"]; ok && !isIntfNil(v) && !proxyProtocolChoiceTypeFound {
+
+				proxyProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					proxyProtocolChoiceInt := &ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions_ProxyProtocolV2{}
+					proxyProtocolChoiceInt.ProxyProtocolV2 = &ves_io_schema.Empty{}
+					advancedOptions.ProxyProtocolChoice = proxyProtocolChoiceInt
+				}
 
 			}
 
@@ -4203,6 +4621,39 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+						networkChoiceTypeFound = true
+						networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateIP_Segment{}
+						networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+						choiceInt.PrivateIp.NetworkChoice = networkChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
 					privateIpChoiceTypeFound := false
 
 					if v, ok := cs["ip"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
@@ -4350,6 +4801,39 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 							networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_OutsideNetwork{}
 							networkChoiceInt.OutsideNetwork = &ves_io_schema.Empty{}
 							choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["segment"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+						networkChoiceTypeFound = true
+						networkChoiceInt := &ves_io_schema_views_origin_pool.OriginServerPrivateName_Segment{}
+						networkChoiceInt.Segment = &ves_io_schema_views.ObjectRefType{}
+						choiceInt.PrivateName.NetworkChoice = networkChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								networkChoiceInt.Segment.Tenant = v.(string)
+
+							}
+
 						}
 
 					}

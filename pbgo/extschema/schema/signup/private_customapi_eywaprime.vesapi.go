@@ -141,7 +141,8 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCCreateV2(ctx context.Context,
 		q.Add("account_details", fmt.Sprintf("%v", req.AccountDetails))
 		q.Add("billing_details", fmt.Sprintf("%v", req.BillingDetails))
 		q.Add("company_details", fmt.Sprintf("%v", req.CompanyDetails))
-		q.Add("source_choice", fmt.Sprintf("%v", req.SourceChoice))
+		q.Add("origin", fmt.Sprintf("%v", req.Origin))
+		q.Add("signup_type", fmt.Sprintf("%v", req.SignupType))
 		q.Add("user_details", fmt.Sprintf("%v", req.UserDetails))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -228,7 +229,8 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCRestrictedCreateV2(ctx contex
 		q.Add("account_details", fmt.Sprintf("%v", req.AccountDetails))
 		q.Add("billing_details", fmt.Sprintf("%v", req.BillingDetails))
 		q.Add("company_details", fmt.Sprintf("%v", req.CompanyDetails))
-		q.Add("source_choice", fmt.Sprintf("%v", req.SourceChoice))
+		q.Add("origin", fmt.Sprintf("%v", req.Origin))
+		q.Add("signup_type", fmt.Sprintf("%v", req.SignupType))
 		q.Add("user_details", fmt.Sprintf("%v", req.UserDetails))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -605,6 +607,25 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
         }
     },
     "definitions": {
+        "infraprotect_informationPolicer": {
+            "type": "object",
+            "description": "Policer config for bandwidth restrictions",
+            "title": "Policer Config",
+            "x-displayname": "Policer Config",
+            "x-ves-proto-message": "ves.io.schema.infraprotect_information.Policer",
+            "properties": {
+                "bandwidth_max_mb": {
+                    "type": "integer",
+                    "description": " Bandwidth max allowed for a customer defined by contract\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 9999\n",
+                    "title": "Bandwidth Max",
+                    "format": "int64",
+                    "x-displayname": "Bandwidth Max in MB",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "9999"
+                    }
+                }
+            }
+        },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
             "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
@@ -718,6 +739,19 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                 }
             }
         },
+        "schemaSignupOrigin": {
+            "type": "string",
+            "description": "x-required\nSignupOrigin indicates, from which platform signup is originated, example f5xc, aws..etc\n\n - ORIGIN_UNKNOWN: ORIGIN_UNKNOWN\n\nIndicates, the origin of the signup is unknown\n - ORIGIN_F5XC: ORIGIN_F5XC\n\nORIGIN_F5XC as an origin indicates, signup is initiated from console or by internal scaling/testing/support teams using private API\n - ORIGIN_AWS: ORIGIN_AWS\n\nORIGIN_AWS as an origin indicates, signup is initiated from AWS marketplace \u0026 it comes to eywaprime via tsahik",
+            "title": "SignupOrigin",
+            "enum": [
+                "ORIGIN_UNKNOWN",
+                "ORIGIN_F5XC",
+                "ORIGIN_AWS"
+            ],
+            "default": "ORIGIN_UNKNOWN",
+            "x-displayname": "Signup Origin",
+            "x-ves-proto-enum": "ves.io.schema.SignupOrigin"
+        },
         "schemaTaxExemptionType": {
             "type": "string",
             "description": "TaxExemptionType holds possible tax exemption option.\n\nUNKNOWN indicates the field not being set\nTAX_REGULAR indicates customers that are required to pay taxes\nTAX_EXEMPT indicates customers exempt from paying taxes - their status needs to be verified once signup is completed.\nTAX_EXEMPT indicates customers exempt from paying taxes - their status has been verified and the customer is not being taxed by us.\nTAX_EXEMPT_VERIFICATION_FAILED indicates customers that the tax exempt verification process failed - they can contact F5XC to get more details\nTAX_EXEMPT_VERIFICATION_PENDING indicates customers that the tax exempt verification process is ongoing",
@@ -782,7 +816,7 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
         "schemainfraprotect_informationGlobalSpecType": {
             "type": "object",
             "description": "Organisation information",
-            "title": "information",
+            "title": "Information",
             "x-displayname": "Information",
             "x-ves-oneof-field-as_path_choice": "[\"as_path_choice_full\",\"as_path_choice_none\",\"as_path_choice_origin\"]",
             "x-ves-oneof-field-default_tunnel_bgp_secret_choice": "[\"default_tunnel_bgp_secret\",\"default_tunnel_bgp_secret_none\"]",
@@ -834,6 +868,12 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "title": "No default tunnel BGP secret",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No default tunnel BGP secret"
+                },
+                "policer": {
+                    "description": " Policer config for bandwidth restrictions",
+                    "title": "Policer Config",
+                    "$ref": "#/definitions/infraprotect_informationPolicer",
+                    "x-displayname": "Policer Config"
                 },
                 "prefixes": {
                     "type": "array",
@@ -1118,7 +1158,7 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
             "type": "object",
             "title": "Create V2 Request",
             "x-displayname": "Create V2 Request",
-            "x-ves-oneof-field-source_choice": "[\"source_internal_sre\"]",
+            "x-ves-oneof-field-signup_type": "[\"signup_type_internal_sre\"]",
             "x-ves-proto-message": "ves.io.schema.signup.CreateV2Request",
             "properties": {
                 "account_details": {
@@ -1147,11 +1187,21 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "$ref": "#/definitions/signupCompanyMeta",
                     "x-displayname": "Company Details"
                 },
-                "source_internal_sre": {
+                "origin": {
+                    "description": " origin of the signup, from which platform signup is originated, example f5xc, aws..etc\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Origin",
+                    "$ref": "#/definitions/schemaSignupOrigin",
+                    "x-displayname": "Origin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "signup_type_internal_sre": {
                     "description": "Exclusive with []\n For internal use ONLY\n payload for the request made internally, probably via SRE",
-                    "title": "Source Internal SRE",
-                    "$ref": "#/definitions/signupSourceInternalSre",
-                    "x-displayname": "Source Internal SRE"
+                    "title": "Signup Type Internal SRE",
+                    "$ref": "#/definitions/signupSignupTypeInternalSre",
+                    "x-displayname": "Signup Type Internal SRE"
                 },
                 "user_details": {
                     "description": " details of the user",
@@ -1181,47 +1231,22 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                 }
             }
         },
-        "signupCrmInfoV2": {
+        "signupSignupTypeInternalScaling": {
             "type": "object",
-            "description": "Deprecated: use the CRMInfo defined in schema/types.proto",
-            "title": "fields of crm info message",
-            "x-displayname": "Crm Info",
-            "x-ves-proto-message": "ves.io.schema.signup.CrmInfoV2"
+            "description": "x-displayName: \"Signup Type Internal Scaling\"",
+            "title": "Signup Type Internal Scaling"
         },
-        "signupMarketplaceAws": {
+        "signupSignupTypeInternalSre": {
             "type": "object",
-            "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for AWS Marketplace",
-            "title": "Marketplace Aws",
-            "properties": {
-                "crm_details": {
-                    "description": "x-displayName: \"CRM Details\"\nx-required\nThis field holds CRM information",
-                    "title": "CRM Details",
-                    "$ref": "#/definitions/schemaCRMInfo"
-                }
-            }
-        },
-        "signupSourceInternalScaling": {
-            "type": "object",
-            "description": "x-displayName: \"Source Internal Scaling\"",
-            "title": "Source Internal Scaling"
-        },
-        "signupSourceInternalSre": {
-            "type": "object",
-            "title": "Source Internal SRE",
-            "x-displayname": "Source Internal SRE",
-            "x-ves-proto-message": "ves.io.schema.signup.SourceInternalSre",
+            "title": "Signup Type Internal SRE",
+            "x-displayname": "Signup Type Internal SRE",
+            "x-ves-proto-message": "ves.io.schema.signup.SignupTypeInternalSre",
             "properties": {
                 "crm_details": {
                     "description": " This field holds CRM information",
                     "title": "CRM Details",
                     "$ref": "#/definitions/schemaCRMInfo",
                     "x-displayname": "CRM Details"
-                },
-                "crm_info": {
-                    "description": " this field holds the CRM info\n This field is deprecated. use CrmDetails instead",
-                    "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfoV2",
-                    "x-displayname": "CRM Info"
                 },
                 "f5xc_instance_name": {
                     "type": "string",
@@ -1233,6 +1258,13 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64"
                     }
+                },
+                "is_demo_tenant": {
+                    "type": "boolean",
+                    "description": " Indicates whether signup is for demo tenant or not.",
+                    "title": "Is Demo Tenant",
+                    "format": "boolean",
+                    "x-displayname": "Is Demo Tenant"
                 },
                 "kc_instance_name": {
                     "type": "string",
@@ -1247,22 +1279,22 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                 }
             }
         },
-        "signupSourceMarketplace": {
+        "signupSignupTypeMarketplace": {
             "type": "object",
-            "description": "x-displayName: \"Source Marketplace\"\npayload for the creation request, for Marketplace source",
-            "title": "Source Marketplace",
+            "description": "x-displayName: \"Signup Type Marketplace\"\npayload for the creation request, for Marketplace Signup Type",
+            "title": "Signup Type Marketplace",
             "properties": {
-                "marketplace_aws": {
-                    "description": "x-displayName: \"Marketplace Aws\"\npayload for the creation request, for Aws Marketplace",
-                    "title": "MarketplaceAws",
-                    "$ref": "#/definitions/signupMarketplaceAws"
+                "crm_details": {
+                    "description": "x-displayName: \"CRM Details\"\nx-required\nThis field holds CRM information",
+                    "title": "CRM Details",
+                    "$ref": "#/definitions/schemaCRMInfo"
                 }
             }
         },
-        "signupSourceMsp": {
+        "signupSignupTypeMsp": {
             "type": "object",
-            "description": "x-displayName: \"Source MSP\"",
-            "title": "Source MSP",
+            "description": "x-displayName: \"Signup Type MSP\"",
+            "title": "Signup Type MSP",
             "properties": {
                 "child_tenant_obj_name": {
                     "type": "string",
@@ -1273,18 +1305,13 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "description": "x-displayName: \"CRM Details\"\nThis field holds CRM information",
                     "title": "CRM Details",
                     "$ref": "#/definitions/schemaCRMInfo"
-                },
-                "crm_info": {
-                    "description": "x-displayName: \"CRM Info\"\nthis field holds the CRM info\nThis field is deprecated. use CrmDetails instead",
-                    "title": "crm_info",
-                    "$ref": "#/definitions/signupCrmInfoV2"
                 }
             }
         },
-        "signupSourcePlanTransition": {
+        "signupSignupTypePlanTransition": {
             "type": "object",
-            "description": "x-displayName: \"Source Plan Transition\"\nSourcePlanTransition can be only used for Free to Individual plan transition signups",
-            "title": "Source Plan Transition",
+            "description": "x-displayName: \"Signup Type Plan Transition\"\nSignupTypePlanTransition can be only used for Free to Individual plan transition signups",
+            "title": "Signup Type Plan Transition",
             "properties": {
                 "is_sso_enabled": {
                     "type": "boolean",

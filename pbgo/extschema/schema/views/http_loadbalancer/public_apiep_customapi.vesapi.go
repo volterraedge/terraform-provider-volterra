@@ -1514,15 +1514,15 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 },
                 "schema_json": {
                     "type": "string",
-                    "description": " The schema of the API endpoint\n\nExample: - \"{}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 10000\n",
+                    "description": " The schema of the API endpoint\n\nExample: - \"{}\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 20000\n",
                     "title": "Schema JSON",
-                    "maxLength": 10000,
+                    "maxLength": 20000,
                     "x-displayname": "Schema JSON",
                     "x-ves-example": "{}",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "10000"
+                        "ves.io.schema.rules.string.max_bytes": "20000"
                     }
                 }
             }

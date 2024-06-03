@@ -5468,7 +5468,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 					amiChoiceTypeFound := false
 
-					if v, ok := cs["BestPlusPayG200Mbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
+					if v, ok := cs["best_plus_pay_g200_mbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
 
 						amiChoiceTypeFound = true
 

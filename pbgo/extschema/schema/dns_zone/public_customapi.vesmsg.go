@@ -79,6 +79,15 @@ func (v *ValidateCloneReq) Validate(ctx context.Context, pm interface{}, opts ..
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["tenant"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant"))
+		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

@@ -821,7 +821,7 @@ var DefaultApiEndpointWithSchemaValidator = func() *ValidateApiEndpointWithSchem
 	vrhSchemaJson := v.SchemaJsonValidationRuleHandler
 	rulesSchemaJson := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_bytes": "10000",
+		"ves.io.schema.rules.string.max_bytes": "20000",
 	}
 	vFn, err = vrhSchemaJson(rulesSchemaJson)
 	if err != nil {
@@ -2920,6 +2920,398 @@ var DefaultInternetVIPTargetGroupStatusTypeValidator = func() *ValidateInternetV
 
 func InternetVIPTargetGroupStatusTypeValidator() db.Validator {
 	return DefaultInternetVIPTargetGroupStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *KubernetesUpgradeDrain) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *KubernetesUpgradeDrain) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *KubernetesUpgradeDrain) DeepCopy() *KubernetesUpgradeDrain {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &KubernetesUpgradeDrain{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *KubernetesUpgradeDrain) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *KubernetesUpgradeDrain) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return KubernetesUpgradeDrainValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateKubernetesUpgradeDrain struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateKubernetesUpgradeDrain) KubernetesUpgradeDrainEnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for kubernetes_upgrade_drain_enable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateKubernetesUpgradeDrain) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*KubernetesUpgradeDrain)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *KubernetesUpgradeDrain got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain_enable_choice"]; exists {
+		val := m.GetKubernetesUpgradeDrainEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("kubernetes_upgrade_drain_enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetKubernetesUpgradeDrainEnableChoice().(type) {
+	case *KubernetesUpgradeDrain_EnableUpgradeDrain:
+		if fv, exists := v.FldValidators["kubernetes_upgrade_drain_enable_choice.enable_upgrade_drain"]; exists {
+			val := m.GetKubernetesUpgradeDrainEnableChoice().(*KubernetesUpgradeDrain_EnableUpgradeDrain).EnableUpgradeDrain
+			vOpts := append(opts,
+				db.WithValidateField("kubernetes_upgrade_drain_enable_choice"),
+				db.WithValidateField("enable_upgrade_drain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *KubernetesUpgradeDrain_DisableUpgradeDrain:
+		if fv, exists := v.FldValidators["kubernetes_upgrade_drain_enable_choice.disable_upgrade_drain"]; exists {
+			val := m.GetKubernetesUpgradeDrainEnableChoice().(*KubernetesUpgradeDrain_DisableUpgradeDrain).DisableUpgradeDrain
+			vOpts := append(opts,
+				db.WithValidateField("kubernetes_upgrade_drain_enable_choice"),
+				db.WithValidateField("disable_upgrade_drain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultKubernetesUpgradeDrainValidator = func() *ValidateKubernetesUpgradeDrain {
+	v := &ValidateKubernetesUpgradeDrain{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKubernetesUpgradeDrainEnableChoice := v.KubernetesUpgradeDrainEnableChoiceValidationRuleHandler
+	rulesKubernetesUpgradeDrainEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhKubernetesUpgradeDrainEnableChoice(rulesKubernetesUpgradeDrainEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KubernetesUpgradeDrain.kubernetes_upgrade_drain_enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["kubernetes_upgrade_drain_enable_choice"] = vFn
+
+	v.FldValidators["kubernetes_upgrade_drain_enable_choice.enable_upgrade_drain"] = KubernetesUpgradeDrainConfigValidator().Validate
+
+	return v
+}()
+
+func KubernetesUpgradeDrainValidator() db.Validator {
+	return DefaultKubernetesUpgradeDrainValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *KubernetesUpgradeDrainConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *KubernetesUpgradeDrainConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *KubernetesUpgradeDrainConfig) DeepCopy() *KubernetesUpgradeDrainConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &KubernetesUpgradeDrainConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *KubernetesUpgradeDrainConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *KubernetesUpgradeDrainConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return KubernetesUpgradeDrainConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateKubernetesUpgradeDrainConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateKubernetesUpgradeDrainConfig) DrainMaxUnavailableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for drain_max_unavailable_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateKubernetesUpgradeDrainConfig) DrainMaxUnavailableChoiceDrainMaxUnavailableNodeCountValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_DrainMaxUnavailableNodeCount, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for drain_max_unavailable_node_count")
+	}
+	return oValidatorFn_DrainMaxUnavailableNodeCount, nil
+}
+func (v *ValidateKubernetesUpgradeDrainConfig) DrainMaxUnavailableChoiceDrainMaxUnavailableNodePercentageValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_DrainMaxUnavailableNodePercentage, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for drain_max_unavailable_node_percentage")
+	}
+	return oValidatorFn_DrainMaxUnavailableNodePercentage, nil
+}
+
+func (v *ValidateKubernetesUpgradeDrainConfig) VegaUpgradeModeToggleChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vega_upgrade_mode_toggle_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateKubernetesUpgradeDrainConfig) DrainNodeTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for drain_node_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateKubernetesUpgradeDrainConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*KubernetesUpgradeDrainConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *KubernetesUpgradeDrainConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["drain_max_unavailable_choice"]; exists {
+		val := m.GetDrainMaxUnavailableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("drain_max_unavailable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDrainMaxUnavailableChoice().(type) {
+	case *KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount:
+		if fv, exists := v.FldValidators["drain_max_unavailable_choice.drain_max_unavailable_node_count"]; exists {
+			val := m.GetDrainMaxUnavailableChoice().(*KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount).DrainMaxUnavailableNodeCount
+			vOpts := append(opts,
+				db.WithValidateField("drain_max_unavailable_choice"),
+				db.WithValidateField("drain_max_unavailable_node_count"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage:
+		if fv, exists := v.FldValidators["drain_max_unavailable_choice.drain_max_unavailable_node_percentage"]; exists {
+			val := m.GetDrainMaxUnavailableChoice().(*KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage).DrainMaxUnavailableNodePercentage
+			vOpts := append(opts,
+				db.WithValidateField("drain_max_unavailable_choice"),
+				db.WithValidateField("drain_max_unavailable_node_percentage"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["drain_node_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("drain_node_timeout"))
+		if err := fv(ctx, m.GetDrainNodeTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vega_upgrade_mode_toggle_choice"]; exists {
+		val := m.GetVegaUpgradeModeToggleChoice()
+		vOpts := append(opts,
+			db.WithValidateField("vega_upgrade_mode_toggle_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetVegaUpgradeModeToggleChoice().(type) {
+	case *KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode:
+		if fv, exists := v.FldValidators["vega_upgrade_mode_toggle_choice.disable_vega_upgrade_mode"]; exists {
+			val := m.GetVegaUpgradeModeToggleChoice().(*KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode).DisableVegaUpgradeMode
+			vOpts := append(opts,
+				db.WithValidateField("vega_upgrade_mode_toggle_choice"),
+				db.WithValidateField("disable_vega_upgrade_mode"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode:
+		if fv, exists := v.FldValidators["vega_upgrade_mode_toggle_choice.enable_vega_upgrade_mode"]; exists {
+			val := m.GetVegaUpgradeModeToggleChoice().(*KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode).EnableVegaUpgradeMode
+			vOpts := append(opts,
+				db.WithValidateField("vega_upgrade_mode_toggle_choice"),
+				db.WithValidateField("enable_vega_upgrade_mode"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultKubernetesUpgradeDrainConfigValidator = func() *ValidateKubernetesUpgradeDrainConfig {
+	v := &ValidateKubernetesUpgradeDrainConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDrainMaxUnavailableChoice := v.DrainMaxUnavailableChoiceValidationRuleHandler
+	rulesDrainMaxUnavailableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDrainMaxUnavailableChoice(rulesDrainMaxUnavailableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KubernetesUpgradeDrainConfig.drain_max_unavailable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["drain_max_unavailable_choice"] = vFn
+
+	vrhDrainMaxUnavailableChoiceDrainMaxUnavailableNodeCount := v.DrainMaxUnavailableChoiceDrainMaxUnavailableNodeCountValidationRuleHandler
+	rulesDrainMaxUnavailableChoiceDrainMaxUnavailableNodeCount := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "5000",
+	}
+	vFnMap["drain_max_unavailable_choice.drain_max_unavailable_node_count"], err = vrhDrainMaxUnavailableChoiceDrainMaxUnavailableNodeCount(rulesDrainMaxUnavailableChoiceDrainMaxUnavailableNodeCount)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field KubernetesUpgradeDrainConfig.drain_max_unavailable_choice_drain_max_unavailable_node_count: %s", err)
+		panic(errMsg)
+	}
+	vrhDrainMaxUnavailableChoiceDrainMaxUnavailableNodePercentage := v.DrainMaxUnavailableChoiceDrainMaxUnavailableNodePercentageValidationRuleHandler
+	rulesDrainMaxUnavailableChoiceDrainMaxUnavailableNodePercentage := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFnMap["drain_max_unavailable_choice.drain_max_unavailable_node_percentage"], err = vrhDrainMaxUnavailableChoiceDrainMaxUnavailableNodePercentage(rulesDrainMaxUnavailableChoiceDrainMaxUnavailableNodePercentage)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field KubernetesUpgradeDrainConfig.drain_max_unavailable_choice_drain_max_unavailable_node_percentage: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["drain_max_unavailable_choice.drain_max_unavailable_node_count"] = vFnMap["drain_max_unavailable_choice.drain_max_unavailable_node_count"]
+	v.FldValidators["drain_max_unavailable_choice.drain_max_unavailable_node_percentage"] = vFnMap["drain_max_unavailable_choice.drain_max_unavailable_node_percentage"]
+
+	vrhVegaUpgradeModeToggleChoice := v.VegaUpgradeModeToggleChoiceValidationRuleHandler
+	rulesVegaUpgradeModeToggleChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhVegaUpgradeModeToggleChoice(rulesVegaUpgradeModeToggleChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KubernetesUpgradeDrainConfig.vega_upgrade_mode_toggle_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vega_upgrade_mode_toggle_choice"] = vFn
+
+	vrhDrainNodeTimeout := v.DrainNodeTimeoutValidationRuleHandler
+	rulesDrainNodeTimeout := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "900",
+	}
+	vFn, err = vrhDrainNodeTimeout(rulesDrainNodeTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for KubernetesUpgradeDrainConfig.drain_node_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["drain_node_timeout"] = vFn
+
+	return v
+}()
+
+func KubernetesUpgradeDrainConfigValidator() db.Validator {
+	return DefaultKubernetesUpgradeDrainConfigValidator
 }
 
 // augmented methods on protoc/std generated struct

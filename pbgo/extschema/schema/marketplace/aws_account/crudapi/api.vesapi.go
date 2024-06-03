@@ -2707,24 +2707,30 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
-                "signup": {
-                    "type": "array",
-                    "description": " Reference to signup object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "signup",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
-                    },
-                    "x-displayname": "Signup Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
+                "signup_id": {
+                    "type": "string",
+                    "description": " Identifier for the corresponding signup object",
+                    "title": "Signup ID",
+                    "x-displayname": "Signup ID"
                 },
                 "subscription_status": {
                     "description": " AWSSubscriptionStatus indicates F5XC AWS marketplace product subscription status per account",
                     "title": "AWSSubscriptionStatus",
                     "$ref": "#/definitions/aws_accountAWSSubscriptionStatus",
                     "x-displayname": "AWS Customer Subscription Status"
+                },
+                "tenant": {
+                    "type": "array",
+                    "description": " Reference to tenant object\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Tenant Reference",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Tenant Reference",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3029,10 +3035,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",

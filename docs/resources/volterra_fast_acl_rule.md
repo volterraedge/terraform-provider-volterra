@@ -21,13 +21,15 @@ resource "volterra_fast_acl_rule" "example" {
   namespace = "staging"
 
   action {
-    // One of the arguments from this list "simple_action policer_action protocol_policer_action" must be set
+    // One of the arguments from this list "policer_action protocol_policer_action simple_action" can be set
+
     simple_action = "simple_action"
   }
 
   port {
-    // One of the arguments from this list "all user_defined dns" must be set
-    user_defined = "user_defined"
+    // One of the arguments from this list "all user_defined dns" can be set
+
+    dns = true
   }
 
   // One of the arguments from this list "prefix ip_prefix_set" must be set

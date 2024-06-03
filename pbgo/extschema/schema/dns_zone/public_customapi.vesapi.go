@@ -193,6 +193,7 @@ func (c *CustomAPIRestClient) doRPCCloneFromDNSDomain(ctx context.Context, callO
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("tenant", fmt.Sprintf("%v", req.Tenant))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -1540,7 +1541,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindcreate"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportBINDCreate"
             },
             "x-displayname": "DNS Zone Custom API",
@@ -1625,7 +1625,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindvalidate"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportBINDValidate"
             },
             "x-displayname": "DNS Zone Custom API",
@@ -2049,7 +2048,15 @@ var CustomAPISwaggerJSON string = `{
             "description": "Clone Request",
             "title": "Clone Request",
             "x-displayname": "Clone Request",
-            "x-ves-proto-message": "ves.io.schema.dns_zone.CloneReq"
+            "x-ves-proto-message": "ves.io.schema.dns_zone.CloneReq",
+            "properties": {
+                "tenant": {
+                    "type": "string",
+                    "description": " Tenant for which dns domain cloned",
+                    "title": "Tenant name",
+                    "x-displayname": "Tenant name"
+                }
+            }
         },
         "dns_zoneCloneResp": {
             "type": "object",
@@ -2972,12 +2979,14 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "title": "Import BIND Create Request",
             "x-displayname": "Import BIND Create Request",
+            "x-ves-displayorder": "2,1",
             "x-ves-proto-message": "ves.io.schema.dns_zone.ImportBINDCreateRequest",
             "properties": {
                 "description": {
                     "type": "string",
+                    "description": " Optional description about zone, import method, etc.",
                     "title": "Description",
-                    "x-displayname": "Description for each zone"
+                    "x-displayname": "Description"
                 },
                 "file": {
                     "type": "string",
@@ -2991,15 +3000,6 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.bytes.max_len": "2097152",
                         "ves.io.schema.rules.message.required": "true"
                     }
-                },
-                "ignore_zone_list": {
-                    "type": "array",
-                    "description": " Zones in this list will be ignored when parsing the zip file to avoid invalid zone errors. ",
-                    "title": "Ignore Zone List",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Ignore Zone List"
                 }
             }
         },
@@ -3011,6 +3011,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "invalid_zone_list": {
                     "type": "array",
+                    "description": " Zones that we failed to parse. On submission, objects will not be created for any detected zone in this list.",
                     "title": "Invalid Zone List",
                     "items": {
                         "$ref": "#/definitions/dns_zoneInvalidZone"
@@ -3025,6 +3026,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "valid_zone_list": {
                     "type": "array",
+                    "description": " Zones that we parsed succcessfully. On submission, objects will be created for every zone in this list. ",
                     "title": "Valid Zone List",
                     "items": {
                         "$ref": "#/definitions/dns_zoneValidZone"
@@ -3037,12 +3039,14 @@ var CustomAPISwaggerJSON string = `{
             "type": "object",
             "title": "Import BIND Validate Request",
             "x-displayname": "Import BIND Validate Request",
+            "x-ves-displayorder": "2,1",
             "x-ves-proto-message": "ves.io.schema.dns_zone.ImportBINDValidateRequest",
             "properties": {
                 "description": {
                     "type": "string",
+                    "description": " Optional description about zone, import method, etc.",
                     "title": "Description",
-                    "x-displayname": "Description for each zone"
+                    "x-displayname": "Description"
                 },
                 "file": {
                     "type": "string",
@@ -4402,10 +4406,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",

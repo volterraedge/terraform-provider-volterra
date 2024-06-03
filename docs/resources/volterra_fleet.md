@@ -21,14 +21,17 @@ resource "volterra_fleet" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_bond_devices bond_device_list" must be set
+
   no_bond_devices = true
 
-  // One of the arguments from this list "dc_cluster_group dc_cluster_group_inside no_dc_cluster_group" must be set
+  // One of the arguments from this list "no_dc_cluster_group dc_cluster_group dc_cluster_group_inside" must be set
+
   no_dc_cluster_group = true
   fleet_label         = ["sfo"]
 
-  // One of the arguments from this list "enable_vgpu disable_gpu enable_gpu" must be set
-  disable_gpu = true
+  // One of the arguments from this list "disable_gpu enable_gpu enable_vgpu" must be set
+
+  enable_gpu = true
 
   // One of the arguments from this list "interface_list default_config device_list" must be set
 
@@ -39,26 +42,34 @@ resource "volterra_fleet" "example" {
       tenant    = "acmecorp"
     }
   }
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
+
   logs_streaming_disabled = true
+
   // One of the arguments from this list "default_sriov_interface sriov_interfaces" must be set
+
   default_sriov_interface = true
+
   // One of the arguments from this list "default_storage_class storage_class_list" must be set
+
   default_storage_class = true
+
   // One of the arguments from this list "no_storage_device storage_device_list" must be set
+
   no_storage_device = true
+
   // One of the arguments from this list "no_storage_interfaces storage_interface_list" must be set
+
   no_storage_interfaces = true
-  // One of the arguments from this list "no_storage_static_routes storage_static_routes" must be set
+
+  // One of the arguments from this list "storage_static_routes no_storage_static_routes" must be set
+
   no_storage_static_routes = true
 
   // One of the arguments from this list "deny_all_usb allow_all_usb usb_policy" must be set
 
-  usb_policy {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  deny_all_usb = true
 }
 
 ```
@@ -111,6 +122,8 @@ Argument Reference
 `device_list` - (Optional) Add device for all interfaces belonging to this fleet. See [Interface Choice Device List ](#interface-choice-device-list) below for details.
 
 `interface_list` - (Optional) Add all interfaces belonging to this fleet. See [Interface Choice Interface List ](#interface-choice-interface-list) below for details.
+
+`kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -171,6 +184,16 @@ Configuration to block the default services allowed by the platform.
 `web_user_interface` - (Optional) Matches the web user interface port (`Bool`).
 
 `network_type` - (Optional) Network type in which these ports get blocked (`String`).
+
+### Kubernetes Upgrade Drain
+
+Enable Kubernetes Drain during OS or SW upgrade.
+
+###### One of the arguments from this list "enable_upgrade_drain, disable_upgrade_drain" must be set
+
+`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+
+`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
 ### Performance Enhancement Mode
 
@@ -486,7 +509,7 @@ Storage class Device configuration for NetApp Trident.
 
 Device configuration for NetApp Trident.
 
-###### One of the arguments from this list "netapp_backend_ontap_san, netapp_backend_ontap_nas" must be set
+###### One of the arguments from this list "netapp_backend_ontap_nas, netapp_backend_ontap_san" must be set
 
 `netapp_backend_ontap_nas` - (Optional) Backend configuration for ONTAP NAS. See [Backend Choice Netapp Backend Ontap Nas ](#backend-choice-netapp-backend-ontap-nas) below for details.
 
@@ -542,7 +565,7 @@ For FlashArrays you must set the "mgmt_endpoint" and "api_token".
 
 `labels` - (Optional) The labels are optional, and can be any key-value pair for use with the PSO "fleet" provisioner. (`String`).
 
-###### One of the arguments from this list "mgmt_dns_name, mgmt_ip" must be set
+###### One of the arguments from this list "mgmt_ip, mgmt_dns_name" must be set
 
 `mgmt_dns_name` - (Optional) Management Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
@@ -556,7 +579,7 @@ Please Enter API TOken. Token to connect to management interface.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -574,7 +597,7 @@ For FlashBlades you must set the "mgmt_endpoint", "api_token" and nfs_endpoint.
 
 `lables` - (Optional) The labels are optional, and can be any key-value pair for use with the PSO "fleet" provisioner. (`String`).
 
-###### One of the arguments from this list "mgmt_ip, mgmt_dns_name" must be set
+###### One of the arguments from this list "mgmt_dns_name, mgmt_ip" must be set
 
 `mgmt_dns_name` - (Optional) Management Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
@@ -594,7 +617,7 @@ Please Enter API TOken. Token to connect to management interface.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -622,7 +645,7 @@ chap Password to connect to the HPE storage.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -640,7 +663,7 @@ Please Enter you password..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -671,6 +694,28 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 `location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+
+Disable Node by Node Upgrade during Software or OS version upgrade.
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
+
+Enable Node by Node Upgrade during Software or OS version upgrade.
+
+###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+
+`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+
+`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
+
+`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+
+###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Lacp Choice Active Backup
 
@@ -716,7 +761,7 @@ Please Enter you password. Password to connect to the cluster/SVM.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -776,7 +821,7 @@ Please Enter value of client private key. Used for certificate-based auth..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -822,7 +867,7 @@ List of QoS volume defaults types.
 
 `export_policy` - (Optional) Export policy to use. (`String`).
 
-###### One of the arguments from this list "qos_policy, adaptive_qos_policy, no_qos" must be set
+###### One of the arguments from this list "no_qos, qos_policy, adaptive_qos_policy" must be set
 
 `adaptive_qos_policy` - (Optional) Enter Adaptive QoS Policy Name (`String`).
 
@@ -1014,7 +1059,7 @@ List of custom storage classes.
 
 `description` - (Optional) Description for this storage class (`String`).
 
-###### One of the arguments from this list "hpe_storage, netapp_trident, pure_service_orchestrator, custom_storage" must be set
+###### One of the arguments from this list "netapp_trident, pure_service_orchestrator, custom_storage, hpe_storage" must be set
 
 `custom_storage` - (Optional) Storage configuration for Custom Storage. See [Device Choice Custom Storage ](#device-choice-custom-storage) below for details.
 
@@ -1074,7 +1119,7 @@ Nexthop for the route.
 
 List of route prefixes.
 
-###### One of the arguments from this list "ipv6, ipv4" must be set
+###### One of the arguments from this list "ipv4, ipv6" must be set
 
 `ipv4` - (Optional) IPv4 Subnet Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
@@ -1133,6 +1178,14 @@ CHAP target initiator secret. Required if useCHAP=true.
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Ver Ipv4
 

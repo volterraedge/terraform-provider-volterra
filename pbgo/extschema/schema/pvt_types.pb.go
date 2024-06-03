@@ -292,7 +292,6 @@ func (m *DaemonTlsParametersType) GetTrustedCaUrl() string {
 // Title
 //
 // x-displayName "displayname"
-// Only added so codegeneration does not break
 // UseragentType specifies all attributes encoded in Useragent header
 // emitted by a service-framework based client.
 type UseragentType struct {
@@ -377,7 +376,6 @@ func (m *UseragentType) GetSiteName() string {
 // Title
 //
 // x-displayName "displayname"
-// Only added so codegeneration does not break
 // ServiceParam groups all parameters required for a client to connect to a server
 type ServiceParameters struct {
 	// Title
@@ -437,7 +435,6 @@ func (m *ServiceParameters) GetCtype() ServiceConnectionType {
 // Title
 //
 // x-displayName "displayname"
-// Only added so codegeneration does not break
 // OperMetaType is metadata that oper objects may have.
 // Implementors can decided whether individual oper objects should have this field or not.
 // If an oper object does have metadata, it should use this message type.
@@ -445,42 +442,36 @@ type OperMetaType struct {
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
 	// Tenant to which this object belongs.
 	Tenant string `protobuf:"bytes,1,opt,name=tenant,proto3" json:"tenant,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
 	// Namespace defines the space within each name must be unique.
 	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
 	// Name must be unique within a namespace.
 	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
 	// UID is the unique in time and space value for this object.
 	Uid string `protobuf:"bytes,4,opt,name=uid,proto3" json:"uid,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
-	// Creation and last modification timestamps for this object.
+	// Creation timestamp for this object.
 	CreationTimestamp *types.Timestamp `protobuf:"bytes,5,opt,name=creation_timestamp,json=creationTimestamp,proto3" json:"creation_timestamp,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
+	// Last modification timestamp for this object.
 	ModificationTimestamp *types.Timestamp `protobuf:"bytes,6,opt,name=modification_timestamp,json=modificationTimestamp,proto3" json:"modification_timestamp,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
 	// Annotations is the unstructured annotation for this object.
 	Annotations map[string]string `protobuf:"bytes,7,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
@@ -565,19 +556,16 @@ func (m *OperMetaType) GetAnnotations() map[string]string {
 // Title
 //
 // x-displayName "displayname"
-// Only added so codegeneration does not break
 // DaemonEnvironmentType is the specification of the environment in which the daemon is launched
 type DaemonEnvironmentType struct {
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
 	// Name of the environment - staging, demo1, crt, etc.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Title
 	//
 	// x-displayName "displayname"
-	// Only added so codegeneration does not break
 	// DNS suffix to use for internal communication - int.ves.io, int.volterra.us, etc.
 	InternalDnsSuffix string `protobuf:"bytes,2,opt,name=internal_dns_suffix,json=internalDnsSuffix,proto3" json:"internal_dns_suffix,omitempty"`
 }

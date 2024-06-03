@@ -40,8 +40,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.origin_pool.OriginServerPrivateName"] = OriginServerPrivateNameValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerPublicIP"] = OriginServerPublicIPValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerPublicName"] = OriginServerPublicNameValidator()
-	vr["ves.io.schema.views.origin_pool.OriginServerSegmentIP"] = OriginServerSegmentIPValidator()
-	vr["ves.io.schema.views.origin_pool.OriginServerSegmentName"] = OriginServerSegmentNameValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerType"] = OriginServerTypeValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkIP"] = OriginServerVirtualNetworkIPValidator()
 	vr["ves.io.schema.views.origin_pool.OriginServerVirtualNetworkName"] = OriginServerVirtualNetworkNameValidator()
@@ -63,8 +61,7 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.origin_pool.API.Create"] = []string{
-		"spec.advanced_options.disable_lb_source_ip_persistance",
-		"spec.advanced_options.enable_lb_source_ip_persistance",
+		"spec.advanced_options.header_transformation_type",
 		"spec.origin_servers.#.k8s_service.service_selector",
 		"spec.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
@@ -75,38 +72,30 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.origin_pool.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.origin_pool.API.Create"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
@@ -115,76 +104,59 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.origin_pool.API.Get"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "create_form.spec.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "create_form.spec.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "create_form.spec.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "replace_form.spec.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.origin_pool.API.List"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "items.#.get_spec.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "items.#.get_spec.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.origin_pool.API.Replace"] = []string{
-		"spec.advanced_options.disable_lb_source_ip_persistance",
-		"spec.advanced_options.enable_lb_source_ip_persistance",
+		"spec.advanced_options.header_transformation_type",
 		"spec.origin_servers.#.k8s_service.service_selector",
 		"spec.use_tls.use_mtls.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.use_tls.use_mtls.tls_certificates.#.private_key.secret_encoding_type",
@@ -195,19 +167,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.origin_pool.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.public_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "spec.origin_servers.#.segment_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.origin_servers.#.vn_private_ip.ipv6",
-			AllowedEnvironments: []string{"crt", "demo1", "softbank_mec", "staging", "test"},
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
 

@@ -31,14 +31,12 @@ resource "volterra_dns_load_balancer" "example" {
         tenant    = "acmecorp"
       }
 
-      // One of the arguments from this list "geo_location_label_selector geo_location_set asn_list asn_matcher" must be set
+      // One of the arguments from this list "ip_prefix_set geo_location_label_selector geo_location_set asn_list asn_matcher ip_prefix_list" must be set
 
-      asn_matcher {
-        asn_sets {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+      geo_location_set {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
       score = "50"
     }
@@ -100,7 +98,7 @@ Do not perform any load-balancing. Instead return NXDOMAIN.
 
 The rule evaluates to true if the origin ASN is present in the ASN list..
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Client Choice Asn Matcher
 
@@ -110,9 +108,25 @@ The rule evaluates to true if the origin ASN is present in one of the BGP ASN Se
 
 ### Client Choice Geo Location Label Selector
 
-with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request..
+with the translated geo locations derived from incoming EDNS0 client-subnet in the DNS request..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
+
+### Client Choice Ip Prefix List
+
+IP Prefix list..
+
+`invert_match` - (Optional) Invert the match result. (`Bool`).
+
+`ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
+
+### Client Choice Ip Prefix Set
+
+IP Prefix set..
+
+`invert_matcher` - (Optional) Invert the match result. (`Bool`).
+
+`prefix_sets` - (Required) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
 
 ### Ref
 
@@ -152,15 +166,19 @@ Rules to perform load balancing.
 
 `pool` - (Optional) Use this pool for the Load Balancing.. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "asn_list, asn_matcher, geo_location_label_selector, geo_location_set" must be set
+###### One of the arguments from this list "ip_prefix_set, geo_location_label_selector, geo_location_set, asn_list, asn_matcher, ip_prefix_list" must be set
 
 `asn_list` - (Optional) The rule evaluates to true if the origin ASN is present in the ASN list.. See [Client Choice Asn List ](#client-choice-asn-list) below for details.
 
-`asn_matcher` - (Optional) The rule evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Client Choice Asn Matcher ](#client-choice-asn-matcher) below for details.(Deprecated)
+`asn_matcher` - (Optional) The rule evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Client Choice Asn Matcher ](#client-choice-asn-matcher) below for details.
 
-`geo_location_label_selector` - (Optional) with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.. See [Client Choice Geo Location Label Selector ](#client-choice-geo-location-label-selector) below for details.
+`geo_location_label_selector` - (Optional) with the translated geo locations derived from incoming EDNS0 client-subnet in the DNS request.. See [Client Choice Geo Location Label Selector ](#client-choice-geo-location-label-selector) below for details.
 
-`geo_location_set` - (Optional) with the translated geo locations derived from incoming EDNS-S0 client-subnet in the DNS request.. See [ref](#ref) below for details.
+`geo_location_set` - (Optional) with the translated geo locations derived from incoming EDNS0 client-subnet in the DNS request.. See [ref](#ref) below for details.
+
+`ip_prefix_list` - (Optional) IP Prefix list.. See [Client Choice Ip Prefix List ](#client-choice-ip-prefix-list) below for details.
+
+`ip_prefix_set` - (Optional) IP Prefix set.. See [Client Choice Ip Prefix Set ](#client-choice-ip-prefix-set) below for details.
 
 `score` - (Optional) When multiple load balancing rules match a query, the one with the highest score is chosen (`Int`).
 

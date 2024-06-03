@@ -21,7 +21,8 @@ resource "volterra_gcp_vpc_site" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
-  block_all_services = true
+
+  default_blocked_services = true
 
   // One of the arguments from this list "cloud_credentials" must be set
 
@@ -32,12 +33,20 @@ resource "volterra_gcp_vpc_site" "example" {
   }
   gcp_region    = ["us-west1"]
   instance_type = ["n1-standard-4"]
+
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
-  logs_streaming_disabled = true
+
+  log_receiver {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
+
   // One of the arguments from this list "private_connect_disabled private_connectivity" must be set
+
   private_connect_disabled = true
 
-  // One of the arguments from this list "ingress_gw ingress_egress_gw voltstack_cluster" must be set
+  // One of the arguments from this list "ingress_egress_gw voltstack_cluster ingress_gw" must be set
 
   ingress_gw {
     gcp_certified_hw = "gcp-byol-voltmesh"
@@ -47,8 +56,8 @@ resource "volterra_gcp_vpc_site" "example" {
     local_network {
       // One of the arguments from this list "new_network_autogenerate new_network existing_network" must be set
 
-      new_network_autogenerate {
-        autogenerate = true
+      new_network {
+        name = "network1"
       }
     }
 
@@ -66,6 +75,7 @@ resource "volterra_gcp_vpc_site" "example" {
 
     performance_enhancement_mode {
       // One of the arguments from this list "perf_mode_l7_enhanced perf_mode_l3_enhanced" must be set
+
       perf_mode_l7_enhanced = true
     }
   }
@@ -99,7 +109,7 @@ Argument Reference
 
 `blocked_services` - (Optional) Use custom blocked services configuration. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
 
-`default_blocked_services` - (Optional) Allow access to DNS, SSH & WebUI services on Site (`Bool`).
+`default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (`Bool`).
 
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
 
@@ -114,6 +124,8 @@ Argument Reference
 `gcp_region` - (Required) Name for GCP Region. (`String`).
 
 `instance_type` - (Required) Select Instance size based on performance needed (`String`).
+
+`kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
 
@@ -159,6 +171,16 @@ custom dns configure to the CE site.
 
 `outside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in outside network (`String`).
 
+### Kubernetes Upgrade Drain
+
+Enable Kubernetes Drain during OS or SW upgrade.
+
+###### One of the arguments from this list "disable_upgrade_drain, enable_upgrade_drain" must be set
+
+`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+
+`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
+
 ### Offline Survivability Mode
 
 Enable/Disable offline survivability mode.
@@ -173,7 +195,7 @@ Enable/Disable offline survivability mode.
 
 Operating System Details.
 
-###### One of the arguments from this list "operating_system_version, default_os_version" must be set
+###### One of the arguments from this list "default_os_version, operating_system_version" must be set
 
 `default_os_version` - (Optional) Will assign latest available OS version (`Bool`).
 
@@ -285,7 +307,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -309,7 +331,7 @@ Nexthop for the route.
 
 List of route prefixes.
 
-###### One of the arguments from this list "ipv4, ipv6" must be set
+###### One of the arguments from this list "ipv6, ipv4" must be set
 
 `ipv4` - (Optional) IPv4 Subnet Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
@@ -393,7 +415,7 @@ Global network connections.
 
 Network for the inside interface of the node.
 
-###### One of the arguments from this list "new_network_autogenerate, new_network, existing_network" must be set
+###### One of the arguments from this list "new_network, existing_network, new_network_autogenerate" must be set
 
 `existing_network` - (Optional) Name of existing VPC network.. See [Choice Existing Network ](#choice-existing-network) below for details.
 
@@ -415,7 +437,7 @@ Subnet for the inside interface of the node..
 
 Network for the outside interface of the node.
 
-###### One of the arguments from this list "new_network, existing_network, new_network_autogenerate" must be set
+###### One of the arguments from this list "new_network_autogenerate, new_network, existing_network" must be set
 
 `existing_network` - (Optional) Name of existing VPC network.. See [Choice Existing Network ](#choice-existing-network) below for details.
 
@@ -447,7 +469,7 @@ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
 Network for the local interface of the node.
 
-###### One of the arguments from this list "new_network, existing_network, new_network_autogenerate" must be set
+###### One of the arguments from this list "new_network_autogenerate, new_network, existing_network" must be set
 
 `existing_network` - (Optional) Name of existing VPC network.. See [Choice Existing Network ](#choice-existing-network) below for details.
 
@@ -489,7 +511,7 @@ Static Routes disabled for inside network..
 
 List of Static routes.
 
-###### One of the arguments from this list "custom_static_route, simple_static_route" must be set
+###### One of the arguments from this list "simple_static_route, custom_static_route" must be set
 
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Config Mode Choice Custom Static Route ](#config-mode-choice-custom-static-route) below for details.
 
@@ -509,7 +531,7 @@ Policy to enable/disable specific domains, with implicit enable all domains.
 
 Domain value or regular expression to match.
 
-###### One of the arguments from this list "suffix_value, regex_value, exact_value" must be set
+###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
 
 `exact_value` - (Optional) Exact domain name. (`String`).
 
@@ -520,6 +542,28 @@ Domain value or regular expression to match.
 ### K8s Cluster Choice No K8s Cluster
 
 Site Local K8s API access is disabled.
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+
+Disable Node by Node Upgrade during Software or OS version upgrade.
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
+
+Enable Node by Node Upgrade during Software or OS version upgrade.
+
+###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+
+`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+
+`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
+
+`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+
+###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Network Options Inside
 
@@ -739,7 +783,7 @@ creating ipsec between two sites which are part of the site mesh group.
 
 Two interface site is useful when site is used as ingress/egress gateway to the VPC network..
 
-###### One of the arguments from this list "dc_cluster_group_outside_vn, dc_cluster_group_inside_vn, no_dc_cluster_group" must be set
+###### One of the arguments from this list "no_dc_cluster_group, dc_cluster_group_outside_vn, dc_cluster_group_inside_vn" must be set
 
 `dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
 
@@ -747,7 +791,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
 
-###### One of the arguments from this list "active_forward_proxy_policies, forward_proxy_allow_all, no_forward_proxy" must be set
+###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
@@ -767,7 +811,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `inside_network` - (Optional) Network for the inside interface of the node. See [Ingress Egress Gw Inside Network ](#ingress-egress-gw-inside-network) below for details.
 
-###### One of the arguments from this list "no_inside_static_routes, inside_static_routes" must be set
+###### One of the arguments from this list "inside_static_routes, no_inside_static_routes" must be set
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Route Choice Inside Static Routes ](#inside-static-route-choice-inside-static-routes) below for details.
 
@@ -775,7 +819,7 @@ Two interface site is useful when site is used as ingress/egress gateway to the 
 
 `inside_subnet` - (Optional) Subnet for the inside interface of the node.. See [Ingress Egress Gw Inside Subnet ](#ingress-egress-gw-inside-subnet) below for details.
 
-###### One of the arguments from this list "active_enhanced_firewall_policies, no_network_policy, active_network_policies" must be set
+###### One of the arguments from this list "no_network_policy, active_network_policies, active_enhanced_firewall_policies" must be set
 
 `active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
 
@@ -829,7 +873,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
 
-###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
+###### One of the arguments from this list "forward_proxy_allow_all, no_forward_proxy, active_forward_proxy_policies" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
@@ -847,7 +891,7 @@ App Stack Cluster using single interface, useful for deploying K8s cluster..
 
 `no_global_network` - (Optional) No global network to connect (`Bool`).
 
-###### One of the arguments from this list "k8s_cluster, no_k8s_cluster" must be set
+###### One of the arguments from this list "no_k8s_cluster, k8s_cluster" must be set
 
 `k8s_cluster` - (Optional) Site Local K8s API access is enabled, using k8s_cluster object. See [ref](#ref) below for details.
 
@@ -911,7 +955,7 @@ No TLS interception is enabled for this network connector.
 
 Specify TLS interception configuration for the network connector.
 
-###### One of the arguments from this list "policy, enable_for_all_domains" must be set
+###### One of the arguments from this list "enable_for_all_domains, policy" must be set
 
 `enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
 
@@ -932,6 +976,14 @@ Specify TLS interception configuration for the network connector.
 ### Trusted Ca Choice Volterra Trusted Ca
 
 F5XC Root CA Certificate for validating upstream server certificate.
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Ver Ipv4
 

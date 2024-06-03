@@ -20,8 +20,9 @@ resource "volterra_virtual_network" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "site_local_inside_network legacy_type srv6_network global_network site_local_network" must be set
-  site_local_inside_network = true
+  // One of the arguments from this list "site_local_network site_local_inside_network legacy_type srv6_network global_network" must be set
+
+  global_network = true
 }
 
 ```
@@ -117,7 +118,7 @@ Configure a per site srv6 network.
 
 `access_network_rtargets` - (Optional) Import Route Targets for connectivity to Access Networks.. See [Srv6 Network Access Network Rtargets ](#srv6-network-access-network-rtargets) below for details.
 
-###### One of the arguments from this list "interface_ip_vip, anycast_vip, fleet_vip" must be set
+###### One of the arguments from this list "anycast_vip, fleet_vip, interface_ip_vip" must be set
 
 `anycast_vip` - (Optional) Configure anycast VIP (`String`).
 
@@ -133,7 +134,7 @@ Configure a per site srv6 network.
 
 `internet_rtargets` - (Optional) Import Route Targets for connectivity to the Internet.. See [Srv6 Network Internet Rtargets ](#srv6-network-internet-rtargets) below for details.
 
-###### One of the arguments from this list "srv6_network_ns_params, no_namespace_network" must be set
+###### One of the arguments from this list "no_namespace_network, srv6_network_ns_params" must be set
 
 `no_namespace_network` - (Optional) Namespace network is not connected to this network (`Bool`).
 
@@ -143,7 +144,7 @@ Configure a per site srv6 network.
 
 `slice` - (Required) The srv6_network_slice to which this network belongs.. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "fleet_snat_pool, interface_ip_snat_pool, site_snat_pool" must be set
+###### One of the arguments from this list "interface_ip_snat_pool, site_snat_pool, fleet_snat_pool" must be set
 
 `fleet_snat_pool` - (Optional) Configure address allocator for SNAT pool for a Fleet. See [Snat Pool Choice Fleet Snat Pool ](#snat-pool-choice-fleet-snat-pool) below for details.(Deprecated)
 

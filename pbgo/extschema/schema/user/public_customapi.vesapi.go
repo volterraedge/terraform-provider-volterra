@@ -3622,12 +3622,14 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaAddonServiceAccess": {
             "type": "string",
-            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nPlan based access control denied.\nThis means current plan doesnt allow this addon service.",
+            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nPlan based access control denied. This means current plan doesnt allow this addon service.\nWhen the user clicks on such addon, he will be shown billing plan upgrade page\n - AS_AC_PBAC_DENY_UPGRADE_PLAN: x-displayName: \"PBAC Deny - Upgrade plan\"\nPlan based access control denied. This means current plan doesnt allow this addon service.\nWhen the user clicks on such addon, he will be shown billing plan upgrade page\n - AS_AC_PBAC_DENY_REQUEST_SERVICE: x-displayName: \"PBAC Deny - Request service\"\nPlan based access control denied. This means current plan doesnt allow this addon service.\nWhen the user clicks on such addon, he will be shown request service button which creates a support ticket requesting enablement of the addon.\nSince the addon is not part of the plan, the customer would be advised accordingly by the support team depending on his current plan",
             "title": "AddonServiceAccess",
             "enum": [
                 "AS_AC_NONE",
                 "AS_AC_ALLOWED",
-                "AS_AC_PBAC_DENY"
+                "AS_AC_PBAC_DENY",
+                "AS_AC_PBAC_DENY_UPGRADE_PLAN",
+                "AS_AC_PBAC_DENY_REQUEST_SERVICE"
             ],
             "default": "AS_AC_NONE"
         },
@@ -3808,10 +3810,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",

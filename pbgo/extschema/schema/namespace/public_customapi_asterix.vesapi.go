@@ -43,6 +43,24 @@ func (c *NamespaceMLCustomAPIGrpcClient) doRPCGetApiEndpointsStats(ctx context.C
 	return rsp, err
 }
 
+func (c *NamespaceMLCustomAPIGrpcClient) doRPCGetApiEndpointsStatsAllNamespaces(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &ApiEndpointsStatsAllNSReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.ApiEndpointsStatsAllNSReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetApiEndpointsStatsAllNamespaces(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *NamespaceMLCustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SuggestValuesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.SuggestValuesReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.SuggestValues(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *NamespaceMLCustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -74,6 +92,10 @@ func NewNamespaceMLCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient 
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["GetApiEndpointsStats"] = ccl.doRPCGetApiEndpointsStats
+
+	rpcFns["GetApiEndpointsStatsAllNamespaces"] = ccl.doRPCGetApiEndpointsStatsAllNamespaces
+
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
 	ccl.rpcFns = rpcFns
 
@@ -174,6 +196,175 @@ func (c *NamespaceMLCustomAPIRestClient) doRPCGetApiEndpointsStats(ctx context.C
 	return pbRsp, nil
 }
 
+func (c *NamespaceMLCustomAPIRestClient) doRPCGetApiEndpointsStatsAllNamespaces(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &ApiEndpointsStatsAllNSReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.ApiEndpointsStatsAllNSReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &ApiEndpointsStatsNSRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.ApiEndpointsStatsNSRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *NamespaceMLCustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SuggestValuesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.namespace.SuggestValuesReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("field_path", fmt.Sprintf("%v", req.FieldPath))
+		q.Add("match_value", fmt.Sprintf("%v", req.MatchValue))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("request_body", fmt.Sprintf("%v", req.RequestBody))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SuggestValuesResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.namespace.SuggestValuesResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *NamespaceMLCustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -200,6 +391,10 @@ func NewNamespaceMLCustomAPIRestClient(baseURL string, hc http.Client) server.Cu
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["GetApiEndpointsStats"] = ccl.doRPCGetApiEndpointsStats
 
+	rpcFns["GetApiEndpointsStatsAllNamespaces"] = ccl.doRPCGetApiEndpointsStatsAllNamespaces
+
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -215,6 +410,14 @@ type namespaceMLCustomAPIInprocClient struct {
 func (c *namespaceMLCustomAPIInprocClient) GetApiEndpointsStats(ctx context.Context, in *ApiEndpointsStatsNSReq, opts ...grpc.CallOption) (*ApiEndpointsStatsNSRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStats")
 	return c.NamespaceMLCustomAPIServer.GetApiEndpointsStats(ctx, in)
+}
+func (c *namespaceMLCustomAPIInprocClient) GetApiEndpointsStatsAllNamespaces(ctx context.Context, in *ApiEndpointsStatsAllNSReq, opts ...grpc.CallOption) (*ApiEndpointsStatsNSRsp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStatsAllNamespaces")
+	return c.NamespaceMLCustomAPIServer.GetApiEndpointsStatsAllNamespaces(ctx, in)
+}
+func (c *namespaceMLCustomAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.namespace.NamespaceMLCustomAPI.SuggestValues")
+	return c.NamespaceMLCustomAPIServer.SuggestValues(ctx, in)
 }
 
 func NewNamespaceMLCustomAPIInprocClient(svc svcfw.Service) NamespaceMLCustomAPIClient {
@@ -287,6 +490,104 @@ func (s *namespaceMLCustomAPISrv) GetApiEndpointsStats(ctx context.Context, in *
 
 	return rsp, nil
 }
+func (s *namespaceMLCustomAPISrv) GetApiEndpointsStatsAllNamespaces(ctx context.Context, in *ApiEndpointsStatsAllNSReq) (*ApiEndpointsStatsNSRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceMLCustomAPI")
+	cah, ok := ah.(NamespaceMLCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceMLCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *ApiEndpointsStatsNSRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.ApiEndpointsStatsAllNSReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceMLCustomAPI.GetApiEndpointsStatsAllNamespaces' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStatsAllNamespaces"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetApiEndpointsStatsAllNamespaces(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.ApiEndpointsStatsNSRsp", rsp)...)
+
+	return rsp, nil
+}
+func (s *namespaceMLCustomAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) (*SuggestValuesResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.namespace.NamespaceMLCustomAPI")
+	cah, ok := ah.(NamespaceMLCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *NamespaceMLCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *SuggestValuesResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'NamespaceMLCustomAPI.SuggestValues' operation on 'namespace'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.namespace.NamespaceMLCustomAPI.SuggestValues"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SuggestValues(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.namespace.SuggestValuesResp", rsp)...)
+
+	return rsp, nil
+}
 
 func NewNamespaceMLCustomAPIServer(svc svcfw.Service) NamespaceMLCustomAPIServer {
 	return &namespaceMLCustomAPISrv{svc: svc}
@@ -311,6 +612,90 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/api_endpoints/all_ns_stats": {
+            "post": {
+                "summary": "Get Api Endpoints Stats for All Namespaces",
+                "description": "Get api endpoints stats for all Namespaces. This API is specific to system namespace",
+                "operationId": "ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStatsAllNamespaces",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/namespaceApiEndpointsStatsNSRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceApiEndpointsStatsAllNSReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceMLCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-getapiendpointsstatsallnamespaces"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStatsAllNamespaces"
+            },
+            "x-displayname": "NamespaceMLCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceMLCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/api_endpoints/stats": {
             "post": {
                 "summary": "Get Api Endpoints Stats for Namespace",
@@ -402,9 +787,117 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
             "x-displayname": "NamespaceMLCustomAPI",
             "x-ves-proto-service": "ves.io.schema.namespace.NamespaceMLCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/suggest-values": {
+            "post": {
+                "summary": "Suggest Values",
+                "description": "Returns suggested values for the specified field in the given Create/Replace/Custom request",
+                "operationId": "ves.io.schema.namespace.NamespaceMLCustomAPI.SuggestValues",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/schemanamespaceSuggestValuesResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"foobar\"\nNamespace in which the suggestions are scoped.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/namespaceSuggestValuesReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "NamespaceMLCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-suggestvalues"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceMLCustomAPI.SuggestValues"
+            },
+            "x-displayname": "NamespaceMLCustomAPI",
+            "x-ves-proto-service": "ves.io.schema.namespace.NamespaceMLCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
+        "namespaceApiEndpointsStatsAllNSReq": {
+            "type": "object",
+            "description": "Request shape for GET Api Endpoints Stats All Namespaces",
+            "title": "Api Endpoints stats all namespaces request",
+            "x-displayname": "Api Endpoints Stats All Namespaces Request",
+            "x-ves-proto-message": "ves.io.schema.namespace.ApiEndpointsStatsAllNSReq",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the App type for current request\n\nExample: - \"shared\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "shared"
+                }
+            }
+        },
         "namespaceApiEndpointsStatsNSReq": {
             "type": "object",
             "description": "Request shape for GET Api Endpoints Stats",
@@ -472,6 +965,163 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
                     "title": "number of endpoints",
                     "format": "int32",
                     "x-displayname": "Total Endpoints"
+                }
+            }
+        },
+        "namespaceSuggestValuesReq": {
+            "type": "object",
+            "description": "Request body of SuggestValues request",
+            "title": "SuggestValuesReq",
+            "x-displayname": "Request for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.namespace.SuggestValuesReq",
+            "properties": {
+                "field_path": {
+                    "type": "string",
+                    "description": " JSON path of the field for which the suggested values are being requested.\n\nExample: - \"spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "field_path",
+                    "maxLength": 1024,
+                    "x-displayname": "Field Path",
+                    "x-ves-example": "spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
+                "match_value": {
+                    "type": "string",
+                    "description": " A substring that must be present in either the value or description of each SuggestedItem in the response.\n\nExample: - \"some-substring\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "match_value",
+                    "maxLength": 256,
+                    "x-displayname": "Match Value",
+                    "x-ves-example": "some-substring",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the suggestions are scoped.\n\nExample: - \"foobar\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "foobar"
+                },
+                "request_body": {
+                    "description": " Body of the Create/Replace/Custom request in whose context the suggested values for the field are being requested.",
+                    "title": "request_body",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Request Body"
+                }
+            }
+        },
+        "protobufAny": {
+            "type": "object",
+            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
+            "properties": {
+                "type_url": {
+                    "type": "string",
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
+                    "format": "byte"
+                }
+            }
+        },
+        "schemanamespaceSuggestValuesResp": {
+            "type": "object",
+            "description": "Response body of SuggestValues request",
+            "title": "SuggestValuesResp",
+            "x-displayname": "Response for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.namespace.SuggestValuesResp",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of suggested items.",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/schemanamespaceSuggestedItem"
+                    },
+                    "x-displayname": "Suggested Items"
+                }
+            }
+        },
+        "schemanamespaceSuggestedItem": {
+            "type": "object",
+            "description": "A tuple with a suggested value and it's description.",
+            "title": "SuggestedItem",
+            "x-displayname": "Suggested Item",
+            "x-ves-oneof-field-value_choice": "[\"ref_value\",\"str_value\"]",
+            "x-ves-proto-message": "ves.io.schema.namespace.SuggestedItem",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Optional description for the suggested value.",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "ref_value": {
+                    "description": "Exclusive with [str_value]\n",
+                    "title": "str_value",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Object Reference"
+                },
+                "str_value": {
+                    "type": "string",
+                    "description": "Exclusive with [ref_value]\n",
+                    "title": "str_value",
+                    "x-displayname": "String"
+                },
+                "value": {
+                    "type": "string",
+                    "description": " Suggested value for the field.\n Should use value_choice.str_value instead.",
+                    "title": "value",
+                    "x-displayname": "Value"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         }

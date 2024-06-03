@@ -21,13 +21,14 @@ resource "volterra_discovery" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "no_cluster_id cluster_id" must be set
+
   no_cluster_id = true
 
   // One of the arguments from this list "discovery_k8s discovery_consul" must be set
 
   discovery_k8s {
     access_info {
-      // One of the arguments from this list "connection_info in_cluster kubeconfig_url" must be set
+      // One of the arguments from this list "kubeconfig_url connection_info in_cluster" must be set
 
       kubeconfig_url {
         blindfold_secret_info_internal {
@@ -42,21 +43,27 @@ resource "volterra_discovery" "example" {
 
         // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-        blindfold_secret_info {
-          decryption_provider = "value"
+        vault_secret_info {
+          key = "key_pem"
 
-          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          location = "v1/data/vhost_key"
 
-          store_provider = "value"
+          provider = "vault-vh-provider"
+
+          secret_encoding = "secret_encoding"
+
+          version = "1"
         }
       }
 
       // One of the arguments from this list "isolated reachable" must be set
+
       isolated = true
     }
 
     publish_info {
-      // One of the arguments from this list "dns_delegation disable publish publish_fqdns" must be set
+      // One of the arguments from this list "disable publish publish_fqdns dns_delegation" must be set
+
       disable = true
     }
   }
@@ -168,7 +175,7 @@ Provide kubeconfig file to connect to K8s cluster.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -234,7 +241,7 @@ Configuration to publish VIPs.
 
 Credentials can be kubeconfig file or mTLS using PKI certificates.
 
-###### One of the arguments from this list "kubeconfig_url, connection_info, in_cluster" must be set
+###### One of the arguments from this list "connection_info, in_cluster, kubeconfig_url" must be set
 
 `connection_info` - (Optional) Provide API server access details (endpoint and TLS parameters). See [Config Type Connection Info ](#config-type-connection-info) below for details.
 
@@ -242,7 +249,7 @@ Credentials can be kubeconfig file or mTLS using PKI certificates.
 
 `kubeconfig_url` - (Optional) Provide kubeconfig file to connect to K8s cluster. See [Config Type Kubeconfig Url ](#config-type-kubeconfig-url) below for details.
 
-###### One of the arguments from this list "reachable, isolated" must be set
+###### One of the arguments from this list "isolated, reachable" must be set
 
 `isolated` - (Optional) discovered when Kubernetes cluster is in InCluster mode. (`Bool`).
 
@@ -270,7 +277,7 @@ F5XC Secret. URL for password, needs to be fetched from this path.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -482,7 +489,7 @@ The data may be optionally secured using BlindFold..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 

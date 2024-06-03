@@ -56,7 +56,7 @@ List of L4 protocol match condition and associated traffic rate limits.
 
 Protocol specifys L4 match criteria in a packet.
 
-###### One of the arguments from this list "tcp, icmp, udp, dns" can be set
+###### One of the arguments from this list "dns, tcp, icmp, udp" can be set
 
 `dns` - (Optional) Match all DNS packets. See [Type Dns ](#type-dns) below for details.
 

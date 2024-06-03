@@ -802,6 +802,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *CreateSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -1300,6 +1309,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -2100,6 +2111,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *GetSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -2625,6 +2645,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -3956,6 +3978,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["launch_ike_in_namespace"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("launch_ike_in_namespace"))
@@ -4523,6 +4554,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -5816,6 +5849,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetLocalControlPlaneChoice().(type) {
 	case *ReplaceSpecType_NoLocalControlPlane:
 		if fv, exists := v.FldValidators["local_control_plane_choice.no_local_control_plane"]; exists {
@@ -6314,6 +6356,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -9416,6 +9460,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.CustomDns = f.GetCustomDns()
 	m.GetGpuChoiceFromGlobalSpecType(f)
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodeConfiguration = f.GetMasterNodeConfiguration()
@@ -9454,6 +9499,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.CustomDns = m1.CustomDns
 	m1.SetGpuChoiceToGlobalSpecType(f)
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodeConfiguration = m1.MasterNodeConfiguration
@@ -9886,6 +9932,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.CustomDns = f.GetCustomDns()
 	m.GetGpuChoiceFromGlobalSpecType(f)
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodeConfiguration = f.GetMasterNodeConfiguration()
@@ -9925,6 +9972,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.CustomDns = m1.CustomDns
 	m1.SetGpuChoiceToGlobalSpecType(f)
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodeConfiguration = m1.MasterNodeConfiguration
@@ -10358,6 +10406,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.CustomDns = f.GetCustomDns()
 	m.GetGpuChoiceFromGlobalSpecType(f)
 	m.GetK8SClusterChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLocalControlPlaneChoiceFromGlobalSpecType(f)
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.MasterNodeConfiguration = f.GetMasterNodeConfiguration()
@@ -10396,6 +10445,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.CustomDns = m1.CustomDns
 	m1.SetGpuChoiceToGlobalSpecType(f)
 	m1.SetK8SClusterChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLocalControlPlaneChoiceToGlobalSpecType(f)
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.MasterNodeConfiguration = m1.MasterNodeConfiguration

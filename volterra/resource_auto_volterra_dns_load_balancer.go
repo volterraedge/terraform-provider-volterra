@@ -203,40 +203,34 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 
 									"asn_matcher": {
 
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"asn_sets": {
 
-													Type:       schema.TypeList,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeList,
+													Required: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"kind": {
-																Type:       schema.TypeString,
-																Computed:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Computed: true,
 															},
 
 															"name": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 															"namespace": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 															"tenant": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 														},
 													},
@@ -283,6 +277,84 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+											},
+										},
+									},
+
+									"ip_prefix_list": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_match": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"ip_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"ipv6_prefixes": {
+
+													Type: schema.TypeList,
+
+													Optional: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"ip_prefix_set": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_matcher": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"prefix_sets": {
+
+													Type:     schema.TypeList,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 											},
 										},
@@ -647,6 +719,90 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								clientChoiceInt.GeoLocationSet.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixList{}
+						clientChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+								clientChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+							}
+
+							if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								clientChoiceInt.IpPrefixList.IpPrefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixSet{}
+						clientChoiceInt.IpPrefixSet = &ves_io_schema_policy.IpMatcherType{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+								clientChoiceInt.IpPrefixSet.InvertMatcher = v.(bool)
+
+							}
+
+							if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								clientChoiceInt.IpPrefixSet.PrefixSets = prefixSetsInt
+								for i, ps := range sl {
+
+									psMapToStrVal := ps.(map[string]interface{})
+									prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									prefixSetsInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Uid = v.(string)
+									}
+
+								}
 
 							}
 
@@ -1053,6 +1209,90 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 								clientChoiceInt.GeoLocationSet.Tenant = v.(string)
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["ip_prefix_list"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixList{}
+						clientChoiceInt.IpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
+
+								clientChoiceInt.IpPrefixList.InvertMatch = v.(bool)
+
+							}
+
+							if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									ls[i] = v.(string)
+								}
+								clientChoiceInt.IpPrefixList.IpPrefixes = ls
+
+							}
+
+						}
+
+					}
+
+					if v, ok := rulesMapStrToI["ip_prefix_set"]; ok && !isIntfNil(v) && !clientChoiceTypeFound {
+
+						clientChoiceTypeFound = true
+						clientChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_IpPrefixSet{}
+						clientChoiceInt.IpPrefixSet = &ves_io_schema_policy.IpMatcherType{}
+						rules[i].ClientChoice = clientChoiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
+
+								clientChoiceInt.IpPrefixSet.InvertMatcher = v.(bool)
+
+							}
+
+							if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								clientChoiceInt.IpPrefixSet.PrefixSets = prefixSetsInt
+								for i, ps := range sl {
+
+									psMapToStrVal := ps.(map[string]interface{})
+									prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+
+									prefixSetsInt[i].Kind = "ip_prefix_set"
+
+									if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Name = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Namespace = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Tenant = v.(string)
+									}
+
+									if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+										prefixSetsInt[i].Uid = v.(string)
+									}
+
+								}
 
 							}
 

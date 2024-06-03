@@ -12,9 +12,7 @@ import (
 	"net/http"
 	"strings"
 
-	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	multierror "github.com/hashicorp/go-multierror"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 
@@ -23,8 +21,6 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
-	"gopkg.volterra.us/stdlib/flags"
-	"gopkg.volterra.us/stdlib/log"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
@@ -71,52 +67,6 @@ func NewReplaceRequest(e db.Entry) (*ReplaceRequest, error) {
 	}
 	r.FromObject(e)
 	return r, nil
-}
-
-func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) {
-	strs := strings.Split(key, "/")
-	if len(strs) != 2 {
-		return nil, fmt.Errorf("key must have namespace and name separated by /, but found %s", key)
-	}
-	ccOpts := server.NewCRUDCallOpts()
-	for _, o := range opts {
-		o(ccOpts)
-	}
-	var rspFmt GetResponseFormatCode
-	switch ccOpts.ResponseFormat {
-	case server.DefaultForm:
-		rspFmt = GET_RSP_FORMAT_DEFAULT
-	case server.CreateRequestForm:
-		rspFmt = GET_RSP_FORMAT_FOR_CREATE
-	case server.ReplaceRequestForm:
-		rspFmt = GET_RSP_FORMAT_FOR_REPLACE
-	case server.GetSpecForm:
-		rspFmt = GET_RSP_FORMAT_READ
-	case server.BrokenRefsForm:
-		rspFmt = GET_RSP_FORMAT_BROKEN_REFERENCES
-	default:
-		return nil, fmt.Errorf("Unsupported Response Format %s", ccOpts.ResponseFormat)
-	}
-	return &GetRequest{Namespace: strs[0], Name: strs[1], ResponseFormat: rspFmt}, nil
-}
-func (m *GetRequest) ResponseFormatString() string {
-	return m.GetResponseFormat().String()
-}
-
-func NewListRequest(opts ...server.CRUDCallOpt) *ListRequest {
-	ccOpts := server.NewCRUDCallOpts()
-	for _, o := range opts {
-		o(ccOpts)
-	}
-	return &ListRequest{Namespace: ccOpts.Namespace}
-}
-
-func NewDeleteRequest(key string) (*DeleteRequest, error) {
-	strs := strings.Split(key, "/")
-	if len(strs) != 2 {
-		return nil, fmt.Errorf("key must have namespace and name separated by /, but found %s", key)
-	}
-	return &DeleteRequest{Namespace: strs[0], Name: strs[1]}, nil
 }
 
 // GRPC Client
@@ -213,114 +163,28 @@ func (c *crudAPIGrpcClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 }
 
-func (c *crudAPIGrpcClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*GetResponse, error) {
-	req, err := NewGetRequest(key, opts...)
-	if err != nil {
-		return nil, errors.Wrap(err, "Get")
-	}
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-
-	rsp, err := c.grpcClient.Get(ctx, req, cco.GrpcCallOpts...)
-	if err != nil {
-		return nil, err
-	}
-	if cco.OutResourceVersion != nil {
-		*cco.OutResourceVersion = rsp.ResourceVersion
-	}
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return rsp, nil
-}
-
 func (c *crudAPIGrpcClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	gRsp, err := c.GetRaw(ctx, key, opts...)
-	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
-		return obj, err
-	}
-	return nil, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
 
-	gRsp, err := c.GetRaw(ctx, key, opts...)
-	respDetail := server.GetResponse{}
-	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
-
-		return &respDetail, err
-	}
-	return nil, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIGrpcClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
 
-	idSet := []string{}
-	listRsp, err := c.List(ctx, opts...)
-	if listRsp == nil {
-		return idSet, err
-	}
-	for _, li := range listRsp.GetItems() {
-		idSet = append(idSet, li.GetUid())
-	}
-	return idSet, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIGrpcClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
 
-	sliSet := []server.ListItem{}
-	listRsp, err := c.List(ctx, opts...)
-	if listRsp == nil {
-		return sliSet, err
-	}
-	for _, li := range listRsp.GetItems() {
-		sliSet = append(sliSet, li)
-	}
-	return sliSet, err
+	return nil, fmt.Errorf("Not implemented")
 
-}
-
-func (c *crudAPIGrpcClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ListResponse, error) {
-	req := NewListRequest(opts...)
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
-	}
-	req.ReportFields = cco.ReportFields
-	req.ReportStatusFields = cco.ReportStatusFields
-	rsp, err := c.grpcClient.List(ctx, req, cco.GrpcCallOpts...)
-	if err != nil {
-		return nil, err
-	}
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return rsp, nil
 }
 
 func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
@@ -329,22 +193,7 @@ func (c *crudAPIGrpcClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIGrpcClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	req, err := NewDeleteRequest(key)
-	if err != nil {
-		return errors.Wrap(err, "Delete")
-	}
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	ctx = client.AddHdrsToCtx(cco.Headers, ctx)
-
-	rsp, err := c.grpcClient.Delete(ctx, req, cco.GrpcCallOpts...)
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return err
+	return fmt.Errorf("Not implemented")
 
 }
 
@@ -444,7 +293,10 @@ func (c *crudAPIRestClient) Create(ctx context.Context, e db.Entry, opts ...serv
 	defer rsp.Body.Close()
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return nil, fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 	body, err := io.ReadAll(rsp.Body)
 	if err != nil {
@@ -565,7 +417,10 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 	if rsp.StatusCode != http.StatusOK {
 		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
+		if err != nil {
+			return fmt.Errorf("Unsuccessful POST at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err.Error())
+		}
+		return fmt.Errorf("Unsuccessful PUT at URL %s, status code %d, body %s", url, rsp.StatusCode, body)
 	}
 
 	if _, err := io.ReadAll(rsp.Body); err != nil {
@@ -577,175 +432,28 @@ func (c *crudAPIRestClient) Replace(ctx context.Context, e db.Entry, opts ...ser
 
 }
 
-func (c *crudAPIRestClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*GetResponse, error) {
-	req, err := NewGetRequest(key, opts...)
-	if err != nil {
-		return nil, errors.Wrap(err, "Get")
-	}
-
-	url := fmt.Sprintf("%s/public/namespaces/%s/registrations/%s", c.baseURL, req.Namespace, req.Name)
-	hReq, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	hReq = hReq.WithContext(ctx)
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	client.AddHdrsToReq(cco.Headers, hReq)
-
-	q := hReq.URL.Query()
-	q.Add("response_format", fmt.Sprintf("%d", req.ResponseFormat))
-	hReq.URL.RawQuery += q.Encode()
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, err
-	}
-	defer rsp.Body.Close()
-	if rsp.StatusCode != http.StatusOK {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful GET at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
-	}
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient Get")
-	}
-
-	rspo := &GetResponse{}
-	if err := codec.FromJSON(string(body), rspo); err != nil {
-		return nil, errors.Wrap(err, "Converting json to response protobuf message")
-	}
-	if cco.OutResourceVersion != nil {
-		*cco.OutResourceVersion = rspo.ResourceVersion
-	}
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rspo
-		cco.OutCallResponse.JSON = string(body)
-	}
-	configapi.TranscribeCall(ctx, req, rspo)
-	return rspo, nil
-}
-
 func (c *crudAPIRestClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	gRsp, err := c.GetRaw(ctx, key, opts...)
-	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
-		return obj, err
-	}
-	return nil, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
 
-	gRsp, err := c.GetRaw(ctx, key, opts...)
-	respDetail := server.GetResponse{}
-	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
-
-		return &respDetail, err
-	}
-
-	return nil, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIRestClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
 
-	idSet := []string{}
-	listRsp, err := c.List(ctx, opts...)
-	if listRsp == nil {
-		return idSet, err
-	}
-	for _, li := range listRsp.GetItems() {
-		idSet = append(idSet, li.GetUid())
-	}
-	return idSet, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIRestClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
 
-	sliSet := []server.ListItem{}
-	listRsp, err := c.List(ctx, opts...)
-	if listRsp == nil {
-		return sliSet, err
-	}
-	for _, li := range listRsp.GetItems() {
-		sliSet = append(sliSet, li)
-	}
-	return sliSet, err
+	return nil, fmt.Errorf("Not implemented")
 
-}
-
-func (c *crudAPIRestClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ListResponse, error) {
-	req := NewListRequest(opts...)
-	_ = req
-	url := fmt.Sprintf("%s/public/namespaces/%s/registrations", c.baseURL, req.Namespace)
-
-	hReq, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
-	}
-	hReq = hReq.WithContext(ctx)
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	client.AddHdrsToReq(cco.Headers, hReq)
-
-	q := hReq.URL.Query()
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		q.Add("label_filter", cco.LabelFilter[0])
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
-	}
-
-	for _, fName := range cco.ReportFields {
-		q.Add("report_fields", fName)
-	}
-	for _, fName := range cco.ReportStatusFields {
-		q.Add("report_status_fields", fName)
-	}
-
-	hReq.URL.RawQuery += q.Encode()
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, err
-	}
-	defer rsp.Body.Close()
-	if rsp.StatusCode != http.StatusOK {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful List at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
-	}
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "RestClient List")
-	}
-
-	rspo := &ListResponse{}
-	if err := codec.FromJSON(string(body), rspo); err != nil {
-		return nil, errors.Wrap(err, "Converting json to response protobuf message")
-	}
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rspo
-		cco.OutCallResponse.JSON = string(body)
-	}
-	configapi.TranscribeCall(ctx, req, rspo)
-	return rspo, nil
 }
 
 func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
@@ -754,42 +462,7 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
-	if err != nil {
-		return errors.Wrap(err, "Delete")
-	}
-
-	url := fmt.Sprintf("%s/public/namespaces/%s/registrations/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	client.AddHdrsToReq(cco.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return err
-	}
-	defer rsp.Body.Close()
-
-	if rsp.StatusCode != http.StatusOK {
-		body, err := io.ReadAll(rsp.Body)
-		return fmt.Errorf("Unsuccessful DELETE at URL %s, status code %d, body %s, err %s", url, rsp.StatusCode, body, err)
-	}
-
-	_, err = io.ReadAll(rsp.Body)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	configapi.TranscribeCall(ctx, dReq, nil)
-
-	return nil
+	return fmt.Errorf("Not implemented")
 
 }
 
@@ -817,7 +490,7 @@ func (c *APIInprocClient) Create(ctx context.Context, req *CreateRequest, opts .
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.API.Create", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.API.Create")
 	rsp, err := oah.Create(ctx, req)
 	if err != nil {
 		return rsp, err
@@ -832,56 +505,11 @@ func (c *APIInprocClient) Replace(ctx context.Context, req *ReplaceRequest, opts
 		err := fmt.Errorf("No CRUD Server for ves.io.schema.registration")
 		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.API.Replace", nil)
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.API.Replace")
 	if rsp, err := oah.Replace(ctx, req); err != nil {
 		return rsp, err
 	}
 	return NewObjectReplaceRsp(nil)
-}
-
-func (c *APIInprocClient) Get(ctx context.Context, req *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.registration.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		err := fmt.Errorf("No CRUD Server for ves.io.schema.registration")
-		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.API.Get", nil)
-	rsp, err := oah.Get(ctx, req)
-	if err != nil {
-		return rsp, err
-	}
-	return rsp, nil
-}
-
-func (c *APIInprocClient) List(ctx context.Context, req *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.registration.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		err := fmt.Errorf("No CRUD Server for ves.io.schema.registration")
-		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.API.List", nil)
-	rsp, err := oah.List(ctx, req)
-	if err != nil {
-		return rsp, err
-	}
-	return rsp, nil
-}
-
-func (c *APIInprocClient) Delete(ctx context.Context, req *DeleteRequest, opts ...grpc.CallOption) (*google_protobuf.Empty, error) {
-	ah := c.svc.GetAPIHandler("ves.io.schema.registration.API")
-	oah, ok := ah.(*APISrv)
-	if !ok {
-		err := fmt.Errorf("No CRUD Server for ves.io.schema.registration")
-		return nil, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-	ctx = server.ContextFromInprocReq(ctx, "ves.io.schema.registration.API.Delete", nil)
-	rsp, err := oah.Delete(ctx, req)
-	if err != nil {
-		return rsp, err
-	}
-	return rsp, nil
 }
 
 func NewAPIInprocClient(svc svcfw.Service) APIClient {
@@ -957,108 +585,28 @@ func (c *crudAPIInprocClient) Replace(ctx context.Context, e db.Entry, opts ...s
 
 }
 
-func (c *crudAPIInprocClient) GetRaw(ctx context.Context, key string, opts ...server.CRUDCallOpt) (*GetResponse, error) {
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-	req, err := NewGetRequest(key, opts...)
-	if err != nil {
-		return nil, errors.Wrap(err, "Get")
-	}
-	rsp, err := c.cl.Get(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-	if cco.OutResourceVersion != nil {
-		*cco.OutResourceVersion = rsp.ResourceVersion
-	}
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return rsp, nil
-}
-
 func (c *crudAPIInprocClient) Get(ctx context.Context, key string, opts ...server.CRUDCallOpt) (db.Entry, error) {
 
-	gRsp, err := c.GetRaw(ctx, key, opts...)
-	if gRsp != nil {
-		obj := NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(obj)
-		}
-		return obj, err
-	}
-	return nil, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.NewEntryFunc, opts ...server.CRUDCallOpt) (*server.GetResponse, error) {
 
-	gRsp, err := c.GetRaw(ctx, key, opts...)
-	respDetail := server.GetResponse{}
-	if gRsp != nil {
-		respDetail.Entry = NewDBObject(gRsp.Object)
-		if gRsp.Object == nil {
-			gRsp.ToObject(respDetail.Entry)
-		}
-
-		return &respDetail, err
-	}
-
-	return nil, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIInprocClient) ListIDs(ctx context.Context, opts ...server.CRUDCallOpt) ([]string, error) {
 
-	idSet := []string{}
-	listRsp, err := c.List(ctx, opts...)
-	if listRsp == nil {
-		return idSet, err
-	}
-	for _, li := range listRsp.GetItems() {
-		idSet = append(idSet, li.GetUid())
-	}
-	return idSet, err
+	return nil, fmt.Errorf("Not implemented")
 
 }
 
 func (c *crudAPIInprocClient) ListItems(ctx context.Context, opts ...server.CRUDCallOpt) ([]server.ListItem, error) {
 
-	sliSet := []server.ListItem{}
-	listRsp, err := c.List(ctx, opts...)
-	if listRsp == nil {
-		return sliSet, err
-	}
-	for _, li := range listRsp.GetItems() {
-		sliSet = append(sliSet, li)
-	}
-	return sliSet, err
+	return nil, fmt.Errorf("Not implemented")
 
-}
-
-func (c *crudAPIInprocClient) List(ctx context.Context, opts ...server.CRUDCallOpt) (*ListResponse, error) {
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-
-	req := NewListRequest(opts...)
-	switch len(cco.LabelFilter) {
-	case 0:
-	case 1:
-		req.LabelFilter = cco.LabelFilter[0]
-	default:
-		return nil, fmt.Errorf("Only one label selector expression can be provided, got %d: %s", len(cco.LabelFilter), cco.LabelFilter)
-	}
-
-	rsp, err := c.cl.List(ctx, req)
-
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return rsp, err
 }
 
 func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRUDCallOpt) (server.ListStreamRsp, error) {
@@ -1067,22 +615,7 @@ func (c *crudAPIInprocClient) ListStream(ctx context.Context, opts ...server.CRU
 
 func (c *crudAPIInprocClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	cco := server.NewCRUDCallOpts()
-	for _, opt := range opts {
-		opt(cco)
-	}
-
-	req, err := NewDeleteRequest(key)
-	if err != nil {
-		return errors.Wrap(err, "Delete")
-	}
-
-	rsp, err := c.cl.Delete(ctx, req)
-
-	if cco.OutCallResponse != nil {
-		cco.OutCallResponse.ProtoMsg = rsp
-	}
-	return err
+	return fmt.Errorf("Not implemented")
 
 }
 
@@ -1217,133 +750,6 @@ func (s *APISrv) Replace(ctx context.Context, req *ReplaceRequest) (*ReplaceResp
 	return rsp, nil
 }
 
-func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
-	if s.sf.Config().EnableAPIValidation {
-		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Get"); rvFn != nil {
-			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-	tenant := server.TenantFromContext(ctx)
-	rsrcReq := &server.ResourceGetRequest{IsPublic: true, Tenant: tenant, Namespace: req.GetNamespace(), Name: req.GetName()}
-	switch req.ResponseFormat {
-	case GET_RSP_FORMAT_FOR_CREATE:
-		rsrcReq.RspInCreateForm = true
-
-	case GET_RSP_FORMAT_FOR_REPLACE:
-		rsrcReq.RspInReplaceForm = true
-
-	case GET_RSP_FORMAT_READ:
-		rsrcReq.RspInReadForm = true
-
-	case GET_RSP_FORMAT_REFERRING_OBJECTS:
-		rsrcReq.RspInReferringObjectsForm = true
-
-	case GET_RSP_FORMAT_BROKEN_REFERENCES:
-		rsrcReq.RspInBrokenReferencesForm = true
-
-	}
-
-	rsrcRsp, err := s.opts.RsrcHandler.GetFn(ctx, rsrcReq, s.apiWrapper)
-	if err != nil {
-		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "GetResource"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-	rsp, err := NewObjectGetRsp(ctx, s.sf, req, rsrcRsp)
-	if err != nil {
-		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "GetResponse"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-	rspMsgFQN := "ves.io.schema.registration.GetResponse"
-	if conv, exists := s.sf.Config().ObjToMsgConverters[rspMsgFQN]; exists {
-		if err := conv(rsrcRsp.Entry, rsp); err != nil {
-			return nil, err
-		}
-	}
-	return rsp, nil
-}
-
-func (s *APISrv) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
-	if s.sf.Config().EnableAPIValidation {
-		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.List"); rvFn != nil {
-			if err := rvFn(ctx, req); err != nil {
-				err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-	var merr *multierror.Error
-	rsrcReq := &server.ResourceListRequest{
-		Namespace:   req.Namespace,
-		LabelFilter: req.LabelFilter,
-		RspStreamed: false,
-	}
-	if len(req.ReportStatusFields) > 0 {
-		rsrcReq.ReportStatusFields = &req.ReportStatusFields
-	}
-	rsrcRsp, err := s.opts.RsrcHandler.ListFn(ctx, rsrcReq, s.apiWrapper)
-	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "ListResource"))
-	}
-	rsp, err := NewListResponse(ctx, req, s.sf, rsrcRsp)
-	if err != nil {
-		merr = multierror.Append(merr, errors.Wrap(err, "ListResponse allocation failed"))
-	}
-	if merr != nil {
-		if rsp == nil {
-			return nil, merr
-		}
-		rsp.Errors = append(rsp.Errors, &ves_io_schema.ErrorType{
-			Code:    ves_io_schema.EINTERNAL,
-			Message: merr.Error(),
-		})
-
-	}
-	return rsp, nil
-}
-
-func (s *APISrv) Delete(ctx context.Context, req *DeleteRequest) (*google_protobuf.Empty, error) {
-	if err := s.validateTransport(ctx); err != nil {
-		return nil, err
-	}
-	if s.sf.Config().EnableAPIValidation {
-		if rvFn := s.sf.GetRPCValidator("ves.io.schema.registration.API.Delete"); rvFn != nil {
-			if err := rvFn(ctx, req); err != nil {
-				if !server.NoReqValidateFromContext(ctx) {
-					err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "Validating Request"))
-					return nil, server.GRPCStatusFromError(err).Err()
-				}
-				s.sf.Logger().Warn(server.NoReqValidateAcceptLog, zap.String("rpc_fqn", "ves.io.schema.registration.API.Delete"), zap.Error(err))
-			}
-		}
-	}
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.sf, "ves.io.schema.registration.API.DeleteRequest", req)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-	}()
-
-	tenant := server.TenantFromContext(ctx)
-	key := fmt.Sprintf("%s/%s/%s", tenant, req.GetNamespace(), req.GetName())
-	rsrcReq := &server.ResourceDeleteRequest{Key: key}
-	rsrcReq.FailIfReferred = req.FailIfReferred
-	_, err := s.opts.RsrcHandler.DeleteFn(ctx, rsrcReq, s.apiWrapper)
-	if err != nil {
-		err := server.MaybePublicRestError(ctx, errors.Wrapf(err, "DeleteResource"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-	return &google_protobuf.Empty{}, nil
-}
-
 // Assert that APISrv implements the generated gRPC APIServer interface
 var _ APIServer = &APISrv{}
 
@@ -1378,35 +784,6 @@ func (r *Object) Uid() string {
 	return r.SystemMetadata.Uid
 }
 
-func (r *ListResponse) GetKeys() []string {
-	var ret []string
-	for _, i := range r.Items {
-		ret = append(ret, i.Namespace+"/"+i.Name)
-	}
-	return ret
-}
-
-// Implement server.SROListItem interface on ListResponseItem
-func (l *ListResponseItem) GetObjUid() string {
-	return l.Uid
-}
-
-func (l *ListResponseItem) GetObjTenant() string {
-	return l.Tenant
-}
-
-func (l *ListResponseItem) GetObjNamespace() string {
-	return l.Namespace
-}
-
-func (l *ListResponseItem) GetObjName() string {
-	return l.Name
-}
-
-func (l *ListResponseItem) GetObjLabels() map[string]string {
-	return l.Labels
-}
-
 func NewObjectCreateRsp(e db.Entry) (*CreateResponse, error) {
 	switch e.(type) {
 	case nil:
@@ -1421,213 +798,6 @@ func NewObjectCreateRsp(e db.Entry) (*CreateResponse, error) {
 
 func NewObjectReplaceRsp(e db.Entry) (*ReplaceResponse, error) {
 	return &ReplaceResponse{}, nil
-}
-
-func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsrcRsp *server.ResourceGetResponse) (*GetResponse, error) {
-	rsp := &GetResponse{}
-	e := rsrcRsp.Entry
-	if e == nil {
-		return rsp, nil
-	}
-	o, ok := e.(*DBObject)
-	if !ok {
-		return nil, fmt.Errorf("entry not of type *DBObject in NewObjectGetRsp")
-	}
-
-	rsp.ResourceVersion = rsrcRsp.ResourceVersion
-	var merr *multierror.Error
-	buildReadForm := func() {
-		rsp.Metadata = &ves_io_schema.ObjectGetMetaType{}
-		rsp.Metadata.FromObjectMetaType(o.Metadata)
-		rsp.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
-		rsp.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-		rsp.Spec = &GetSpecType{}
-		if redactor, ok := e.(db.Redactor); ok {
-			if err := redactor.Redact(ctx); err != nil {
-				merr = multierror.Append(merr, errors.WithMessage(err, "Error while redacting entry"))
-				return
-			}
-		}
-		rsp.Spec.FromGlobalSpecType(o.Spec.GcSpec)
-
-	}
-	_ = buildReadForm
-	buildStatusForm := func() {
-
-	}
-	_ = buildStatusForm
-	buildReferringObjectsForm := func() {
-		for _, br := range rsrcRsp.ReferringObjects {
-			rsp.ReferringObjects = append(rsp.ReferringObjects, &ves_io_schema.ObjectRefType{
-				Kind:      db.KindForEntryType(br.Type),
-				Uid:       br.UID,
-				Tenant:    br.Tenant,
-				Namespace: br.Namespace,
-				Name:      br.Name,
-			})
-		}
-
-	}
-	_ = buildReferringObjectsForm
-	buildBrokenReferencesForm := func() {
-		for _, br := range rsrcRsp.DeletedReferredObjects {
-			rsp.DeletedReferredObjects = append(rsp.DeletedReferredObjects, &ves_io_schema.ObjectRefType{
-				Kind:      db.KindForEntryType(br.Type),
-				Uid:       br.UID,
-				Tenant:    br.Tenant,
-				Namespace: br.Namespace,
-				Name:      br.Name,
-			})
-		}
-		for _, br := range rsrcRsp.DisabledReferredObjects {
-			rsp.DisabledReferredObjects = append(rsp.DisabledReferredObjects, &ves_io_schema.ObjectRefType{
-				Kind:      db.KindForEntryType(br.Type),
-				Uid:       br.UID,
-				Tenant:    br.Tenant,
-				Namespace: br.Namespace,
-				Name:      br.Name,
-			})
-		}
-
-	}
-	_ = buildBrokenReferencesForm
-
-	switch req.ResponseFormat {
-
-	case GET_RSP_FORMAT_FOR_CREATE:
-		createReq, err := NewCreateRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Building CreateRequest from entry")
-		}
-		// Name has to be specified for a new create
-		createReq.Metadata.Name = ""
-		rsp.CreateForm = createReq
-
-	case GET_RSP_FORMAT_FOR_REPLACE:
-		replaceReq, err := NewReplaceRequest(e)
-		if err != nil {
-			return nil, errors.Wrap(err, "Building ReplaceRequest from entry")
-		}
-		rsp.ReplaceForm = replaceReq
-
-	case GET_RSP_FORMAT_READ:
-		buildReadForm()
-
-	case GET_RSP_FORMAT_REFERRING_OBJECTS:
-		buildReferringObjectsForm()
-
-	case GET_RSP_FORMAT_BROKEN_REFERENCES:
-		buildBrokenReferencesForm()
-
-	default:
-		noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-		if !noDBForm {
-			rsp.Object = o.Object
-			sf.Logger().Alert(svcfw.GetResponseInDBForm,
-				log.MinorAlert,
-				zap.String("user", server.UserFromContext(ctx)),
-				zap.String("useragent", server.UseragentStrFromContext(ctx)),
-				zap.String("operation", "Get"),
-			)
-			buildReadForm()
-
-		} else {
-			buildReadForm()
-
-		}
-		buildStatusForm()
-	}
-
-	return rsp, errors.ErrOrNil(merr)
-}
-
-func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rsrcRsp *server.ResourceListResponse) (*ListResponse, error) {
-	if req == nil {
-		return nil, fmt.Errorf("Nil ListRequest")
-	}
-	if rsrcRsp == nil {
-		return nil, fmt.Errorf("Nil ResourceResponse")
-	}
-
-	errStrs := []string{}
-	resp := &ListResponse{}
-	resp.Items = []*ListResponseItem{}
-
-	for _, rsrcItem := range rsrcRsp.Items {
-		if rsrcItem == nil {
-			errStrs = append(errStrs, fmt.Sprintf("Nil ResourceListResponseItem"))
-			continue
-		}
-
-		e := rsrcItem.Entry
-		o, ok := e.(*DBObject)
-		if !ok {
-			resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
-				Code:    ves_io_schema.EINTERNAL,
-				Message: fmt.Sprintf("Entry %T not of type *DBObject in NewListResponse", e),
-			})
-
-			continue
-		}
-		if redactor, ok := e.(db.Redactor); ok {
-			if err := redactor.Redact(ctx); err != nil {
-				resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
-					Code:    ves_io_schema.EINTERNAL,
-					Message: fmt.Sprintf("Error while redacting in NewListResponse: %s", err),
-				})
-				continue
-			}
-		}
-		item := &ListResponseItem{
-			Tenant:    o.GetSystemMetadata().GetTenant(),
-			Namespace: o.GetMetadata().GetNamespace(),
-			Name:      o.GetMetadata().GetName(),
-			Uid:       o.GetMetadata().GetUid(),
-			OwnerView: o.GetSystemMetadata().GetOwnerView(),
-			Labels:    o.GetMetadata().GetLabels(),
-		}
-
-		item.Description = o.GetMetadata().GetDescription()
-		item.Annotations = o.GetMetadata().GetAnnotations()
-		item.Disabled = o.GetMetadata().GetDisable()
-
-		if len(req.ReportFields) > 0 {
-			noDBForm, _ := flags.GetEnvGetRspNoDBForm()
-			if !noDBForm {
-				item.Object = o.Object
-			}
-
-			item.Metadata = &ves_io_schema.ObjectGetMetaType{}
-			item.Metadata.FromObjectMetaType(o.Metadata)
-			item.SystemMetadata = &ves_io_schema.SystemObjectGetMetaType{}
-			item.SystemMetadata.FromSystemObjectMetaType(o.SystemMetadata)
-
-			if o.Object.GetSpec().GetGcSpec() != nil {
-				msgFQN := "ves.io.schema.registration.GetResponse"
-				if conv, exists := sf.Config().ObjToMsgConverters[msgFQN]; exists {
-					getSpec := &GetSpecType{}
-					getSpec.FromGlobalSpecType(o.Spec.GcSpec)
-					getRsp := &GetResponse{Spec: getSpec}
-					if err := conv(o, getRsp); err != nil {
-						resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
-							Code:    ves_io_schema.EINTERNAL,
-							Message: fmt.Sprintf("Converting entry to getResponse: %s", err),
-						})
-
-						continue
-					}
-					item.GetSpec = getRsp.Spec
-				} else {
-					item.GetSpec = &GetSpecType{}
-					item.GetSpec.FromGlobalSpecType(o.Spec.GcSpec)
-				}
-			}
-
-		}
-
-		resp.Items = append(resp.Items, item)
-	}
-	return resp, nil
 }
 
 func RegisterGwAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interface{}) error {
@@ -1848,324 +1018,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Registration",
             "x-ves-proto-service": "ves.io.schema.registration.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
-        },
-        "/public/namespaces/{namespace}/registrations": {
-            "get": {
-                "summary": "List Registration",
-                "description": "List the set of registration in a namespace",
-                "operationId": "ves.io.schema.registration.API.List",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/registrationListResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "namespace",
-                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace to scope the listing of registration",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Namespace"
-                    },
-                    {
-                        "name": "label_filter",
-                        "description": "x-example: \"env in (staging, testing), tier in (web, db)\"\nA LabelSelectorType expression that every item in list response will satisfy",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "x-displayname": "Label Filter"
-                    },
-                    {
-                        "name": "report_fields",
-                        "description": "x-example: \"\"\nExtra fields to return along with summary fields",
-                        "in": "query",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi",
-                        "x-displayname": "Report Fields"
-                    },
-                    {
-                        "name": "report_status_fields",
-                        "description": "x-example: \"\"\nExtra status fields to return along with summary fields",
-                        "in": "query",
-                        "required": false,
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi",
-                        "x-displayname": "Report Status Fields"
-                    }
-                ],
-                "tags": [
-                    "API"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-api-list"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.registration.API.List"
-            },
-            "x-displayname": "Registration",
-            "x-ves-proto-service": "ves.io.schema.registration.API",
-            "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
-        },
-        "/public/namespaces/{namespace}/registrations/{name}": {
-            "get": {
-                "summary": "Get Registration",
-                "description": "Get registration specification",
-                "operationId": "ves.io.schema.registration.API.Get",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/registrationGetResponse"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "namespace",
-                        "description": "namespace\n\nx-example: \"ns1\"\nThe namespace in which the configuration object is present",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Namespace"
-                    },
-                    {
-                        "name": "name",
-                        "description": "name\n\nx-example: \"name\"\nThe name of the configuration object to be fetched",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Name"
-                    },
-                    {
-                        "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in CreateRequest format\nResponse should be in ReplaceRequest format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
-                        "in": "query",
-                        "required": false,
-                        "type": "string",
-                        "enum": [
-                            "GET_RSP_FORMAT_DEFAULT",
-                            "GET_RSP_FORMAT_FOR_CREATE",
-                            "GET_RSP_FORMAT_FOR_REPLACE",
-                            "GET_RSP_FORMAT_READ",
-                            "GET_RSP_FORMAT_REFERRING_OBJECTS",
-                            "GET_RSP_FORMAT_BROKEN_REFERENCES"
-                        ],
-                        "default": "GET_RSP_FORMAT_DEFAULT",
-                        "x-displayname": "Broken Referred Objects"
-                    }
-                ],
-                "tags": [
-                    "API"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-api-get"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.registration.API.Get"
-            },
-            "delete": {
-                "summary": "Delete Registration",
-                "description": "Delete the specified registration",
-                "operationId": "ves.io.schema.registration.API.Delete",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {}
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "namespace",
-                        "description": "namespace\n\nx-example: \"ns1\"\nNamespace in which the configuration object is present",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Namespace"
-                    },
-                    {
-                        "name": "name",
-                        "description": "name\n\nx-example: \"name\"\nName of the configuration object",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "x-displayname": "Name"
-                    },
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/registrationDeleteRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "API"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-api-delete"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.registration.API.Delete"
-            },
-            "x-displayname": "Registration",
-            "x-ves-proto-service": "ves.io.schema.registration.API",
-            "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         }
     },
     "definitions": {
@@ -2175,50 +1027,6 @@ var APISwaggerJSON string = `{
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
-        },
-        "ioschemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
         },
         "ioschemaStatusType": {
             "type": "object",
@@ -2248,21 +1056,6 @@ var APISwaggerJSON string = `{
                     "title": "status",
                     "x-displayname": "Status",
                     "x-ves-example": "value"
-                }
-            }
-        },
-        "protobufAny": {
-            "type": "object",
-            "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
-            "properties": {
-                "type_url": {
-                    "type": "string",
-                    "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n-path/google.protobuf.Duration-). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme -http-, -https-, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, -https- is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com.\n\nSchemes other than -http-, -https- (or the empty scheme) might be\nused with implementation specific semantics."
-                },
-                "value": {
-                    "type": "string",
-                    "description": "Must be a valid serialized protocol buffer of the above specified type.",
-                    "format": "byte"
                 }
             }
         },
@@ -2310,122 +1103,6 @@ var APISwaggerJSON string = `{
                     "x-displayname": "System Metadata"
                 }
             }
-        },
-        "registrationDeleteRequest": {
-            "type": "object",
-            "description": "This is the input message of the 'Delete' RPC.",
-            "title": "DeleteRequest is used to delete a registration",
-            "x-displayname": "Delete Request",
-            "x-ves-proto-message": "ves.io.schema.registration.DeleteRequest",
-            "properties": {
-                "fail_if_referred": {
-                    "type": "boolean",
-                    "description": " Fail the delete operation if this object is being referred by other objects",
-                    "title": "fail_if_referred",
-                    "format": "boolean",
-                    "x-displayname": "Fail-If-Referred"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "name"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                }
-            }
-        },
-        "registrationGetResponse": {
-            "type": "object",
-            "description": "This is the output message of the 'Get' RPC",
-            "title": "GetResponse is the shape of a read registration",
-            "x-displayname": "Get Response",
-            "x-ves-proto-message": "ves.io.schema.registration.GetResponse",
-            "properties": {
-                "create_form": {
-                    "description": "Format used to create a new similar object",
-                    "title": "create_form",
-                    "$ref": "#/definitions/registrationCreateRequest",
-                    "x-displayname": "CreateRequest Format"
-                },
-                "deleted_referred_objects": {
-                    "type": "array",
-                    "description": "The set of deleted objects that are referred by this object",
-                    "title": "deleted_referred_objects",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Deleted Referred Objects"
-                },
-                "disabled_referred_objects": {
-                    "type": "array",
-                    "description": "The set of deleted objects that are referred by this object",
-                    "title": "disabled_referred_objects",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Disabled Referred Objects"
-                },
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectGetMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "object": {
-                    "title": "object",
-                    "$ref": "#/definitions/registrationObject",
-                    "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
-                },
-                "referring_objects": {
-                    "type": "array",
-                    "description": "The set of objects that are referring to this object in their spec",
-                    "title": "referring_objects",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Referring Objects"
-                },
-                "replace_form": {
-                    "description": "Format to replace changeable values in object",
-                    "title": "replace_form",
-                    "$ref": "#/definitions/registrationReplaceRequest",
-                    "x-displayname": "ReplaceRequest Format"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the registration",
-                    "title": "spec",
-                    "$ref": "#/definitions/schemaregistrationGetSpecType",
-                    "x-displayname": "Spec"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system metadata",
-                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "registrationGetResponseFormatCode": {
-            "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
-            "title": "GetResponseFormatCode",
-            "enum": [
-                "GET_RSP_FORMAT_DEFAULT",
-                "GET_RSP_FORMAT_FOR_CREATE",
-                "GET_RSP_FORMAT_FOR_REPLACE",
-                "GET_RSP_FORMAT_READ",
-                "GET_RSP_FORMAT_REFERRING_OBJECTS",
-                "GET_RSP_FORMAT_BROKEN_REFERENCES"
-            ],
-            "default": "GET_RSP_FORMAT_DEFAULT"
         },
         "registrationInfra": {
             "type": "object",
@@ -2583,180 +1260,6 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "string:///LS0tLS1CRUdJTiBDRxxxx"
                 }
             }
-        },
-        "registrationListResponse": {
-            "type": "object",
-            "description": "This is the output message of 'List' RPC.",
-            "title": "ListResponse is the collection of registration",
-            "x-displayname": "List Response",
-            "x-ves-proto-message": "ves.io.schema.registration.ListResponse",
-            "properties": {
-                "errors": {
-                    "type": "array",
-                    "description": " Errors(if any) while listing items from collection",
-                    "title": "errors",
-                    "items": {
-                        "$ref": "#/definitions/schemaErrorType"
-                    },
-                    "x-displayname": "Errors"
-                },
-                "items": {
-                    "type": "array",
-                    "description": " items represents the collection in response",
-                    "title": "items",
-                    "items": {
-                        "$ref": "#/definitions/registrationListResponseItem"
-                    },
-                    "x-displayname": "Items"
-                }
-            }
-        },
-        "registrationListResponseItem": {
-            "type": "object",
-            "description": "By default a summary of registration is returned in 'List'. By setting\n'report_fields' in the ListRequest more details of each item can be got.",
-            "title": "ListResponseItem is an individual item in a collection of registration",
-            "x-displayname": "List Item",
-            "x-ves-proto-message": "ves.io.schema.registration.ListResponseItem",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " The set of annotations present on this registration",
-                    "title": "annotations",
-                    "x-displayname": "Annotations"
-                },
-                "description": {
-                    "type": "string",
-                    "description": " The description set for this registration",
-                    "title": "description",
-                    "x-displayname": "Description"
-                },
-                "disabled": {
-                    "type": "boolean",
-                    "description": " A value of true indicates registration is administratively disabled",
-                    "title": "disabled",
-                    "format": "boolean",
-                    "x-displayname": "Disabled"
-                },
-                "get_spec": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object",
-                    "title": "get_spec",
-                    "$ref": "#/definitions/schemaregistrationGetSpecType",
-                    "x-displayname": "Get Specification"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " The set of labels present on this registration",
-                    "title": "labels",
-                    "x-displayname": "Labels"
-                },
-                "metadata": {
-                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectGetMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " The name of this registration\n\nExample: - \"name\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "name"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " The namespace this item belongs to\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "object": {
-                    "description": " If ListRequest has any specified report_fields, it will appear in object\n DEPRECATED by get_spec, metadata and system_metadata",
-                    "title": "object",
-                    "$ref": "#/definitions/registrationObject",
-                    "x-displayname": "Object"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "system_metadata": {
-                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
-                    "x-displayname": "System Metadata"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " The tenant this item belongs to\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " The unique uid of this registration\n\nExample: - \"d27938ba-967e-40a7-9709-57b8627f9f75\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
-                }
-            }
-        },
-        "registrationObject": {
-            "type": "object",
-            "description": "Registration object stores node registration and information regarding the node",
-            "title": "Registration object",
-            "x-displayname": "Object",
-            "x-ves-displayorder": "1,2,3,4",
-            "x-ves-proto-message": "ves.io.schema.registration.Object",
-            "properties": {
-                "metadata": {
-                    "description": " Standard object's metadata",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaObjectMetaType",
-                    "x-displayname": "Metadata"
-                },
-                "spec": {
-                    "description": " Specification of the desired behavior of the registration",
-                    "title": "spec",
-                    "$ref": "#/definitions/registrationSpecType",
-                    "x-displayname": "Spec"
-                },
-                "status": {
-                    "description": " Most recently observed status of the registration",
-                    "title": "status\nx-displayName: \"Status\"\nMost recently observed status of the registration",
-                    "$ref": "#/definitions/schemaregistrationStatusType",
-                    "x-displayname": "Status"
-                },
-                "system_metadata": {
-                    "description": " System generated object's metadata",
-                    "title": "system_metadata",
-                    "$ref": "#/definitions/schemaSystemObjectMetaType",
-                    "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "registrationObjectState": {
-            "type": "string",
-            "description": "Defines states for registration object\n\nState isn't set\nObject was created (registration request was received and object created)\nRegistration was approved and waiting for configuration\nThis state can be set by user only if current state is NEW\nRegistration is approved and prepared for  to connect\nIt can't be set manually.\nRegistration isn't valid anymore and it will be deleted in near future\nThis state can be set by user anytime.\nRegistration is failed (vpm reported or timeout)\nDEPRECATED. Registration is reported as finished (workload was deployed)\nUser action is required\nRegistration is online\nOperating system upgrade is in progress\nMaintenance is in progress",
-            "title": "ObjectState",
-            "enum": [
-                "NOTSET",
-                "NEW",
-                "APPROVED",
-                "ADMITTED",
-                "RETIRED",
-                "FAILED",
-                "DONE",
-                "PENDING",
-                "ONLINE",
-                "UPGRADING",
-                "MAINTENANCE"
-            ],
-            "default": "NOTSET",
-            "x-displayname": "Object State",
-            "x-ves-proto-enum": "ves.io.schema.registration.ObjectState"
         },
         "registrationPassport": {
             "type": "object",
@@ -2930,67 +1433,6 @@ var APISwaggerJSON string = `{
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.registration.ReplaceResponse"
         },
-        "registrationSpecType": {
-            "type": "object",
-            "description": "Shape of the registration specification",
-            "title": "Shape of the token specification",
-            "x-displayname": "Specification",
-            "x-ves-proto-message": "ves.io.schema.registration.SpecType",
-            "properties": {
-                "gc_spec": {
-                    "title": "gc_spec",
-                    "$ref": "#/definitions/schemaregistrationGlobalSpecType",
-                    "x-displayname": "GC Spec"
-                }
-            }
-        },
-        "schemaErrorCode": {
-            "type": "string",
-            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
-            "title": "ErrorCode",
-            "enum": [
-                "EOK",
-                "EPERMS",
-                "EBADINPUT",
-                "ENOTFOUND",
-                "EEXISTS",
-                "EUNKNOWN",
-                "ESERIALIZE",
-                "EINTERNAL",
-                "EPARTIAL"
-            ],
-            "default": "EOK",
-            "x-displayname": "Error Code",
-            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
-        },
-        "schemaErrorType": {
-            "type": "object",
-            "description": "Information about a error in API operation",
-            "title": "ErrorType",
-            "x-displayname": "Error Type",
-            "x-ves-proto-message": "ves.io.schema.ErrorType",
-            "properties": {
-                "code": {
-                    "description": " A simple general code by category",
-                    "title": "code",
-                    "$ref": "#/definitions/schemaErrorCode",
-                    "x-displayname": "Code"
-                },
-                "error_obj": {
-                    "description": " A structured error object for machine parsing",
-                    "title": "error_obj",
-                    "$ref": "#/definitions/protobufAny",
-                    "x-displayname": "Error Object"
-                },
-                "message": {
-                    "type": "string",
-                    "description": " A human readable string of the error\n\nExample: - \"value\"-",
-                    "title": "message",
-                    "x-displayname": "Message",
-                    "x-ves-example": "value"
-                }
-            }
-        },
         "schemaInitializerType": {
             "type": "object",
             "description": "Initializer is information about an initializer that has not yet completed.",
@@ -3051,10 +1493,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3111,10 +1557,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3148,75 +1598,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
-                }
-            }
-        },
-        "schemaObjectMetaType": {
-            "type": "object",
-            "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
-            "title": "ObjectMetaType",
-            "x-displayname": "Metadata",
-            "x-ves-proto-message": "ves.io.schema.ObjectMetaType",
-            "properties": {
-                "annotations": {
-                    "type": "object",
-                    "description": " Annotations is an unstructured key value map stored with a resource that may be\n set by external tools to store and retrieve arbitrary metadata. They are not\n queryable and should be preserved when modifying objects.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 64\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.values.string.max_len: 1024\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "annotations",
-                    "x-displayname": "Annotations",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "64",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.values.string.max_len": "1024",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
-                },
-                "description": {
-                    "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
-                    "title": "description",
-                    "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
-                },
-                "disable": {
-                    "type": "boolean",
-                    "description": " A value of true will administratively disable the object\n\nExample: - \"true\"-",
-                    "title": "disable",
-                    "format": "boolean",
-                    "x-displayname": "Disable",
-                    "x-ves-example": "true"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nExample: - \"value\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "value"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " This is the name of configuration object. It has to be unique within the namespace.\n It can only be specified during create API and cannot be changed during replace API.\n The value of name has to follow DNS-1035 format.\n\nExample: - \"acmecorp-web\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "acmecorp-web",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " This defines the workspace within which each the configuration object is to be created.\n Must be a DNS_LABEL format. For a namespace object itself, namespace value will be \"\"\n\nExample: - \"staging\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "staging"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -3242,10 +1623,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3279,19 +1664,6 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "staging"
                 }
             }
-        },
-        "schemaSiteToSiteTunnelType": {
-            "type": "string",
-            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl",
-            "title": "Site to site tunnel type",
-            "enum": [
-                "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
-                "SITE_TO_SITE_TUNNEL_IPSEC",
-                "SITE_TO_SITE_TUNNEL_SSL"
-            ],
-            "default": "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
-            "x-displayname": "Tunnel type",
-            "x-ves-proto-enum": "ves.io.schema.SiteToSiteTunnelType"
         },
         "schemaSystemObjectGetMetaType": {
             "type": "object",
@@ -3385,149 +1757,6 @@ var APISwaggerJSON string = `{
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaSystemObjectMetaType": {
-            "type": "object",
-            "description": "SystemObjectMetaType is metadata generated or populated by the system for all persisted objects and\ncannot be updated directly by users.",
-            "title": "SystemObjectMetaType",
-            "x-displayname": "System Metadata",
-            "x-ves-proto-message": "ves.io.schema.SystemObjectMetaType",
-            "properties": {
-                "creation_timestamp": {
-                    "type": "string",
-                    "description": " CreationTimestamp is a timestamp representing the server time when this object was\n created. It is not guaranteed to be set in happens-before order across separate operations.\n Clients may not set this value. It is represented in RFC3339 form and is in UTC.",
-                    "title": "creation_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Creation Timestamp"
-                },
-                "creator_class": {
-                    "type": "string",
-                    "description": " A value identifying the class of the user or service which created this configuration object.\n\nExample: - \"value\"-",
-                    "title": "creator_class",
-                    "x-displayname": "Creator Class",
-                    "x-ves-example": "value"
-                },
-                "creator_cookie": {
-                    "type": "string",
-                    "description": " This can used by the creator of the object for later audit for e.g. by storing the\n version identifying information of the object so at future it can be determined if\n version present at remote end is current or stale.\n\nExample: - \"value\"-",
-                    "title": "creator_cookie",
-                    "x-displayname": "Creator Cookie",
-                    "x-ves-example": "value"
-                },
-                "creator_id": {
-                    "type": "string",
-                    "description": " A value identifying the exact user or service that created this configuration object\n\nExample: - \"value\"-",
-                    "title": "creator_id",
-                    "x-displayname": "Creator ID",
-                    "x-ves-example": "value"
-                },
-                "deletion_timestamp": {
-                    "type": "string",
-                    "description": " DeletionTimestamp is RFC 3339 date and time at which this resource will be deleted. This\n field is set by the server when a graceful deletion is requested by the user, and is not\n directly settable by a client. The resource is expected to be deleted (no longer visible\n from resource lists, and not reachable by name) after the time in this field, once the\n finalizers list is empty. As long as the finalizers list contains items, deletion is blocked.\n Once the deletionTimestamp is set, this value may not be unset or be set further into the\n future, although it may be shortened or the resource may be deleted prior to this time.\n For example, a user may request that a pod is deleted in 30 seconds. The Kubelet will react\n by sending a graceful termination signal to the containers in the pod. After that 30 seconds,\n the Kubelet will send a hard termination signal (SIGKILL) to the container and after cleanup,\n remove the pod from the API. In the presence of network partitions, this object may still\n exist after this timestamp, until an administrator or automated process can determine the\n resource is fully terminated.\n If not set, graceful deletion of the object has not been requested.\n\n Populated by the system when a graceful deletion is requested.\n Read-only.",
-                    "title": "deletion_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Deletion Timestamp"
-                },
-                "finalizers": {
-                    "type": "array",
-                    "description": " Must be empty before the object is deleted from the registry. Each entry\n is an identifier for the responsible component that will remove the entry\n from the list. If the deletionTimestamp of the object is non-nil, entries\n in this list can only be removed.\n\nExample: - \"value\"-",
-                    "title": "finalizers",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Finalizers",
-                    "x-ves-example": "value"
-                },
-                "initializers": {
-                    "description": " An initializer is a controller which enforces some system invariant at object creation time.\n This field is a list of initializers that have not yet acted on this object. If nil or empty,\n this object has been completely initialized. Otherwise, the object is considered uninitialized\n and is hidden (in list/watch and get calls) from clients that haven't explicitly asked to\n observe uninitialized objects.\n\n When an object is created, the system will populate this list with the current set of initializers.\n Only privileged users may set or modify this list. Once it is empty, it may not be modified further\n by any user.",
-                    "title": "initializers",
-                    "$ref": "#/definitions/schemaInitializersType",
-                    "x-displayname": "Initializers"
-                },
-                "labels": {
-                    "type": "object",
-                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the operator or software. Values here can be interpreted\n by software(backend or frontend) to enable certain behavior e.g. things marked as soft-deleted(restorable).\n\nExample: - \"'ves.io/soft-deleted''true'\"-",
-                    "title": "labels",
-                    "x-displayname": "Labels",
-                    "x-ves-example": "'ves.io/soft-deleted': 'true'"
-                },
-                "modification_timestamp": {
-                    "type": "string",
-                    "description": " ModificationTimestamp is a timestamp representing the server time when this object was\n last modified.",
-                    "title": "modification_timestamp",
-                    "format": "date-time",
-                    "x-displayname": "Modification Timestamp"
-                },
-                "namespace": {
-                    "type": "array",
-                    "description": " The namespace this object belongs to. This is populated by the service based on the\n metadata.namespace field when an object is created.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "namespace",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Namespace Reference",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
-                "object_index": {
-                    "type": "integer",
-                    "description": " Unique index for the object. Some objects need a unique integer index to be allocated\n for each object type. This field will be populated for all objects that need it and will\n be zero otherwise.\n\nExample: - \"0\"-",
-                    "title": "object_index",
-                    "format": "int64",
-                    "x-displayname": "Object Index",
-                    "x-ves-example": "0"
-                },
-                "owner_view": {
-                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
-                    "title": "owner_view",
-                    "$ref": "#/definitions/schemaViewRefType",
-                    "x-displayname": "Owner View"
-                },
-                "sre_disable": {
-                    "type": "boolean",
-                    "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
-                    "title": "sre_disable",
-                    "format": "boolean",
-                    "x-displayname": "SRE Disable",
-                    "x-ves-example": "true"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " Tenant to which this configuration object belongs to. The value for this is found from\n presented credentials.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "trace_info": {
-                    "type": "string",
-                    "description": " trace_info holds information(\u003ctrace-id\u003e:\u003cspan-id\u003e:\u003cparent-span-id\u003e) of the request doing\n the object modification. This can be used on the watch side to create subsequent spans.\n This information can be used to co-relate activities across services (modulo state compression)\n for a synchronous API.\n\nExample: - \"value\"-",
-                    "title": "trace_info",
-                    "x-displayname": "Trace Info",
-                    "x-ves-example": "value"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " uid is the unique in time and space value for this object. It is generated by\n the server on successful creation of an object and is not allowed to change on Replace\n API. The value of is taken from uid field of ObjectMetaType, if provided.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                },
-                "vtrp_id": {
-                    "type": "string",
-                    "description": " Indicate origin of this object.",
-                    "title": "vtrp_id",
-                    "x-displayname": "VTRP ID"
-                },
-                "vtrp_stale": {
-                    "type": "boolean",
-                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
-                    "title": "vtrp_stale",
-                    "format": "boolean",
-                    "x-displayname": "VTRP Stale"
                 }
             }
         },
@@ -3644,101 +1873,12 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaregistrationGlobalSpecType": {
-            "type": "object",
-            "title": "Shape of the registration specification",
-            "x-displayname": "Global Specification",
-            "x-ves-proto-message": "ves.io.schema.registration.GlobalSpecType",
-            "properties": {
-                "infra": {
-                    "description": " Infrastructure metadata section\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Infra",
-                    "$ref": "#/definitions/registrationInfra",
-                    "x-displayname": "Infrastructure",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "passport": {
-                    "description": " Passport is storing identification for instance as site name, latitude, longitude, etc.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Passport",
-                    "$ref": "#/definitions/registrationPassport",
-                    "x-displayname": "Passport",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "role": {
-                    "type": "array",
-                    "description": " Role of registered node. Used by system to determine what roles should be enforced.\n\nExample: - \"k8s-master, etcd\"-",
-                    "title": "Instance role",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Role",
-                    "x-ves-example": "k8s-master, etcd"
-                },
-                "site": {
-                    "type": "array",
-                    "description": " Site for this registration, assigned after registration is assigned to site.",
-                    "title": "Site",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Site"
-                },
-                "token": {
-                    "type": "string",
-                    "description": " Token is used for machine and tenant identification\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Token",
-                    "x-displayname": "Token",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "tunnel_type": {
-                    "description": " Tunnel type specifies the type of tunnel to be used for traffic between the sites.\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n",
-                    "title": "Site to site tunnel type",
-                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
-                    "x-displayname": "Site to Site Tunnel Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1,2]"
-                    }
-                }
-            }
-        },
         "schemaregistrationReplaceSpecType": {
             "type": "object",
             "description": "NO fields are allowed to be replaced",
             "title": "Replace registration",
             "x-displayname": "Replace Registration",
             "x-ves-proto-message": "ves.io.schema.registration.ReplaceSpecType"
-        },
-        "schemaregistrationStatusType": {
-            "type": "object",
-            "description": "Most recent observer status of object",
-            "title": "Shape of the registration status",
-            "x-displayname": "Status Type",
-            "x-ves-displayorder": "1,2",
-            "x-ves-proto-message": "ves.io.schema.registration.StatusType",
-            "properties": {
-                "current_state": {
-                    "description": " It defines current state of registration and if (and how) it should be handled.",
-                    "title": "Current state of registration",
-                    "$ref": "#/definitions/registrationObjectState",
-                    "x-displayname": "Registration state"
-                },
-                "object_status": {
-                    "description": " Shape of the registration status",
-                    "title": "object status",
-                    "$ref": "#/definitions/ioschemaStatusType",
-                    "x-displayname": "Object Status"
-                }
-            }
         },
         "siteBios": {
             "type": "object",

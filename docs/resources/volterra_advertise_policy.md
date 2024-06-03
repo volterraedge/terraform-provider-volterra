@@ -21,6 +21,7 @@ resource "volterra_advertise_policy" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "port port_ranges" must be set
+
   port = "80"
 }
 
@@ -165,7 +166,7 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Direct reference to site object.
 
-###### One of the arguments from this list "enable_internet_vip, disable_internet_vip" must be set
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
 `disable_internet_vip` - (Optional) Do not enable advertise on external internet vip. (`Bool`).
 
@@ -245,7 +246,7 @@ TLS Private Key data in unencrypted PEM format including the PEM headers. The da
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -275,7 +276,7 @@ Common TLS parameters used in both upstream and downstream connections.
 
 Root CA Certificate.
 
-`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.(Deprecated)
+`trusted_ca_list` - (Optional) Reference to Root CA Certificate. See [ref](#ref) below for details.
 
 Attribute Reference
 -------------------

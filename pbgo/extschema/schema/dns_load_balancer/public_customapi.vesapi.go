@@ -311,7 +311,7 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/system/dns_load_balancer/suggest-values": {
+        "/public/namespaces/system/suggest-values": {
             "post": {
                 "summary": "Suggest Values",
                 "description": "SuggestValues returns suggested values for the specified field in the given Create/Replace/Custom request.",

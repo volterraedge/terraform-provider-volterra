@@ -3446,7 +3446,7 @@ var APISwaggerJSON string = `{
             "x-ves-displayorder": "1,8,9,25,20,10,11,13,14,15,16,18,19,23",
             "x-ves-oneof-field-cluster_retract_choice": "[\"do_not_retract_cluster\",\"retract_cluster\"]",
             "x-ves-oneof-field-host_rewrite_params": "[\"auto_host_rewrite\",\"host_rewrite\"]",
-            "x-ves-oneof-field-route_destination_rewrite": "[\"prefix_rewrite\"]",
+            "x-ves-oneof-field-route_destination_rewrite": "[\"prefix_rewrite\",\"regex_rewrite\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteDestinationList",
             "properties": {
                 "auto_host_rewrite": {
@@ -3533,7 +3533,7 @@ var APISwaggerJSON string = `{
                 },
                 "prefix_rewrite": {
                     "type": "string",
-                    "description": "Exclusive with []\n prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped\n with its value. When using regex path matching, the entire path (not including\n the query string) will be swapped with this value. This option allows application\n URLs to be rooted at a different path from those exposed at the reverse proxy layer.\n\n Example :\n   gcSpec:\n     routes:\n     - match:\n       - headers: []\n         path:\n           prefix : /register/\n         query_params: []\n       - headers: []\n          path:\n           prefix: /register\n         query_params: []\n       routeDestination:\n         prefixRewrite: \"/\"\n         destinations:\n         - cluster:\n           - kind: cluster.Object\n             uid: cluster-1\n\n Having above entries in the config, requests to /register will be stripped to /,\n while requests to /register/public will be stripped to /public\n\nExample: - \"/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": "Exclusive with [regex_rewrite]\n prefix_rewrite indicates that during forwarding, the matched prefix (or path) should be swapped\n with its value. When using regex path matching, the entire path (not including\n the query string) will be swapped with this value. This option allows application\n URLs to be rooted at a different path from those exposed at the reverse proxy layer.\n\n Example :\n   gcSpec:\n     routes:\n     - match:\n       - headers: []\n         path:\n           prefix : /register/\n         query_params: []\n       - headers: []\n          path:\n           prefix: /register\n         query_params: []\n       routeDestination:\n         prefixRewrite: \"/\"\n         destinations:\n         - cluster:\n           - kind: cluster.Object\n             uid: cluster-1\n\n Having above entries in the config, requests to /register will be stripped to /,\n while requests to /register/public will be stripped to /public\n\nExample: - \"/\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "prefix_rewrite",
                     "maxLength": 256,
                     "x-displayname": "Prefix Rewrite",
@@ -3548,6 +3548,13 @@ var APISwaggerJSON string = `{
                     "title": "priority",
                     "$ref": "#/definitions/schemaRoutingPriority",
                     "x-displayname": "Priority"
+                },
+                "regex_rewrite": {
+                    "description": "Exclusive with [prefix_rewrite]\n regex_rewrite indicates that during forwarding, the matched regex should be swapped\n with the substitution value. \n\n Example :\n   gcSpec:\n     routes:\n     - match:\n       - headers: []\n         path:\n           regex : \"^/service/([^/]+)(/.*)$\"\n         query_params: []\n       routeDestination:\n         regexRewrite: \n              pattern: \"^/service/([^/]+)(/.*)$\" \n              substitution: \"\\\\2/instance/\\\\1\"\n         destinations:\n         - cluster:\n           - kind: cluster.Object\n             uid: cluster-1\n\n The path pattern \"^/service/([^/]+)(/.*)$\" paired with a substitution string of \"\\\\2/instance/\\\\1\" \n would transform \"/service/foo/v1/api\" into \"/v1/api/instance/foo\".\n\nExample: - \"^/service/([^/]+)(/.*)$\"-",
+                    "title": "regex_rewrite",
+                    "$ref": "#/definitions/schemaRegexMatchRewrite",
+                    "x-displayname": "Regex Rewrite",
+                    "x-ves-example": "^/service/([^/]+)(/.*)$"
                 },
                 "retract_cluster": {
                     "description": "Exclusive with [do_not_retract_cluster]\n When this option is enabled, weighted cluster will not be considered\n for loadbalancing, if all its endpoints are unhealthy.\n Since the cluster with all unhealthy endpoints is removed, the traffic\n will be distributed among remaining clusters as per their weight.\n Also panic-threshold configuration is ignored for retracted cluster.\n\n This option is ignored when single destination cluster is configured\n for route",
@@ -4589,10 +4596,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4638,18 +4649,35 @@ var APISwaggerJSON string = `{
         },
         "schemaRegexMatchRewrite": {
             "type": "object",
-            "description": "x-displayName: \"Regex Match Rewrite\"\nRegexMatchRewrite describes how to match a string and then produce a new string using a \nregular expression and a substitution string.",
+            "description": "RegexMatchRewrite describes how to match a string and then produce a new string using a \nregular expression and a substitution string.",
             "title": "RegexMatchRewrite",
+            "x-displayname": "Regex Match Rewrite",
+            "x-ves-proto-message": "ves.io.schema.RegexMatchRewrite",
             "properties": {
                 "pattern": {
                     "type": "string",
-                    "description": "x-displayName: \"Pattern\"\nx-example: \"^/service/([^/]+)(/.*)$\"\nThe regular expression used to find portions of a string that should be replaced.",
-                    "title": "Pattern"
+                    "description": " The regular expression used to find portions of a string that should be replaced.\n\nExample: - \"^/service/([^/]+)(/.*)$\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "Pattern",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Pattern",
+                    "x-ves-example": "^/service/([^/]+)(/.*)$",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
                 },
                 "substitution": {
                     "type": "string",
-                    "description": "x-displayName: \"Substitution\"\nx-example: \"\\\\2/instance/\\\\1\"\nThe string that should be substituted into matching portions of the subject string during a \nsubstitution operation to produce a new string.",
-                    "title": "Substitution"
+                    "description": " The string that should be substituted into matching portions of the subject string during a \n substitution operation to produce a new string.\n\nExample: - \"\\\\2/instance/\\\\1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Substitution",
+                    "maxLength": 256,
+                    "x-displayname": "Substitution",
+                    "x-ves-example": "\\\\2/instance/\\\\1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
                 }
             }
         },

@@ -2356,17 +2356,48 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
+                "gcp_zone_names": {
+                    "type": "array",
+                    "description": " x-required\n List of zones when instances will be created, needs to match with region selected.\n\nExample: - \"us-west1-a, us-west1-b, us-west1-c\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "GCP zones",
+                    "maxItems": 3,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "x-displayname": "GCP zone names",
+                    "x-ves-example": "us-west1-a, us-west1-b, us-west1-c",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
                 "global_network_list": {
                     "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
                     "x-displayname": "Connect Global Networks"
                 },
+                "inside_network": {
+                    "description": " Network for the inside interface of the node",
+                    "title": "Network",
+                    "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
+                    "x-displayname": "VPC Network for Inside Interface"
+                },
                 "inside_static_routes": {
                     "description": "Exclusive with [no_inside_static_routes]\n Manage static routes for inside network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "inside_subnet": {
+                    "description": " Subnet for the inside interface of the node.",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "Subnet for Inside Interface"
                 },
                 "no_dc_cluster_group": {
                     "description": "Exclusive with [dc_cluster_group_inside_vn dc_cluster_group_outside_vn]\n This site is not a member of dc cluster group",
@@ -2404,11 +2435,34 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Static Routes"
                 },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of main nodes to create, either 1 or 3.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.in: [1,3]\n",
+                    "title": "Number of main nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of main nodes",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.in": "[1,3]"
+                    }
+                },
+                "outside_network": {
+                    "description": " Network for the outside interface of the node",
+                    "title": "Network",
+                    "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
+                    "x-displayname": "VPC Network for Outside Interface"
+                },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "outside_subnet": {
+                    "description": " Subnet for the outside interface of the node.",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "Subnet for Outside Interface"
                 },
                 "performance_enhancement_mode": {
                     "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
@@ -2629,6 +2683,48 @@ var APISwaggerJSON string = `{
             "x-displayname": "GCP Ingress Gateway",
             "x-ves-proto-message": "ves.io.schema.views.gcp_vpc_site.GCPVPCIngressGwReplaceType",
             "properties": {
+                "gcp_zone_names": {
+                    "type": "array",
+                    "description": " x-required\n List of zones when instances will be created, needs to match with region selected.\n\nExample: - \"us-west1-a, us-west1-b, us-west1-c\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "GCP zones",
+                    "maxItems": 3,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "x-displayname": "GCP zone names",
+                    "x-ves-example": "us-west1-a, us-west1-b, us-west1-c",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "local_network": {
+                    "description": " Network for the local interface of the node",
+                    "title": "Network",
+                    "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
+                    "x-displayname": "VPC Network for Local Interface"
+                },
+                "local_subnet": {
+                    "description": " Subnet for the local interface of the node.",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "Subnet for Local Interface"
+                },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of main nodes to create, either 1 or 3.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.in: [1,3]\n",
+                    "title": "Number of main nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of main nodes",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.in": "[1,3]"
+                    }
+                },
                 "performance_enhancement_mode": {
                     "description": " Performance Enhancement Mode to optimize for L3 or L7 networking",
                     "title": "Performance Enhancement Choice",
@@ -2794,6 +2890,25 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable Forward Proxy with Allow All Policy"
                 },
+                "gcp_zone_names": {
+                    "type": "array",
+                    "description": " x-required\n List of zones when instances will be created, needs to match with region selected.\n\nExample: - \"us-west1-a, us-west1-b, us-west1-c\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "GCP zones",
+                    "maxItems": 3,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 64
+                    },
+                    "x-displayname": "GCP zone names",
+                    "x-ves-example": "us-west1-a, us-west1-b, us-west1-c",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
                 "global_network_list": {
                     "description": "Exclusive with [no_global_network]\n List of global network connections",
                     "title": "Connect Global Networks",
@@ -2830,11 +2945,34 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Static Routes"
                 },
+                "node_number": {
+                    "type": "integer",
+                    "description": " Number of main nodes to create, either 1 or 3.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.in: [1,3]\n",
+                    "title": "Number of main nodes",
+                    "format": "int64",
+                    "x-displayname": "Number of main Nodes",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.in": "[1,3]"
+                    }
+                },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
                     "$ref": "#/definitions/viewsSiteStaticRoutesListType",
                     "x-displayname": "Manage Static routes"
+                },
+                "site_local_network": {
+                    "description": " Network for the local interface of the node",
+                    "title": "Network",
+                    "$ref": "#/definitions/viewsGCPVPCNetworkChoiceType",
+                    "x-displayname": "VPC Network for Local Interface"
+                },
+                "site_local_subnet": {
+                    "description": " Subnet for the local interface of the node.",
+                    "title": "Subnet",
+                    "$ref": "#/definitions/viewsGCPVPCSubnetChoiceType",
+                    "x-displayname": "Subnet for Local Interface"
                 },
                 "sm_connection_public_ip": {
                     "description": "Exclusive with [sm_connection_pvt_ip]\n Site Mesh Group Connection Via Public IP. This option will use elastic IP for\n creating ipsec between two sites which are part of the site mesh group",
@@ -3885,10 +4023,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3945,10 +4087,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4007,10 +4153,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -5236,6 +5386,77 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsKubernetesUpgradeDrain": {
+            "type": "object",
+            "description": "Node by Node Upgrade during Software or OS version upgrade",
+            "title": "Node by Node Upgrade",
+            "x-displayname": "Node by Node Upgrade [BETA]",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
+            "properties": {
+                "disable_upgrade_drain": {
+                    "description": "Exclusive with [enable_upgrade_drain]\n Disable  Node by Node Upgrade during Software or OS version upgrade",
+                    "title": "Disable upgrade drain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Node by Node Upgrade"
+                },
+                "enable_upgrade_drain": {
+                    "description": "Exclusive with [disable_upgrade_drain]\n Enable Node by Node Upgrade during Software or OS version upgrade",
+                    "title": "Enable Node by Node Upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
+                    "x-displayname": "Enable Node by Node Upgrade"
+                }
+            }
+        },
+        "viewsKubernetesUpgradeDrainConfig": {
+            "type": "object",
+            "description": "Node by Node upgrade config during Software or OS version upgrade",
+            "title": "Node by Node Upgrade",
+            "x-displayname": "Node by Node Upgrade Config",
+            "x-ves-oneof-field-drain_max_unavailable_choice": "[\"drain_max_unavailable_node_count\"]",
+            "x-ves-oneof-field-vega_upgrade_mode_toggle_choice": "[\"disable_vega_upgrade_mode\",\"enable_vega_upgrade_mode\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrainConfig",
+            "properties": {
+                "disable_vega_upgrade_mode": {
+                    "description": "Exclusive with [enable_vega_upgrade_mode]\n Disable Vega Upgrade Mode",
+                    "title": "Disable Vega Upgrade Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Vega Upgrade Mode"
+                },
+                "drain_max_unavailable_node_count": {
+                    "type": "integer",
+                    "description": "Exclusive with []\n Max unavailable worker node count during Software or OS version upgrade\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
+                    "title": "Max Unavailable Node Count",
+                    "format": "int64",
+                    "x-displayname": "Max Unavailable Worker Node Count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "5000"
+                    }
+                },
+                "drain_node_timeout": {
+                    "type": "integer",
+                    "description": " Second to wait before skipping a pod eviction, equivalent to -skip-wait-for-delete-timeout- option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
+                    "title": "Pod Eviction Timeout",
+                    "format": "int64",
+                    "x-displayname": "Pod Eviction Timeout",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "900"
+                    }
+                },
+                "enable_vega_upgrade_mode": {
+                    "description": "Exclusive with [disable_vega_upgrade_mode]\n Enable Vega Upgrade Mode\n When enabled, vega will inform RE to stop traffic to the specific node.",
+                    "title": "Enable Vega Upgrade Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Vega Upgrade Mode"
+                }
+            }
+        },
         "viewsL3PerformanceEnhancementType": {
             "type": "object",
             "description": "x-required\nL3 enhanced performance mode options",
@@ -5567,9 +5788,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom DNS"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -5626,6 +5847,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
+                "kubernetes_upgrade_drain": {
+                    "description": " Enable Kubernetes Drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -5659,14 +5885,16 @@ var APISwaggerJSON string = `{
                 },
                 "ssh_key": {
                     "type": "string",
-                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n",
+                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
                     "maxLength": 8192,
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB...",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "8192"
+                        "ves.io.schema.rules.string.max_len": "8192",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "sw": {
@@ -5736,9 +5964,9 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom DNS"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -5801,6 +6029,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
+                "kubernetes_upgrade_drain": {
+                    "description": " Enable Kubernetes Drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
+                },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -5843,14 +6076,16 @@ var APISwaggerJSON string = `{
                 },
                 "ssh_key": {
                     "type": "string",
-                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n",
+                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
                     "maxLength": 8192,
                     "x-displayname": "Public SSH key",
                     "x-ves-example": "ssh-rsa AAAAB...",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "8192"
+                        "ves.io.schema.rules.string.max_len": "8192",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "suggested_action": {
@@ -5921,9 +6156,31 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom DNS"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH \u0026 WebUI services on Site",
+                    "description": "Exclusive with [block_all_services blocked_services]\n Allow access to DNS, SSH services on Site",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Allow access to DNS, SSH \u0026 WebUI services on Site"
+                    "x-displayname": "Allow access to DNS, SSH services on Site"
+                },
+                "disk_size": {
+                    "type": "integer",
+                    "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
+                    "format": "int64",
+                    "x-displayname": "Cloud Disk Size",
+                    "x-ves-example": "80",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "64000"
+                    }
+                },
+                "gcp_region": {
+                    "type": "string",
+                    "description": " Name for GCP Region.\n\nExample: - \"us-west1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "maxLength": 64,
+                    "x-displayname": "GCP Region",
+                    "x-ves-example": "us-west1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
                 },
                 "ingress_egress_gw": {
                     "description": "Exclusive with [ingress_gw voltstack_cluster]\n Two interface site is useful when site is used as ingress/egress gateway to the VPC network.",
@@ -5936,6 +6193,23 @@ var APISwaggerJSON string = `{
                     "title": "Ingress Gateway",
                     "$ref": "#/definitions/gcp_vpc_siteGCPVPCIngressGwReplaceType",
                     "x-displayname": "Ingress Gateway (One Interface)"
+                },
+                "instance_type": {
+                    "type": "string",
+                    "description": " Select Instance size based on performance needed\n\nExample: - \"n1-standard-4\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "maxLength": 64,
+                    "x-displayname": "GCP Instance Type for Node",
+                    "x-ves-example": "n1-standard-4",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "kubernetes_upgrade_drain": {
+                    "description": " Enable Kubernetes Drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
                 },
                 "log_receiver": {
                     "description": "Exclusive with [logs_streaming_disabled]\n Select log receiver for logs streaming",
@@ -5961,6 +6235,20 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [private_connect_disabled]\n Enable Private Connectivity to Site",
                     "$ref": "#/definitions/viewsPrivateConnectConfigType",
                     "x-displayname": "Enable Private Connectivity"
+                },
+                "ssh_key": {
+                    "type": "string",
+                    "description": " Public SSH key for accessing the site.\n\nExample: - \"ssh-rsa AAAAB...\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8192\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 8192,
+                    "x-displayname": "Public SSH key",
+                    "x-ves-example": "ssh-rsa AAAAB...",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "8192",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 },
                 "voltstack_cluster": {
                     "description": "Exclusive with [ingress_egress_gw ingress_gw]\n App Stack Cluster using single interface, useful for deploying K8s cluster.",

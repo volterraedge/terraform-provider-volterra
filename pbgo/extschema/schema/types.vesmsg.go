@@ -5966,6 +5966,17 @@ func (v *ValidateHeaderTransformationType) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
+	case *HeaderTransformationType_LegacyHeaderTransformation:
+		if fv, exists := v.FldValidators["header_transformation_choice.legacy_header_transformation"]; exists {
+			val := m.GetHeaderTransformationChoice().(*HeaderTransformationType_LegacyHeaderTransformation).LegacyHeaderTransformation
+			vOpts := append(opts,
+				db.WithValidateField("header_transformation_choice"),
+				db.WithValidateField("legacy_header_transformation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -8917,6 +8928,16 @@ func (v *ValidateObjectCreateMetaType) AnnotationsValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateObjectCreateMetaType) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateObjectCreateMetaType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ObjectCreateMetaType)
 	if !ok {
@@ -9027,6 +9048,17 @@ var DefaultObjectCreateMetaTypeValidator = func() *ValidateObjectCreateMetaType 
 	}
 	v.FldValidators["annotations"] = vFn
 
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "1200",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ObjectCreateMetaType.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
 	return v
 }()
 
@@ -9125,6 +9157,16 @@ func (v *ValidateObjectGetMetaType) AnnotationsValidationRuleHandler(rules map[s
 			return errors.Wrap(err, "items annotations")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateObjectGetMetaType) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
 	}
 
 	return validatorFn, nil
@@ -9240,6 +9282,17 @@ var DefaultObjectGetMetaTypeValidator = func() *ValidateObjectGetMetaType {
 	}
 	v.FldValidators["annotations"] = vFn
 
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "1200",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ObjectGetMetaType.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
 	return v
 }()
 
@@ -9348,6 +9401,16 @@ func (v *ValidateObjectMetaType) AnnotationsValidationRuleHandler(rules map[stri
 			return errors.Wrap(err, "items annotations")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateObjectMetaType) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
 	}
 
 	return validatorFn, nil
@@ -9471,6 +9534,17 @@ var DefaultObjectMetaTypeValidator = func() *ValidateObjectMetaType {
 		panic(errMsg)
 	}
 	v.FldValidators["annotations"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "1200",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ObjectMetaType.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
 
 	return v
 }()
@@ -9704,6 +9778,16 @@ func (v *ValidateObjectReplaceMetaType) AnnotationsValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateObjectReplaceMetaType) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateObjectReplaceMetaType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ObjectReplaceMetaType)
 	if !ok {
@@ -9802,6 +9886,17 @@ var DefaultObjectReplaceMetaTypeValidator = func() *ValidateObjectReplaceMetaTyp
 		panic(errMsg)
 	}
 	v.FldValidators["annotations"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "1200",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ObjectReplaceMetaType.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
 
 	return v
 }()

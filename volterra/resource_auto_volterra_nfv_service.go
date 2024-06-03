@@ -2207,6 +2207,18 @@ func resourceVolterraNfvService() *schema.Resource {
 										Type:     schema.TypeBool,
 										Optional: true,
 									},
+
+									"best_plus_pay_g200_mbps": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"best_plus_payg_1gbps": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
 								},
 							},
 						},
@@ -5971,7 +5983,7 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 					amiChoiceTypeFound := false
 
-					if v, ok := cs["AWAFPayG200Mbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
+					if v, ok := cs["awaf_pay_g200_mbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
 
 						amiChoiceTypeFound = true
 
@@ -5983,7 +5995,7 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 
 					}
 
-					if v, ok := cs["AWAFPayG3Gbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
+					if v, ok := cs["awaf_pay_g3_gbps"]; ok && !isIntfNil(v) && !amiChoiceTypeFound {
 
 						amiChoiceTypeFound = true
 

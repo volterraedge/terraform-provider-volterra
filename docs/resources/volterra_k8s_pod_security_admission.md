@@ -21,10 +21,12 @@ resource "volterra_k8s_pod_security_admission" "example" {
   namespace = "staging"
 
   pod_security_admission_specs {
-    // One of the arguments from this list "enforce audit warn" must be set
-    enforce = true
+    // One of the arguments from this list "warn enforce audit" must be set
 
-    // One of the arguments from this list "privileged baseline restricted" must be set
+    warn = true
+
+    // One of the arguments from this list "restricted privileged baseline" must be set
+
     privileged = true
   }
 }

@@ -80,6 +80,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.InternetVIPListenerStatusType"] = InternetVIPListenerStatusTypeValidator()
 	vr["ves.io.schema.views.InternetVIPStatus"] = InternetVIPStatusValidator()
 	vr["ves.io.schema.views.InternetVIPTargetGroupStatusType"] = InternetVIPTargetGroupStatusTypeValidator()
+	vr["ves.io.schema.views.KubernetesUpgradeDrain"] = KubernetesUpgradeDrainValidator()
+	vr["ves.io.schema.views.KubernetesUpgradeDrainConfig"] = KubernetesUpgradeDrainConfigValidator()
 	vr["ves.io.schema.views.L3PerformanceEnhancementType"] = L3PerformanceEnhancementTypeValidator()
 	vr["ves.io.schema.views.LinkRefType"] = LinkRefTypeValidator()
 	vr["ves.io.schema.views.MasterNode"] = MasterNodeValidator()

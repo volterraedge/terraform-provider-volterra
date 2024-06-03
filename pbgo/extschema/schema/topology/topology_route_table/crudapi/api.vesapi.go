@@ -2966,10 +2966,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3224,6 +3228,55 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "topologyAWSRouteAttributes": {
+            "type": "object",
+            "description": "Route attributes specific to AWS.",
+            "title": "AWSRouteAttributes",
+            "x-displayname": "AWS Route Attributes",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSRouteAttributes",
+            "properties": {
+                "propagated": {
+                    "type": "boolean",
+                    "description": "Is route propagated\n\nExample: - false-",
+                    "title": "Propagated",
+                    "format": "boolean",
+                    "x-displayname": "Propagated"
+                }
+            }
+        },
+        "topologyGCPRouteAttributes": {
+            "type": "object",
+            "description": "Route attributes specific to GCP.",
+            "title": "GCPRouteAttributes",
+            "x-displayname": "GCP Route Attributes",
+            "x-ves-proto-message": "ves.io.schema.topology.GCPRouteAttributes",
+            "properties": {
+                "ip_version": {
+                    "type": "string",
+                    "description": " Version of IP protocol\n\nExample: - \"ipv4\"-",
+                    "title": "IP version",
+                    "x-displayname": "IP version",
+                    "x-ves-example": "ipv4"
+                },
+                "priority": {
+                    "type": "integer",
+                    "description": " Route Priority\n\nExample: - 1-",
+                    "title": "Priority",
+                    "format": "int64",
+                    "x-displayname": "Priority"
+                },
+                "scope_limits": {
+                    "type": "array",
+                    "description": " Limits on the scope of route like network tag\n\nExample: - \"tag-1, tag-2\"-",
+                    "title": "Scope Limits",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Scope Limits",
+                    "x-ves-example": "tag-1, tag-2"
+                }
+            }
+        },
         "topologyMetaType": {
             "type": "object",
             "description": "A metadata for topology objects.",
@@ -3302,7 +3355,7 @@ var APISwaggerJSON string = `{
         },
         "topologyRouteNextHopTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.",
+            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nx-displayName: LOAD BALANCER\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nx-displayName: VPC NETWORK\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nx-displayName: VPC PEERING\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nx-displayName: INTERNAL LOAD BALANCER\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nx-displayName: INSTANCE\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nx-displayName: INTERCONNECT\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nx-displayName: INTERNET GATEWAY\nINTERNET GATEWAY\n - IP: IP\n\nx-displayName: IP\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nx-displayName: VPN TUNNEL\nVPN TUNNEL",
             "title": "RouteNextHopTypeEnum",
             "enum": [
                 "VIRTUAL_NETWORK_GATEWAY",
@@ -3312,7 +3365,16 @@ var APISwaggerJSON string = `{
                 "NONE",
                 "VNET_PEERING",
                 "VIRTUAL_NETWORK_SERVICE_ENDPOINT",
-                "NEXT_HOP_TYPE_NOT_APPLICABLE"
+                "NEXT_HOP_TYPE_NOT_APPLICABLE",
+                "LOADBALANCER",
+                "VPC_NETWORK",
+                "VPC_PEERING",
+                "INTERNAL_LOAD_BALANCER",
+                "INSTANCE",
+                "INTERCONNECT",
+                "INTERNET_GATEWAY",
+                "IP",
+                "VPN_TUNNEL"
             ],
             "default": "VIRTUAL_NETWORK_GATEWAY",
             "x-displayname": "",
@@ -3390,7 +3452,7 @@ var APISwaggerJSON string = `{
                 "routes": {
                     "type": "array",
                     "description": " list of routes",
-                    "title": "Rotues",
+                    "title": "Routes",
                     "items": {
                         "$ref": "#/definitions/topologyRouteType"
                     },
@@ -3433,13 +3495,26 @@ var APISwaggerJSON string = `{
             "description": "A canonical form of the route.",
             "title": "RouteType",
             "x-displayname": "Route Type",
+            "x-ves-oneof-field-cloud_route_attributes": "[\"aws\",\"gcp\"]",
             "x-ves-proto-message": "ves.io.schema.topology.RouteType",
             "properties": {
+                "aws": {
+                    "description": "Exclusive with [gcp]\n Cloud Type AWS",
+                    "title": "AWS",
+                    "$ref": "#/definitions/topologyAWSRouteAttributes",
+                    "x-displayname": "AWS"
+                },
                 "destination": {
                     "type": "string",
                     "description": " Destination",
                     "title": "Destination",
                     "x-displayname": "Destination"
+                },
+                "gcp": {
+                    "description": "Exclusive with [aws]\n Cloud Type GCP",
+                    "title": "GCP",
+                    "$ref": "#/definitions/topologyGCPRouteAttributes",
+                    "x-displayname": "GCP"
                 },
                 "next_hop_type": {
                     "description": " Next Hop Type of the route",

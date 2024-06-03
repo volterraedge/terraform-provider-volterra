@@ -2966,10 +2966,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3299,6 +3303,12 @@ var APISwaggerJSON string = `{
                     "description": " url identifies the other end of the Ver for tunnel origination/termination",
                     "title": "url",
                     "x-displayname": "URL"
+                },
+                "verNodeIp": {
+                    "type": "string",
+                    "description": " The VER node IP in the local site from which the connection is setup",
+                    "title": "verNodeIP",
+                    "x-displayname": "VER Node IP"
                 },
                 "verNodeName": {
                     "type": "string",

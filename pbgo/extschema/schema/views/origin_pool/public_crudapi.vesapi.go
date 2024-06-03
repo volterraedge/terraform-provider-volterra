@@ -2251,6 +2251,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "clusterHttp1ProtocolOptions": {
+            "type": "object",
+            "description": "HTTP/1.1 Protocol options for upstream connections",
+            "title": "Http1ProtocolOptions",
+            "x-displayname": "HTTP/1.1 Protocol Options",
+            "x-ves-proto-message": "ves.io.schema.cluster.Http1ProtocolOptions",
+            "properties": {
+                "header_transformation": {
+                    "description": " Two mutually exclusive types of header key formatters are supported: Stateless\n (Default and Proper Case) and Stateful (Preserve Case) formatters. When a Stateless\n formatter is selected, it applies to the upstream request headers and when a\n Stateful formatter is selected, it applies to response headers sent to the client.\n It's essential to ensure that the same formatter type (either stateless or stateful)\n is applied on http load balancer. If different formatter types are applied, only\n the stateful formatter will take effect, and the stateless formatter will be disregarded.",
+                    "title": "Header transformation",
+                    "$ref": "#/definitions/schemaHeaderTransformationType",
+                    "x-displayname": "Header Transformation Configuration"
+                }
+            }
+        },
         "clusterHttp2ProtocolOptions": {
             "type": "object",
             "description": "Http2 Protocol options for upstream connections",
@@ -2673,9 +2688,10 @@ var APISwaggerJSON string = `{
             "x-displayname": "Origin Pool Advanced Options",
             "x-ves-oneof-field-circuit_breaker_choice": "[\"circuit_breaker\",\"default_circuit_breaker\",\"disable_circuit_breaker\"]",
             "x-ves-oneof-field-http_protocol_type": "[\"auto_http_config\",\"http1_config\",\"http2_options\"]",
-            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[]",
+            "x-ves-oneof-field-lb_source_ip_persistance_choice": "[\"disable_lb_source_ip_persistance\",\"enable_lb_source_ip_persistance\"]",
             "x-ves-oneof-field-outlier_detection_choice": "[\"disable_outlier_detection\",\"outlier_detection\"]",
             "x-ves-oneof-field-panic_threshold_type": "[\"no_panic_threshold\",\"panic_threshold\"]",
+            "x-ves-oneof-field-proxy_protocol_choice": "[\"disable_proxy_protocol\",\"proxy_protocol_v1\",\"proxy_protocol_v2\"]",
             "x-ves-oneof-field-subset_choice": "[\"disable_subsets\",\"enable_subsets\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginPoolAdvancedOptions",
             "properties": {
@@ -2714,11 +2730,23 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Circuit Breaker"
                 },
+                "disable_lb_source_ip_persistance": {
+                    "description": "Exclusive with [enable_lb_source_ip_persistance]\n Disable LB source IP persistence",
+                    "title": "disable_lb_source_ip_persistence",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable LB Source IP persistence"
+                },
                 "disable_outlier_detection": {
                     "description": "Exclusive with [outlier_detection]\n Outlier detection is disabled",
                     "title": "Disable Outlier Detection",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Outlier Detection"
+                },
+                "disable_proxy_protocol": {
+                    "description": "Exclusive with [proxy_protocol_v1 proxy_protocol_v2]\n Disable Proxy Protocol for upstream connections",
+                    "title": "Disable Proxy Protocol",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Proxy Protocol"
                 },
                 "disable_subsets": {
                     "description": "Exclusive with [enable_subsets]\n Subset load balancing is disabled. All eligible origin servers will be considered for load balancing.",
@@ -2726,22 +2754,22 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Subset Load Balancing"
                 },
+                "enable_lb_source_ip_persistance": {
+                    "description": "Exclusive with [disable_lb_source_ip_persistance]\n Enable LB source IP persistence",
+                    "title": "enable_lb_source_ip_persistence",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable LB Source IP persistence"
+                },
                 "enable_subsets": {
                     "description": "Exclusive with [disable_subsets]\n Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing.",
                     "title": "Subset Load Balancing is Enable",
                     "$ref": "#/definitions/origin_poolOriginPoolSubsets",
                     "x-displayname": "Enable Subset Load Balancing"
                 },
-                "header_transformation_type": {
-                    "description": " Settings to normalize the headers of upstream requests.",
-                    "title": "Header transformation",
-                    "$ref": "#/definitions/schemaHeaderTransformationType",
-                    "x-displayname": "Header Transformation Configuration"
-                },
                 "http1_config": {
                     "description": "Exclusive with [auto_http_config http2_options]\n Enable HTTP/1.1 for upstream connections",
                     "title": "http1_config",
-                    "$ref": "#/definitions/ioschemaEmpty",
+                    "$ref": "#/definitions/clusterHttp1ProtocolOptions",
                     "x-displayname": "HTTP/1.1"
                 },
                 "http2_options": {
@@ -2782,6 +2810,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "100"
                     }
+                },
+                "proxy_protocol_v1": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v2]\n Enable Proxy Protocol Version 1 for upstream connections",
+                    "title": "Proxy Protocol V1",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V1"
+                },
+                "proxy_protocol_v2": {
+                    "description": "Exclusive with [disable_proxy_protocol proxy_protocol_v1]\n Enable Proxy Protocol Version 2 for upstream connections",
+                    "title": "Proxy Protocol V2",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Proxy Protocol V2"
                 }
             }
         },
@@ -2967,12 +3007,12 @@ var APISwaggerJSON string = `{
             "title": "OriginServerPrivateIP",
             "x-displayname": "IP address on given Sites",
             "x-ves-displayorder": "10,2,3",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\",\"segment\"]",
             "x-ves-oneof-field-private_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateIP",
             "properties": {
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\n Inside network on the site",
+                    "description": "Exclusive with [outside_network segment]\n Inside network on the site",
                     "title": "Inside Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Inside Network"
@@ -2998,10 +3038,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\n Outside network on the site",
+                    "description": "Exclusive with [inside_network segment]\n Outside network on the site",
                     "title": "Outside Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Outside Network"
+                },
+                "segment": {
+                    "description": "Exclusive with [inside_network outside_network]\n Segment where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "site_locator": {
                     "description": " Site or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3021,7 +3071,7 @@ var APISwaggerJSON string = `{
             "title": "OriginServerPrivateName",
             "x-displayname": "DNS Name on given Sites",
             "x-ves-displayorder": "1,6,2,3",
-            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\"]",
+            "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\",\"segment\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerPrivateName",
             "properties": {
                 "dns_name": {
@@ -3036,13 +3086,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "inside_network": {
-                    "description": "Exclusive with [outside_network]\n Inside network on the site",
+                    "description": "Exclusive with [outside_network segment]\n Inside network on the site",
                     "title": "Inside Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Inside Network"
                 },
                 "outside_network": {
-                    "description": "Exclusive with [inside_network]\n Outside network on the site",
+                    "description": "Exclusive with [inside_network segment]\n Outside network on the site",
                     "title": "Outside Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Outside Network"
@@ -3056,6 +3106,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "20",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.lte": "604800"
+                    }
+                },
+                "segment": {
+                    "description": "Exclusive with [inside_network outside_network]\n Segment where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "site_locator": {
@@ -3138,131 +3198,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "origin_poolOriginServerSegmentIP": {
-            "type": "object",
-            "description": "Specify origin server with IP address in a Segment on given Site",
-            "title": "OriginServerSegmentIP",
-            "x-displayname": "IP address of Origin server in Segment on given Site",
-            "x-ves-displayorder": "1,4,5",
-            "x-ves-oneof-field-ip_choice": "[\"ip\"]",
-            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerSegmentIP",
-            "properties": {
-                "ip": {
-                    "type": "string",
-                    "description": "Exclusive with []\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
-                    "title": "IP",
-                    "x-displayname": "IP",
-                    "x-ves-example": "8.8.8.8",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv4": "true"
-                    }
-                },
-                "ipv6": {
-                    "type": "string",
-                    "description": " Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IP6",
-                    "x-displayname": "IP6",
-                    "x-ves-example": "2001::10",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "segment": {
-                    "description": " Segment where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "site_locator": {
-                    "description": " Site or Cloud RE Region or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Site Locator",
-                    "$ref": "#/definitions/viewsSiteRegionLocator",
-                    "x-displayname": "Site or Cloud Edge or Virtual Site",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "origin_poolOriginServerSegmentName": {
-            "type": "object",
-            "description": "Specify origin server with DNS name in Segment on given Site",
-            "title": "OriginServerSegmentName",
-            "x-displayname": "DNS Name of Origin Server in Segment on given Sites",
-            "x-ves-displayorder": "1,2,3,4",
-            "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerSegmentName",
-            "properties": {
-                "dns_name": {
-                    "type": "string",
-                    "description": " DNS Name\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "DNS name",
-                    "x-displayname": "DNS Name",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "refresh_interval": {
-                    "type": "integer",
-                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
-                    "title": "refresh_interval",
-                    "format": "int64",
-                    "x-displayname": "DNS Refresh interval",
-                    "x-ves-example": "20",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "604800"
-                    }
-                },
-                "segment": {
-                    "description": " Segment where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Segment",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Segment",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "site_locator": {
-                    "description": " Site or Cloud RE Region or Virtual site where this origin server is located\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Site Locator",
-                    "$ref": "#/definitions/viewsSiteRegionLocator",
-                    "x-displayname": "Site or Cloud RE Region or Virtual Site",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
         "origin_poolOriginServerType": {
             "type": "object",
             "description": "Various options to specify origin server",
             "title": "OriginServerType",
             "x-displayname": "Origin Server",
-            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"segment_ip\",\"segment_name\",\"vn_private_ip\",\"vn_private_name\"]",
+            "x-ves-oneof-field-choice": "[\"consul_service\",\"custom_endpoint_object\",\"k8s_service\",\"private_ip\",\"private_name\",\"public_ip\",\"public_name\",\"vn_private_ip\",\"vn_private_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerType",
             "properties": {
                 "consul_service": {
-                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
+                    "description": "Exclusive with [custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with Hashi Corp Consul service name and site information",
                     "title": "OriginServerConsulService",
                     "$ref": "#/definitions/origin_poolOriginServerConsulService",
                     "x-displayname": "Consul Service Name of Origin Server on given Sites"
                 },
                 "custom_endpoint_object": {
-                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
+                    "description": "Exclusive with [consul_service k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with a reference to endpoint object",
                     "title": "OriginServerCustomEndpoint",
                     "$ref": "#/definitions/origin_poolOriginServerCustomEndpoint",
                     "x-displayname": "Custom Endpoint Object for Origin Server"
                 },
                 "k8s_service": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object private_ip private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with K8s service name and site information",
                     "title": "OriginServerK8SService",
                     "$ref": "#/definitions/origin_poolOriginServerK8SService",
                     "x-displayname": "K8s Service Name of Origin Server on given Sites"
@@ -3275,49 +3232,37 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "value"
                 },
                 "private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_name public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public IP address and site information",
                     "title": "OriginServerPrivateIP",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateIP",
                     "x-displayname": "IP address of Origin Server on given Sites"
                 },
                 "private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip public_ip public_name vn_private_ip vn_private_name]\n Specify origin server with private or public DNS name and site information",
                     "title": "OriginServerPrivateName",
                     "$ref": "#/definitions/origin_poolOriginServerPrivateName",
                     "x-displayname": "DNS Name of Origin Server on given Sites"
                 },
                 "public_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_name vn_private_ip vn_private_name]\n Specify origin server with public IP",
                     "title": "OriginServerPublicIP",
                     "$ref": "#/definitions/origin_poolOriginServerPublicIP",
                     "x-displayname": "Public IP of Origin Server"
                 },
                 "public_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip segment_ip segment_name vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip vn_private_ip vn_private_name]\n Specify origin server with public DNS name",
                     "title": "OriginServerPublicName",
                     "$ref": "#/definitions/origin_poolOriginServerPublicName",
                     "x-displayname": "Public DNS Name of Origin Server"
                 },
-                "segment_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_name vn_private_ip vn_private_name]\n Specify origin server with IP address in a Segment on given Site",
-                    "title": "OriginServerSegmentIP",
-                    "$ref": "#/definitions/origin_poolOriginServerSegmentIP",
-                    "x-displayname": "IP address of Origin server in Segment on given Site"
-                },
-                "segment_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip vn_private_ip vn_private_name]\n Specify origin server with DNS name in Segment on given Site",
-                    "title": "OriginServerSegmentName",
-                    "$ref": "#/definitions/origin_poolOriginServerSegmentName",
-                    "x-displayname": "DNS Name of Origin Server in Segment on given Sites"
-                },
                 "vn_private_ip": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_name]\n Specify origin server IP address on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkIP",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkIP",
                     "x-displayname": "IP address on Virtual Network"
                 },
                 "vn_private_name": {
-                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name segment_ip segment_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
+                    "description": "Exclusive with [consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip]\n Specify origin server name on virtual network other than inside or outside network",
                     "title": "OriginServerVirtualNetworkName",
                     "$ref": "#/definitions/origin_poolOriginServerVirtualNetworkName",
                     "x-displayname": "Name on Virtual Network"
@@ -3734,23 +3679,29 @@ var APISwaggerJSON string = `{
             "title": "HeaderTransformationType",
             "x-displayname": "Header Transformation",
             "x-ves-displayorder": "1",
-            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
+            "x-ves-oneof-field-header_transformation_choice": "[\"default_header_transformation\",\"legacy_header_transformation\",\"preserve_case_header_transformation\",\"proper_case_header_transformation\"]",
             "x-ves-proto-message": "ves.io.schema.HeaderTransformationType",
             "properties": {
                 "default_header_transformation": {
-                    "description": "Exclusive with [preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
+                    "description": "Exclusive with [legacy_header_transformation preserve_case_header_transformation proper_case_header_transformation]\n Normalize the headers to lower case",
                     "title": "Default header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default"
                 },
+                "legacy_header_transformation": {
+                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation proper_case_header_transformation]\n Use old header transformation if configured earlier",
+                    "title": "Legacy header transformations",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Legacy"
+                },
                 "preserve_case_header_transformation": {
-                    "description": "Exclusive with [default_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
+                    "description": "Exclusive with [default_header_transformation legacy_header_transformation proper_case_header_transformation]\n Preserves the original case of headers without any modifications.",
                     "title": "Preserve case header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Preserve Case"
                 },
                 "proper_case_header_transformation": {
-                    "description": "Exclusive with [default_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
+                    "description": "Exclusive with [default_header_transformation legacy_header_transformation preserve_case_header_transformation]\n Normalize the headers to proper case words. The fist character and any character\n following a special character will be capitalized if it’s an alpha character.\n For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”",
                     "title": "Proper case header transformation",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Proper Case"
@@ -3832,10 +3783,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3892,10 +3847,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3954,10 +3913,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -4420,34 +4383,6 @@ var APISwaggerJSON string = `{
                 },
                 "virtual_site": {
                     "description": "Exclusive with [site]\n Reference to virtual site object",
-                    "title": "Virtual Site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Virtual Site"
-                }
-            }
-        },
-        "viewsSiteRegionLocator": {
-            "type": "object",
-            "description": "This message defines reference to site or virtual site or a cloud-re-region object",
-            "title": "SiteRegionLocator",
-            "x-displayname": "Select Site or Virtual Site or Cloud Edge",
-            "x-ves-oneof-field-choice": "[\"cloud_re_region\",\"site\",\"virtual_site\"]",
-            "x-ves-proto-message": "ves.io.schema.views.SiteRegionLocator",
-            "properties": {
-                "cloud_re_region": {
-                    "description": "Exclusive with [site virtual_site]\n Reference to a Cloud Edge",
-                    "title": "Cloud Edge",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Cloud Edge"
-                },
-                "site": {
-                    "description": "Exclusive with [cloud_re_region virtual_site]\n Reference to site object",
-                    "title": "site",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Site"
-                },
-                "virtual_site": {
-                    "description": "Exclusive with [cloud_re_region site]\n Reference to virtual site object",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Site"

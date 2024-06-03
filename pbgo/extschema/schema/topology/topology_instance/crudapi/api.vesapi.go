@@ -2937,6 +2937,89 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaIpSubnetType": {
+            "type": "object",
+            "description": "IP Address used to specify an IPv4 or IPv6 subnet addresses",
+            "title": "IP Subnet",
+            "x-displayname": "IP Subnet",
+            "x-ves-displayorder": "3",
+            "x-ves-oneof-field-ver": "[\"ipv4\",\"ipv6\"]",
+            "x-ves-proto-message": "ves.io.schema.IpSubnetType",
+            "properties": {
+                "ipv4": {
+                    "description": "Exclusive with [ipv6]\n IPv4 Subnet Address",
+                    "title": "IPv4 Subnet",
+                    "$ref": "#/definitions/schemaIpv4SubnetType",
+                    "x-displayname": "IPv4 Subnet"
+                },
+                "ipv6": {
+                    "description": "Exclusive with [ipv4]\n IPv6 Subnet Address",
+                    "title": "IPv6 Subnet",
+                    "$ref": "#/definitions/schemaIpv6SubnetType",
+                    "x-displayname": "IPv6 Subnet"
+                }
+            }
+        },
+        "schemaIpv4SubnetType": {
+            "type": "object",
+            "description": "IPv4 subnets specified as prefix and prefix-length. Prefix length must be \u003c= 32",
+            "title": "IPv4 Subnet",
+            "x-displayname": "IPv4 Subnet",
+            "x-ves-proto-message": "ves.io.schema.Ipv4SubnetType",
+            "properties": {
+                "plen": {
+                    "type": "integer",
+                    "description": " Prefix-length of the IPv4 subnet. Must be \u003c= 32\n\nExample: - \"24\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "title": "Prefix Length",
+                    "format": "int64",
+                    "x-displayname": "Prefix Length",
+                    "x-ves-example": "24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "32"
+                    }
+                },
+                "prefix": {
+                    "type": "string",
+                    "description": " Prefix part of the IPv4 subnet in string form with dot-decimal notation\n\nExample: - \"192.168.1.0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "Prefix",
+                    "x-displayname": "Prefix",
+                    "x-ves-example": "192.168.1.0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                }
+            }
+        },
+        "schemaIpv6SubnetType": {
+            "type": "object",
+            "description": "IPv6 subnets specified as prefix and prefix-length. prefix-legnth must be \u003c= 128",
+            "title": "IPv6 Subnet",
+            "x-displayname": "IPv6 Subnet",
+            "x-ves-proto-message": "ves.io.schema.Ipv6SubnetType",
+            "properties": {
+                "plen": {
+                    "type": "integer",
+                    "description": " Prefix length of the IPv6 subnet. Must be \u003c= 128\n\nExample: - \"38\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 128\n",
+                    "title": "Prefix length",
+                    "format": "int64",
+                    "x-displayname": "Prefix Length",
+                    "x-ves-example": "38",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "128"
+                    }
+                },
+                "prefix": {
+                    "type": "string",
+                    "description": " Prefix part of the IPv6 subnet given in form of string.\n IPv6 address must be specified as hexadecimal numbers separated by ':'\n e.g. \"2001:db8:0:0:0:2:0:0\"\n The address can be compacted by suppressing zeros\n e.g. \"2001:db8::2::\"\n\nExample: - \"2001:db8:0:0:0:0:2:0\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "Prefix",
+                    "x-displayname": "Prefix",
+                    "x-ves-example": "2001:db8:0:0:0:0:2:0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                }
+            }
+        },
         "schemaListMetaType": {
             "type": "object",
             "description": "ListMetaType is metadata that all lists must have.",
@@ -2966,10 +3049,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",
@@ -3224,6 +3311,206 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaVirtualNetworkType": {
+            "type": "string",
+            "description": "Different types of virtual networks understood by the system\n\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL provides connectivity to public (outside) network.\nThis is an insecure network and is connected to public internet via NAT Gateways/firwalls\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created automatically and present on all sites\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE is a private network inside site.\nIt is a secure network and is not connected to public network.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different\nsites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on CE sites. This network is created during provisioning of site\nUser defined per-site virtual network. Scope of this virtual network is limited to the site.\nThis is not yet supported\nVirtual-network of type VIRTUAL_NETWORK_PUBLIC directly conects to the public internet.\nVirtual-network of this type is local to every site. Two virtual networks of this type on different sites are neither related nor connected.\n\nConstraints:\nThere can be atmost one virtual network of this type in a given site.\nThis network type is supported on RE sites only\nIt is an internally created by the system. They must not be created by user\nVirtual Neworks with global scope across different sites in F5XC domain.\nAn example global virtual-network called \"AIN Network\" is created for every tenant.\nfor volterra fabric\n\nConstraints:\nIt is currently only supported as internally created by the system.\nvK8s service network for a given tenant. Used to advertise a virtual host only to vk8s pods for that tenant\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVER internal network for the site. It can only be used for virtual hosts with SMA_PROXY type proxy\nConstraints:\nIt is an internally created by the system. Must not be created by user\nVirtual-network of type VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE represents both\nVIRTUAL_NETWORK_SITE_LOCAL and VIRTUAL_NETWORK_SITE_LOCAL_INSIDE\n\nConstraints:\nThis network type is only meaningful in an advertise policy\nWhen virtual-network of type VIRTUAL_NETWORK_IP_AUTO is selected for\nan endpoint, VER will try to determine the network based on the provided\nIP address\n\nConstraints:\nThis network type is only meaningful in an endpoint\n\nVoltADN Private Network is used on volterra RE(s) to connect to customer private networks\nThis network is created by opening a support ticket\n\nThis network is per site srv6 network\nVER IP Fabric network for the site.\nThis Virtual network type is used for exposing virtual host on IP Fabric network on the VER site or\nfor endpoint in IP Fabric network\nConstraints:\nIt is an internally created by the system. Must not be created by user\nNetwork internally created for a segment\nConstraints:\nIt is an internally created by the system. Must not be created by user",
+            "title": "VirtualNetworkType",
+            "enum": [
+                "VIRTUAL_NETWORK_SITE_LOCAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE",
+                "VIRTUAL_NETWORK_PER_SITE",
+                "VIRTUAL_NETWORK_PUBLIC",
+                "VIRTUAL_NETWORK_GLOBAL",
+                "VIRTUAL_NETWORK_SITE_SERVICE",
+                "VIRTUAL_NETWORK_VER_INTERNAL",
+                "VIRTUAL_NETWORK_SITE_LOCAL_INSIDE_OUTSIDE",
+                "VIRTUAL_NETWORK_IP_AUTO",
+                "VIRTUAL_NETWORK_VOLTADN_PRIVATE_NETWORK",
+                "VIRTUAL_NETWORK_SRV6_NETWORK",
+                "VIRTUAL_NETWORK_IP_FABRIC",
+                "VIRTUAL_NETWORK_SEGMENT"
+            ],
+            "default": "VIRTUAL_NETWORK_SITE_LOCAL",
+            "x-displayname": "Virtual Network Type",
+            "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
+        },
+        "siteActiveState": {
+            "type": "string",
+            "description": "Active/Backup state for the interface\n\nUnknown state\nInterface in active state\nInterface in backup state",
+            "title": "Active State",
+            "enum": [
+                "STATE_UNKNOWN",
+                "STATE_ACTIVE",
+                "STATE_BACKUP"
+            ],
+            "default": "STATE_UNKNOWN",
+            "x-displayname": "Active State",
+            "x-ves-proto-enum": "ves.io.schema.site.ActiveState"
+        },
+        "siteAddressMode": {
+            "type": "string",
+            "description": "AddressMode identifies the mode of address assignment on an interface\n\n - STATIC: Static\n\nInterface Address is assigned statically\n - DHCP: DHCP\n\nInterface Address is obtained via DHCP",
+            "title": "Interface Address Mode",
+            "enum": [
+                "STATIC",
+                "DHCP"
+            ],
+            "default": "STATIC",
+            "x-displayname": "AddressMode",
+            "x-ves-proto-enum": "ves.io.schema.site.AddressMode"
+        },
+        "siteBondMembersType": {
+            "type": "object",
+            "description": "BondMembersType represents the bond interface members  along with the corresponding link state",
+            "title": "Bond Interface Members",
+            "x-displayname": "Bond Interface Members",
+            "x-ves-proto-message": "ves.io.schema.site.BondMembersType",
+            "properties": {
+                "link_speed": {
+                    "type": "integer",
+                    "description": " Link speed of Bond Interface Member in Mbps",
+                    "title": "Link Speed\nx-displayName: \"Link Speed in Mbps\"\nLink speed of Bond Interface Member in Mbps",
+                    "format": "int64",
+                    "x-displayname": "Link Speed in Mbps"
+                },
+                "link_state": {
+                    "type": "boolean",
+                    "description": " Link state of Bond Interface Member",
+                    "title": "Link State\nx-displayName: \"Link State\"\nLink state of Bond Interface Member",
+                    "format": "boolean",
+                    "x-displayname": "Link State"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the Bond Interface Member",
+                    "title": "Name\nx-displayName: \"Name\"\nName of the Bond Interface Member",
+                    "x-displayname": "Name"
+                }
+            }
+        },
+        "siteInterfaceStatus": {
+            "type": "object",
+            "description": "Status of Interfaces in ver",
+            "title": "Interface Status",
+            "x-displayname": "Interface Status",
+            "x-ves-proto-message": "ves.io.schema.site.InterfaceStatus",
+            "properties": {
+                "active_state": {
+                    "description": " Active state for the interface",
+                    "title": "Active-Backup status\nx-displayName: \"Active/Backup status\"\nActive state for the interface",
+                    "$ref": "#/definitions/siteActiveState",
+                    "x-displayname": "Active/Backup status"
+                },
+                "bond_members": {
+                    "type": "array",
+                    "description": " Members of the Bond interface along with the corresponding link state",
+                    "title": "Bond Interface Members\nx-displayName: \"Bond Members\"\nMembers of the Bond interface along with the corresponding link state",
+                    "items": {
+                        "$ref": "#/definitions/siteBondMembersType"
+                    },
+                    "x-displayname": "Bond Members"
+                },
+                "dhcp_server": {
+                    "type": "boolean",
+                    "description": " Indicate if DHCP server is configured on the interface",
+                    "title": "DHCP Server",
+                    "format": "boolean",
+                    "x-displayname": "DHCP Server"
+                },
+                "ip": {
+                    "description": " IP address of interface",
+                    "title": "IP subnet",
+                    "$ref": "#/definitions/schemaIpSubnetType",
+                    "x-displayname": "IP Subnet"
+                },
+                "ip_mode": {
+                    "description": " Mode of address assignment on the interface",
+                    "title": "IP Mode",
+                    "$ref": "#/definitions/siteAddressMode",
+                    "x-displayname": "IP Mode"
+                },
+                "ipv6": {
+                    "description": " IPv6 address of interface",
+                    "title": "IPv6 subnet",
+                    "$ref": "#/definitions/schemaIpSubnetType",
+                    "x-displayname": "IPv6 Subnet"
+                },
+                "link_quality": {
+                    "description": " Link quality for the interface",
+                    "title": "Link quality status\nx-displayName: \"Link Quality\"\nLink quality for the interface",
+                    "$ref": "#/definitions/siteLinkQuality",
+                    "x-displayname": "Link Quality"
+                },
+                "link_state": {
+                    "type": "boolean",
+                    "description": " Link State for the interface",
+                    "title": "Link State\nx-displayName: \"Link State\"\nLink State for the interface",
+                    "format": "boolean",
+                    "x-displayname": "Link State"
+                },
+                "link_type": {
+                    "description": " Link type for the interface",
+                    "title": "Link type\nx-displayName: \"Link type\"\nLink type for the interface",
+                    "$ref": "#/definitions/siteLinkType",
+                    "x-displayname": "Link type"
+                },
+                "mac": {
+                    "type": "string",
+                    "description": " Mac Address of interface",
+                    "title": "Mac Address",
+                    "x-displayname": "Mac Address"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of interface",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "network_name": {
+                    "type": "string",
+                    "description": " Name of Virtual Network to which the interface belongs",
+                    "title": "Virtual Network Name",
+                    "x-displayname": "Virtual Network Name"
+                },
+                "network_type": {
+                    "description": " Virtual Network Type of interface",
+                    "title": "Virtual Network Type",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Virtual Network Type"
+                }
+            }
+        },
+        "siteLinkQuality": {
+            "type": "string",
+            "description": "Link quality determined by VER using different probes\n\nUnknown quality\nLink quality is good\nLink quality is poor\nQuality disabled",
+            "title": "Link quality",
+            "enum": [
+                "QUALITY_UNKNOWN",
+                "QUALITY_GOOD",
+                "QUALITY_POOR",
+                "QUALITY_DISABLED"
+            ],
+            "default": "QUALITY_UNKNOWN",
+            "x-displayname": "Link quality",
+            "x-ves-proto-enum": "ves.io.schema.site.LinkQuality"
+        },
+        "siteLinkType": {
+            "type": "string",
+            "description": "Link type of interface determined operationally\n\nLink type unknown\nLink type ethernet\nWiFi link of type 802.11ac\nWiFi link of type 802.11bgn\nLink type 4G\nWiFi link\nWan link",
+            "title": "Link type",
+            "enum": [
+                "LINK_TYPE_UNKNOWN",
+                "LINK_TYPE_ETHERNET",
+                "LINK_TYPE_WIFI_802_11AC",
+                "LINK_TYPE_WIFI_802_11BGN",
+                "LINK_TYPE_4G",
+                "LINK_TYPE_WIFI",
+                "LINK_TYPE_WAN"
+            ],
+            "default": "LINK_TYPE_UNKNOWN",
+            "x-displayname": "Link type",
+            "x-ves-proto-enum": "ves.io.schema.site.LinkType"
+        },
         "topologyAddressInfoType": {
             "type": "object",
             "description": "Address with additional information",
@@ -3277,6 +3564,12 @@ var APISwaggerJSON string = `{
                     "title": "CPU",
                     "format": "int64",
                     "x-displayname": "CPU Count"
+                },
+                "f5xc_node_name": {
+                    "type": "string",
+                    "description": " F5XC node name",
+                    "title": "F5XC Node name",
+                    "x-displayname": "F5XC Node Name"
                 },
                 "instance_type": {
                     "type": "string",
@@ -3402,6 +3695,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Network Interface",
             "x-ves-proto-message": "ves.io.schema.topology.NetworkInterfaceType",
             "properties": {
+                "f5xc_status": {
+                    "description": " F5XC side interface status",
+                    "title": "F5XC status",
+                    "$ref": "#/definitions/siteInterfaceStatus",
+                    "x-displayname": "f5xc status"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of this interface",

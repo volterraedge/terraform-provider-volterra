@@ -2360,6 +2360,29 @@ type ValidateLilacCDNCachePurgeRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateLilacCDNCachePurgeRequest) PatternTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pattern_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateLilacCDNCachePurgeRequest) PatternTypePatternValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Pattern, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pattern")
+	}
+	return oValidatorFn_Pattern, nil
+}
+func (v *ValidateLilacCDNCachePurgeRequest) PatternTypeHostnameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Hostname, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for hostname")
+	}
+	return oValidatorFn_Hostname, nil
+}
+
 func (v *ValidateLilacCDNCachePurgeRequest) PurgeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -2420,11 +2443,60 @@ func (v *ValidateLilacCDNCachePurgeRequest) Validate(ctx context.Context, pm int
 
 	}
 
-	if fv, exists := v.FldValidators["pattern"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("pattern"))
-		if err := fv(ctx, m.GetPattern(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["pattern_type"]; exists {
+		val := m.GetPatternType()
+		vOpts := append(opts,
+			db.WithValidateField("pattern_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetPatternType().(type) {
+	case *LilacCDNCachePurgeRequest_Pattern:
+		if fv, exists := v.FldValidators["pattern_type.pattern"]; exists {
+			val := m.GetPatternType().(*LilacCDNCachePurgeRequest_Pattern).Pattern
+			vOpts := append(opts,
+				db.WithValidateField("pattern_type"),
+				db.WithValidateField("pattern"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LilacCDNCachePurgeRequest_PurgeAll:
+		if fv, exists := v.FldValidators["pattern_type.purge_all"]; exists {
+			val := m.GetPatternType().(*LilacCDNCachePurgeRequest_PurgeAll).PurgeAll
+			vOpts := append(opts,
+				db.WithValidateField("pattern_type"),
+				db.WithValidateField("purge_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LilacCDNCachePurgeRequest_Url:
+		if fv, exists := v.FldValidators["pattern_type.url"]; exists {
+			val := m.GetPatternType().(*LilacCDNCachePurgeRequest_Url).Url
+			vOpts := append(opts,
+				db.WithValidateField("pattern_type"),
+				db.WithValidateField("url"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *LilacCDNCachePurgeRequest_Hostname:
+		if fv, exists := v.FldValidators["pattern_type.hostname"]; exists {
+			val := m.GetPatternType().(*LilacCDNCachePurgeRequest_Hostname).Hostname
+			vOpts := append(opts,
+				db.WithValidateField("pattern_type"),
+				db.WithValidateField("hostname"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -2488,6 +2560,41 @@ var DefaultLilacCDNCachePurgeRequestValidator = func() *ValidateLilacCDNCachePur
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPatternType := v.PatternTypeValidationRuleHandler
+	rulesPatternType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPatternType(rulesPatternType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LilacCDNCachePurgeRequest.pattern_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pattern_type"] = vFn
+
+	vrhPatternTypePattern := v.PatternTypePatternValidationRuleHandler
+	rulesPatternTypePattern := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.min_len": "1",
+		"ves.io.schema.rules.string.regex":   "true",
+	}
+	vFnMap["pattern_type.pattern"], err = vrhPatternTypePattern(rulesPatternTypePattern)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LilacCDNCachePurgeRequest.pattern_type_pattern: %s", err)
+		panic(errMsg)
+	}
+	vrhPatternTypeHostname := v.PatternTypeHostnameValidationRuleHandler
+	rulesPatternTypeHostname := map[string]string{
+		"ves.io.schema.rules.string.vh_domain": "true",
+	}
+	vFnMap["pattern_type.hostname"], err = vrhPatternTypeHostname(rulesPatternTypeHostname)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field LilacCDNCachePurgeRequest.pattern_type_hostname: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["pattern_type.pattern"] = vFnMap["pattern_type.pattern"]
+	v.FldValidators["pattern_type.hostname"] = vFnMap["pattern_type.hostname"]
 
 	vrhPurgeType := v.PurgeTypeValidationRuleHandler
 	rulesPurgeType := map[string]string{

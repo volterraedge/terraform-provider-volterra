@@ -1128,22 +1128,19 @@ func resourceVolterraRoute() *schema.Resource {
 
 									"regex_rewrite": {
 
-										Type:       schema.TypeSet,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeSet,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"pattern": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 
 												"substitution": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeString,
+													Optional: true,
 												},
 											},
 										},

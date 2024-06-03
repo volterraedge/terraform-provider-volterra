@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
+	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 )
 
 // resourceVolterraIpPrefixSet is implementation of Volterra's IpPrefixSet resources
@@ -200,6 +201,9 @@ func setIpPrefixSetFields(client *APIClient, d *schema.ResourceData, resp vesapi
 	d.Set("name", metadata.GetName())
 
 	d.Set("namespace", metadata.GetNamespace())
+
+	drift.DriftDetectionSpecIpPrefixSet(d,resp)
+
 
 	return nil
 }

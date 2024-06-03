@@ -17,6 +17,7 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
+	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 )
 
 // resourceVolterraTcpLoadbalancer is implementation of Volterra's TcpLoadbalancer resources
@@ -80,6 +81,130 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"cloud_edge_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cloud_edge": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ipv4_vip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6_vip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"site": {
 
 										Type:     schema.TypeSet,
@@ -100,6 +225,82 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 												"network": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"site_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
 												"site": {
@@ -205,6 +406,82 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 												"network": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"virtual_site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"virtual_site_segment": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
 												"virtual_site": {
@@ -1484,6 +1761,81 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 								sl := v.(*schema.Set).List()
 								site := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.Site.Site = site
+								for _, set := range sl {
+									siteMapStrToI := set.(map[string]interface{})
+
+									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+										site.Name = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										site.Namespace = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										site.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
+						choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ipv6 = v.(string)
+
+							}
+
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								segment := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Segment = segment
+								for _, set := range sl {
+									segmentMapStrToI := set.(map[string]interface{})
+
+									if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+										segment.Name = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										segment.Namespace = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										segment.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								site := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Site = site
 								for _, set := range sl {
 									siteMapStrToI := set.(map[string]interface{})
 
@@ -3290,6 +3642,8 @@ func setTcpLoadbalancerFields(client *APIClient, d *schema.ResourceData, resp ve
 
 	d.Set("namespace", metadata.GetNamespace())
 
+	drift.DriftDetectionTcpLoadbalancer(d,resp)
+
 	return nil
 }
 
@@ -3404,6 +3758,81 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 								sl := v.(*schema.Set).List()
 								site := &ves_io_schema_views.ObjectRefType{}
 								choiceInt.Site.Site = site
+								for _, set := range sl {
+									siteMapStrToI := set.(map[string]interface{})
+
+									if w, ok := siteMapStrToI["name"]; ok && !isIntfNil(w) {
+										site.Name = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										site.Namespace = w.(string)
+									}
+
+									if w, ok := siteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										site.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_SiteSegment{}
+						choiceInt.SiteSegment = &ves_io_schema_views.WhereSiteSegment{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+								choiceInt.SiteSegment.Ipv6 = v.(string)
+
+							}
+
+							if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								segment := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Segment = segment
+								for _, set := range sl {
+									segmentMapStrToI := set.(map[string]interface{})
+
+									if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+										segment.Name = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										segment.Namespace = w.(string)
+									}
+
+									if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										segment.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+							if v, ok := cs["site"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								site := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.SiteSegment.Site = site
 								for _, set := range sl {
 									siteMapStrToI := set.(map[string]interface{})
 

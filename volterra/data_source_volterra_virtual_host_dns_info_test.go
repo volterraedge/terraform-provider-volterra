@@ -6,9 +6,11 @@ import (
 	"os"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	ves_io_schema_ap "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	ves_io_schema_vn "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
 )
@@ -20,9 +22,13 @@ func TestAccDataSourceVHDNSInfoBasic(t *testing.T) {
 		return []string{
 			ves_io_schema_vh.ObjectType, ves_io_schema_ns.ObjectType,
 			ves_io_schema_vn.ObjectType, ves_io_schema_ap.ObjectType,
+			ves_io_schema_tenant.ObjectType,
 		}
 	}
-	testURL, stopFunc, _ := createTestCustomAPIServer(t, getTestObj())
+	testURL, stopFunc, f := createTestCustomAPIServer(t, getTestObj())
+	tenantName := "ves-io"
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String())
+	f.MustCreateEntry(tenantObj)
 	defer stopFunc()
 	os.Setenv("VOLT_API_TEST", "true")
 	os.Setenv("VOLT_API_URL", testURL)

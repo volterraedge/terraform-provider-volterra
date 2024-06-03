@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -27,6 +28,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_policy.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.alert_policy.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.alert_policy.ReplaceResponse"] = ReplaceResponseValidator()
+
+	vr["ves.io.schema.alert_policy.AlertPolicyMatch"] = AlertPolicyMatchValidator()
+	vr["ves.io.schema.alert_policy.AlertPolicyMatchRequest"] = AlertPolicyMatchRequestValidator()
+	vr["ves.io.schema.alert_policy.AlertPolicyMatchResponse"] = AlertPolicyMatchResponseValidator()
 
 	vr["ves.io.schema.alert_policy.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.alert_policy.CustomGroupBy"] = CustomGroupByValidator()
@@ -60,6 +65,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.alert_policy.API"] = "config"
+	sm["ves.io.schema.alert_policy.CustomAPI"] = "alert"
 
 }
 
@@ -94,6 +100,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.alert_policy.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.alert_policy.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.alert_policy.Object"] = NewCRUDAPIServer
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.alert_policy.Object"] = CustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.alert_policy.CustomAPI"] = NewCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.alert_policy.CustomAPI"] = NewCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.alert_policy.CustomAPI"] = RegisterCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.alert_policy.CustomAPI"] = RegisterGwCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.alert_policy.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIServer(svc)
+		}
 
 	}()
 

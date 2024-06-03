@@ -76,7 +76,7 @@ any_asn.
 
 asn_list.
 
-`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. (`Int`).
+`as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
 ### Asn Choice Asn Matcher
 
@@ -166,7 +166,7 @@ Specification for the rule including match preicates and actions..
 
 `custom_rate_limiter` - (Optional) Apply a custom rate limiter.. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "any_asn, asn_list, asn_matcher" can be set
+###### One of the arguments from this list "asn_matcher, any_asn, asn_list" can be set
 
 `any_asn` - (Optional)any_asn (`Bool`).
 
@@ -174,7 +174,7 @@ Specification for the rule including match preicates and actions..
 
 `asn_matcher` - (Optional)asn_matcher. See [Asn Choice Asn Matcher ](#asn-choice-asn-matcher) below for details.
 
-###### One of the arguments from this list "any_country, country_list" must be set
+###### One of the arguments from this list "country_list, any_country" must be set
 
 `any_country` - (Optional) x-displayName: "Any Country" (`Bool`).
 

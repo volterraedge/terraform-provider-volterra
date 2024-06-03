@@ -1263,6 +1263,13 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
+						"legacy_header_transformation": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
 						"preserve_case_header_transformation": {
 
 							Type:       schema.TypeBool,
@@ -1275,6 +1282,72 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							Type:       schema.TypeBool,
 							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"http_protocol_options": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"http_protocol_enable_v1_only": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"header_transformation": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"default_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"legacy_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"preserve_case_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"proper_case_header_transformation": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"http_protocol_enable_v1_v2": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"http_protocol_enable_v2_only": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},
@@ -2614,6 +2687,83 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+					},
+				},
+			},
+
+			"ztna_proxy_configurations": {
+
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"ztna_application_config": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"ztna_policy_config": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
 						},
 					},
 				},
@@ -4088,6 +4238,18 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+					headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
 			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 				headerTransformationChoiceTypeFound = true
@@ -4108,6 +4270,122 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
 					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
 					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	//http_protocol_options
+	if v, ok := d.GetOk("http_protocol_options"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		httpProtocolOptions := &ves_io_schema_virtual_host.HttpProtocolOptions{}
+		createSpec.HttpProtocolOptions = httpProtocolOptions
+		for _, set := range sl {
+			httpProtocolOptionsMapStrToI := set.(map[string]interface{})
+
+			httpProtocolChoiceTypeFound := false
+
+			if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+				httpProtocolChoiceTypeFound = true
+				httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+				httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema_virtual_host.Http1ProtocolOptions{}
+				httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						headerTransformation := &ves_io_schema.HeaderTransformationType{}
+						httpProtocolChoiceInt.HttpProtocolEnableV1Only.HeaderTransformation = headerTransformation
+						for _, set := range sl {
+							headerTransformationMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_v2"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+				httpProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}
+					httpProtocolChoiceInt.HttpProtocolEnableV1V2 = &ves_io_schema.Empty{}
+					httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+				}
+
+			}
+
+			if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v2_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+				httpProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV2Only{}
+					httpProtocolChoiceInt.HttpProtocolEnableV2Only = &ves_io_schema.Empty{}
+					httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 				}
 
 			}
@@ -5666,6 +5944,83 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//ztna_proxy_configurations
+	if v, ok := d.GetOk("ztna_proxy_configurations"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		ztnaProxyConfigurations := &ves_io_schema_virtual_host.ZtnaProxyConfiguration{}
+		createSpec.ZtnaProxyConfigurations = ztnaProxyConfigurations
+		for _, set := range sl {
+			ztnaProxyConfigurationsMapStrToI := set.(map[string]interface{})
+
+			if v, ok := ztnaProxyConfigurationsMapStrToI["ztna_application_config"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				ztnaApplicationConfigInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ztnaProxyConfigurations.ZtnaApplicationConfig = ztnaApplicationConfigInt
+				for i, ps := range sl {
+
+					zacMapToStrVal := ps.(map[string]interface{})
+					ztnaApplicationConfigInt[i] = &ves_io_schema.ObjectRefType{}
+
+					ztnaApplicationConfigInt[i].Kind = "ztna_application"
+
+					if v, ok := zacMapToStrVal["name"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Name = v.(string)
+					}
+
+					if v, ok := zacMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := zacMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := zacMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Uid = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := ztnaProxyConfigurationsMapStrToI["ztna_policy_config"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				ztnaPolicyConfigInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ztnaProxyConfigurations.ZtnaPolicyConfig = ztnaPolicyConfigInt
+				for i, ps := range sl {
+
+					zpcMapToStrVal := ps.(map[string]interface{})
+					ztnaPolicyConfigInt[i] = &ves_io_schema.ObjectRefType{}
+
+					ztnaPolicyConfigInt[i].Kind = "ztna"
+
+					if v, ok := zpcMapToStrVal["name"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Name = v.(string)
+					}
+
+					if v, ok := zpcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := zpcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := zpcMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Uid = v.(string)
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 	log.Printf("[DEBUG] Creating Volterra VirtualHost object with struct: %+v", createReq)
 
 	createVirtualHostResp, err := client.CreateObject(context.Background(), ves_io_schema_virtual_host.ObjectType, createReq)
@@ -7154,6 +7509,18 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+				headerTransformationChoiceTypeFound = true
+
+				if v.(bool) {
+					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+					headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
 			if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
 
 				headerTransformationChoiceTypeFound = true
@@ -7174,6 +7541,121 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 					headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
 					headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
 					headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("http_protocol_options"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		httpProtocolOptions := &ves_io_schema_virtual_host.HttpProtocolOptions{}
+		updateSpec.HttpProtocolOptions = httpProtocolOptions
+		for _, set := range sl {
+			httpProtocolOptionsMapStrToI := set.(map[string]interface{})
+
+			httpProtocolChoiceTypeFound := false
+
+			if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+				httpProtocolChoiceTypeFound = true
+				httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1Only{}
+				httpProtocolChoiceInt.HttpProtocolEnableV1Only = &ves_io_schema_virtual_host.Http1ProtocolOptions{}
+				httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					if v, ok := cs["header_transformation"]; ok && !isIntfNil(v) {
+
+						sl := v.(*schema.Set).List()
+						headerTransformation := &ves_io_schema.HeaderTransformationType{}
+						httpProtocolChoiceInt.HttpProtocolEnableV1Only.HeaderTransformation = headerTransformation
+						for _, set := range sl {
+							headerTransformationMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformation.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+			if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v1_v2"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+				httpProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV1V2{}
+					httpProtocolChoiceInt.HttpProtocolEnableV1V2 = &ves_io_schema.Empty{}
+					httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
+				}
+
+			}
+
+			if v, ok := httpProtocolOptionsMapStrToI["http_protocol_enable_v2_only"]; ok && !isIntfNil(v) && !httpProtocolChoiceTypeFound {
+
+				httpProtocolChoiceTypeFound = true
+
+				if v.(bool) {
+					httpProtocolChoiceInt := &ves_io_schema_virtual_host.HttpProtocolOptions_HttpProtocolEnableV2Only{}
+					httpProtocolChoiceInt.HttpProtocolEnableV2Only = &ves_io_schema.Empty{}
+					httpProtocolOptions.HttpProtocolChoice = httpProtocolChoiceInt
 				}
 
 			}
@@ -8701,6 +9183,82 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 					refTypeInt := &ves_io_schema.WafType_InheritWaf{}
 					refTypeInt.InheritWaf = &ves_io_schema.Empty{}
 					wafType.RefType = refTypeInt
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("ztna_proxy_configurations"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		ztnaProxyConfigurations := &ves_io_schema_virtual_host.ZtnaProxyConfiguration{}
+		updateSpec.ZtnaProxyConfigurations = ztnaProxyConfigurations
+		for _, set := range sl {
+			ztnaProxyConfigurationsMapStrToI := set.(map[string]interface{})
+
+			if v, ok := ztnaProxyConfigurationsMapStrToI["ztna_application_config"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				ztnaApplicationConfigInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ztnaProxyConfigurations.ZtnaApplicationConfig = ztnaApplicationConfigInt
+				for i, ps := range sl {
+
+					zacMapToStrVal := ps.(map[string]interface{})
+					ztnaApplicationConfigInt[i] = &ves_io_schema.ObjectRefType{}
+
+					ztnaApplicationConfigInt[i].Kind = "ztna_application"
+
+					if v, ok := zacMapToStrVal["name"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Name = v.(string)
+					}
+
+					if v, ok := zacMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := zacMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := zacMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						ztnaApplicationConfigInt[i].Uid = v.(string)
+					}
+
+				}
+
+			}
+
+			if v, ok := ztnaProxyConfigurationsMapStrToI["ztna_policy_config"]; ok && !isIntfNil(v) {
+
+				sl := v.([]interface{})
+				ztnaPolicyConfigInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+				ztnaProxyConfigurations.ZtnaPolicyConfig = ztnaPolicyConfigInt
+				for i, ps := range sl {
+
+					zpcMapToStrVal := ps.(map[string]interface{})
+					ztnaPolicyConfigInt[i] = &ves_io_schema.ObjectRefType{}
+
+					ztnaPolicyConfigInt[i].Kind = "ztna"
+
+					if v, ok := zpcMapToStrVal["name"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Name = v.(string)
+					}
+
+					if v, ok := zpcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Namespace = v.(string)
+					}
+
+					if v, ok := zpcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Tenant = v.(string)
+					}
+
+					if v, ok := zpcMapToStrVal["uid"]; ok && !isIntfNil(v) {
+						ztnaPolicyConfigInt[i].Uid = v.(string)
+					}
+
 				}
 
 			}

@@ -900,6 +900,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "No default tunnel BGP secret"
                 },
+                "policer": {
+                    "description": " Policer config for bandwidth restrictions",
+                    "$ref": "#/definitions/infraprotect_informationPolicer",
+                    "x-displayname": "Policer Config"
+                },
                 "prefixes": {
                     "type": "array",
                     "description": " List of tenant 'super' prefixes noted in CIDR\n\nExample: - \"value\"-",
@@ -945,6 +950,25 @@ var APISwaggerJSON string = `{
                     "description": " Organisation UUID\n\nExample: - \"value\"-",
                     "x-displayname": "Uuid",
                     "x-ves-example": "value"
+                }
+            }
+        },
+        "infraprotect_informationPolicer": {
+            "type": "object",
+            "description": "Policer config for bandwidth restrictions",
+            "title": "Policer Config",
+            "x-displayname": "Policer Config",
+            "x-ves-proto-message": "ves.io.schema.infraprotect_information.Policer",
+            "properties": {
+                "bandwidth_max_mb": {
+                    "type": "integer",
+                    "description": " Bandwidth max allowed for a customer defined by contract\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 9999\n",
+                    "title": "Bandwidth Max",
+                    "format": "int64",
+                    "x-displayname": "Bandwidth Max in MB",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "9999"
+                    }
                 }
             }
         },
@@ -1170,10 +1194,14 @@ var APISwaggerJSON string = `{
                 },
                 "description": {
                     "type": "string",
-                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-",
+                    "description": " Human readable description for the object\n\nExample: - \"Virtual Host for acmecorp website\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 1200\n",
                     "title": "description",
+                    "maxLength": 1200,
                     "x-displayname": "Description",
-                    "x-ves-example": "Virtual Host for acmecorp website"
+                    "x-ves-example": "Virtual Host for acmecorp website",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "1200"
+                    }
                 },
                 "disable": {
                     "type": "boolean",

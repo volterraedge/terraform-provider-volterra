@@ -22,27 +22,16 @@ resource "volterra_cloud_credentials" "example" {
 
   // One of the arguments from this list "aws_secret_key aws_assume_role azure_pfx_certificate azure_client_secret gcp_cred_file" must be set
 
-  aws_secret_key {
-    access_key = "value"
+  aws_assume_role {
+    duration_seconds = "5400"
 
-    secret_key {
-      blindfold_secret_info_internal {
-        decryption_provider = "value"
+    // One of the arguments from this list "external_id_is_optional external_id_is_tenant_id custom_external_id" must be set
 
-        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-        store_provider = "value"
-      }
-
-      secret_encoding_type = "secret_encoding_type"
-
-      // One of the arguments from this list "clear_secret_info wingman_secret_info blindfold_secret_info vault_secret_info" must be set
-
-      clear_secret_info {
-        provider = "box-provider"
-
-        url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-      }
+    external_id_is_optional = true
+    role_arn = "arn:aws:iam::121212121212:role/aws-iam-role-arn"
+    session_name = "cloud-f5xc-deployment"
+    session_tags = {
+      "key1" = "value1"
     }
   }
 }
@@ -86,7 +75,7 @@ Secret Access Key for your AWS account.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -228,7 +217,7 @@ Content of Credential File for your GCP account.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 

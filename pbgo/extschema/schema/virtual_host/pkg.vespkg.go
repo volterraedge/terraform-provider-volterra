@@ -81,6 +81,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.DynamicReverseProxyType"] = DynamicReverseProxyTypeValidator()
 	vr["ves.io.schema.virtual_host.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.virtual_host.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.virtual_host.Http1ProtocolOptions"] = Http1ProtocolOptionsValidator()
 	vr["ves.io.schema.virtual_host.HttpProtocolOptions"] = HttpProtocolOptionsValidator()
 	vr["ves.io.schema.virtual_host.HttpRedirectOptions"] = HttpRedirectOptionsValidator()
 	vr["ves.io.schema.virtual_host.JavaScriptConfigType"] = JavaScriptConfigTypeValidator()
@@ -94,6 +95,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.TemporaryUserBlockingType"] = TemporaryUserBlockingTypeValidator()
 	vr["ves.io.schema.virtual_host.VerStatusType"] = VerStatusTypeValidator()
 	vr["ves.io.schema.virtual_host.VirtualHostID"] = VirtualHostIDValidator()
+	vr["ves.io.schema.virtual_host.ZtnaProxyConfiguration"] = ZtnaProxyConfigurationValidator()
 
 }
 
@@ -113,6 +115,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointLearntSchema"] = []string{
 		"discovered_openapi_spec",
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.virtual_host.CreateRequest.spec.api_spec.open_api_validation_choice.enable_open_api_validation",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
@@ -149,9 +158,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
+		"spec.ztna_proxy_configurations",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Create"] = "ves.io.schema.virtual_host.CreateRequest"
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.virtual_host.ReplaceRequest.spec.api_spec.open_api_validation_choice.enable_open_api_validation",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []string{
 		"spec.api_spec",
@@ -187,6 +204,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
+		"spec.ztna_proxy_configurations",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Replace"] = "ves.io.schema.virtual_host.ReplaceRequest"

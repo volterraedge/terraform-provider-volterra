@@ -152,7 +152,7 @@ func RegisterCustomAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, 
 }
 
 var (
-	pattern_CustomAPI_SuggestValues_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"public", "namespaces", "system", "dns_load_balancer", "suggest-values"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_CustomAPI_SuggestValues_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"public", "namespaces", "system", "suggest-values"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

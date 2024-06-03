@@ -121,7 +121,20 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 				Type:     schema.TypeSet,
 				Optional: true,
 				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{},
+					Schema: map[string]*schema.Schema{
+
+						"control_and_data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
 				},
 			},
 
@@ -153,6 +166,18 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"control_and_data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},

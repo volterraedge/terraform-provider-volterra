@@ -516,7 +516,7 @@ var DefaultEvaluateBatchAPIAccessReqValidator = func() *ValidateEvaluateBatchAPI
 
 	vrhBatchNamespaceApiList := v.BatchNamespaceApiListValidationRuleHandler
 	rulesBatchNamespaceApiList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
+		"ves.io.schema.rules.repeated.max_items": "75",
 	}
 	vFn, err = vrhBatchNamespaceApiList(rulesBatchNamespaceApiList)
 	if err != nil {
@@ -911,7 +911,7 @@ var DefaultNamespaceAPIListValidator = func() *ValidateNamespaceAPIList {
 
 	vrhItemLists := v.ItemListsValidationRuleHandler
 	rulesItemLists := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "50",
+		"ves.io.schema.rules.repeated.max_items": "15",
 	}
 	vFn, err = vrhItemLists(rulesItemLists)
 	if err != nil {

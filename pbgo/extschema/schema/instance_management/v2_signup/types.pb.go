@@ -8,7 +8,7 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_information"
 	signup "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/signup"
 	io "io"
@@ -64,21 +64,28 @@ type GlobalSpecType struct {
 	// x-required
 	// we use it to store derived internal information like f5xc instance, kc instance
 	InternalMeta *signup.InternalMeta `protobuf:"bytes,12,opt,name=internal_meta,json=internalMeta,proto3" json:"internal_meta,omitempty"`
-	// Source Choice
+	// Signup Type
 	//
-	// x-displayName: "Source Choice"
+	// x-displayName: "Signup Type"
 	// x-required
-	// origin of the request
+	// indicates the type of the signup, example scaling, msp...etc
+	// signup type can be defined as a specific usecase the tenant is created for
 	//
-	// Types that are valid to be assigned to SourceChoice:
-	//	*GlobalSpecType_SourcePublic
-	//	*GlobalSpecType_SourceInternalSre
-	//	*GlobalSpecType_SourceInternalScaling
-	//	*GlobalSpecType_SourcePlanTransition
-	//	*GlobalSpecType_SourceMsp
-	//	*GlobalSpecType_SourceInternalSso
-	//	*GlobalSpecType_SourceMarketplace
-	SourceChoice isGlobalSpecType_SourceChoice `protobuf_oneof:"source_choice"`
+	// Types that are valid to be assigned to SignupType:
+	//	*GlobalSpecType_SignupTypePublic
+	//	*GlobalSpecType_SignupTypeInternalSre
+	//	*GlobalSpecType_SignupTypeInternalScaling
+	//	*GlobalSpecType_SignupTypePlanTransition
+	//	*GlobalSpecType_SignupTypeMsp
+	//	*GlobalSpecType_SignupTypeInternalSso
+	//	*GlobalSpecType_SignupTypeMarketplace
+	SignupType isGlobalSpecType_SignupType `protobuf_oneof:"signup_type"`
+	// Origin
+	//
+	// x-displayName: "Origin"
+	// x-required
+	// origin of the signup, from which platform signup is originated, example f5xc, aws..etc
+	Origin schema.SignupOrigin `protobuf:"varint,14,opt,name=origin,proto3,enum=ves.io.schema.SignupOrigin" json:"origin,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -109,46 +116,46 @@ func (m *GlobalSpecType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GlobalSpecType proto.InternalMessageInfo
 
-type isGlobalSpecType_SourceChoice interface {
-	isGlobalSpecType_SourceChoice()
+type isGlobalSpecType_SignupType interface {
+	isGlobalSpecType_SignupType()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
 
-type GlobalSpecType_SourcePublic struct {
-	SourcePublic *signup.SourcePublic `protobuf:"bytes,6,opt,name=source_public,json=sourcePublic,proto3,oneof" json:"source_public,omitempty"`
+type GlobalSpecType_SignupTypePublic struct {
+	SignupTypePublic *signup.SignupTypePublic `protobuf:"bytes,6,opt,name=signup_type_public,json=signupTypePublic,proto3,oneof" json:"signup_type_public,omitempty"`
 }
-type GlobalSpecType_SourceInternalSre struct {
-	SourceInternalSre *signup.SourceInternalSre `protobuf:"bytes,7,opt,name=source_internal_sre,json=sourceInternalSre,proto3,oneof" json:"source_internal_sre,omitempty"`
+type GlobalSpecType_SignupTypeInternalSre struct {
+	SignupTypeInternalSre *signup.SignupTypeInternalSre `protobuf:"bytes,7,opt,name=signup_type_internal_sre,json=signupTypeInternalSre,proto3,oneof" json:"signup_type_internal_sre,omitempty"`
 }
-type GlobalSpecType_SourceInternalScaling struct {
-	SourceInternalScaling *signup.SourceInternalScaling `protobuf:"bytes,8,opt,name=source_internal_scaling,json=sourceInternalScaling,proto3,oneof" json:"source_internal_scaling,omitempty"`
+type GlobalSpecType_SignupTypeInternalScaling struct {
+	SignupTypeInternalScaling *signup.SignupTypeInternalScaling `protobuf:"bytes,8,opt,name=signup_type_internal_scaling,json=signupTypeInternalScaling,proto3,oneof" json:"signup_type_internal_scaling,omitempty"`
 }
-type GlobalSpecType_SourcePlanTransition struct {
-	SourcePlanTransition *signup.SourcePlanTransition `protobuf:"bytes,9,opt,name=source_plan_transition,json=sourcePlanTransition,proto3,oneof" json:"source_plan_transition,omitempty"`
+type GlobalSpecType_SignupTypePlanTransition struct {
+	SignupTypePlanTransition *signup.SignupTypePlanTransition `protobuf:"bytes,9,opt,name=signup_type_plan_transition,json=signupTypePlanTransition,proto3,oneof" json:"signup_type_plan_transition,omitempty"`
 }
-type GlobalSpecType_SourceMsp struct {
-	SourceMsp *signup.SourceMsp `protobuf:"bytes,10,opt,name=source_msp,json=sourceMsp,proto3,oneof" json:"source_msp,omitempty"`
+type GlobalSpecType_SignupTypeMsp struct {
+	SignupTypeMsp *signup.SignupTypeMsp `protobuf:"bytes,10,opt,name=signup_type_msp,json=signupTypeMsp,proto3,oneof" json:"signup_type_msp,omitempty"`
 }
-type GlobalSpecType_SourceInternalSso struct {
-	SourceInternalSso *signup.SourceInternalSso `protobuf:"bytes,11,opt,name=source_internal_sso,json=sourceInternalSso,proto3,oneof" json:"source_internal_sso,omitempty"`
+type GlobalSpecType_SignupTypeInternalSso struct {
+	SignupTypeInternalSso *signup.SignupTypeInternalSso `protobuf:"bytes,11,opt,name=signup_type_internal_sso,json=signupTypeInternalSso,proto3,oneof" json:"signup_type_internal_sso,omitempty"`
 }
-type GlobalSpecType_SourceMarketplace struct {
-	SourceMarketplace *signup.SourceMarketplace `protobuf:"bytes,13,opt,name=source_marketplace,json=sourceMarketplace,proto3,oneof" json:"source_marketplace,omitempty"`
+type GlobalSpecType_SignupTypeMarketplace struct {
+	SignupTypeMarketplace *signup.SignupTypeMarketplace `protobuf:"bytes,13,opt,name=signup_type_marketplace,json=signupTypeMarketplace,proto3,oneof" json:"signup_type_marketplace,omitempty"`
 }
 
-func (*GlobalSpecType_SourcePublic) isGlobalSpecType_SourceChoice()          {}
-func (*GlobalSpecType_SourceInternalSre) isGlobalSpecType_SourceChoice()     {}
-func (*GlobalSpecType_SourceInternalScaling) isGlobalSpecType_SourceChoice() {}
-func (*GlobalSpecType_SourcePlanTransition) isGlobalSpecType_SourceChoice()  {}
-func (*GlobalSpecType_SourceMsp) isGlobalSpecType_SourceChoice()             {}
-func (*GlobalSpecType_SourceInternalSso) isGlobalSpecType_SourceChoice()     {}
-func (*GlobalSpecType_SourceMarketplace) isGlobalSpecType_SourceChoice()     {}
+func (*GlobalSpecType_SignupTypePublic) isGlobalSpecType_SignupType()          {}
+func (*GlobalSpecType_SignupTypeInternalSre) isGlobalSpecType_SignupType()     {}
+func (*GlobalSpecType_SignupTypeInternalScaling) isGlobalSpecType_SignupType() {}
+func (*GlobalSpecType_SignupTypePlanTransition) isGlobalSpecType_SignupType()  {}
+func (*GlobalSpecType_SignupTypeMsp) isGlobalSpecType_SignupType()             {}
+func (*GlobalSpecType_SignupTypeInternalSso) isGlobalSpecType_SignupType()     {}
+func (*GlobalSpecType_SignupTypeMarketplace) isGlobalSpecType_SignupType()     {}
 
-func (m *GlobalSpecType) GetSourceChoice() isGlobalSpecType_SourceChoice {
+func (m *GlobalSpecType) GetSignupType() isGlobalSpecType_SignupType {
 	if m != nil {
-		return m.SourceChoice
+		return m.SignupType
 	}
 	return nil
 }
@@ -188,65 +195,72 @@ func (m *GlobalSpecType) GetInternalMeta() *signup.InternalMeta {
 	return nil
 }
 
-func (m *GlobalSpecType) GetSourcePublic() *signup.SourcePublic {
-	if x, ok := m.GetSourceChoice().(*GlobalSpecType_SourcePublic); ok {
-		return x.SourcePublic
+func (m *GlobalSpecType) GetSignupTypePublic() *signup.SignupTypePublic {
+	if x, ok := m.GetSignupType().(*GlobalSpecType_SignupTypePublic); ok {
+		return x.SignupTypePublic
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSourceInternalSre() *signup.SourceInternalSre {
-	if x, ok := m.GetSourceChoice().(*GlobalSpecType_SourceInternalSre); ok {
-		return x.SourceInternalSre
+func (m *GlobalSpecType) GetSignupTypeInternalSre() *signup.SignupTypeInternalSre {
+	if x, ok := m.GetSignupType().(*GlobalSpecType_SignupTypeInternalSre); ok {
+		return x.SignupTypeInternalSre
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSourceInternalScaling() *signup.SourceInternalScaling {
-	if x, ok := m.GetSourceChoice().(*GlobalSpecType_SourceInternalScaling); ok {
-		return x.SourceInternalScaling
+func (m *GlobalSpecType) GetSignupTypeInternalScaling() *signup.SignupTypeInternalScaling {
+	if x, ok := m.GetSignupType().(*GlobalSpecType_SignupTypeInternalScaling); ok {
+		return x.SignupTypeInternalScaling
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSourcePlanTransition() *signup.SourcePlanTransition {
-	if x, ok := m.GetSourceChoice().(*GlobalSpecType_SourcePlanTransition); ok {
-		return x.SourcePlanTransition
+func (m *GlobalSpecType) GetSignupTypePlanTransition() *signup.SignupTypePlanTransition {
+	if x, ok := m.GetSignupType().(*GlobalSpecType_SignupTypePlanTransition); ok {
+		return x.SignupTypePlanTransition
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSourceMsp() *signup.SourceMsp {
-	if x, ok := m.GetSourceChoice().(*GlobalSpecType_SourceMsp); ok {
-		return x.SourceMsp
+func (m *GlobalSpecType) GetSignupTypeMsp() *signup.SignupTypeMsp {
+	if x, ok := m.GetSignupType().(*GlobalSpecType_SignupTypeMsp); ok {
+		return x.SignupTypeMsp
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSourceInternalSso() *signup.SourceInternalSso {
-	if x, ok := m.GetSourceChoice().(*GlobalSpecType_SourceInternalSso); ok {
-		return x.SourceInternalSso
+func (m *GlobalSpecType) GetSignupTypeInternalSso() *signup.SignupTypeInternalSso {
+	if x, ok := m.GetSignupType().(*GlobalSpecType_SignupTypeInternalSso); ok {
+		return x.SignupTypeInternalSso
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetSourceMarketplace() *signup.SourceMarketplace {
-	if x, ok := m.GetSourceChoice().(*GlobalSpecType_SourceMarketplace); ok {
-		return x.SourceMarketplace
+func (m *GlobalSpecType) GetSignupTypeMarketplace() *signup.SignupTypeMarketplace {
+	if x, ok := m.GetSignupType().(*GlobalSpecType_SignupTypeMarketplace); ok {
+		return x.SignupTypeMarketplace
 	}
 	return nil
+}
+
+func (m *GlobalSpecType) GetOrigin() schema.SignupOrigin {
+	if m != nil {
+		return m.Origin
+	}
+	return schema.ORIGIN_UNKNOWN
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
-		(*GlobalSpecType_SourcePublic)(nil),
-		(*GlobalSpecType_SourceInternalSre)(nil),
-		(*GlobalSpecType_SourceInternalScaling)(nil),
-		(*GlobalSpecType_SourcePlanTransition)(nil),
-		(*GlobalSpecType_SourceMsp)(nil),
-		(*GlobalSpecType_SourceInternalSso)(nil),
-		(*GlobalSpecType_SourceMarketplace)(nil),
+		(*GlobalSpecType_SignupTypePublic)(nil),
+		(*GlobalSpecType_SignupTypeInternalSre)(nil),
+		(*GlobalSpecType_SignupTypeInternalScaling)(nil),
+		(*GlobalSpecType_SignupTypePlanTransition)(nil),
+		(*GlobalSpecType_SignupTypeMsp)(nil),
+		(*GlobalSpecType_SignupTypeInternalSso)(nil),
+		(*GlobalSpecType_SignupTypeMarketplace)(nil),
 	}
 }
 
@@ -259,51 +273,52 @@ func init() {
 }
 
 var fileDescriptor_142ba11d320bb60e = []byte{
-	// 690 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x95, 0xcf, 0x4e, 0xdb, 0x4c,
-	0x14, 0xc5, 0x3d, 0xdf, 0x07, 0x21, 0x98, 0x00, 0xad, 0xfb, 0xcf, 0xd0, 0xca, 0x50, 0xba, 0x68,
-	0x55, 0x84, 0x2d, 0xa5, 0x8b, 0xae, 0xa1, 0x95, 0x08, 0x48, 0x48, 0x55, 0xa0, 0x8b, 0x76, 0x63,
-	0x8d, 0xcd, 0xc5, 0x8c, 0xb0, 0x67, 0x46, 0x33, 0xe3, 0xb4, 0x2c, 0x2a, 0xf5, 0x11, 0xba, 0xef,
-	0x0b, 0x74, 0xd3, 0x27, 0x60, 0xd3, 0x65, 0x97, 0x59, 0x66, 0x59, 0xcc, 0x86, 0x25, 0x8f, 0x50,
-	0x65, 0x6c, 0x07, 0x27, 0x8d, 0x52, 0xba, 0xf3, 0xf5, 0x39, 0xe7, 0x77, 0x6f, 0x6e, 0x46, 0x63,
-	0xf3, 0x65, 0x07, 0xa4, 0x4b, 0x98, 0x27, 0xc3, 0x63, 0x48, 0xb0, 0x47, 0xa8, 0x54, 0x98, 0x86,
-	0xe0, 0x27, 0x98, 0xe2, 0x08, 0x12, 0xa0, 0xca, 0xeb, 0x34, 0x7d, 0x49, 0x22, 0x9a, 0x72, 0x4f,
-	0x9d, 0x72, 0x90, 0x2e, 0x17, 0x4c, 0x31, 0x6b, 0x3d, 0x0f, 0xba, 0x79, 0xd0, 0x1d, 0x13, 0x74,
-	0x07, 0xc1, 0xe5, 0x8d, 0x88, 0xa8, 0xe3, 0x34, 0x70, 0x43, 0x96, 0x78, 0x11, 0x8b, 0x98, 0xa7,
-	0x19, 0x41, 0x7a, 0xa4, 0x2b, 0x5d, 0xe8, 0xa7, 0x9c, 0xbd, 0xbc, 0x12, 0x31, 0x16, 0xc5, 0x70,
-	0xed, 0x52, 0x24, 0x01, 0xa9, 0x70, 0xc2, 0x0b, 0x43, 0x73, 0x74, 0xea, 0x23, 0x81, 0xfb, 0x0a,
-	0x84, 0xca, 0x27, 0xf4, 0x88, 0x89, 0x04, 0x2b, 0xc2, 0x68, 0x75, 0xe0, 0xe5, 0x87, 0xc3, 0x19,
-	0xc6, 0xfb, 0x8e, 0x52, 0x7c, 0x32, 0x2c, 0x56, 0x7f, 0xaf, 0xdf, 0x69, 0x16, 0xa6, 0xa5, 0x61,
-	0x53, 0x15, 0xfe, 0x68, 0x58, 0xea, 0xe0, 0x98, 0x1c, 0x62, 0x05, 0x85, 0xba, 0x3a, 0xa2, 0x12,
-	0xf8, 0xe0, 0x0f, 0xf5, 0x5f, 0xfb, 0x5e, 0x37, 0x17, 0xb6, 0x63, 0x16, 0xe0, 0x78, 0x9f, 0x43,
-	0x78, 0x70, 0xca, 0xc1, 0xda, 0x35, 0x17, 0x43, 0x96, 0x70, 0x4c, 0x4f, 0xfd, 0x43, 0x50, 0x98,
-	0xc4, 0xd2, 0x46, 0xab, 0xe8, 0xd9, 0x5c, 0xf3, 0xb1, 0x3b, 0xbc, 0xfa, 0x7c, 0x58, 0xf7, 0x55,
-	0x6e, 0xde, 0x03, 0x85, 0xdb, 0x0b, 0x45, 0xf2, 0x75, 0x1e, 0xb4, 0x36, 0xcd, 0x46, 0x2a, 0x41,
-	0x0c, 0x40, 0xff, 0x69, 0x90, 0x33, 0x1e, 0xf4, 0x56, 0x82, 0xd0, 0x94, 0xb9, 0x7e, 0xa6, 0x44,
-	0xec, 0x9a, 0x8b, 0x38, 0x0c, 0x59, 0x4a, 0xd5, 0x80, 0xf2, 0xff, 0xa4, 0x71, 0x36, 0x73, 0x73,
-	0x3e, 0x4e, 0x91, 0xac, 0xb0, 0x02, 0x12, 0xc7, 0x84, 0x46, 0x03, 0xd6, 0xd4, 0x24, 0xd6, 0x56,
-	0x6e, 0xce, 0x59, 0x45, 0xb2, 0x64, 0x6d, 0x9b, 0xf3, 0x84, 0x2a, 0x10, 0x14, 0xc7, 0x7e, 0x02,
-	0x0a, 0xdb, 0x0d, 0x4d, 0x5a, 0x1b, 0x4f, 0xda, 0x29, 0xac, 0x1a, 0xd5, 0x20, 0x95, 0xca, 0xda,
-	0x31, 0xe7, 0x25, 0x4b, 0x45, 0x08, 0x3e, 0x4f, 0x83, 0x98, 0x84, 0x76, 0x6d, 0x12, 0x68, 0x5f,
-	0x5b, 0xdf, 0x68, 0x67, 0xcb, 0x68, 0x37, 0x64, 0xa5, 0xb6, 0xde, 0x99, 0x77, 0x0a, 0xd4, 0x60,
-	0x34, 0x29, 0xc0, 0x9e, 0xd1, 0xc0, 0xa7, 0x93, 0x80, 0xe5, 0x7c, 0xfb, 0x02, 0x5a, 0x46, 0xfb,
-	0xb6, 0x1c, 0x7d, 0x69, 0x81, 0xf9, 0xe0, 0x0f, 0x74, 0x88, 0xfb, 0x0b, 0xb1, 0xeb, 0x1a, 0xbf,
-	0x7e, 0x23, 0x7c, 0x1e, 0x69, 0x19, 0xed, 0x7b, 0x72, 0x9c, 0x60, 0x9d, 0x98, 0xf7, 0xcb, 0x65,
-	0xc4, 0x98, 0xfa, 0x4a, 0x60, 0x2a, 0x49, 0xff, 0xc0, 0xda, 0xb3, 0xba, 0xcb, 0xf3, 0x89, 0x5b,
-	0x89, 0x31, 0x3d, 0x18, 0x24, 0xb6, 0x66, 0x7a, 0x9f, 0xd0, 0xe5, 0x19, 0x42, 0x2d, 0xa3, 0x7d,
-	0x57, 0x8e, 0x31, 0x58, 0x3b, 0xa6, 0x59, 0x34, 0x4b, 0x24, 0xb7, 0x4d, 0xdd, 0x60, 0x65, 0x52,
-	0x83, 0x3d, 0xc9, 0xab, 0xd4, 0x59, 0x59, 0xbe, 0xb5, 0x82, 0x31, 0x9b, 0x97, 0xcc, 0x9e, 0xfb,
-	0x87, 0xcd, 0x4b, 0x56, 0x65, 0x8f, 0xfe, 0x05, 0x92, 0x59, 0xd8, 0xb4, 0xca, 0x71, 0xb1, 0x38,
-	0x01, 0xc5, 0x63, 0x1c, 0x82, 0x3d, 0xff, 0xf7, 0x16, 0x7b, 0xd7, 0xf6, 0x31, 0x2d, 0xaa, 0xea,
-	0xd2, 0xe0, 0x2c, 0x86, 0xc7, 0x8c, 0x84, 0x60, 0xd5, 0x7f, 0x9c, 0xa1, 0x5a, 0xf7, 0x0c, 0x4d,
-	0xef, 0x4e, 0xd5, 0xa7, 0x6f, 0xd5, 0xb6, 0xbe, 0xa2, 0xee, 0xb9, 0x63, 0xf4, 0xce, 0x1d, 0xe3,
-	0xea, 0xdc, 0x41, 0x9f, 0x33, 0x07, 0x7d, 0xcb, 0x1c, 0xf4, 0x33, 0x73, 0x50, 0x37, 0x73, 0x50,
-	0x2f, 0x73, 0xd0, 0xaf, 0xcc, 0x41, 0x97, 0x99, 0x63, 0x5c, 0x65, 0x0e, 0xfa, 0x72, 0xe1, 0x18,
-	0xdd, 0x0b, 0xc7, 0xe8, 0x5d, 0x38, 0xc6, 0x7b, 0x1c, 0x31, 0x7e, 0x12, 0xb9, 0x1d, 0x16, 0x2b,
-	0x10, 0x02, 0xbb, 0xa9, 0xf4, 0xf4, 0x43, 0xff, 0xd6, 0xdc, 0xe0, 0x82, 0x75, 0xc8, 0x21, 0x88,
-	0x8d, 0x52, 0xf6, 0x78, 0x10, 0x31, 0x0f, 0x3e, 0xaa, 0xf2, 0x66, 0xbc, 0xc1, 0x77, 0x22, 0xa8,
-	0xe9, 0x4b, 0xed, 0xc5, 0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x1c, 0x40, 0x1b, 0x4b, 0x5d, 0x06,
-	0x00, 0x00,
+	// 718 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x95, 0x4d, 0x4f, 0xe3, 0x38,
+	0x1c, 0xc6, 0xe3, 0x5d, 0x28, 0xe0, 0x42, 0x41, 0x91, 0x56, 0x84, 0x17, 0x79, 0x59, 0x90, 0x56,
+	0x48, 0x88, 0x44, 0x2a, 0x87, 0x3d, 0xd3, 0x5d, 0x89, 0x2e, 0x12, 0xda, 0x55, 0x61, 0x39, 0xec,
+	0x25, 0x72, 0x83, 0x1b, 0x2c, 0x12, 0xdb, 0xb2, 0xdd, 0x0e, 0x1c, 0x46, 0x9a, 0x8f, 0x30, 0xf7,
+	0xf9, 0x02, 0xf3, 0x1d, 0x7a, 0x99, 0xe3, 0x1c, 0x7b, 0xec, 0x71, 0x08, 0x17, 0x8e, 0x7c, 0x84,
+	0x51, 0x9c, 0xb4, 0x24, 0x55, 0x0b, 0xcc, 0xa9, 0x71, 0x9f, 0xe7, 0xf9, 0x3d, 0xff, 0xd8, 0x95,
+	0x0b, 0xff, 0xe8, 0x11, 0xe5, 0x52, 0xee, 0xa9, 0xe0, 0x9a, 0xc4, 0xd8, 0xa3, 0x4c, 0x69, 0xcc,
+	0x02, 0xe2, 0xc7, 0x98, 0xe1, 0x90, 0xc4, 0x84, 0x69, 0xaf, 0x57, 0xf7, 0x15, 0x0d, 0x59, 0x57,
+	0x78, 0xfa, 0x4e, 0x10, 0xe5, 0x0a, 0xc9, 0x35, 0xb7, 0x0f, 0xb2, 0xa0, 0x9b, 0x05, 0xdd, 0x29,
+	0x41, 0x77, 0x1c, 0xdc, 0x3c, 0x0c, 0xa9, 0xbe, 0xee, 0xb6, 0xdd, 0x80, 0xc7, 0x5e, 0xc8, 0x43,
+	0xee, 0x19, 0x46, 0xbb, 0xdb, 0x31, 0x2b, 0xb3, 0x30, 0x4f, 0x19, 0x7b, 0xf3, 0xd7, 0x90, 0xf3,
+	0x30, 0x22, 0xcf, 0x2e, 0x4d, 0x63, 0xa2, 0x34, 0x8e, 0x45, 0x6e, 0xa8, 0x4f, 0x4e, 0xdd, 0x91,
+	0x38, 0x55, 0x48, 0xa0, 0x7d, 0xca, 0x3a, 0x5c, 0xc6, 0x58, 0x53, 0xce, 0x8a, 0x03, 0x6f, 0x6e,
+	0x95, 0x33, 0x5c, 0xa4, 0x8e, 0x91, 0xb8, 0x57, 0x16, 0x8b, 0xef, 0xeb, 0xf7, 0xea, 0xb9, 0x69,
+	0xa3, 0x6c, 0x2a, 0xc2, 0xb7, 0xcb, 0x52, 0x0f, 0x47, 0xf4, 0x0a, 0x6b, 0x92, 0xab, 0x3b, 0x13,
+	0x2a, 0x25, 0xef, 0xfc, 0x52, 0xff, 0x6e, 0x7f, 0x09, 0xd6, 0x4e, 0x22, 0xde, 0xc6, 0xd1, 0xb9,
+	0x20, 0xc1, 0xc5, 0x9d, 0x20, 0xf6, 0x29, 0x5c, 0x0d, 0x78, 0x2c, 0x30, 0xbb, 0xf3, 0xaf, 0x88,
+	0xc6, 0x34, 0x52, 0x0e, 0xd8, 0x01, 0xfb, 0xd5, 0xfa, 0x6f, 0x6e, 0x79, 0xeb, 0xb3, 0x61, 0xdd,
+	0x3f, 0x33, 0xf3, 0x19, 0xd1, 0xb8, 0x55, 0xcb, 0x93, 0x7f, 0x65, 0x41, 0xfb, 0x18, 0x2e, 0x77,
+	0x15, 0x91, 0x63, 0xd0, 0x4f, 0x06, 0x84, 0xa6, 0x83, 0xfe, 0x53, 0x44, 0x1a, 0x4a, 0x35, 0xcd,
+	0x8c, 0x10, 0xa7, 0x70, 0x15, 0x07, 0x01, 0xef, 0x32, 0x3d, 0xa6, 0xfc, 0xfc, 0xd2, 0x38, 0xc7,
+	0x99, 0x39, 0x1b, 0x27, 0x4f, 0x16, 0x58, 0x6d, 0x1a, 0x45, 0x94, 0x85, 0x63, 0xd6, 0xdc, 0x4b,
+	0xac, 0x46, 0x66, 0xce, 0x58, 0x79, 0x72, 0xc4, 0x3a, 0x81, 0x2b, 0x94, 0x69, 0x22, 0x19, 0x8e,
+	0xfc, 0x98, 0x68, 0xec, 0x2c, 0x1b, 0xd2, 0xee, 0x74, 0xd2, 0xdf, 0xb9, 0xd5, 0xa0, 0x96, 0x69,
+	0x61, 0x65, 0x5f, 0x42, 0x3b, 0x33, 0xf9, 0xe9, 0xc1, 0xfa, 0xa2, 0xdb, 0x8e, 0x68, 0xe0, 0x54,
+	0x0c, 0xed, 0xf7, 0xe9, 0xb4, 0x73, 0xf3, 0x91, 0x9e, 0xd6, 0xbf, 0xc6, 0xdd, 0xb4, 0x5a, 0x6b,
+	0x6a, 0xe2, 0x3b, 0xbb, 0x03, 0x9d, 0x22, 0x77, 0x3c, 0xac, 0x92, 0xc4, 0x59, 0x30, 0xf4, 0x83,
+	0xd7, 0xe8, 0xa3, 0xa9, 0xcf, 0x25, 0x69, 0x5a, 0xad, 0x5f, 0xd4, 0x34, 0xc1, 0x96, 0x70, 0x7b,
+	0x7a, 0x4f, 0x80, 0xd3, 0xfd, 0x72, 0x16, 0x4d, 0x97, 0xf7, 0xe6, 0xae, 0x2c, 0xd6, 0xb4, 0x5a,
+	0x1b, 0x6a, 0x96, 0x68, 0xdf, 0xc2, 0xad, 0xd2, 0x9e, 0x45, 0x98, 0xf9, 0x5a, 0x62, 0xa6, 0x68,
+	0xfa, 0xe3, 0x76, 0x96, 0x4c, 0xa5, 0xfb, 0xea, 0xe6, 0x45, 0x98, 0x5d, 0x8c, 0x53, 0x8d, 0x85,
+	0xe1, 0x7b, 0xf0, 0xd8, 0x07, 0xa0, 0x69, 0xb5, 0x1c, 0x35, 0xc3, 0x64, 0x5f, 0xc2, 0xd5, 0x62,
+	0x73, 0xac, 0x84, 0x03, 0x4d, 0xdb, 0xde, 0x6b, 0x6d, 0x67, 0x4a, 0x14, 0x2b, 0x56, 0x54, 0x51,
+	0xb1, 0xf9, 0xac, 0xd3, 0x52, 0xdc, 0xa9, 0xfe, 0xe0, 0x69, 0x29, 0x5e, 0x2c, 0x9a, 0x76, 0x6c,
+	0x8a, 0xdb, 0x0c, 0xae, 0x97, 0x5e, 0x04, 0xcb, 0x1b, 0xa2, 0x45, 0x84, 0x03, 0xe2, 0xac, 0xbc,
+	0xad, 0xef, 0xec, 0x39, 0x32, 0xa3, 0xaf, 0xe0, 0xb0, 0x8f, 0x60, 0x85, 0x4b, 0x1a, 0x52, 0xe6,
+	0xd4, 0x76, 0xc0, 0x7e, 0xad, 0xbe, 0x35, 0x81, 0xcf, 0xb8, 0xff, 0x18, 0x4b, 0x2b, 0xb7, 0x36,
+	0xd6, 0x61, 0xb5, 0x30, 0xa4, 0xbd, 0xf8, 0xa5, 0x0f, 0x2a, 0x83, 0x3e, 0x98, 0x3f, 0x9d, 0x5b,
+	0x9c, 0x5f, 0xab, 0x34, 0x3e, 0x81, 0xc1, 0x3d, 0xb2, 0x86, 0xf7, 0xc8, 0x7a, 0xba, 0x47, 0xe0,
+	0x43, 0x82, 0xc0, 0xe7, 0x04, 0x81, 0xaf, 0x09, 0x02, 0x83, 0x04, 0x81, 0x61, 0x82, 0xc0, 0xb7,
+	0x04, 0x81, 0xc7, 0x04, 0x59, 0x4f, 0x09, 0x02, 0x1f, 0x1f, 0x90, 0x35, 0x78, 0x40, 0xd6, 0xf0,
+	0x01, 0x59, 0xff, 0xe3, 0x90, 0x8b, 0x9b, 0xd0, 0xed, 0xf1, 0x48, 0x13, 0x29, 0xb1, 0xdb, 0x55,
+	0x9e, 0x79, 0x48, 0xef, 0xf0, 0x43, 0x21, 0x79, 0x8f, 0x5e, 0x11, 0x79, 0x38, 0x92, 0x3d, 0xd1,
+	0x0e, 0xb9, 0x47, 0x6e, 0xf5, 0xe8, 0x9e, 0x7e, 0xc3, 0xbf, 0x56, 0xbb, 0x62, 0xae, 0xd8, 0xa3,
+	0xef, 0x01, 0x00, 0x00, 0xff, 0xff, 0xec, 0x85, 0xb4, 0x4d, 0xeb, 0x06, 0x00, 0x00,
 }
 
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -340,25 +355,28 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.InternalMeta.Equal(that1.InternalMeta) {
 		return false
 	}
-	if that1.SourceChoice == nil {
-		if this.SourceChoice != nil {
+	if that1.SignupType == nil {
+		if this.SignupType != nil {
 			return false
 		}
-	} else if this.SourceChoice == nil {
+	} else if this.SignupType == nil {
 		return false
-	} else if !this.SourceChoice.Equal(that1.SourceChoice) {
+	} else if !this.SignupType.Equal(that1.SignupType) {
+		return false
+	}
+	if this.Origin != that1.Origin {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_SourcePublic) Equal(that interface{}) bool {
+func (this *GlobalSpecType_SignupTypePublic) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_SourcePublic)
+	that1, ok := that.(*GlobalSpecType_SignupTypePublic)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_SourcePublic)
+		that2, ok := that.(GlobalSpecType_SignupTypePublic)
 		if ok {
 			that1 = &that2
 		} else {
@@ -370,19 +388,19 @@ func (this *GlobalSpecType_SourcePublic) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SourcePublic.Equal(that1.SourcePublic) {
+	if !this.SignupTypePublic.Equal(that1.SignupTypePublic) {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_SourceInternalSre) Equal(that interface{}) bool {
+func (this *GlobalSpecType_SignupTypeInternalSre) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_SourceInternalSre)
+	that1, ok := that.(*GlobalSpecType_SignupTypeInternalSre)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_SourceInternalSre)
+		that2, ok := that.(GlobalSpecType_SignupTypeInternalSre)
 		if ok {
 			that1 = &that2
 		} else {
@@ -394,19 +412,19 @@ func (this *GlobalSpecType_SourceInternalSre) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SourceInternalSre.Equal(that1.SourceInternalSre) {
+	if !this.SignupTypeInternalSre.Equal(that1.SignupTypeInternalSre) {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_SourceInternalScaling) Equal(that interface{}) bool {
+func (this *GlobalSpecType_SignupTypeInternalScaling) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_SourceInternalScaling)
+	that1, ok := that.(*GlobalSpecType_SignupTypeInternalScaling)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_SourceInternalScaling)
+		that2, ok := that.(GlobalSpecType_SignupTypeInternalScaling)
 		if ok {
 			that1 = &that2
 		} else {
@@ -418,19 +436,19 @@ func (this *GlobalSpecType_SourceInternalScaling) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SourceInternalScaling.Equal(that1.SourceInternalScaling) {
+	if !this.SignupTypeInternalScaling.Equal(that1.SignupTypeInternalScaling) {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_SourcePlanTransition) Equal(that interface{}) bool {
+func (this *GlobalSpecType_SignupTypePlanTransition) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_SourcePlanTransition)
+	that1, ok := that.(*GlobalSpecType_SignupTypePlanTransition)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_SourcePlanTransition)
+		that2, ok := that.(GlobalSpecType_SignupTypePlanTransition)
 		if ok {
 			that1 = &that2
 		} else {
@@ -442,19 +460,19 @@ func (this *GlobalSpecType_SourcePlanTransition) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SourcePlanTransition.Equal(that1.SourcePlanTransition) {
+	if !this.SignupTypePlanTransition.Equal(that1.SignupTypePlanTransition) {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_SourceMsp) Equal(that interface{}) bool {
+func (this *GlobalSpecType_SignupTypeMsp) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_SourceMsp)
+	that1, ok := that.(*GlobalSpecType_SignupTypeMsp)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_SourceMsp)
+		that2, ok := that.(GlobalSpecType_SignupTypeMsp)
 		if ok {
 			that1 = &that2
 		} else {
@@ -466,19 +484,19 @@ func (this *GlobalSpecType_SourceMsp) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SourceMsp.Equal(that1.SourceMsp) {
+	if !this.SignupTypeMsp.Equal(that1.SignupTypeMsp) {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_SourceInternalSso) Equal(that interface{}) bool {
+func (this *GlobalSpecType_SignupTypeInternalSso) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_SourceInternalSso)
+	that1, ok := that.(*GlobalSpecType_SignupTypeInternalSso)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_SourceInternalSso)
+		that2, ok := that.(GlobalSpecType_SignupTypeInternalSso)
 		if ok {
 			that1 = &that2
 		} else {
@@ -490,19 +508,19 @@ func (this *GlobalSpecType_SourceInternalSso) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SourceInternalSso.Equal(that1.SourceInternalSso) {
+	if !this.SignupTypeInternalSso.Equal(that1.SignupTypeInternalSso) {
 		return false
 	}
 	return true
 }
-func (this *GlobalSpecType_SourceMarketplace) Equal(that interface{}) bool {
+func (this *GlobalSpecType_SignupTypeMarketplace) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*GlobalSpecType_SourceMarketplace)
+	that1, ok := that.(*GlobalSpecType_SignupTypeMarketplace)
 	if !ok {
-		that2, ok := that.(GlobalSpecType_SourceMarketplace)
+		that2, ok := that.(GlobalSpecType_SignupTypeMarketplace)
 		if ok {
 			that1 = &that2
 		} else {
@@ -514,7 +532,7 @@ func (this *GlobalSpecType_SourceMarketplace) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.SourceMarketplace.Equal(that1.SourceMarketplace) {
+	if !this.SignupTypeMarketplace.Equal(that1.SignupTypeMarketplace) {
 		return false
 	}
 	return true
@@ -523,7 +541,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 17)
 	s = append(s, "&v2_signup.GlobalSpecType{")
 	if this.CompanyDetails != nil {
 		s = append(s, "CompanyDetails: "+fmt.Sprintf("%#v", this.CompanyDetails)+",\n")
@@ -540,66 +558,67 @@ func (this *GlobalSpecType) GoString() string {
 	if this.InternalMeta != nil {
 		s = append(s, "InternalMeta: "+fmt.Sprintf("%#v", this.InternalMeta)+",\n")
 	}
-	if this.SourceChoice != nil {
-		s = append(s, "SourceChoice: "+fmt.Sprintf("%#v", this.SourceChoice)+",\n")
+	if this.SignupType != nil {
+		s = append(s, "SignupType: "+fmt.Sprintf("%#v", this.SignupType)+",\n")
 	}
+	s = append(s, "Origin: "+fmt.Sprintf("%#v", this.Origin)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *GlobalSpecType_SourcePublic) GoString() string {
+func (this *GlobalSpecType_SignupTypePublic) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SourcePublic{` +
-		`SourcePublic:` + fmt.Sprintf("%#v", this.SourcePublic) + `}`}, ", ")
+	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SignupTypePublic{` +
+		`SignupTypePublic:` + fmt.Sprintf("%#v", this.SignupTypePublic) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_SourceInternalSre) GoString() string {
+func (this *GlobalSpecType_SignupTypeInternalSre) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SourceInternalSre{` +
-		`SourceInternalSre:` + fmt.Sprintf("%#v", this.SourceInternalSre) + `}`}, ", ")
+	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SignupTypeInternalSre{` +
+		`SignupTypeInternalSre:` + fmt.Sprintf("%#v", this.SignupTypeInternalSre) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_SourceInternalScaling) GoString() string {
+func (this *GlobalSpecType_SignupTypeInternalScaling) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SourceInternalScaling{` +
-		`SourceInternalScaling:` + fmt.Sprintf("%#v", this.SourceInternalScaling) + `}`}, ", ")
+	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SignupTypeInternalScaling{` +
+		`SignupTypeInternalScaling:` + fmt.Sprintf("%#v", this.SignupTypeInternalScaling) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_SourcePlanTransition) GoString() string {
+func (this *GlobalSpecType_SignupTypePlanTransition) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SourcePlanTransition{` +
-		`SourcePlanTransition:` + fmt.Sprintf("%#v", this.SourcePlanTransition) + `}`}, ", ")
+	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SignupTypePlanTransition{` +
+		`SignupTypePlanTransition:` + fmt.Sprintf("%#v", this.SignupTypePlanTransition) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_SourceMsp) GoString() string {
+func (this *GlobalSpecType_SignupTypeMsp) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SourceMsp{` +
-		`SourceMsp:` + fmt.Sprintf("%#v", this.SourceMsp) + `}`}, ", ")
+	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SignupTypeMsp{` +
+		`SignupTypeMsp:` + fmt.Sprintf("%#v", this.SignupTypeMsp) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_SourceInternalSso) GoString() string {
+func (this *GlobalSpecType_SignupTypeInternalSso) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SourceInternalSso{` +
-		`SourceInternalSso:` + fmt.Sprintf("%#v", this.SourceInternalSso) + `}`}, ", ")
+	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SignupTypeInternalSso{` +
+		`SignupTypeInternalSso:` + fmt.Sprintf("%#v", this.SignupTypeInternalSso) + `}`}, ", ")
 	return s
 }
-func (this *GlobalSpecType_SourceMarketplace) GoString() string {
+func (this *GlobalSpecType_SignupTypeMarketplace) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SourceMarketplace{` +
-		`SourceMarketplace:` + fmt.Sprintf("%#v", this.SourceMarketplace) + `}`}, ", ")
+	s := strings.Join([]string{`&v2_signup.GlobalSpecType_SignupTypeMarketplace{` +
+		`SignupTypeMarketplace:` + fmt.Sprintf("%#v", this.SignupTypeMarketplace) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -630,11 +649,16 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.SourceChoice != nil {
+	if m.Origin != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Origin))
+		i--
+		dAtA[i] = 0x70
+	}
+	if m.SignupType != nil {
 		{
-			size := m.SourceChoice.Size()
+			size := m.SignupType.Size()
 			i -= size
-			if _, err := m.SourceChoice.MarshalTo(dAtA[i:]); err != nil {
+			if _, err := m.SignupType.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -702,16 +726,16 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *GlobalSpecType_SourcePublic) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypePublic) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_SourcePublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypePublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SourcePublic != nil {
+	if m.SignupTypePublic != nil {
 		{
-			size, err := m.SourcePublic.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.SignupTypePublic.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -723,16 +747,16 @@ func (m *GlobalSpecType_SourcePublic) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_SourceInternalSre) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeInternalSre) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_SourceInternalSre) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeInternalSre) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SourceInternalSre != nil {
+	if m.SignupTypeInternalSre != nil {
 		{
-			size, err := m.SourceInternalSre.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.SignupTypeInternalSre.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -744,16 +768,16 @@ func (m *GlobalSpecType_SourceInternalSre) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_SourceInternalScaling) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeInternalScaling) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_SourceInternalScaling) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeInternalScaling) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SourceInternalScaling != nil {
+	if m.SignupTypeInternalScaling != nil {
 		{
-			size, err := m.SourceInternalScaling.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.SignupTypeInternalScaling.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -765,16 +789,16 @@ func (m *GlobalSpecType_SourceInternalScaling) MarshalToSizedBuffer(dAtA []byte)
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_SourcePlanTransition) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypePlanTransition) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_SourcePlanTransition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypePlanTransition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SourcePlanTransition != nil {
+	if m.SignupTypePlanTransition != nil {
 		{
-			size, err := m.SourcePlanTransition.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.SignupTypePlanTransition.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -786,16 +810,16 @@ func (m *GlobalSpecType_SourcePlanTransition) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_SourceMsp) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeMsp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_SourceMsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeMsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SourceMsp != nil {
+	if m.SignupTypeMsp != nil {
 		{
-			size, err := m.SourceMsp.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.SignupTypeMsp.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -807,16 +831,16 @@ func (m *GlobalSpecType_SourceMsp) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_SourceInternalSso) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeInternalSso) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_SourceInternalSso) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeInternalSso) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SourceInternalSso != nil {
+	if m.SignupTypeInternalSso != nil {
 		{
-			size, err := m.SourceInternalSso.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.SignupTypeInternalSso.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -828,16 +852,16 @@ func (m *GlobalSpecType_SourceInternalSso) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
-func (m *GlobalSpecType_SourceMarketplace) MarshalTo(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeMarketplace) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *GlobalSpecType_SourceMarketplace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *GlobalSpecType_SignupTypeMarketplace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
-	if m.SourceMarketplace != nil {
+	if m.SignupTypeMarketplace != nil {
 		{
-			size, err := m.SourceMarketplace.MarshalToSizedBuffer(dAtA[:i])
+			size, err := m.SignupTypeMarketplace.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -882,96 +906,99 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.BillingDetails.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.SourceChoice != nil {
-		n += m.SourceChoice.Size()
+	if m.SignupType != nil {
+		n += m.SignupType.Size()
 	}
 	if m.InternalMeta != nil {
 		l = m.InternalMeta.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.Origin != 0 {
+		n += 1 + sovTypes(uint64(m.Origin))
+	}
 	return n
 }
 
-func (m *GlobalSpecType_SourcePublic) Size() (n int) {
+func (m *GlobalSpecType_SignupTypePublic) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SourcePublic != nil {
-		l = m.SourcePublic.Size()
+	if m.SignupTypePublic != nil {
+		l = m.SignupTypePublic.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GlobalSpecType_SourceInternalSre) Size() (n int) {
+func (m *GlobalSpecType_SignupTypeInternalSre) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SourceInternalSre != nil {
-		l = m.SourceInternalSre.Size()
+	if m.SignupTypeInternalSre != nil {
+		l = m.SignupTypeInternalSre.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GlobalSpecType_SourceInternalScaling) Size() (n int) {
+func (m *GlobalSpecType_SignupTypeInternalScaling) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SourceInternalScaling != nil {
-		l = m.SourceInternalScaling.Size()
+	if m.SignupTypeInternalScaling != nil {
+		l = m.SignupTypeInternalScaling.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GlobalSpecType_SourcePlanTransition) Size() (n int) {
+func (m *GlobalSpecType_SignupTypePlanTransition) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SourcePlanTransition != nil {
-		l = m.SourcePlanTransition.Size()
+	if m.SignupTypePlanTransition != nil {
+		l = m.SignupTypePlanTransition.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GlobalSpecType_SourceMsp) Size() (n int) {
+func (m *GlobalSpecType_SignupTypeMsp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SourceMsp != nil {
-		l = m.SourceMsp.Size()
+	if m.SignupTypeMsp != nil {
+		l = m.SignupTypeMsp.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GlobalSpecType_SourceInternalSso) Size() (n int) {
+func (m *GlobalSpecType_SignupTypeInternalSso) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SourceInternalSso != nil {
-		l = m.SourceInternalSso.Size()
+	if m.SignupTypeInternalSso != nil {
+		l = m.SignupTypeInternalSso.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
-func (m *GlobalSpecType_SourceMarketplace) Size() (n int) {
+func (m *GlobalSpecType_SignupTypeMarketplace) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.SourceMarketplace != nil {
-		l = m.SourceMarketplace.Size()
+	if m.SignupTypeMarketplace != nil {
+		l = m.SignupTypeMarketplace.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -992,78 +1019,79 @@ func (this *GlobalSpecType) String() string {
 		`UserDetails:` + strings.Replace(fmt.Sprintf("%v", this.UserDetails), "UserMeta", "signup.UserMeta", 1) + `,`,
 		`AccountDetails:` + strings.Replace(fmt.Sprintf("%v", this.AccountDetails), "AccountMeta", "signup.AccountMeta", 1) + `,`,
 		`BillingDetails:` + strings.Replace(fmt.Sprintf("%v", this.BillingDetails), "BillingMeta", "signup.BillingMeta", 1) + `,`,
-		`SourceChoice:` + fmt.Sprintf("%v", this.SourceChoice) + `,`,
+		`SignupType:` + fmt.Sprintf("%v", this.SignupType) + `,`,
 		`InternalMeta:` + strings.Replace(fmt.Sprintf("%v", this.InternalMeta), "InternalMeta", "signup.InternalMeta", 1) + `,`,
+		`Origin:` + fmt.Sprintf("%v", this.Origin) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SourcePublic) String() string {
+func (this *GlobalSpecType_SignupTypePublic) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_SourcePublic{`,
-		`SourcePublic:` + strings.Replace(fmt.Sprintf("%v", this.SourcePublic), "SourcePublic", "signup.SourcePublic", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_SignupTypePublic{`,
+		`SignupTypePublic:` + strings.Replace(fmt.Sprintf("%v", this.SignupTypePublic), "SignupTypePublic", "signup.SignupTypePublic", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SourceInternalSre) String() string {
+func (this *GlobalSpecType_SignupTypeInternalSre) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_SourceInternalSre{`,
-		`SourceInternalSre:` + strings.Replace(fmt.Sprintf("%v", this.SourceInternalSre), "SourceInternalSre", "signup.SourceInternalSre", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_SignupTypeInternalSre{`,
+		`SignupTypeInternalSre:` + strings.Replace(fmt.Sprintf("%v", this.SignupTypeInternalSre), "SignupTypeInternalSre", "signup.SignupTypeInternalSre", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SourceInternalScaling) String() string {
+func (this *GlobalSpecType_SignupTypeInternalScaling) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_SourceInternalScaling{`,
-		`SourceInternalScaling:` + strings.Replace(fmt.Sprintf("%v", this.SourceInternalScaling), "SourceInternalScaling", "signup.SourceInternalScaling", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_SignupTypeInternalScaling{`,
+		`SignupTypeInternalScaling:` + strings.Replace(fmt.Sprintf("%v", this.SignupTypeInternalScaling), "SignupTypeInternalScaling", "signup.SignupTypeInternalScaling", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SourcePlanTransition) String() string {
+func (this *GlobalSpecType_SignupTypePlanTransition) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_SourcePlanTransition{`,
-		`SourcePlanTransition:` + strings.Replace(fmt.Sprintf("%v", this.SourcePlanTransition), "SourcePlanTransition", "signup.SourcePlanTransition", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_SignupTypePlanTransition{`,
+		`SignupTypePlanTransition:` + strings.Replace(fmt.Sprintf("%v", this.SignupTypePlanTransition), "SignupTypePlanTransition", "signup.SignupTypePlanTransition", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SourceMsp) String() string {
+func (this *GlobalSpecType_SignupTypeMsp) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_SourceMsp{`,
-		`SourceMsp:` + strings.Replace(fmt.Sprintf("%v", this.SourceMsp), "SourceMsp", "signup.SourceMsp", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_SignupTypeMsp{`,
+		`SignupTypeMsp:` + strings.Replace(fmt.Sprintf("%v", this.SignupTypeMsp), "SignupTypeMsp", "signup.SignupTypeMsp", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SourceInternalSso) String() string {
+func (this *GlobalSpecType_SignupTypeInternalSso) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_SourceInternalSso{`,
-		`SourceInternalSso:` + strings.Replace(fmt.Sprintf("%v", this.SourceInternalSso), "SourceInternalSso", "signup.SourceInternalSso", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_SignupTypeInternalSso{`,
+		`SignupTypeInternalSso:` + strings.Replace(fmt.Sprintf("%v", this.SignupTypeInternalSso), "SignupTypeInternalSso", "signup.SignupTypeInternalSso", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *GlobalSpecType_SourceMarketplace) String() string {
+func (this *GlobalSpecType_SignupTypeMarketplace) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&GlobalSpecType_SourceMarketplace{`,
-		`SourceMarketplace:` + strings.Replace(fmt.Sprintf("%v", this.SourceMarketplace), "SourceMarketplace", "signup.SourceMarketplace", 1) + `,`,
+	s := strings.Join([]string{`&GlobalSpecType_SignupTypeMarketplace{`,
+		`SignupTypeMarketplace:` + strings.Replace(fmt.Sprintf("%v", this.SignupTypeMarketplace), "SignupTypeMarketplace", "signup.SignupTypeMarketplace", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1251,7 +1279,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourcePublic", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SignupTypePublic", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1278,15 +1306,15 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &signup.SourcePublic{}
+			v := &signup.SignupTypePublic{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.SourceChoice = &GlobalSpecType_SourcePublic{v}
+			m.SignupType = &GlobalSpecType_SignupTypePublic{v}
 			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceInternalSre", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SignupTypeInternalSre", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1313,15 +1341,15 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &signup.SourceInternalSre{}
+			v := &signup.SignupTypeInternalSre{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.SourceChoice = &GlobalSpecType_SourceInternalSre{v}
+			m.SignupType = &GlobalSpecType_SignupTypeInternalSre{v}
 			iNdEx = postIndex
 		case 8:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceInternalScaling", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SignupTypeInternalScaling", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1348,15 +1376,15 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &signup.SourceInternalScaling{}
+			v := &signup.SignupTypeInternalScaling{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.SourceChoice = &GlobalSpecType_SourceInternalScaling{v}
+			m.SignupType = &GlobalSpecType_SignupTypeInternalScaling{v}
 			iNdEx = postIndex
 		case 9:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourcePlanTransition", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SignupTypePlanTransition", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1383,15 +1411,15 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &signup.SourcePlanTransition{}
+			v := &signup.SignupTypePlanTransition{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.SourceChoice = &GlobalSpecType_SourcePlanTransition{v}
+			m.SignupType = &GlobalSpecType_SignupTypePlanTransition{v}
 			iNdEx = postIndex
 		case 10:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceMsp", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SignupTypeMsp", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1418,15 +1446,15 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &signup.SourceMsp{}
+			v := &signup.SignupTypeMsp{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.SourceChoice = &GlobalSpecType_SourceMsp{v}
+			m.SignupType = &GlobalSpecType_SignupTypeMsp{v}
 			iNdEx = postIndex
 		case 11:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceInternalSso", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SignupTypeInternalSso", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1453,11 +1481,11 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &signup.SourceInternalSso{}
+			v := &signup.SignupTypeInternalSso{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.SourceChoice = &GlobalSpecType_SourceInternalSso{v}
+			m.SignupType = &GlobalSpecType_SignupTypeInternalSso{v}
 			iNdEx = postIndex
 		case 12:
 			if wireType != 2 {
@@ -1497,7 +1525,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 13:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SourceMarketplace", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SignupTypeMarketplace", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -1524,12 +1552,31 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &signup.SourceMarketplace{}
+			v := &signup.SignupTypeMarketplace{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			m.SourceChoice = &GlobalSpecType_SourceMarketplace{v}
+			m.SignupType = &GlobalSpecType_SignupTypeMarketplace{v}
 			iNdEx = postIndex
+		case 14:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Origin", wireType)
+			}
+			m.Origin = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Origin |= schema.SignupOrigin(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

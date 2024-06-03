@@ -20,40 +20,45 @@ resource "volterra_global_log_receiver" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "ns_current ns_all ns_list ns_system" must be set
-  ns_system = true
+  // One of the arguments from this list "ns_list ns_system ns_current ns_all" must be set
+
+  ns_current = true
 
   // One of the arguments from this list "request_logs security_events audit_logs" must be set
+
   request_logs = true
 
-  // One of the arguments from this list "new_relic_receiver aws_cloud_watch_receiver kafka_receiver sumo_logic_receiver http_receiver splunk_receiver elastic_receiver gcp_bucket_receiver datadog_receiver azure_receiver azure_event_hubs_receiver qradar_receiver s3_receiver" must be set
+  // One of the arguments from this list "http_receiver elastic_receiver kafka_receiver qradar_receiver gcp_bucket_receiver s3_receiver datadog_receiver azure_event_hubs_receiver new_relic_receiver splunk_receiver azure_receiver aws_cloud_watch_receiver sumo_logic_receiver" must be set
 
-  s3_receiver {
-    aws_cred {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
+  http_receiver {
+    // One of the arguments from this list "auth_none auth_basic auth_token" must be set
 
-    aws_region = "us-east-1"
+    auth_none = true
 
     batch {
-      // One of the arguments from this list "max_bytes max_bytes_disabled" must be set
+      // One of the arguments from this list "max_bytes_disabled max_bytes" can be set
+
       max_bytes_disabled = true
 
-      // One of the arguments from this list "max_events_disabled max_events" must be set
+      // One of the arguments from this list "max_events_disabled max_events" can be set
+
       max_events_disabled = true
 
-      // One of the arguments from this list "timeout_seconds_default timeout_seconds" must be set
+      // One of the arguments from this list "timeout_seconds_default timeout_seconds" can be set
+
       timeout_seconds_default = true
     }
 
-    bucket = "my-log-bucket"
-
     compression {
-      // One of the arguments from this list "compression_gzip compression_none" must be set
+      // One of the arguments from this list "compression_none compression_gzip" can be set
+
       compression_none = true
     }
+
+    // One of the arguments from this list "no_tls use_tls" must be set
+
+    no_tls = true
+    uri = "http://example.com:9000/logs"
   }
 }
 
@@ -136,7 +141,7 @@ HTTP Basic Auth Password.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -172,7 +177,7 @@ F5XC Secret. URL for token, needs to be fetched from this path.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -186,7 +191,7 @@ F5XC Secret. URL for token, needs to be fetched from this path.
 
 Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
 
-###### One of the arguments from this list "max_bytes, max_bytes_disabled" can be set
+###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
 
 `max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
 
@@ -208,7 +213,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -222,7 +227,7 @@ Azure Event Hubs Connection String..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -258,7 +263,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_none, compression_gzip" can be set
+###### One of the arguments from this list "compression_gzip, compression_none" can be set
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -336,7 +341,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 `max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
 
-###### One of the arguments from this list "max_events, max_events_disabled" can be set
+###### One of the arguments from this list "max_events_disabled, max_events" can be set
 
 `max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
 
@@ -366,7 +371,7 @@ Secret API key to access the datadog server.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -380,7 +385,7 @@ Secret API key to access the datadog server.
 
 Batch Options allow tuning of the conditions for how batches of logs are sent to the endpoint.
 
-###### One of the arguments from this list "max_bytes_disabled, max_bytes" can be set
+###### One of the arguments from this list "max_bytes, max_bytes_disabled" can be set
 
 `max_bytes` - (Optional) Send batch to endpoint after the batch is equal to or larger than this many bytes (`Int`).
 
@@ -392,7 +397,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 `max_events_disabled` - (Optional) Max Events Disabled (`Bool`).
 
-###### One of the arguments from this list "timeout_seconds, timeout_seconds_default" can be set
+###### One of the arguments from this list "timeout_seconds_default, timeout_seconds" can be set
 
 `timeout_seconds` - (Optional) Send batch to the endpoint after this many seconds (`Int`).
 
@@ -432,7 +437,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 `max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
 
-###### One of the arguments from this list "max_events_disabled, max_events" can be set
+###### One of the arguments from this list "max_events, max_events_disabled" can be set
 
 `max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
 
@@ -548,7 +553,7 @@ The data may be optionally secured using BlindFold..
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -612,7 +617,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 Compression Options allows selection of how data should be compressed when sent to the endpoint.
 
-###### One of the arguments from this list "compression_gzip, compression_none" can be set
+###### One of the arguments from this list "compression_none, compression_gzip" can be set
 
 `compression_gzip` - (Optional) Gzip Compression (`Bool`).
 
@@ -666,7 +671,7 @@ Send logs to a Datadog service.
 
 `datadog_api_key` - (Required) Secret API key to access the datadog server. See [Datadog Receiver Datadog Api Key ](#datadog-receiver-datadog-api-key) below for details.
 
-###### One of the arguments from this list "site, endpoint" must be set
+###### One of the arguments from this list "endpoint, site" must be set
 
 `endpoint` - (Optional) Datadog Endpoint, example: `example.com:9000` (`String`).
 
@@ -682,7 +687,7 @@ Send logs to a Datadog service.
 
 Send logs to an Elasticsearch endpoint.
 
-###### One of the arguments from this list "auth_aws, auth_none, auth_basic" must be set
+###### One of the arguments from this list "auth_none, auth_basic, auth_aws" must be set
 
 `auth_aws` - (Optional) Reference to AWS Cloud Credentials for Authentication when connecting to the Elasticsearch Endpoint. See [ref](#ref) below for details.(Deprecated)
 
@@ -696,7 +701,7 @@ Send logs to an Elasticsearch endpoint.
 
 `endpoint` - (Required) Elasticsearch Endpoint URL, example `http://10.9.8.7:9000` (`String`).
 
-###### One of the arguments from this list "use_tls, no_tls" must be set
+###### One of the arguments from this list "no_tls, use_tls" must be set
 
 `no_tls` - (Optional) Do not use TLS for the client connection (`Bool`).
 
@@ -922,7 +927,7 @@ Batch Options allow tuning of the conditions for how batches of logs are sent to
 
 `max_bytes_disabled` - (Optional) Batch Bytes Disabled (`Bool`).
 
-###### One of the arguments from this list "max_events_disabled, max_events" can be set
+###### One of the arguments from this list "max_events, max_events_disabled" can be set
 
 `max_events` - (Optional) Send batch to endpoint after this many log messages are in the batch (`Int`).
 
@@ -952,7 +957,7 @@ Splunk HEC Logs secret Token.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -1000,7 +1005,7 @@ Use TLS for client connections to the endpoint.
 
 `mtls_enable` - (Optional) Enable mTLS configuration. See [Mtls Choice Mtls Enable ](#mtls-choice-mtls-enable) below for details.
 
-###### One of the arguments from this list "disable_verify_certificate, enable_verify_certificate" can be set
+###### One of the arguments from this list "enable_verify_certificate, disable_verify_certificate" can be set
 
 `disable_verify_certificate` - (Optional) x-displayName: "Skip Server Certificate Verification" (`Bool`).
 

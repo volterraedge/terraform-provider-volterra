@@ -449,21 +449,21 @@ func (m *BillingMeta) GetInfraprotectInfo() *infraprotect_information.GlobalSpec
 	return nil
 }
 
-// Source Public
+// Signup Type Public
 //
-// x-displayName: "Source Public"
-type SourcePublic struct {
+// x-displayName: "Signup Type Public"
+type SignupTypePublic struct {
 }
 
-func (m *SourcePublic) Reset()      { *m = SourcePublic{} }
-func (*SourcePublic) ProtoMessage() {}
-func (*SourcePublic) Descriptor() ([]byte, []int) {
+func (m *SignupTypePublic) Reset()      { *m = SignupTypePublic{} }
+func (*SignupTypePublic) ProtoMessage() {}
+func (*SignupTypePublic) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ff5d246d7ca2938f, []int{5}
 }
-func (m *SourcePublic) XXX_Unmarshal(b []byte) error {
+func (m *SignupTypePublic) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SourcePublic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignupTypePublic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -471,22 +471,22 @@ func (m *SourcePublic) XXX_Marshal(b []byte, deterministic bool) ([]byte, error)
 	}
 	return b[:n], nil
 }
-func (m *SourcePublic) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourcePublic.Merge(m, src)
+func (m *SignupTypePublic) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignupTypePublic.Merge(m, src)
 }
-func (m *SourcePublic) XXX_Size() int {
+func (m *SignupTypePublic) XXX_Size() int {
 	return m.Size()
 }
-func (m *SourcePublic) XXX_DiscardUnknown() {
-	xxx_messageInfo_SourcePublic.DiscardUnknown(m)
+func (m *SignupTypePublic) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignupTypePublic.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SourcePublic proto.InternalMessageInfo
+var xxx_messageInfo_SignupTypePublic proto.InternalMessageInfo
 
-// Source Internal SRE
+// Signup Type Internal SRE
 //
-// x-displayName: "Source Internal SRE"
-type SourceInternalSre struct {
+// x-displayName: "Signup Type Internal SRE"
+type SignupTypeInternalSre struct {
 	// f5xc_instance_name
 	//
 	// x-displayName: "F5XC Instance Name"
@@ -499,28 +499,27 @@ type SourceInternalSre struct {
 	// x-example: "kc-instance-3"
 	// this field holds the kc instance name to be used for tenant realm allocation
 	KcInstanceName string `protobuf:"bytes,2,opt,name=kc_instance_name,json=kcInstanceName,proto3" json:"kc_instance_name,omitempty"`
-	// crm_info
-	//
-	// x-displayName: "CRM Info"
-	// this field holds the CRM info
-	// This field is deprecated. use CrmDetails instead
-	CrmInfo *CrmInfoV2 `protobuf:"bytes,3,opt,name=crm_info,json=crmInfo,proto3" json:"crm_info,omitempty"` // Deprecated: Do not use.
 	// CRM Details
 	//
 	// x-displayName: "CRM Details"
 	// This field holds CRM information
 	CrmDetails *schema.CRMInfo `protobuf:"bytes,4,opt,name=crm_details,json=crmDetails,proto3" json:"crm_details,omitempty"`
+	// Is Demo Tenant
+	//
+	// x-displayName: "Is Demo Tenant"
+	// Indicates whether signup is for demo tenant or not.
+	IsDemoTenant bool `protobuf:"varint,6,opt,name=is_demo_tenant,json=isDemoTenant,proto3" json:"is_demo_tenant,omitempty"`
 }
 
-func (m *SourceInternalSre) Reset()      { *m = SourceInternalSre{} }
-func (*SourceInternalSre) ProtoMessage() {}
-func (*SourceInternalSre) Descriptor() ([]byte, []int) {
+func (m *SignupTypeInternalSre) Reset()      { *m = SignupTypeInternalSre{} }
+func (*SignupTypeInternalSre) ProtoMessage() {}
+func (*SignupTypeInternalSre) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ff5d246d7ca2938f, []int{6}
 }
-func (m *SourceInternalSre) XXX_Unmarshal(b []byte) error {
+func (m *SignupTypeInternalSre) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SourceInternalSre) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignupTypeInternalSre) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -528,62 +527,61 @@ func (m *SourceInternalSre) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 	}
 	return b[:n], nil
 }
-func (m *SourceInternalSre) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceInternalSre.Merge(m, src)
+func (m *SignupTypeInternalSre) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignupTypeInternalSre.Merge(m, src)
 }
-func (m *SourceInternalSre) XXX_Size() int {
+func (m *SignupTypeInternalSre) XXX_Size() int {
 	return m.Size()
 }
-func (m *SourceInternalSre) XXX_DiscardUnknown() {
-	xxx_messageInfo_SourceInternalSre.DiscardUnknown(m)
+func (m *SignupTypeInternalSre) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignupTypeInternalSre.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SourceInternalSre proto.InternalMessageInfo
+var xxx_messageInfo_SignupTypeInternalSre proto.InternalMessageInfo
 
-func (m *SourceInternalSre) GetF5XcInstanceName() string {
+func (m *SignupTypeInternalSre) GetF5XcInstanceName() string {
 	if m != nil {
 		return m.F5XcInstanceName
 	}
 	return ""
 }
 
-func (m *SourceInternalSre) GetKcInstanceName() string {
+func (m *SignupTypeInternalSre) GetKcInstanceName() string {
 	if m != nil {
 		return m.KcInstanceName
 	}
 	return ""
 }
 
-// Deprecated: Do not use.
-func (m *SourceInternalSre) GetCrmInfo() *CrmInfoV2 {
-	if m != nil {
-		return m.CrmInfo
-	}
-	return nil
-}
-
-func (m *SourceInternalSre) GetCrmDetails() *schema.CRMInfo {
+func (m *SignupTypeInternalSre) GetCrmDetails() *schema.CRMInfo {
 	if m != nil {
 		return m.CrmDetails
 	}
 	return nil
 }
 
-// Source Internal Scaling
-//
-// x-displayName: "Source Internal Scaling"
-type SourceInternalScaling struct {
+func (m *SignupTypeInternalSre) GetIsDemoTenant() bool {
+	if m != nil {
+		return m.IsDemoTenant
+	}
+	return false
 }
 
-func (m *SourceInternalScaling) Reset()      { *m = SourceInternalScaling{} }
-func (*SourceInternalScaling) ProtoMessage() {}
-func (*SourceInternalScaling) Descriptor() ([]byte, []int) {
+// Signup Type Internal Scaling
+//
+// x-displayName: "Signup Type Internal Scaling"
+type SignupTypeInternalScaling struct {
+}
+
+func (m *SignupTypeInternalScaling) Reset()      { *m = SignupTypeInternalScaling{} }
+func (*SignupTypeInternalScaling) ProtoMessage() {}
+func (*SignupTypeInternalScaling) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ff5d246d7ca2938f, []int{7}
 }
-func (m *SourceInternalScaling) XXX_Unmarshal(b []byte) error {
+func (m *SignupTypeInternalScaling) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SourceInternalScaling) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignupTypeInternalScaling) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -591,117 +589,40 @@ func (m *SourceInternalScaling) XXX_Marshal(b []byte, deterministic bool) ([]byt
 	}
 	return b[:n], nil
 }
-func (m *SourceInternalScaling) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceInternalScaling.Merge(m, src)
+func (m *SignupTypeInternalScaling) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignupTypeInternalScaling.Merge(m, src)
 }
-func (m *SourceInternalScaling) XXX_Size() int {
+func (m *SignupTypeInternalScaling) XXX_Size() int {
 	return m.Size()
 }
-func (m *SourceInternalScaling) XXX_DiscardUnknown() {
-	xxx_messageInfo_SourceInternalScaling.DiscardUnknown(m)
+func (m *SignupTypeInternalScaling) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignupTypeInternalScaling.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SourceInternalScaling proto.InternalMessageInfo
+var xxx_messageInfo_SignupTypeInternalScaling proto.InternalMessageInfo
 
-// Source Marketplace
+// Signup Type Marketplace
 //
-// x-displayName: "Source Marketplace"
-// payload for the creation request, for Marketplace source
-type SourceMarketplace struct {
-	// MarketplaceChoice
-	//
-	// x-displayName: "Marketplace Choice"
-	// marketplace provider choice
-	//
-	// Types that are valid to be assigned to MarketplaceChoice:
-	//	*SourceMarketplace_MarketplaceAws
-	MarketplaceChoice isSourceMarketplace_MarketplaceChoice `protobuf_oneof:"marketplace_choice"`
-}
-
-func (m *SourceMarketplace) Reset()      { *m = SourceMarketplace{} }
-func (*SourceMarketplace) ProtoMessage() {}
-func (*SourceMarketplace) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff5d246d7ca2938f, []int{8}
-}
-func (m *SourceMarketplace) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SourceMarketplace) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SourceMarketplace) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceMarketplace.Merge(m, src)
-}
-func (m *SourceMarketplace) XXX_Size() int {
-	return m.Size()
-}
-func (m *SourceMarketplace) XXX_DiscardUnknown() {
-	xxx_messageInfo_SourceMarketplace.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SourceMarketplace proto.InternalMessageInfo
-
-type isSourceMarketplace_MarketplaceChoice interface {
-	isSourceMarketplace_MarketplaceChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type SourceMarketplace_MarketplaceAws struct {
-	MarketplaceAws *MarketplaceAws `protobuf:"bytes,2,opt,name=marketplace_aws,json=marketplaceAws,proto3,oneof" json:"marketplace_aws,omitempty"`
-}
-
-func (*SourceMarketplace_MarketplaceAws) isSourceMarketplace_MarketplaceChoice() {}
-
-func (m *SourceMarketplace) GetMarketplaceChoice() isSourceMarketplace_MarketplaceChoice {
-	if m != nil {
-		return m.MarketplaceChoice
-	}
-	return nil
-}
-
-func (m *SourceMarketplace) GetMarketplaceAws() *MarketplaceAws {
-	if x, ok := m.GetMarketplaceChoice().(*SourceMarketplace_MarketplaceAws); ok {
-		return x.MarketplaceAws
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*SourceMarketplace) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*SourceMarketplace_MarketplaceAws)(nil),
-	}
-}
-
-// Marketplace Aws
-//
-// x-displayName: "Marketplace Aws"
-// payload for the creation request, for AWS Marketplace
-type MarketplaceAws struct {
+// x-displayName: "Signup Type Marketplace"
+// payload for the creation request, for Marketplace Signup Type
+type SignupTypeMarketplace struct {
 	// CRM Details
 	//
 	// x-displayName: "CRM Details"
 	// x-required
 	// This field holds CRM information
-	CrmDetails *schema.CRMInfo `protobuf:"bytes,2,opt,name=crm_details,json=crmDetails,proto3" json:"crm_details,omitempty"`
+	CrmDetails *schema.CRMInfo `protobuf:"bytes,3,opt,name=crm_details,json=crmDetails,proto3" json:"crm_details,omitempty"`
 }
 
-func (m *MarketplaceAws) Reset()      { *m = MarketplaceAws{} }
-func (*MarketplaceAws) ProtoMessage() {}
-func (*MarketplaceAws) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff5d246d7ca2938f, []int{9}
+func (m *SignupTypeMarketplace) Reset()      { *m = SignupTypeMarketplace{} }
+func (*SignupTypeMarketplace) ProtoMessage() {}
+func (*SignupTypeMarketplace) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ff5d246d7ca2938f, []int{8}
 }
-func (m *MarketplaceAws) XXX_Unmarshal(b []byte) error {
+func (m *SignupTypeMarketplace) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MarketplaceAws) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignupTypeMarketplace) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -709,30 +630,30 @@ func (m *MarketplaceAws) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 	}
 	return b[:n], nil
 }
-func (m *MarketplaceAws) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MarketplaceAws.Merge(m, src)
+func (m *SignupTypeMarketplace) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignupTypeMarketplace.Merge(m, src)
 }
-func (m *MarketplaceAws) XXX_Size() int {
+func (m *SignupTypeMarketplace) XXX_Size() int {
 	return m.Size()
 }
-func (m *MarketplaceAws) XXX_DiscardUnknown() {
-	xxx_messageInfo_MarketplaceAws.DiscardUnknown(m)
+func (m *SignupTypeMarketplace) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignupTypeMarketplace.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MarketplaceAws proto.InternalMessageInfo
+var xxx_messageInfo_SignupTypeMarketplace proto.InternalMessageInfo
 
-func (m *MarketplaceAws) GetCrmDetails() *schema.CRMInfo {
+func (m *SignupTypeMarketplace) GetCrmDetails() *schema.CRMInfo {
 	if m != nil {
 		return m.CrmDetails
 	}
 	return nil
 }
 
-// Source Plan Transition
+// Signup Type Plan Transition
 //
-// x-displayName: "Source Plan Transition"
-// SourcePlanTransition can be only used for Free to Individual plan transition signups
-type SourcePlanTransition struct {
+// x-displayName: "Signup Type Plan Transition"
+// SignupTypePlanTransition can be only used for Free to Individual plan transition signups
+type SignupTypePlanTransition struct {
 	// IsSsoEnabled
 	//
 	// x-displayName: "IsSsoEnabled"
@@ -741,15 +662,15 @@ type SourcePlanTransition struct {
 	IsSsoEnabled bool `protobuf:"varint,1,opt,name=is_sso_enabled,json=isSsoEnabled,proto3" json:"is_sso_enabled,omitempty"`
 }
 
-func (m *SourcePlanTransition) Reset()      { *m = SourcePlanTransition{} }
-func (*SourcePlanTransition) ProtoMessage() {}
-func (*SourcePlanTransition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff5d246d7ca2938f, []int{10}
+func (m *SignupTypePlanTransition) Reset()      { *m = SignupTypePlanTransition{} }
+func (*SignupTypePlanTransition) ProtoMessage() {}
+func (*SignupTypePlanTransition) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ff5d246d7ca2938f, []int{9}
 }
-func (m *SourcePlanTransition) XXX_Unmarshal(b []byte) error {
+func (m *SignupTypePlanTransition) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SourcePlanTransition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignupTypePlanTransition) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -757,35 +678,29 @@ func (m *SourcePlanTransition) XXX_Marshal(b []byte, deterministic bool) ([]byte
 	}
 	return b[:n], nil
 }
-func (m *SourcePlanTransition) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourcePlanTransition.Merge(m, src)
+func (m *SignupTypePlanTransition) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignupTypePlanTransition.Merge(m, src)
 }
-func (m *SourcePlanTransition) XXX_Size() int {
+func (m *SignupTypePlanTransition) XXX_Size() int {
 	return m.Size()
 }
-func (m *SourcePlanTransition) XXX_DiscardUnknown() {
-	xxx_messageInfo_SourcePlanTransition.DiscardUnknown(m)
+func (m *SignupTypePlanTransition) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignupTypePlanTransition.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SourcePlanTransition proto.InternalMessageInfo
+var xxx_messageInfo_SignupTypePlanTransition proto.InternalMessageInfo
 
-func (m *SourcePlanTransition) GetIsSsoEnabled() bool {
+func (m *SignupTypePlanTransition) GetIsSsoEnabled() bool {
 	if m != nil {
 		return m.IsSsoEnabled
 	}
 	return false
 }
 
-// Source MSP
+// Signup Type MSP
 //
-// x-displayName: "Source MSP"
-type SourceMsp struct {
-	// crm_info
-	//
-	// x-displayName: "CRM Info"
-	// this field holds the CRM info
-	// This field is deprecated. use CrmDetails instead
-	CrmInfo *CrmInfoV2 `protobuf:"bytes,1,opt,name=crm_info,json=crmInfo,proto3" json:"crm_info,omitempty"` // Deprecated: Do not use.
+// x-displayName: "Signup Type MSP"
+type SignupTypeMsp struct {
 	// CRM Details
 	//
 	// x-displayName: "CRM Details"
@@ -798,15 +713,15 @@ type SourceMsp struct {
 	ChildTenantObjName string `protobuf:"bytes,4,opt,name=child_tenant_obj_name,json=childTenantObjName,proto3" json:"child_tenant_obj_name,omitempty"`
 }
 
-func (m *SourceMsp) Reset()      { *m = SourceMsp{} }
-func (*SourceMsp) ProtoMessage() {}
-func (*SourceMsp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff5d246d7ca2938f, []int{11}
+func (m *SignupTypeMsp) Reset()      { *m = SignupTypeMsp{} }
+func (*SignupTypeMsp) ProtoMessage() {}
+func (*SignupTypeMsp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ff5d246d7ca2938f, []int{10}
 }
-func (m *SourceMsp) XXX_Unmarshal(b []byte) error {
+func (m *SignupTypeMsp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SourceMsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignupTypeMsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -814,55 +729,47 @@ func (m *SourceMsp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	}
 	return b[:n], nil
 }
-func (m *SourceMsp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceMsp.Merge(m, src)
+func (m *SignupTypeMsp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignupTypeMsp.Merge(m, src)
 }
-func (m *SourceMsp) XXX_Size() int {
+func (m *SignupTypeMsp) XXX_Size() int {
 	return m.Size()
 }
-func (m *SourceMsp) XXX_DiscardUnknown() {
-	xxx_messageInfo_SourceMsp.DiscardUnknown(m)
+func (m *SignupTypeMsp) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignupTypeMsp.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SourceMsp proto.InternalMessageInfo
+var xxx_messageInfo_SignupTypeMsp proto.InternalMessageInfo
 
-// Deprecated: Do not use.
-func (m *SourceMsp) GetCrmInfo() *CrmInfoV2 {
-	if m != nil {
-		return m.CrmInfo
-	}
-	return nil
-}
-
-func (m *SourceMsp) GetCrmDetails() *schema.CRMInfo {
+func (m *SignupTypeMsp) GetCrmDetails() *schema.CRMInfo {
 	if m != nil {
 		return m.CrmDetails
 	}
 	return nil
 }
 
-func (m *SourceMsp) GetChildTenantObjName() string {
+func (m *SignupTypeMsp) GetChildTenantObjName() string {
 	if m != nil {
 		return m.ChildTenantObjName
 	}
 	return ""
 }
 
-// Source Internal SSO
+// Signup Type Internal SSO
 //
-// x-displayName: "Source Internal SSO"
-type SourceInternalSso struct {
+// x-displayName: "Signup Type Internal SSO"
+type SignupTypeInternalSso struct {
 }
 
-func (m *SourceInternalSso) Reset()      { *m = SourceInternalSso{} }
-func (*SourceInternalSso) ProtoMessage() {}
-func (*SourceInternalSso) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff5d246d7ca2938f, []int{12}
+func (m *SignupTypeInternalSso) Reset()      { *m = SignupTypeInternalSso{} }
+func (*SignupTypeInternalSso) ProtoMessage() {}
+func (*SignupTypeInternalSso) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ff5d246d7ca2938f, []int{11}
 }
-func (m *SourceInternalSso) XXX_Unmarshal(b []byte) error {
+func (m *SignupTypeInternalSso) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *SourceInternalSso) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *SignupTypeInternalSso) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	b = b[:cap(b)]
 	n, err := m.MarshalToSizedBuffer(b)
 	if err != nil {
@@ -870,17 +777,17 @@ func (m *SourceInternalSso) XXX_Marshal(b []byte, deterministic bool) ([]byte, e
 	}
 	return b[:n], nil
 }
-func (m *SourceInternalSso) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SourceInternalSso.Merge(m, src)
+func (m *SignupTypeInternalSso) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignupTypeInternalSso.Merge(m, src)
 }
-func (m *SourceInternalSso) XXX_Size() int {
+func (m *SignupTypeInternalSso) XXX_Size() int {
 	return m.Size()
 }
-func (m *SourceInternalSso) XXX_DiscardUnknown() {
-	xxx_messageInfo_SourceInternalSso.DiscardUnknown(m)
+func (m *SignupTypeInternalSso) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignupTypeInternalSso.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_SourceInternalSso proto.InternalMessageInfo
+var xxx_messageInfo_SignupTypeInternalSso proto.InternalMessageInfo
 
 // ContactMeta
 //
@@ -947,7 +854,7 @@ type ContactMeta struct {
 func (m *ContactMeta) Reset()      { *m = ContactMeta{} }
 func (*ContactMeta) ProtoMessage() {}
 func (*ContactMeta) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff5d246d7ca2938f, []int{13}
+	return fileDescriptor_ff5d246d7ca2938f, []int{12}
 }
 func (m *ContactMeta) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1035,133 +942,20 @@ func (m *ContactMeta) GetZipCode() string {
 	return ""
 }
 
-// fields of crm info message
-//
-// x-displayName: "Crm Info"
-// Deprecated: use the CRMInfo defined in schema/types.proto
-type CrmInfoV2 struct {
-	// account_id
-	//
-	// x-displayName: "AccountID"
-	// x-example: "SFA-1478257"
-	// salesforce account ID
-	AccountId string `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
-	// entitlement_id
-	//
-	// x-displayName: "EntitlementID"
-	// x-example: "e5712007-0560-4fcc-b8c9-f4ffbeaf3e4e"
-	EntitlementId string `protobuf:"bytes,2,opt,name=entitlement_id,json=entitlementId,proto3" json:"entitlement_id,omitempty"`
-	// subscription_id
-	//
-	// x-displayName: "SubscriptionId"
-	// x-example: "A-S00012023"
-	// sales force subscription id
-	SubscriptionId string `protobuf:"bytes,3,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
-	// order_type
-	//
-	// x-displayName: "OrderType"
-	// x-example: "PAID"
-	OrderType string `protobuf:"bytes,5,opt,name=order_type,json=orderType,proto3" json:"order_type,omitempty"`
-	// Entitled SKUs
-	//
-	// x-displayName: "Entitled SKUs"
-	// x-example: "['F5-V-O-ALL-BASE-PK-B','F5-XC-O-ALL-BOT-STD-B','F5-V-O-ADN-MSH-API-B','F5-V-O-ADN-MSH-RLM-B']"
-	// SKU information that is used mostly for reporting purposes.
-	EntitledSkus []string `protobuf:"bytes,6,rep,name=entitled_skus,json=entitledSkus,proto3" json:"entitled_skus,omitempty"`
-	// Customer Identifier
-	//
-	// x-displayName: "Customer Identifier"
-	// x-example: "HHhd4MFcSzM"
-	// Customer identifier is a unique account(tenant) identifier provided by source
-	CustomerIdentifier string `protobuf:"bytes,7,opt,name=customer_identifier,json=customerIdentifier,proto3" json:"customer_identifier,omitempty"`
-}
-
-func (m *CrmInfoV2) Reset()      { *m = CrmInfoV2{} }
-func (*CrmInfoV2) ProtoMessage() {}
-func (*CrmInfoV2) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ff5d246d7ca2938f, []int{14}
-}
-func (m *CrmInfoV2) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CrmInfoV2) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *CrmInfoV2) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CrmInfoV2.Merge(m, src)
-}
-func (m *CrmInfoV2) XXX_Size() int {
-	return m.Size()
-}
-func (m *CrmInfoV2) XXX_DiscardUnknown() {
-	xxx_messageInfo_CrmInfoV2.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CrmInfoV2 proto.InternalMessageInfo
-
-func (m *CrmInfoV2) GetAccountId() string {
-	if m != nil {
-		return m.AccountId
-	}
-	return ""
-}
-
-func (m *CrmInfoV2) GetEntitlementId() string {
-	if m != nil {
-		return m.EntitlementId
-	}
-	return ""
-}
-
-func (m *CrmInfoV2) GetSubscriptionId() string {
-	if m != nil {
-		return m.SubscriptionId
-	}
-	return ""
-}
-
-func (m *CrmInfoV2) GetOrderType() string {
-	if m != nil {
-		return m.OrderType
-	}
-	return ""
-}
-
-func (m *CrmInfoV2) GetEntitledSkus() []string {
-	if m != nil {
-		return m.EntitledSkus
-	}
-	return nil
-}
-
-func (m *CrmInfoV2) GetCustomerIdentifier() string {
-	if m != nil {
-		return m.CustomerIdentifier
-	}
-	return ""
-}
-
 func init() {
 	proto.RegisterType((*CompanyMeta)(nil), "ves.io.schema.signup.CompanyMeta")
 	proto.RegisterType((*InternalMeta)(nil), "ves.io.schema.signup.InternalMeta")
 	proto.RegisterType((*UserMeta)(nil), "ves.io.schema.signup.UserMeta")
 	proto.RegisterType((*AccountMeta)(nil), "ves.io.schema.signup.AccountMeta")
 	proto.RegisterType((*BillingMeta)(nil), "ves.io.schema.signup.BillingMeta")
-	proto.RegisterType((*SourcePublic)(nil), "ves.io.schema.signup.SourcePublic")
-	proto.RegisterType((*SourceInternalSre)(nil), "ves.io.schema.signup.SourceInternalSre")
-	proto.RegisterType((*SourceInternalScaling)(nil), "ves.io.schema.signup.SourceInternalScaling")
-	proto.RegisterType((*SourceMarketplace)(nil), "ves.io.schema.signup.SourceMarketplace")
-	proto.RegisterType((*MarketplaceAws)(nil), "ves.io.schema.signup.MarketplaceAws")
-	proto.RegisterType((*SourcePlanTransition)(nil), "ves.io.schema.signup.SourcePlanTransition")
-	proto.RegisterType((*SourceMsp)(nil), "ves.io.schema.signup.SourceMsp")
-	proto.RegisterType((*SourceInternalSso)(nil), "ves.io.schema.signup.SourceInternalSso")
+	proto.RegisterType((*SignupTypePublic)(nil), "ves.io.schema.signup.SignupTypePublic")
+	proto.RegisterType((*SignupTypeInternalSre)(nil), "ves.io.schema.signup.SignupTypeInternalSre")
+	proto.RegisterType((*SignupTypeInternalScaling)(nil), "ves.io.schema.signup.SignupTypeInternalScaling")
+	proto.RegisterType((*SignupTypeMarketplace)(nil), "ves.io.schema.signup.SignupTypeMarketplace")
+	proto.RegisterType((*SignupTypePlanTransition)(nil), "ves.io.schema.signup.SignupTypePlanTransition")
+	proto.RegisterType((*SignupTypeMsp)(nil), "ves.io.schema.signup.SignupTypeMsp")
+	proto.RegisterType((*SignupTypeInternalSso)(nil), "ves.io.schema.signup.SignupTypeInternalSso")
 	proto.RegisterType((*ContactMeta)(nil), "ves.io.schema.signup.ContactMeta")
-	proto.RegisterType((*CrmInfoV2)(nil), "ves.io.schema.signup.CrmInfoV2")
 }
 
 func init() {
@@ -1169,96 +963,82 @@ func init() {
 }
 
 var fileDescriptor_ff5d246d7ca2938f = []byte{
-	// 1412 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xbf, 0x6f, 0x1b, 0x47,
-	0x16, 0xd6, 0x2c, 0x29, 0x6a, 0x39, 0x94, 0x28, 0x6a, 0x2c, 0xeb, 0xd6, 0xf2, 0xdd, 0x5a, 0xe6,
-	0x19, 0x77, 0xba, 0x83, 0x45, 0x9e, 0x69, 0xdc, 0xd9, 0x38, 0x18, 0x07, 0x8b, 0xb2, 0x71, 0x47,
-	0x01, 0x96, 0x8d, 0x95, 0xec, 0xc2, 0xcd, 0x62, 0xb8, 0x3b, 0xa2, 0xc6, 0xda, 0xdd, 0x59, 0xcc,
-	0x0c, 0x65, 0xd1, 0x80, 0x01, 0x15, 0x57, 0xa5, 0x0a, 0xfc, 0x17, 0xa4, 0x48, 0x91, 0x26, 0x4d,
-	0xd2, 0x45, 0x8d, 0x4b, 0x97, 0x2a, 0x85, 0x54, 0x31, 0xdd, 0x38, 0x40, 0x0a, 0x57, 0x29, 0x93,
-	0x60, 0x66, 0x77, 0xe5, 0x25, 0x25, 0x03, 0xf9, 0x01, 0xa4, 0xdb, 0x99, 0xf7, 0x7d, 0x6f, 0xdf,
-	0xaf, 0xf9, 0x66, 0xe0, 0x9f, 0xf7, 0x88, 0x68, 0x50, 0xd6, 0x14, 0xde, 0x0e, 0x09, 0x71, 0x53,
-	0xd0, 0x5e, 0xd4, 0x8f, 0x9b, 0x72, 0x10, 0x13, 0xe1, 0xee, 0xb5, 0x1a, 0x31, 0x67, 0x92, 0xa1,
-	0xf9, 0x04, 0xd4, 0x48, 0x40, 0x8d, 0x04, 0xb4, 0xb8, 0xd2, 0xa3, 0x72, 0xa7, 0xdf, 0x6d, 0x78,
-	0x2c, 0x6c, 0xf6, 0x58, 0x8f, 0x35, 0x35, 0xb8, 0xdb, 0xdf, 0xd6, 0x2b, 0xbd, 0xd0, 0x5f, 0x89,
-	0x93, 0xc5, 0x4b, 0x3d, 0xc6, 0x7a, 0x01, 0x79, 0x8f, 0x92, 0x34, 0x24, 0x42, 0xe2, 0x30, 0x4e,
-	0x01, 0xad, 0xd1, 0x50, 0x68, 0xb4, 0xcd, 0xb1, 0xb2, 0x10, 0x4f, 0xba, 0x34, 0xda, 0x66, 0x3c,
-	0xc4, 0x92, 0xb2, 0x28, 0x09, 0x2e, 0xe5, 0x5c, 0x1c, 0xe5, 0xb0, 0x58, 0x21, 0x32, 0xe3, 0x85,
-	0x51, 0x63, 0x9e, 0xf7, 0xc7, 0x51, 0xd3, 0x1e, 0x0e, 0xa8, 0x8f, 0x25, 0x49, 0xad, 0x4b, 0x63,
-	0x56, 0x4a, 0x9e, 0xba, 0x23, 0xae, 0xeb, 0x03, 0x58, 0x59, 0x63, 0x61, 0x8c, 0xa3, 0xc1, 0x3d,
-	0x22, 0x31, 0xb2, 0x61, 0x31, 0xc2, 0x21, 0xb1, 0xc0, 0x12, 0x58, 0x2e, 0xb7, 0xe1, 0x57, 0xdf,
-	0xbe, 0x2c, 0x4c, 0xf2, 0x82, 0x75, 0x60, 0x38, 0x7a, 0x1f, 0xad, 0xc3, 0xd9, 0x10, 0xd3, 0x80,
-	0x46, 0x3d, 0x17, 0xfb, 0x3e, 0x27, 0x42, 0x58, 0xc6, 0x12, 0x58, 0xae, 0xb4, 0x2e, 0x37, 0xce,
-	0x2a, 0x6d, 0x63, 0x8d, 0x45, 0x12, 0x7b, 0x52, 0xf9, 0x76, 0xaa, 0x29, 0x73, 0x35, 0x21, 0xd6,
-	0x3f, 0x05, 0x70, 0xba, 0x13, 0x49, 0xc2, 0x23, 0x1c, 0xe8, 0x9f, 0xdf, 0x80, 0x68, 0xfb, 0x9f,
-	0xfb, 0x9e, 0x4b, 0x23, 0x21, 0x71, 0xe4, 0x11, 0x37, 0x17, 0x4a, 0x59, 0x85, 0x52, 0xe4, 0x86,
-	0x75, 0xdb, 0xa9, 0x29, 0x50, 0x27, 0xc5, 0x6c, 0xa8, 0xa8, 0xae, 0xc3, 0xda, 0xee, 0x38, 0xcd,
-	0x18, 0xa7, 0x55, 0x77, 0x47, 0x49, 0x7f, 0x81, 0x65, 0x49, 0x22, 0x1c, 0x49, 0x97, 0xfa, 0x56,
-	0x61, 0x1c, 0x6d, 0x26, 0xb6, 0x8e, 0x5f, 0xff, 0x12, 0x40, 0xf3, 0xa1, 0x20, 0x5c, 0x87, 0xf8,
-	0x37, 0x08, 0xb7, 0x29, 0x17, 0xd2, 0xfd, 0x40, 0x95, 0xca, 0xda, 0xaa, 0xfd, 0xff, 0x15, 0x96,
-	0x03, 0x9c, 0x21, 0x8d, 0x53, 0x48, 0x53, 0x19, 0x35, 0x70, 0x09, 0x4e, 0x12, 0x55, 0x9a, 0x34,
-	0x88, 0x3c, 0x28, 0x31, 0xa0, 0x6b, 0xb0, 0xea, 0x25, 0x85, 0x74, 0xa3, 0x7e, 0xd8, 0x25, 0xdc,
-	0x2a, 0x9e, 0x82, 0xce, 0xa4, 0x88, 0x0d, 0x0d, 0xa8, 0x7f, 0x07, 0x60, 0x65, 0xd5, 0xf3, 0x58,
-	0x3f, 0xd2, 0xc5, 0x47, 0x7f, 0x87, 0xa5, 0x80, 0x79, 0x38, 0xc8, 0x42, 0x41, 0x5f, 0x1f, 0x82,
-	0x49, 0x12, 0xad, 0x3c, 0xdc, 0xcc, 0x72, 0xae, 0x39, 0x29, 0x02, 0x5d, 0x87, 0x25, 0x9f, 0x85,
-	0x98, 0x46, 0x69, 0x44, 0x17, 0x15, 0x64, 0x81, 0xcf, 0x5b, 0x73, 0x8f, 0x0b, 0x7b, 0x44, 0x3c,
-	0x36, 0xf7, 0x58, 0x20, 0x09, 0xe7, 0xf8, 0x13, 0x03, 0x38, 0x29, 0x14, 0x5d, 0x85, 0x15, 0xc9,
-	0x84, 0xbb, 0x47, 0xb8, 0xa0, 0x2c, 0x4a, 0x03, 0xac, 0x28, 0x66, 0x89, 0x17, 0x6b, 0x86, 0x35,
-	0xed, 0x40, 0xc9, 0xc4, 0xa3, 0xc4, 0x8c, 0x36, 0xe0, 0xac, 0x42, 0x63, 0xcf, 0x23, 0xb1, 0x24,
-	0xbe, 0x8b, 0xa5, 0x35, 0xa9, 0xe7, 0x68, 0xb1, 0x91, 0x9c, 0xae, 0x46, 0x76, 0xba, 0x1a, 0x5b,
-	0xd9, 0xe9, 0x4a, 0xd3, 0xfd, 0x02, 0x18, 0x37, 0x81, 0x33, 0x23, 0x99, 0x58, 0x4d, 0xd9, 0xab,
-	0xb2, 0xfe, 0x79, 0x01, 0x56, 0xda, 0x34, 0x50, 0xe3, 0xa5, 0xd3, 0xbd, 0x0a, 0xcb, 0x71, 0x80,
-	0xa3, 0x7c, 0x9b, 0x66, 0x15, 0x1b, 0x72, 0xb3, 0x06, 0xad, 0x03, 0x43, 0x45, 0x6e, 0x2a, 0xc4,
-	0x46, 0x3a, 0xd5, 0xdd, 0x84, 0xfc, 0x2b, 0xa6, 0x3a, 0x65, 0xa6, 0x53, 0x8d, 0x1a, 0xd0, 0xf4,
-	0xfa, 0x9c, 0x93, 0xc8, 0x1b, 0xa4, 0x45, 0x50, 0xa5, 0x2e, 0x3c, 0xdc, 0xbc, 0x93, 0xd5, 0x02,
-	0x58, 0x25, 0xe7, 0x04, 0x83, 0xd6, 0xe0, 0x42, 0x8c, 0x07, 0x21, 0x89, 0xa4, 0x1b, 0x73, 0xb6,
-	0x47, 0x7d, 0xc2, 0x5d, 0xc9, 0x76, 0x49, 0xa4, 0x0b, 0x52, 0x6e, 0xcf, 0xbc, 0x7a, 0x0e, 0x72,
-	0x6d, 0x9e, 0x4f, 0xc1, 0x0f, 0x52, 0xec, 0x96, 0x82, 0xa2, 0x3b, 0x70, 0x46, 0xe2, 0x7d, 0x97,
-	0xec, 0x93, 0x50, 0x9f, 0x6e, 0xab, 0xb4, 0x04, 0x96, 0xab, 0xad, 0x4b, 0x63, 0xe1, 0x6f, 0xe1,
-	0xfd, 0xbb, 0x19, 0x64, 0x6b, 0x10, 0x13, 0x67, 0x5a, 0xe6, 0x76, 0x90, 0x07, 0xe7, 0x4e, 0x69,
-	0x95, 0x35, 0xa5, 0x0b, 0xf1, 0xaf, 0x31, 0x4f, 0x1f, 0xd2, 0xb4, 0xc6, 0x7f, 0x03, 0xd6, 0xc5,
-	0xc1, 0x66, 0x4c, 0x3c, 0xfd, 0x83, 0x5a, 0x1e, 0xd8, 0x89, 0xb6, 0xd9, 0x7a, 0xd1, 0x2c, 0xd4,
-	0x8a, 0xf5, 0x2a, 0x9c, 0xde, 0x64, 0x7d, 0xee, 0x91, 0x07, 0xfd, 0x6e, 0x40, 0xbd, 0xfa, 0x81,
-	0x01, 0xe7, 0x92, 0x8d, 0x4c, 0x11, 0x36, 0x39, 0xf9, 0x9d, 0x05, 0xe1, 0x3f, 0xd0, 0xf4, 0x78,
-	0x98, 0x64, 0x5d, 0xd0, 0x59, 0x5f, 0xfa, 0x40, 0xfb, 0x79, 0xa8, 0x52, 0x79, 0xd4, 0x6a, 0x1b,
-	0x16, 0x70, 0xa6, 0xbc, 0x64, 0x89, 0x6e, 0xc0, 0x8a, 0xe2, 0xfb, 0x44, 0x62, 0x1a, 0x08, 0xdd,
-	0xfc, 0x4a, 0x6b, 0x61, 0xcc, 0xc5, 0x9a, 0x73, 0x4f, 0x81, 0x1d, 0xe8, 0xf1, 0xf0, 0x4e, 0x82,
-	0x5c, 0x2f, 0x9a, 0x93, 0xb5, 0x52, 0xfd, 0x0f, 0xf0, 0xfc, 0x58, 0x05, 0x3c, 0xac, 0x06, 0xab,
-	0xfe, 0x11, 0xc8, 0x6a, 0x73, 0x0f, 0xf3, 0x5d, 0x22, 0xe3, 0x00, 0x7b, 0x04, 0xdd, 0x57, 0x4a,
-	0x7c, 0xb2, 0x74, 0xf1, 0xd3, 0x6c, 0x66, 0xaf, 0x9c, 0x1d, 0x74, 0x8e, 0xbb, 0xfa, 0x54, 0xfc,
-	0x6f, 0x42, 0xc9, 0x71, 0x7e, 0xa7, 0x6d, 0x43, 0x94, 0x77, 0xe8, 0xed, 0x30, 0xea, 0x11, 0x64,
-	0xbe, 0x3c, 0x04, 0xc6, 0xd1, 0x21, 0x00, 0xeb, 0x45, 0x13, 0xd4, 0x8c, 0xfa, 0x7d, 0x58, 0x1d,
-	0xf5, 0x34, 0x9e, 0xb6, 0xf1, 0x0b, 0xd2, 0x56, 0x0e, 0x6f, 0xc1, 0xf9, 0x74, 0x12, 0x02, 0x1c,
-	0x6d, 0x71, 0x1c, 0x09, 0xaa, 0x87, 0xf1, 0x0a, 0xac, 0x52, 0xe1, 0x0a, 0xc1, 0x5c, 0x12, 0xe1,
-	0x6e, 0x40, 0x7c, 0xdd, 0x77, 0xd3, 0x99, 0xa6, 0x62, 0x53, 0xb0, 0xbb, 0xc9, 0x5e, 0xfd, 0x15,
-	0x80, 0xe5, 0xb4, 0x36, 0x22, 0x1e, 0xe9, 0x20, 0xf8, 0xed, 0x1d, 0xfc, 0xd9, 0xa9, 0xa0, 0x5b,
-	0xf0, 0xbc, 0xb7, 0x43, 0x03, 0xdf, 0x4d, 0x6f, 0x14, 0xd6, 0x7d, 0x92, 0x0c, 0x5d, 0x71, 0x64,
-	0xe8, 0x6a, 0xc0, 0x41, 0x1a, 0xb7, 0xa5, 0x61, 0xf7, 0xbb, 0x4f, 0xd4, 0xe0, 0xa5, 0x47, 0xe2,
-	0xdc, 0xa9, 0x13, 0x20, 0x58, 0xfd, 0x07, 0xa0, 0xee, 0xe7, 0x13, 0xb5, 0x41, 0x97, 0xe1, 0x74,
-	0xbc, 0xc3, 0x22, 0x92, 0xdd, 0x03, 0xfa, 0x2c, 0x38, 0x15, 0xbd, 0x97, 0x28, 0x3f, 0x5a, 0x84,
-	0x66, 0x2a, 0x62, 0xd7, 0x92, 0x99, 0x77, 0x4e, 0xd6, 0x39, 0x5b, 0x2b, 0xd1, 0xf6, 0x13, 0x5b,
-	0x0b, 0x21, 0x58, 0xf4, 0xa8, 0x4c, 0x45, 0xcb, 0xd1, 0xdf, 0x68, 0x01, 0x96, 0xf4, 0x15, 0x32,
-	0x48, 0xc4, 0xc8, 0x49, 0x57, 0x68, 0x1e, 0x4e, 0x0a, 0x89, 0x25, 0xd1, 0x3a, 0x53, 0x76, 0x92,
-	0x05, 0xfa, 0x13, 0x84, 0xfa, 0xc3, 0xf5, 0x98, 0x4f, 0xb4, 0x70, 0x94, 0x9d, 0xb2, 0xde, 0x59,
-	0x63, 0x3e, 0x41, 0x16, 0x9c, 0xd2, 0x74, 0x3e, 0xb0, 0x4c, 0x6d, 0xcb, 0x96, 0xe8, 0x02, 0x34,
-	0x9f, 0xd1, 0x38, 0xa1, 0x95, 0x13, 0xd3, 0x33, 0x1a, 0x2b, 0x52, 0xfd, 0x7b, 0x03, 0x96, 0x4f,
-	0xba, 0x85, 0xfe, 0x01, 0x21, 0x4e, 0x2e, 0x35, 0x75, 0x69, 0x27, 0x42, 0x30, 0x77, 0xfc, 0x1c,
-	0xbc, 0x3d, 0x04, 0x79, 0x91, 0x2c, 0xa7, 0xa0, 0x8e, 0x8f, 0x6e, 0xc2, 0x2a, 0x89, 0x24, 0x95,
-	0x01, 0xd1, 0x12, 0x4b, 0xfd, 0x54, 0x07, 0xce, 0x60, 0xcd, 0xe4, 0x80, 0x1d, 0x1f, 0xfd, 0x1b,
-	0xce, 0x8a, 0x7e, 0x57, 0x78, 0x9c, 0x6a, 0x75, 0x7c, 0xff, 0x4a, 0x38, 0x83, 0x5a, 0xcd, 0x23,
-	0x3b, 0xbe, 0x8a, 0x93, 0x71, 0xad, 0xe4, 0x83, 0x98, 0xa4, 0x42, 0x7e, 0x56, 0x9c, 0x1a, 0xa4,
-	0x84, 0x12, 0xdd, 0x85, 0xd9, 0xef, 0x7d, 0x57, 0xec, 0xf6, 0x85, 0x55, 0x5a, 0x2a, 0x2c, 0x97,
-	0xdb, 0x4b, 0x39, 0x12, 0x7c, 0x01, 0xa6, 0xea, 0x09, 0x53, 0xfb, 0x78, 0x01, 0x8c, 0xda, 0x6d,
-	0x67, 0x3a, 0xa3, 0x6d, 0xee, 0xf6, 0x05, 0x6a, 0xc3, 0x73, 0x5e, 0x5f, 0x48, 0x16, 0x12, 0xee,
-	0x52, 0x5f, 0x99, 0xb6, 0x29, 0xe1, 0x49, 0x2f, 0x4e, 0x45, 0xf0, 0xa3, 0x1a, 0xc7, 0x14, 0xdd,
-	0x39, 0x01, 0xaf, 0x17, 0xcd, 0x62, 0x6d, 0xb2, 0xfd, 0x7f, 0x70, 0xf4, 0xda, 0x9e, 0x38, 0x7e,
-	0x6d, 0x4f, 0xbc, 0x7b, 0x6d, 0x83, 0x83, 0xa1, 0x0d, 0x3e, 0x1b, 0xda, 0xe0, 0xd5, 0xd0, 0x06,
-	0x47, 0x43, 0x1b, 0x1c, 0x0f, 0x6d, 0xf0, 0xcd, 0xd0, 0x06, 0x6f, 0x87, 0xf6, 0xc4, 0xbb, 0xa1,
-	0x0d, 0x3e, 0x7e, 0x63, 0x4f, 0x1c, 0xbd, 0xb1, 0x27, 0x8e, 0xdf, 0xd8, 0x13, 0x8f, 0xd7, 0x7b,
-	0x2c, 0xde, 0xed, 0x35, 0xb2, 0x57, 0x42, 0xa3, 0x2f, 0x9a, 0xfa, 0x43, 0xdd, 0x12, 0x2b, 0xd9,
-	0x25, 0xb7, 0x92, 0x99, 0x9b, 0x71, 0xb7, 0xc7, 0x9a, 0x64, 0x5f, 0x66, 0x2f, 0xf7, 0xfc, 0x03,
-	0xbe, 0x5b, 0xd2, 0xef, 0x80, 0xeb, 0x3f, 0x05, 0x00, 0x00, 0xff, 0xff, 0xcf, 0x07, 0xc6, 0xe9,
-	0xdf, 0x0b, 0x00, 0x00,
+	// 1190 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0x4f, 0x6f, 0x1b, 0x45,
+	0x1c, 0xcd, 0xd8, 0x8e, 0xbb, 0x1e, 0x27, 0xa9, 0x3b, 0x4a, 0xc3, 0x36, 0x85, 0x6d, 0x6a, 0x10,
+	0x14, 0xd4, 0xac, 0x55, 0x57, 0x50, 0x0e, 0x1c, 0x9a, 0x3f, 0x15, 0x4a, 0xa4, 0x86, 0x6a, 0x93,
+	0x72, 0xa8, 0x90, 0x56, 0xe3, 0xdd, 0xb1, 0x33, 0xcd, 0xee, 0xcc, 0x6a, 0x66, 0x6c, 0xe2, 0x4a,
+	0x48, 0x3d, 0xf0, 0x01, 0x10, 0x9f, 0x80, 0x03, 0x07, 0x2e, 0x5c, 0xe0, 0x06, 0x17, 0x8e, 0x3d,
+	0xf6, 0x58, 0x71, 0xa2, 0xee, 0x05, 0x24, 0x0e, 0xfd, 0x04, 0x08, 0xcd, 0xcc, 0x6e, 0xba, 0x76,
+	0x5a, 0xa9, 0xe2, 0xc0, 0x6d, 0x66, 0x7e, 0xef, 0x8d, 0xdf, 0xbc, 0xdf, 0x1f, 0x2f, 0x7c, 0x7b,
+	0x44, 0xa4, 0x4f, 0x79, 0x47, 0x46, 0x87, 0x24, 0xc5, 0x1d, 0x49, 0x07, 0x6c, 0x98, 0x75, 0xd4,
+	0x38, 0x23, 0x32, 0x1c, 0x75, 0xfd, 0x4c, 0x70, 0xc5, 0xd1, 0xb2, 0x05, 0xf9, 0x16, 0xe4, 0x5b,
+	0xd0, 0xea, 0xfa, 0x80, 0xaa, 0xc3, 0x61, 0xcf, 0x8f, 0x78, 0xda, 0x19, 0xf0, 0x01, 0xef, 0x18,
+	0x70, 0x6f, 0xd8, 0x37, 0x3b, 0xb3, 0x31, 0x2b, 0x7b, 0xc9, 0xea, 0xa5, 0x01, 0xe7, 0x83, 0x84,
+	0xbc, 0x40, 0x29, 0x9a, 0x12, 0xa9, 0x70, 0x9a, 0xe5, 0x80, 0xee, 0xb4, 0x14, 0xca, 0xfa, 0x02,
+	0xeb, 0x08, 0x89, 0x54, 0x48, 0x59, 0x9f, 0x8b, 0x14, 0x2b, 0xca, 0x99, 0x15, 0x97, 0x73, 0x2e,
+	0x4e, 0x73, 0x78, 0xa6, 0x11, 0x45, 0xf0, 0xc2, 0x74, 0xb0, 0xcc, 0x7b, 0x73, 0x3a, 0x34, 0xc2,
+	0x09, 0x8d, 0xb1, 0x22, 0x79, 0x74, 0x6d, 0x26, 0x4a, 0xc9, 0x97, 0xe1, 0xd4, 0xd5, 0xed, 0x31,
+	0x6c, 0x6e, 0xf1, 0x34, 0xc3, 0x6c, 0x7c, 0x9b, 0x28, 0x8c, 0x3c, 0x58, 0x63, 0x38, 0x25, 0x2e,
+	0x58, 0x03, 0x57, 0x1a, 0x9b, 0xf0, 0x97, 0xbf, 0x7e, 0xab, 0xce, 0x8b, 0xaa, 0xfb, 0xb0, 0x12,
+	0x98, 0x73, 0xb4, 0x0b, 0xcf, 0xa6, 0x98, 0x26, 0x94, 0x0d, 0x42, 0x1c, 0xc7, 0x82, 0x48, 0xe9,
+	0x56, 0xd6, 0xc0, 0x95, 0x66, 0xf7, 0xb2, 0xff, 0x32, 0x6b, 0xfd, 0x2d, 0xce, 0x14, 0x8e, 0x94,
+	0xbe, 0x3b, 0x58, 0xca, 0x99, 0x1b, 0x96, 0xd8, 0xfe, 0x1e, 0xc0, 0x85, 0x1d, 0xa6, 0x88, 0x60,
+	0x38, 0x31, 0x3f, 0x7e, 0x03, 0xa2, 0xfe, 0x87, 0xc7, 0x51, 0x48, 0x99, 0x54, 0x98, 0x45, 0x24,
+	0x2c, 0x49, 0x69, 0x68, 0x29, 0x35, 0x51, 0x71, 0x6f, 0x06, 0x2d, 0x0d, 0xda, 0xc9, 0x31, 0x7b,
+	0x5a, 0xd5, 0x75, 0xd8, 0x3a, 0x9a, 0xa5, 0x55, 0x66, 0x69, 0x4b, 0x47, 0xd3, 0xa4, 0x77, 0x61,
+	0x43, 0x11, 0x86, 0x99, 0x0a, 0x69, 0xec, 0x56, 0x67, 0xd1, 0x8e, 0x8d, 0xed, 0xc4, 0xed, 0x9f,
+	0x01, 0x74, 0xee, 0x4a, 0x22, 0x8c, 0xc4, 0xf7, 0x21, 0xec, 0x53, 0x21, 0x55, 0xf8, 0x0a, 0x97,
+	0x1a, 0x26, 0x6a, 0xee, 0x7f, 0x0f, 0x36, 0x12, 0x5c, 0x20, 0x2b, 0xa7, 0x90, 0x8e, 0x0e, 0x1a,
+	0xe0, 0x1a, 0x9c, 0x27, 0xda, 0x9a, 0x5c, 0x44, 0x19, 0x64, 0x03, 0xe8, 0x1a, 0x5c, 0x8a, 0xac,
+	0x91, 0x21, 0x1b, 0xa6, 0x3d, 0x22, 0xdc, 0xda, 0x29, 0xe8, 0x62, 0x8e, 0xd8, 0x33, 0x80, 0xf6,
+	0xdf, 0x00, 0x36, 0x37, 0xa2, 0x88, 0x0f, 0x99, 0x31, 0x1f, 0x7d, 0x00, 0xeb, 0x09, 0x8f, 0x70,
+	0x52, 0x48, 0x41, 0xbf, 0xff, 0x0a, 0xe6, 0x09, 0x5b, 0xbf, 0xbb, 0x5f, 0xbc, 0xb9, 0x15, 0xe4,
+	0x08, 0x74, 0x1d, 0xd6, 0x63, 0x9e, 0x62, 0xca, 0x72, 0x45, 0x17, 0x35, 0x64, 0x45, 0x2c, 0xbb,
+	0xe7, 0xee, 0x55, 0x47, 0x44, 0xde, 0x73, 0x46, 0x3c, 0x51, 0x44, 0x08, 0xfc, 0x5d, 0x05, 0x04,
+	0x39, 0x14, 0x5d, 0x85, 0x4d, 0xc5, 0x65, 0x38, 0x22, 0x42, 0x52, 0xce, 0x72, 0x81, 0x4d, 0xcd,
+	0xac, 0x8b, 0x5a, 0xab, 0xe2, 0x2e, 0x04, 0x50, 0x71, 0xf9, 0xb9, 0x0d, 0xa3, 0x3d, 0x78, 0x56,
+	0xa3, 0x71, 0x14, 0x91, 0x4c, 0x91, 0x38, 0xc4, 0xca, 0x9d, 0x37, 0x75, 0xb4, 0xea, 0xdb, 0xee,
+	0xf2, 0x8b, 0xee, 0xf2, 0x0f, 0x8a, 0xee, 0xca, 0x9f, 0xfb, 0x13, 0xa8, 0x7c, 0x0c, 0x82, 0x45,
+	0xc5, 0xe5, 0x46, 0xce, 0xde, 0x50, 0xed, 0x1f, 0xab, 0xb0, 0xb9, 0x49, 0x13, 0x5d, 0x5e, 0xe6,
+	0xb9, 0x57, 0x61, 0x23, 0x4b, 0x30, 0x2b, 0xa7, 0xe9, 0xac, 0x66, 0x43, 0xe1, 0xb4, 0xa0, 0xfb,
+	0xb0, 0xa2, 0x95, 0x3b, 0x1a, 0xb1, 0x97, 0x57, 0x75, 0xcf, 0x92, 0xff, 0x43, 0x55, 0xe7, 0xcc,
+	0xbc, 0xaa, 0x91, 0x0f, 0x9d, 0x68, 0x28, 0x04, 0x61, 0xd1, 0x38, 0x37, 0x41, 0x5b, 0x5d, 0xbd,
+	0xbb, 0xbf, 0x5d, 0x78, 0x01, 0xdc, 0x7a, 0x70, 0x82, 0x41, 0x5b, 0x70, 0x25, 0xc3, 0xe3, 0x94,
+	0x30, 0x15, 0x66, 0x82, 0x8f, 0x68, 0x4c, 0x44, 0xa8, 0xf8, 0x11, 0x61, 0xc6, 0x90, 0xc6, 0xe6,
+	0xe2, 0xa3, 0xaf, 0x40, 0x29, 0xcd, 0xcb, 0x39, 0xf8, 0x4e, 0x8e, 0x3d, 0xd0, 0x50, 0xb4, 0x0d,
+	0x17, 0x15, 0x3e, 0x0e, 0xc9, 0x31, 0x49, 0x4d, 0x77, 0xbb, 0xf5, 0x35, 0x70, 0x65, 0xa9, 0x7b,
+	0x69, 0x46, 0xfe, 0x01, 0x3e, 0xbe, 0x55, 0x40, 0x0e, 0xc6, 0x19, 0x09, 0x16, 0x54, 0xe9, 0x04,
+	0x45, 0xf0, 0xdc, 0xa9, 0x59, 0xe5, 0x9e, 0x31, 0x46, 0x7c, 0x34, 0x73, 0xd3, 0xab, 0x66, 0x9a,
+	0xff, 0x69, 0xc2, 0x7b, 0x38, 0xd9, 0xcf, 0x48, 0x64, 0x7e, 0xa0, 0x55, 0x06, 0xee, 0xb0, 0x3e,
+	0xdf, 0xad, 0x39, 0xd5, 0x56, 0xad, 0x8d, 0x60, 0x6b, 0xdf, 0x78, 0xa9, 0x51, 0x77, 0x86, 0xbd,
+	0x84, 0x46, 0xed, 0xe7, 0x00, 0x9e, 0x7f, 0x71, 0x58, 0x4c, 0x86, 0x7d, 0x41, 0xfe, 0xe7, 0xc1,
+	0x70, 0x03, 0x36, 0x23, 0x91, 0x86, 0x31, 0x51, 0x98, 0x26, 0xd2, 0x24, 0xb1, 0xd9, 0x5d, 0x99,
+	0x31, 0x60, 0x2b, 0xb8, 0xad, 0x9f, 0x13, 0xc0, 0x48, 0xa4, 0xdb, 0x16, 0x89, 0xde, 0x81, 0x4b,
+	0x54, 0x86, 0x31, 0x49, 0x79, 0x68, 0xa7, 0x87, 0x49, 0x83, 0x13, 0x2c, 0x50, 0xb9, 0x4d, 0x52,
+	0x7e, 0x60, 0xce, 0xac, 0x01, 0xbb, 0x35, 0x67, 0xbe, 0x55, 0x6f, 0x5f, 0x84, 0x17, 0x5e, 0xf2,
+	0xe2, 0x08, 0xeb, 0x82, 0x6a, 0x7f, 0x51, 0xb6, 0xe3, 0x36, 0x16, 0x47, 0x44, 0x65, 0x09, 0x8e,
+	0x4e, 0x09, 0xac, 0xbe, 0xae, 0xc0, 0xdd, 0x9a, 0x03, 0x5a, 0x95, 0xdd, 0x9a, 0x53, 0x69, 0x55,
+	0xdb, 0x37, 0xa1, 0x5b, 0xca, 0x40, 0x82, 0xd9, 0x81, 0xc0, 0x4c, 0x52, 0x53, 0x08, 0xf6, 0x21,
+	0x52, 0xf2, 0x90, 0x30, 0xdc, 0x4b, 0x48, 0x6c, 0xbc, 0x36, 0x0f, 0xd9, 0x97, 0xfc, 0x96, 0x3d,
+	0x6b, 0x7f, 0x0b, 0xe0, 0x62, 0x49, 0xa0, 0xcc, 0x66, 0x85, 0x55, 0x5e, 0xdb, 0xb9, 0x4f, 0xe0,
+	0xf9, 0xe8, 0x90, 0x26, 0x71, 0xee, 0x5b, 0xc8, 0x7b, 0xf7, 0x6d, 0xb2, 0x6a, 0x53, 0xc9, 0x6a,
+	0x81, 0x00, 0x19, 0x9c, 0xb5, 0xf2, 0xb3, 0xde, 0x7d, 0x9d, 0xb0, 0x93, 0x67, 0xe9, 0xc2, 0x7a,
+	0xe3, 0xa5, 0x35, 0x24, 0x79, 0xfb, 0x1f, 0xa0, 0xff, 0xe9, 0x4e, 0xfa, 0x16, 0x5d, 0x86, 0x0b,
+	0xd9, 0x21, 0x67, 0xa4, 0x98, 0xa8, 0xa6, 0x9a, 0x82, 0xa6, 0x39, 0xb3, 0x33, 0x14, 0xad, 0x42,
+	0x27, 0x1f, 0x07, 0xd7, 0x6c, 0xd5, 0x04, 0x27, 0xfb, 0x52, 0xac, 0x6b, 0xa7, 0xe4, 0x49, 0xac,
+	0x8b, 0x10, 0xac, 0x45, 0x54, 0xe5, 0xed, 0x1f, 0x98, 0x35, 0x5a, 0x81, 0x75, 0x33, 0x8c, 0xc7,
+	0xb6, 0xad, 0x83, 0x7c, 0x87, 0x96, 0xe1, 0xbc, 0x54, 0x58, 0x11, 0x53, 0x2a, 0x8d, 0xc0, 0x6e,
+	0xd0, 0x5b, 0x10, 0x9a, 0x45, 0x18, 0xf1, 0x98, 0x98, 0x16, 0x6c, 0x04, 0x0d, 0x73, 0xb2, 0xc5,
+	0x63, 0x82, 0x5c, 0x78, 0xc6, 0xd0, 0xc5, 0xd8, 0x75, 0x4c, 0xac, 0xd8, 0xa2, 0x0b, 0xd0, 0x79,
+	0x40, 0x33, 0x4b, 0x6b, 0xd8, 0xd0, 0x03, 0x9a, 0x69, 0xd2, 0xe6, 0xd7, 0xe0, 0xf1, 0x53, 0x6f,
+	0xee, 0xc9, 0x53, 0x6f, 0xee, 0xf9, 0x53, 0x0f, 0x3c, 0x9c, 0x78, 0xe0, 0x87, 0x89, 0x07, 0x1e,
+	0x4d, 0x3c, 0xf0, 0x78, 0xe2, 0x81, 0x27, 0x13, 0x0f, 0xfc, 0x31, 0xf1, 0xc0, 0x9f, 0x13, 0x6f,
+	0xee, 0xf9, 0xc4, 0x03, 0xdf, 0x3c, 0xf3, 0xe6, 0x1e, 0x3f, 0xf3, 0xe6, 0x9e, 0x3c, 0xf3, 0xe6,
+	0xee, 0xed, 0x0e, 0x78, 0x76, 0x34, 0xf0, 0x8b, 0xb1, 0xef, 0x0f, 0x65, 0xc7, 0x2c, 0x74, 0xdb,
+	0xaf, 0x17, 0x53, 0x6b, 0xbd, 0x08, 0x77, 0xb2, 0xde, 0x80, 0x77, 0xc8, 0xb1, 0x2a, 0x3e, 0xc5,
+	0xca, 0x5f, 0x64, 0xbd, 0xba, 0x19, 0xec, 0xd7, 0xff, 0x0d, 0x00, 0x00, 0xff, 0xff, 0x17, 0x19,
+	0xda, 0x27, 0xb0, 0x09, 0x00, 0x00,
 }
 
 func (this *CompanyMeta) Equal(that interface{}) bool {
@@ -1423,14 +1203,14 @@ func (this *BillingMeta) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SourcePublic) Equal(that interface{}) bool {
+func (this *SignupTypePublic) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SourcePublic)
+	that1, ok := that.(*SignupTypePublic)
 	if !ok {
-		that2, ok := that.(SourcePublic)
+		that2, ok := that.(SignupTypePublic)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1444,14 +1224,14 @@ func (this *SourcePublic) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SourceInternalSre) Equal(that interface{}) bool {
+func (this *SignupTypeInternalSre) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SourceInternalSre)
+	that1, ok := that.(*SignupTypeInternalSre)
 	if !ok {
-		that2, ok := that.(SourceInternalSre)
+		that2, ok := that.(SignupTypeInternalSre)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1469,22 +1249,22 @@ func (this *SourceInternalSre) Equal(that interface{}) bool {
 	if this.KcInstanceName != that1.KcInstanceName {
 		return false
 	}
-	if !this.CrmInfo.Equal(that1.CrmInfo) {
-		return false
-	}
 	if !this.CrmDetails.Equal(that1.CrmDetails) {
 		return false
 	}
+	if this.IsDemoTenant != that1.IsDemoTenant {
+		return false
+	}
 	return true
 }
-func (this *SourceInternalScaling) Equal(that interface{}) bool {
+func (this *SignupTypeInternalScaling) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SourceInternalScaling)
+	that1, ok := that.(*SignupTypeInternalScaling)
 	if !ok {
-		that2, ok := that.(SourceInternalScaling)
+		that2, ok := that.(SignupTypeInternalScaling)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1498,68 +1278,14 @@ func (this *SourceInternalScaling) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SourceMarketplace) Equal(that interface{}) bool {
+func (this *SignupTypeMarketplace) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SourceMarketplace)
+	that1, ok := that.(*SignupTypeMarketplace)
 	if !ok {
-		that2, ok := that.(SourceMarketplace)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.MarketplaceChoice == nil {
-		if this.MarketplaceChoice != nil {
-			return false
-		}
-	} else if this.MarketplaceChoice == nil {
-		return false
-	} else if !this.MarketplaceChoice.Equal(that1.MarketplaceChoice) {
-		return false
-	}
-	return true
-}
-func (this *SourceMarketplace_MarketplaceAws) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SourceMarketplace_MarketplaceAws)
-	if !ok {
-		that2, ok := that.(SourceMarketplace_MarketplaceAws)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MarketplaceAws.Equal(that1.MarketplaceAws) {
-		return false
-	}
-	return true
-}
-func (this *MarketplaceAws) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MarketplaceAws)
-	if !ok {
-		that2, ok := that.(MarketplaceAws)
+		that2, ok := that.(SignupTypeMarketplace)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1576,14 +1302,14 @@ func (this *MarketplaceAws) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SourcePlanTransition) Equal(that interface{}) bool {
+func (this *SignupTypePlanTransition) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SourcePlanTransition)
+	that1, ok := that.(*SignupTypePlanTransition)
 	if !ok {
-		that2, ok := that.(SourcePlanTransition)
+		that2, ok := that.(SignupTypePlanTransition)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1600,14 +1326,14 @@ func (this *SourcePlanTransition) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SourceMsp) Equal(that interface{}) bool {
+func (this *SignupTypeMsp) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SourceMsp)
+	that1, ok := that.(*SignupTypeMsp)
 	if !ok {
-		that2, ok := that.(SourceMsp)
+		that2, ok := that.(SignupTypeMsp)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1619,9 +1345,6 @@ func (this *SourceMsp) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.CrmInfo.Equal(that1.CrmInfo) {
-		return false
-	}
 	if !this.CrmDetails.Equal(that1.CrmDetails) {
 		return false
 	}
@@ -1630,14 +1353,14 @@ func (this *SourceMsp) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *SourceInternalSso) Equal(that interface{}) bool {
+func (this *SignupTypeInternalSso) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*SourceInternalSso)
+	that1, ok := that.(*SignupTypeInternalSso)
 	if !ok {
-		that2, ok := that.(SourceInternalSso)
+		that2, ok := that.(SignupTypeInternalSso)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1695,50 +1418,6 @@ func (this *ContactMeta) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ZipCode != that1.ZipCode {
-		return false
-	}
-	return true
-}
-func (this *CrmInfoV2) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CrmInfoV2)
-	if !ok {
-		that2, ok := that.(CrmInfoV2)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.AccountId != that1.AccountId {
-		return false
-	}
-	if this.EntitlementId != that1.EntitlementId {
-		return false
-	}
-	if this.SubscriptionId != that1.SubscriptionId {
-		return false
-	}
-	if this.OrderType != that1.OrderType {
-		return false
-	}
-	if len(this.EntitledSkus) != len(that1.EntitledSkus) {
-		return false
-	}
-	for i := range this.EntitledSkus {
-		if this.EntitledSkus[i] != that1.EntitledSkus[i] {
-			return false
-		}
-	}
-	if this.CustomerIdentifier != that1.CustomerIdentifier {
 		return false
 	}
 	return true
@@ -1815,92 +1494,67 @@ func (this *BillingMeta) goString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SourcePublic) GoString() string {
+func (this *SignupTypePublic) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 4)
-	s = append(s, "&signup.SourcePublic{")
+	s = append(s, "&signup.SignupTypePublic{")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SourceInternalSre) GoString() string {
+func (this *SignupTypeInternalSre) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 8)
-	s = append(s, "&signup.SourceInternalSre{")
+	s = append(s, "&signup.SignupTypeInternalSre{")
 	s = append(s, "F5XcInstanceName: "+fmt.Sprintf("%#v", this.F5XcInstanceName)+",\n")
 	s = append(s, "KcInstanceName: "+fmt.Sprintf("%#v", this.KcInstanceName)+",\n")
-	if this.CrmInfo != nil {
-		s = append(s, "CrmInfo: "+fmt.Sprintf("%#v", this.CrmInfo)+",\n")
-	}
 	if this.CrmDetails != nil {
 		s = append(s, "CrmDetails: "+fmt.Sprintf("%#v", this.CrmDetails)+",\n")
 	}
+	s = append(s, "IsDemoTenant: "+fmt.Sprintf("%#v", this.IsDemoTenant)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SourceInternalScaling) GoString() string {
+func (this *SignupTypeInternalScaling) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 4)
-	s = append(s, "&signup.SourceInternalScaling{")
+	s = append(s, "&signup.SignupTypeInternalScaling{")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SourceMarketplace) GoString() string {
+func (this *SignupTypeMarketplace) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
-	s = append(s, "&signup.SourceMarketplace{")
-	if this.MarketplaceChoice != nil {
-		s = append(s, "MarketplaceChoice: "+fmt.Sprintf("%#v", this.MarketplaceChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *SourceMarketplace_MarketplaceAws) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&signup.SourceMarketplace_MarketplaceAws{` +
-		`MarketplaceAws:` + fmt.Sprintf("%#v", this.MarketplaceAws) + `}`}, ", ")
-	return s
-}
-func (this *MarketplaceAws) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&signup.MarketplaceAws{")
+	s = append(s, "&signup.SignupTypeMarketplace{")
 	if this.CrmDetails != nil {
 		s = append(s, "CrmDetails: "+fmt.Sprintf("%#v", this.CrmDetails)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SourcePlanTransition) GoString() string {
+func (this *SignupTypePlanTransition) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
-	s = append(s, "&signup.SourcePlanTransition{")
+	s = append(s, "&signup.SignupTypePlanTransition{")
 	s = append(s, "IsSsoEnabled: "+fmt.Sprintf("%#v", this.IsSsoEnabled)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SourceMsp) GoString() string {
+func (this *SignupTypeMsp) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
-	s = append(s, "&signup.SourceMsp{")
-	if this.CrmInfo != nil {
-		s = append(s, "CrmInfo: "+fmt.Sprintf("%#v", this.CrmInfo)+",\n")
-	}
+	s := make([]string, 0, 6)
+	s = append(s, "&signup.SignupTypeMsp{")
 	if this.CrmDetails != nil {
 		s = append(s, "CrmDetails: "+fmt.Sprintf("%#v", this.CrmDetails)+",\n")
 	}
@@ -1908,12 +1562,12 @@ func (this *SourceMsp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *SourceInternalSso) GoString() string {
+func (this *SignupTypeInternalSso) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 4)
-	s = append(s, "&signup.SourceInternalSso{")
+	s = append(s, "&signup.SignupTypeInternalSso{")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1932,21 +1586,6 @@ func (this *ContactMeta) GoString() string {
 	s = append(s, "StateCode: "+fmt.Sprintf("%#v", this.StateCode)+",\n")
 	s = append(s, "Country: "+fmt.Sprintf("%#v", this.Country)+",\n")
 	s = append(s, "ZipCode: "+fmt.Sprintf("%#v", this.ZipCode)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CrmInfoV2) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 10)
-	s = append(s, "&signup.CrmInfoV2{")
-	s = append(s, "AccountId: "+fmt.Sprintf("%#v", this.AccountId)+",\n")
-	s = append(s, "EntitlementId: "+fmt.Sprintf("%#v", this.EntitlementId)+",\n")
-	s = append(s, "SubscriptionId: "+fmt.Sprintf("%#v", this.SubscriptionId)+",\n")
-	s = append(s, "OrderType: "+fmt.Sprintf("%#v", this.OrderType)+",\n")
-	s = append(s, "EntitledSkus: "+fmt.Sprintf("%#v", this.EntitledSkus)+",\n")
-	s = append(s, "CustomerIdentifier: "+fmt.Sprintf("%#v", this.CustomerIdentifier)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -2224,7 +1863,7 @@ func (m *BillingMeta) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SourcePublic) Marshal() (dAtA []byte, err error) {
+func (m *SignupTypePublic) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2234,12 +1873,12 @@ func (m *SourcePublic) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SourcePublic) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignupTypePublic) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SourcePublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignupTypePublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2247,7 +1886,7 @@ func (m *SourcePublic) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SourceInternalSre) Marshal() (dAtA []byte, err error) {
+func (m *SignupTypeInternalSre) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2257,16 +1896,26 @@ func (m *SourceInternalSre) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SourceInternalSre) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignupTypeInternalSre) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SourceInternalSre) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignupTypeInternalSre) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
+	if m.IsDemoTenant {
+		i--
+		if m.IsDemoTenant {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x30
+	}
 	if m.CrmDetails != nil {
 		{
 			size, err := m.CrmDetails.MarshalToSizedBuffer(dAtA[:i])
@@ -2278,18 +1927,6 @@ func (m *SourceInternalSre) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x22
-	}
-	if m.CrmInfo != nil {
-		{
-			size, err := m.CrmInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypesV2(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
 	}
 	if len(m.KcInstanceName) > 0 {
 		i -= len(m.KcInstanceName)
@@ -2308,7 +1945,7 @@ func (m *SourceInternalSre) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SourceInternalScaling) Marshal() (dAtA []byte, err error) {
+func (m *SignupTypeInternalScaling) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2318,12 +1955,12 @@ func (m *SourceInternalScaling) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SourceInternalScaling) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignupTypeInternalScaling) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SourceInternalScaling) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignupTypeInternalScaling) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2331,7 +1968,7 @@ func (m *SourceInternalScaling) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SourceMarketplace) Marshal() (dAtA []byte, err error) {
+func (m *SignupTypeMarketplace) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2341,65 +1978,12 @@ func (m *SourceMarketplace) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SourceMarketplace) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignupTypeMarketplace) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SourceMarketplace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MarketplaceChoice != nil {
-		{
-			size := m.MarketplaceChoice.Size()
-			i -= size
-			if _, err := m.MarketplaceChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *SourceMarketplace_MarketplaceAws) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SourceMarketplace_MarketplaceAws) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.MarketplaceAws != nil {
-		{
-			size, err := m.MarketplaceAws.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypesV2(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *MarketplaceAws) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MarketplaceAws) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MarketplaceAws) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignupTypeMarketplace) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2414,12 +1998,12 @@ func (m *MarketplaceAws) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintTypesV2(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *SourcePlanTransition) Marshal() (dAtA []byte, err error) {
+func (m *SignupTypePlanTransition) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2429,12 +2013,12 @@ func (m *SourcePlanTransition) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SourcePlanTransition) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignupTypePlanTransition) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SourcePlanTransition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignupTypePlanTransition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2452,7 +2036,7 @@ func (m *SourcePlanTransition) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *SourceMsp) Marshal() (dAtA []byte, err error) {
+func (m *SignupTypeMsp) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2462,12 +2046,12 @@ func (m *SourceMsp) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SourceMsp) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignupTypeMsp) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SourceMsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignupTypeMsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2491,22 +2075,10 @@ func (m *SourceMsp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if m.CrmInfo != nil {
-		{
-			size, err := m.CrmInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypesV2(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
 	return len(dAtA) - i, nil
 }
 
-func (m *SourceInternalSso) Marshal() (dAtA []byte, err error) {
+func (m *SignupTypeInternalSso) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2516,12 +2088,12 @@ func (m *SourceInternalSso) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *SourceInternalSso) MarshalTo(dAtA []byte) (int, error) {
+func (m *SignupTypeInternalSso) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *SourceInternalSso) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *SignupTypeInternalSso) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2609,73 +2181,6 @@ func (m *ContactMeta) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i -= len(m.PhoneNumber)
 		copy(dAtA[i:], m.PhoneNumber)
 		i = encodeVarintTypesV2(dAtA, i, uint64(len(m.PhoneNumber)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *CrmInfoV2) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CrmInfoV2) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CrmInfoV2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.CustomerIdentifier) > 0 {
-		i -= len(m.CustomerIdentifier)
-		copy(dAtA[i:], m.CustomerIdentifier)
-		i = encodeVarintTypesV2(dAtA, i, uint64(len(m.CustomerIdentifier)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if len(m.EntitledSkus) > 0 {
-		for iNdEx := len(m.EntitledSkus) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.EntitledSkus[iNdEx])
-			copy(dAtA[i:], m.EntitledSkus[iNdEx])
-			i = encodeVarintTypesV2(dAtA, i, uint64(len(m.EntitledSkus[iNdEx])))
-			i--
-			dAtA[i] = 0x32
-		}
-	}
-	if len(m.OrderType) > 0 {
-		i -= len(m.OrderType)
-		copy(dAtA[i:], m.OrderType)
-		i = encodeVarintTypesV2(dAtA, i, uint64(len(m.OrderType)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.SubscriptionId) > 0 {
-		i -= len(m.SubscriptionId)
-		copy(dAtA[i:], m.SubscriptionId)
-		i = encodeVarintTypesV2(dAtA, i, uint64(len(m.SubscriptionId)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.EntitlementId) > 0 {
-		i -= len(m.EntitlementId)
-		copy(dAtA[i:], m.EntitlementId)
-		i = encodeVarintTypesV2(dAtA, i, uint64(len(m.EntitlementId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.AccountId) > 0 {
-		i -= len(m.AccountId)
-		copy(dAtA[i:], m.AccountId)
-		i = encodeVarintTypesV2(dAtA, i, uint64(len(m.AccountId)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -2813,7 +2318,7 @@ func (m *BillingMeta) Size() (n int) {
 	return n
 }
 
-func (m *SourcePublic) Size() (n int) {
+func (m *SignupTypePublic) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2822,7 +2327,7 @@ func (m *SourcePublic) Size() (n int) {
 	return n
 }
 
-func (m *SourceInternalSre) Size() (n int) {
+func (m *SignupTypeInternalSre) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2836,18 +2341,17 @@ func (m *SourceInternalSre) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypesV2(uint64(l))
 	}
-	if m.CrmInfo != nil {
-		l = m.CrmInfo.Size()
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
 	if m.CrmDetails != nil {
 		l = m.CrmDetails.Size()
 		n += 1 + l + sovTypesV2(uint64(l))
 	}
+	if m.IsDemoTenant {
+		n += 2
+	}
 	return n
 }
 
-func (m *SourceInternalScaling) Size() (n int) {
+func (m *SignupTypeInternalScaling) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2856,31 +2360,7 @@ func (m *SourceInternalScaling) Size() (n int) {
 	return n
 }
 
-func (m *SourceMarketplace) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MarketplaceChoice != nil {
-		n += m.MarketplaceChoice.Size()
-	}
-	return n
-}
-
-func (m *SourceMarketplace_MarketplaceAws) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MarketplaceAws != nil {
-		l = m.MarketplaceAws.Size()
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
-	return n
-}
-func (m *MarketplaceAws) Size() (n int) {
+func (m *SignupTypeMarketplace) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2893,7 +2373,7 @@ func (m *MarketplaceAws) Size() (n int) {
 	return n
 }
 
-func (m *SourcePlanTransition) Size() (n int) {
+func (m *SignupTypePlanTransition) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2905,16 +2385,12 @@ func (m *SourcePlanTransition) Size() (n int) {
 	return n
 }
 
-func (m *SourceMsp) Size() (n int) {
+func (m *SignupTypeMsp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.CrmInfo != nil {
-		l = m.CrmInfo.Size()
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
 	if m.CrmDetails != nil {
 		l = m.CrmDetails.Size()
 		n += 1 + l + sovTypesV2(uint64(l))
@@ -2926,7 +2402,7 @@ func (m *SourceMsp) Size() (n int) {
 	return n
 }
 
-func (m *SourceInternalSso) Size() (n int) {
+func (m *SignupTypeInternalSso) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2974,41 +2450,6 @@ func (m *ContactMeta) Size() (n int) {
 		n += 1 + l + sovTypesV2(uint64(l))
 	}
 	l = len(m.ZipCode)
-	if l > 0 {
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
-	return n
-}
-
-func (m *CrmInfoV2) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.AccountId)
-	if l > 0 {
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
-	l = len(m.EntitlementId)
-	if l > 0 {
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
-	l = len(m.SubscriptionId)
-	if l > 0 {
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
-	l = len(m.OrderType)
-	if l > 0 {
-		n += 1 + l + sovTypesV2(uint64(l))
-	}
-	if len(m.EntitledSkus) > 0 {
-		for _, s := range m.EntitledSkus {
-			l = len(s)
-			n += 1 + l + sovTypesV2(uint64(l))
-		}
-	}
-	l = len(m.CustomerIdentifier)
 	if l > 0 {
 		n += 1 + l + sovTypesV2(uint64(l))
 	}
@@ -3085,94 +2526,73 @@ func (this *BillingMeta) string() string {
 	}, "")
 	return s
 }
-func (this *SourcePublic) String() string {
+func (this *SignupTypePublic) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SourcePublic{`,
+	s := strings.Join([]string{`&SignupTypePublic{`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *SourceInternalSre) String() string {
+func (this *SignupTypeInternalSre) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SourceInternalSre{`,
+	s := strings.Join([]string{`&SignupTypeInternalSre{`,
 		`F5XcInstanceName:` + fmt.Sprintf("%v", this.F5XcInstanceName) + `,`,
 		`KcInstanceName:` + fmt.Sprintf("%v", this.KcInstanceName) + `,`,
-		`CrmInfo:` + strings.Replace(this.CrmInfo.String(), "CrmInfoV2", "CrmInfoV2", 1) + `,`,
+		`CrmDetails:` + strings.Replace(fmt.Sprintf("%v", this.CrmDetails), "CRMInfo", "schema.CRMInfo", 1) + `,`,
+		`IsDemoTenant:` + fmt.Sprintf("%v", this.IsDemoTenant) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignupTypeInternalScaling) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignupTypeInternalScaling{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignupTypeMarketplace) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignupTypeMarketplace{`,
 		`CrmDetails:` + strings.Replace(fmt.Sprintf("%v", this.CrmDetails), "CRMInfo", "schema.CRMInfo", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *SourceInternalScaling) String() string {
+func (this *SignupTypePlanTransition) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SourceInternalScaling{`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SourceMarketplace) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SourceMarketplace{`,
-		`MarketplaceChoice:` + fmt.Sprintf("%v", this.MarketplaceChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SourceMarketplace_MarketplaceAws) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SourceMarketplace_MarketplaceAws{`,
-		`MarketplaceAws:` + strings.Replace(fmt.Sprintf("%v", this.MarketplaceAws), "MarketplaceAws", "MarketplaceAws", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MarketplaceAws) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MarketplaceAws{`,
-		`CrmDetails:` + strings.Replace(fmt.Sprintf("%v", this.CrmDetails), "CRMInfo", "schema.CRMInfo", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SourcePlanTransition) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SourcePlanTransition{`,
+	s := strings.Join([]string{`&SignupTypePlanTransition{`,
 		`IsSsoEnabled:` + fmt.Sprintf("%v", this.IsSsoEnabled) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *SourceMsp) String() string {
+func (this *SignupTypeMsp) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SourceMsp{`,
-		`CrmInfo:` + strings.Replace(this.CrmInfo.String(), "CrmInfoV2", "CrmInfoV2", 1) + `,`,
+	s := strings.Join([]string{`&SignupTypeMsp{`,
 		`CrmDetails:` + strings.Replace(fmt.Sprintf("%v", this.CrmDetails), "CRMInfo", "schema.CRMInfo", 1) + `,`,
 		`ChildTenantObjName:` + fmt.Sprintf("%v", this.ChildTenantObjName) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *SourceInternalSso) String() string {
+func (this *SignupTypeInternalSso) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&SourceInternalSso{`,
+	s := strings.Join([]string{`&SignupTypeInternalSso{`,
 		`}`,
 	}, "")
 	return s
@@ -3191,21 +2611,6 @@ func (this *ContactMeta) String() string {
 		`StateCode:` + fmt.Sprintf("%v", this.StateCode) + `,`,
 		`Country:` + fmt.Sprintf("%v", this.Country) + `,`,
 		`ZipCode:` + fmt.Sprintf("%v", this.ZipCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CrmInfoV2) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CrmInfoV2{`,
-		`AccountId:` + fmt.Sprintf("%v", this.AccountId) + `,`,
-		`EntitlementId:` + fmt.Sprintf("%v", this.EntitlementId) + `,`,
-		`SubscriptionId:` + fmt.Sprintf("%v", this.SubscriptionId) + `,`,
-		`OrderType:` + fmt.Sprintf("%v", this.OrderType) + `,`,
-		`EntitledSkus:` + fmt.Sprintf("%v", this.EntitledSkus) + `,`,
-		`CustomerIdentifier:` + fmt.Sprintf("%v", this.CustomerIdentifier) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4094,7 +3499,7 @@ func (m *BillingMeta) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SourcePublic) Unmarshal(dAtA []byte) error {
+func (m *SignupTypePublic) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4117,10 +3522,10 @@ func (m *SourcePublic) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SourcePublic: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignupTypePublic: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourcePublic: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignupTypePublic: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -4147,7 +3552,7 @@ func (m *SourcePublic) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SourceInternalSre) Unmarshal(dAtA []byte) error {
+func (m *SignupTypeInternalSre) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4170,10 +3575,10 @@ func (m *SourceInternalSre) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SourceInternalSre: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignupTypeInternalSre: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourceInternalSre: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignupTypeInternalSre: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4240,42 +3645,6 @@ func (m *SourceInternalSre) Unmarshal(dAtA []byte) error {
 			}
 			m.KcInstanceName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CrmInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CrmInfo == nil {
-				m.CrmInfo = &CrmInfoV2{}
-			}
-			if err := m.CrmInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CrmDetails", wireType)
@@ -4312,117 +3681,11 @@ func (m *SourceInternalSre) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypesV2(dAtA[iNdEx:])
-			if err != nil {
-				return err
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IsDemoTenant", wireType)
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SourceInternalScaling) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypesV2
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SourceInternalScaling: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourceInternalScaling: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypesV2(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SourceMarketplace) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypesV2
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SourceMarketplace: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourceMarketplace: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MarketplaceAws", wireType)
-			}
-			var msglen int
+			var v int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypesV2
@@ -4432,27 +3695,12 @@ func (m *SourceMarketplace) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				v |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &MarketplaceAws{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MarketplaceChoice = &SourceMarketplace_MarketplaceAws{v}
-			iNdEx = postIndex
+			m.IsDemoTenant = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypesV2(dAtA[iNdEx:])
@@ -4477,7 +3725,7 @@ func (m *SourceMarketplace) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MarketplaceAws) Unmarshal(dAtA []byte) error {
+func (m *SignupTypeInternalScaling) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4500,13 +3748,66 @@ func (m *MarketplaceAws) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MarketplaceAws: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignupTypeInternalScaling: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MarketplaceAws: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignupTypeInternalScaling: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 2:
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypesV2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypesV2
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypesV2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SignupTypeMarketplace) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypesV2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SignupTypeMarketplace: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SignupTypeMarketplace: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CrmDetails", wireType)
 			}
@@ -4566,7 +3867,7 @@ func (m *MarketplaceAws) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SourcePlanTransition) Unmarshal(dAtA []byte) error {
+func (m *SignupTypePlanTransition) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4589,10 +3890,10 @@ func (m *SourcePlanTransition) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SourcePlanTransition: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignupTypePlanTransition: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourcePlanTransition: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignupTypePlanTransition: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4639,7 +3940,7 @@ func (m *SourcePlanTransition) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SourceMsp) Unmarshal(dAtA []byte) error {
+func (m *SignupTypeMsp) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4662,48 +3963,12 @@ func (m *SourceMsp) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SourceMsp: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignupTypeMsp: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourceMsp: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignupTypeMsp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CrmInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.CrmInfo == nil {
-				m.CrmInfo = &CrmInfoV2{}
-			}
-			if err := m.CrmInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CrmDetails", wireType)
@@ -4796,7 +4061,7 @@ func (m *SourceMsp) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *SourceInternalSso) Unmarshal(dAtA []byte) error {
+func (m *SignupTypeInternalSso) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4819,10 +4084,10 @@ func (m *SourceInternalSso) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: SourceInternalSso: wiretype end group for non-group")
+			return fmt.Errorf("proto: SignupTypeInternalSso: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SourceInternalSso: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: SignupTypeInternalSso: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -5165,251 +4430,6 @@ func (m *ContactMeta) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ZipCode = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypesV2(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CrmInfoV2) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypesV2
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CrmInfoV2: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CrmInfoV2: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AccountId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AccountId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EntitlementId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EntitlementId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SubscriptionId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SubscriptionId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OrderType", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OrderType = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EntitledSkus", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EntitledSkus = append(m.EntitledSkus, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomerIdentifier", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypesV2
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypesV2
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CustomerIdentifier = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

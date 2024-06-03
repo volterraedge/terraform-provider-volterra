@@ -73,6 +73,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.ValidateRulesReq"] = ValidateRulesReqValidator()
 	vr["ves.io.schema.namespace.ValidateRulesResponse"] = ValidateRulesResponseValidator()
 
+	vr["ves.io.schema.namespace.ApiEndpointsStatsAllNSReq"] = ApiEndpointsStatsAllNSReqValidator()
 	vr["ves.io.schema.namespace.ApiEndpointsStatsNSReq"] = ApiEndpointsStatsNSReqValidator()
 	vr["ves.io.schema.namespace.ApiEndpointsStatsNSRsp"] = ApiEndpointsStatsNSRspValidator()
 

@@ -767,6 +767,22 @@ func (v *ValidateGlobalSpecType) DownstreamCosValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) OriginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.SignupOrigin)
+		return int32(i)
+	}
+	// ves_io_schema.SignupOrigin_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.SignupOrigin_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for origin")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -863,6 +879,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["origin"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin"))
+		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["plan_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("plan_type"))
@@ -932,6 +957,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_control"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_control"))
+		if err := fv(ctx, m.GetTenantControl(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1045,7 +1079,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAddonServicesSubscribed := v.AddonServicesSubscribedValidationRuleHandler
 	rulesAddonServicesSubscribed := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.max_items": "128",
 	}
 	vFn, err = vrhAddonServicesSubscribed(rulesAddonServicesSubscribed)
 	if err != nil {
@@ -1076,6 +1110,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["downstream_cos"] = vFn
 
+	vrhOrigin := v.OriginValidationRuleHandler
+	rulesOrigin := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOrigin(rulesOrigin)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.origin: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin"] = vFn
+
 	v.FldValidators["k8s_server_sub_cas"] = SubCAValidator().Validate
 
 	v.FldValidators["proxy_root_cas"] = CAValidator().Validate
@@ -1083,6 +1128,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["shape_shared_instance_auth_key"] = ves_io_schema.SecretTypeValidator().Validate
 
 	v.FldValidators["crm_info"] = ves_io_schema.CRMInfoValidator().Validate
+
+	v.FldValidators["tenant_control"] = TenantControlConfigValidator().Validate
 
 	return v
 }()
@@ -1196,4 +1243,112 @@ var DefaultSubCAValidator = func() *ValidateSubCA {
 
 func SubCAValidator() db.Validator {
 	return DefaultSubCAValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TenantControlConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TenantControlConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TenantControlConfig) DeepCopy() *TenantControlConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TenantControlConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TenantControlConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TenantControlConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TenantControlConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTenantControlConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTenantControlConfig) TenantNodePercentValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_node_percent")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTenantControlConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TenantControlConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TenantControlConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tenant_node_percent"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_node_percent"))
+		if err := fv(ctx, m.GetTenantNodePercent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTenantControlConfigValidator = func() *ValidateTenantControlConfig {
+	v := &ValidateTenantControlConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTenantNodePercent := v.TenantNodePercentValidationRuleHandler
+	rulesTenantNodePercent := map[string]string{
+		"ves.io.schema.rules.int32.gte": "10",
+		"ves.io.schema.rules.int32.lte": "100",
+	}
+	vFn, err = vrhTenantNodePercent(rulesTenantNodePercent)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TenantControlConfig.tenant_node_percent: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_node_percent"] = vFn
+
+	return v
+}()
+
+func TenantControlConfigValidator() db.Validator {
+	return DefaultTenantControlConfigValidator
 }

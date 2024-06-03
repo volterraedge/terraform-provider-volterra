@@ -21,7 +21,8 @@ resource "volterra_api_definition" "example" {
   namespace = "staging"
 
   // One of the arguments from this list "strict_schema_origin mixed_schema_origin" must be set
-  strict_schema_origin = true
+
+  mixed_schema_origin = true
 }
 
 ```

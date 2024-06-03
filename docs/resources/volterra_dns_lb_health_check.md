@@ -20,9 +20,9 @@ resource "volterra_dns_lb_health_check" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "http_health_check tcp_health_check udp_health_check icmp_health_check https_health_check tcp_hex_health_check" must be set
+  // One of the arguments from this list "https_health_check tcp_hex_health_check http_health_check tcp_health_check udp_health_check icmp_health_check" must be set
 
-  http_health_check {
+  https_health_check {
     health_check_port = "80"
 
     receive = "HTTP/1"

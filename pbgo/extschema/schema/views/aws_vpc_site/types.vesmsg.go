@@ -448,6 +448,54 @@ func (v *ValidateAWSVPCIngressEgressGwReplaceType) SiteMeshGroupChoiceValidation
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCIngressEgressGwReplaceType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AWSVPCTwoInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSVPCTwoInterfaceNodeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSVPCTwoInterfaceNodeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated az_nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items az_nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCIngressEgressGwReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPCIngressEgressGwReplaceType)
 	if !ok {
@@ -475,6 +523,14 @@ func (v *ValidateAWSVPCIngressEgressGwReplaceType) Validate(ctx context.Context,
 
 		vOpts := append(opts, db.WithValidateField("allowed_vip_port_sli"))
 		if err := fv(ctx, m.GetAllowedVipPortSli(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["az_nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("az_nodes"))
+		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -865,6 +921,18 @@ var DefaultAWSVPCIngressEgressGwReplaceTypeValidator = func() *ValidateAWSVPCIng
 		panic(errMsg)
 	}
 	v.FldValidators["site_mesh_group_choice"] = vFn
+
+	vrhAzNodes := v.AzNodesValidationRuleHandler
+	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhAzNodes(rulesAzNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCIngressEgressGwReplaceType.az_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_nodes"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_outside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_inside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -1899,6 +1967,54 @@ type ValidateAWSVPCIngressGwReplaceType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAWSVPCIngressGwReplaceType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCOneInterfaceNodeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AWSVPCOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSVPCOneInterfaceNodeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSVPCOneInterfaceNodeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated az_nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items az_nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCIngressGwReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPCIngressGwReplaceType)
 	if !ok {
@@ -1922,6 +2038,14 @@ func (v *ValidateAWSVPCIngressGwReplaceType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["az_nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("az_nodes"))
+		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["performance_enhancement_mode"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("performance_enhancement_mode"))
@@ -1937,6 +2061,26 @@ func (v *ValidateAWSVPCIngressGwReplaceType) Validate(ctx context.Context, pm in
 // Well-known symbol for default validator implementation
 var DefaultAWSVPCIngressGwReplaceTypeValidator = func() *ValidateAWSVPCIngressGwReplaceType {
 	v := &ValidateAWSVPCIngressGwReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAzNodes := v.AzNodesValidationRuleHandler
+	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhAzNodes(rulesAzNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCIngressGwReplaceType.az_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_nodes"] = vFn
 
 	v.FldValidators["allowed_vip_port"] = ves_io_schema_views.AllowedVIPPortsValidator().Validate
 
@@ -2796,6 +2940,54 @@ func (v *ValidateAWSVPCVoltstackClusterReplaceType) SiteMeshGroupChoiceValidatio
 	return validatorFn, nil
 }
 
+func (v *ValidateAWSVPCVoltstackClusterReplaceType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AWSVPCOneInterfaceNodeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AWSVPCOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AWSVPCOneInterfaceNodeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AWSVPCOneInterfaceNodeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated az_nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items az_nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSVPCVoltstackClusterReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSVPCVoltstackClusterReplaceType)
 	if !ok {
@@ -2814,6 +3006,14 @@ func (v *ValidateAWSVPCVoltstackClusterReplaceType) Validate(ctx context.Context
 
 		vOpts := append(opts, db.WithValidateField("allowed_vip_port"))
 		if err := fv(ctx, m.GetAllowedVipPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["az_nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("az_nodes"))
+		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3137,6 +3337,18 @@ var DefaultAWSVPCVoltstackClusterReplaceTypeValidator = func() *ValidateAWSVPCVo
 		panic(errMsg)
 	}
 	v.FldValidators["site_mesh_group_choice"] = vFn
+
+	vrhAzNodes := v.AzNodesValidationRuleHandler
+	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhAzNodes(rulesAzNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSVPCVoltstackClusterReplaceType.az_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_nodes"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -4882,6 +5094,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -5266,6 +5487,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	rulesSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -5338,6 +5560,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -6199,6 +6423,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -6661,6 +6894,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	rulesSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -6741,6 +6975,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["cloud_site_info"] = AWSVPCSiteInfoTypeValidator().Validate
 
@@ -7716,6 +7952,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["logs_receiver_choice"]; exists {
 		val := m.GetLogsReceiverChoice()
 		vOpts := append(opts,
@@ -8214,6 +8459,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	rulesSshKey := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhSshKey(rulesSshKey)
 	if err != nil {
@@ -8298,6 +8544,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -8627,6 +8875,14 @@ func (v *ValidateReplaceSpecType) DirectConnectChoiceValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) EgressGatewayChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for egress_gateway_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) InternetVipChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8639,6 +8895,14 @@ func (v *ValidateReplaceSpecType) LogsReceiverChoiceValidationRuleHandler(rules 
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for logs_receiver_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SecurityGroupChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for security_group_choice")
 	}
 	return validatorFn, nil
 }
@@ -8674,6 +8938,46 @@ func (v *ValidateReplaceSpecType) WorkerNodesTotalNodesValidationRuleHandler(rul
 	return oValidatorFn_TotalNodes, nil
 }
 
+func (v *ValidateReplaceSpecType) InstanceTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for instance_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for aws_region")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) DiskSizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for disk_size")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -8702,6 +9006,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["aws_region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aws_region"))
+		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8844,6 +9157,71 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["disk_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disk_size"))
+		if err := fv(ctx, m.GetDiskSize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["egress_gateway_choice"]; exists {
+		val := m.GetEgressGatewayChoice()
+		vOpts := append(opts,
+			db.WithValidateField("egress_gateway_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEgressGatewayChoice().(type) {
+	case *ReplaceSpecType_EgressGatewayDefault:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_gateway_default"]; exists {
+			val := m.GetEgressGatewayChoice().(*ReplaceSpecType_EgressGatewayDefault).EgressGatewayDefault
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_gateway_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EgressNatGw:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_nat_gw"]; exists {
+			val := m.GetEgressGatewayChoice().(*ReplaceSpecType_EgressNatGw).EgressNatGw
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_nat_gw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EgressVirtualPrivateGateway:
+		if fv, exists := v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"]; exists {
+			val := m.GetEgressGatewayChoice().(*ReplaceSpecType_EgressVirtualPrivateGateway).EgressVirtualPrivateGateway
+			vOpts := append(opts,
+				db.WithValidateField("egress_gateway_choice"),
+				db.WithValidateField("egress_virtual_private_gateway"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["instance_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("instance_type"))
+		if err := fv(ctx, m.GetInstanceType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["internet_vip_choice"]; exists {
 		val := m.GetInternetVipChoice()
 		vOpts := append(opts,
@@ -8876,6 +9254,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -8925,6 +9312,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["security_group_choice"]; exists {
+		val := m.GetSecurityGroupChoice()
+		vOpts := append(opts,
+			db.WithValidateField("security_group_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSecurityGroupChoice().(type) {
+	case *ReplaceSpecType_F5XcSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.f5xc_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*ReplaceSpecType_F5XcSecurityGroup).F5XcSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("f5xc_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_CustomSecurityGroup:
+		if fv, exists := v.FldValidators["security_group_choice.custom_security_group"]; exists {
+			val := m.GetSecurityGroupChoice().(*ReplaceSpecType_CustomSecurityGroup).CustomSecurityGroup
+			vOpts := append(opts,
+				db.WithValidateField("security_group_choice"),
+				db.WithValidateField("custom_security_group"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_type"]; exists {
 		val := m.GetSiteType()
 		vOpts := append(opts,
@@ -8968,6 +9391,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ssh_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ssh_key"))
+		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vpc"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vpc"))
+		if err := fv(ctx, m.GetVpc(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -9067,6 +9508,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["direct_connect_choice"] = vFn
 
+	vrhEgressGatewayChoice := v.EgressGatewayChoiceValidationRuleHandler
+	rulesEgressGatewayChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEgressGatewayChoice(rulesEgressGatewayChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.egress_gateway_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["egress_gateway_choice"] = vFn
+
 	vrhInternetVipChoice := v.InternetVipChoiceValidationRuleHandler
 	rulesInternetVipChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9088,6 +9540,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["logs_receiver_choice"] = vFn
+
+	vrhSecurityGroupChoice := v.SecurityGroupChoiceValidationRuleHandler
+	rulesSecurityGroupChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSecurityGroupChoice(rulesSecurityGroupChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.security_group_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["security_group_choice"] = vFn
 
 	vrhSiteType := v.SiteTypeValidationRuleHandler
 	rulesSiteType := map[string]string{
@@ -9135,6 +9598,53 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["worker_nodes.nodes_per_az"] = vFnMap["worker_nodes.nodes_per_az"]
 	v.FldValidators["worker_nodes.total_nodes"] = vFnMap["worker_nodes.total_nodes"]
 
+	vrhInstanceType := v.InstanceTypeValidationRuleHandler
+	rulesInstanceType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "64",
+	}
+	vFn, err = vrhInstanceType(rulesInstanceType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.instance_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["instance_type"] = vFn
+
+	vrhAwsRegion := v.AwsRegionValidationRuleHandler
+	rulesAwsRegion := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAwsRegion(rulesAwsRegion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.aws_region: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["aws_region"] = vFn
+
+	vrhSshKey := v.SshKeyValidationRuleHandler
+	rulesSshKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8192",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhSshKey(rulesSshKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ssh_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ssh_key"] = vFn
+
+	vrhDiskSize := v.DiskSizeValidationRuleHandler
+	rulesDiskSize := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "2048",
+	}
+	vFn, err = vrhDiskSize(rulesDiskSize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.disk_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["disk_size"] = vFn
+
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
 		"ves.io.schema.rules.string.max_len": "256",
@@ -9153,17 +9663,26 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["direct_connect_choice.direct_connect_enabled"] = ves_io_schema_views.DirectConnectConfigTypeValidator().Validate
 	v.FldValidators["direct_connect_choice.private_connectivity"] = ves_io_schema_views.PrivateConnectConfigTypeValidator().Validate
 
+	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
+	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
+
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["security_group_choice.custom_security_group"] = ves_io_schema_views.SecurityGroupTypeValidator().Validate
 
 	v.FldValidators["site_type.ingress_gw"] = AWSVPCIngressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AWSVPCIngressEgressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AWSVPCVoltstackClusterReplaceTypeValidator().Validate
+
+	v.FldValidators["vpc"] = ves_io_schema_views.AWSVPCchoiceTypeValidator().Validate
 
 	v.FldValidators["coordinates"] = ves_io_schema_site.CoordinatesValidator().Validate
 
 	v.FldValidators["offline_survivability_mode"] = ves_io_schema_views.OfflineSurvivabilityModeTypeValidator().Validate
 
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -9441,6 +9960,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) fromAWSVPCIngressEgressGwType(f *AWSV
 	}
 	m.AllowedVipPort = f.GetAllowedVipPort()
 	m.AllowedVipPortSli = f.GetAllowedVipPortSli()
+	m.AzNodes = f.GetAzNodes()
 	m.GetDcClusterGroupChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetForwardProxyChoiceFromAWSVPCIngressEgressGwType(f)
 	m.GetGlobalNetworkChoiceFromAWSVPCIngressEgressGwType(f)
@@ -9468,6 +9988,7 @@ func (m *AWSVPCIngressEgressGwReplaceType) toAWSVPCIngressEgressGwType(f *AWSVPC
 
 	f.AllowedVipPort = m1.AllowedVipPort
 	f.AllowedVipPortSli = m1.AllowedVipPortSli
+	f.AzNodes = m1.AzNodes
 	m1.SetDcClusterGroupChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetForwardProxyChoiceToAWSVPCIngressEgressGwType(f)
 	m1.SetGlobalNetworkChoiceToAWSVPCIngressEgressGwType(f)
@@ -9491,6 +10012,7 @@ func (m *AWSVPCIngressGwReplaceType) fromAWSVPCIngressGwType(f *AWSVPCIngressGwT
 		return
 	}
 	m.AllowedVipPort = f.GetAllowedVipPort()
+	m.AzNodes = f.GetAzNodes()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
 }
 
@@ -9510,6 +10032,7 @@ func (m *AWSVPCIngressGwReplaceType) toAWSVPCIngressGwType(f *AWSVPCIngressGwTyp
 	_ = m1
 
 	f.AllowedVipPort = m1.AllowedVipPort
+	f.AzNodes = m1.AzNodes
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
 }
 
@@ -9748,6 +10271,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) fromAWSVPCVoltstackClusterType(f *AW
 		return
 	}
 	m.AllowedVipPort = f.GetAllowedVipPort()
+	m.AzNodes = f.GetAzNodes()
 	m.GetDcClusterGroupChoiceFromAWSVPCVoltstackClusterType(f)
 	m.GetForwardProxyChoiceFromAWSVPCVoltstackClusterType(f)
 	m.GetGlobalNetworkChoiceFromAWSVPCVoltstackClusterType(f)
@@ -9772,6 +10296,7 @@ func (m *AWSVPCVoltstackClusterReplaceType) toAWSVPCVoltstackClusterType(f *AWSV
 	_ = m1
 
 	f.AllowedVipPort = m1.AllowedVipPort
+	f.AzNodes = m1.AzNodes
 	m1.SetDcClusterGroupChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetForwardProxyChoiceToAWSVPCVoltstackClusterType(f)
 	m1.SetGlobalNetworkChoiceToAWSVPCVoltstackClusterType(f)
@@ -10142,6 +10667,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetEgressGatewayChoiceFromGlobalSpecType(f)
 	m.InstanceType = f.GetInstanceType()
 	m.GetInternetVipChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.Os = f.GetOs()
@@ -10180,6 +10706,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetEgressGatewayChoiceToGlobalSpecType(f)
 	f.InstanceType = m1.InstanceType
 	m1.SetInternetVipChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.Os = m1.Os
@@ -10563,6 +11090,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.ErrorDescription = f.GetErrorDescription()
 	m.InstanceType = f.GetInstanceType()
 	m.GetInternetVipChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
@@ -10610,6 +11138,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.ErrorDescription = m1.ErrorDescription
 	f.InstanceType = m1.InstanceType
 	m1.SetInternetVipChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
@@ -10748,6 +11277,47 @@ func (r *ReplaceSpecType) GetDirectConnectChoiceFromGlobalSpecType(o *GlobalSpec
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetEgressGatewayChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.EgressGatewayChoice.(type) {
+	case nil:
+		o.EgressGatewayChoice = nil
+
+	case *ReplaceSpecType_EgressGatewayDefault:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressGatewayDefault{EgressGatewayDefault: of.EgressGatewayDefault}
+
+	case *ReplaceSpecType_EgressNatGw:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressNatGw{EgressNatGw: of.EgressNatGw}
+
+	case *ReplaceSpecType_EgressVirtualPrivateGateway:
+		o.EgressGatewayChoice = &GlobalSpecType_EgressVirtualPrivateGateway{EgressVirtualPrivateGateway: of.EgressVirtualPrivateGateway}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetEgressGatewayChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.EgressGatewayChoice.(type) {
+	case nil:
+		r.EgressGatewayChoice = nil
+
+	case *GlobalSpecType_EgressGatewayDefault:
+		r.EgressGatewayChoice = &ReplaceSpecType_EgressGatewayDefault{EgressGatewayDefault: of.EgressGatewayDefault}
+
+	case *GlobalSpecType_EgressNatGw:
+		r.EgressGatewayChoice = &ReplaceSpecType_EgressNatGw{EgressNatGw: of.EgressNatGw}
+
+	case *GlobalSpecType_EgressVirtualPrivateGateway:
+		r.EgressGatewayChoice = &ReplaceSpecType_EgressVirtualPrivateGateway{EgressVirtualPrivateGateway: of.EgressVirtualPrivateGateway}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
 func (r *ReplaceSpecType) SetInternetVipChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.InternetVipChoice.(type) {
 	case nil:
@@ -10810,6 +11380,41 @@ func (r *ReplaceSpecType) GetLogsReceiverChoiceFromGlobalSpecType(o *GlobalSpecT
 
 	case *GlobalSpecType_LogsStreamingDisabled:
 		r.LogsReceiverChoice = &ReplaceSpecType_LogsStreamingDisabled{LogsStreamingDisabled: of.LogsStreamingDisabled}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetSecurityGroupChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SecurityGroupChoice.(type) {
+	case nil:
+		o.SecurityGroupChoice = nil
+
+	case *ReplaceSpecType_CustomSecurityGroup:
+		o.SecurityGroupChoice = &GlobalSpecType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *ReplaceSpecType_F5XcSecurityGroup:
+		o.SecurityGroupChoice = &GlobalSpecType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetSecurityGroupChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SecurityGroupChoice.(type) {
+	case nil:
+		r.SecurityGroupChoice = nil
+
+	case *GlobalSpecType_CustomSecurityGroup:
+		r.SecurityGroupChoice = &ReplaceSpecType_CustomSecurityGroup{CustomSecurityGroup: of.CustomSecurityGroup}
+
+	case *GlobalSpecType_F5XcSecurityGroup:
+		r.SecurityGroupChoice = &ReplaceSpecType_F5XcSecurityGroup{F5XcSecurityGroup: of.F5XcSecurityGroup}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10931,15 +11536,23 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.Address = f.GetAddress()
+	m.AwsRegion = f.GetAwsRegion()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
 	m.CustomDns = f.GetCustomDns()
 	m.GetDeploymentFromGlobalSpecType(f)
 	m.GetDirectConnectChoiceFromGlobalSpecType(f)
+	m.DiskSize = f.GetDiskSize()
+	m.GetEgressGatewayChoiceFromGlobalSpecType(f)
+	m.InstanceType = f.GetInstanceType()
 	m.GetInternetVipChoiceFromGlobalSpecType(f)
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.GetLogsReceiverChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
+	m.GetSecurityGroupChoiceFromGlobalSpecType(f)
 	m.GetSiteTypeFromGlobalSpecType(f)
+	m.SshKey = f.GetSshKey()
+	m.Vpc = f.GetVpc()
 	m.GetWorkerNodesFromGlobalSpecType(f)
 }
 
@@ -10959,15 +11572,23 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.Address = m1.Address
+	f.AwsRegion = m1.AwsRegion
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
 	f.CustomDns = m1.CustomDns
 	m1.SetDeploymentToGlobalSpecType(f)
 	m1.SetDirectConnectChoiceToGlobalSpecType(f)
+	f.DiskSize = m1.DiskSize
+	m1.SetEgressGatewayChoiceToGlobalSpecType(f)
+	f.InstanceType = m1.InstanceType
 	m1.SetInternetVipChoiceToGlobalSpecType(f)
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	m1.SetLogsReceiverChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
+	m1.SetSecurityGroupChoiceToGlobalSpecType(f)
 	m1.SetSiteTypeToGlobalSpecType(f)
+	f.SshKey = m1.SshKey
+	f.Vpc = m1.Vpc
 	m1.SetWorkerNodesToGlobalSpecType(f)
 }
 

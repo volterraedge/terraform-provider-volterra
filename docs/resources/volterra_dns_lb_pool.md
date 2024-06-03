@@ -21,18 +21,13 @@ resource "volterra_dns_lb_pool" "example" {
   namespace           = "staging"
   load_balancing_mode = ["load_balancing_mode"]
 
-  // One of the arguments from this list "cname_pool mx_pool srv_pool a_pool aaaa_pool" must be set
+  // One of the arguments from this list "aaaa_pool cname_pool mx_pool srv_pool a_pool" must be set
 
-  a_pool {
-    // One of the arguments from this list "disable_health_check health_check" must be set
-    disable_health_check = true
-
+  mx_pool {
     max_answers = "1"
 
     members {
-      disable = true
-
-      ip_endpoint = "8.8.8.8"
+      domain = "mail.example.com"
 
       name = "web server 1"
 
@@ -41,8 +36,10 @@ resource "volterra_dns_lb_pool" "example" {
       ratio = "10"
     }
   }
+
   // One of the arguments from this list "use_rrset_ttl ttl" must be set
-  ttl = "3600"
+
+  use_rrset_ttl = true
 }
 
 ```

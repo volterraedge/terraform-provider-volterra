@@ -22,6 +22,7 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
+	ves_io_schema_dns_zone_rrset "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset"
 	ves_io_schema_known_label "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label"
 	ves_io_schema_known_label_key "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label_key"
 	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
@@ -547,6 +548,7 @@ func makeCustomTestServer(t *testing.T, objectTypes []string) (*generic.Fixture,
 		"ves.io.schema.views.terraform_parameters.CustomAPI":       newTFCustomAPIServer,
 		"ves.io.schema.views.terraform_parameters.CustomActionAPI": newTFCustomActionAPIServer,
 		"ves.io.schema.namespace.NamespaceCustomAPI":               newNamespaceCustomAPIServer,
+		"ves.io.schema.dns_zone.rrset.CustomAPI":                   newDnsZoneRecordCustomAPIServer,
 	}
 
 	// bail if there isn't a handler for every possible public custom API defined in schema repo
@@ -618,8 +620,16 @@ func generateResourceName() string {
 	return acctest.RandStringFromCharSet(10, acctest.CharSetAlpha)
 }
 
+type TenantOption func(pbObj *ves_io_schema_tenant.Object)
+
+func withAddonServices(addons ...string) TenantOption {
+	return func(pbObj *ves_io_schema_tenant.Object) {
+		pbObj.Spec.GcSpec.AddonServicesSubscribed = addons
+	}
+}
+
 // mkDBObjTenant creates an instance of *ves_io_schema_tenant.DBObject
-func mkDBObjTenant(name, uid string) *ves_io_schema_tenant.DBObject {
+func mkDBObjTenant(name, uid string, opts ...TenantOption) *ves_io_schema_tenant.DBObject {
 	pbObj := &ves_io_schema_tenant.Object{
 		Metadata: &ves_io_schema.ObjectMetaType{
 			Name:      name,
@@ -641,8 +651,38 @@ func mkDBObjTenant(name, uid string) *ves_io_schema_tenant.DBObject {
 			GcSpec: &ves_io_schema_tenant.GlobalSpecType{},
 		},
 	}
+	for _, opt := range opts {
+		opt(pbObj)
+	}
 	return ves_io_schema_tenant.NewDBObject(pbObj)
 }
+
+// ves.io.schema.known_label.CustomAPI handling - start
+type dnsZoneRecordCustomAPIServer struct {
+	sf svcfw.Service
+}
+
+func newDnsZoneRecordCustomAPIServer(sf svcfw.Service) server.APIHandler {
+	return &dnsZoneRecordCustomAPIServer{sf: sf}
+}
+
+func (s *dnsZoneRecordCustomAPIServer) Create(ctx context.Context, req *ves_io_schema_dns_zone_rrset.CreateRequest) (*ves_io_schema_dns_zone_rrset.Response, error) {
+	return &ves_io_schema_dns_zone_rrset.Response{}, nil
+}
+
+func (s *dnsZoneRecordCustomAPIServer) Get(ctx context.Context, req *ves_io_schema_dns_zone_rrset.GetRequest) (*ves_io_schema_dns_zone_rrset.Response, error) {
+	return &ves_io_schema_dns_zone_rrset.Response{}, nil
+}
+
+func (s *dnsZoneRecordCustomAPIServer) Replace(ctx context.Context, req *ves_io_schema_dns_zone_rrset.ReplaceRequest) (*ves_io_schema_dns_zone_rrset.Response, error) {
+	return &ves_io_schema_dns_zone_rrset.Response{}, nil
+}
+
+func (s *dnsZoneRecordCustomAPIServer) Delete(ctx context.Context, req *ves_io_schema_dns_zone_rrset.DeleteRequest) (*ves_io_schema_dns_zone_rrset.Response, error) {
+	return &ves_io_schema_dns_zone_rrset.Response{}, nil
+}
+
+var _ ves_io_schema_dns_zone_rrset.CustomAPIServer = &dnsZoneRecordCustomAPIServer{}
 
 // ves.io.schema.known_label.CustomAPI handling - start
 type knownLabelCustomAPIServer struct {

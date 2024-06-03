@@ -405,6 +405,64 @@ func resourceVolterraFleet() *schema.Resource {
 				},
 			},
 
+			"kubernetes_upgrade_drain": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_upgrade_drain": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_upgrade_drain": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"drain_max_unavailable_node_count": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"drain_max_unavailable_node_percentage": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"drain_node_timeout": {
+										Type:     schema.TypeInt,
+										Required: true,
+									},
+
+									"disable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"enable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"log_receiver": {
 
 				Type:     schema.TypeSet,
@@ -3967,6 +4025,104 @@ func resourceVolterraFleetCreate(d *schema.ResourceData, meta interface{}) error
 
 					if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
 						interfacesInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	//kubernetes_upgrade_drain
+	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
+		createSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
+		for _, set := range sl {
+			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+
+			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+
+				if v.(bool) {
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+				}
+
+			}
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
+				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					drainMaxUnavailableChoiceTypeFound := false
+
+					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+					}
+
+					vegaUpgradeModeToggleChoiceTypeFound := false
+
+					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
 					}
 
 				}
@@ -8297,6 +8453,103 @@ func resourceVolterraFleetUpdate(d *schema.ResourceData, meta interface{}) error
 
 					if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
 						interfacesInt[i].Tenant = v.(string)
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("kubernetes_upgrade_drain"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		kubernetesUpgradeDrain := &ves_io_schema_views.KubernetesUpgradeDrain{}
+		updateSpec.KubernetesUpgradeDrain = kubernetesUpgradeDrain
+		for _, set := range sl {
+			kubernetesUpgradeDrainMapStrToI := set.(map[string]interface{})
+
+			kubernetesUpgradeDrainEnableChoiceTypeFound := false
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["disable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+
+				if v.(bool) {
+					kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_DisableUpgradeDrain{}
+					kubernetesUpgradeDrainEnableChoiceInt.DisableUpgradeDrain = &ves_io_schema.Empty{}
+					kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+				}
+
+			}
+
+			if v, ok := kubernetesUpgradeDrainMapStrToI["enable_upgrade_drain"]; ok && !isIntfNil(v) && !kubernetesUpgradeDrainEnableChoiceTypeFound {
+
+				kubernetesUpgradeDrainEnableChoiceTypeFound = true
+				kubernetesUpgradeDrainEnableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrain_EnableUpgradeDrain{}
+				kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain = &ves_io_schema_views.KubernetesUpgradeDrainConfig{}
+				kubernetesUpgradeDrain.KubernetesUpgradeDrainEnableChoice = kubernetesUpgradeDrainEnableChoiceInt
+
+				sl := v.(*schema.Set).List()
+				for _, set := range sl {
+					cs := set.(map[string]interface{})
+
+					drainMaxUnavailableChoiceTypeFound := false
+
+					if v, ok := cs["drain_max_unavailable_node_count"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodeCount{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodeCount = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+						drainMaxUnavailableChoiceTypeFound = true
+						drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+						drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+					}
+
+					if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
+
+						kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+					}
+
+					vegaUpgradeModeToggleChoiceTypeFound := false
+
+					if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
+					}
+
+					if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+						vegaUpgradeModeToggleChoiceTypeFound = true
+
+						if v.(bool) {
+							vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+							vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+							kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+						}
+
 					}
 
 				}

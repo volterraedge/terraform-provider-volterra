@@ -269,15 +269,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["crm_info"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("crm_info"))
-		if err := fv(ctx, m.GetCrmInfo(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["currency"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("currency"))
@@ -510,8 +501,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["infraprotect_info"] = ves_io_schema_infraprotect_information.GlobalSpecTypeValidator().Validate
 
-	v.FldValidators["crm_info"] = CrmInfoValidator().Validate
-
 	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
 
 	return v
@@ -519,245 +508,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
-}
-
-// augmented methods on protoc/std generated struct
-
-func (m *CrmInfo) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *CrmInfo) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *CrmInfo) DeepCopy() *CrmInfo {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &CrmInfo{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *CrmInfo) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *CrmInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return CrmInfoValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateCrmInfo struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateCrmInfo) AccountIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for account_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfo) EntitlementIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for entitlement_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfo) SubscriptionIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for subscription_id")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfo) OrderTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for order_type")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfo) CustomerIdentifierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for customer_identifier")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateCrmInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*CrmInfo)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *CrmInfo got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["account_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("account_id"))
-		if err := fv(ctx, m.GetAccountId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["customer_identifier"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("customer_identifier"))
-		if err := fv(ctx, m.GetCustomerIdentifier(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["entitled_skus"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("entitled_skus"))
-		for idx, item := range m.GetEntitledSkus() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["entitlement_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("entitlement_id"))
-		if err := fv(ctx, m.GetEntitlementId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["order_type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("order_type"))
-		if err := fv(ctx, m.GetOrderType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["subscription_id"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("subscription_id"))
-		if err := fv(ctx, m.GetSubscriptionId(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultCrmInfoValidator = func() *ValidateCrmInfo {
-	v := &ValidateCrmInfo{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhAccountId := v.AccountIdValidationRuleHandler
-	rulesAccountId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhAccountId(rulesAccountId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfo.account_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["account_id"] = vFn
-
-	vrhEntitlementId := v.EntitlementIdValidationRuleHandler
-	rulesEntitlementId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhEntitlementId(rulesEntitlementId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfo.entitlement_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["entitlement_id"] = vFn
-
-	vrhSubscriptionId := v.SubscriptionIdValidationRuleHandler
-	rulesSubscriptionId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhSubscriptionId(rulesSubscriptionId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfo.subscription_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["subscription_id"] = vFn
-
-	vrhOrderType := v.OrderTypeValidationRuleHandler
-	rulesOrderType := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-	}
-	vFn, err = vrhOrderType(rulesOrderType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfo.order_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["order_type"] = vFn
-
-	vrhCustomerIdentifier := v.CustomerIdentifierValidationRuleHandler
-	rulesCustomerIdentifier := map[string]string{
-		"ves.io.schema.rules.string.max_len": "255",
-	}
-	vFn, err = vrhCustomerIdentifier(rulesCustomerIdentifier)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CrmInfo.customer_identifier: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["customer_identifier"] = vFn
-
-	return v
-}()
-
-func CrmInfoValidator() db.Validator {
-	return DefaultCrmInfoValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1092,15 +842,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["crm_info"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("crm_info"))
-		if err := fv(ctx, m.GetCrmInfo(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["currency"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("currency"))
@@ -1333,8 +1074,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["infraprotect_info"] = ves_io_schema_infraprotect_information.GlobalSpecTypeValidator().Validate
 
-	v.FldValidators["crm_info"] = CrmInfoValidator().Validate
-
 	v.FldValidators["crm_details"] = ves_io_schema.CRMInfoValidator().Validate
 
 	return v
@@ -1433,7 +1172,6 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.CompanyName = f.GetCompanyName()
 	m.ContactNumber = f.GetContactNumber()
 	m.CrmDetails = f.GetCrmDetails()
-	m.CrmInfo = f.GetCrmInfo()
 	m.Currency = f.GetCurrency()
 	m.Customer = f.GetCustomer()
 	m.CustomerContact = f.GetCustomerContact()
@@ -1476,7 +1214,6 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.CompanyName = m1.CompanyName
 	f.ContactNumber = m1.ContactNumber
 	f.CrmDetails = m1.CrmDetails
-	f.CrmInfo = m1.CrmInfo
 	f.Currency = m1.Currency
 	f.Customer = m1.Customer
 	f.CustomerContact = m1.CustomerContact

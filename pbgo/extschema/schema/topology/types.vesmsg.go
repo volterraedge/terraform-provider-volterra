@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_site_mesh_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
 )
 
@@ -138,6 +139,84 @@ func AWSPolicyTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSRouteAttributes) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSRouteAttributes) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSRouteAttributes) DeepCopy() *AWSRouteAttributes {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSRouteAttributes{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSRouteAttributes) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSRouteAttributes) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSRouteAttributesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAWSRouteAttributes struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSRouteAttributes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSRouteAttributes)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSRouteAttributes got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["propagated"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("propagated"))
+		if err := fv(ctx, m.GetPropagated(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSRouteAttributesValidator = func() *ValidateAWSRouteAttributes {
+	v := &ValidateAWSRouteAttributes{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSRouteAttributesValidator() db.Validator {
+	return DefaultAWSRouteAttributesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *AddressInfoType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -230,6 +309,93 @@ var DefaultAddressInfoTypeValidator = func() *ValidateAddressInfoType {
 
 func AddressInfoTypeValidator() db.Validator {
 	return DefaultAddressInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureResourceGroupInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureResourceGroupInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureResourceGroupInfo) DeepCopy() *AzureResourceGroupInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureResourceGroupInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureResourceGroupInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureResourceGroupInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureResourceGroupInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureResourceGroupInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureResourceGroupInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureResourceGroupInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureResourceGroupInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site_rg"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_rg"))
+		if err := fv(ctx, m.GetSiteRg(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_network_rg"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_network_rg"))
+		if err := fv(ctx, m.GetVirtualNetworkRg(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureResourceGroupInfoValidator = func() *ValidateAzureResourceGroupInfo {
+	v := &ValidateAzureResourceGroupInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AzureResourceGroupInfoValidator() db.Validator {
+	return DefaultAzureResourceGroupInfoValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -558,6 +724,105 @@ func DCClusterGroupTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GCPRouteAttributes) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GCPRouteAttributes) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GCPRouteAttributes) DeepCopy() *GCPRouteAttributes {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GCPRouteAttributes{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GCPRouteAttributes) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GCPRouteAttributes) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GCPRouteAttributesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGCPRouteAttributes struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPRouteAttributes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GCPRouteAttributes)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GCPRouteAttributes got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ip_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_version"))
+		if err := fv(ctx, m.GetIpVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["priority"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("priority"))
+		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scope_limits"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scope_limits"))
+		for idx, item := range m.GetScopeLimits() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGCPRouteAttributesValidator = func() *ValidateGCPRouteAttributes {
+	v := &ValidateGCPRouteAttributes{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GCPRouteAttributesValidator() db.Validator {
+	return DefaultGCPRouteAttributesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *InstanceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -669,6 +934,15 @@ func (v *ValidateInstanceType) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["f5xc_node_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("f5xc_node_name"))
+		if err := fv(ctx, m.GetF5XcNodeName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["instance_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("instance_type"))
@@ -753,6 +1027,8 @@ func (v *ValidateInstanceType) Validate(ctx context.Context, pm interface{}, opt
 // Well-known symbol for default validator implementation
 var DefaultInstanceTypeValidator = func() *ValidateInstanceType {
 	v := &ValidateInstanceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["interfaces"] = NetworkInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -1158,6 +1434,15 @@ func (v *ValidateNetworkInterfaceType) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["f5xc_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("f5xc_status"))
+		if err := fv(ctx, m.GetF5XcStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
@@ -1230,6 +1515,8 @@ func (v *ValidateNetworkInterfaceType) Validate(ctx context.Context, pm interfac
 // Well-known symbol for default validator implementation
 var DefaultNetworkInterfaceTypeValidator = func() *ValidateNetworkInterfaceType {
 	v := &ValidateNetworkInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["f5xc_status"] = ves_io_schema_site.InterfaceStatusValidator().Validate
 
 	return v
 }()
@@ -1594,6 +1881,171 @@ var DefaultNetworkTypeValidator = func() *ValidateNetworkType {
 
 func NetworkTypeValidator() db.Validator {
 	return DefaultNetworkTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ProviderInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ProviderInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ProviderInfo) DeepCopy() *ProviderInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ProviderInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ProviderInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ProviderInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ProviderInfoValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ProviderInfo) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudLinkDRefInfo()
+
+}
+
+func (m *ProviderInfo) GetCloudLinkDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetCloudLink()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("ProviderInfo.cloud_link[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cloud_link.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "cloud_link",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCloudLinkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ProviderInfo) GetCloudLinkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cloud_link.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cloud_link")
+	}
+	for _, ref := range m.GetCloudLink() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateProviderInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateProviderInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ProviderInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ProviderInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["azure_rg_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("azure_rg_info"))
+		if err := fv(ctx, m.GetAzureRgInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cloud_link"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cloud_link"))
+		for idx, item := range m.GetCloudLink() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["gcp_zones"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gcp_zones"))
+		for idx, item := range m.GetGcpZones() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["region"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("region"))
+		if err := fv(ctx, m.GetRegion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultProviderInfoValidator = func() *ValidateProviderInfo {
+	v := &ValidateProviderInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ProviderInfoValidator() db.Validator {
+	return DefaultProviderInfoValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2064,6 +2516,32 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetCloudRouteAttributes().(type) {
+	case *RouteType_Aws:
+		if fv, exists := v.FldValidators["cloud_route_attributes.aws"]; exists {
+			val := m.GetCloudRouteAttributes().(*RouteType_Aws).Aws
+			vOpts := append(opts,
+				db.WithValidateField("cloud_route_attributes"),
+				db.WithValidateField("aws"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteType_Gcp:
+		if fv, exists := v.FldValidators["cloud_route_attributes.gcp"]; exists {
+			val := m.GetCloudRouteAttributes().(*RouteType_Gcp).Gcp
+			vOpts := append(opts,
+				db.WithValidateField("cloud_route_attributes"),
+				db.WithValidateField("gcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["destination"]; exists {
@@ -2615,6 +3093,12 @@ func (m *SiteType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetProviderInfoDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetProviderInfoDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetTgwDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetTgwDRefInfo() FAILED")
 	} else {
@@ -2715,6 +3199,24 @@ func (m *SiteType) GetNetworkDBEntries(ctx context.Context, d db.Interface) ([]d
 	return entries, nil
 }
 
+// GetDRefInfo for the field's type
+func (m *SiteType) GetProviderInfoDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetProviderInfo() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetProviderInfo().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetProviderInfo().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "provider_info." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
 func (m *SiteType) GetTgwDRefInfo() ([]db.DRefInfo, error) {
 	refs := m.GetTgw()
 	if len(refs) == 0 {
@@ -2778,6 +3280,15 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["app_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_type"))
+		if err := fv(ctx, m.GetAppType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dc_cluster_group"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dc_cluster_group"))
@@ -2790,6 +3301,15 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
+	if fv, exists := v.FldValidators["gateway_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("gateway_type"))
+		if err := fv(ctx, m.GetGatewayType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("network"))
@@ -2798,6 +3318,15 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["provider_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("provider_info"))
+		if err := fv(ctx, m.GetProviderInfo(), vOpts...); err != nil {
+			return err
 		}
 
 	}

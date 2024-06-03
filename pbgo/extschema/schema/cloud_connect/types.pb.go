@@ -12,6 +12,7 @@ import (
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	cloud_re_region "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region"
+	site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
@@ -71,6 +72,204 @@ var CloudConnectState_value = map[string]int32{
 
 func (CloudConnectState) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_245b6fb3a531fd11, []int{0}
+}
+
+// Cloud Connect VPC State
+//
+// x-displayName: "Cloud Connect VPC State"
+// Cloud Connect VPC State Type
+type CloudConnectVPCStateType int32
+
+const (
+	// Available
+	//
+	// x-displayName: "Available"
+	// Cloud Connect vpc attachment is in available state.
+	AVAILABLE CloudConnectVPCStateType = 0
+	// Pending
+	//
+	// x-displayName: "Pending"
+	// Cloud Connect vpc attachment is in flight.
+	PENDING CloudConnectVPCStateType = 1
+	// Failed
+	//
+	// x-displayName: "Failed"
+	// Cloud Connect vpc attachment has failed.
+	FAILED CloudConnectVPCStateType = 2
+	// Deleted
+	//
+	// x-displayName: "Deleted"
+	// Cloud Connect vpc attachment has been deleted.
+	DELETED CloudConnectVPCStateType = 3
+	// Deleting
+	//
+	// x-displayName: "Deleting"
+	// Cloud Connect vpc attachment is being deleted.
+	DELETING CloudConnectVPCStateType = 4
+)
+
+var CloudConnectVPCStateType_name = map[int32]string{
+	0: "AVAILABLE",
+	1: "PENDING",
+	2: "FAILED",
+	3: "DELETED",
+	4: "DELETING",
+}
+
+var CloudConnectVPCStateType_value = map[string]int32{
+	"AVAILABLE": 0,
+	"PENDING":   1,
+	"FAILED":    2,
+	"DELETED":   3,
+	"DELETING":  4,
+}
+
+func (CloudConnectVPCStateType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{1}
+}
+
+// Cloud Connect Provider
+//
+// x-displayName: "Cloud Connect Provider"
+// Cloud Connect Provider Type
+type CloudConnectProviderType int32
+
+const (
+	// AWS
+	//
+	// x-displayName: "AWS"
+	// Cloud connects backed by AWS cloud
+	AWS CloudConnectProviderType = 0
+	// AZURE
+	//
+	// x-displayName: "AZURE"
+	// Cloud connects backed by Azure cloud
+	AZURE CloudConnectProviderType = 1
+	// GCP
+	//
+	// x-displayName: "GCP"
+	// Cloud connects backed by GCP cloud
+	GCP CloudConnectProviderType = 2
+)
+
+var CloudConnectProviderType_name = map[int32]string{
+	0: "AWS",
+	1: "AZURE",
+	2: "GCP",
+}
+
+var CloudConnectProviderType_value = map[string]int32{
+	"AWS":   0,
+	"AZURE": 1,
+	"GCP":   2,
+}
+
+func (CloudConnectProviderType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{2}
+}
+
+// Label
+//
+// x-displayName: "Label"
+// Metrics used to construct the cloud connect dara are tagged with these labels and therefore
+// the metrics can be sliced and diced based on one or more labels.
+type Label int32
+
+const (
+	// x-displayName: "None"
+	// Indicates the field not being set
+	LABEL_NONE Label = 0
+	// x-displayName: "Site"
+	// Identifies a customer edge
+	LABEL_CUSTOMER_EDGE Label = 1
+)
+
+var Label_name = map[int32]string{
+	0: "LABEL_NONE",
+	1: "LABEL_CUSTOMER_EDGE",
+}
+
+var Label_value = map[string]int32{
+	"LABEL_NONE":          0,
+	"LABEL_CUSTOMER_EDGE": 1,
+}
+
+func (Label) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{3}
+}
+
+// Traffic Type
+//
+// x-displayName: "Traffic Type"
+// TrafficType specifies the type of traffic.
+type TrafficType int32
+
+const (
+	// x-displayName: "None"
+	TRAFFIC_TYPE_NONE TrafficType = 0
+	// x-displayName: "Intersegment"
+	// Intersegment traffic
+	TRAFFIC_TYPE_INTER_SEGMENT TrafficType = 1
+	// x-displayName: "Intrasegment"
+	// Intrasegment traffic
+	TRAFFIC_TYPE_INTRA_SEGMENT TrafficType = 2
+	// x-displayName: "Internet"
+	// Internet traffic
+	TRAFFIC_TYPE_INTERNET TrafficType = 3
+)
+
+var TrafficType_name = map[int32]string{
+	0: "TRAFFIC_TYPE_NONE",
+	1: "TRAFFIC_TYPE_INTER_SEGMENT",
+	2: "TRAFFIC_TYPE_INTRA_SEGMENT",
+	3: "TRAFFIC_TYPE_INTERNET",
+}
+
+var TrafficType_value = map[string]int32{
+	"TRAFFIC_TYPE_NONE":          0,
+	"TRAFFIC_TYPE_INTER_SEGMENT": 1,
+	"TRAFFIC_TYPE_INTRA_SEGMENT": 2,
+	"TRAFFIC_TYPE_INTERNET":      3,
+}
+
+func (TrafficType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{4}
+}
+
+// Cloud Connect Metric Type
+//
+// x-displayName: "Cloud Connect Metric Type"
+// FieldSelector specifies the metrics that can be queried for cloud connect.
+type FieldSelector int32
+
+const (
+	// x-displayName: "None"
+	// Indicates field not being set
+	METRIC_TYPE_NONE FieldSelector = 0
+	// x-displayName: "Incoming bytes per second"
+	// x-unit: "bytes per second (bps)"
+	// Throughput of incoming traffic
+	METRIC_TYPE_IN_BYTES FieldSelector = 1
+	// x-displayName: "Outgoing bytes per second"
+	// x-unit: "bytes per second (bps)"
+	// Throughput of outgoing traffic
+	METRIC_TYPE_OUT_BYTES FieldSelector = 2
+)
+
+var FieldSelector_name = map[int32]string{
+	0: "METRIC_TYPE_NONE",
+	1: "METRIC_TYPE_IN_BYTES",
+	2: "METRIC_TYPE_OUT_BYTES",
+}
+
+var FieldSelector_value = map[string]int32{
+	"METRIC_TYPE_NONE":      0,
+	"METRIC_TYPE_IN_BYTES":  1,
+	"METRIC_TYPE_OUT_BYTES": 2,
+}
+
+func (FieldSelector) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{5}
 }
 
 // Cloud Connect AWS Type
@@ -466,6 +665,167 @@ func (*AWSVPCAttachmentType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// VNET Attachments
+//
+// x-displayName: "VNET Attachments"
+type AzureVnetAttachmentListType struct {
+	// vnet_list
+	//
+	// x-displayName: "VNET List"
+	VnetList []*AzureVNETAttachmentType `protobuf:"bytes,1,rep,name=vnet_list,json=vnetList,proto3" json:"vnet_list,omitempty"`
+}
+
+func (m *AzureVnetAttachmentListType) Reset()      { *m = AzureVnetAttachmentListType{} }
+func (*AzureVnetAttachmentListType) ProtoMessage() {}
+func (*AzureVnetAttachmentListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{5}
+}
+func (m *AzureVnetAttachmentListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureVnetAttachmentListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureVnetAttachmentListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureVnetAttachmentListType.Merge(m, src)
+}
+func (m *AzureVnetAttachmentListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureVnetAttachmentListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureVnetAttachmentListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureVnetAttachmentListType proto.InternalMessageInfo
+
+func (m *AzureVnetAttachmentListType) GetVnetList() []*AzureVNETAttachmentType {
+	if m != nil {
+		return m.VnetList
+	}
+	return nil
+}
+
+// Azure VNET attachment
+//
+// x-displayName: "Azure VNET Attachment"
+type AzureVNETAttachmentType struct {
+	// Subscription ID
+	//
+	// x-displayName: "Subscription ID"
+	// x-required
+	// Enter the Subscription ID of the VNET to be attached
+	SubscriptionId string `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	// VNET ID
+	//
+	// x-displayName: "VNET ID"
+	// x-required
+	// Enter the vnet ID of the VNET to be attached
+	VnetId string `protobuf:"bytes,2,opt,name=vnet_id,json=vnetId,proto3" json:"vnet_id,omitempty"`
+	// Routing Choice
+	//
+	// x-displayName: "Routing Choice"
+	// x-required
+	// Select which traffic should be routed towards the CE
+	//
+	// Types that are valid to be assigned to RoutingChoice:
+	//	*AzureVNETAttachmentType_ManualRouting
+	//	*AzureVNETAttachmentType_CustomRouting
+	RoutingChoice isAzureVNETAttachmentType_RoutingChoice `protobuf_oneof:"routing_choice"`
+}
+
+func (m *AzureVNETAttachmentType) Reset()      { *m = AzureVNETAttachmentType{} }
+func (*AzureVNETAttachmentType) ProtoMessage() {}
+func (*AzureVNETAttachmentType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{6}
+}
+func (m *AzureVNETAttachmentType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureVNETAttachmentType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureVNETAttachmentType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureVNETAttachmentType.Merge(m, src)
+}
+func (m *AzureVNETAttachmentType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureVNETAttachmentType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureVNETAttachmentType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureVNETAttachmentType proto.InternalMessageInfo
+
+type isAzureVNETAttachmentType_RoutingChoice interface {
+	isAzureVNETAttachmentType_RoutingChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AzureVNETAttachmentType_ManualRouting struct {
+	ManualRouting *schema.Empty `protobuf:"bytes,4,opt,name=manual_routing,json=manualRouting,proto3,oneof" json:"manual_routing,omitempty"`
+}
+type AzureVNETAttachmentType_CustomRouting struct {
+	CustomRouting *AzureRouteTableWithStaticRouteListType `protobuf:"bytes,6,opt,name=custom_routing,json=customRouting,proto3,oneof" json:"custom_routing,omitempty"`
+}
+
+func (*AzureVNETAttachmentType_ManualRouting) isAzureVNETAttachmentType_RoutingChoice() {}
+func (*AzureVNETAttachmentType_CustomRouting) isAzureVNETAttachmentType_RoutingChoice() {}
+
+func (m *AzureVNETAttachmentType) GetRoutingChoice() isAzureVNETAttachmentType_RoutingChoice {
+	if m != nil {
+		return m.RoutingChoice
+	}
+	return nil
+}
+
+func (m *AzureVNETAttachmentType) GetSubscriptionId() string {
+	if m != nil {
+		return m.SubscriptionId
+	}
+	return ""
+}
+
+func (m *AzureVNETAttachmentType) GetVnetId() string {
+	if m != nil {
+		return m.VnetId
+	}
+	return ""
+}
+
+func (m *AzureVNETAttachmentType) GetManualRouting() *schema.Empty {
+	if x, ok := m.GetRoutingChoice().(*AzureVNETAttachmentType_ManualRouting); ok {
+		return x.ManualRouting
+	}
+	return nil
+}
+
+func (m *AzureVNETAttachmentType) GetCustomRouting() *AzureRouteTableWithStaticRouteListType {
+	if x, ok := m.GetRoutingChoice().(*AzureVNETAttachmentType_CustomRouting); ok {
+		return x.CustomRouting
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AzureVNETAttachmentType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AzureVNETAttachmentType_ManualRouting)(nil),
+		(*AzureVNETAttachmentType_CustomRouting)(nil),
+	}
+}
+
 // Default Route Override Choice
 //
 // x-displayName: "Override Default Route Choice"
@@ -485,7 +845,7 @@ type DefaultRoute struct {
 func (m *DefaultRoute) Reset()      { *m = DefaultRoute{} }
 func (*DefaultRoute) ProtoMessage() {}
 func (*DefaultRoute) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{5}
+	return fileDescriptor_245b6fb3a531fd11, []int{7}
 }
 func (m *DefaultRoute) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -573,7 +933,7 @@ type AWSSubnetIDListType struct {
 func (m *AWSSubnetIDListType) Reset()      { *m = AWSSubnetIDListType{} }
 func (*AWSSubnetIDListType) ProtoMessage() {}
 func (*AWSSubnetIDListType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{6}
+	return fileDescriptor_245b6fb3a531fd11, []int{8}
 }
 func (m *AWSSubnetIDListType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -621,7 +981,7 @@ type AWSRouteTableListType struct {
 func (m *AWSRouteTableListType) Reset()      { *m = AWSRouteTableListType{} }
 func (*AWSRouteTableListType) ProtoMessage() {}
 func (*AWSRouteTableListType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{7}
+	return fileDescriptor_245b6fb3a531fd11, []int{9}
 }
 func (m *AWSRouteTableListType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -669,7 +1029,7 @@ type AWSDefaultRoutesRouteTable struct {
 func (m *AWSDefaultRoutesRouteTable) Reset()      { *m = AWSDefaultRoutesRouteTable{} }
 func (*AWSDefaultRoutesRouteTable) ProtoMessage() {}
 func (*AWSDefaultRoutesRouteTable) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{8}
+	return fileDescriptor_245b6fb3a531fd11, []int{10}
 }
 func (m *AWSDefaultRoutesRouteTable) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -701,6 +1061,166 @@ func (m *AWSDefaultRoutesRouteTable) GetRouteTableId() []string {
 	return nil
 }
 
+// Azure Route Table
+//
+// x-displayName: "Azure Route Table"
+// Azure Route Table
+type AzureRouteTables struct {
+	// Route table ID
+	//
+	// x-displayName: "Route table ID"
+	// x-example: "rt-12345678901234567"
+	// Route table ID
+	RouteTableId []string `protobuf:"bytes,1,rep,name=route_table_id,json=routeTableId,proto3" json:"route_table_id,omitempty"`
+}
+
+func (m *AzureRouteTables) Reset()      { *m = AzureRouteTables{} }
+func (*AzureRouteTables) ProtoMessage() {}
+func (*AzureRouteTables) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{11}
+}
+func (m *AzureRouteTables) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureRouteTables) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureRouteTables) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureRouteTables.Merge(m, src)
+}
+func (m *AzureRouteTables) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureRouteTables) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureRouteTables.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureRouteTables proto.InternalMessageInfo
+
+func (m *AzureRouteTables) GetRouteTableId() []string {
+	if m != nil {
+		return m.RouteTableId
+	}
+	return nil
+}
+
+// List Azure Route Table with Static Route
+//
+// x-displayName: "List Azure Route Table with Static Route"
+// List Azure Route Table with Static Route
+type AzureRouteTableWithStaticRouteListType struct {
+	// List of route tables with static routes
+	//
+	// x-required
+	// x-displayName: "List of route tables with static routes"
+	// Route Tables with static routes
+	RouteTables []*AzureRouteTableWithStaticRoute `protobuf:"bytes,1,rep,name=route_tables,json=routeTables,proto3" json:"route_tables,omitempty"`
+}
+
+func (m *AzureRouteTableWithStaticRouteListType) Reset() {
+	*m = AzureRouteTableWithStaticRouteListType{}
+}
+func (*AzureRouteTableWithStaticRouteListType) ProtoMessage() {}
+func (*AzureRouteTableWithStaticRouteListType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{12}
+}
+func (m *AzureRouteTableWithStaticRouteListType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureRouteTableWithStaticRouteListType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureRouteTableWithStaticRouteListType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureRouteTableWithStaticRouteListType.Merge(m, src)
+}
+func (m *AzureRouteTableWithStaticRouteListType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureRouteTableWithStaticRouteListType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureRouteTableWithStaticRouteListType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureRouteTableWithStaticRouteListType proto.InternalMessageInfo
+
+func (m *AzureRouteTableWithStaticRouteListType) GetRouteTables() []*AzureRouteTableWithStaticRoute {
+	if m != nil {
+		return m.RouteTables
+	}
+	return nil
+}
+
+// Azure Route Table
+//
+// x-displayName: "Azure Route Table with Static Route"
+// Azure Route Table with Static Route
+type AzureRouteTableWithStaticRoute struct {
+	// Route table ID
+	//
+	// x-displayName: "Route table ID"
+	// x-example: "rt-12345678901234567"
+	// Route table ID
+	RouteTableId string `protobuf:"bytes,1,opt,name=route_table_id,json=routeTableId,proto3" json:"route_table_id,omitempty"`
+	// static_routes
+	//
+	// x-displayName: "Static Routes"
+	// x-example: "10.1.1.0/24"
+	// x-required
+	// List of Static Routes
+	StaticRoutes []string `protobuf:"bytes,108,rep,name=static_routes,json=staticRoutes,proto3" json:"static_routes,omitempty"`
+}
+
+func (m *AzureRouteTableWithStaticRoute) Reset()      { *m = AzureRouteTableWithStaticRoute{} }
+func (*AzureRouteTableWithStaticRoute) ProtoMessage() {}
+func (*AzureRouteTableWithStaticRoute) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{13}
+}
+func (m *AzureRouteTableWithStaticRoute) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureRouteTableWithStaticRoute) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureRouteTableWithStaticRoute) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureRouteTableWithStaticRoute.Merge(m, src)
+}
+func (m *AzureRouteTableWithStaticRoute) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureRouteTableWithStaticRoute) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureRouteTableWithStaticRoute.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureRouteTableWithStaticRoute proto.InternalMessageInfo
+
+func (m *AzureRouteTableWithStaticRoute) GetRouteTableId() string {
+	if m != nil {
+		return m.RouteTableId
+	}
+	return ""
+}
+
+func (m *AzureRouteTableWithStaticRoute) GetStaticRoutes() []string {
+	if m != nil {
+		return m.StaticRoutes
+	}
+	return nil
+}
+
 // AWS Route Table
 //
 // x-displayName: "AWS Route Table"
@@ -724,7 +1244,7 @@ type AWSRouteTableType struct {
 func (m *AWSRouteTableType) Reset()      { *m = AWSRouteTableType{} }
 func (*AWSRouteTableType) ProtoMessage() {}
 func (*AWSRouteTableType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{9}
+	return fileDescriptor_245b6fb3a531fd11, []int{14}
 }
 func (m *AWSRouteTableType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -777,7 +1297,7 @@ type ReplaceAWSREType struct {
 func (m *ReplaceAWSREType) Reset()      { *m = ReplaceAWSREType{} }
 func (*ReplaceAWSREType) ProtoMessage() {}
 func (*ReplaceAWSREType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{10}
+	return fileDescriptor_245b6fb3a531fd11, []int{15}
 }
 func (m *ReplaceAWSREType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -837,7 +1357,7 @@ type AWSTGWSiteType struct {
 func (m *AWSTGWSiteType) Reset()      { *m = AWSTGWSiteType{} }
 func (*AWSTGWSiteType) ProtoMessage() {}
 func (*AWSTGWSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{11}
+	return fileDescriptor_245b6fb3a531fd11, []int{16}
 }
 func (m *AWSTGWSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -898,7 +1418,7 @@ type ReplaceAWSTGWSiteType struct {
 func (m *ReplaceAWSTGWSiteType) Reset()      { *m = ReplaceAWSTGWSiteType{} }
 func (*ReplaceAWSTGWSiteType) ProtoMessage() {}
 func (*ReplaceAWSTGWSiteType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{12}
+	return fileDescriptor_245b6fb3a531fd11, []int{17}
 }
 func (m *ReplaceAWSTGWSiteType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -930,6 +1450,127 @@ func (m *ReplaceAWSTGWSiteType) GetVpcAttachments() *AWSVPCAttachmentListType {
 	return nil
 }
 
+// Cloud Connect Azure VNET Site Type
+//
+// x-displayName: "Azure VNET Site Type"
+// Cloud Connect Azure VNET Site Type
+type AzureVNETSiteType struct {
+	// Azure VNET Site Reference
+	//
+	// x-displayName: "Azure VNET Site Reference"
+	// Azure VNET Site Reference
+	// x-required
+	Site *views.ObjectRefType `protobuf:"bytes,1,opt,name=site,proto3" json:"site,omitempty"`
+	// Cloud Credential
+	//
+	// x-displayName: "Credential Reference"
+	// Reference to cloud credential to deploy resources
+	// x-required
+	Cred *views.ObjectRefType `protobuf:"bytes,2,opt,name=cred,proto3" json:"cred,omitempty"`
+	// Spoke VNETs
+	//
+	// x-displayName: "Spoke VNETs"
+	// Spoke VNETs to be attached to the Azure Hub VNET Site
+	// x-required
+	VnetAttachments *AzureVnetAttachmentListType `protobuf:"bytes,5,opt,name=vnet_attachments,json=vnetAttachments,proto3" json:"vnet_attachments,omitempty"`
+}
+
+func (m *AzureVNETSiteType) Reset()      { *m = AzureVNETSiteType{} }
+func (*AzureVNETSiteType) ProtoMessage() {}
+func (*AzureVNETSiteType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{18}
+}
+func (m *AzureVNETSiteType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureVNETSiteType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureVNETSiteType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureVNETSiteType.Merge(m, src)
+}
+func (m *AzureVNETSiteType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureVNETSiteType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureVNETSiteType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureVNETSiteType proto.InternalMessageInfo
+
+func (m *AzureVNETSiteType) GetSite() *views.ObjectRefType {
+	if m != nil {
+		return m.Site
+	}
+	return nil
+}
+
+func (m *AzureVNETSiteType) GetCred() *views.ObjectRefType {
+	if m != nil {
+		return m.Cred
+	}
+	return nil
+}
+
+func (m *AzureVNETSiteType) GetVnetAttachments() *AzureVnetAttachmentListType {
+	if m != nil {
+		return m.VnetAttachments
+	}
+	return nil
+}
+
+// Replace Cloud Connect AWS TGW Site Type
+//
+// x-displayName: "AWS TGW Site Type"
+// Cloud Connect AWS TGW Site Type
+type ReplaceAzureVNETSiteType struct {
+	// Spoke VPCs
+	//
+	// x-displayName: "Spoke VPCs"
+	// Spoke VPCs to be attached to the AWS TGW Site
+	VnetAttachments *AzureVnetAttachmentListType `protobuf:"bytes,3,opt,name=vnet_attachments,json=vnetAttachments,proto3" json:"vnet_attachments,omitempty"`
+}
+
+func (m *ReplaceAzureVNETSiteType) Reset()      { *m = ReplaceAzureVNETSiteType{} }
+func (*ReplaceAzureVNETSiteType) ProtoMessage() {}
+func (*ReplaceAzureVNETSiteType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{19}
+}
+func (m *ReplaceAzureVNETSiteType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ReplaceAzureVNETSiteType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ReplaceAzureVNETSiteType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReplaceAzureVNETSiteType.Merge(m, src)
+}
+func (m *ReplaceAzureVNETSiteType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ReplaceAzureVNETSiteType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReplaceAzureVNETSiteType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReplaceAzureVNETSiteType proto.InternalMessageInfo
+
+func (m *ReplaceAzureVNETSiteType) GetVnetAttachments() *AzureVnetAttachmentListType {
+	if m != nil {
+		return m.VnetAttachments
+	}
+	return nil
+}
+
 // Cloud Connect Status
 //
 // x-displayName: "Status"
@@ -942,13 +1583,14 @@ type CloudConnectStatusType struct {
 	//
 	// Types that are valid to be assigned to CloudConnectDeployment:
 	//	*CloudConnectStatusType_CloudConnectAwsSite
+	//	*CloudConnectStatusType_CloudConnectAzureSite
 	CloudConnectDeployment isCloudConnectStatusType_CloudConnectDeployment `protobuf_oneof:"cloud_connect_deployment"`
 }
 
 func (m *CloudConnectStatusType) Reset()      { *m = CloudConnectStatusType{} }
 func (*CloudConnectStatusType) ProtoMessage() {}
 func (*CloudConnectStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{13}
+	return fileDescriptor_245b6fb3a531fd11, []int{20}
 }
 func (m *CloudConnectStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -983,8 +1625,13 @@ type isCloudConnectStatusType_CloudConnectDeployment interface {
 type CloudConnectStatusType_CloudConnectAwsSite struct {
 	CloudConnectAwsSite *AWSAttachmentsListStatusType `protobuf:"bytes,2,opt,name=cloud_connect_aws_site,json=cloudConnectAwsSite,proto3,oneof" json:"cloud_connect_aws_site,omitempty"`
 }
+type CloudConnectStatusType_CloudConnectAzureSite struct {
+	CloudConnectAzureSite *AzureAttachmentsListStatusType `protobuf:"bytes,3,opt,name=cloud_connect_azure_site,json=cloudConnectAzureSite,proto3,oneof" json:"cloud_connect_azure_site,omitempty"`
+}
 
 func (*CloudConnectStatusType_CloudConnectAwsSite) isCloudConnectStatusType_CloudConnectDeployment() {
+}
+func (*CloudConnectStatusType_CloudConnectAzureSite) isCloudConnectStatusType_CloudConnectDeployment() {
 }
 
 func (m *CloudConnectStatusType) GetCloudConnectDeployment() isCloudConnectStatusType_CloudConnectDeployment {
@@ -1001,10 +1648,18 @@ func (m *CloudConnectStatusType) GetCloudConnectAwsSite() *AWSAttachmentsListSta
 	return nil
 }
 
+func (m *CloudConnectStatusType) GetCloudConnectAzureSite() *AzureAttachmentsListStatusType {
+	if x, ok := m.GetCloudConnectDeployment().(*CloudConnectStatusType_CloudConnectAzureSite); ok {
+		return x.CloudConnectAzureSite
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CloudConnectStatusType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CloudConnectStatusType_CloudConnectAwsSite)(nil),
+		(*CloudConnectStatusType_CloudConnectAzureSite)(nil),
 	}
 }
 
@@ -1023,7 +1678,7 @@ type AWSAttachmentsListStatusType struct {
 func (m *AWSAttachmentsListStatusType) Reset()      { *m = AWSAttachmentsListStatusType{} }
 func (*AWSAttachmentsListStatusType) ProtoMessage() {}
 func (*AWSAttachmentsListStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{14}
+	return fileDescriptor_245b6fb3a531fd11, []int{21}
 }
 func (m *AWSAttachmentsListStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1080,11 +1735,16 @@ type AWSAttachmentsStatusType struct {
 	// x-displayName: "VPC Owner Account"
 	// VPC Owner Account
 	VpcOwnerId string `protobuf:"bytes,5,opt,name=vpc_owner_id,json=vpcOwnerId,proto3" json:"vpc_owner_id,omitempty"`
-	// Attachment State
+	// VPC CIDR
 	//
-	// x-displayName: "Attachment State"
-	// Attachment State
-	State string `protobuf:"bytes,6,opt,name=state,proto3" json:"state,omitempty"`
+	// x-displayName: "VPC CIDR"
+	// VPC CIDR
+	VpcCidr string `protobuf:"bytes,12,opt,name=vpc_cidr,json=vpcCidr,proto3" json:"vpc_cidr,omitempty"`
+	// Deployment State
+	//
+	// x-displayName: "Deployment State"
+	// VPC deployment state
+	VpcDeploymentState CloudConnectVPCStateType `protobuf:"varint,11,opt,name=vpc_deployment_state,json=vpcDeploymentState,proto3,enum=ves.io.schema.cloud_connect.CloudConnectVPCStateType" json:"vpc_deployment_state,omitempty"`
 	// Attachment Deployment Status
 	//
 	// x-displayName: "Attachment Deployment Status"
@@ -1110,7 +1770,7 @@ type AWSAttachmentsStatusType struct {
 func (m *AWSAttachmentsStatusType) Reset()      { *m = AWSAttachmentsStatusType{} }
 func (*AWSAttachmentsStatusType) ProtoMessage() {}
 func (*AWSAttachmentsStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{15}
+	return fileDescriptor_245b6fb3a531fd11, []int{22}
 }
 func (m *AWSAttachmentsStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1163,11 +1823,18 @@ func (m *AWSAttachmentsStatusType) GetVpcOwnerId() string {
 	return ""
 }
 
-func (m *AWSAttachmentsStatusType) GetState() string {
+func (m *AWSAttachmentsStatusType) GetVpcCidr() string {
 	if m != nil {
-		return m.State
+		return m.VpcCidr
 	}
 	return ""
+}
+
+func (m *AWSAttachmentsStatusType) GetVpcDeploymentState() CloudConnectVPCStateType {
+	if m != nil {
+		return m.VpcDeploymentState
+	}
+	return AVAILABLE
 }
 
 func (m *AWSAttachmentsStatusType) GetDeploymentStatus() string {
@@ -1238,7 +1905,7 @@ type SubnetStatusType struct {
 func (m *SubnetStatusType) Reset()      { *m = SubnetStatusType{} }
 func (*SubnetStatusType) ProtoMessage() {}
 func (*SubnetStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{16}
+	return fileDescriptor_245b6fb3a531fd11, []int{23}
 }
 func (m *SubnetStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1305,6 +1972,230 @@ func (m *SubnetStatusType) GetStatus() string {
 	return ""
 }
 
+// Azure spoke Attachment List Status Type
+//
+// x-displayName: "Azure spoke Attachment List Status Type"
+// Azure VEspokeNT Attachment List Status Type
+type AzureAttachmentsListStatusType struct {
+	// Azure spoke Attachment Status Type
+	//
+	// x-displayName: "Azure spoke Attachment Status"
+	// Azure spoke Attachment Status Type
+	AttachmentStatus []*AzureAttachmentsStatusType `protobuf:"bytes,1,rep,name=attachment_status,json=attachmentStatus,proto3" json:"attachment_status,omitempty"`
+}
+
+func (m *AzureAttachmentsListStatusType) Reset()      { *m = AzureAttachmentsListStatusType{} }
+func (*AzureAttachmentsListStatusType) ProtoMessage() {}
+func (*AzureAttachmentsListStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{24}
+}
+func (m *AzureAttachmentsListStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureAttachmentsListStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureAttachmentsListStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureAttachmentsListStatusType.Merge(m, src)
+}
+func (m *AzureAttachmentsListStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureAttachmentsListStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureAttachmentsListStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureAttachmentsListStatusType proto.InternalMessageInfo
+
+func (m *AzureAttachmentsListStatusType) GetAttachmentStatus() []*AzureAttachmentsStatusType {
+	if m != nil {
+		return m.AttachmentStatus
+	}
+	return nil
+}
+
+// Azure Attachment Status Type
+//
+// x-displayName: "Azure Attachment Status Type"
+// Azure Attachment Status Type
+type AzureAttachmentsStatusType struct {
+	// VNET Attachment ID
+	//
+	// x-displayName: "VNET Attachment ID"
+	// VNET Attachment ID
+	VnetAttachmentId string `protobuf:"bytes,2,opt,name=vnet_attachment_id,json=vnetAttachmentId,proto3" json:"vnet_attachment_id,omitempty"`
+	// Attachment Creation Time
+	//
+	// x-displayName: "Attachment Creation Time"
+	// Attachment Creation Time
+	CreationTime *types.Timestamp `protobuf:"bytes,1,opt,name=creation_time,json=creationTime,proto3" json:"creation_time,omitempty"`
+	// Spoke VNET ID
+	//
+	// x-displayName: "Spoke VNET ID"
+	// Spoke VNET ID
+	SpokeVnetId string `protobuf:"bytes,3,opt,name=spoke_vnet_id,json=spokeVnetId,proto3" json:"spoke_vnet_id,omitempty"`
+	// Hub VNET Name
+	//
+	// x-displayName: "Hub VNET Name"
+	// Hub VNET Name
+	HubVnetName string `protobuf:"bytes,4,opt,name=hub_vnet_name,json=hubVnetName,proto3" json:"hub_vnet_name,omitempty"`
+	// Hub Owner subscription
+	//
+	// x-displayName: "Hub Owner Subscription"
+	// Hub Owner Subscription
+	HubOwnerSubscriptionid string `protobuf:"bytes,5,opt,name=hub_owner_subscriptionid,json=hubOwnerSubscriptionid,proto3" json:"hub_owner_subscriptionid,omitempty"`
+	// Hub VNET Peering state
+	//
+	// x-displayName: "Hub VNET Peering state"
+	// Hub VNET Peering state
+	PeeringState string `protobuf:"bytes,6,opt,name=peering_state,json=peeringState,proto3" json:"peering_state,omitempty"`
+	// Hub VNET Provisioning state
+	//
+	// x-displayName: "Hub VNET Provisioning state"
+	// Hub VNET Provisioning state
+	ProvisioningState string `protobuf:"bytes,7,opt,name=provisioning_state,json=provisioningState,proto3" json:"provisioning_state,omitempty"`
+	// Attachment Deployment Status
+	//
+	// x-displayName: "Attachment Deployment Status"
+	// Attachment Deployment Status
+	DeploymentStatus string `protobuf:"bytes,8,opt,name=deployment_status,json=deploymentStatus,proto3" json:"deployment_status,omitempty"`
+	// Hub VNET peering sync level
+	//
+	// x-displayName: "Hub VNET peering sync level"
+	// Hub VNET peering sync level
+	PeeringSyncLevel string `protobuf:"bytes,9,opt,name=peering_sync_level,json=peeringSyncLevel,proto3" json:"peering_sync_level,omitempty"`
+	// Attachment Tags
+	//
+	// x-displayName: "Attachment Tags"
+	// Attachment Tags
+	Tags map[string]string `protobuf:"bytes,10,rep,name=tags,proto3" json:"tags,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	// Subnets
+	//
+	// x-displayName: "Network Interfaces"
+	// Network Interfaces created along with the attachment
+	Subnets []*SubnetStatusType `protobuf:"bytes,11,rep,name=subnets,proto3" json:"subnets,omitempty"`
+	// x-displayName: "Installed Routes"
+	// Routes
+	InstalledRoutes *AzureRouteTableWithStaticRouteListType `protobuf:"bytes,12,opt,name=installed_routes,json=installedRoutes,proto3" json:"installed_routes,omitempty"`
+}
+
+func (m *AzureAttachmentsStatusType) Reset()      { *m = AzureAttachmentsStatusType{} }
+func (*AzureAttachmentsStatusType) ProtoMessage() {}
+func (*AzureAttachmentsStatusType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{25}
+}
+func (m *AzureAttachmentsStatusType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AzureAttachmentsStatusType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AzureAttachmentsStatusType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AzureAttachmentsStatusType.Merge(m, src)
+}
+func (m *AzureAttachmentsStatusType) XXX_Size() int {
+	return m.Size()
+}
+func (m *AzureAttachmentsStatusType) XXX_DiscardUnknown() {
+	xxx_messageInfo_AzureAttachmentsStatusType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AzureAttachmentsStatusType proto.InternalMessageInfo
+
+func (m *AzureAttachmentsStatusType) GetVnetAttachmentId() string {
+	if m != nil {
+		return m.VnetAttachmentId
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetCreationTime() *types.Timestamp {
+	if m != nil {
+		return m.CreationTime
+	}
+	return nil
+}
+
+func (m *AzureAttachmentsStatusType) GetSpokeVnetId() string {
+	if m != nil {
+		return m.SpokeVnetId
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetHubVnetName() string {
+	if m != nil {
+		return m.HubVnetName
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetHubOwnerSubscriptionid() string {
+	if m != nil {
+		return m.HubOwnerSubscriptionid
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetPeeringState() string {
+	if m != nil {
+		return m.PeeringState
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetProvisioningState() string {
+	if m != nil {
+		return m.ProvisioningState
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetDeploymentStatus() string {
+	if m != nil {
+		return m.DeploymentStatus
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetPeeringSyncLevel() string {
+	if m != nil {
+		return m.PeeringSyncLevel
+	}
+	return ""
+}
+
+func (m *AzureAttachmentsStatusType) GetTags() map[string]string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+func (m *AzureAttachmentsStatusType) GetSubnets() []*SubnetStatusType {
+	if m != nil {
+		return m.Subnets
+	}
+	return nil
+}
+
+func (m *AzureAttachmentsStatusType) GetInstalledRoutes() *AzureRouteTableWithStaticRouteListType {
+	if m != nil {
+		return m.InstalledRoutes
+	}
+	return nil
+}
+
 // Cloud Connect specification
 //
 // x-displayName: "Specification"
@@ -1318,6 +2209,7 @@ type GlobalSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*GlobalSpecType_AwsRe
 	//	*GlobalSpecType_AwsTgwSite
+	//	*GlobalSpecType_AzureVnetSite
 	Cloud isGlobalSpecType_Cloud `protobuf_oneof:"cloud"`
 	// Segment
 	//
@@ -1346,12 +2238,22 @@ type GlobalSpecType struct {
 	// x-displayName: "Cloud Connect State"
 	// State of the vpc attachments with the Cloud Connect deployment
 	State CloudConnectState `protobuf:"varint,15,opt,name=state,proto3,enum=ves.io.schema.cloud_connect.CloudConnectState" json:"state,omitempty"`
+	// Onboared VPC Count
+	//
+	// x-displayName: "onboarded_vpc"
+	// Number of vpc that have been onboarded onto the cloud from this config.
+	OnboardedVpc uint32 `protobuf:"varint,17,opt,name=onboarded_vpc,json=onboardedVpc,proto3" json:"onboarded_vpc,omitempty"`
+	// CloudConnect Connection Coordinates
+	//
+	// x-displayName: "CloudConnect Coordinates"
+	// Coordinates of the attached site with this cloud connect.
+	Coordinates *site.Coordinates `protobuf:"bytes,18,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{17}
+	return fileDescriptor_245b6fb3a531fd11, []int{26}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1395,12 +2297,16 @@ type GlobalSpecType_AwsRe struct {
 type GlobalSpecType_AwsTgwSite struct {
 	AwsTgwSite *AWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type GlobalSpecType_AzureVnetSite struct {
+	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,16,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
+}
 type GlobalSpecType_Bandwidth_500Mbs struct {
 	Bandwidth_500Mbs *schema.Empty `protobuf:"bytes,9,opt,name=bandwidth_500mbs,json=bandwidth500mbs,proto3,oneof" json:"bandwidth_500mbs,omitempty"`
 }
 
 func (*GlobalSpecType_AwsRe) isGlobalSpecType_Cloud()                      {}
 func (*GlobalSpecType_AwsTgwSite) isGlobalSpecType_Cloud()                 {}
+func (*GlobalSpecType_AzureVnetSite) isGlobalSpecType_Cloud()              {}
 func (*GlobalSpecType_Bandwidth_500Mbs) isGlobalSpecType_BandwidthOption() {}
 
 func (m *GlobalSpecType) GetCloud() isGlobalSpecType_Cloud {
@@ -1426,6 +2332,13 @@ func (m *GlobalSpecType) GetAwsRe() *AWSREType {
 func (m *GlobalSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 	if x, ok := m.GetCloud().(*GlobalSpecType_AwsTgwSite); ok {
 		return x.AwsTgwSite
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAzureVnetSite() *AzureVNETSiteType {
+	if x, ok := m.GetCloud().(*GlobalSpecType_AzureVnetSite); ok {
+		return x.AzureVnetSite
 	}
 	return nil
 }
@@ -1465,11 +2378,26 @@ func (m *GlobalSpecType) GetState() CloudConnectState {
 	return DOWN
 }
 
+func (m *GlobalSpecType) GetOnboardedVpc() uint32 {
+	if m != nil {
+		return m.OnboardedVpc
+	}
+	return 0
+}
+
+func (m *GlobalSpecType) GetCoordinates() *site.Coordinates {
+	if m != nil {
+		return m.Coordinates
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_AwsRe)(nil),
 		(*GlobalSpecType_AwsTgwSite)(nil),
+		(*GlobalSpecType_AzureVnetSite)(nil),
 		(*GlobalSpecType_Bandwidth_500Mbs)(nil),
 	}
 }
@@ -1482,6 +2410,7 @@ type CreateSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*CreateSpecType_AwsRe
 	//	*CreateSpecType_AwsTgwSite
+	//	*CreateSpecType_AzureVnetSite
 	Cloud   isCreateSpecType_Cloud `protobuf_oneof:"cloud"`
 	Segment *views.ObjectRefType   `protobuf:"bytes,13,opt,name=segment,proto3" json:"segment,omitempty"`
 }
@@ -1489,7 +2418,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{18}
+	return fileDescriptor_245b6fb3a531fd11, []int{27}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1527,9 +2456,13 @@ type CreateSpecType_AwsRe struct {
 type CreateSpecType_AwsTgwSite struct {
 	AwsTgwSite *AWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type CreateSpecType_AzureVnetSite struct {
+	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,16,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
+}
 
-func (*CreateSpecType_AwsRe) isCreateSpecType_Cloud()      {}
-func (*CreateSpecType_AwsTgwSite) isCreateSpecType_Cloud() {}
+func (*CreateSpecType_AwsRe) isCreateSpecType_Cloud()         {}
+func (*CreateSpecType_AwsTgwSite) isCreateSpecType_Cloud()    {}
+func (*CreateSpecType_AzureVnetSite) isCreateSpecType_Cloud() {}
 
 func (m *CreateSpecType) GetCloud() isCreateSpecType_Cloud {
 	if m != nil {
@@ -1552,6 +2485,13 @@ func (m *CreateSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 	return nil
 }
 
+func (m *CreateSpecType) GetAzureVnetSite() *AzureVNETSiteType {
+	if x, ok := m.GetCloud().(*CreateSpecType_AzureVnetSite); ok {
+		return x.AzureVnetSite
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetSegment() *views.ObjectRefType {
 	if m != nil {
 		return m.Segment
@@ -1564,6 +2504,7 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_AwsRe)(nil),
 		(*CreateSpecType_AwsTgwSite)(nil),
+		(*CreateSpecType_AzureVnetSite)(nil),
 	}
 }
 
@@ -1575,6 +2516,7 @@ type ReplaceSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*ReplaceSpecType_AwsRe
 	//	*ReplaceSpecType_AwsTgwSite
+	//	*ReplaceSpecType_AzureVnetSite
 	Cloud   isReplaceSpecType_Cloud `protobuf_oneof:"cloud"`
 	Segment *views.ObjectRefType    `protobuf:"bytes,13,opt,name=segment,proto3" json:"segment,omitempty"`
 }
@@ -1582,7 +2524,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{19}
+	return fileDescriptor_245b6fb3a531fd11, []int{28}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1620,9 +2562,13 @@ type ReplaceSpecType_AwsRe struct {
 type ReplaceSpecType_AwsTgwSite struct {
 	AwsTgwSite *ReplaceAWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type ReplaceSpecType_AzureVnetSite struct {
+	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,16,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
+}
 
-func (*ReplaceSpecType_AwsRe) isReplaceSpecType_Cloud()      {}
-func (*ReplaceSpecType_AwsTgwSite) isReplaceSpecType_Cloud() {}
+func (*ReplaceSpecType_AwsRe) isReplaceSpecType_Cloud()         {}
+func (*ReplaceSpecType_AwsTgwSite) isReplaceSpecType_Cloud()    {}
+func (*ReplaceSpecType_AzureVnetSite) isReplaceSpecType_Cloud() {}
 
 func (m *ReplaceSpecType) GetCloud() isReplaceSpecType_Cloud {
 	if m != nil {
@@ -1645,6 +2591,13 @@ func (m *ReplaceSpecType) GetAwsTgwSite() *ReplaceAWSTGWSiteType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetAzureVnetSite() *AzureVNETSiteType {
+	if x, ok := m.GetCloud().(*ReplaceSpecType_AzureVnetSite); ok {
+		return x.AzureVnetSite
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetSegment() *views.ObjectRefType {
 	if m != nil {
 		return m.Segment
@@ -1657,6 +2610,7 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_AwsRe)(nil),
 		(*ReplaceSpecType_AwsTgwSite)(nil),
+		(*ReplaceSpecType_AzureVnetSite)(nil),
 	}
 }
 
@@ -1668,15 +2622,18 @@ type GetSpecType struct {
 	// Types that are valid to be assigned to Cloud:
 	//	*GetSpecType_AwsRe
 	//	*GetSpecType_AwsTgwSite
-	Cloud   isGetSpecType_Cloud  `protobuf_oneof:"cloud"`
-	Segment *views.ObjectRefType `protobuf:"bytes,13,opt,name=segment,proto3" json:"segment,omitempty"`
-	State   CloudConnectState    `protobuf:"varint,15,opt,name=state,proto3,enum=ves.io.schema.cloud_connect.CloudConnectState" json:"state,omitempty"`
+	//	*GetSpecType_AzureVnetSite
+	Cloud        isGetSpecType_Cloud  `protobuf_oneof:"cloud"`
+	Segment      *views.ObjectRefType `protobuf:"bytes,13,opt,name=segment,proto3" json:"segment,omitempty"`
+	State        CloudConnectState    `protobuf:"varint,15,opt,name=state,proto3,enum=ves.io.schema.cloud_connect.CloudConnectState" json:"state,omitempty"`
+	OnboardedVpc uint32               `protobuf:"varint,17,opt,name=onboarded_vpc,json=onboardedVpc,proto3" json:"onboarded_vpc,omitempty"`
+	Coordinates  *site.Coordinates    `protobuf:"bytes,18,opt,name=coordinates,proto3" json:"coordinates,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_245b6fb3a531fd11, []int{20}
+	return fileDescriptor_245b6fb3a531fd11, []int{29}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1714,9 +2671,13 @@ type GetSpecType_AwsRe struct {
 type GetSpecType_AwsTgwSite struct {
 	AwsTgwSite *AWSTGWSiteType `protobuf:"bytes,7,opt,name=aws_tgw_site,json=awsTgwSite,proto3,oneof" json:"aws_tgw_site,omitempty"`
 }
+type GetSpecType_AzureVnetSite struct {
+	AzureVnetSite *AzureVNETSiteType `protobuf:"bytes,16,opt,name=azure_vnet_site,json=azureVnetSite,proto3,oneof" json:"azure_vnet_site,omitempty"`
+}
 
-func (*GetSpecType_AwsRe) isGetSpecType_Cloud()      {}
-func (*GetSpecType_AwsTgwSite) isGetSpecType_Cloud() {}
+func (*GetSpecType_AwsRe) isGetSpecType_Cloud()         {}
+func (*GetSpecType_AwsTgwSite) isGetSpecType_Cloud()    {}
+func (*GetSpecType_AzureVnetSite) isGetSpecType_Cloud() {}
 
 func (m *GetSpecType) GetCloud() isGetSpecType_Cloud {
 	if m != nil {
@@ -1739,6 +2700,13 @@ func (m *GetSpecType) GetAwsTgwSite() *AWSTGWSiteType {
 	return nil
 }
 
+func (m *GetSpecType) GetAzureVnetSite() *AzureVNETSiteType {
+	if x, ok := m.GetCloud().(*GetSpecType_AzureVnetSite); ok {
+		return x.AzureVnetSite
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetSegment() *views.ObjectRefType {
 	if m != nil {
 		return m.Segment
@@ -1753,17 +2721,353 @@ func (m *GetSpecType) GetState() CloudConnectState {
 	return DOWN
 }
 
+func (m *GetSpecType) GetOnboardedVpc() uint32 {
+	if m != nil {
+		return m.OnboardedVpc
+	}
+	return 0
+}
+
+func (m *GetSpecType) GetCoordinates() *site.Coordinates {
+	if m != nil {
+		return m.Coordinates
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_AwsRe)(nil),
 		(*GetSpecType_AwsTgwSite)(nil),
+		(*GetSpecType_AzureVnetSite)(nil),
 	}
+}
+
+// Label Filter
+//
+// x-displayName: "Label Filter"
+// Metrics used in the cloud connect are tagged with labels listed in the enum Label.
+// Label Filter is used to filter the timeseries that match the specified label key/value
+// and the operator.
+type LabelFilter struct {
+	// Label
+	//
+	// x-displayName: "Label"
+	// Label name
+	Label Label `protobuf:"varint,1,opt,name=label,proto3,enum=ves.io.schema.cloud_connect.Label" json:"label,omitempty"`
+	// Operator
+	//
+	// x-displayName: "Operator"
+	// Operator to be applied on the label
+	Op schema.MetricLabelOp `protobuf:"varint,2,opt,name=op,proto3,enum=ves.io.schema.MetricLabelOp" json:"op,omitempty"`
+	// Value
+	//
+	// x-displayName: "Value"
+	// x-example: "ce01"
+	// Value of the label
+	Value string `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+}
+
+func (m *LabelFilter) Reset()      { *m = LabelFilter{} }
+func (*LabelFilter) ProtoMessage() {}
+func (*LabelFilter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{30}
+}
+func (m *LabelFilter) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LabelFilter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LabelFilter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LabelFilter.Merge(m, src)
+}
+func (m *LabelFilter) XXX_Size() int {
+	return m.Size()
+}
+func (m *LabelFilter) XXX_DiscardUnknown() {
+	xxx_messageInfo_LabelFilter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LabelFilter proto.InternalMessageInfo
+
+func (m *LabelFilter) GetLabel() Label {
+	if m != nil {
+		return m.Label
+	}
+	return LABEL_NONE
+}
+
+func (m *LabelFilter) GetOp() schema.MetricLabelOp {
+	if m != nil {
+		return m.Op
+	}
+	return schema.EQ
+}
+
+func (m *LabelFilter) GetValue() string {
+	if m != nil {
+		return m.Value
+	}
+	return ""
+}
+
+// Customer Edge
+//
+// x-displayName: "Customer Edge"
+// Customer Edge uniquely identifies customer edge i.e. site.
+type CustomerEdge struct {
+	// Customer Edge
+	//
+	// x-displayName: "Customer Edge"
+	// x-example: "Customer Edge 1"
+	// Name of the customer edge
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *CustomerEdge) Reset()      { *m = CustomerEdge{} }
+func (*CustomerEdge) ProtoMessage() {}
+func (*CustomerEdge) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{31}
+}
+func (m *CustomerEdge) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomerEdge) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomerEdge) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomerEdge.Merge(m, src)
+}
+func (m *CustomerEdge) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomerEdge) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomerEdge.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomerEdge proto.InternalMessageInfo
+
+func (m *CustomerEdge) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// Metric Data
+//
+// x-displayName: "Metric Data"
+// MetricData contains metric type and the corresponding value for a cloud connect
+type MetricData struct {
+	// Type
+	//
+	// x-displayName: "Type"
+	// Identifies the metric type
+	Type FieldSelector `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.cloud_connect.FieldSelector" json:"type,omitempty"`
+	// Unit
+	//
+	// x-displayName: "Unit"
+	// Unit for the metric value
+	Unit schema.UnitType `protobuf:"varint,2,opt,name=unit,proto3,enum=ves.io.schema.UnitType" json:"unit,omitempty"`
+	// Value
+	//
+	// x-displayName: "Value"
+	// List of metric values. May contain more than one value if timeseries data is requested.
+	Values []*schema.MetricValue `protobuf:"bytes,3,rep,name=values,proto3" json:"values,omitempty"`
+}
+
+func (m *MetricData) Reset()      { *m = MetricData{} }
+func (*MetricData) ProtoMessage() {}
+func (*MetricData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{32}
+}
+func (m *MetricData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MetricData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *MetricData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MetricData.Merge(m, src)
+}
+func (m *MetricData) XXX_Size() int {
+	return m.Size()
+}
+func (m *MetricData) XXX_DiscardUnknown() {
+	xxx_messageInfo_MetricData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MetricData proto.InternalMessageInfo
+
+func (m *MetricData) GetType() FieldSelector {
+	if m != nil {
+		return m.Type
+	}
+	return METRIC_TYPE_NONE
+}
+
+func (m *MetricData) GetUnit() schema.UnitType {
+	if m != nil {
+		return m.Unit
+	}
+	return schema.UNIT_MILLISECONDS
+}
+
+func (m *MetricData) GetValues() []*schema.MetricValue {
+	if m != nil {
+		return m.Values
+	}
+	return nil
+}
+
+// Cloud Connect Segmentation Data
+//
+// x-displayName: "Cloud Connect Segmentation Data"
+// SegmentationData contains metric type and the corresponding value for a cloud connect
+type SegmentationData struct {
+	// Type
+	//
+	// x-displayName: "Type"
+	// Identifies the segment type
+	Type TrafficType `protobuf:"varint,1,opt,name=type,proto3,enum=ves.io.schema.cloud_connect.TrafficType" json:"type,omitempty"`
+	// Data
+	//
+	// x-displayName: "Data"
+	// List of metric values. May contain more than one value if timeseries data is requested.
+	Data []*MetricData `protobuf:"bytes,2,rep,name=data,proto3" json:"data,omitempty"`
+}
+
+func (m *SegmentationData) Reset()      { *m = SegmentationData{} }
+func (*SegmentationData) ProtoMessage() {}
+func (*SegmentationData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{33}
+}
+func (m *SegmentationData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SegmentationData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SegmentationData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SegmentationData.Merge(m, src)
+}
+func (m *SegmentationData) XXX_Size() int {
+	return m.Size()
+}
+func (m *SegmentationData) XXX_DiscardUnknown() {
+	xxx_messageInfo_SegmentationData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SegmentationData proto.InternalMessageInfo
+
+func (m *SegmentationData) GetType() TrafficType {
+	if m != nil {
+		return m.Type
+	}
+	return TRAFFIC_TYPE_NONE
+}
+
+func (m *SegmentationData) GetData() []*MetricData {
+	if m != nil {
+		return m.Data
+	}
+	return nil
+}
+
+// Cloud Connect Edge Data
+//
+// x-displayName: "Cloud Connect Edge Data"
+// EdgeData wraps all the response data for a customer edge.
+type EdgeData struct {
+	// CE
+	//
+	// x-displayName: "CE"
+	// Identifier for the customer edge
+	Ce *CustomerEdge `protobuf:"bytes,1,opt,name=ce,proto3" json:"ce,omitempty"`
+	// Metric
+	//
+	// x-displayName: "Metric"
+	// Metric data for the segments
+	Segments []*SegmentationData `protobuf:"bytes,2,rep,name=segments,proto3" json:"segments,omitempty"`
+}
+
+func (m *EdgeData) Reset()      { *m = EdgeData{} }
+func (*EdgeData) ProtoMessage() {}
+func (*EdgeData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_245b6fb3a531fd11, []int{34}
+}
+func (m *EdgeData) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EdgeData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *EdgeData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EdgeData.Merge(m, src)
+}
+func (m *EdgeData) XXX_Size() int {
+	return m.Size()
+}
+func (m *EdgeData) XXX_DiscardUnknown() {
+	xxx_messageInfo_EdgeData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EdgeData proto.InternalMessageInfo
+
+func (m *EdgeData) GetCe() *CustomerEdge {
+	if m != nil {
+		return m.Ce
+	}
+	return nil
+}
+
+func (m *EdgeData) GetSegments() []*SegmentationData {
+	if m != nil {
+		return m.Segments
+	}
+	return nil
 }
 
 func init() {
 	proto.RegisterEnum("ves.io.schema.cloud_connect.CloudConnectState", CloudConnectState_name, CloudConnectState_value)
 	golang_proto.RegisterEnum("ves.io.schema.cloud_connect.CloudConnectState", CloudConnectState_name, CloudConnectState_value)
+	proto.RegisterEnum("ves.io.schema.cloud_connect.CloudConnectVPCStateType", CloudConnectVPCStateType_name, CloudConnectVPCStateType_value)
+	golang_proto.RegisterEnum("ves.io.schema.cloud_connect.CloudConnectVPCStateType", CloudConnectVPCStateType_name, CloudConnectVPCStateType_value)
+	proto.RegisterEnum("ves.io.schema.cloud_connect.CloudConnectProviderType", CloudConnectProviderType_name, CloudConnectProviderType_value)
+	golang_proto.RegisterEnum("ves.io.schema.cloud_connect.CloudConnectProviderType", CloudConnectProviderType_name, CloudConnectProviderType_value)
+	proto.RegisterEnum("ves.io.schema.cloud_connect.Label", Label_name, Label_value)
+	golang_proto.RegisterEnum("ves.io.schema.cloud_connect.Label", Label_name, Label_value)
+	proto.RegisterEnum("ves.io.schema.cloud_connect.TrafficType", TrafficType_name, TrafficType_value)
+	golang_proto.RegisterEnum("ves.io.schema.cloud_connect.TrafficType", TrafficType_name, TrafficType_value)
+	proto.RegisterEnum("ves.io.schema.cloud_connect.FieldSelector", FieldSelector_name, FieldSelector_value)
+	golang_proto.RegisterEnum("ves.io.schema.cloud_connect.FieldSelector", FieldSelector_name, FieldSelector_value)
 	proto.RegisterType((*AWSREType)(nil), "ves.io.schema.cloud_connect.AWSREType")
 	golang_proto.RegisterType((*AWSREType)(nil), "ves.io.schema.cloud_connect.AWSREType")
 	proto.RegisterType((*PeerType)(nil), "ves.io.schema.cloud_connect.PeerType")
@@ -1774,6 +3078,10 @@ func init() {
 	golang_proto.RegisterType((*AWSVPCAttachmentListType)(nil), "ves.io.schema.cloud_connect.AWSVPCAttachmentListType")
 	proto.RegisterType((*AWSVPCAttachmentType)(nil), "ves.io.schema.cloud_connect.AWSVPCAttachmentType")
 	golang_proto.RegisterType((*AWSVPCAttachmentType)(nil), "ves.io.schema.cloud_connect.AWSVPCAttachmentType")
+	proto.RegisterType((*AzureVnetAttachmentListType)(nil), "ves.io.schema.cloud_connect.AzureVnetAttachmentListType")
+	golang_proto.RegisterType((*AzureVnetAttachmentListType)(nil), "ves.io.schema.cloud_connect.AzureVnetAttachmentListType")
+	proto.RegisterType((*AzureVNETAttachmentType)(nil), "ves.io.schema.cloud_connect.AzureVNETAttachmentType")
+	golang_proto.RegisterType((*AzureVNETAttachmentType)(nil), "ves.io.schema.cloud_connect.AzureVNETAttachmentType")
 	proto.RegisterType((*DefaultRoute)(nil), "ves.io.schema.cloud_connect.DefaultRoute")
 	golang_proto.RegisterType((*DefaultRoute)(nil), "ves.io.schema.cloud_connect.DefaultRoute")
 	proto.RegisterType((*AWSSubnetIDListType)(nil), "ves.io.schema.cloud_connect.AWSSubnetIDListType")
@@ -1782,6 +3090,12 @@ func init() {
 	golang_proto.RegisterType((*AWSRouteTableListType)(nil), "ves.io.schema.cloud_connect.AWSRouteTableListType")
 	proto.RegisterType((*AWSDefaultRoutesRouteTable)(nil), "ves.io.schema.cloud_connect.AWSDefaultRoutesRouteTable")
 	golang_proto.RegisterType((*AWSDefaultRoutesRouteTable)(nil), "ves.io.schema.cloud_connect.AWSDefaultRoutesRouteTable")
+	proto.RegisterType((*AzureRouteTables)(nil), "ves.io.schema.cloud_connect.AzureRouteTables")
+	golang_proto.RegisterType((*AzureRouteTables)(nil), "ves.io.schema.cloud_connect.AzureRouteTables")
+	proto.RegisterType((*AzureRouteTableWithStaticRouteListType)(nil), "ves.io.schema.cloud_connect.AzureRouteTableWithStaticRouteListType")
+	golang_proto.RegisterType((*AzureRouteTableWithStaticRouteListType)(nil), "ves.io.schema.cloud_connect.AzureRouteTableWithStaticRouteListType")
+	proto.RegisterType((*AzureRouteTableWithStaticRoute)(nil), "ves.io.schema.cloud_connect.AzureRouteTableWithStaticRoute")
+	golang_proto.RegisterType((*AzureRouteTableWithStaticRoute)(nil), "ves.io.schema.cloud_connect.AzureRouteTableWithStaticRoute")
 	proto.RegisterType((*AWSRouteTableType)(nil), "ves.io.schema.cloud_connect.AWSRouteTableType")
 	golang_proto.RegisterType((*AWSRouteTableType)(nil), "ves.io.schema.cloud_connect.AWSRouteTableType")
 	proto.RegisterType((*ReplaceAWSREType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSREType")
@@ -1790,6 +3104,10 @@ func init() {
 	golang_proto.RegisterType((*AWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.AWSTGWSiteType")
 	proto.RegisterType((*ReplaceAWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType")
 	golang_proto.RegisterType((*ReplaceAWSTGWSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAWSTGWSiteType")
+	proto.RegisterType((*AzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.AzureVNETSiteType")
+	golang_proto.RegisterType((*AzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.AzureVNETSiteType")
+	proto.RegisterType((*ReplaceAzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAzureVNETSiteType")
+	golang_proto.RegisterType((*ReplaceAzureVNETSiteType)(nil), "ves.io.schema.cloud_connect.ReplaceAzureVNETSiteType")
 	proto.RegisterType((*CloudConnectStatusType)(nil), "ves.io.schema.cloud_connect.CloudConnectStatusType")
 	golang_proto.RegisterType((*CloudConnectStatusType)(nil), "ves.io.schema.cloud_connect.CloudConnectStatusType")
 	proto.RegisterType((*AWSAttachmentsListStatusType)(nil), "ves.io.schema.cloud_connect.AWSAttachmentsListStatusType")
@@ -1800,6 +3118,12 @@ func init() {
 	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AWSAttachmentsStatusType.TagsEntry")
 	proto.RegisterType((*SubnetStatusType)(nil), "ves.io.schema.cloud_connect.SubnetStatusType")
 	golang_proto.RegisterType((*SubnetStatusType)(nil), "ves.io.schema.cloud_connect.SubnetStatusType")
+	proto.RegisterType((*AzureAttachmentsListStatusType)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsListStatusType")
+	golang_proto.RegisterType((*AzureAttachmentsListStatusType)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsListStatusType")
+	proto.RegisterType((*AzureAttachmentsStatusType)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsStatusType")
+	golang_proto.RegisterType((*AzureAttachmentsStatusType)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsStatusType")
+	proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsStatusType.TagsEntry")
+	golang_proto.RegisterMapType((map[string]string)(nil), "ves.io.schema.cloud_connect.AzureAttachmentsStatusType.TagsEntry")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cloud_connect.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.cloud_connect.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.cloud_connect.CreateSpecType")
@@ -1808,6 +3132,16 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.cloud_connect.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cloud_connect.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.cloud_connect.GetSpecType")
+	proto.RegisterType((*LabelFilter)(nil), "ves.io.schema.cloud_connect.LabelFilter")
+	golang_proto.RegisterType((*LabelFilter)(nil), "ves.io.schema.cloud_connect.LabelFilter")
+	proto.RegisterType((*CustomerEdge)(nil), "ves.io.schema.cloud_connect.CustomerEdge")
+	golang_proto.RegisterType((*CustomerEdge)(nil), "ves.io.schema.cloud_connect.CustomerEdge")
+	proto.RegisterType((*MetricData)(nil), "ves.io.schema.cloud_connect.MetricData")
+	golang_proto.RegisterType((*MetricData)(nil), "ves.io.schema.cloud_connect.MetricData")
+	proto.RegisterType((*SegmentationData)(nil), "ves.io.schema.cloud_connect.SegmentationData")
+	golang_proto.RegisterType((*SegmentationData)(nil), "ves.io.schema.cloud_connect.SegmentationData")
+	proto.RegisterType((*EdgeData)(nil), "ves.io.schema.cloud_connect.EdgeData")
+	golang_proto.RegisterType((*EdgeData)(nil), "ves.io.schema.cloud_connect.EdgeData")
 }
 
 func init() {
@@ -1818,169 +3152,281 @@ func init() {
 }
 
 var fileDescriptor_245b6fb3a531fd11 = []byte{
-	// 2521 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x59, 0x4d, 0x6c, 0x1b, 0xc7,
-	0x15, 0xe6, 0xf0, 0x4f, 0xe4, 0x93, 0x44, 0xad, 0xc6, 0xb2, 0x43, 0xcb, 0x06, 0xbd, 0xdd, 0xda,
-	0x89, 0x6c, 0x4b, 0x94, 0x44, 0x3b, 0x75, 0xac, 0xb6, 0x49, 0x48, 0x51, 0xb5, 0x28, 0x18, 0xb6,
-	0xba, 0x72, 0xec, 0x26, 0x41, 0xcc, 0x2e, 0x77, 0x47, 0xf4, 0xd6, 0xab, 0xdd, 0xc5, 0xee, 0x92,
-	0xac, 0xd2, 0xaa, 0x70, 0x73, 0xc8, 0x21, 0x97, 0x06, 0x3e, 0xf7, 0x50, 0x14, 0x28, 0x10, 0x18,
-	0x28, 0x7a, 0x69, 0x03, 0xd4, 0x74, 0x01, 0x23, 0xa7, 0xc0, 0xe8, 0x41, 0x47, 0x1f, 0x7a, 0xa8,
-	0xe5, 0x8b, 0x7b, 0x0b, 0x7a, 0x0a, 0x72, 0x2a, 0x66, 0x66, 0x77, 0xf9, 0x63, 0x9a, 0xfe, 0xa9,
-	0x0b, 0x14, 0xb9, 0xed, 0xee, 0xcc, 0xfb, 0xde, 0x7b, 0xdf, 0x7b, 0xf3, 0xe6, 0x3d, 0x12, 0x5e,
-	0x6b, 0x12, 0x37, 0xaf, 0x5b, 0xf3, 0xae, 0x7a, 0x8d, 0x6c, 0x29, 0xf3, 0xaa, 0x61, 0x35, 0xb4,
-	0xaa, 0x6a, 0x99, 0x26, 0x51, 0xbd, 0x79, 0x6f, 0xdb, 0x26, 0x6e, 0xde, 0x76, 0x2c, 0xcf, 0xc2,
-	0x87, 0xf8, 0xc6, 0x3c, 0xdf, 0x98, 0xef, 0xd9, 0x38, 0x3d, 0x57, 0xd7, 0xbd, 0x6b, 0x8d, 0x5a,
-	0x5e, 0xb5, 0xb6, 0xe6, 0xeb, 0x56, 0xdd, 0x9a, 0x67, 0x32, 0xb5, 0xc6, 0x26, 0x7b, 0x63, 0x2f,
-	0xec, 0x89, 0x63, 0x4d, 0x1f, 0xa9, 0x5b, 0x56, 0xdd, 0x20, 0x9d, 0x5d, 0x9e, 0xbe, 0x45, 0x5c,
-	0x4f, 0xd9, 0xb2, 0xfd, 0x0d, 0xc7, 0x07, 0x59, 0xe5, 0x90, 0xaa, 0x43, 0xea, 0xba, 0x65, 0x76,
-	0xdb, 0x35, 0x7d, 0xa8, 0x77, 0xab, 0x65, 0x7b, 0xba, 0x65, 0x06, 0x8b, 0x07, 0x7b, 0x17, 0xbb,
-	0xe5, 0x0e, 0xf7, 0x2e, 0x35, 0x15, 0x43, 0xd7, 0x14, 0x8f, 0xf8, 0xab, 0x62, 0xdf, 0xaa, 0x4e,
-	0x5a, 0xd5, 0x5e, 0xe8, 0x23, 0x8f, 0xef, 0x70, 0xbb, 0x15, 0x48, 0x9f, 0xc4, 0x21, 0x5d, 0xbc,
-	0xb2, 0x21, 0xaf, 0x5c, 0xda, 0xb6, 0x09, 0x56, 0x20, 0xc9, 0x8d, 0xcf, 0x22, 0x11, 0xcd, 0x8c,
-	0x16, 0xa4, 0x7c, 0x2f, 0x9f, 0x4c, 0x3e, 0x7f, 0xb1, 0xf6, 0x33, 0xa2, 0x7a, 0x32, 0xd9, 0xa4,
-	0x32, 0xa5, 0x63, 0xb7, 0x76, 0xc6, 0x02, 0xd7, 0xa9, 0xe8, 0x8d, 0x3b, 0x08, 0xdd, 0xbe, 0x83,
-	0x32, 0x29, 0x34, 0x83, 0x16, 0xd0, 0x52, 0x52, 0xb5, 0xcc, 0x4d, 0xbd, 0x2e, 0xfb, 0xc0, 0xf8,
-	0x2a, 0xc4, 0x55, 0x87, 0x68, 0xd9, 0xe8, 0x33, 0x2b, 0x78, 0xf5, 0xd6, 0xce, 0xa4, 0x1f, 0x48,
-	0x87, 0x68, 0xc4, 0xf4, 0x74, 0xc5, 0x70, 0x07, 0x68, 0x60, 0xb8, 0x58, 0x83, 0x89, 0xa6, 0xad,
-	0x56, 0x15, 0xcf, 0x53, 0xd4, 0x6b, 0x5b, 0xc4, 0xf4, 0xdc, 0x6c, 0x8c, 0xa9, 0x7a, 0x3d, 0x3f,
-	0x24, 0x37, 0xf2, 0xc5, 0x2b, 0x1b, 0x97, 0xd7, 0x97, 0x8b, 0xa1, 0xd4, 0x79, 0xdd, 0xf5, 0x98,
-	0xf6, 0xf8, 0x57, 0x6d, 0x84, 0xe4, 0x4c, 0xd3, 0x56, 0x3b, 0x8b, 0x2e, 0x7e, 0x07, 0x46, 0xb9,
-	0xbc, 0xa1, 0x9b, 0xd7, 0xdd, 0x6c, 0x9c, 0x69, 0xc8, 0x0f, 0xd5, 0xb0, 0x4c, 0xdf, 0xce, 0xeb,
-	0xe6, 0xf5, 0x3e, 0x68, 0x50, 0x83, 0x05, 0x17, 0x1f, 0x84, 0x98, 0x57, 0x6f, 0x65, 0x13, 0x22,
-	0x9a, 0x49, 0x97, 0x46, 0xee, 0xef, 0xa0, 0x47, 0x74, 0x07, 0xfd, 0x86, 0xcb, 0x90, 0xb0, 0x09,
-	0x71, 0xdc, 0x6c, 0x5a, 0x8c, 0xcd, 0x8c, 0x16, 0x8e, 0x0d, 0xd5, 0xb5, 0x4e, 0x88, 0xc3, 0x54,
-	0x84, 0x18, 0x5c, 0x78, 0x09, 0xfe, 0xfd, 0xe6, 0xc8, 0xe2, 0x6c, 0x61, 0xf6, 0xd4, 0xec, 0xe9,
-	0xb5, 0x78, 0x2a, 0x29, 0x8c, 0xac, 0xc5, 0x53, 0x23, 0x42, 0x6a, 0x2d, 0x9e, 0x4a, 0x09, 0x69,
-	0xe9, 0x4f, 0x08, 0x52, 0x81, 0x28, 0x3e, 0x02, 0xa3, 0x5e, 0xbd, 0x55, 0x55, 0x34, 0xcd, 0x21,
-	0xae, 0xcb, 0x12, 0x22, 0x2d, 0x83, 0x57, 0x6f, 0x15, 0xf9, 0x17, 0x7c, 0x10, 0x52, 0x14, 0xb4,
-	0xaa, 0xb8, 0x26, 0x8b, 0x66, 0x4c, 0x1e, 0xa1, 0xef, 0x45, 0xd7, 0xc4, 0xdf, 0x87, 0xb8, 0x69,
-	0x69, 0xc4, 0x67, 0xfe, 0xb5, 0x81, 0xb6, 0x86, 0x07, 0x25, 0x7f, 0xc1, 0xd2, 0x08, 0x55, 0x29,
-	0x33, 0x21, 0x7c, 0x02, 0x26, 0x75, 0xd3, 0xd5, 0x35, 0x52, 0xad, 0x3b, 0xa4, 0xea, 0x36, 0x6a,
-	0x26, 0xf1, 0x18, 0xc3, 0x69, 0x79, 0x82, 0x2f, 0x9c, 0x73, 0xc8, 0x06, 0xfb, 0x2c, 0xfd, 0x1a,
-	0xc1, 0xe4, 0x63, 0xc4, 0x62, 0x03, 0xa0, 0x13, 0x9d, 0x2c, 0x62, 0x84, 0x3d, 0x4b, 0xa6, 0x1d,
-	0xbf, 0xb5, 0xd3, 0x25, 0xf8, 0x78, 0x8a, 0xdd, 0xfe, 0xd7, 0xdd, 0x58, 0xe2, 0x26, 0x8a, 0x0a,
-	0x48, 0x4e, 0x87, 0x51, 0x93, 0x1a, 0x90, 0x7d, 0x52, 0xf6, 0xe0, 0x77, 0x21, 0x45, 0xb3, 0xd1,
-	0xd0, 0x5d, 0xcf, 0xb7, 0x63, 0xf1, 0xb9, 0xd2, 0x90, 0x99, 0x35, 0x4a, 0xf5, 0x26, 0x6f, 0xa2,
-	0x98, 0x70, 0x03, 0xc9, 0x23, 0x4d, 0x5b, 0xa5, 0xf0, 0xd2, 0xef, 0x93, 0x30, 0x35, 0x68, 0x3b,
-	0x56, 0x21, 0x49, 0x75, 0xea, 0x1a, 0x8f, 0x59, 0xe9, 0xfc, 0xd7, 0x6d, 0x14, 0xb9, 0x7d, 0x07,
-	0x09, 0x29, 0xea, 0x0a, 0x77, 0x70, 0x4e, 0x53, 0x3c, 0x85, 0xc2, 0xc6, 0x9d, 0x68, 0xf6, 0x6d,
-	0xfa, 0xf0, 0xaa, 0x73, 0xb4, 0x20, 0x5d, 0x9d, 0x69, 0xda, 0xea, 0xdc, 0xf1, 0x99, 0xf7, 0x95,
-	0xb9, 0x0f, 0x17, 0xe6, 0xce, 0x7e, 0xf0, 0x8b, 0x37, 0x76, 0x7e, 0x19, 0x3e, 0x2f, 0x9e, 0xd9,
-	0x39, 0x7e, 0x54, 0x4e, 0x34, 0x6d, 0xb5, 0xa2, 0xe1, 0x1f, 0x42, 0x66, 0x4b, 0x31, 0x1b, 0x8a,
-	0x51, 0x75, 0xac, 0x86, 0xa7, 0x9b, 0xf5, 0x6c, 0x92, 0xc5, 0x7a, 0xaa, 0xcf, 0xbd, 0x95, 0x2d,
-	0xdb, 0xdb, 0x5e, 0x8d, 0xc8, 0xe3, 0x7c, 0xb7, 0xcc, 0x37, 0xe3, 0x75, 0x18, 0xd7, 0xc8, 0xa6,
-	0xd2, 0x30, 0x3c, 0x26, 0x4f, 0xb2, 0x69, 0x26, 0x7d, 0x7c, 0x28, 0x39, 0x65, 0x2e, 0x41, 0x31,
-	0xc8, 0x6a, 0x44, 0x1e, 0xd3, 0xba, 0xde, 0xf1, 0xfb, 0x90, 0x51, 0x1b, 0xae, 0x67, 0x6d, 0x85,
-	0x06, 0x01, 0x83, 0x2c, 0x3c, 0x8d, 0x6f, 0x26, 0x7e, 0x49, 0xa9, 0x19, 0x24, 0x88, 0x1a, 0x35,
-	0x97, 0x63, 0xf9, 0xe6, 0x2e, 0x3d, 0x8a, 0xde, 0x6b, 0xa3, 0x87, 0x51, 0xc0, 0x90, 0xbc, 0xbc,
-	0xbe, 0x2c, 0x56, 0xca, 0xd3, 0xa9, 0x80, 0x64, 0xf8, 0x7b, 0x14, 0x32, 0xfe, 0x3e, 0x71, 0xf9,
-	0x9a, 0xa5, 0xab, 0xe4, 0xc4, 0x5f, 0xa3, 0xf0, 0x79, 0x14, 0xe6, 0xfa, 0x29, 0x2a, 0x1c, 0xba,
-	0x60, 0x89, 0xcc, 0x5d, 0x57, 0x6c, 0xe9, 0x86, 0x21, 0xd6, 0x88, 0xa8, 0x9b, 0xae, 0xa7, 0x18,
-	0x06, 0xd1, 0xe0, 0x3c, 0xe4, 0x7a, 0x28, 0xc9, 0x2b, 0x06, 0x97, 0x24, 0x55, 0x8f, 0x5a, 0xe7,
-	0x16, 0x4e, 0x5c, 0x6c, 0x12, 0xc7, 0xd1, 0x35, 0x22, 0xfa, 0x4c, 0x88, 0xcc, 0x76, 0x71, 0xd3,
-	0x72, 0x44, 0xc5, 0x30, 0xc4, 0x8e, 0x27, 0x2e, 0x5c, 0x87, 0x53, 0xbd, 0x68, 0x2e, 0x31, 0x88,
-	0xea, 0xe9, 0x4d, 0xd2, 0x83, 0x99, 0xef, 0x7a, 0xa9, 0xea, 0x9a, 0x74, 0x5a, 0x48, 0x9c, 0x58,
-	0x18, 0xa2, 0x66, 0x23, 0x40, 0xe9, 0x51, 0xb6, 0x06, 0x87, 0x7a, 0xb9, 0xef, 0x86, 0x75, 0xa5,
-	0x93, 0x42, 0x42, 0xca, 0xf4, 0x2a, 0x3a, 0xf1, 0xca, 0x32, 0x13, 0x10, 0x97, 0x2b, 0x65, 0xd9,
-	0xed, 0x02, 0x2b, 0xcd, 0x40, 0xc6, 0x07, 0xa9, 0xaa, 0x8c, 0x4d, 0x7c, 0xe0, 0x6e, 0x1b, 0x25,
-	0x77, 0xdb, 0x28, 0xb1, 0xd7, 0x46, 0xc9, 0xef, 0xcd, 0x9e, 0x9d, 0x5d, 0x5c, 0xf8, 0xdd, 0x1d,
-	0x84, 0xd6, 0xe2, 0xa9, 0xa8, 0x10, 0x5b, 0x8b, 0xa7, 0x62, 0x42, 0x7c, 0x2d, 0x9e, 0x8a, 0x0b,
-	0x89, 0xb5, 0x78, 0x2a, 0x21, 0x24, 0x7b, 0x2a, 0xda, 0x37, 0x08, 0xc6, 0xba, 0xd3, 0x06, 0xbf,
-	0x0d, 0x42, 0x3f, 0xaf, 0xfe, 0x5d, 0xf7, 0xa4, 0xcc, 0xcd, 0x28, 0x86, 0xd1, 0xe5, 0x2c, 0xb6,
-	0xe0, 0xc0, 0x60, 0x2e, 0xfd, 0x5b, 0xe0, 0xcc, 0xd3, 0x12, 0xae, 0xdb, 0x1e, 0xb7, 0x83, 0xbc,
-	0x1a, 0x91, 0xa7, 0x42, 0xe0, 0x2e, 0x85, 0xa5, 0x93, 0x30, 0xd5, 0x13, 0xca, 0x80, 0x97, 0x7d,
-	0x77, 0xdb, 0x08, 0xed, 0xb6, 0x51, 0x6c, 0xaf, 0x8d, 0x62, 0x8b, 0xb3, 0xa7, 0xfb, 0x49, 0x91,
-	0xfe, 0x82, 0x60, 0x5f, 0xf1, 0xca, 0x06, 0x2f, 0x95, 0x95, 0x72, 0x58, 0x94, 0x3e, 0x46, 0x00,
-	0xbc, 0xac, 0x56, 0x75, 0xcd, 0x65, 0x75, 0x29, 0x5d, 0xaa, 0xdf, 0xbe, 0x83, 0xb0, 0x5f, 0xee,
-	0xfa, 0x6a, 0x44, 0xfe, 0x26, 0x3a, 0x29, 0x1d, 0x77, 0x5e, 0x2b, 0x1c, 0xbb, 0x3a, 0xc3, 0xe5,
-	0x86, 0x96, 0x88, 0xb0, 0x4a, 0xc6, 0x83, 0xa7, 0x14, 0x0a, 0x9e, 0xb2, 0x48, 0x4e, 0x73, 0x88,
-	0x8a, 0xe6, 0x2e, 0xed, 0xff, 0xa2, 0x8d, 0x26, 0x61, 0x02, 0x80, 0x9b, 0x28, 0x56, 0xca, 0x2e,
-	0x46, 0x8b, 0xd2, 0x67, 0x08, 0xf6, 0x0f, 0x3c, 0x98, 0xd8, 0x81, 0xb1, 0xbe, 0xc8, 0xc5, 0x9e,
-	0x7a, 0xef, 0xf6, 0x20, 0xb1, 0x7a, 0x7a, 0x24, 0xac, 0xa7, 0x5f, 0xa2, 0x81, 0x26, 0x8e, 0x3a,
-	0x1d, 0xfa, 0x97, 0x0e, 0x7d, 0xd1, 0x46, 0xaf, 0xc0, 0xfe, 0xce, 0x21, 0xf7, 0xf3, 0x00, 0x2d,
-	0xce, 0x20, 0xe9, 0xb7, 0x08, 0xa6, 0x9f, 0x1c, 0x52, 0xfc, 0x2b, 0xe8, 0xcb, 0x7b, 0x9f, 0xec,
-	0x9f, 0xf8, 0x25, 0xf9, 0x09, 0x84, 0x73, 0x33, 0x06, 0x95, 0x67, 0xc7, 0xab, 0x0d, 0x2f, 0xcf,
-	0x63, 0x1d, 0xd3, 0x2b, 0x9a, 0xf4, 0xc7, 0x28, 0x4c, 0x3e, 0xe6, 0x3f, 0xf6, 0x06, 0x58, 0x45,
-	0x2f, 0x8a, 0x0b, 0xc3, 0xad, 0xfa, 0xef, 0x6c, 0xc1, 0x32, 0x8c, 0xbb, 0x9e, 0xe2, 0xe9, 0x2a,
-	0xcf, 0x62, 0x37, 0x6b, 0x30, 0x2a, 0xe6, 0x28, 0x22, 0xdc, 0x44, 0x23, 0x52, 0xc2, 0x89, 0x7d,
-	0x8d, 0xc2, 0x30, 0x08, 0x85, 0x81, 0xa1, 0x19, 0xe3, 0x18, 0x9c, 0xe9, 0xa5, 0x0b, 0xf7, 0xda,
-	0x68, 0x0d, 0x8e, 0x82, 0xd0, 0x13, 0x1b, 0x5a, 0x9f, 0x85, 0x7e, 0x1f, 0x41, 0x82, 0xf1, 0x0d,
-	0x26, 0xcb, 0xab, 0x8d, 0x5b, 0x9a, 0xec, 0x33, 0x48, 0x00, 0xe9, 0x06, 0x02, 0x41, 0x26, 0xb6,
-	0xa1, 0xa8, 0xa4, 0xd3, 0x14, 0x5f, 0x7d, 0xb9, 0x1d, 0x65, 0x7f, 0x2f, 0xb9, 0x34, 0x76, 0xef,
-	0xcd, 0x4e, 0x0b, 0x2e, 0xb5, 0xa3, 0x90, 0x29, 0x5e, 0xd9, 0xb8, 0x74, 0xee, 0xca, 0x86, 0xee,
-	0xf1, 0x78, 0x7d, 0x00, 0x71, 0x57, 0xf7, 0xc8, 0x73, 0xf6, 0xe4, 0x4a, 0xcb, 0xad, 0xd2, 0x06,
-	0x8e, 0x8a, 0x3e, 0xa1, 0x27, 0x67, 0xb0, 0xdf, 0x8e, 0x8e, 0x9c, 0xdf, 0x00, 0xd2, 0xa7, 0x08,
-	0xf6, 0x77, 0x02, 0xd8, 0x4d, 0xe2, 0x4b, 0xb7, 0x62, 0x77, 0x80, 0x15, 0x4b, 0x93, 0xf7, 0xde,
-	0xec, 0x8b, 0x9e, 0xf4, 0x39, 0x82, 0x03, 0xac, 0x45, 0x5d, 0xe6, 0x90, 0x34, 0x09, 0x1b, 0x2e,
-	0xb3, 0xc9, 0x86, 0x03, 0x3d, 0xda, 0xaa, 0x34, 0x66, 0x2c, 0xd4, 0x3c, 0x16, 0x67, 0x9f, 0x66,
-	0x5a, 0x97, 0x6a, 0x6a, 0x58, 0x07, 0x7a, 0x35, 0x22, 0xef, 0x53, 0xbb, 0x94, 0x16, 0x5b, 0x2e,
-	0x35, 0xa8, 0x74, 0x14, 0xb2, 0xbd, 0x1a, 0x35, 0x62, 0x1b, 0xd6, 0x36, 0x45, 0xc0, 0x29, 0xea,
-	0x91, 0x7f, 0x89, 0x20, 0x21, 0x2a, 0x7d, 0x84, 0xe0, 0xf0, 0x30, 0x1d, 0xb8, 0x06, 0x93, 0x1d,
-	0x3a, 0xab, 0x2e, 0x5b, 0xf0, 0x4b, 0xf2, 0xeb, 0xcf, 0x61, 0x79, 0x07, 0x51, 0x16, 0x3a, 0x78,
-	0xfc, 0xab, 0xf4, 0x49, 0x92, 0x75, 0xd7, 0x03, 0xb7, 0xd3, 0x49, 0x81, 0x8d, 0x28, 0x1d, 0x23,
-	0x74, 0x9e, 0xc6, 0x69, 0x79, 0x82, 0x0e, 0x2a, 0xe1, 0xf7, 0x8a, 0x86, 0xdf, 0x82, 0x71, 0xd5,
-	0x21, 0x0a, 0x1d, 0x8e, 0xab, 0x74, 0x90, 0xf7, 0x4f, 0xd3, 0x74, 0x9e, 0x4f, 0xf9, 0xf9, 0x60,
-	0xca, 0xcf, 0x5f, 0x0a, 0xa6, 0x7c, 0x79, 0x2c, 0x10, 0xa0, 0x9f, 0xf0, 0xfe, 0xb0, 0xad, 0xe6,
-	0xb3, 0x88, 0xdf, 0x08, 0x8b, 0x30, 0x46, 0x3f, 0x5b, 0x2d, 0x93, 0x38, 0x74, 0x31, 0xc1, 0xe7,
-	0xa4, 0xa6, 0xad, 0x5e, 0xa4, 0x9f, 0x2a, 0x1a, 0x9e, 0x82, 0x04, 0xe5, 0x86, 0xb0, 0x0e, 0x39,
-	0x2d, 0xf3, 0x17, 0x7c, 0x12, 0x26, 0x3b, 0xdc, 0x07, 0xe4, 0x8d, 0xb0, 0x1d, 0x42, 0x67, 0x81,
-	0x3b, 0x8b, 0xdf, 0x85, 0xb8, 0xa7, 0xd4, 0xdd, 0x6c, 0x8a, 0x91, 0xfb, 0xd6, 0x0b, 0x91, 0x9b,
-	0xbf, 0xa4, 0xd4, 0xdd, 0x15, 0xd3, 0x73, 0xb6, 0x4b, 0x71, 0x36, 0x12, 0x32, 0x48, 0x7c, 0x0e,
-	0x46, 0xf8, 0x85, 0xec, 0x66, 0x81, 0xa1, 0xcf, 0x0d, 0x45, 0xe7, 0x37, 0x75, 0x57, 0xc8, 0x02,
-	0x69, 0xfc, 0x01, 0x08, 0x61, 0x33, 0x1b, 0x94, 0xf8, 0xf4, 0x8b, 0xb6, 0xe0, 0x6c, 0xd2, 0xe3,
-	0x58, 0xbc, 0x5a, 0x4f, 0x9f, 0x81, 0x74, 0xe8, 0x00, 0x16, 0x20, 0x76, 0x9d, 0x6c, 0xfb, 0x33,
-	0x29, 0x7d, 0xa4, 0x24, 0x37, 0x15, 0xa3, 0x41, 0xfc, 0xf0, 0xf3, 0x97, 0xa5, 0xe8, 0x1b, 0x68,
-	0xe9, 0x0b, 0x74, 0xaf, 0x8d, 0xfe, 0x86, 0x06, 0xf6, 0xee, 0x47, 0x61, 0xbc, 0xc3, 0x15, 0x5d,
-	0xda, 0x37, 0x20, 0xa3, 0x40, 0x84, 0xf1, 0x65, 0x3f, 0x13, 0x44, 0x9a, 0x0a, 0xd3, 0x13, 0x7d,
-	0xb9, 0x04, 0xdf, 0x85, 0x49, 0x8a, 0xcd, 0x22, 0x2e, 0x16, 0x55, 0xd5, 0x6a, 0x98, 0xde, 0x74,
-	0xa6, 0x37, 0x33, 0x40, 0x80, 0x04, 0xe5, 0x8d, 0x4c, 0x8f, 0xf8, 0x09, 0x01, 0x33, 0x30, 0x59,
-	0x0e, 0x43, 0x2d, 0x72, 0x52, 0xa9, 0x09, 0x8f, 0x25, 0x86, 0xdf, 0xd0, 0x3d, 0x8c, 0x81, 0xd0,
-	0x1f, 0x00, 0xbc, 0x00, 0x53, 0x26, 0xf1, 0x5a, 0x96, 0x73, 0xbd, 0xaa, 0x9b, 0x1e, 0x71, 0x36,
-	0x15, 0xb5, 0x73, 0xa7, 0xcb, 0xd8, 0x5f, 0xab, 0x04, 0x4b, 0x15, 0x0d, 0x1f, 0x83, 0x4c, 0x67,
-	0xa7, 0xb7, 0x6d, 0x07, 0xa4, 0x8d, 0x87, 0x5f, 0x03, 0x60, 0xdb, 0xd1, 0x9b, 0x8a, 0x47, 0xaa,
-	0xba, 0xdd, 0x3c, 0x1d, 0xfe, 0x12, 0x10, 0xe3, 0xc0, 0xfe, 0x5a, 0xc5, 0x6e, 0x9e, 0x0e, 0x7e,
-	0x11, 0x38, 0x09, 0x93, 0x4a, 0x53, 0xd1, 0x0d, 0xa5, 0xa6, 0x1b, 0xba, 0xb7, 0x5d, 0xfd, 0xd0,
-	0x32, 0x89, 0x7f, 0x5a, 0x84, 0xee, 0x85, 0xf7, 0x2c, 0x93, 0xe0, 0x43, 0x90, 0x0e, 0x9b, 0x50,
-	0xff, 0xd4, 0xa4, 0x82, 0xd6, 0x10, 0x1f, 0x80, 0xa4, 0x7f, 0x24, 0xf8, 0xa1, 0xf1, 0xdf, 0x96,
-	0x1e, 0xd0, 0x60, 0xfe, 0x03, 0x41, 0x1e, 0xa6, 0x2e, 0x70, 0xc7, 0xc4, 0xd0, 0x33, 0x1a, 0xbf,
-	0x03, 0x83, 0xc9, 0x00, 0x09, 0x32, 0x9d, 0x7d, 0xd4, 0x3b, 0xda, 0x20, 0xf4, 0x92, 0x40, 0x31,
-	0xd7, 0xb9, 0x4f, 0x62, 0x65, 0xfd, 0xf2, 0x69, 0xd1, 0xf7, 0x8a, 0x62, 0x0e, 0xe2, 0x81, 0x46,
-	0xaf, 0xd8, 0xe5, 0x94, 0x48, 0xbd, 0xa2, 0xd1, 0x7b, 0x8c, 0x02, 0xc8, 0x42, 0x3a, 0xec, 0x70,
-	0xa7, 0x47, 0xbb, 0xfc, 0xa6, 0x49, 0xe9, 0x87, 0x3d, 0x15, 0x78, 0x2c, 0x7d, 0x9c, 0x80, 0xcc,
-	0x39, 0xc3, 0xaa, 0x29, 0xc6, 0x86, 0x4d, 0x54, 0x16, 0x8a, 0x15, 0x48, 0xd2, 0xab, 0xc1, 0x09,
-	0x2e, 0x86, 0x57, 0x9f, 0x7a, 0xa2, 0x56, 0xf8, 0x25, 0x45, 0x0f, 0xfa, 0x6a, 0x44, 0x4e, 0x28,
-	0x2d, 0x57, 0x26, 0xf8, 0x22, 0xf4, 0x74, 0x05, 0xac, 0xdc, 0x8c, 0x16, 0x4e, 0x3e, 0x0d, 0xac,
-	0xeb, 0x36, 0x5b, 0x8d, 0xc8, 0xa0, 0xb4, 0xdc, 0x4b, 0xf5, 0x16, 0xfd, 0x82, 0x57, 0x61, 0xc4,
-	0x25, 0x75, 0x9a, 0xa8, 0xd9, 0xf1, 0x67, 0xee, 0x1e, 0xe0, 0xd6, 0x4e, 0x20, 0x25, 0x07, 0x0f,
-	0xb8, 0x08, 0x42, 0x4d, 0x31, 0xb5, 0x96, 0xae, 0x79, 0xd7, 0xaa, 0xaf, 0x2f, 0x2c, 0x6c, 0xd5,
-	0x82, 0xea, 0x31, 0x78, 0x2e, 0x43, 0xf2, 0x44, 0xb8, 0x9f, 0x6f, 0xc7, 0x25, 0x48, 0x50, 0xaf,
-	0xdc, 0xec, 0x18, 0xab, 0x63, 0x87, 0xfb, 0xe4, 0x7a, 0x8d, 0xc8, 0xdc, 0xda, 0x61, 0xdd, 0x4f,
-	0xf8, 0xfb, 0x18, 0x13, 0xc5, 0x3f, 0x85, 0x89, 0xa6, 0xee, 0x78, 0x74, 0x68, 0xf7, 0xf3, 0x28,
-	0x9b, 0x79, 0x06, 0xb4, 0x83, 0xb7, 0x76, 0xfa, 0xe5, 0x02, 0xe0, 0x8c, 0xff, 0xdd, 0x4f, 0x57,
-	0x5c, 0x0e, 0x6e, 0x83, 0x09, 0x11, 0xcd, 0x64, 0x9e, 0xe5, 0x37, 0xc3, 0xae, 0xbe, 0x81, 0xf8,
-	0xb7, 0x47, 0xe9, 0x30, 0x24, 0xd8, 0x4e, 0x36, 0x04, 0x46, 0xe9, 0xc5, 0x4d, 0x87, 0xc0, 0xc2,
-	0xec, 0x19, 0xaa, 0xb3, 0xf4, 0x9d, 0x6e, 0x32, 0xf9, 0x0f, 0xc2, 0x78, 0xfc, 0x6e, 0x1b, 0xa5,
-	0x77, 0xdb, 0x28, 0xb5, 0xd7, 0x46, 0xe8, 0x2c, 0xbf, 0xe2, 0x07, 0x0e, 0xcf, 0xfc, 0x47, 0x41,
-	0x3a, 0x3c, 0xff, 0x21, 0x0a, 0x19, 0x56, 0xf8, 0x48, 0x98, 0x88, 0x6f, 0xbd, 0x58, 0x22, 0xfe,
-	0x0f, 0x53, 0xf0, 0x07, 0x2f, 0x90, 0x82, 0x61, 0xda, 0xb1, 0x7e, 0xad, 0xf7, 0xac, 0x95, 0x70,
-	0x40, 0x6d, 0xfa, 0xa3, 0x6f, 0x10, 0x7f, 0x1c, 0xce, 0x96, 0xf4, 0xe7, 0x28, 0x4c, 0xf8, 0x4d,
-	0x67, 0x48, 0xd4, 0x8f, 0xfa, 0x88, 0x1a, 0x7e, 0xab, 0xf6, 0xcf, 0x1c, 0x1d, 0xbe, 0x2e, 0x0f,
-	0xe4, 0xab, 0xf0, 0x8c, 0x68, 0xff, 0xd7, 0xb4, 0x3d, 0x8a, 0xc2, 0xe8, 0x39, 0xe2, 0x7d, 0x5b,
-	0x73, 0xeb, 0xe5, 0x9c, 0xf4, 0x97, 0x42, 0xf5, 0x89, 0x53, 0xfe, 0xaf, 0xe4, 0xdd, 0x0a, 0x70,
-	0x0a, 0xe2, 0xe5, 0x8b, 0x57, 0x2e, 0x08, 0x11, 0x3c, 0x06, 0xa9, 0xf2, 0xca, 0x39, 0xb9, 0x58,
-	0x5e, 0x29, 0x0b, 0x08, 0x27, 0x21, 0xfa, 0xce, 0xba, 0x10, 0x2d, 0xfd, 0x06, 0xed, 0x3e, 0xc8,
-	0x45, 0xee, 0x3f, 0xc8, 0x45, 0xbe, 0x7a, 0x90, 0x43, 0x37, 0xf6, 0x72, 0xe8, 0xb3, 0xbd, 0x1c,
-	0xfa, 0x72, 0x2f, 0x87, 0x76, 0xf7, 0x72, 0xe8, 0xfe, 0x5e, 0x0e, 0xfd, 0x73, 0x2f, 0x87, 0x1e,
-	0xed, 0xe5, 0x22, 0x5f, 0xed, 0xe5, 0xd0, 0xa7, 0x0f, 0x73, 0x91, 0xbb, 0x0f, 0x73, 0x68, 0xf7,
-	0x61, 0x2e, 0x72, 0xff, 0x61, 0x2e, 0xf2, 0xde, 0x8f, 0xeb, 0x96, 0x7d, 0xbd, 0x9e, 0x6f, 0x5a,
-	0x86, 0x47, 0x1c, 0x47, 0xc9, 0x37, 0xdc, 0x79, 0xf6, 0xb0, 0x69, 0x39, 0x5b, 0x73, 0xb6, 0x63,
-	0x35, 0x75, 0x8d, 0x38, 0x73, 0xc1, 0xf2, 0xbc, 0x5d, 0xab, 0x5b, 0xf3, 0xe4, 0xe7, 0x9e, 0xff,
-	0x4f, 0xd5, 0xa0, 0x7f, 0xfa, 0x6a, 0x49, 0xd6, 0xa4, 0x9f, 0xfa, 0x4f, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x75, 0x36, 0x94, 0x8a, 0x0f, 0x1c, 0x00, 0x00,
+	// 3747 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7a, 0x4f, 0x6c, 0x1b, 0x57,
+	0x7a, 0xb8, 0x1e, 0xff, 0x89, 0xfc, 0x24, 0x52, 0xa3, 0x67, 0xd9, 0xa6, 0xe5, 0x80, 0x66, 0x26,
+	0x76, 0x22, 0xcb, 0x12, 0x6d, 0x2b, 0x4e, 0x6c, 0x2b, 0xfb, 0x4b, 0x96, 0x14, 0x69, 0x99, 0x82,
+	0x2c, 0xeb, 0x37, 0xa2, 0xe5, 0xc6, 0x41, 0xcc, 0x1d, 0xce, 0x3c, 0x53, 0x53, 0x8f, 0x66, 0x88,
+	0x99, 0x21, 0x55, 0x65, 0xab, 0xae, 0x77, 0x0f, 0x8b, 0xa2, 0x45, 0x91, 0x34, 0x28, 0xd0, 0x1e,
+	0x7a, 0x28, 0xf6, 0xb4, 0x30, 0xb0, 0xed, 0xa9, 0x05, 0x36, 0x34, 0x50, 0x63, 0x81, 0x16, 0x0b,
+	0xa3, 0x28, 0x0c, 0xf4, 0xd0, 0x1c, 0x7a, 0x68, 0xe4, 0x4b, 0xda, 0x53, 0xb0, 0xa7, 0x45, 0x4f,
+	0xc5, 0x7b, 0x6f, 0x86, 0x1c, 0x52, 0x23, 0x4a, 0x72, 0x7c, 0x49, 0xdb, 0x1b, 0x67, 0xbe, 0xbf,
+	0xef, 0xfb, 0xf7, 0xbe, 0xef, 0xe3, 0xc0, 0x5b, 0x2d, 0x62, 0xe7, 0x34, 0xf3, 0xa2, 0xad, 0x6c,
+	0x90, 0x4d, 0xf9, 0xa2, 0xa2, 0x9b, 0x4d, 0xb5, 0xaa, 0x98, 0x86, 0x41, 0x14, 0xe7, 0xa2, 0xb3,
+	0xdd, 0x20, 0x76, 0xae, 0x61, 0x99, 0x8e, 0x89, 0x4f, 0x73, 0xc4, 0x1c, 0x47, 0xcc, 0xf5, 0x20,
+	0x4e, 0xce, 0xd6, 0x35, 0x67, 0xa3, 0x59, 0xcb, 0x29, 0xe6, 0xe6, 0xc5, 0xba, 0x59, 0x37, 0x2f,
+	0x32, 0x9a, 0x5a, 0xf3, 0x01, 0x7b, 0x62, 0x0f, 0xec, 0x17, 0xe7, 0x35, 0x79, 0xa6, 0x6e, 0x9a,
+	0x75, 0x9d, 0x74, 0xb1, 0x1c, 0x6d, 0x93, 0xd8, 0x8e, 0xbc, 0xd9, 0x70, 0x11, 0xce, 0x07, 0x69,
+	0x65, 0x91, 0xaa, 0x45, 0xea, 0x9a, 0x69, 0xf8, 0xf5, 0x9a, 0x3c, 0xdd, 0x8b, 0x6a, 0x36, 0x1c,
+	0xcd, 0x34, 0x3c, 0x60, 0xa6, 0x17, 0x68, 0x6b, 0x0e, 0xe9, 0x21, 0x3e, 0xd5, 0x0b, 0xf7, 0x83,
+	0x5e, 0xeb, 0x05, 0xb5, 0x64, 0x5d, 0x53, 0x65, 0x87, 0xb8, 0xd0, 0x6c, 0x1f, 0x54, 0x23, 0x5b,
+	0xd5, 0x5e, 0xd1, 0x67, 0xf6, 0x62, 0xd8, 0x7e, 0x01, 0xe2, 0x1f, 0x45, 0x20, 0x91, 0xbf, 0xbb,
+	0x26, 0x95, 0x2a, 0xdb, 0x0d, 0x82, 0x65, 0x88, 0xf1, 0xc3, 0xa5, 0x51, 0x16, 0x4d, 0x8d, 0xcc,
+	0x89, 0xb9, 0x5e, 0x7b, 0x33, 0xfa, 0xdc, 0xed, 0xda, 0xef, 0x12, 0xc5, 0x91, 0xc8, 0x03, 0x4a,
+	0x53, 0x38, 0xf7, 0x78, 0x67, 0xd4, 0x33, 0x0d, 0x25, 0x7d, 0xf4, 0x04, 0xa1, 0x2f, 0x9e, 0xa0,
+	0x54, 0x1c, 0x4d, 0xa1, 0x4b, 0x68, 0x3e, 0xa6, 0x98, 0xc6, 0x03, 0xad, 0x2e, 0xb9, 0x8c, 0xf1,
+	0x7d, 0x88, 0x28, 0x16, 0x51, 0xd3, 0xa1, 0x43, 0x0b, 0x78, 0xf3, 0xf1, 0xce, 0xb8, 0xeb, 0x68,
+	0x8b, 0xa8, 0xc4, 0x70, 0x34, 0x59, 0xb7, 0x03, 0x24, 0x30, 0xbe, 0x58, 0x85, 0xb1, 0x56, 0x43,
+	0xa9, 0xca, 0x8e, 0x23, 0x2b, 0x1b, 0x9b, 0xc4, 0x70, 0xec, 0x74, 0x98, 0x89, 0x7a, 0x27, 0x37,
+	0x20, 0x76, 0x72, 0xf9, 0xbb, 0x6b, 0xeb, 0xab, 0x0b, 0xf9, 0x0e, 0xd5, 0xb2, 0x66, 0x3b, 0x4c,
+	0x7a, 0xe4, 0x9b, 0x36, 0x42, 0x52, 0xaa, 0xd5, 0x50, 0xba, 0x40, 0x1b, 0xdf, 0x81, 0x11, 0x4e,
+	0xaf, 0x6b, 0xc6, 0x43, 0x3b, 0x1d, 0x61, 0x12, 0x72, 0x03, 0x25, 0x2c, 0xd0, 0xa7, 0x65, 0xcd,
+	0x78, 0xd8, 0xc7, 0x1a, 0x14, 0x0f, 0x60, 0xe3, 0x53, 0x10, 0x76, 0xea, 0x5b, 0xe9, 0x68, 0x16,
+	0x4d, 0x25, 0x0a, 0xc3, 0x5f, 0xee, 0xa0, 0xaf, 0x29, 0x06, 0x7d, 0x87, 0x8b, 0x10, 0x6d, 0x10,
+	0x62, 0xd9, 0xe9, 0x44, 0x36, 0x3c, 0x35, 0x32, 0x77, 0x6e, 0xa0, 0xac, 0x55, 0x42, 0x2c, 0x26,
+	0xa2, 0xc3, 0x83, 0x13, 0xcf, 0xc3, 0x6f, 0xde, 0x1f, 0xbe, 0x3c, 0x33, 0x37, 0xf3, 0xf6, 0xcc,
+	0x95, 0xa5, 0x48, 0x3c, 0x26, 0x0c, 0x2f, 0x45, 0xe2, 0xc3, 0x42, 0x7c, 0x29, 0x12, 0x8f, 0x0b,
+	0x09, 0xf1, 0x6f, 0x10, 0xc4, 0x3d, 0x52, 0x7c, 0x06, 0x46, 0x9c, 0xfa, 0x56, 0x55, 0x56, 0x55,
+	0x8b, 0xd8, 0x36, 0x0b, 0x88, 0x84, 0x04, 0x4e, 0x7d, 0x2b, 0xcf, 0xdf, 0xe0, 0x53, 0x10, 0xa7,
+	0x4c, 0xab, 0xb2, 0x6d, 0x30, 0x6f, 0x86, 0xa5, 0x61, 0xfa, 0x9c, 0xb7, 0x0d, 0xfc, 0x1e, 0x44,
+	0x0c, 0x53, 0x25, 0xae, 0xe5, 0xdf, 0x0a, 0xd4, 0xb5, 0x93, 0x48, 0xb9, 0x15, 0x53, 0x25, 0x54,
+	0xa4, 0xc4, 0x88, 0xf0, 0x34, 0x8c, 0x6b, 0x86, 0xad, 0xa9, 0xa4, 0x5a, 0xb7, 0x48, 0xd5, 0x6e,
+	0xd6, 0x0c, 0xe2, 0x30, 0x0b, 0x27, 0xa4, 0x31, 0x0e, 0x58, 0xb4, 0xc8, 0x1a, 0x7b, 0x2d, 0xfe,
+	0x18, 0xc1, 0xf8, 0x1e, 0xc3, 0x62, 0x1d, 0xa0, 0xeb, 0x9d, 0x34, 0x62, 0x06, 0x3b, 0x4c, 0xa4,
+	0x9d, 0x7f, 0xbc, 0xe3, 0x23, 0xdc, 0x1b, 0x62, 0x5f, 0xfc, 0xc7, 0xd3, 0x70, 0xf4, 0x73, 0x14,
+	0x12, 0x90, 0x94, 0xe8, 0x78, 0x4d, 0x6c, 0x42, 0x7a, 0xbf, 0xe8, 0xc1, 0x1f, 0x42, 0x9c, 0x46,
+	0xa3, 0xae, 0xd9, 0x8e, 0xab, 0xc7, 0xe5, 0x23, 0x85, 0x21, 0x53, 0x6b, 0x84, 0xca, 0x8d, 0x7d,
+	0x8e, 0xc2, 0xc2, 0x23, 0x24, 0x0d, 0xb7, 0x1a, 0x0a, 0x65, 0x2f, 0xfe, 0x2c, 0x06, 0x13, 0x41,
+	0xe8, 0x58, 0x81, 0x18, 0x95, 0xa9, 0xa9, 0xdc, 0x67, 0x85, 0xe5, 0xdf, 0xb6, 0xd1, 0xd0, 0x17,
+	0x4f, 0x90, 0x10, 0xa7, 0x47, 0xe1, 0x07, 0x9c, 0x55, 0x65, 0x47, 0xa6, 0x6c, 0x23, 0x56, 0x28,
+	0xfd, 0x7d, 0xfa, 0xe3, 0x4d, 0xeb, 0xec, 0x9c, 0x78, 0x7f, 0xaa, 0xd5, 0x50, 0x66, 0xcf, 0x4f,
+	0x7d, 0x24, 0xcf, 0x7e, 0x72, 0x69, 0xf6, 0xfa, 0xc7, 0x3f, 0xbc, 0xb6, 0xf3, 0xfb, 0x9d, 0xdf,
+	0x97, 0xaf, 0xee, 0x9c, 0x3f, 0x2b, 0x45, 0x5b, 0x0d, 0xa5, 0xac, 0xe2, 0xff, 0x07, 0xa9, 0x4d,
+	0xd9, 0x68, 0xca, 0x7a, 0xd5, 0x32, 0x9b, 0x8e, 0x66, 0xd4, 0xd3, 0x31, 0xe6, 0xeb, 0x89, 0xbe,
+	0xe3, 0x95, 0x36, 0x1b, 0xce, 0xf6, 0xcd, 0x21, 0x29, 0xc9, 0xb1, 0x25, 0x8e, 0x8c, 0x57, 0x21,
+	0xa9, 0x92, 0x07, 0x72, 0x53, 0x77, 0x18, 0x3d, 0x49, 0x27, 0x18, 0xf5, 0xf9, 0x81, 0xc6, 0x29,
+	0x72, 0x0a, 0xca, 0x83, 0xdc, 0x1c, 0x92, 0x46, 0x55, 0xdf, 0x33, 0xfe, 0x08, 0x52, 0x4a, 0xd3,
+	0x76, 0xcc, 0xcd, 0x8e, 0x42, 0xc0, 0x58, 0xce, 0x1d, 0x64, 0x6f, 0x46, 0x5e, 0x91, 0x6b, 0x3a,
+	0xf1, 0xbc, 0x46, 0xd5, 0xe5, 0xbc, 0x5c, 0x75, 0xe7, 0xbf, 0x0e, 0x3d, 0x6b, 0xa3, 0x17, 0x21,
+	0xc0, 0x10, 0x5b, 0x5f, 0x5d, 0xc8, 0x96, 0x8b, 0x93, 0x71, 0xcf, 0xc8, 0xf0, 0x4f, 0x21, 0x48,
+	0xb9, 0x78, 0xd9, 0x85, 0x0d, 0x53, 0x53, 0xc8, 0xf4, 0x2f, 0x43, 0xf0, 0x77, 0x21, 0x98, 0xed,
+	0x37, 0xd1, 0xdc, 0xe9, 0x15, 0x33, 0xcb, 0x8e, 0x6b, 0x67, 0xb7, 0x34, 0x5d, 0xcf, 0xd6, 0x48,
+	0x56, 0x33, 0x6c, 0x47, 0xd6, 0x75, 0xa2, 0xc2, 0x32, 0x64, 0x7a, 0x4c, 0x92, 0x93, 0x75, 0x4e,
+	0x49, 0xaa, 0x0e, 0xd5, 0xce, 0x9e, 0x9b, 0xbe, 0xdd, 0x22, 0x96, 0xa5, 0xa9, 0x24, 0xeb, 0x5a,
+	0x22, 0xcb, 0x74, 0xcf, 0x3e, 0x30, 0xad, 0xac, 0xac, 0xeb, 0xd9, 0xee, 0x49, 0x6c, 0x78, 0x08,
+	0x6f, 0xf7, 0x72, 0xb3, 0x89, 0x4e, 0x14, 0x47, 0x6b, 0x91, 0x1e, 0x9e, 0x39, 0xdf, 0x43, 0x55,
+	0x53, 0xc5, 0x2b, 0x42, 0x74, 0xfa, 0xd2, 0x00, 0x31, 0x6b, 0x1e, 0x97, 0x1e, 0x61, 0x4b, 0x70,
+	0xba, 0xd7, 0xf6, 0x7e, 0xb6, 0xb6, 0x78, 0x41, 0x88, 0x8a, 0xa9, 0x5e, 0x41, 0xd3, 0x27, 0x17,
+	0x18, 0x41, 0x76, 0xa1, 0x5c, 0x94, 0x6c, 0x1f, 0xb3, 0xc2, 0x14, 0xa4, 0x5c, 0x26, 0x55, 0x85,
+	0x59, 0x13, 0x9f, 0x78, 0xda, 0x46, 0xb1, 0xe7, 0x6d, 0x14, 0xdd, 0x6d, 0xa3, 0xd8, 0xbb, 0x33,
+	0xd7, 0x67, 0x2e, 0x5f, 0xfa, 0xab, 0x27, 0x08, 0x2d, 0x45, 0xe2, 0x21, 0x21, 0xbc, 0x14, 0x89,
+	0x87, 0x85, 0xc8, 0x52, 0x24, 0x1e, 0x11, 0xa2, 0x4b, 0x91, 0x78, 0x54, 0x88, 0xf5, 0x54, 0xb4,
+	0x1d, 0x38, 0x9d, 0xff, 0xa4, 0x69, 0x91, 0x75, 0x83, 0x38, 0x01, 0xe9, 0x79, 0x1f, 0x12, 0x2d,
+	0x83, 0x38, 0xfe, 0xfc, 0xbc, 0x32, 0x38, 0x5e, 0x18, 0xb3, 0x95, 0x52, 0x65, 0x50, 0x8a, 0xc6,
+	0x29, 0x4f, 0x96, 0xa3, 0xff, 0x1a, 0x81, 0x93, 0xfb, 0x90, 0xe0, 0x25, 0x18, 0xb3, 0x9b, 0x35,
+	0x5b, 0xb1, 0x34, 0x76, 0x63, 0x77, 0xf3, 0xf5, 0xf5, 0x03, 0xf3, 0x55, 0x4a, 0xf9, 0x29, 0xcb,
+	0x2a, 0x9e, 0x87, 0x61, 0x76, 0x0e, 0x8d, 0xdf, 0xab, 0x87, 0xe2, 0x11, 0xa3, 0x14, 0x81, 0x99,
+	0x1c, 0x39, 0x4a, 0x26, 0xeb, 0x7b, 0xf2, 0x8e, 0x17, 0x82, 0x85, 0x83, 0xed, 0xd8, 0xf5, 0xfa,
+	0x5d, 0xcd, 0xd9, 0x58, 0x73, 0x64, 0x47, 0x53, 0xd8, 0xbb, 0xfd, 0x13, 0xf1, 0x5f, 0xd0, 0xb3,
+	0x36, 0xfa, 0x67, 0x04, 0x67, 0x61, 0x6c, 0xcd, 0x67, 0x02, 0x9a, 0x91, 0xe3, 0x7b, 0xec, 0x09,
+	0x13, 0x30, 0x4c, 0x0d, 0x4f, 0xa1, 0x89, 0x8e, 0x85, 0xe0, 0x53, 0xb4, 0x27, 0x61, 0x77, 0xe0,
+	0x87, 0x47, 0x4d, 0xd7, 0x57, 0x19, 0xf3, 0xe7, 0xf6, 0xc4, 0xfc, 0xb1, 0xa7, 0x6d, 0x14, 0x79,
+	0xde, 0x46, 0xe1, 0xdd, 0x36, 0x0a, 0x5f, 0x99, 0x79, 0xd7, 0x0d, 0x78, 0x1e, 0xea, 0x51, 0x21,
+	0x26, 0x3e, 0x0a, 0xc1, 0xa8, 0xbf, 0x1e, 0xe2, 0xef, 0x83, 0xd0, 0x5f, 0x30, 0xdc, 0x26, 0x6e,
+	0x3f, 0x47, 0xa6, 0x64, 0x5d, 0xf7, 0x65, 0x31, 0x36, 0xe1, 0x44, 0x70, 0x91, 0x70, 0x03, 0xe2,
+	0xea, 0x41, 0x95, 0xd4, 0xaf, 0x8f, 0xdd, 0xe5, 0x7c, 0x73, 0x48, 0x9a, 0xe8, 0x30, 0xf6, 0x09,
+	0x2c, 0x5c, 0x80, 0x89, 0x9e, 0x1a, 0xe5, 0x3f, 0x3c, 0xf2, 0x0e, 0x7f, 0x79, 0xe6, 0x4a, 0x40,
+	0xb6, 0x53, 0x13, 0xfc, 0x2d, 0x82, 0x63, 0xf9, 0xbb, 0x6b, 0xbc, 0x13, 0x28, 0x17, 0x3b, 0x49,
+	0xfd, 0x53, 0x04, 0xc0, 0xbb, 0x86, 0xaa, 0xa6, 0xda, 0x2c, 0xad, 0x13, 0x85, 0xfa, 0x17, 0x4f,
+	0x10, 0x76, 0x6f, 0xf3, 0xbe, 0x74, 0xc8, 0x7d, 0x8e, 0x2e, 0x88, 0xe7, 0xad, 0xb7, 0xe6, 0xce,
+	0xdd, 0x9f, 0xe2, 0x74, 0x03, 0x6f, 0xc0, 0x4e, 0x13, 0x10, 0xf1, 0x7e, 0xc5, 0x91, 0xf7, 0x2b,
+	0x8d, 0xa4, 0x04, 0x67, 0x51, 0x56, 0xed, 0xf9, 0xe3, 0xbf, 0x6a, 0xa3, 0x71, 0x18, 0x03, 0xe0,
+	0x2a, 0x66, 0xcb, 0x45, 0x1b, 0xa3, 0xcb, 0xe2, 0xcf, 0x11, 0x1c, 0x0f, 0xbc, 0x77, 0xb0, 0x05,
+	0xa3, 0x7d, 0xfe, 0x0b, 0x1f, 0xd8, 0x56, 0xf6, 0x70, 0x62, 0xb5, 0xe8, 0x4c, 0xa7, 0x16, 0xfd,
+	0x1a, 0x05, 0xaa, 0x38, 0x62, 0x75, 0x9d, 0x30, 0x7f, 0xfa, 0x57, 0x6d, 0x74, 0x12, 0x8e, 0x77,
+	0x53, 0xc2, 0x8d, 0x06, 0x74, 0x79, 0x0a, 0x89, 0x7f, 0x89, 0x60, 0x72, 0x7f, 0xc7, 0xe2, 0x3f,
+	0x80, 0xbe, 0x10, 0x77, 0x8d, 0xfd, 0x3b, 0x6e, 0xf5, 0xd9, 0xc7, 0xe0, 0x5c, 0x8d, 0xa0, 0xee,
+	0xc3, 0x72, 0x6a, 0x83, 0xbb, 0x8f, 0xd1, 0xae, 0xea, 0x65, 0x55, 0xfc, 0x53, 0x04, 0x42, 0x5f,
+	0x25, 0xb1, 0xf1, 0xce, 0x3e, 0x4a, 0xdd, 0x3d, 0xb2, 0x52, 0xe7, 0xac, 0x37, 0xe6, 0x5e, 0xa7,
+	0x4a, 0x1d, 0x45, 0xa7, 0x7f, 0x44, 0xf0, 0xe6, 0xe1, 0xaa, 0x1b, 0xfe, 0x51, 0xa0, 0xbb, 0xdf,
+	0xfb, 0x16, 0x85, 0xf3, 0x55, 0xfa, 0xfe, 0x97, 0x21, 0xc8, 0x0c, 0x96, 0x86, 0xed, 0x00, 0x53,
+	0xd3, 0xdb, 0xe7, 0xd6, 0x60, 0x53, 0x7f, 0x2b, 0x03, 0x63, 0x09, 0x92, 0x36, 0xd3, 0x81, 0x17,
+	0x0d, 0x3b, 0xad, 0x33, 0xf7, 0xce, 0x52, 0x86, 0xf0, 0x39, 0x1a, 0x16, 0xa3, 0x56, 0xf8, 0xb7,
+	0xa8, 0x73, 0x66, 0x61, 0x2e, 0xd0, 0x0e, 0xa3, 0x76, 0xf7, 0x1c, 0xf6, 0xfc, 0xca, 0xb3, 0x36,
+	0x5a, 0x82, 0xb3, 0x20, 0xf4, 0x18, 0x82, 0xde, 0x1b, 0x42, 0xff, 0x11, 0x41, 0x84, 0x24, 0xb7,
+	0x01, 0xaf, 0xe0, 0x76, 0x61, 0xbc, 0x4f, 0x21, 0x01, 0xc4, 0x5f, 0x84, 0x60, 0x7c, 0x4f, 0x62,
+	0x62, 0x67, 0x1f, 0x73, 0xad, 0x1c, 0xd2, 0x5c, 0x2f, 0x95, 0x24, 0xdf, 0x09, 0x7b, 0x3d, 0x42,
+	0x20, 0x48, 0xa4, 0xa1, 0xcb, 0x0a, 0xe9, 0x2e, 0x23, 0xee, 0xbf, 0xda, 0x49, 0xbe, 0x7f, 0x86,
+	0x9f, 0x1f, 0x7d, 0xf6, 0x7e, 0x77, 0xf5, 0x21, 0xb6, 0x43, 0x90, 0xca, 0xdf, 0x5d, 0xab, 0x2c,
+	0xde, 0x5d, 0xd3, 0x1c, 0xee, 0xaf, 0x8f, 0x21, 0x62, 0x6b, 0x0e, 0x39, 0xe2, 0x2e, 0x44, 0xde,
+	0xb2, 0xab, 0x74, 0x70, 0xa6, 0xa4, 0xfb, 0xec, 0x42, 0x18, 0xdb, 0xff, 0x19, 0x9b, 0x10, 0xde,
+	0x79, 0x8b, 0x9f, 0x21, 0x38, 0xde, 0x75, 0xa0, 0xdf, 0x88, 0xaf, 0x5c, 0x8b, 0xe7, 0x01, 0x5a,
+	0xcc, 0x8f, 0x3f, 0x7b, 0xbf, 0xcf, 0x7b, 0xe2, 0x33, 0x9a, 0x83, 0x5e, 0xef, 0xdd, 0x51, 0xe7,
+	0x07, 0x47, 0xf6, 0xe9, 0xd4, 0xe3, 0x9d, 0x31, 0x99, 0xf2, 0xa9, 0xb2, 0x06, 0xf2, 0x40, 0xb7,
+	0xd6, 0x8e, 0xec, 0xd6, 0xe9, 0x20, 0xb7, 0x7e, 0xdd, 0x0e, 0x96, 0xc1, 0x5c, 0xab, 0x81, 0xc0,
+	0x94, 0xf1, 0x5b, 0x35, 0xca, 0xe4, 0x5d, 0x3b, 0xc4, 0xf8, 0x12, 0x38, 0x0b, 0xb9, 0xee, 0x1d,
+	0x6b, 0xf5, 0x40, 0x3d, 0xff, 0xfe, 0x05, 0x82, 0xb4, 0xe7, 0xdf, 0x3d, 0x36, 0x0d, 0xd2, 0x26,
+	0xfc, 0x6d, 0xb5, 0x79, 0x1e, 0xa4, 0x4d, 0x90, 0x9f, 0xff, 0x3a, 0x04, 0x27, 0xd8, 0x0a, 0x68,
+	0x81, 0xb3, 0xa5, 0xc5, 0xa6, 0x69, 0x33, 0xc5, 0x1a, 0x70, 0xa2, 0x47, 0x62, 0x95, 0xe6, 0x26,
+	0x73, 0x3f, 0x77, 0xce, 0xf5, 0x83, 0x42, 0xd0, 0x27, 0x9a, 0x6a, 0xd6, 0x65, 0x7d, 0x73, 0x48,
+	0x3a, 0xa6, 0xf8, 0x84, 0xe6, 0xb7, 0x6c, 0xaa, 0x10, 0x6e, 0x41, 0xba, 0x4f, 0x22, 0x8b, 0x1c,
+	0x26, 0x93, 0x9b, 0xe4, 0x10, 0xd7, 0xfb, 0x20, 0xa9, 0xc7, 0x7b, 0xa4, 0x52, 0x6c, 0x2a, 0xb7,
+	0x70, 0xb6, 0x5f, 0xae, 0x4a, 0x1a, 0xba, 0xb9, 0x4d, 0x79, 0xe0, 0x38, 0x35, 0xa5, 0xdb, 0x43,
+	0x23, 0x21, 0x24, 0xfe, 0x04, 0xc1, 0x6b, 0x83, 0xce, 0x86, 0x6b, 0x30, 0xde, 0x75, 0x65, 0xd5,
+	0x66, 0x00, 0xb7, 0x39, 0x79, 0xe7, 0x08, 0x16, 0xeb, 0x72, 0x94, 0x84, 0x2e, 0x3f, 0xfe, 0x56,
+	0xfc, 0xf1, 0x30, 0xdb, 0x9a, 0x05, 0xa2, 0xe3, 0x69, 0x18, 0x67, 0xab, 0xc7, 0xae, 0x12, 0xde,
+	0x60, 0x2b, 0x8d, 0x39, 0xf5, 0xad, 0x2e, 0x51, 0x59, 0xc5, 0x1f, 0x40, 0x52, 0xb1, 0x88, 0xcc,
+	0x46, 0x3e, 0x47, 0xdb, 0xf4, 0x32, 0x7b, 0x32, 0xc7, 0xb7, 0xfb, 0x39, 0x6f, 0xbb, 0x9f, 0xab,
+	0x78, 0xdb, 0x7d, 0x69, 0xd4, 0x23, 0xa0, 0xaf, 0xf0, 0xf1, 0xce, 0xba, 0x8c, 0xef, 0x18, 0xdd,
+	0x05, 0x57, 0x16, 0x46, 0xe9, 0x6b, 0x73, 0xcb, 0x20, 0x16, 0x05, 0x46, 0xf9, 0xfe, 0xb3, 0xd5,
+	0x50, 0x6e, 0xd3, 0x57, 0x65, 0x15, 0x9f, 0xe2, 0xbb, 0x3d, 0x45, 0x53, 0xad, 0xf4, 0x28, 0x83,
+	0x0e, 0xb7, 0x1a, 0xca, 0x82, 0xa6, 0x5a, 0xb8, 0x0e, 0x13, 0x14, 0xd4, 0x75, 0x02, 0xb3, 0x22,
+	0x49, 0x8f, 0x64, 0xd1, 0x54, 0xea, 0x00, 0x23, 0xfa, 0x63, 0x79, 0x7d, 0x75, 0x81, 0x9a, 0x85,
+	0x6f, 0x47, 0x71, 0xab, 0xa1, 0x14, 0x3b, 0x1c, 0xd9, 0x7b, 0x7c, 0x01, 0xc6, 0xfb, 0x84, 0x34,
+	0xed, 0xf4, 0x30, 0x53, 0x46, 0x50, 0x7b, 0x70, 0x9b, 0x36, 0xfe, 0x10, 0x22, 0x8e, 0x5c, 0xb7,
+	0xd3, 0x71, 0xe6, 0xca, 0x0f, 0x5e, 0xca, 0x95, 0xb9, 0x8a, 0x5c, 0xb7, 0x4b, 0x86, 0x63, 0x6d,
+	0x17, 0x22, 0x6c, 0xb1, 0xcc, 0x58, 0xe2, 0x45, 0x18, 0xe6, 0x73, 0x8f, 0x9d, 0x06, 0xc6, 0x7d,
+	0x76, 0x20, 0x77, 0x3e, 0x10, 0xf9, 0x02, 0xc4, 0xa3, 0xc6, 0x1f, 0x83, 0xd0, 0x99, 0xb1, 0xbd,
+	0x86, 0x25, 0xf1, 0xb2, 0x8b, 0x3c, 0xb6, 0x2f, 0xe6, 0xbc, 0x78, 0xef, 0x31, 0x79, 0x15, 0x12,
+	0x9d, 0x03, 0x60, 0x01, 0xc2, 0x0f, 0xc9, 0xb6, 0xbb, 0xd9, 0xa6, 0x3f, 0xf1, 0x04, 0x44, 0x5b,
+	0xb2, 0xde, 0x24, 0x6e, 0xb0, 0xf1, 0x87, 0xf9, 0xd0, 0x35, 0x34, 0xff, 0x0f, 0xe8, 0x59, 0x1b,
+	0x3d, 0x45, 0x81, 0x1b, 0xc0, 0xb3, 0x90, 0xec, 0xda, 0x8a, 0x82, 0x8e, 0x05, 0xc4, 0x2f, 0x60,
+	0x88, 0xd0, 0xc1, 0x7f, 0x12, 0xba, 0x61, 0x03, 0x6f, 0xc0, 0x38, 0xe5, 0xc6, 0x22, 0x2a, 0x9b,
+	0x57, 0x14, 0xb3, 0x69, 0x38, 0x93, 0xa9, 0xde, 0xc8, 0x83, 0xd7, 0x21, 0xca, 0x9c, 0x3d, 0x99,
+	0x0e, 0x8e, 0xaa, 0x2c, 0x82, 0x29, 0x18, 0xef, 0x46, 0x46, 0x96, 0xdb, 0x95, 0x6a, 0xb1, 0x27,
+	0x36, 0x3a, 0x03, 0x74, 0x4c, 0x18, 0x16, 0x5f, 0x84, 0x41, 0xe8, 0xf7, 0x04, 0xbe, 0x04, 0x13,
+	0x06, 0x71, 0xb6, 0x4c, 0xeb, 0x61, 0x55, 0x33, 0x1c, 0x62, 0x3d, 0x90, 0x95, 0x6e, 0xab, 0x2a,
+	0x61, 0x17, 0x56, 0xf6, 0x40, 0x65, 0x15, 0x9f, 0x83, 0x54, 0x17, 0xd3, 0xd9, 0x6e, 0x78, 0xd6,
+	0x4b, 0x76, 0xde, 0x7a, 0x8c, 0x1b, 0x96, 0xd6, 0x92, 0x1d, 0x52, 0xd5, 0x1a, 0xad, 0x2b, 0x9d,
+	0x3f, 0x16, 0xc2, 0x9c, 0xb1, 0x0b, 0x2b, 0x37, 0x5a, 0x57, 0xbc, 0x3f, 0x18, 0x2e, 0xc0, 0xb8,
+	0xdc, 0x92, 0x35, 0x5d, 0xae, 0x69, 0xba, 0xe6, 0x6c, 0x57, 0x3f, 0x31, 0x0d, 0xe2, 0x26, 0xa9,
+	0xe0, 0x07, 0xdc, 0x33, 0x0d, 0x82, 0x4f, 0x43, 0xa2, 0x33, 0xf4, 0xbb, 0xc9, 0x1a, 0xf7, 0x46,
+	0x71, 0x7c, 0x02, 0x62, 0x6e, 0x6e, 0xc4, 0x18, 0xc4, 0x7d, 0x9a, 0xff, 0x8a, 0x7a, 0xf5, 0xdf,
+	0x10, 0xe4, 0x60, 0x62, 0x85, 0x1f, 0x2c, 0xdb, 0x39, 0x19, 0x75, 0xe4, 0x89, 0x60, 0x63, 0x80,
+	0x08, 0xa9, 0x2e, 0x1e, 0x3d, 0x1d, 0xed, 0x7b, 0x7b, 0x8d, 0x40, 0x79, 0xae, 0xf2, 0x33, 0x65,
+	0xcb, 0xab, 0xeb, 0x57, 0xb2, 0xee, 0xa9, 0x28, 0xcf, 0x20, 0x3b, 0x50, 0x1f, 0xe6, 0x7d, 0x87,
+	0xca, 0xd2, 0x53, 0x51, 0x1f, 0xee, 0x31, 0x01, 0xa4, 0x21, 0xd1, 0xd9, 0x28, 0x4c, 0x8e, 0xf8,
+	0xce, 0x4d, 0xa3, 0xd3, 0x75, 0x7e, 0xdc, 0x3b, 0xb1, 0xf8, 0x53, 0xe4, 0xce, 0x71, 0xfb, 0x17,
+	0x7c, 0x75, 0xff, 0x82, 0x7f, 0xf5, 0x48, 0xd7, 0xd5, 0xc0, 0x92, 0xff, 0xb3, 0x38, 0x4c, 0xee,
+	0x4f, 0x80, 0x67, 0x00, 0xf7, 0x75, 0x11, 0xdd, 0xaa, 0x2f, 0xf4, 0xf6, 0x01, 0xaf, 0xa2, 0xec,
+	0x8b, 0x90, 0xb4, 0x1b, 0xe6, 0x43, 0xb7, 0xab, 0xd3, 0x54, 0x37, 0x0e, 0x47, 0xd8, 0xcb, 0x75,
+	0x1e, 0x36, 0x22, 0x24, 0x37, 0x9a, 0x35, 0x8e, 0x61, 0xc8, 0x9b, 0x5e, 0xf0, 0x8d, 0x6c, 0x34,
+	0x6b, 0x14, 0x63, 0x45, 0xde, 0x24, 0xf8, 0x1a, 0xa4, 0x29, 0x0e, 0xcf, 0x56, 0xff, 0x02, 0xb2,
+	0x13, 0x86, 0x27, 0x36, 0x9a, 0x35, 0x96, 0xe1, 0x6b, 0x3d, 0x50, 0xfc, 0x06, 0x24, 0x1b, 0x84,
+	0x58, 0x9a, 0x51, 0x77, 0x6f, 0x07, 0x1e, 0x9b, 0xa3, 0xee, 0x4b, 0x5e, 0xe0, 0x67, 0x01, 0x37,
+	0x2c, 0xb3, 0xa5, 0xd9, 0x94, 0xa6, 0x83, 0xc9, 0x2b, 0xfc, 0xb8, 0x1f, 0x32, 0xe0, 0x3e, 0x88,
+	0xef, 0x73, 0x1f, 0xcc, 0x00, 0xee, 0x28, 0xb0, 0x6d, 0x28, 0x55, 0x9d, 0xb4, 0x88, 0xce, 0xaa,
+	0x6d, 0x42, 0x12, 0x3c, 0x2d, 0xb6, 0x0d, 0x65, 0x99, 0xbe, 0xc7, 0x1f, 0xb9, 0xb7, 0x07, 0xaf,
+	0xef, 0xf9, 0x97, 0x8c, 0x8b, 0x83, 0xef, 0x8f, 0x91, 0x6f, 0x75, 0x7f, 0x18, 0x01, 0xf7, 0xc7,
+	0xe8, 0x2b, 0x5b, 0x48, 0xbf, 0xc2, 0x0b, 0xe5, 0xcf, 0x42, 0xcf, 0xda, 0xe8, 0xd3, 0x10, 0x64,
+	0x21, 0xb9, 0x46, 0x43, 0x2e, 0xeb, 0x6d, 0xaa, 0xc7, 0xfa, 0x02, 0x13, 0xce, 0xf5, 0x5f, 0x2f,
+	0x13, 0x41, 0x99, 0x42, 0x19, 0x2d, 0xb8, 0x01, 0x9e, 0xa5, 0x11, 0x4e, 0x19, 0xf5, 0xa4, 0x08,
+	0xc5, 0x58, 0xe5, 0x5e, 0xcd, 0xf2, 0x0b, 0x65, 0xac, 0x2f, 0x02, 0x61, 0x1a, 0xf0, 0xaa, 0x2f,
+	0xa6, 0x5c, 0xb4, 0x89, 0xa0, 0x18, 0x64, 0xb8, 0x1e, 0xb7, 0x6d, 0x43, 0xc9, 0xb2, 0x28, 0x61,
+	0xb8, 0x7b, 0x62, 0xea, 0xf0, 0xf7, 0x93, 0xf8, 0x9b, 0x18, 0xa4, 0x16, 0x75, 0xb3, 0x26, 0xeb,
+	0x6b, 0x0d, 0xa2, 0xb0, 0xc2, 0x50, 0x82, 0x18, 0xed, 0xdb, 0x2d, 0xaf, 0x6b, 0x7f, 0xf3, 0xc0,
+	0x46, 0xa0, 0xc4, 0x47, 0x08, 0x1a, 0x5f, 0x37, 0x87, 0xa4, 0xa8, 0xbc, 0x65, 0x4b, 0x04, 0xdf,
+	0x86, 0x9e, 0xd1, 0x9c, 0xe5, 0xd0, 0xc8, 0xdc, 0x85, 0x83, 0x98, 0xf9, 0x46, 0x8d, 0x9b, 0x43,
+	0x12, 0xc8, 0x5b, 0x76, 0xa5, 0xbe, 0xc5, 0x7a, 0x7d, 0x19, 0xfa, 0xe7, 0xc2, 0xb4, 0x70, 0x88,
+	0xef, 0x00, 0xf6, 0xcc, 0x4f, 0x85, 0xe1, 0xff, 0xdc, 0x89, 0x38, 0xc4, 0x76, 0x6e, 0x0e, 0x49,
+	0x49, 0xd9, 0x9b, 0x89, 0x98, 0x88, 0x7b, 0x30, 0x6c, 0x93, 0x3a, 0xb5, 0x4f, 0x3a, 0x79, 0xe8,
+	0x71, 0xf2, 0xb5, 0xc7, 0x3b, 0x1e, 0x55, 0xc0, 0x00, 0xe9, 0x81, 0x70, 0x1e, 0x84, 0x9a, 0x6c,
+	0xa8, 0x5b, 0x9a, 0xea, 0x6c, 0x54, 0xdf, 0xb9, 0x74, 0x69, 0xb3, 0xe6, 0x75, 0x5a, 0xc1, 0x7f,
+	0x18, 0x20, 0x69, 0xac, 0x83, 0xcf, 0xd1, 0x71, 0x01, 0xa2, 0xf4, 0xd8, 0x34, 0xc3, 0x68, 0xce,
+	0xbe, 0xd6, 0x47, 0xd7, 0xab, 0x56, 0xea, 0xf1, 0x0e, 0x1b, 0x90, 0x3b, 0x5f, 0x24, 0x30, 0x52,
+	0xfc, 0x03, 0x18, 0x6b, 0x69, 0x96, 0xd3, 0x94, 0xf5, 0xaa, 0x7b, 0xd5, 0xa6, 0x53, 0x87, 0xe0,
+	0x76, 0xea, 0xf1, 0x4e, 0x3f, 0x9d, 0xc7, 0x38, 0xe5, 0xbe, 0x77, 0x6f, 0x74, 0x5c, 0x84, 0x28,
+	0xaf, 0x9a, 0x63, 0xac, 0xfb, 0xce, 0x1d, 0xba, 0xfb, 0x66, 0xd1, 0x2f, 0x71, 0x62, 0x7c, 0x1e,
+	0x92, 0xa6, 0x51, 0x33, 0x65, 0x4b, 0x25, 0x6a, 0xb5, 0xd5, 0x50, 0xd2, 0xe3, 0x59, 0x34, 0x95,
+	0x74, 0x8b, 0xd8, 0x68, 0x07, 0xb4, 0xde, 0x50, 0xf0, 0x22, 0x8c, 0x28, 0xa6, 0x69, 0xa9, 0x9a,
+	0x21, 0x53, 0xe3, 0x60, 0x66, 0xd4, 0x33, 0x7d, 0x62, 0xe9, 0xe9, 0x73, 0x0b, 0x5d, 0x34, 0x97,
+	0x93, 0x9f, 0xb2, 0x70, 0x06, 0xa2, 0x4c, 0x3b, 0xf6, 0x17, 0x68, 0x88, 0x8e, 0x71, 0xbb, 0x6d,
+	0x14, 0x9b, 0x9b, 0xb9, 0x3a, 0x73, 0xf9, 0x5d, 0x8a, 0x5d, 0x78, 0xdd, 0xef, 0x43, 0xfe, 0xe5,
+	0x0f, 0x4e, 0x3e, 0x6d, 0xa3, 0xc4, 0xf3, 0x36, 0x8a, 0xef, 0xb6, 0x11, 0xba, 0xce, 0x67, 0xbe,
+	0xc0, 0x7f, 0x49, 0xf9, 0xd7, 0x1f, 0x71, 0x21, 0x21, 0xfe, 0x61, 0x18, 0x52, 0xac, 0x76, 0x90,
+	0x4e, 0xd2, 0x7d, 0xf0, 0x72, 0x49, 0xf7, 0xdd, 0x4e, 0xb7, 0xef, 0xbd, 0x44, 0xba, 0x75, 0x12,
+	0x8a, 0xed, 0x26, 0x7a, 0x4b, 0x57, 0x01, 0x7b, 0x0e, 0x4c, 0xfc, 0xe4, 0xbf, 0x10, 0xff, 0x39,
+	0xd8, 0x21, 0xe2, 0x9f, 0x87, 0x61, 0xcc, 0x5d, 0xb4, 0x74, 0x7c, 0x71, 0xa3, 0xcf, 0x17, 0x83,
+	0xef, 0xc6, 0xfe, 0x3d, 0x6a, 0xd7, 0x25, 0xeb, 0x81, 0x2e, 0x99, 0x3b, 0x24, 0xb7, 0xff, 0xed,
+	0x9e, 0xf9, 0xfb, 0x08, 0x8c, 0x2c, 0x12, 0xe7, 0xff, 0x32, 0xe4, 0xa5, 0xfd, 0xf0, 0xdd, 0xad,
+	0xc4, 0xaf, 0x26, 0x82, 0xfe, 0x18, 0xc1, 0xc8, 0xb2, 0x5c, 0x23, 0xfa, 0x0d, 0x4d, 0x77, 0x88,
+	0x85, 0xaf, 0x41, 0x54, 0xa7, 0x8f, 0xac, 0x61, 0x4c, 0xed, 0x31, 0x65, 0xaf, 0x39, 0x18, 0xa1,
+	0xc4, 0x09, 0xf0, 0x0c, 0x84, 0xcc, 0x06, 0x8b, 0xbb, 0xd4, 0x9e, 0x7b, 0xf2, 0x16, 0x71, 0x2c,
+	0x4d, 0x61, 0xe8, 0xb7, 0x1b, 0x52, 0xc8, 0x6c, 0x74, 0x9b, 0xd0, 0xb0, 0xaf, 0x09, 0x15, 0x45,
+	0x18, 0xe5, 0xdf, 0x23, 0x10, 0xab, 0xa4, 0xd6, 0x09, 0xc6, 0x10, 0x61, 0x33, 0x0e, 0xef, 0x5e,
+	0xd9, 0x6f, 0xf1, 0x17, 0x08, 0x80, 0xf3, 0x2b, 0xca, 0x8e, 0x8c, 0xdf, 0x87, 0x08, 0x9b, 0xef,
+	0xb9, 0xbe, 0xd3, 0x03, 0xf5, 0xbd, 0xa1, 0x11, 0x5d, 0xe5, 0x9f, 0x0b, 0x99, 0x96, 0xc4, 0xe8,
+	0xf0, 0x05, 0x88, 0x34, 0x0d, 0xcd, 0x71, 0x15, 0x3f, 0xd9, 0x47, 0x7f, 0xc7, 0xd0, 0x78, 0x93,
+	0xcd, 0x90, 0xf0, 0x1c, 0xc4, 0x98, 0xa2, 0x76, 0x3a, 0xcc, 0xfa, 0x81, 0xc9, 0xc0, 0x73, 0xae,
+	0x53, 0x14, 0xc9, 0xc5, 0x14, 0xff, 0x04, 0x81, 0xb0, 0xc6, 0x83, 0x8d, 0xf5, 0xbd, 0x4c, 0xeb,
+	0xef, 0xf5, 0x68, 0x3d, 0x35, 0x50, 0xeb, 0x8a, 0x25, 0x3f, 0x78, 0xa0, 0x29, 0x5c, 0x0d, 0xa6,
+	0xf3, 0x7b, 0x10, 0x51, 0x65, 0x47, 0x4e, 0x87, 0x98, 0x12, 0x6f, 0x0d, 0xa4, 0xee, 0x9a, 0x4a,
+	0x62, 0x44, 0xe2, 0x67, 0x08, 0xe2, 0xd4, 0xb8, 0x4c, 0x8f, 0xeb, 0x10, 0x52, 0xbc, 0x39, 0x75,
+	0xf0, 0x87, 0x6e, 0x7e, 0xbf, 0x48, 0x21, 0x85, 0xe0, 0x32, 0xc4, 0xdd, 0x1c, 0xb2, 0x5d, 0x45,
+	0x0e, 0x98, 0x8f, 0xfa, 0x6c, 0x20, 0x75, 0xc8, 0xa7, 0xdf, 0x76, 0x3f, 0x98, 0xf4, 0x67, 0x16,
+	0x8e, 0x43, 0xa4, 0x78, 0xfb, 0xee, 0x8a, 0x30, 0x84, 0x47, 0x21, 0x5e, 0x2c, 0x2d, 0x4a, 0xf9,
+	0x62, 0xa9, 0x28, 0x20, 0x1c, 0x83, 0xd0, 0x9d, 0x55, 0x21, 0x34, 0xfd, 0x31, 0xa4, 0xf7, 0x5b,
+	0x4b, 0xe2, 0x24, 0x24, 0xf2, 0xeb, 0xf9, 0xf2, 0x72, 0xbe, 0xb0, 0x5c, 0x12, 0x86, 0xf0, 0x08,
+	0x0c, 0xaf, 0x96, 0x56, 0x8a, 0xe5, 0x95, 0x45, 0x01, 0x61, 0x80, 0xd8, 0x8d, 0x7c, 0x79, 0xb9,
+	0x54, 0x14, 0x42, 0x14, 0x50, 0x2c, 0x2d, 0x97, 0x2a, 0xa5, 0xa2, 0x10, 0xe6, 0x62, 0x96, 0x4b,
+	0x15, 0x8a, 0x16, 0x99, 0xbe, 0xda, 0xcb, 0x9e, 0x8d, 0x20, 0xaa, 0xfb, 0x19, 0xea, 0x30, 0x84,
+	0xf3, 0x77, 0xd7, 0x84, 0x21, 0x9c, 0x80, 0x68, 0xfe, 0xde, 0x1d, 0xa9, 0x24, 0x20, 0xfa, 0x6e,
+	0x71, 0x81, 0xea, 0x75, 0x09, 0xa2, 0x2c, 0xd0, 0x71, 0x0a, 0x60, 0x39, 0x5f, 0x28, 0x2d, 0x57,
+	0x57, 0x6e, 0xaf, 0x50, 0x2d, 0x4e, 0xc2, 0x31, 0xfe, 0xbc, 0x70, 0x67, 0xad, 0x72, 0xfb, 0x56,
+	0x49, 0xaa, 0x96, 0x8a, 0x8b, 0x25, 0x01, 0x4d, 0xff, 0x08, 0x46, 0x7c, 0x3e, 0xc6, 0xc7, 0x61,
+	0xbc, 0x22, 0xe5, 0x6f, 0xdc, 0x28, 0x2f, 0x54, 0x2b, 0x1f, 0xae, 0x96, 0x3c, 0xf2, 0x0c, 0x4c,
+	0xf6, 0xbc, 0x2e, 0xaf, 0x54, 0x4a, 0x52, 0x75, 0xad, 0xb4, 0x78, 0xab, 0xb4, 0x52, 0x11, 0x50,
+	0x10, 0x5c, 0xca, 0x77, 0xe0, 0x21, 0x7c, 0x0a, 0x8e, 0xef, 0xa5, 0x5f, 0x29, 0x55, 0x84, 0xf0,
+	0xf4, 0x3d, 0x48, 0xf6, 0xa4, 0x06, 0x9e, 0x00, 0xe1, 0x56, 0xa9, 0x22, 0xf5, 0x69, 0x90, 0x86,
+	0x09, 0xff, 0xdb, 0xf2, 0x4a, 0xb5, 0xf0, 0x61, 0xa5, 0xb4, 0x26, 0x20, 0xca, 0xdb, 0x0f, 0xb9,
+	0x7d, 0xa7, 0xe2, 0x82, 0x42, 0x85, 0x4f, 0xd1, 0xf3, 0xaf, 0x32, 0x43, 0x5f, 0x7e, 0x95, 0x19,
+	0xfa, 0xe6, 0xab, 0x0c, 0x7a, 0xb4, 0x9b, 0x41, 0x3f, 0xdf, 0xcd, 0xa0, 0x5f, 0xef, 0x66, 0xd0,
+	0xf3, 0xdd, 0x0c, 0xfa, 0x72, 0x37, 0x83, 0xfe, 0x7d, 0x37, 0x83, 0xbe, 0xde, 0xcd, 0x0c, 0x7d,
+	0xb3, 0x9b, 0x41, 0x9f, 0xbd, 0xc8, 0x0c, 0x3d, 0x7d, 0x91, 0x41, 0xcf, 0x5f, 0x64, 0x86, 0xbe,
+	0x7c, 0x91, 0x19, 0xba, 0xf7, 0xff, 0xeb, 0x66, 0xe3, 0x61, 0x3d, 0xd7, 0x32, 0x69, 0x75, 0xb2,
+	0xe4, 0x5c, 0xd3, 0xbe, 0xc8, 0x7e, 0x3c, 0x30, 0xad, 0xcd, 0xd9, 0x86, 0xeb, 0x94, 0x59, 0x0f,
+	0x7c, 0xb1, 0x51, 0xab, 0x9b, 0x17, 0xc9, 0xef, 0x39, 0xde, 0x67, 0xed, 0x01, 0xdf, 0xee, 0xd7,
+	0x62, 0x6c, 0x0f, 0xf3, 0xf6, 0x7f, 0x07, 0x00, 0x00, 0xff, 0xff, 0x0a, 0xce, 0xe2, 0x13, 0xe1,
+	0x2f, 0x00, 0x00,
 }
 
 func (x CloudConnectState) String() string {
 	s, ok := CloudConnectState_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x CloudConnectVPCStateType) String() string {
+	s, ok := CloudConnectVPCStateType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x CloudConnectProviderType) String() string {
+	s, ok := CloudConnectProviderType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x Label) String() string {
+	s, ok := Label_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x TrafficType) String() string {
+	s, ok := TrafficType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x FieldSelector) String() string {
+	s, ok := FieldSelector_name[int32(x)]
 	if ok {
 		return s
 	}
@@ -2226,6 +3672,119 @@ func (this *AWSVPCAttachmentType_CustomRouting) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AzureVnetAttachmentListType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVnetAttachmentListType)
+	if !ok {
+		that2, ok := that.(AzureVnetAttachmentListType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.VnetList) != len(that1.VnetList) {
+		return false
+	}
+	for i := range this.VnetList {
+		if !this.VnetList[i].Equal(that1.VnetList[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AzureVNETAttachmentType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVNETAttachmentType)
+	if !ok {
+		that2, ok := that.(AzureVNETAttachmentType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.SubscriptionId != that1.SubscriptionId {
+		return false
+	}
+	if this.VnetId != that1.VnetId {
+		return false
+	}
+	if that1.RoutingChoice == nil {
+		if this.RoutingChoice != nil {
+			return false
+		}
+	} else if this.RoutingChoice == nil {
+		return false
+	} else if !this.RoutingChoice.Equal(that1.RoutingChoice) {
+		return false
+	}
+	return true
+}
+func (this *AzureVNETAttachmentType_ManualRouting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVNETAttachmentType_ManualRouting)
+	if !ok {
+		that2, ok := that.(AzureVNETAttachmentType_ManualRouting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ManualRouting.Equal(that1.ManualRouting) {
+		return false
+	}
+	return true
+}
+func (this *AzureVNETAttachmentType_CustomRouting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVNETAttachmentType_CustomRouting)
+	if !ok {
+		that2, ok := that.(AzureVNETAttachmentType_CustomRouting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CustomRouting.Equal(that1.CustomRouting) {
+		return false
+	}
+	return true
+}
 func (this *DefaultRoute) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2391,6 +3950,96 @@ func (this *AWSDefaultRoutesRouteTable) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AzureRouteTables) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureRouteTables)
+	if !ok {
+		that2, ok := that.(AzureRouteTables)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.RouteTableId) != len(that1.RouteTableId) {
+		return false
+	}
+	for i := range this.RouteTableId {
+		if this.RouteTableId[i] != that1.RouteTableId[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *AzureRouteTableWithStaticRouteListType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureRouteTableWithStaticRouteListType)
+	if !ok {
+		that2, ok := that.(AzureRouteTableWithStaticRouteListType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.RouteTables) != len(that1.RouteTables) {
+		return false
+	}
+	for i := range this.RouteTables {
+		if !this.RouteTables[i].Equal(that1.RouteTables[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AzureRouteTableWithStaticRoute) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureRouteTableWithStaticRoute)
+	if !ok {
+		that2, ok := that.(AzureRouteTableWithStaticRoute)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.RouteTableId != that1.RouteTableId {
+		return false
+	}
+	if len(this.StaticRoutes) != len(that1.StaticRoutes) {
+		return false
+	}
+	for i := range this.StaticRoutes {
+		if this.StaticRoutes[i] != that1.StaticRoutes[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *AWSRouteTableType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2501,6 +4150,60 @@ func (this *ReplaceAWSTGWSiteType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AzureVNETSiteType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureVNETSiteType)
+	if !ok {
+		that2, ok := that.(AzureVNETSiteType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Site.Equal(that1.Site) {
+		return false
+	}
+	if !this.Cred.Equal(that1.Cred) {
+		return false
+	}
+	if !this.VnetAttachments.Equal(that1.VnetAttachments) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceAzureVNETSiteType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceAzureVNETSiteType)
+	if !ok {
+		that2, ok := that.(ReplaceAzureVNETSiteType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.VnetAttachments.Equal(that1.VnetAttachments) {
+		return false
+	}
+	return true
+}
 func (this *CloudConnectStatusType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2551,6 +4254,30 @@ func (this *CloudConnectStatusType_CloudConnectAwsSite) Equal(that interface{}) 
 		return false
 	}
 	if !this.CloudConnectAwsSite.Equal(that1.CloudConnectAwsSite) {
+		return false
+	}
+	return true
+}
+func (this *CloudConnectStatusType_CloudConnectAzureSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CloudConnectStatusType_CloudConnectAzureSite)
+	if !ok {
+		that2, ok := that.(CloudConnectStatusType_CloudConnectAzureSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CloudConnectAzureSite.Equal(that1.CloudConnectAzureSite) {
 		return false
 	}
 	return true
@@ -2615,7 +4342,10 @@ func (this *AWSAttachmentsStatusType) Equal(that interface{}) bool {
 	if this.VpcOwnerId != that1.VpcOwnerId {
 		return false
 	}
-	if this.State != that1.State {
+	if this.VpcCidr != that1.VpcCidr {
+		return false
+	}
+	if this.VpcDeploymentState != that1.VpcDeploymentState {
 		return false
 	}
 	if this.DeploymentStatus != that1.DeploymentStatus {
@@ -2681,6 +4411,102 @@ func (this *SubnetStatusType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *AzureAttachmentsListStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureAttachmentsListStatusType)
+	if !ok {
+		that2, ok := that.(AzureAttachmentsListStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AttachmentStatus) != len(that1.AttachmentStatus) {
+		return false
+	}
+	for i := range this.AttachmentStatus {
+		if !this.AttachmentStatus[i].Equal(that1.AttachmentStatus[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AzureAttachmentsStatusType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AzureAttachmentsStatusType)
+	if !ok {
+		that2, ok := that.(AzureAttachmentsStatusType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.VnetAttachmentId != that1.VnetAttachmentId {
+		return false
+	}
+	if !this.CreationTime.Equal(that1.CreationTime) {
+		return false
+	}
+	if this.SpokeVnetId != that1.SpokeVnetId {
+		return false
+	}
+	if this.HubVnetName != that1.HubVnetName {
+		return false
+	}
+	if this.HubOwnerSubscriptionid != that1.HubOwnerSubscriptionid {
+		return false
+	}
+	if this.PeeringState != that1.PeeringState {
+		return false
+	}
+	if this.ProvisioningState != that1.ProvisioningState {
+		return false
+	}
+	if this.DeploymentStatus != that1.DeploymentStatus {
+		return false
+	}
+	if this.PeeringSyncLevel != that1.PeeringSyncLevel {
+		return false
+	}
+	if len(this.Tags) != len(that1.Tags) {
+		return false
+	}
+	for i := range this.Tags {
+		if this.Tags[i] != that1.Tags[i] {
+			return false
+		}
+	}
+	if len(this.Subnets) != len(that1.Subnets) {
+		return false
+	}
+	for i := range this.Subnets {
+		if !this.Subnets[i].Equal(that1.Subnets[i]) {
+			return false
+		}
+	}
+	if !this.InstalledRoutes.Equal(that1.InstalledRoutes) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2740,6 +4566,12 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.State != that1.State {
 		return false
 	}
+	if this.OnboardedVpc != that1.OnboardedVpc {
+		return false
+	}
+	if !this.Coordinates.Equal(that1.Coordinates) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_AwsRe) Equal(that interface{}) bool {
@@ -2786,6 +4618,30 @@ func (this *GlobalSpecType_AwsTgwSite) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AwsTgwSite.Equal(that1.AwsTgwSite) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_AzureVnetSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_AzureVnetSite)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_AzureVnetSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureVnetSite.Equal(that1.AzureVnetSite) {
 		return false
 	}
 	return true
@@ -2895,6 +4751,30 @@ func (this *CreateSpecType_AwsTgwSite) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_AzureVnetSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_AzureVnetSite)
+	if !ok {
+		that2, ok := that.(CreateSpecType_AzureVnetSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureVnetSite.Equal(that1.AzureVnetSite) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -2976,6 +4856,30 @@ func (this *ReplaceSpecType_AwsTgwSite) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_AzureVnetSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_AzureVnetSite)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_AzureVnetSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureVnetSite.Equal(that1.AzureVnetSite) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -3008,6 +4912,12 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.State != that1.State {
+		return false
+	}
+	if this.OnboardedVpc != that1.OnboardedVpc {
+		return false
+	}
+	if !this.Coordinates.Equal(that1.Coordinates) {
 		return false
 	}
 	return true
@@ -3057,6 +4967,183 @@ func (this *GetSpecType_AwsTgwSite) Equal(that interface{}) bool {
 	}
 	if !this.AwsTgwSite.Equal(that1.AwsTgwSite) {
 		return false
+	}
+	return true
+}
+func (this *GetSpecType_AzureVnetSite) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_AzureVnetSite)
+	if !ok {
+		that2, ok := that.(GetSpecType_AzureVnetSite)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AzureVnetSite.Equal(that1.AzureVnetSite) {
+		return false
+	}
+	return true
+}
+func (this *LabelFilter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*LabelFilter)
+	if !ok {
+		that2, ok := that.(LabelFilter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Label != that1.Label {
+		return false
+	}
+	if this.Op != that1.Op {
+		return false
+	}
+	if this.Value != that1.Value {
+		return false
+	}
+	return true
+}
+func (this *CustomerEdge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomerEdge)
+	if !ok {
+		that2, ok := that.(CustomerEdge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	return true
+}
+func (this *MetricData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*MetricData)
+	if !ok {
+		that2, ok := that.(MetricData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if this.Unit != that1.Unit {
+		return false
+	}
+	if len(this.Values) != len(that1.Values) {
+		return false
+	}
+	for i := range this.Values {
+		if !this.Values[i].Equal(that1.Values[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *SegmentationData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SegmentationData)
+	if !ok {
+		that2, ok := that.(SegmentationData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if len(this.Data) != len(that1.Data) {
+		return false
+	}
+	for i := range this.Data {
+		if !this.Data[i].Equal(that1.Data[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *EdgeData) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*EdgeData)
+	if !ok {
+		that2, ok := that.(EdgeData)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ce.Equal(that1.Ce) {
+		return false
+	}
+	if len(this.Segments) != len(that1.Segments) {
+		return false
+	}
+	for i := range this.Segments {
+		if !this.Segments[i].Equal(that1.Segments[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -3161,6 +5248,48 @@ func (this *AWSVPCAttachmentType_CustomRouting) GoString() string {
 		`CustomRouting:` + fmt.Sprintf("%#v", this.CustomRouting) + `}`}, ", ")
 	return s
 }
+func (this *AzureVnetAttachmentListType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.AzureVnetAttachmentListType{")
+	if this.VnetList != nil {
+		s = append(s, "VnetList: "+fmt.Sprintf("%#v", this.VnetList)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AzureVNETAttachmentType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&cloud_connect.AzureVNETAttachmentType{")
+	s = append(s, "SubscriptionId: "+fmt.Sprintf("%#v", this.SubscriptionId)+",\n")
+	s = append(s, "VnetId: "+fmt.Sprintf("%#v", this.VnetId)+",\n")
+	if this.RoutingChoice != nil {
+		s = append(s, "RoutingChoice: "+fmt.Sprintf("%#v", this.RoutingChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AzureVNETAttachmentType_ManualRouting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.AzureVNETAttachmentType_ManualRouting{` +
+		`ManualRouting:` + fmt.Sprintf("%#v", this.ManualRouting) + `}`}, ", ")
+	return s
+}
+func (this *AzureVNETAttachmentType_CustomRouting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.AzureVNETAttachmentType_CustomRouting{` +
+		`CustomRouting:` + fmt.Sprintf("%#v", this.CustomRouting) + `}`}, ", ")
+	return s
+}
 func (this *DefaultRoute) GoString() string {
 	if this == nil {
 		return "nil"
@@ -3221,6 +5350,39 @@ func (this *AWSDefaultRoutesRouteTable) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *AzureRouteTables) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.AzureRouteTables{")
+	s = append(s, "RouteTableId: "+fmt.Sprintf("%#v", this.RouteTableId)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AzureRouteTableWithStaticRouteListType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.AzureRouteTableWithStaticRouteListType{")
+	if this.RouteTables != nil {
+		s = append(s, "RouteTables: "+fmt.Sprintf("%#v", this.RouteTables)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AzureRouteTableWithStaticRoute) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_connect.AzureRouteTableWithStaticRoute{")
+	s = append(s, "RouteTableId: "+fmt.Sprintf("%#v", this.RouteTableId)+",\n")
+	s = append(s, "StaticRoutes: "+fmt.Sprintf("%#v", this.StaticRoutes)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *AWSRouteTableType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -3274,11 +5436,41 @@ func (this *ReplaceAWSTGWSiteType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *CloudConnectStatusType) GoString() string {
+func (this *AzureVNETSiteType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_connect.AzureVNETSiteType{")
+	if this.Site != nil {
+		s = append(s, "Site: "+fmt.Sprintf("%#v", this.Site)+",\n")
+	}
+	if this.Cred != nil {
+		s = append(s, "Cred: "+fmt.Sprintf("%#v", this.Cred)+",\n")
+	}
+	if this.VnetAttachments != nil {
+		s = append(s, "VnetAttachments: "+fmt.Sprintf("%#v", this.VnetAttachments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ReplaceAzureVNETSiteType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.ReplaceAzureVNETSiteType{")
+	if this.VnetAttachments != nil {
+		s = append(s, "VnetAttachments: "+fmt.Sprintf("%#v", this.VnetAttachments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CloudConnectStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
 	s = append(s, "&cloud_connect.CloudConnectStatusType{")
 	if this.CloudConnectDeployment != nil {
 		s = append(s, "CloudConnectDeployment: "+fmt.Sprintf("%#v", this.CloudConnectDeployment)+",\n")
@@ -3292,6 +5484,14 @@ func (this *CloudConnectStatusType_CloudConnectAwsSite) GoString() string {
 	}
 	s := strings.Join([]string{`&cloud_connect.CloudConnectStatusType_CloudConnectAwsSite{` +
 		`CloudConnectAwsSite:` + fmt.Sprintf("%#v", this.CloudConnectAwsSite) + `}`}, ", ")
+	return s
+}
+func (this *CloudConnectStatusType_CloudConnectAzureSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.CloudConnectStatusType_CloudConnectAzureSite{` +
+		`CloudConnectAzureSite:` + fmt.Sprintf("%#v", this.CloudConnectAzureSite) + `}`}, ", ")
 	return s
 }
 func (this *AWSAttachmentsListStatusType) GoString() string {
@@ -3310,7 +5510,7 @@ func (this *AWSAttachmentsStatusType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 13)
+	s := make([]string, 0, 14)
 	s = append(s, "&cloud_connect.AWSAttachmentsStatusType{")
 	s = append(s, "TgwAttachmentId: "+fmt.Sprintf("%#v", this.TgwAttachmentId)+",\n")
 	if this.CreationTime != nil {
@@ -3318,7 +5518,8 @@ func (this *AWSAttachmentsStatusType) GoString() string {
 	}
 	s = append(s, "VpcId: "+fmt.Sprintf("%#v", this.VpcId)+",\n")
 	s = append(s, "VpcOwnerId: "+fmt.Sprintf("%#v", this.VpcOwnerId)+",\n")
-	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "VpcCidr: "+fmt.Sprintf("%#v", this.VpcCidr)+",\n")
+	s = append(s, "VpcDeploymentState: "+fmt.Sprintf("%#v", this.VpcDeploymentState)+",\n")
 	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
 	keysForTags := make([]string, 0, len(this.Tags))
 	for k, _ := range this.Tags {
@@ -3357,11 +5558,62 @@ func (this *SubnetStatusType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *AzureAttachmentsListStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.AzureAttachmentsListStatusType{")
+	if this.AttachmentStatus != nil {
+		s = append(s, "AttachmentStatus: "+fmt.Sprintf("%#v", this.AttachmentStatus)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AzureAttachmentsStatusType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&cloud_connect.AzureAttachmentsStatusType{")
+	s = append(s, "VnetAttachmentId: "+fmt.Sprintf("%#v", this.VnetAttachmentId)+",\n")
+	if this.CreationTime != nil {
+		s = append(s, "CreationTime: "+fmt.Sprintf("%#v", this.CreationTime)+",\n")
+	}
+	s = append(s, "SpokeVnetId: "+fmt.Sprintf("%#v", this.SpokeVnetId)+",\n")
+	s = append(s, "HubVnetName: "+fmt.Sprintf("%#v", this.HubVnetName)+",\n")
+	s = append(s, "HubOwnerSubscriptionid: "+fmt.Sprintf("%#v", this.HubOwnerSubscriptionid)+",\n")
+	s = append(s, "PeeringState: "+fmt.Sprintf("%#v", this.PeeringState)+",\n")
+	s = append(s, "ProvisioningState: "+fmt.Sprintf("%#v", this.ProvisioningState)+",\n")
+	s = append(s, "DeploymentStatus: "+fmt.Sprintf("%#v", this.DeploymentStatus)+",\n")
+	s = append(s, "PeeringSyncLevel: "+fmt.Sprintf("%#v", this.PeeringSyncLevel)+",\n")
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%#v: %#v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
+	if this.Tags != nil {
+		s = append(s, "Tags: "+mapStringForTags+",\n")
+	}
+	if this.Subnets != nil {
+		s = append(s, "Subnets: "+fmt.Sprintf("%#v", this.Subnets)+",\n")
+	}
+	if this.InstalledRoutes != nil {
+		s = append(s, "InstalledRoutes: "+fmt.Sprintf("%#v", this.InstalledRoutes)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 14)
 	s = append(s, "&cloud_connect.GlobalSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -3379,6 +5631,10 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "VirtualNetwork: "+fmt.Sprintf("%#v", this.VirtualNetwork)+",\n")
 	}
 	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "OnboardedVpc: "+fmt.Sprintf("%#v", this.OnboardedVpc)+",\n")
+	if this.Coordinates != nil {
+		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3398,6 +5654,14 @@ func (this *GlobalSpecType_AwsTgwSite) GoString() string {
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_AzureVnetSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.GlobalSpecType_AzureVnetSite{` +
+		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType_Bandwidth_500Mbs) GoString() string {
 	if this == nil {
 		return "nil"
@@ -3410,7 +5674,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&cloud_connect.CreateSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -3437,11 +5701,19 @@ func (this *CreateSpecType_AwsTgwSite) GoString() string {
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_AzureVnetSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.CreateSpecType_AzureVnetSite{` +
+		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 8)
 	s = append(s, "&cloud_connect.ReplaceSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -3468,11 +5740,19 @@ func (this *ReplaceSpecType_AwsTgwSite) GoString() string {
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_AzureVnetSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.ReplaceSpecType_AzureVnetSite{` +
+		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 11)
 	s = append(s, "&cloud_connect.GetSpecType{")
 	if this.Cloud != nil {
 		s = append(s, "Cloud: "+fmt.Sprintf("%#v", this.Cloud)+",\n")
@@ -3481,6 +5761,10 @@ func (this *GetSpecType) GoString() string {
 		s = append(s, "Segment: "+fmt.Sprintf("%#v", this.Segment)+",\n")
 	}
 	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "OnboardedVpc: "+fmt.Sprintf("%#v", this.OnboardedVpc)+",\n")
+	if this.Coordinates != nil {
+		s = append(s, "Coordinates: "+fmt.Sprintf("%#v", this.Coordinates)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -3499,6 +5783,78 @@ func (this *GetSpecType_AwsTgwSite) GoString() string {
 	s := strings.Join([]string{`&cloud_connect.GetSpecType_AwsTgwSite{` +
 		`AwsTgwSite:` + fmt.Sprintf("%#v", this.AwsTgwSite) + `}`}, ", ")
 	return s
+}
+func (this *GetSpecType_AzureVnetSite) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&cloud_connect.GetSpecType_AzureVnetSite{` +
+		`AzureVnetSite:` + fmt.Sprintf("%#v", this.AzureVnetSite) + `}`}, ", ")
+	return s
+}
+func (this *LabelFilter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_connect.LabelFilter{")
+	s = append(s, "Label: "+fmt.Sprintf("%#v", this.Label)+",\n")
+	s = append(s, "Op: "+fmt.Sprintf("%#v", this.Op)+",\n")
+	s = append(s, "Value: "+fmt.Sprintf("%#v", this.Value)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CustomerEdge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&cloud_connect.CustomerEdge{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *MetricData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&cloud_connect.MetricData{")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	s = append(s, "Unit: "+fmt.Sprintf("%#v", this.Unit)+",\n")
+	if this.Values != nil {
+		s = append(s, "Values: "+fmt.Sprintf("%#v", this.Values)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SegmentationData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_connect.SegmentationData{")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	if this.Data != nil {
+		s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *EdgeData) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&cloud_connect.EdgeData{")
+	if this.Ce != nil {
+		s = append(s, "Ce: "+fmt.Sprintf("%#v", this.Ce)+",\n")
+	}
+	if this.Segments != nil {
+		s = append(s, "Segments: "+fmt.Sprintf("%#v", this.Segments)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
 	rv := reflect.ValueOf(v)
@@ -3830,6 +6186,131 @@ func (m *AWSVPCAttachmentType_CustomRouting) MarshalToSizedBuffer(dAtA []byte) (
 	}
 	return len(dAtA) - i, nil
 }
+func (m *AzureVnetAttachmentListType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureVnetAttachmentListType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVnetAttachmentListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.VnetList) > 0 {
+		for iNdEx := len(m.VnetList) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.VnetList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AzureVNETAttachmentType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureVNETAttachmentType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVNETAttachmentType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.RoutingChoice != nil {
+		{
+			size := m.RoutingChoice.Size()
+			i -= size
+			if _, err := m.RoutingChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if len(m.VnetId) > 0 {
+		i -= len(m.VnetId)
+		copy(dAtA[i:], m.VnetId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VnetId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.SubscriptionId) > 0 {
+		i -= len(m.SubscriptionId)
+		copy(dAtA[i:], m.SubscriptionId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SubscriptionId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AzureVNETAttachmentType_ManualRouting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVNETAttachmentType_ManualRouting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ManualRouting != nil {
+		{
+			size, err := m.ManualRouting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AzureVNETAttachmentType_CustomRouting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVNETAttachmentType_CustomRouting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CustomRouting != nil {
+		{
+			size, err := m.CustomRouting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
 func (m *DefaultRoute) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4005,6 +6486,116 @@ func (m *AWSDefaultRoutesRouteTable) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
+func (m *AzureRouteTables) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureRouteTables) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureRouteTables) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.RouteTableId) > 0 {
+		for iNdEx := len(m.RouteTableId) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RouteTableId[iNdEx])
+			copy(dAtA[i:], m.RouteTableId[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.RouteTableId[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AzureRouteTableWithStaticRouteListType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureRouteTableWithStaticRouteListType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureRouteTableWithStaticRouteListType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.RouteTables) > 0 {
+		for iNdEx := len(m.RouteTables) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RouteTables[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AzureRouteTableWithStaticRoute) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureRouteTableWithStaticRoute) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureRouteTableWithStaticRoute) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.StaticRoutes) > 0 {
+		for iNdEx := len(m.StaticRoutes) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.StaticRoutes[iNdEx])
+			copy(dAtA[i:], m.StaticRoutes[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.StaticRoutes[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xe2
+		}
+	}
+	if len(m.RouteTableId) > 0 {
+		i -= len(m.RouteTableId)
+		copy(dAtA[i:], m.RouteTableId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.RouteTableId)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AWSRouteTableType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4175,6 +6766,100 @@ func (m *ReplaceAWSTGWSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AzureVNETSiteType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureVNETSiteType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureVNETSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VnetAttachments != nil {
+		{
+			size, err := m.VnetAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.Cred != nil {
+		{
+			size, err := m.Cred.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Site != nil {
+		{
+			size, err := m.Site.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ReplaceAzureVNETSiteType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ReplaceAzureVNETSiteType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceAzureVNETSiteType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.VnetAttachments != nil {
+		{
+			size, err := m.VnetAttachments.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CloudConnectStatusType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4225,6 +6910,27 @@ func (m *CloudConnectStatusType_CloudConnectAwsSite) MarshalToSizedBuffer(dAtA [
 		}
 		i--
 		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CloudConnectStatusType_CloudConnectAzureSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CloudConnectStatusType_CloudConnectAzureSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CloudConnectAzureSite != nil {
+		{
+			size, err := m.CloudConnectAzureSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
@@ -4285,6 +6991,18 @@ func (m *AWSAttachmentsStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if len(m.VpcCidr) > 0 {
+		i -= len(m.VpcCidr)
+		copy(dAtA[i:], m.VpcCidr)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VpcCidr)))
+		i--
+		dAtA[i] = 0x62
+	}
+	if m.VpcDeploymentState != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.VpcDeploymentState))
+		i--
+		dAtA[i] = 0x58
+	}
 	if len(m.Subnets) > 0 {
 		for iNdEx := len(m.Subnets) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -4341,13 +7059,6 @@ func (m *AWSAttachmentsStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i = encodeVarintTypes(dAtA, i, uint64(len(m.DeploymentStatus)))
 		i--
 		dAtA[i] = 0x3a
-	}
-	if len(m.State) > 0 {
-		i -= len(m.State)
-		copy(dAtA[i:], m.State)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.State)))
-		i--
-		dAtA[i] = 0x32
 	}
 	if len(m.VpcOwnerId) > 0 {
 		i -= len(m.VpcOwnerId)
@@ -4450,6 +7161,184 @@ func (m *SubnetStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *AzureAttachmentsListStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureAttachmentsListStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureAttachmentsListStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AttachmentStatus) > 0 {
+		for iNdEx := len(m.AttachmentStatus) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AttachmentStatus[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AzureAttachmentsStatusType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AzureAttachmentsStatusType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AzureAttachmentsStatusType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.InstalledRoutes != nil {
+		{
+			size, err := m.InstalledRoutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	if len(m.Subnets) > 0 {
+		for iNdEx := len(m.Subnets) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Subnets[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x5a
+		}
+	}
+	if len(m.Tags) > 0 {
+		keysForTags := make([]string, 0, len(m.Tags))
+		for k := range m.Tags {
+			keysForTags = append(keysForTags, string(k))
+		}
+		github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+		for iNdEx := len(keysForTags) - 1; iNdEx >= 0; iNdEx-- {
+			v := m.Tags[string(keysForTags[iNdEx])]
+			baseI := i
+			i -= len(v)
+			copy(dAtA[i:], v)
+			i = encodeVarintTypes(dAtA, i, uint64(len(v)))
+			i--
+			dAtA[i] = 0x12
+			i -= len(keysForTags[iNdEx])
+			copy(dAtA[i:], keysForTags[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(keysForTags[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+			i = encodeVarintTypes(dAtA, i, uint64(baseI-i))
+			i--
+			dAtA[i] = 0x52
+		}
+	}
+	if len(m.PeeringSyncLevel) > 0 {
+		i -= len(m.PeeringSyncLevel)
+		copy(dAtA[i:], m.PeeringSyncLevel)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeeringSyncLevel)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.DeploymentStatus) > 0 {
+		i -= len(m.DeploymentStatus)
+		copy(dAtA[i:], m.DeploymentStatus)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DeploymentStatus)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.ProvisioningState) > 0 {
+		i -= len(m.ProvisioningState)
+		copy(dAtA[i:], m.ProvisioningState)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ProvisioningState)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.PeeringState) > 0 {
+		i -= len(m.PeeringState)
+		copy(dAtA[i:], m.PeeringState)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.PeeringState)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if len(m.HubOwnerSubscriptionid) > 0 {
+		i -= len(m.HubOwnerSubscriptionid)
+		copy(dAtA[i:], m.HubOwnerSubscriptionid)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.HubOwnerSubscriptionid)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.HubVnetName) > 0 {
+		i -= len(m.HubVnetName)
+		copy(dAtA[i:], m.HubVnetName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.HubVnetName)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.SpokeVnetId) > 0 {
+		i -= len(m.SpokeVnetId)
+		copy(dAtA[i:], m.SpokeVnetId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SpokeVnetId)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.VnetAttachmentId) > 0 {
+		i -= len(m.VnetAttachmentId)
+		copy(dAtA[i:], m.VnetAttachmentId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.VnetAttachmentId)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.CreationTime != nil {
+		{
+			size, err := m.CreationTime.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4470,6 +7359,36 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.OnboardedVpc != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.OnboardedVpc))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x88
+	}
+	if m.Cloud != nil {
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.State != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.State))
 		i--
@@ -4520,15 +7439,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			size := m.BandwidthOption.Size()
 			i -= size
 			if _, err := m.BandwidthOption.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Cloud != nil {
-		{
-			size := m.Cloud.Size()
-			i -= size
-			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
 				return 0, err
 			}
 		}
@@ -4599,6 +7509,29 @@ func (m *GlobalSpecType_Bandwidth_500Mbs) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_AzureVnetSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureVnetSite != nil {
+		{
+			size, err := m.AzureVnetSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4619,6 +7552,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Cloud != nil {
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.Segment != nil {
 		{
 			size, err := m.Segment.MarshalToSizedBuffer(dAtA[:i])
@@ -4630,15 +7572,6 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x6a
-	}
-	if m.Cloud != nil {
-		{
-			size := m.Cloud.Size()
-			i -= size
-			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -4685,6 +7618,29 @@ func (m *CreateSpecType_AwsTgwSite) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_AzureVnetSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureVnetSite != nil {
+		{
+			size, err := m.AzureVnetSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4705,6 +7661,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Cloud != nil {
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.Segment != nil {
 		{
 			size, err := m.Segment.MarshalToSizedBuffer(dAtA[:i])
@@ -4716,15 +7681,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x6a
-	}
-	if m.Cloud != nil {
-		{
-			size := m.Cloud.Size()
-			i -= size
-			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -4771,6 +7727,29 @@ func (m *ReplaceSpecType_AwsTgwSite) MarshalToSizedBuffer(dAtA []byte) (int, err
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_AzureVnetSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureVnetSite != nil {
+		{
+			size, err := m.AzureVnetSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4791,6 +7770,36 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Coordinates != nil {
+		{
+			size, err := m.Coordinates.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	if m.OnboardedVpc != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.OnboardedVpc))
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x88
+	}
+	if m.Cloud != nil {
+		{
+			size := m.Cloud.Size()
+			i -= size
+			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.State != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.State))
 		i--
@@ -4807,15 +7816,6 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x6a
-	}
-	if m.Cloud != nil {
-		{
-			size := m.Cloud.Size()
-			i -= size
-			if _, err := m.Cloud.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	return len(dAtA) - i, nil
 }
@@ -4862,6 +7862,237 @@ func (m *GetSpecType_AwsTgwSite) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_AzureVnetSite) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_AzureVnetSite) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AzureVnetSite != nil {
+		{
+			size, err := m.AzureVnetSite.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x82
+	}
+	return len(dAtA) - i, nil
+}
+func (m *LabelFilter) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LabelFilter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LabelFilter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Value) > 0 {
+		i -= len(m.Value)
+		copy(dAtA[i:], m.Value)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Value)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Op != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Op))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Label != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Label))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CustomerEdge) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CustomerEdge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomerEdge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MetricData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MetricData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MetricData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Values) > 0 {
+		for iNdEx := len(m.Values) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Values[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if m.Unit != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Unit))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SegmentationData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SegmentationData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SegmentationData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Data) > 0 {
+		for iNdEx := len(m.Data) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Data[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EdgeData) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EdgeData) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EdgeData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Segments) > 0 {
+		for iNdEx := len(m.Segments) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Segments[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if m.Ce != nil {
+		{
+			size, err := m.Ce.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -5014,6 +8245,65 @@ func (m *AWSVPCAttachmentType_CustomRouting) Size() (n int) {
 	}
 	return n
 }
+func (m *AzureVnetAttachmentListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.VnetList) > 0 {
+		for _, e := range m.VnetList {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AzureVNETAttachmentType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.SubscriptionId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.VnetId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.RoutingChoice != nil {
+		n += m.RoutingChoice.Size()
+	}
+	return n
+}
+
+func (m *AzureVNETAttachmentType_ManualRouting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ManualRouting != nil {
+		l = m.ManualRouting.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AzureVNETAttachmentType_CustomRouting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CustomRouting != nil {
+		l = m.CustomRouting.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *DefaultRoute) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5095,6 +8385,55 @@ func (m *AWSDefaultRoutesRouteTable) Size() (n int) {
 	return n
 }
 
+func (m *AzureRouteTables) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.RouteTableId) > 0 {
+		for _, s := range m.RouteTableId {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AzureRouteTableWithStaticRouteListType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.RouteTables) > 0 {
+		for _, e := range m.RouteTables {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AzureRouteTableWithStaticRoute) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.RouteTableId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.StaticRoutes) > 0 {
+		for _, s := range m.StaticRoutes {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *AWSRouteTableType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5161,6 +8500,40 @@ func (m *ReplaceAWSTGWSiteType) Size() (n int) {
 	return n
 }
 
+func (m *AzureVNETSiteType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Site != nil {
+		l = m.Site.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Cred != nil {
+		l = m.Cred.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.VnetAttachments != nil {
+		l = m.VnetAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ReplaceAzureVNETSiteType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.VnetAttachments != nil {
+		l = m.VnetAttachments.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *CloudConnectStatusType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5181,6 +8554,18 @@ func (m *CloudConnectStatusType_CloudConnectAwsSite) Size() (n int) {
 	_ = l
 	if m.CloudConnectAwsSite != nil {
 		l = m.CloudConnectAwsSite.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CloudConnectStatusType_CloudConnectAzureSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CloudConnectAzureSite != nil {
+		l = m.CloudConnectAzureSite.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -5222,10 +8607,6 @@ func (m *AWSAttachmentsStatusType) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	l = len(m.State)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	l = len(m.DeploymentStatus)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -5247,6 +8628,13 @@ func (m *AWSAttachmentsStatusType) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
+	}
+	if m.VpcDeploymentState != 0 {
+		n += 1 + sovTypes(uint64(m.VpcDeploymentState))
+	}
+	l = len(m.VpcCidr)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -5284,6 +8672,84 @@ func (m *SubnetStatusType) Size() (n int) {
 	return n
 }
 
+func (m *AzureAttachmentsListStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AttachmentStatus) > 0 {
+		for _, e := range m.AttachmentStatus {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AzureAttachmentsStatusType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CreationTime != nil {
+		l = m.CreationTime.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.VnetAttachmentId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.SpokeVnetId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.HubVnetName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.HubOwnerSubscriptionid)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.PeeringState)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ProvisioningState)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.DeploymentStatus)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.PeeringSyncLevel)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Tags) > 0 {
+		for k, v := range m.Tags {
+			_ = k
+			_ = v
+			mapEntrySize := 1 + len(k) + sovTypes(uint64(len(k))) + 1 + len(v) + sovTypes(uint64(len(v)))
+			n += mapEntrySize + 1 + sovTypes(uint64(mapEntrySize))
+		}
+	}
+	if len(m.Subnets) > 0 {
+		for _, e := range m.Subnets {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.InstalledRoutes != nil {
+		l = m.InstalledRoutes.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5314,6 +8780,13 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.State != 0 {
 		n += 1 + sovTypes(uint64(m.State))
+	}
+	if m.OnboardedVpc != 0 {
+		n += 2 + sovTypes(uint64(m.OnboardedVpc))
+	}
+	if m.Coordinates != nil {
+		l = m.Coordinates.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -5351,6 +8824,18 @@ func (m *GlobalSpecType_Bandwidth_500Mbs) Size() (n int) {
 	if m.Bandwidth_500Mbs != nil {
 		l = m.Bandwidth_500Mbs.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_AzureVnetSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureVnetSite != nil {
+		l = m.AzureVnetSite.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -5394,6 +8879,18 @@ func (m *CreateSpecType_AwsTgwSite) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_AzureVnetSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureVnetSite != nil {
+		l = m.AzureVnetSite.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5434,6 +8931,18 @@ func (m *ReplaceSpecType_AwsTgwSite) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_AzureVnetSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureVnetSite != nil {
+		l = m.AzureVnetSite.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5449,6 +8958,13 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.State != 0 {
 		n += 1 + sovTypes(uint64(m.State))
+	}
+	if m.OnboardedVpc != 0 {
+		n += 2 + sovTypes(uint64(m.OnboardedVpc))
+	}
+	if m.Coordinates != nil {
+		l = m.Coordinates.Size()
+		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -5474,6 +8990,107 @@ func (m *GetSpecType_AwsTgwSite) Size() (n int) {
 	if m.AwsTgwSite != nil {
 		l = m.AwsTgwSite.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_AzureVnetSite) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AzureVnetSite != nil {
+		l = m.AzureVnetSite.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *LabelFilter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Label != 0 {
+		n += 1 + sovTypes(uint64(m.Label))
+	}
+	if m.Op != 0 {
+		n += 1 + sovTypes(uint64(m.Op))
+	}
+	l = len(m.Value)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CustomerEdge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *MetricData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Type != 0 {
+		n += 1 + sovTypes(uint64(m.Type))
+	}
+	if m.Unit != 0 {
+		n += 1 + sovTypes(uint64(m.Unit))
+	}
+	if len(m.Values) > 0 {
+		for _, e := range m.Values {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SegmentationData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Type != 0 {
+		n += 1 + sovTypes(uint64(m.Type))
+	}
+	if len(m.Data) > 0 {
+		for _, e := range m.Data {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *EdgeData) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ce != nil {
+		l = m.Ce.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Segments) > 0 {
+		for _, e := range m.Segments {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -5588,6 +9205,53 @@ func (this *AWSVPCAttachmentType_CustomRouting) String() string {
 	}, "")
 	return s
 }
+func (this *AzureVnetAttachmentListType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForVnetList := "[]*AzureVNETAttachmentType{"
+	for _, f := range this.VnetList {
+		repeatedStringForVnetList += strings.Replace(f.String(), "AzureVNETAttachmentType", "AzureVNETAttachmentType", 1) + ","
+	}
+	repeatedStringForVnetList += "}"
+	s := strings.Join([]string{`&AzureVnetAttachmentListType{`,
+		`VnetList:` + repeatedStringForVnetList + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVNETAttachmentType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVNETAttachmentType{`,
+		`SubscriptionId:` + fmt.Sprintf("%v", this.SubscriptionId) + `,`,
+		`VnetId:` + fmt.Sprintf("%v", this.VnetId) + `,`,
+		`RoutingChoice:` + fmt.Sprintf("%v", this.RoutingChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVNETAttachmentType_ManualRouting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVNETAttachmentType_ManualRouting{`,
+		`ManualRouting:` + strings.Replace(fmt.Sprintf("%v", this.ManualRouting), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureVNETAttachmentType_CustomRouting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVNETAttachmentType_CustomRouting{`,
+		`CustomRouting:` + strings.Replace(fmt.Sprintf("%v", this.CustomRouting), "AzureRouteTableWithStaticRouteListType", "AzureRouteTableWithStaticRouteListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *DefaultRoute) String() string {
 	if this == nil {
 		return "nil"
@@ -5653,6 +9317,42 @@ func (this *AWSDefaultRoutesRouteTable) String() string {
 	}, "")
 	return s
 }
+func (this *AzureRouteTables) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureRouteTables{`,
+		`RouteTableId:` + fmt.Sprintf("%v", this.RouteTableId) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureRouteTableWithStaticRouteListType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForRouteTables := "[]*AzureRouteTableWithStaticRoute{"
+	for _, f := range this.RouteTables {
+		repeatedStringForRouteTables += strings.Replace(f.String(), "AzureRouteTableWithStaticRoute", "AzureRouteTableWithStaticRoute", 1) + ","
+	}
+	repeatedStringForRouteTables += "}"
+	s := strings.Join([]string{`&AzureRouteTableWithStaticRouteListType{`,
+		`RouteTables:` + repeatedStringForRouteTables + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureRouteTableWithStaticRoute) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureRouteTableWithStaticRoute{`,
+		`RouteTableId:` + fmt.Sprintf("%v", this.RouteTableId) + `,`,
+		`StaticRoutes:` + fmt.Sprintf("%v", this.StaticRoutes) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AWSRouteTableType) String() string {
 	if this == nil {
 		return "nil"
@@ -5696,6 +9396,28 @@ func (this *ReplaceAWSTGWSiteType) String() string {
 	}, "")
 	return s
 }
+func (this *AzureVNETSiteType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AzureVNETSiteType{`,
+		`Site:` + strings.Replace(fmt.Sprintf("%v", this.Site), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Cred:` + strings.Replace(fmt.Sprintf("%v", this.Cred), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`VnetAttachments:` + strings.Replace(this.VnetAttachments.String(), "AzureVnetAttachmentListType", "AzureVnetAttachmentListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceAzureVNETSiteType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceAzureVNETSiteType{`,
+		`VnetAttachments:` + strings.Replace(this.VnetAttachments.String(), "AzureVnetAttachmentListType", "AzureVnetAttachmentListType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CloudConnectStatusType) String() string {
 	if this == nil {
 		return "nil"
@@ -5712,6 +9434,16 @@ func (this *CloudConnectStatusType_CloudConnectAwsSite) String() string {
 	}
 	s := strings.Join([]string{`&CloudConnectStatusType_CloudConnectAwsSite{`,
 		`CloudConnectAwsSite:` + strings.Replace(fmt.Sprintf("%v", this.CloudConnectAwsSite), "AWSAttachmentsListStatusType", "AWSAttachmentsListStatusType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CloudConnectStatusType_CloudConnectAzureSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CloudConnectStatusType_CloudConnectAzureSite{`,
+		`CloudConnectAzureSite:` + strings.Replace(fmt.Sprintf("%v", this.CloudConnectAzureSite), "AzureAttachmentsListStatusType", "AzureAttachmentsListStatusType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5755,11 +9487,12 @@ func (this *AWSAttachmentsStatusType) String() string {
 		`TgwAttachmentId:` + fmt.Sprintf("%v", this.TgwAttachmentId) + `,`,
 		`VpcId:` + fmt.Sprintf("%v", this.VpcId) + `,`,
 		`VpcOwnerId:` + fmt.Sprintf("%v", this.VpcOwnerId) + `,`,
-		`State:` + fmt.Sprintf("%v", this.State) + `,`,
 		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
 		`Tags:` + mapStringForTags + `,`,
 		`InstalledRoutes:` + strings.Replace(this.InstalledRoutes.String(), "AWSRouteTableListType", "AWSRouteTableListType", 1) + `,`,
 		`Subnets:` + repeatedStringForSubnets + `,`,
+		`VpcDeploymentState:` + fmt.Sprintf("%v", this.VpcDeploymentState) + `,`,
+		`VpcCidr:` + fmt.Sprintf("%v", this.VpcCidr) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5775,6 +9508,57 @@ func (this *SubnetStatusType) String() string {
 		`AvailabilityZone:` + fmt.Sprintf("%v", this.AvailabilityZone) + `,`,
 		`SubnetId:` + fmt.Sprintf("%v", this.SubnetId) + `,`,
 		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureAttachmentsListStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForAttachmentStatus := "[]*AzureAttachmentsStatusType{"
+	for _, f := range this.AttachmentStatus {
+		repeatedStringForAttachmentStatus += strings.Replace(f.String(), "AzureAttachmentsStatusType", "AzureAttachmentsStatusType", 1) + ","
+	}
+	repeatedStringForAttachmentStatus += "}"
+	s := strings.Join([]string{`&AzureAttachmentsListStatusType{`,
+		`AttachmentStatus:` + repeatedStringForAttachmentStatus + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AzureAttachmentsStatusType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForSubnets := "[]*SubnetStatusType{"
+	for _, f := range this.Subnets {
+		repeatedStringForSubnets += strings.Replace(f.String(), "SubnetStatusType", "SubnetStatusType", 1) + ","
+	}
+	repeatedStringForSubnets += "}"
+	keysForTags := make([]string, 0, len(this.Tags))
+	for k, _ := range this.Tags {
+		keysForTags = append(keysForTags, k)
+	}
+	github_com_gogo_protobuf_sortkeys.Strings(keysForTags)
+	mapStringForTags := "map[string]string{"
+	for _, k := range keysForTags {
+		mapStringForTags += fmt.Sprintf("%v: %v,", k, this.Tags[k])
+	}
+	mapStringForTags += "}"
+	s := strings.Join([]string{`&AzureAttachmentsStatusType{`,
+		`CreationTime:` + strings.Replace(fmt.Sprintf("%v", this.CreationTime), "Timestamp", "types.Timestamp", 1) + `,`,
+		`VnetAttachmentId:` + fmt.Sprintf("%v", this.VnetAttachmentId) + `,`,
+		`SpokeVnetId:` + fmt.Sprintf("%v", this.SpokeVnetId) + `,`,
+		`HubVnetName:` + fmt.Sprintf("%v", this.HubVnetName) + `,`,
+		`HubOwnerSubscriptionid:` + fmt.Sprintf("%v", this.HubOwnerSubscriptionid) + `,`,
+		`PeeringState:` + fmt.Sprintf("%v", this.PeeringState) + `,`,
+		`ProvisioningState:` + fmt.Sprintf("%v", this.ProvisioningState) + `,`,
+		`DeploymentStatus:` + fmt.Sprintf("%v", this.DeploymentStatus) + `,`,
+		`PeeringSyncLevel:` + fmt.Sprintf("%v", this.PeeringSyncLevel) + `,`,
+		`Tags:` + mapStringForTags + `,`,
+		`Subnets:` + repeatedStringForSubnets + `,`,
+		`InstalledRoutes:` + strings.Replace(this.InstalledRoutes.String(), "AzureRouteTableWithStaticRouteListType", "AzureRouteTableWithStaticRouteListType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5800,6 +9584,8 @@ func (this *GlobalSpecType) String() string {
 		`Segment:` + strings.Replace(fmt.Sprintf("%v", this.Segment), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`VirtualNetwork:` + repeatedStringForVirtualNetwork + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
+		`OnboardedVpc:` + fmt.Sprintf("%v", this.OnboardedVpc) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5830,6 +9616,16 @@ func (this *GlobalSpecType_Bandwidth_500Mbs) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_Bandwidth_500Mbs{`,
 		`Bandwidth_500Mbs:` + strings.Replace(fmt.Sprintf("%v", this.Bandwidth_500Mbs), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_AzureVnetSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_AzureVnetSite{`,
+		`AzureVnetSite:` + strings.Replace(fmt.Sprintf("%v", this.AzureVnetSite), "AzureVNETSiteType", "AzureVNETSiteType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5865,6 +9661,16 @@ func (this *CreateSpecType_AwsTgwSite) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_AzureVnetSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_AzureVnetSite{`,
+		`AzureVnetSite:` + strings.Replace(fmt.Sprintf("%v", this.AzureVnetSite), "AzureVNETSiteType", "AzureVNETSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -5896,6 +9702,16 @@ func (this *ReplaceSpecType_AwsTgwSite) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_AzureVnetSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_AzureVnetSite{`,
+		`AzureVnetSite:` + strings.Replace(fmt.Sprintf("%v", this.AzureVnetSite), "AzureVNETSiteType", "AzureVNETSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -5904,6 +9720,8 @@ func (this *GetSpecType) String() string {
 		`Cloud:` + fmt.Sprintf("%v", this.Cloud) + `,`,
 		`Segment:` + strings.Replace(fmt.Sprintf("%v", this.Segment), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
+		`OnboardedVpc:` + fmt.Sprintf("%v", this.OnboardedVpc) + `,`,
+		`Coordinates:` + strings.Replace(fmt.Sprintf("%v", this.Coordinates), "Coordinates", "site.Coordinates", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -5924,6 +9742,87 @@ func (this *GetSpecType_AwsTgwSite) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_AwsTgwSite{`,
 		`AwsTgwSite:` + strings.Replace(fmt.Sprintf("%v", this.AwsTgwSite), "AWSTGWSiteType", "AWSTGWSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_AzureVnetSite) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_AzureVnetSite{`,
+		`AzureVnetSite:` + strings.Replace(fmt.Sprintf("%v", this.AzureVnetSite), "AzureVNETSiteType", "AzureVNETSiteType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *LabelFilter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&LabelFilter{`,
+		`Label:` + fmt.Sprintf("%v", this.Label) + `,`,
+		`Op:` + fmt.Sprintf("%v", this.Op) + `,`,
+		`Value:` + fmt.Sprintf("%v", this.Value) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomerEdge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomerEdge{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *MetricData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForValues := "[]*MetricValue{"
+	for _, f := range this.Values {
+		repeatedStringForValues += strings.Replace(fmt.Sprintf("%v", f), "MetricValue", "schema.MetricValue", 1) + ","
+	}
+	repeatedStringForValues += "}"
+	s := strings.Join([]string{`&MetricData{`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`Unit:` + fmt.Sprintf("%v", this.Unit) + `,`,
+		`Values:` + repeatedStringForValues + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SegmentationData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForData := "[]*MetricData{"
+	for _, f := range this.Data {
+		repeatedStringForData += strings.Replace(f.String(), "MetricData", "MetricData", 1) + ","
+	}
+	repeatedStringForData += "}"
+	s := strings.Join([]string{`&SegmentationData{`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`Data:` + repeatedStringForData + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *EdgeData) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForSegments := "[]*SegmentationData{"
+	for _, f := range this.Segments {
+		repeatedStringForSegments += strings.Replace(f.String(), "SegmentationData", "SegmentationData", 1) + ","
+	}
+	repeatedStringForSegments += "}"
+	s := strings.Join([]string{`&EdgeData{`,
+		`Ce:` + strings.Replace(this.Ce.String(), "CustomerEdge", "CustomerEdge", 1) + `,`,
+		`Segments:` + repeatedStringForSegments + `,`,
 		`}`,
 	}, "")
 	return s
@@ -6735,6 +10634,280 @@ func (m *AWSVPCAttachmentType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *AzureVnetAttachmentListType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureVnetAttachmentListType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureVnetAttachmentListType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VnetList", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VnetList = append(m.VnetList, &AzureVNETAttachmentType{})
+			if err := m.VnetList[len(m.VnetList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureVNETAttachmentType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureVNETAttachmentType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureVNETAttachmentType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubscriptionId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SubscriptionId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VnetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VnetId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ManualRouting", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RoutingChoice = &AzureVNETAttachmentType_ManualRouting{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomRouting", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureRouteTableWithStaticRouteListType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.RoutingChoice = &AzureVNETAttachmentType_CustomRouting{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *DefaultRoute) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -7090,6 +11263,295 @@ func (m *AWSDefaultRoutesRouteTable) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.RouteTableId = append(m.RouteTableId, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureRouteTables) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureRouteTables: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureRouteTables: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTableId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouteTableId = append(m.RouteTableId, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureRouteTableWithStaticRouteListType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureRouteTableWithStaticRouteListType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureRouteTableWithStaticRouteListType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTables", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouteTables = append(m.RouteTables, &AzureRouteTableWithStaticRoute{})
+			if err := m.RouteTables[len(m.RouteTables)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureRouteTableWithStaticRoute) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureRouteTableWithStaticRoute: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureRouteTableWithStaticRoute: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RouteTableId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RouteTableId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 108:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StaticRoutes", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StaticRoutes = append(m.StaticRoutes, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -7571,6 +12033,256 @@ func (m *ReplaceAWSTGWSiteType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *AzureVNETSiteType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureVNETSiteType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureVNETSiteType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Site", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Site == nil {
+				m.Site = &views.ObjectRefType{}
+			}
+			if err := m.Site.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cred", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Cred == nil {
+				m.Cred = &views.ObjectRefType{}
+			}
+			if err := m.Cred.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VnetAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VnetAttachments == nil {
+				m.VnetAttachments = &AzureVnetAttachmentListType{}
+			}
+			if err := m.VnetAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ReplaceAzureVNETSiteType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ReplaceAzureVNETSiteType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ReplaceAzureVNETSiteType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VnetAttachments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.VnetAttachments == nil {
+				m.VnetAttachments = &AzureVnetAttachmentListType{}
+			}
+			if err := m.VnetAttachments.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *CloudConnectStatusType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -7634,6 +12346,41 @@ func (m *CloudConnectStatusType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.CloudConnectDeployment = &CloudConnectStatusType_CloudConnectAwsSite{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloudConnectAzureSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureAttachmentsListStatusType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CloudConnectDeployment = &CloudConnectStatusType_CloudConnectAzureSite{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -7907,38 +12654,6 @@ func (m *AWSAttachmentsStatusType) Unmarshal(dAtA []byte) error {
 			}
 			m.VpcOwnerId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.State = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
@@ -8167,6 +12882,57 @@ func (m *AWSAttachmentsStatusType) Unmarshal(dAtA []byte) error {
 			if err := m.Subnets[len(m.Subnets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcDeploymentState", wireType)
+			}
+			m.VpcDeploymentState = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.VpcDeploymentState |= CloudConnectVPCStateType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VpcCidr", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VpcCidr = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -8412,6 +13178,635 @@ func (m *SubnetStatusType) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Status = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureAttachmentsListStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureAttachmentsListStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureAttachmentsListStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttachmentStatus", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AttachmentStatus = append(m.AttachmentStatus, &AzureAttachmentsStatusType{})
+			if err := m.AttachmentStatus[len(m.AttachmentStatus)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AzureAttachmentsStatusType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AzureAttachmentsStatusType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AzureAttachmentsStatusType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CreationTime", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CreationTime == nil {
+				m.CreationTime = &types.Timestamp{}
+			}
+			if err := m.CreationTime.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field VnetAttachmentId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.VnetAttachmentId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SpokeVnetId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SpokeVnetId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HubVnetName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HubVnetName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HubOwnerSubscriptionid", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HubOwnerSubscriptionid = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PeeringState", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PeeringState = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ProvisioningState", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ProvisioningState = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DeploymentStatus", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DeploymentStatus = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PeeringSyncLevel", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PeeringSyncLevel = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Tags", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Tags == nil {
+				m.Tags = make(map[string]string)
+			}
+			var mapkey string
+			var mapvalue string
+			for iNdEx < postIndex {
+				entryPreIndex := iNdEx
+				var wire uint64
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					wire |= uint64(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				fieldNum := int32(wire >> 3)
+				if fieldNum == 1 {
+					var stringLenmapkey uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapkey |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapkey := int(stringLenmapkey)
+					if intStringLenmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapkey := iNdEx + intStringLenmapkey
+					if postStringIndexmapkey < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapkey > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
+					iNdEx = postStringIndexmapkey
+				} else if fieldNum == 2 {
+					var stringLenmapvalue uint64
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						stringLenmapvalue |= uint64(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					intStringLenmapvalue := int(stringLenmapvalue)
+					if intStringLenmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					postStringIndexmapvalue := iNdEx + intStringLenmapvalue
+					if postStringIndexmapvalue < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if postStringIndexmapvalue > l {
+						return io.ErrUnexpectedEOF
+					}
+					mapvalue = string(dAtA[iNdEx:postStringIndexmapvalue])
+					iNdEx = postStringIndexmapvalue
+				} else {
+					iNdEx = entryPreIndex
+					skippy, err := skipTypes(dAtA[iNdEx:])
+					if err != nil {
+						return err
+					}
+					if skippy < 0 {
+						return ErrInvalidLengthTypes
+					}
+					if (iNdEx + skippy) > postIndex {
+						return io.ErrUnexpectedEOF
+					}
+					iNdEx += skippy
+				}
+			}
+			m.Tags[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Subnets", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Subnets = append(m.Subnets, &SubnetStatusType{})
+			if err := m.Subnets[len(m.Subnets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field InstalledRoutes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.InstalledRoutes == nil {
+				m.InstalledRoutes = &AzureRouteTableWithStaticRouteListType{}
+			}
+			if err := m.InstalledRoutes.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -8694,6 +14089,96 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureVnetSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureVNETSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GlobalSpecType_AzureVnetSite{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OnboardedVpc", wireType)
+			}
+			m.OnboardedVpc = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OnboardedVpc |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Coordinates", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Coordinates == nil {
+				m.Coordinates = &site.Coordinates{}
+			}
+			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -8853,6 +14338,41 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureVnetSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureVNETSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &CreateSpecType_AzureVnetSite{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -9011,6 +14531,41 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.Segment.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureVnetSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureVNETSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &ReplaceSpecType_AzureVnetSite{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -9190,6 +14745,658 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 16:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AzureVnetSite", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AzureVNETSiteType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Cloud = &GetSpecType_AzureVnetSite{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OnboardedVpc", wireType)
+			}
+			m.OnboardedVpc = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.OnboardedVpc |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Coordinates", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Coordinates == nil {
+				m.Coordinates = &site.Coordinates{}
+			}
+			if err := m.Coordinates.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LabelFilter) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LabelFilter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LabelFilter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Label", wireType)
+			}
+			m.Label = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Label |= Label(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Op", wireType)
+			}
+			m.Op = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Op |= schema.MetricLabelOp(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Value = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomerEdge) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomerEdge: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomerEdge: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MetricData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MetricData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MetricData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= FieldSelector(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Unit", wireType)
+			}
+			m.Unit = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Unit |= schema.UnitType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Values", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Values = append(m.Values, &schema.MetricValue{})
+			if err := m.Values[len(m.Values)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SegmentationData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SegmentationData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SegmentationData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= TrafficType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Data = append(m.Data, &MetricData{})
+			if err := m.Data[len(m.Data)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EdgeData) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EdgeData: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EdgeData: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ce", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ce == nil {
+				m.Ce = &CustomerEdge{}
+			}
+			if err := m.Ce.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Segments", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Segments = append(m.Segments, &SegmentationData{})
+			if err := m.Segments[len(m.Segments)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

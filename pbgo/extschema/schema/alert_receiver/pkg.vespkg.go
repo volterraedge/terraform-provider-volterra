@@ -29,9 +29,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.alert_receiver.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.alert_receiver.ReplaceResponse"] = ReplaceResponseValidator()
 
-	vr["ves.io.schema.alert_receiver.AlertPolicyMatch"] = AlertPolicyMatchValidator()
-	vr["ves.io.schema.alert_receiver.AlertPolicyMatchRequest"] = AlertPolicyMatchRequestValidator()
-	vr["ves.io.schema.alert_receiver.AlertPolicyMatchResponse"] = AlertPolicyMatchResponseValidator()
 	vr["ves.io.schema.alert_receiver.ConfirmAlertReceiverRequest"] = ConfirmAlertReceiverRequestValidator()
 	vr["ves.io.schema.alert_receiver.ConfirmAlertReceiverResponse"] = ConfirmAlertReceiverResponseValidator()
 	vr["ves.io.schema.alert_receiver.TestAlertReceiverRequest"] = TestAlertReceiverRequestValidator()

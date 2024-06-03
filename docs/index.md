@@ -50,5 +50,3 @@ provider "volterra" {
 
   - `VES_P12_CONTENT`: Base64-encoded P12 bundle content.
   - **Password:** Set the P12 file password via the `VES_P12_PASSWORD` environment variable.
-
-  

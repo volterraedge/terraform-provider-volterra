@@ -23,72 +23,25 @@ resource "volterra_apm" "example" {
   // One of the arguments from this list "https_management" must be set
 
   https_management {
-    // One of the arguments from this list "advertise_on_internet_default_vip advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet" must be set
+    // One of the arguments from this list "advertise_on_internet advertise_on_slo_internet_vip advertise_on_sli_vip advertise_on_slo_vip advertise_on_slo_sli disable_local do_not_advertise_on_internet advertise_on_internet_default_vip" must be set
 
-    advertise_on_slo_sli {
-      // One of the arguments from this list "use_mtls no_mtls" must be set
-
-      use_mtls {
-        // One of the arguments from this list "no_crl crl" must be set
-        no_crl = true
-
-        // One of the arguments from this list "trusted_ca_url trusted_ca" must be set
-
-        trusted_ca {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-        // One of the arguments from this list "xfcc_disabled xfcc_options" must be set
-        xfcc_disabled = true
-      }
-
-      tls_certificates {
-        certificate_url = "value"
-
-        description = "Certificate used in production environment"
-
-        // One of the arguments from this list "use_system_defaults disable_ocsp_stapling custom_hash_algorithms" must be set
-
-        use_system_defaults {}
-        private_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "value"
-
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
-
-          wingman_secret_info {
-            name = "ChargeBack-API-Key"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "medium_security low_security custom_security default_security" must be set
-        default_security = true
-      }
-    }
+    do_not_advertise_on_internet = true
 
     domain_suffix = "foo.com"
 
-    // One of the arguments from this list "do_not_advertise advertise_on_public_default_vip advertise_on_public" must be set
+    // One of the arguments from this list "advertise_on_public_default_vip advertise_on_public do_not_advertise" can be set
+
     do_not_advertise = true
 
     // One of the arguments from this list "default_https_port https_port" must be set
-    default_https_port = true
+
+    https_port = "https_port"
   }
 
   // One of the arguments from this list "aws_site_type_choice baremetal_site_type_choice" must be set
 
-  aws_site_type_choice {
-    apm_aws_site {
+  baremetal_site_type_choice {
+    f5_bare_metal_site {
       admin_password {
         blindfold_secret_info_internal {
           decryption_provider = "value"
@@ -102,74 +55,94 @@ resource "volterra_apm" "example" {
 
         // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
 
-        vault_secret_info {
-          key = "key_pem"
+        blindfold_secret_info {
+          decryption_provider = "value"
 
-          location = "v1/data/vhost_key"
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
 
-          provider = "vault-vh-provider"
-
-          secret_encoding = "secret_encoding"
-
-          version = "1"
+          store_provider = "value"
         }
       }
 
       admin_username = "admin"
 
-      aws_tgw_site {
-        aws_tgw_site {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
+      bare_metal_site {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
 
-      endpoint_service {
-        // One of the arguments from this list "disable_advertise_on_slo_ip advertise_on_slo_ip advertise_on_slo_ip_external" must be set
-        disable_advertise_on_slo_ip = true
+      bigiq_instance {
+        license_pool_name = "apm_msp_license_pool1"
 
-        // One of the arguments from this list "automatic_vip configured_vip" must be set
-        automatic_vip = true
+        license_server_ip = "192.168.0.77"
 
-        // One of the arguments from this list "default_tcp_ports http_port https_port custom_tcp_ports no_tcp_ports" must be set
-        default_tcp_ports = true
+        password {
+          blindfold_secret_info_internal {
+            decryption_provider = "value"
 
-        // One of the arguments from this list "no_udp_ports custom_udp_ports" must be set
-        no_udp_ports = true
+            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+            store_provider = "value"
+          }
+
+          secret_encoding_type = "secret_encoding_type"
+
+          // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+          vault_secret_info {
+            key = "key_pem"
+
+            location = "v1/data/vhost_key"
+
+            provider = "vault-vh-provider"
+
+            secret_encoding = "secret_encoding"
+
+            version = "1"
+          }
+        }
+
+        sku_name = "F5-BIG-MSP-A-BT-1G-EXTHSM-1"
+
+        username = "admin"
       }
 
       nodes {
-        aws_az_name = "us-west-2a"
+        bm_node_memory_size = "bm_node_memory_size"
 
-        // One of the arguments from this list "reserved_mgmt_subnet mgmt_subnet" must be set
+        bm_virtual_cpu_count = "bm_virtual_cpu_count"
 
-        mgmt_subnet {
-          // One of the arguments from this list "subnet_param existing_subnet_id" must be set
-
-          subnet_param {
-            ipv4 = "10.1.2.0/24"
-
-            ipv6 = "1234:568:abcd:9100::/64"
+        external_interface {
+          interface {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
           }
+
+          network_gateway = "10.2.3.0"
+
+          network_self_ip = "10.2.3.0/24"
         }
+
+        internal_interface {
+          interface {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+
+          network_gateway = "10.2.3.0"
+
+          network_self_ip = "10.2.3.0/24"
+        }
+
         node_name = "node1"
-        // One of the arguments from this list "automatic_prefix tunnel_prefix" must be set
-        automatic_prefix = true
       }
+
+      public_download_url = "https://imagepath.com/bigip_ve"
 
       ssh_key = "ssh-rsa AAAAB..."
-
-      tags = {
-        "key1" = "value1"
-      }
-    }
-
-    // One of the arguments from this list "market_place_image" must be set
-
-    market_place_image {
-      // One of the arguments from this list "BestPlusPayG200Mbps best_plus_payg_1gbps" must be set
-      BestPlusPayG200Mbps = true
     }
   }
 }
@@ -293,7 +266,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+###### One of the arguments from this list "custom_hash_algorithms, use_system_defaults, disable_ocsp_stapling" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -339,7 +312,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
-###### One of the arguments from this list "medium_security, low_security, custom_security, default_security" must be set
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 
@@ -389,7 +362,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+###### One of the arguments from this list "disable_ocsp_stapling, custom_hash_algorithms, use_system_defaults" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
@@ -403,7 +376,7 @@ for example, domain.com and *.domain.com - but use different signature algorithm
 
 Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
-###### One of the arguments from this list "low_security, custom_security, default_security, medium_security" must be set
+###### One of the arguments from this list "default_security, medium_security, low_security, custom_security" must be set
 
 `custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
 
@@ -429,7 +402,7 @@ Secret admin password for BIG-IP.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "clear_secret_info, wingman_secret_info, blindfold_secret_info, vault_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -457,7 +430,7 @@ External service type is Endpoint service.
 
 `disable_advertise_on_slo_ip` - (Optional) Do not Advertise this loadbalancer on Site Local Outside network address (`Bool`).
 
-###### One of the arguments from this list "configured_vip, automatic_vip" must be set
+###### One of the arguments from this list "automatic_vip, configured_vip" must be set
 
 `automatic_vip` - (Optional) System will automatically select a VIP (`Bool`).
 
@@ -545,7 +518,7 @@ Password of the user used to access BIG-IQ to activate the license.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -609,7 +582,7 @@ Secret admin password for BIG-IP.
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "wingman_secret_info, blindfold_secret_info, vault_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
@@ -671,7 +644,7 @@ Enable HTTPS based management.
 
 `domain_suffix` - (Required) Domain suffix will be used along with node name to form URL to access node management (`String`).
 
-###### One of the arguments from this list "advertise_on_public_default_vip, advertise_on_public, do_not_advertise" can be set
+###### One of the arguments from this list "do_not_advertise, advertise_on_public_default_vip, advertise_on_public" can be set
 
 `advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Internet Choice Advertise On Public ](#internet-choice-advertise-on-public) below for details.(Deprecated)
 

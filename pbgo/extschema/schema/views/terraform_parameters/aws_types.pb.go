@@ -959,7 +959,7 @@ type AWSTGWType struct {
 	// VPC Attachments
 	//
 	// x-displayName: "VPC Attachments"
-	// VPC Attachemnts
+	// VPC Attachments
 	VpcIds []string `protobuf:"bytes,12,rep,name=vpc_ids,json=vpcIds,proto3" json:"vpc_ids,omitempty"`
 	// Hub Tunnel information
 	// x-displayName: "Hub Tunnel Information"

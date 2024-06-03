@@ -20,6 +20,7 @@ import (
 	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 )
 
 // resourceVolterraServicePolicy is implementation of Volterra's ServicePolicy resources
@@ -4468,6 +4469,8 @@ func setServicePolicyFields(client *APIClient, d *schema.ResourceData, resp vesa
 	d.Set("name", metadata.GetName())
 
 	d.Set("namespace", metadata.GetNamespace())
+
+	drift.DriftDetectionSpecServicePolicy(d, resp)
 
 	return nil
 }
