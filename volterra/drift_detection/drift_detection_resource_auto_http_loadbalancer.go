@@ -2272,8 +2272,6 @@ func FlattenTlsCertificates(x []*ves_io_schema.TlsCertificateType) []interface{}
 			"certificate_url":        val.GetCertificateUrl(),
 			"description":            val.GetDescription(),
 			"custom_hash_algorithms": FlattenCustomHashAlgorithms(val.GetCustomHashAlgorithms()),
-			"disable_ocsp_stapling":  isEmpty(val.GetDisableOcspStapling()),
-			"use_system_defaults":    isEmpty(val.GetUseSystemDefaults()),
 			"private_key":            FlattenPrivateKey(val.GetPrivateKey()),
 		}
 		rslt = append(rslt, mapValue)
