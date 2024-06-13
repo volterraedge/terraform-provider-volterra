@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -1019,7 +1021,7 @@ func resourceVolterraSetRRSETRecord() *schema.Resource {
 func resourceVolterraSetRRSETRecordCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 	var dnsZoneName, groupName string
-	var RrSetGroup *ves_io_schema_dns_zone.RRSet
+	rslt := make([]*ves_io_schema_dns_zone.RRSet, 0)
 	if v, ok := d.GetOk("dns_zone_name"); ok {
 		dnsZoneName = v.(string)
 	}
@@ -1029,7 +1031,7 @@ func resourceVolterraSetRRSETRecordCreate(d *schema.ResourceData, meta interface
 	if v, ok := d.GetOk("rrset"); ok {
 		sl := v.([]interface{})
 		for _, set := range sl {
-			RrSetGroup = &ves_io_schema_dns_zone.RRSet{}
+			RrSetGroup := &ves_io_schema_dns_zone.RRSet{}
 			RrSetGroupMapStrToI := set.(map[string]interface{})
 
 			if w, ok := RrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -2204,23 +2206,29 @@ func resourceVolterraSetRRSETRecordCreate(d *schema.ResourceData, meta interface
 				}
 
 			}
-
+			rslt = append(rslt, RrSetGroup)
 		}
+	}
 
-	}
-	req := &ves_io_schema_dns_zone_rrset.CreateRequest{
-		DnsZoneName: dnsZoneName,
-		GroupName:   groupName,
-		Rrset:       RrSetGroup,
-	}
-	yamlReq, err := codec.ToYAML(req)
-	if err != nil {
-		return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
-	}
-	log.Printf("[DEBUG] setting volterra record create request: %+v", req)
-	_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(urirrset, dnsZoneName, groupName), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Create"), yamlReq)
-	if err != nil {
-		return fmt.Errorf("Error encountered while creating a record. Error: %s", err)
+	for _, rrSetGroup := range rslt {
+		req := &ves_io_schema_dns_zone_rrset.CreateRequest{
+			DnsZoneName: dnsZoneName,
+			GroupName:   groupName,
+			Rrset:       rrSetGroup,
+		}
+		yamlReq, err := codec.ToYAML(req)
+		if err != nil {
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
+		}
+		log.Printf("[DEBUG] setting volterra record create request: %+v", req)
+		_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(urirrset, dnsZoneName, groupName), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Create"), yamlReq)
+		if err != nil {
+			if strings.Contains(err.Error(), "contains duplicate RR type: ") {
+				continue
+			}
+			return fmt.Errorf("Error encountered while creating a record. Error: %s", err)
+		}
+		time.Sleep(time.Duration(10 * time.Second))
 	}
 	d.SetId(uuid.New().String())
 	return resourceVolterraSetRRSETRecordRead(d, meta)
@@ -2229,7 +2237,9 @@ func resourceVolterraSetRRSETRecordCreate(d *schema.ResourceData, meta interface
 // resourceVolterraSetKnownLabelRead read dns_zone_record resource
 func resourceVolterraSetRRSETRecordRead(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
-	var dnsZoneName, groupName, recordName, types string
+	var dnsZoneName, groupName string
+	recordName := make([]string, 0)
+	types := make([]string, 0)
 	if v, ok := d.GetOk("dns_zone_name"); ok {
 		dnsZoneName = v.(string)
 	}
@@ -2243,263 +2253,263 @@ func resourceVolterraSetRRSETRecordRead(d *schema.ResourceData, meta interface{}
 			typeRecordSetTypeFound := false
 			if v, ok := RrSetGroupMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "A"
+				types = append(types, "A")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 			if v, ok := RrSetGroupMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "AAAA"
+				types = append(types, "AAAA")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "AFSDB"
+				types = append(types, "AFSDB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "ALIAS"
+				types = append(types, "ALIAS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CAA"
+				types = append(types, "CAA")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CDS"
+				types = append(types, "CDS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CERT"
+				types = append(types, "CERT")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CNAME"
+				types = append(types, "CNAME")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "DLV"
+				types = append(types, "DLV")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "DS"
+				types = append(types, "DS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "EUI48"
+				types = append(types, "EUI48")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "EUI64"
+				types = append(types, "EUI64")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "LB"
+				types = append(types, "LB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "LOC"
+				types = append(types, "LOC")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "MX"
+				types = append(types, "MX")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "NAPTR"
+				types = append(types, "NAPTR")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "NS"
+				types = append(types, "NS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "PTR"
+				types = append(types, "PTR")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "SRV"
+				types = append(types, "SRV")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "SSHFP"
+				types = append(types, "SSHFP")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "TLSA"
+				types = append(types, "TLSA")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "TXT"
+				types = append(types, "TXT")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
@@ -2507,20 +2517,23 @@ func resourceVolterraSetRRSETRecordRead(d *schema.ResourceData, meta interface{}
 		}
 
 	}
-	req := &ves_io_schema_dns_zone_rrset.GetRequest{
-		DnsZoneName: dnsZoneName,
-		GroupName:   groupName,
-		RecordName:  recordName,
-		Type:        types,
-	}
-	yamlReq, err := codec.ToYAML(req)
-	if err != nil {
-		return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
-	}
-	log.Printf("[DEBUG] setting volterra dns_zone_record resource get request value: %+v", req)
-	_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName, types), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Get"), yamlReq)
-	if err != nil {
-		fmt.Printf("Error encountered while fetching dns_zone_record resource info. Error: %s", err)
+
+	for i, rName := range recordName {
+		req := &ves_io_schema_dns_zone_rrset.GetRequest{
+			DnsZoneName: dnsZoneName,
+			GroupName:   groupName,
+			RecordName:  rName,
+			Type:        types[i],
+		}
+		yamlReq, err := codec.ToYAML(req)
+		if err != nil {
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
+		}
+		log.Printf("[DEBUG] setting volterra dns_zone_record resource get request value: %+v", req)
+		_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, rName, types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Get"), yamlReq)
+		if err != nil {
+			fmt.Printf("Error encountered while fetching dns_zone_record resource info. Error: %s", err)
+		}
 	}
 	return nil
 }
@@ -2528,8 +2541,10 @@ func resourceVolterraSetRRSETRecordRead(d *schema.ResourceData, meta interface{}
 // resourceVolterraSetKnownLabelUpdate updates dns_zone_record resource
 func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
-	var dnsZoneName, groupName, recordName, types string
-	var RrSetGroup *ves_io_schema_dns_zone.RRSet
+	var dnsZoneName, groupName string
+	recordName := make([]string, 0)
+	types := make([]string, 0)
+	rslt := make([]*ves_io_schema_dns_zone.RRSet, 0)
 	if v, ok := d.GetOk("dns_zone_name"); ok {
 		dnsZoneName = v.(string)
 	}
@@ -2539,7 +2554,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 	if v, ok := d.GetOk("rrset"); ok {
 		sl := v.([]interface{})
 		for _, set := range sl {
-			RrSetGroup = &ves_io_schema_dns_zone.RRSet{}
+			RrSetGroup := &ves_io_schema_dns_zone.RRSet{}
 			RrSetGroupMapStrToI := set.(map[string]interface{})
 
 			if w, ok := RrSetGroupMapStrToI["description"]; ok && !isIntfNil(w) {
@@ -2558,7 +2573,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_ARecord{}
 				typeRecordSetInt.ARecord = &ves_io_schema_dns_zone.DNSAResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "A"
+				types = append(types, "A")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2567,7 +2582,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.ARecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2591,7 +2606,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AaaaRecord{}
 				typeRecordSetInt.AaaaRecord = &ves_io_schema_dns_zone.DNSAAAAResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "AAAA"
+				types = append(types, "AAAA")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2600,7 +2615,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.AaaaRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2624,7 +2639,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AfsdbRecord{}
 				typeRecordSetInt.AfsdbRecord = &ves_io_schema_dns_zone.DNSAFSDBRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "AFSDB"
+				types = append(types, "AFSDB")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2633,7 +2648,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.AfsdbRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2670,7 +2685,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_AliasRecord{}
 				typeRecordSetInt.AliasRecord = &ves_io_schema_dns_zone.DNSAliasResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "ALIAS"
+				types = append(types, "ALIAS")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2679,7 +2694,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.AliasRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2699,7 +2714,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CaaRecord{}
 				typeRecordSetInt.CaaRecord = &ves_io_schema_dns_zone.DNSCAAResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "CAA"
+				types = append(types, "CAA")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2708,7 +2723,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.CaaRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2747,7 +2762,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CdsRecord{}
 				typeRecordSetInt.CdsRecord = &ves_io_schema_dns_zone.DNSCDSRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "CDS"
+				types = append(types, "CDS")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2756,7 +2771,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.CdsRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2858,7 +2873,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CertRecord{}
 				typeRecordSetInt.CertRecord = &ves_io_schema_dns_zone.CERTResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "CERT"
+				types = append(types, "CERT")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2867,7 +2882,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.CertRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2914,7 +2929,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_CnameRecord{}
 				typeRecordSetInt.CnameRecord = &ves_io_schema_dns_zone.DNSCNAMEResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "CNAME"
+				types = append(types, "CNAME")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2923,7 +2938,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.CnameRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -2943,7 +2958,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
 				typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "DLV"
+				types = append(types, "DLV")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -2952,7 +2967,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.DlvRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3054,7 +3069,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DsRecord{}
 				typeRecordSetInt.DsRecord = &ves_io_schema_dns_zone.DNSDSRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "DS"
+				types = append(types, "DS")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3063,7 +3078,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.DsRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3165,7 +3180,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui48Record{}
 				typeRecordSetInt.Eui48Record = &ves_io_schema_dns_zone.DNSEUI48ResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "EUI48"
+				types = append(types, "EUI48")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3174,7 +3189,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.Eui48Record.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3194,7 +3209,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_Eui64Record{}
 				typeRecordSetInt.Eui64Record = &ves_io_schema_dns_zone.DNSEUI64ResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "EUI64"
+				types = append(types, "EUI64")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3203,7 +3218,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.Eui64Record.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3223,7 +3238,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
 				typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "LB"
+				types = append(types, "LB")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3232,7 +3247,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.LbRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3268,7 +3283,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LocRecord{}
 				typeRecordSetInt.LocRecord = &ves_io_schema_dns_zone.DNSLOCResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "LOC"
+				types = append(types, "LOC")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3277,7 +3292,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.LocRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3356,7 +3371,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_MxRecord{}
 				typeRecordSetInt.MxRecord = &ves_io_schema_dns_zone.DNSMXResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "MX"
+				types = append(types, "MX")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3365,7 +3380,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.MxRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3400,7 +3415,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NaptrRecord{}
 				typeRecordSetInt.NaptrRecord = &ves_io_schema_dns_zone.DNSNAPTRResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "NAPTR"
+				types = append(types, "NAPTR")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3409,7 +3424,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.NaptrRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3460,7 +3475,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_NsRecord{}
 				typeRecordSetInt.NsRecord = &ves_io_schema_dns_zone.DNSNSResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "NS"
+				types = append(types, "NS")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3469,7 +3484,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.NsRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3493,7 +3508,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_PtrRecord{}
 				typeRecordSetInt.PtrRecord = &ves_io_schema_dns_zone.DNSPTRResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "PTR"
+				types = append(types, "PTR")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3502,7 +3517,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.PtrRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3526,7 +3541,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SrvRecord{}
 				typeRecordSetInt.SrvRecord = &ves_io_schema_dns_zone.DNSSRVResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "SRV"
+				types = append(types, "SRV")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3535,7 +3550,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.SrvRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3578,7 +3593,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_SshfpRecord{}
 				typeRecordSetInt.SshfpRecord = &ves_io_schema_dns_zone.SSHFPResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "SSHFP"
+				types = append(types, "SSHFP")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3587,7 +3602,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.SshfpRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3674,7 +3689,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TlsaRecord{}
 				typeRecordSetInt.TlsaRecord = &ves_io_schema_dns_zone.TLSAResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "TLSA"
+				types = append(types, "TLSA")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3683,7 +3698,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.TlsaRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3732,7 +3747,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_TxtRecord{}
 				typeRecordSetInt.TxtRecord = &ves_io_schema_dns_zone.DNSTXTResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = "TXT"
+				types = append(types, "TXT")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3741,7 +3756,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
 
 						typeRecordSetInt.TxtRecord.Name = v.(string)
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 
 					}
 
@@ -3759,24 +3774,29 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 
 			}
 
+			rslt = append(rslt, RrSetGroup)
+
 		}
 
 	}
-	reqUp := &ves_io_schema_dns_zone_rrset.ReplaceRequest{
-		DnsZoneName: dnsZoneName,
-		GroupName:   groupName,
-		RecordName:  recordName,
-		Type:        types,
-		Rrset:       RrSetGroup,
-	}
-	yamlReqUp, err := codec.ToYAML(reqUp)
-	if err != nil {
-		log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
-	}
-	log.Printf("[DEBUG] setting volterra dns_zone_record resource update request value: %+v", reqUp)
-	_, err = client.CustomAPI(context.Background(), http.MethodPut, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName, types), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Replace"), yamlReqUp)
-	if err != nil {
-		log.Printf("Update: Ignored: Error encountered while updating dns_zone_record resource. Error: : %s", err)
+	for i, rrSetGroup := range rslt {
+		reqUp := &ves_io_schema_dns_zone_rrset.ReplaceRequest{
+			DnsZoneName: dnsZoneName,
+			GroupName:   groupName,
+			RecordName:  recordName[i],
+			Type:        types[i],
+			Rrset:       rrSetGroup,
+		}
+		yamlReqUp, err := codec.ToYAML(reqUp)
+		if err != nil {
+			log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
+		}
+		log.Printf("[DEBUG] setting volterra dns_zone_record resource update request value: %+v", reqUp)
+		_, err = client.CustomAPI(context.Background(), http.MethodPut, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName[i], types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Replace"), yamlReqUp)
+		if err != nil {
+			log.Printf("Update: Ignored: Error encountered while updating dns_zone_record resource. Error: : %s", err)
+		}
+		time.Sleep(time.Duration(10 * time.Second))
 	}
 	return nil
 }
@@ -3784,7 +3804,9 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 // resourceVolterraSetRRSETRecordDelete delete dns_zone_record resource
 func resourceVolterraSetRRSETRecordDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
-	var dnsZoneName, groupName, recordName, types string
+	var dnsZoneName, groupName string
+	recordName := make([]string, 0)
+	types := make([]string, 0)
 	if v, ok := d.GetOk("dns_zone_name"); ok {
 		dnsZoneName = v.(string)
 	}
@@ -3798,263 +3820,263 @@ func resourceVolterraSetRRSETRecordDelete(d *schema.ResourceData, meta interface
 			typeRecordSetTypeFound := false
 			if v, ok := RrSetGroupMapStrToI["a_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "A"
+				types = append(types, "A")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 			if v, ok := RrSetGroupMapStrToI["aaaa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "AAAA"
+				types = append(types, "AAAA")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["afsdb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "AFSDB"
+				types = append(types, "AFSDB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["alias_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "ALIAS"
+				types = append(types, "ALIAS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["caa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CAA"
+				types = append(types, "CAA")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["cds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CDS"
+				types = append(types, "CDS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["cert_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CERT"
+				types = append(types, "CERT")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["cname_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "CNAME"
+				types = append(types, "CNAME")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "DLV"
+				types = append(types, "DLV")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["ds_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "DS"
+				types = append(types, "DS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["eui48_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "EUI48"
+				types = append(types, "EUI48")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["eui64_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "EUI64"
+				types = append(types, "EUI64")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "LB"
+				types = append(types, "LB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["loc_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "LOC"
+				types = append(types, "LOC")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["mx_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "MX"
+				types = append(types, "MX")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["naptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "NAPTR"
+				types = append(types, "NAPTR")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["ns_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "NS"
+				types = append(types, "NS")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["ptr_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "PTR"
+				types = append(types, "PTR")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["srv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "SRV"
+				types = append(types, "SRV")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["sshfp_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "SSHFP"
+				types = append(types, "SSHFP")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["tlsa_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "TLSA"
+				types = append(types, "TLSA")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
 
 			if v, ok := RrSetGroupMapStrToI["txt_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = "TXT"
+				types = append(types, "TXT")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
 					if v, ok := cs["name"]; ok && !isIntfNil(v) {
-						recordName = v.(string)
+						recordName = append(recordName, v.(string))
 					}
 				}
 			}
@@ -4062,20 +4084,23 @@ func resourceVolterraSetRRSETRecordDelete(d *schema.ResourceData, meta interface
 		}
 
 	}
-	reqDel := &ves_io_schema_dns_zone_rrset.DeleteRequest{
-		DnsZoneName: dnsZoneName,
-		GroupName:   groupName,
-		RecordName:  recordName,
-		Type:        types,
-	}
-	yamlReqDel, err := codec.ToYAML(reqDel)
-	if err != nil {
-		log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
-	}
-	log.Printf("[DEBUG] setting volterra dns_zone_record resource delete request value: %+v", reqDel)
-	_, err = client.CustomAPI(context.Background(), http.MethodDelete, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName, types), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Delete"), yamlReqDel)
-	if err != nil {
-		log.Printf("Update: Ignored: Error encountered while deleting dns_zone_record resource. Error: : %s", err)
+	for i, rName := range recordName {
+		reqDel := &ves_io_schema_dns_zone_rrset.DeleteRequest{
+			DnsZoneName: dnsZoneName,
+			GroupName:   groupName,
+			RecordName:  rName,
+			Type:        types[i],
+		}
+		yamlReqDel, err := codec.ToYAML(reqDel)
+		if err != nil {
+			log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
+		}
+		log.Printf("[DEBUG] setting volterra dns_zone_record resource delete request value: %+v", reqDel)
+		_, err = client.CustomAPI(context.Background(), http.MethodDelete, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, rName, types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Delete"), yamlReqDel)
+		if err != nil {
+			log.Printf("Update: Ignored: Error encountered while deleting dns_zone_record resource. Error: : %s", err)
+		}
+		time.Sleep(time.Duration(10 * time.Second))
 	}
 	return nil
 }

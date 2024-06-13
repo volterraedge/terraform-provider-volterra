@@ -2869,6 +2869,7 @@ func FlattenPrivateName(x *ves_io_schema_views_origin_pool.OriginServerPrivateNa
 			"dns_name":         x.GetDnsName(),
 			"inside_network":   isEmpty(x.GetInsideNetwork()),
 			"outside_network":  isEmpty(x.GetOutsideNetwork()),
+			"segment":          FlattenSegment(x.GetSegment()),
 			"refresh_interval": x.GetRefreshInterval(),
 			"site_locator":     FlattenSiteLocator(x.GetSiteLocator()),
 		}
@@ -2883,6 +2884,7 @@ func FlattenPrivateIp(x *ves_io_schema_views_origin_pool.OriginServerPrivateIP) 
 		piVal := map[string]interface{}{
 			"inside_network":  isEmpty(x.GetInsideNetwork()),
 			"outside_network": isEmpty(x.GetOutsideNetwork()),
+			"segment":         FlattenSegment(x.GetSegment()),
 			"ip":              x.GetIp(),
 			"ipv6":            x.GetIpv6(),
 			"site_locator":    FlattenSiteLocator(x.GetSiteLocator()),
@@ -2890,6 +2892,19 @@ func FlattenPrivateIp(x *ves_io_schema_views_origin_pool.OriginServerPrivateIP) 
 		piValue = append(piValue, piVal)
 	}
 	return piValue
+}
+
+func FlattenSegment(x *ves_io_schema_views.ObjectRefType) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		value := map[string]interface{}{
+			"name":      x.GetName(),
+			"namespace": x.GetNamespace(),
+			"tenant":    x.GetTenant(),
+		}
+		rslt = append(rslt, value)
+	}
+	return rslt
 }
 
 func FlattenK8sService(x *ves_io_schema_views_origin_pool.OriginServerK8SService) []interface{} {
