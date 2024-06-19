@@ -260,7 +260,7 @@ Specify origin server with private or public IP address and site information.
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
 
 ###### One of the arguments from this list "ipv6, ip" must be set
 
@@ -282,7 +282,7 @@ Specify origin server with private or public DNS name and site information.
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
 
 `refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
 

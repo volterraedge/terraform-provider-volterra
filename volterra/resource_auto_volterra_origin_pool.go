@@ -702,7 +702,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"segment": {
 
 										Type:     schema.TypeSet,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -830,7 +830,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 									"segment": {
 
 										Type:     schema.TypeSet,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 

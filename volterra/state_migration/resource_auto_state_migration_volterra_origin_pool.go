@@ -682,7 +682,7 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 									"segment": {
 
 										Type:     schema.TypeSet,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -807,7 +807,7 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 										Optional: true,
 									},
 
-									"segment": {
+									"Optional": {
 
 										Type:     schema.TypeSet,
 										Required: true,

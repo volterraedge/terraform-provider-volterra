@@ -276,3 +276,36 @@ Attribute Reference
 -------------------
 
 -	`id` - This is the id of the configured dns_zone_record.
+
+Known Limitation
+-------------------
+
+Adding Resource Record Sets to DNS Zones
+
+`Description:`
+
+Currently, there is a limitation when adding individual resource record sets to a DNS domain through the provider resource. To successfully add a resource record set, an initial setup must be performed through the F5XC console.
+
+`Steps to Reproduce:`
+
+Attempt to add a resource record set directly through the provider resource without prior setup in the F5XC console.
+
+`Observed Behavior:`
+
+The addition of the resource record set fails due to the absence of prior configuration.
+
+`Workaround:`
+
+To add a resource record set to a DNS domain, follow these steps:
+
+* Navigate to the `Resource Record Sets` tile in the F5XC console.
+
+* Enable the `Show Advanced Fields` option.
+
+* In the `Additional Resource Record Sets` section, add the desired resource record set.
+
+Once the initial setup is complete, you can add individual resource records to the DNS zone through the provider resource without encountering this limitation.
+
+`Upcoming Fix:`
+
+We are aware of this limitation and are actively working on a fix. This issue will be resolved in the next release, allowing for the direct addition of individual resource record sets to DNS zones without the need for prior configuration through the F5XC console.
