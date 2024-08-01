@@ -40,6 +40,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.MetricsAggregationData"] = MetricsAggregationDataValidator()
 	vr["ves.io.schema.log.MultiFieldAggregationBucket"] = MultiFieldAggregationBucketValidator()
 	vr["ves.io.schema.log.MultiFieldAggregationData"] = MultiFieldAggregationDataValidator()
+	vr["ves.io.schema.log.MultiFieldSubAggregationData"] = MultiFieldSubAggregationDataValidator()
 	vr["ves.io.schema.log.OrderByData"] = OrderByDataValidator()
 	vr["ves.io.schema.log.PercentileAggregationData"] = PercentileAggregationDataValidator()
 

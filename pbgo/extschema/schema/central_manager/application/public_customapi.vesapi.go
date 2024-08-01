@@ -554,7 +554,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-application-customapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-application-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.application.CustomAPI.List"
             },
@@ -646,7 +646,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-application-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-application-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.application.CustomAPI.Get"
             },

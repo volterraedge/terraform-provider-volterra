@@ -4395,6 +4395,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["re_select"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("re_select"))
+		if err := fv(ctx, m.GetReSelect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("region"))
@@ -4801,6 +4810,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
+
+	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
 
 	return v
 }()
@@ -6298,6 +6309,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["re_select"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("re_select"))
+		if err := fv(ctx, m.GetReSelect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["region"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("region"))
@@ -6858,6 +6878,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
 
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+
+	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
 
 	return v
 }()
@@ -8572,6 +8594,16 @@ type ValidateOsInfo struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateOsInfo) NumaNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for numa_nodes")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateOsInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*OsInfo)
 	if !ok {
@@ -8661,6 +8693,15 @@ func (v *ValidateOsInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 
 	}
 
+	if fv, exists := v.FldValidators["numa_nodes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("numa_nodes"))
+		if err := fv(ctx, m.GetNumaNodes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["os"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("os"))
@@ -8709,6 +8750,25 @@ func (v *ValidateOsInfo) Validate(ctx context.Context, pm interface{}, opts ...d
 // Well-known symbol for default validator implementation
 var DefaultOsInfoValidator = func() *ValidateOsInfo {
 	v := &ValidateOsInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNumaNodes := v.NumaNodesValidationRuleHandler
+	rulesNumaNodes := map[string]string{
+		"ves.io.schema.rules.int32.gte": "0",
+	}
+	vFn, err = vrhNumaNodes(rulesNumaNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for OsInfo.numa_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["numa_nodes"] = vFn
 
 	return v
 }()
@@ -11990,6 +12050,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OutsideVip = f.GetOutsideVip()
 	m.OutsideVipV6 = f.GetOutsideVipV6()
 	m.PrivateConnectivity = f.GetPrivateConnectivity()
+	m.ReSelect = f.GetReSelect()
 	m.Region = f.GetRegion()
 	m.SiteState = f.GetSiteState()
 	m.SiteSubtype = f.GetSiteSubtype()
@@ -12048,6 +12109,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OutsideVip = m1.OutsideVip
 	f.OutsideVipV6 = m1.OutsideVipV6
 	f.PrivateConnectivity = m1.PrivateConnectivity
+	f.ReSelect = m1.ReSelect
 	f.Region = m1.Region
 	f.SiteState = m1.SiteState
 	f.SiteSubtype = m1.SiteSubtype

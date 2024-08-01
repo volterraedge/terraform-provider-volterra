@@ -698,7 +698,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-known_label-customapi-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-known_label-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.known_label.CustomAPI.Create"
             },
@@ -790,7 +790,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-known_label-customapi-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-known_label-customapi-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.known_label.CustomAPI.Delete"
             },
@@ -905,7 +905,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-known_label-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-known_label-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.known_label.CustomAPI.Get"
             },

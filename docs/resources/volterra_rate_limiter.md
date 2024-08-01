@@ -1,19 +1,26 @@
+
+
+
+
+
+
+
+
+
+
+
+
 ---
-
 page_title: "Volterra: rate_limiter"
+description: "The rate_limiter allows CRUD of Rate Limiter  resource on Volterra SaaS"
+---
+# Resource volterra_rate_limiter
 
-description: "The rate_limiter allows CRUD of Rate Limiter resource on Volterra SaaS"
--------------------------------------------------------------------------------------
+The Rate Limiter  allows CRUD of Rate Limiter  resource on Volterra SaaS
 
-Resource volterra_rate_limiter
-==============================
+~> **Note:** Please refer to [Rate Limiter  API docs](https://docs.cloud.f5.com/docs-v2/api/rate-limiter) to learn more
 
-The Rate Limiter allows CRUD of Rate Limiter resource on Volterra SaaS
-
-~> **Note:** Please refer to [Rate Limiter API docs](https://docs.cloud.f5.com/docs/api/rate-limiter) to learn more
-
-Example Usage
--------------
+## Example Usage
 
 ```hcl
 resource "volterra_rate_limiter" "example" {
@@ -31,32 +38,43 @@ resource "volterra_rate_limiter" "example" {
 
 ```
 
-Argument Reference
-------------------
+## Argument Reference
 
 ### Metadata Argument Reference
-
 `annotations` - (Optional) queryable and should be preserved when modifying objects. (`String`).
+
 
 `description` - (Optional) Human readable description for the object (`String`).
 
+
 `disable` - (Optional) A value of true will administratively disable the object (`Bool`).
+
 
 `labels` - (Optional) by selector expression (`String`).
 
+
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
+
 `namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
+
+
 
 ### Spec Argument Reference
 
 `limits` - (Required) A list of RateLimitValues that specifies the total number of allowed requests for each specified period.. See [Limits ](#limits) below for details.
 
+
+
+
+
+
 `user_identification` - (Optional) The rules in the user_identification object are evaluated to determine the user identifier to be rate limited.. See [ref](#ref) below for details.
 
-### Limits
 
-A list of RateLimitValues that specifies the total number of allowed requests for each specified period..
+### Limits 
+
+ A list of RateLimitValues that specifies the total number of allowed requests for each specified period..
 
 `burst_multiplier` - (Optional) The maximum burst of requests to accommodate, expressed as a multiple of the rate. (`Int`).
 
@@ -64,7 +82,10 @@ A list of RateLimitValues that specifies the total number of allowed requests fo
 
 `unit` - (Required) Unit for the period per which the rate limit is applied. (`String`).
 
-### Ref
+
+
+### Ref 
+
 
 Reference to another volterra object is shown like below
 
@@ -74,7 +95,9 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-Attribute Reference
--------------------
 
--	`id` - This is the id of the configured rate_limiter.
+
+## Attribute Reference
+
+* `id` - This is the id of the configured rate_limiter.
+

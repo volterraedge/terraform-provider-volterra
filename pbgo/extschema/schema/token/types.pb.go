@@ -64,6 +64,36 @@ func (State) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_6dd221b9cd54c493, []int{0}
 }
 
+// Token Type
+//
+// x-displayName: "Token Type"
+// Token type has two values, 1. "normal", 2. "JWT". for Secure Mesh Site v2 UI, JWT is used, other workflow sticks to normal
+// Single token can be used to register multiple sites
+type Type int32
+
+const (
+	// x-displayName: "Normal"
+	// token is in uuid format
+	NORMAL Type = 0
+	// x-displayName: "Jwt"
+	// token is in JWT format, encrypted by maurice's internal shared key
+	JWT Type = 1
+)
+
+var Type_name = map[int32]string{
+	0: "NORMAL",
+	1: "JWT",
+}
+
+var Type_value = map[string]int32{
+	"NORMAL": 0,
+	"JWT":    1,
+}
+
+func (Type) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_6dd221b9cd54c493, []int{1}
+}
+
 // Token state
 //
 // x-displayName: "Specification"
@@ -75,6 +105,21 @@ type GlobalSpecType struct {
 	// x-required
 	// Token state
 	State State `protobuf:"varint,1,opt,name=state,proto3,enum=ves.io.schema.token.State" json:"state,omitempty"`
+	// type
+	//
+	// x-displayName: "Token Type"
+	// Token type
+	Type Type `protobuf:"varint,2,opt,name=type,proto3,enum=ves.io.schema.token.Type" json:"type,omitempty"`
+	// content
+	//
+	// x-displayName: "Content"
+	// only used for JWT token since it could be longer than 63 characters
+	Content string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	// site name
+	//
+	// x-displayName: "Token Site Name"
+	// only used for JWT token, to add cluster_name to JWT token
+	SiteName string `protobuf:"bytes,4,opt,name=site_name,json=siteName,proto3" json:"site_name,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -112,12 +157,35 @@ func (m *GlobalSpecType) GetState() State {
 	return UNKNOWN
 }
 
+func (m *GlobalSpecType) GetType() Type {
+	if m != nil {
+		return m.Type
+	}
+	return NORMAL
+}
+
+func (m *GlobalSpecType) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
+func (m *GlobalSpecType) GetSiteName() string {
+	if m != nil {
+		return m.SiteName
+	}
+	return ""
+}
+
 // Create token
 //
 // x-displayName: "Create Token"
 // Creates new token. token object is used to manage site admission. User must generate token before provisioning and pass this
 // token to site during it's registration.
 type CreateSpecType struct {
+	Type     Type   `protobuf:"varint,2,opt,name=type,proto3,enum=ves.io.schema.token.Type" json:"type,omitempty"`
+	SiteName string `protobuf:"bytes,4,opt,name=site_name,json=siteName,proto3" json:"site_name,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -147,6 +215,20 @@ func (m *CreateSpecType) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_CreateSpecType proto.InternalMessageInfo
+
+func (m *CreateSpecType) GetType() Type {
+	if m != nil {
+		return m.Type
+	}
+	return NORMAL
+}
+
+func (m *CreateSpecType) GetSiteName() string {
+	if m != nil {
+		return m.SiteName
+	}
+	return ""
+}
 
 // Replace token
 //
@@ -190,7 +272,10 @@ var xxx_messageInfo_ReplaceSpecType proto.InternalMessageInfo
 // Get token. token object is used to manage site admission. User must generate token before provisioning and pass this
 // token to site during it's registration.
 type GetSpecType struct {
-	State State `protobuf:"varint,1,opt,name=state,proto3,enum=ves.io.schema.token.State" json:"state,omitempty"`
+	State    State  `protobuf:"varint,1,opt,name=state,proto3,enum=ves.io.schema.token.State" json:"state,omitempty"`
+	Type     Type   `protobuf:"varint,2,opt,name=type,proto3,enum=ves.io.schema.token.Type" json:"type,omitempty"`
+	Content  string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	SiteName string `protobuf:"bytes,4,opt,name=site_name,json=siteName,proto3" json:"site_name,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -228,9 +313,32 @@ func (m *GetSpecType) GetState() State {
 	return UNKNOWN
 }
 
+func (m *GetSpecType) GetType() Type {
+	if m != nil {
+		return m.Type
+	}
+	return NORMAL
+}
+
+func (m *GetSpecType) GetContent() string {
+	if m != nil {
+		return m.Content
+	}
+	return ""
+}
+
+func (m *GetSpecType) GetSiteName() string {
+	if m != nil {
+		return m.SiteName
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("ves.io.schema.token.State", State_name, State_value)
 	golang_proto.RegisterEnum("ves.io.schema.token.State", State_name, State_value)
+	proto.RegisterEnum("ves.io.schema.token.Type", Type_name, Type_value)
+	golang_proto.RegisterEnum("ves.io.schema.token.Type", Type_name, Type_value)
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.token.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.token.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.token.CreateSpecType")
@@ -247,34 +355,50 @@ func init() {
 }
 
 var fileDescriptor_6dd221b9cd54c493 = []byte{
-	// 368 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2f, 0x4b, 0x2d, 0xd6,
-	0xcb, 0xcc, 0xd7, 0x2f, 0x4e, 0xce, 0x48, 0xcd, 0x4d, 0xd4, 0x2f, 0xc9, 0xcf, 0x4e, 0xcd, 0xd3,
-	0x2f, 0xa9, 0x2c, 0x48, 0x2d, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x86, 0x28, 0xd0,
-	0x83, 0x28, 0xd0, 0x03, 0x2b, 0x90, 0xd2, 0x4d, 0xcf, 0x2c, 0xc9, 0x28, 0x4d, 0xd2, 0x4b, 0xce,
-	0xcf, 0xd5, 0x4f, 0xcf, 0x4f, 0xcf, 0xd7, 0x07, 0xab, 0x4d, 0x2a, 0x4d, 0x03, 0xf3, 0xc0, 0x1c,
-	0x30, 0x0b, 0x62, 0x86, 0x94, 0x34, 0xaa, 0x25, 0xf9, 0x05, 0x25, 0x99, 0xf9, 0x79, 0x50, 0x0b,
-	0xa4, 0x24, 0xd1, 0x5c, 0x80, 0xb0, 0x5b, 0xc9, 0x89, 0x8b, 0xcf, 0x3d, 0x27, 0x3f, 0x29, 0x31,
-	0x27, 0xb8, 0x20, 0x35, 0x39, 0xa4, 0xb2, 0x20, 0x55, 0xc8, 0x80, 0x8b, 0xb5, 0xb8, 0x24, 0xb1,
-	0x24, 0x55, 0x82, 0x51, 0x81, 0x51, 0x83, 0xcf, 0x48, 0x4a, 0x0f, 0x8b, 0xeb, 0xf4, 0x82, 0x41,
-	0x2a, 0x82, 0x20, 0x0a, 0x95, 0x94, 0xb9, 0xf8, 0x9c, 0x8b, 0x52, 0x13, 0x4b, 0x52, 0x61, 0x66,
-	0x58, 0x09, 0x9e, 0xb2, 0x43, 0x33, 0x56, 0x49, 0x85, 0x8b, 0x3f, 0x28, 0xb5, 0x20, 0x27, 0x31,
-	0x19, 0xaf, 0xaa, 0x20, 0x2e, 0x6e, 0xf7, 0xd4, 0x12, 0xf2, 0xdd, 0x82, 0xc5, 0x4c, 0x2d, 0x1d,
-	0x2e, 0x56, 0xb0, 0x12, 0x21, 0x6e, 0x2e, 0xf6, 0x50, 0x3f, 0x6f, 0x3f, 0xff, 0x70, 0x3f, 0x01,
-	0x06, 0x21, 0x4e, 0x2e, 0xd6, 0x30, 0x47, 0x1f, 0x4f, 0x17, 0x01, 0x46, 0x90, 0xb8, 0x6b, 0x44,
-	0x80, 0x67, 0x90, 0xab, 0x8b, 0x00, 0xb3, 0x53, 0x3b, 0xe3, 0x85, 0x87, 0x72, 0x0c, 0x37, 0x1e,
-	0xca, 0x31, 0x7c, 0x78, 0x28, 0xc7, 0xd8, 0xf0, 0x48, 0x8e, 0x71, 0xc5, 0x23, 0x39, 0xc6, 0x13,
-	0x8f, 0xe4, 0x18, 0x2f, 0x3c, 0x92, 0x63, 0xbc, 0xf1, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6,
-	0x17, 0x8f, 0xe4, 0x18, 0x3e, 0x3c, 0x92, 0x63, 0x9c, 0xf0, 0x58, 0x8e, 0xe1, 0xc0, 0x63, 0x39,
-	0xc6, 0x0b, 0x8f, 0xe5, 0x18, 0x6e, 0x3c, 0x96, 0x63, 0x88, 0xf2, 0x4c, 0xcf, 0x2f, 0xc8, 0x4e,
-	0xd7, 0x2b, 0xcb, 0xcf, 0x29, 0x49, 0x2d, 0x2a, 0x4a, 0xd4, 0x2b, 0x2d, 0xd6, 0x07, 0x33, 0xd2,
-	0xf2, 0x8b, 0x72, 0x75, 0x0b, 0x8a, 0xf2, 0xcb, 0x32, 0x53, 0x52, 0x8b, 0x74, 0x61, 0xd2, 0xfa,
-	0x05, 0x49, 0xe9, 0xf9, 0xfa, 0xa9, 0x15, 0x25, 0xd0, 0x98, 0x41, 0x4e, 0x22, 0x49, 0x6c, 0xe0,
-	0x18, 0x32, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x1e, 0x90, 0x0a, 0x25, 0x40, 0x02, 0x00, 0x00,
+	// 498 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x93, 0x31, 0x6f, 0xd3, 0x40,
+	0x14, 0xc7, 0xfd, 0x48, 0xd2, 0x90, 0xab, 0x14, 0x8c, 0x59, 0x5c, 0x47, 0x3a, 0xd2, 0x88, 0xa1,
+	0xaa, 0x88, 0x8d, 0xe8, 0xc6, 0x80, 0xd4, 0xd0, 0xaa, 0x0a, 0x14, 0x17, 0xb9, 0x85, 0x22, 0x96,
+	0xca, 0x36, 0xaf, 0xae, 0xd5, 0xd8, 0x67, 0xd9, 0x97, 0x40, 0x07, 0x24, 0x36, 0x56, 0x3e, 0x06,
+	0x1f, 0x01, 0x09, 0x21, 0x31, 0x22, 0xa6, 0x8c, 0x19, 0x89, 0xb3, 0x74, 0xec, 0x47, 0x40, 0x3e,
+	0xa7, 0x0d, 0x09, 0x19, 0x88, 0xba, 0xdd, 0xbd, 0xf7, 0x7b, 0xef, 0xff, 0x7f, 0x4f, 0x77, 0xe4,
+	0x6e, 0x0f, 0x13, 0xdd, 0x67, 0x46, 0xe2, 0x9e, 0x60, 0x60, 0x1b, 0x9c, 0x9d, 0x62, 0x68, 0xf0,
+	0xb3, 0x08, 0x13, 0x3d, 0x8a, 0x19, 0x67, 0xca, 0x9d, 0x1c, 0xd0, 0x73, 0x40, 0x17, 0x80, 0xd6,
+	0xf4, 0x7c, 0x7e, 0xd2, 0x75, 0x74, 0x97, 0x05, 0x86, 0xc7, 0x3c, 0x66, 0x08, 0xd6, 0xe9, 0x1e,
+	0x8b, 0x9b, 0xb8, 0x88, 0x53, 0xde, 0x43, 0xab, 0x4d, 0x8b, 0xb0, 0x88, 0xfb, 0x2c, 0x1c, 0x0b,
+	0x68, 0x2b, 0x33, 0x0e, 0x26, 0xda, 0x5a, 0x7d, 0x3a, 0xd5, 0xf3, 0xf1, 0xdd, 0xd1, 0x54, 0x71,
+	0xe3, 0x3b, 0x90, 0xea, 0x4e, 0x87, 0x39, 0x76, 0x67, 0x3f, 0x42, 0xf7, 0xe0, 0x2c, 0x42, 0xe5,
+	0x01, 0x29, 0x25, 0xdc, 0xe6, 0xa8, 0x42, 0x1d, 0xd6, 0xaa, 0x0f, 0x35, 0x7d, 0xce, 0x00, 0xfa,
+	0x7e, 0x46, 0x58, 0x39, 0xa8, 0x6c, 0x90, 0x62, 0xa6, 0xaa, 0xde, 0x10, 0x05, 0x2b, 0x73, 0x0b,
+	0xb2, 0xd6, 0xad, 0xe2, 0xf9, 0x37, 0x00, 0x4b, 0xc0, 0xca, 0x2a, 0x29, 0xbb, 0x2c, 0xe4, 0x18,
+	0x72, 0xb5, 0x50, 0x87, 0xb5, 0x4a, 0xab, 0x3c, 0xf8, 0x00, 0x22, 0x7f, 0x19, 0x57, 0x56, 0x49,
+	0x25, 0xf1, 0x39, 0x1e, 0x85, 0x76, 0x80, 0x6a, 0x51, 0x40, 0x79, 0x87, 0x9b, 0x59, 0xd8, 0xb4,
+	0x03, 0x6c, 0x30, 0x52, 0x7d, 0x12, 0xa3, 0xcd, 0xf1, 0xca, 0x7e, 0xf3, 0x3f, 0xcd, 0x8c, 0x6d,
+	0xd4, 0xfe, 0xd1, 0x98, 0x74, 0x7f, 0x74, 0xfb, 0xd7, 0xe3, 0x99, 0xed, 0x34, 0xee, 0x91, 0x5b,
+	0x16, 0x46, 0x1d, 0xdb, 0xbd, 0x52, 0x9c, 0x47, 0x7d, 0x05, 0xb2, 0xbc, 0x83, 0xfc, 0x1a, 0x3b,
+	0x5d, 0x70, 0x0c, 0x75, 0x66, 0x9b, 0x93, 0x25, 0x2e, 0x38, 0xe0, 0xfa, 0x7d, 0x52, 0x12, 0x46,
+	0x94, 0x65, 0x52, 0x7e, 0x69, 0x3e, 0x33, 0xf7, 0x0e, 0x4d, 0x59, 0x52, 0x2a, 0xa4, 0xf4, 0x6a,
+	0x73, 0xb7, 0xbd, 0x25, 0x43, 0x16, 0xdf, 0x7e, 0xfd, 0xa2, 0x6d, 0x6d, 0x6f, 0xc9, 0x85, 0xf5,
+	0x1a, 0x29, 0x8a, 0x01, 0x09, 0x59, 0x32, 0xf7, 0xac, 0xe7, 0x9b, 0xbb, 0xb2, 0xa4, 0x94, 0x49,
+	0xe1, 0xe9, 0xe1, 0x81, 0x0c, 0xad, 0x4f, 0xd0, 0x1f, 0x52, 0x69, 0x30, 0xa4, 0xd2, 0xc5, 0x90,
+	0xc2, 0xc7, 0x94, 0xc2, 0x97, 0x94, 0xc2, 0xcf, 0x94, 0x42, 0x3f, 0xa5, 0x30, 0x48, 0x29, 0xfc,
+	0x4e, 0x29, 0x9c, 0xa7, 0x54, 0xba, 0x48, 0x29, 0x7c, 0x1e, 0x51, 0xe9, 0xc7, 0x88, 0x42, 0x7f,
+	0x44, 0xa5, 0xc1, 0x88, 0x4a, 0x6f, 0xda, 0x1e, 0x8b, 0x4e, 0x3d, 0xbd, 0xc7, 0x3a, 0x1c, 0xe3,
+	0xd8, 0xd6, 0xbb, 0x89, 0x21, 0x0e, 0xc7, 0x2c, 0x0e, 0x9a, 0x51, 0xcc, 0x7a, 0xfe, 0x5b, 0x8c,
+	0x9b, 0x97, 0x69, 0x23, 0x72, 0x3c, 0x66, 0xe0, 0x7b, 0x3e, 0x7e, 0xec, 0x7f, 0x7f, 0x48, 0x67,
+	0x49, 0xbc, 0xf6, 0x8d, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x6e, 0xf3, 0x07, 0xfd, 0xae, 0x03,
+	0x00, 0x00,
 }
 
 func (x State) String() string {
 	s, ok := State_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x Type) String() string {
+	s, ok := Type_name[int32(x)]
 	if ok {
 		return s
 	}
@@ -302,6 +426,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.State != that1.State {
 		return false
 	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if this.Content != that1.Content {
+		return false
+	}
+	if this.SiteName != that1.SiteName {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -321,6 +454,12 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if this.SiteName != that1.SiteName {
 		return false
 	}
 	return true
@@ -368,15 +507,27 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if this.State != that1.State {
 		return false
 	}
+	if this.Type != that1.Type {
+		return false
+	}
+	if this.Content != that1.Content {
+		return false
+	}
+	if this.SiteName != that1.SiteName {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 8)
 	s = append(s, "&token.GlobalSpecType{")
 	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	s = append(s, "Content: "+fmt.Sprintf("%#v", this.Content)+",\n")
+	s = append(s, "SiteName: "+fmt.Sprintf("%#v", this.SiteName)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -384,8 +535,10 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 4)
+	s := make([]string, 0, 6)
 	s = append(s, "&token.CreateSpecType{")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	s = append(s, "SiteName: "+fmt.Sprintf("%#v", this.SiteName)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -402,9 +555,12 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 8)
 	s = append(s, "&token.GetSpecType{")
 	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
+	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
+	s = append(s, "Content: "+fmt.Sprintf("%#v", this.Content)+",\n")
+	s = append(s, "SiteName: "+fmt.Sprintf("%#v", this.SiteName)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -436,6 +592,25 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.SiteName) > 0 {
+		i -= len(m.SiteName)
+		copy(dAtA[i:], m.SiteName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteName)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Content) > 0 {
+		i -= len(m.Content)
+		copy(dAtA[i:], m.Content)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Content)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x10
+	}
 	if m.State != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.State))
 		i--
@@ -464,6 +639,18 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.SiteName) > 0 {
+		i -= len(m.SiteName)
+		copy(dAtA[i:], m.SiteName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteName)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x10
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -510,6 +697,25 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.SiteName) > 0 {
+		i -= len(m.SiteName)
+		copy(dAtA[i:], m.SiteName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SiteName)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Content) > 0 {
+		i -= len(m.Content)
+		copy(dAtA[i:], m.Content)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Content)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Type != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Type))
+		i--
+		dAtA[i] = 0x10
+	}
 	if m.State != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.State))
 		i--
@@ -538,6 +744,17 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.State != 0 {
 		n += 1 + sovTypes(uint64(m.State))
 	}
+	if m.Type != 0 {
+		n += 1 + sovTypes(uint64(m.Type))
+	}
+	l = len(m.Content)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.SiteName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -547,6 +764,13 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Type != 0 {
+		n += 1 + sovTypes(uint64(m.Type))
+	}
+	l = len(m.SiteName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -568,6 +792,17 @@ func (m *GetSpecType) Size() (n int) {
 	if m.State != 0 {
 		n += 1 + sovTypes(uint64(m.State))
 	}
+	if m.Type != 0 {
+		n += 1 + sovTypes(uint64(m.Type))
+	}
+	l = len(m.Content)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.SiteName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -583,6 +818,9 @@ func (this *GlobalSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`Content:` + fmt.Sprintf("%v", this.Content) + `,`,
+		`SiteName:` + fmt.Sprintf("%v", this.SiteName) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -592,6 +830,8 @@ func (this *CreateSpecType) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType{`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`SiteName:` + fmt.Sprintf("%v", this.SiteName) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -611,6 +851,9 @@ func (this *GetSpecType) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType{`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
+		`Type:` + fmt.Sprintf("%v", this.Type) + `,`,
+		`Content:` + fmt.Sprintf("%v", this.Content) + `,`,
+		`SiteName:` + fmt.Sprintf("%v", this.SiteName) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -671,6 +914,89 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= Type(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Content = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SiteName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -724,6 +1050,57 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: CreateSpecType: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= Type(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SiteName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -849,6 +1226,89 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
+			}
+			m.Type = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Type |= Type(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Content", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Content = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SiteName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

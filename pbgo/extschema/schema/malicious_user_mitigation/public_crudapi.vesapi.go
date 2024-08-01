@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-malicious_user_mitigation-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.malicious_user_mitigation.API.Delete"
             },

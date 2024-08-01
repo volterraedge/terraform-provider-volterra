@@ -109,6 +109,15 @@ func (v *ValidateAPIGroupsApiep) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["risk_score"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("risk_score"))
+		if err := fv(ctx, m.GetRiskScore(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["sensitive_data"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("sensitive_data"))

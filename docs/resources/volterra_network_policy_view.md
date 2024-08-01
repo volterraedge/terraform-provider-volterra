@@ -1,19 +1,26 @@
+
+
+
+
+
+
+
+
+
+
+
+
 ---
-
 page_title: "Volterra: network_policy_view"
+description: "The network_policy_view allows CRUD of Network Policy View  resource on Volterra SaaS"
+---
+# Resource volterra_network_policy_view
 
-description: "The network_policy_view allows CRUD of Network Policy View resource on Volterra SaaS"
----------------------------------------------------------------------------------------------------
+The Network Policy View  allows CRUD of Network Policy View  resource on Volterra SaaS
 
-Resource volterra_network_policy_view
-=====================================
+~> **Note:** Please refer to [Network Policy View  API docs](https://docs.cloud.f5.com/docs-v2/api/views-network-policy-view) to learn more
 
-The Network Policy View allows CRUD of Network Policy View resource on Volterra SaaS
-
-~> **Note:** Please refer to [Network Policy View API docs](https://docs.cloud.f5.com/docs/api/views-network-policy-view) to learn more
-
-Example Usage
--------------
+## Example Usage
 
 ```hcl
 resource "volterra_network_policy_view" "example" {
@@ -21,42 +28,228 @@ resource "volterra_network_policy_view" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "prefix_list any outside_endpoints inside_endpoints interface namespace label_selector" must be set
+    // One of the arguments from this list "label_selector prefix_list any outside_endpoints inside_endpoints interface namespace" must be set
 
-    any = true
+    prefix_list {
+      ipv6_prefixes = ["fd48:fa09:d9d4::/48"]
+
+      prefixes = ["192.168.20.0/24"]
+    }
   }
 }
 
 ```
 
-Argument Reference
-------------------
+## Argument Reference
 
 ### Metadata Argument Reference
-
 `annotations` - (Optional) queryable and should be preserved when modifying objects. (`String`).
+
 
 `description` - (Optional) Human readable description for the object (`String`).
 
+
 `disable` - (Optional) A value of true will administratively disable the object (`Bool`).
+
 
 `labels` - (Optional) by selector expression (`String`).
 
+
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
+
 `namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
+
+
 
 ### Spec Argument Reference
 
 `egress_rules` - (Optional) Ordered list of rules applied to connections from policy endpoints.. See [Egress Rules ](#egress-rules) below for details.
 
+
+
+		
+
+
+
+		
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+
 `endpoint` - (Required) Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints.. See [Endpoint ](#endpoint) below for details.
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
 
 `ingress_rules` - (Optional) Ordered list of rules applied to connections to policy endpoints.. See [Ingress Rules ](#ingress-rules) below for details.
 
-### Egress Rules
 
-Ordered list of rules applied to connections from policy endpoints..
+
+		
+
+
+
+		
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Egress Rules 
+
+ Ordered list of rules applied to connections from policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
 
@@ -68,61 +261,92 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Egress Rules Metadata ](#egress-rules-metadata) below for details.
 
-###### One of the arguments from this list "label_selector, ip_prefix_set, any, prefix_list, outside_endpoints, inside_endpoints, namespace" can be set
+
+
+
+###### One of the arguments from this list "any, prefix_list, outside_endpoints, inside_endpoints, namespace, label_selector, ip_prefix_set" can be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
+
 `inside_endpoints` - (Optional) All ip prefixes that are reachable via inside interfaces are chosen as Endpoints (`Bool`).
+
 
 `ip_prefix_set` - (Optional) Reference to object which represents list of IP prefixes that will be referred as remote endpoint. See [Other Endpoint Ip Prefix Set ](#other-endpoint-ip-prefix-set) below for details.
 
+
 `label_selector` - (Optional) local end point is set of prefixes determined by label selector expression. See [Other Endpoint Label Selector ](#other-endpoint-label-selector) below for details.
+
 
 `namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
 
+
 `outside_endpoints` - (Optional) All ip prefixes that are reachable via outside interfaces are chosen as Endpoints (`Bool`).
 
+
 `prefix_list` - (Optional) For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.. See [Other Endpoint Prefix List ](#other-endpoint-prefix-list) below for details.
+
 
 `rule_description` - (Optional) Human readable description for the rule (`String`).(Deprecated)
 
 `rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).(Deprecated)
 
-###### One of the arguments from this list "all_traffic, all_tcp_traffic, all_udp_traffic, applications, protocol_port_range" can be set
+
+
+
+###### One of the arguments from this list "applications, protocol_port_range, all_traffic, all_tcp_traffic, all_udp_traffic" can be set
 
 `all_tcp_traffic` - (Optional) Select all TCP traffic to match (`Bool`).
 
+
 `all_traffic` - (Optional) Select all traffic to match (`Bool`).
+
 
 `all_udp_traffic` - (Optional) Select all UDP traffic to match (`Bool`).
 
+
 `applications` - (Optional) Select Application traffic to match. See [Traffic Choice Applications ](#traffic-choice-applications) below for details.
+
 
 `protocol_port_range` - (Optional) Select specific protocol and port ranges traffic to match. See [Traffic Choice Protocol Port Range ](#traffic-choice-protocol-port-range) below for details.
 
-### Endpoint
 
-Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints..
 
-###### One of the arguments from this list "prefix_list, any, outside_endpoints, inside_endpoints, interface, namespace, label_selector" must be set
+
+### Endpoint 
+
+ Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints..
+
+
+
+###### One of the arguments from this list "inside_endpoints, interface, namespace, label_selector, prefix_list, any, outside_endpoints" must be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
+
 `inside_endpoints` - (Optional) All ip prefixes that are reachable via inside interfaces are chosen as Endpoints (`Bool`).
+
 
 `interface` - (Optional) All ip prefixes that are reachable via an interfaces are chosen as Endpoints. See [ref](#ref) below for details.(Deprecated)
 
+
 `label_selector` - (Optional) local end point is set of prefixes determined by label selector expression. See [Endpoint Choice Label Selector ](#endpoint-choice-label-selector) below for details.
+
 
 `namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
 
+
 `outside_endpoints` - (Optional) All ip prefixes that are reachable via outside interfaces are chosen as Endpoints (`Bool`).
+
 
 `prefix_list` - (Optional) For Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip.. See [Endpoint Choice Prefix List ](#endpoint-choice-prefix-list) below for details.
 
-### Ingress Rules
 
-Ordered list of rules applied to connections to policy endpoints..
+
+
+### Ingress Rules 
+
+ Ordered list of rules applied to connections to policy endpoints..
 
 `action` - (Optional) Action to be taken at rule match. Currently supported actions are Allow and Deny (`String`).
 
@@ -134,51 +358,75 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Ingress Rules Metadata ](#ingress-rules-metadata) below for details.
 
-###### One of the arguments from this list "outside_endpoints, inside_endpoints, namespace, label_selector, ip_prefix_set, any, prefix_list" can be set
+
+
+
+###### One of the arguments from this list "any, prefix_list, outside_endpoints, inside_endpoints, namespace, label_selector, ip_prefix_set" can be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
+
 `inside_endpoints` - (Optional) All ip prefixes that are reachable via inside interfaces are chosen as Endpoints (`Bool`).
+
 
 `ip_prefix_set` - (Optional) Reference to object which represents list of IP prefixes that will be referred as remote endpoint. See [Other Endpoint Ip Prefix Set ](#other-endpoint-ip-prefix-set) below for details.
 
+
 `label_selector` - (Optional) local end point is set of prefixes determined by label selector expression. See [Other Endpoint Label Selector ](#other-endpoint-label-selector) below for details.
+
 
 `namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
 
+
 `outside_endpoints` - (Optional) All ip prefixes that are reachable via outside interfaces are chosen as Endpoints (`Bool`).
 
+
 `prefix_list` - (Optional) For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.. See [Other Endpoint Prefix List ](#other-endpoint-prefix-list) below for details.
+
 
 `rule_description` - (Optional) Human readable description for the rule (`String`).(Deprecated)
 
 `rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).(Deprecated)
 
-###### One of the arguments from this list "all_tcp_traffic, all_udp_traffic, applications, protocol_port_range, all_traffic" can be set
+
+
+
+###### One of the arguments from this list "all_traffic, all_tcp_traffic, all_udp_traffic, applications, protocol_port_range" can be set
 
 `all_tcp_traffic` - (Optional) Select all TCP traffic to match (`Bool`).
 
+
 `all_traffic` - (Optional) Select all traffic to match (`Bool`).
+
 
 `all_udp_traffic` - (Optional) Select all UDP traffic to match (`Bool`).
 
+
 `applications` - (Optional) Select Application traffic to match. See [Traffic Choice Applications ](#traffic-choice-applications) below for details.
+
 
 `protocol_port_range` - (Optional) Select specific protocol and port ranges traffic to match. See [Traffic Choice Protocol Port Range ](#traffic-choice-protocol-port-range) below for details.
 
-### Egress Rules Adv Action
 
-Enable or disable logging..
 
-### Egress Rules Label Matcher
 
-not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location..
+### Egress Rules Adv Action 
+
+ Enable or disable logging..
+
+
+
+### Egress Rules Label Matcher 
+
+ not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
 
-### Egress Rules Metadata
 
-Common attributes for the rule including name and description..
+
+### Egress Rules Metadata 
+
+ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
@@ -186,45 +434,61 @@ Common attributes for the rule including name and description..
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
-### Endpoint Choice Any
 
-Any Endpoint that matches 0/0 ip prefix.
 
-### Endpoint Choice Inside Endpoints
+### Endpoint Choice Any 
 
-All ip prefixes that are reachable via inside interfaces are chosen as Endpoints.
+ Any Endpoint that matches 0/0 ip prefix.
 
-### Endpoint Choice Label Selector
 
-local end point is set of prefixes determined by label selector expression.
+
+### Endpoint Choice Inside Endpoints 
+
+ All ip prefixes that are reachable via inside interfaces are chosen as Endpoints.
+
+
+
+### Endpoint Choice Label Selector 
+
+ local end point is set of prefixes determined by label selector expression.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
-### Endpoint Choice Outside Endpoints
 
-All ip prefixes that are reachable via outside interfaces are chosen as Endpoints.
 
-### Endpoint Choice Prefix List
+### Endpoint Choice Outside Endpoints 
 
-For Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip..
+ All ip prefixes that are reachable via outside interfaces are chosen as Endpoints.
+
+
+
+### Endpoint Choice Prefix List 
+
+ For Ingress rules: To this endpoints from remote endpoints these ip prefixes are destination ip..
 
 `ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
-### Ingress Rules Adv Action
 
-Enable or disable logging..
 
-### Ingress Rules Label Matcher
+### Ingress Rules Adv Action 
 
-not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location..
+ Enable or disable logging..
+
+
+
+### Ingress Rules Label Matcher 
+
+ not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location..
 
 `keys` - (Optional) The list of label key names that have to match (`String`).
 
-### Ingress Rules Metadata
 
-Common attributes for the rule including name and description..
+
+### Ingress Rules Metadata 
+
+ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
@@ -232,39 +496,54 @@ Common attributes for the rule including name and description..
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
-### Other Endpoint Any
 
-Any Endpoint that matches 0/0 ip prefix.
 
-### Other Endpoint Inside Endpoints
+### Other Endpoint Any 
 
-All ip prefixes that are reachable via inside interfaces are chosen as Endpoints.
+ Any Endpoint that matches 0/0 ip prefix.
 
-### Other Endpoint Ip Prefix Set
 
-Reference to object which represents list of IP prefixes that will be referred as remote endpoint.
+
+### Other Endpoint Inside Endpoints 
+
+ All ip prefixes that are reachable via inside interfaces are chosen as Endpoints.
+
+
+
+### Other Endpoint Ip Prefix Set 
+
+ Reference to object which represents list of IP prefixes that will be referred as remote endpoint.
 
 `ref` - (Optional) A list of references to ip_prefix_set objects.. See [ref](#ref) below for details.
 
-### Other Endpoint Label Selector
 
-local end point is set of prefixes determined by label selector expression.
+
+### Other Endpoint Label Selector 
+
+ local end point is set of prefixes determined by label selector expression.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
-### Other Endpoint Outside Endpoints
 
-All ip prefixes that are reachable via outside interfaces are chosen as Endpoints.
 
-### Other Endpoint Prefix List
+### Other Endpoint Outside Endpoints 
 
-For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs..
+ All ip prefixes that are reachable via outside interfaces are chosen as Endpoints.
+
+
+
+### Other Endpoint Prefix List 
+
+ For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs..
 
 `ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
-### Ref
+
+
+### Ref 
+
 
 Reference to another volterra object is shown like below
 
@@ -274,33 +553,45 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Traffic Choice All Tcp Traffic
 
-Select all TCP traffic to match.
 
-### Traffic Choice All Traffic
+### Traffic Choice All Tcp Traffic 
 
-Select all traffic to match.
+ Select all TCP traffic to match.
 
-### Traffic Choice All Udp Traffic
 
-Select all UDP traffic to match.
 
-### Traffic Choice Applications
+### Traffic Choice All Traffic 
 
-Select Application traffic to match.
+ Select all traffic to match.
+
+
+
+### Traffic Choice All Udp Traffic 
+
+ Select all UDP traffic to match.
+
+
+
+### Traffic Choice Applications 
+
+ Select Application traffic to match.
 
 `applications` - (Optional) Application protocols like HTTP, SNMP (`List of Strings`).
 
-### Traffic Choice Protocol Port Range
 
-Select specific protocol and port ranges traffic to match.
+
+### Traffic Choice Protocol Port Range 
+
+ Select specific protocol and port ranges traffic to match.
 
 `port_ranges` - (Optional) List of port ranges. Each range is a single port or a pair of start and end ports e.g. 8080-8192 (`String`).
 
 `protocol` - (Optional) Values are tcp, udp, and icmp (`String`).
 
-Attribute Reference
--------------------
 
--	`id` - This is the id of the configured network_policy_view.
+
+## Attribute Reference
+
+* `id` - This is the id of the configured network_policy_view.
+

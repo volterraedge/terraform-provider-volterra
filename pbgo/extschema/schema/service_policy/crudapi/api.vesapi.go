@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy.crudapi.API.Create"
             },
@@ -3939,6 +3939,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyMaskingConfig": {
+            "type": "object",
+            "description": "x-displayName: \"Masking Configuration\"\nMasking configuration comprise a list of masking fields values and an action - mask or report.",
+            "title": "Masking Configuration",
+            "properties": {
+                "fields": {
+                    "type": "array",
+                    "description": "x-displayName: \"Fields Values\"\nx-example: \"[user.password, credit_card]\"\nA list of JSONPath fields values to match the request/response payload against.",
+                    "title": "Fields",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "mask": {
+                    "description": "x-displayName: \"Mask Sensitive Data\"\nMask sensitive data action",
+                    "title": "Mask Sensitive Data",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "report": {
+                    "description": "x-displayName: \"Report Sensitive Data\"\nReport sensitive data action",
+                    "title": "Report sensitive data",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "policyMatcherType": {
             "type": "object",
             "description": "A matcher specifies multiple criteria for matching an input string. The match is considered successful if any of the criteria are satisfied. The set\nof supported match criteria includes a list of exact values and a list of regular expressions.",
@@ -5032,7 +5057,8 @@ var APISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",
@@ -6649,6 +6675,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Request Constraints\"\nPlace limits on request based on the request attributes. The request matches if any of the attribute sizes exceed the corresponding maximum value.",
                     "title": "request constraints",
                     "$ref": "#/definitions/policyRequestConstraintType"
+                },
+                "response_masking_config": {
+                    "description": "x-displayName: \"Response Masking Configuration\"\nSensitive data masking configuration to be applied for the response",
+                    "title": "Response Masking Configuration",
+                    "$ref": "#/definitions/policyMaskingConfig"
                 },
                 "scheme": {
                     "type": "array",

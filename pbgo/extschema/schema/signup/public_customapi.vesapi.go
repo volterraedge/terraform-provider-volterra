@@ -1294,7 +1294,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-liststates"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-liststates"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ListStates"
             },
@@ -1394,7 +1394,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-listcities"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-listcities"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ListCities"
             },
@@ -1478,7 +1478,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-listcountries"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-listcountries"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ListCountries"
             },
@@ -1562,7 +1562,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-validateregistration"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-validateregistration"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ValidateRegistration"
             },
@@ -1646,7 +1646,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-sendpasswordemail"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-sendpasswordemail"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.SendPasswordEmail"
             },
@@ -1730,7 +1730,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.Get"
             },
@@ -1814,7 +1814,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-validatecontact"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-validatecontact"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ValidateContact"
             },
@@ -1906,7 +1906,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-liststates"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-liststates"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ListStates"
             },
@@ -2006,7 +2006,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-listcities"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-listcities"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ListCities"
             },
@@ -2090,7 +2090,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-signup-customapi-listcountries"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-signup-customapi-listcountries"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.signup.CustomAPI.ListCountries"
             },

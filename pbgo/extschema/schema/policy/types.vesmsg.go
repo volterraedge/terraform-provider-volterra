@@ -5715,6 +5715,205 @@ func L4DestMatcherTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *MaskingConfig) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MaskingConfig) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MaskingConfig) DeepCopy() *MaskingConfig {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MaskingConfig{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MaskingConfig) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MaskingConfig) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MaskingConfigValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMaskingConfig struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMaskingConfig) ActionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for action_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateMaskingConfig) FieldsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for fields")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for fields")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated fields")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items fields")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMaskingConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MaskingConfig)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MaskingConfig got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action_choice"]; exists {
+		val := m.GetActionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("action_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetActionChoice().(type) {
+	case *MaskingConfig_Mask:
+		if fv, exists := v.FldValidators["action_choice.mask"]; exists {
+			val := m.GetActionChoice().(*MaskingConfig_Mask).Mask
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("mask"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaskingConfig_Report:
+		if fv, exists := v.FldValidators["action_choice.report"]; exists {
+			val := m.GetActionChoice().(*MaskingConfig_Report).Report
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("report"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fields"]; exists {
+		vOpts := append(opts, db.WithValidateField("fields"))
+		if err := fv(ctx, m.GetFields(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMaskingConfigValidator = func() *ValidateMaskingConfig {
+	v := &ValidateMaskingConfig{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhActionChoice := v.ActionChoiceValidationRuleHandler
+	rulesActionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhActionChoice(rulesActionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MaskingConfig.action_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["action_choice"] = vFn
+
+	vrhFields := v.FieldsValidationRuleHandler
+	rulesFields := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.json_path": "true",
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
+		"ves.io.schema.rules.repeated.max_items":              "16",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+		"ves.io.schema.rules.string.json_path":                "true",
+	}
+	vFn, err = vrhFields(rulesFields)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MaskingConfig.fields: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["fields"] = vFn
+
+	return v
+}()
+
+func MaskingConfigValidator() db.Validator {
+	return DefaultMaskingConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *MatcherType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

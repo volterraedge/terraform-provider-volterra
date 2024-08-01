@@ -4114,7 +4114,7 @@ type FleetBondDeviceType struct {
 	// x-displayName: "Bond Device Name"
 	// x-example: "bond0"
 	// x-required
-	// Bond device name
+	// Name for the Bond. Ex 'bond0'
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Member Ethernet Devices
 	//
@@ -4139,7 +4139,7 @@ type FleetBondDeviceType struct {
 	// x-displayName: "Link Polling Interval"
 	// x-required
 	// x-example: "1000"
-	// Link polling interval in millisecond
+	// Link polling interval in milliseconds
 	LinkPollingInterval uint32 `protobuf:"varint,6,opt,name=link_polling_interval,json=linkPollingInterval,proto3" json:"link_polling_interval,omitempty"`
 	// Link Up Delay
 	//
@@ -4622,16 +4622,15 @@ func (*LocalControlPlaneType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// BlockedServices specifies the ports of platform services blocked explicitly
+// Disable Node Local Service
 //
-// x-displayName: "Blocked Services"
-// Blocked Services configured explicitly
-// By default all services are allowed and get blocked when config is updated
+// x-displayName: "Disable Node Local Service"
+// Disable a node local service on this site.
 type BlockedServices struct {
 	// blocked_services_type_choice
 	//
-	// x-displayName: "Blocked Services Value Type"
-	// Match criteria for blocked services
+	// x-displayName: "Node Local Service"
+	// Choose the Nodel Local Service to disable
 	//
 	// Types that are valid to be assigned to BlockedServicesValueTypeChoice:
 	//
@@ -4641,8 +4640,8 @@ type BlockedServices struct {
 	BlockedServicesValueTypeChoice isBlockedServices_BlockedServicesValueTypeChoice `protobuf_oneof:"blocked_services_value_type_choice"`
 	// network_type
 	//
-	// x-displayName: "Network Type"
-	// Network type in which these ports get blocked
+	// x-displayName: "Site Local VRF"
+	// Site Local VRF on which this service will be disabled
 	NetworkType schema.VirtualNetworkType `protobuf:"varint,5,opt,name=network_type,json=networkType,proto3,enum=ves.io.schema.VirtualNetworkType" json:"network_type,omitempty"`
 }
 
@@ -5170,10 +5169,10 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_DisableFlowExport
 	//	*GlobalSpecType_EnableFlowExport
 	FlowExporterChoice isGlobalSpecType_FlowExporterChoice `protobuf_oneof:"flow_exporter_choice"`
-	// Blocked Services
+	// Disable Node Local Services
 	//
-	// x-displayName: "Blocked Services"
-	// Configuration to block the default services allowed by the platform
+	// x-displayName: "Disable Node Local Services"
+	// Disable node local services on this site.
 	BlockedServices []*BlockedServices `protobuf:"bytes,59,rep,name=blocked_services,json=blockedServices,proto3" json:"blocked_services,omitempty"`
 	// Offline Survivability Mode
 	//
@@ -8009,15 +8008,14 @@ func (m *FleetStatus) GetAvailableSoftwareVersion() string {
 	return ""
 }
 
-// Custom Blocked Services Configuration List
+// Disable Node Local Services
 //
-// x-displayName: "Custom Blocked Services Configuration List"
-// List of all custom blocked services configuration
+// x-displayName: "Disable Node Local Services"
+// Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.
 type BlockedServicesListType struct {
-	// Custom Blocked Services Configuration
+	// Disable Node Local Services
 	//
-	// x-displayName: "Custom Blocked Services Configuration"
-	// Use custom blocked services configuration
+	// x-displayName: "Disable Node Local Services"
 	BlockedSevice []*BlockedServices `protobuf:"bytes,1,rep,name=blocked_sevice,json=blockedSevice,proto3" json:"blocked_sevice,omitempty"`
 }
 

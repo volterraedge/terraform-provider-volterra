@@ -5345,6 +5345,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["response_masking_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("response_masking_config"))
+		if err := fv(ctx, m.GetResponseMaskingConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
@@ -5702,6 +5711,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["threat_mesh_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["segment_policy"] = ves_io_schema_policy.SegmentPolicyTypeValidator().Validate
+
+	v.FldValidators["response_masking_config"] = ves_io_schema_policy.MaskingConfigValidator().Validate
 
 	return v
 }()

@@ -1724,7 +1724,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.bot_defense_app_infrastructure.API.Create"
             },
@@ -1824,7 +1824,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.bot_defense_app_infrastructure.API.Replace"
             },
@@ -1940,7 +1940,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.bot_defense_app_infrastructure.API.List"
             },
@@ -2049,7 +2049,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.bot_defense_app_infrastructure.API.Get"
             },
@@ -2142,7 +2142,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-bot_defense_app_infrastructure-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.bot_defense_app_infrastructure.API.Delete"
             },

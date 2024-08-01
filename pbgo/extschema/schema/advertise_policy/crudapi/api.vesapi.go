@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-advertise_policy-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.advertise_policy.crudapi.API.Create"
             },
@@ -3181,20 +3181,32 @@ var APISwaggerJSON string = `{
             "description": "TLS configuration for downstream connections",
             "title": "DownstreamTlsParamsType",
             "x-displayname": "Downstream TLS Parameters",
+            "x-ves-oneof-field-client_certificate_verify_choice": "[\"client_certificate_optional\",\"client_certificate_required\",\"no_client_certificate\"]",
             "x-ves-proto-message": "ves.io.schema.DownstreamTlsParamsType",
             "properties": {
+                "client_certificate_optional": {
+                    "description": "Exclusive with [client_certificate_required no_client_certificate]\n Client certificate is optional. If the client has provided a certificate,\n the load balancer will verify it. If certification verification fails,\n the connection will be terminated. If the client does not provide a certificate,\n the connection will be accepted.",
+                    "title": "client_certificate_optional",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Client Certificate Optional"
+                },
+                "client_certificate_required": {
+                    "description": "Exclusive with [client_certificate_optional no_client_certificate]\n Client certificate is mandatory. F5XC will reject connections without a valid client\n certificate.",
+                    "title": "client_certificate_required",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Require Client Certificate"
+                },
                 "common_params": {
                     "description": " Common TLS parameters used in both upstream and downstream connections",
                     "title": "common_params",
                     "$ref": "#/definitions/schemaTlsParamsType",
                     "x-displayname": "Common Parameters"
                 },
-                "require_client_certificate": {
-                    "type": "boolean",
-                    "description": " If true, F5XC will reject connections without a valid client\n certificate.",
-                    "title": "require_client_certificate",
-                    "format": "boolean",
-                    "x-displayname": "Require Client Certificate(enable mTLS)"
+                "no_client_certificate": {
+                    "description": "Exclusive with [client_certificate_optional client_certificate_required]\n Client certificate is not required. If the client has provided a certificate,\n it will be ignored (not used for verification)",
+                    "title": "no_client_certificate",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Client Certificate not required"
                 },
                 "xfcc_header_elements": {
                     "type": "array",

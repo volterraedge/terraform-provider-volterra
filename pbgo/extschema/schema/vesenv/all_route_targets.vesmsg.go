@@ -1453,6 +1453,28 @@ func (v *ValidateRouteTargetChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *RouteTargetChoice_Rt_2016:
+		if fv, exists := v.FldValidators["choice.rt_2016"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2016).Rt_2016
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2016"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteTargetChoice_Rt_2017:
+		if fv, exists := v.FldValidators["choice.rt_2017"]; exists {
+			val := m.GetChoice().(*RouteTargetChoice_Rt_2017).Rt_2017
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("rt_2017"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 	case *RouteTargetChoice_Rt_65535:
 		if fv, exists := v.FldValidators["choice.rt_65535"]; exists {
 			val := m.GetChoice().(*RouteTargetChoice_Rt_65535).Rt_65535

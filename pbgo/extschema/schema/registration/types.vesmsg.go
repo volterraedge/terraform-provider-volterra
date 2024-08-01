@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 )
 
 var (
@@ -953,6 +954,8 @@ var DefaultInfraValidator = func() *ValidateInfra {
 		panic(errMsg)
 	}
 	v.FldValidators["interfaces"] = vFn
+
+	v.FldValidators["hw_info"] = ves_io_schema_site.OsInfoValidator().Validate
 
 	return v
 }()

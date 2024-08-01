@@ -1012,7 +1012,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-settgwinfo"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-settgwinfo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetTGWInfo"
             },
@@ -1112,7 +1112,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-setvipinfo"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-setvipinfo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVIPInfo"
             },
@@ -1212,7 +1212,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-setvpcipprefixes"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-setvpcipprefixes"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPCIpPrefixes"
             },
@@ -1312,7 +1312,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-setvpntunnels"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-setvpntunnels"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.SetVPNTunnels"
             },
@@ -1412,7 +1412,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-validateconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_tgw_site-customapi-validateconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_tgw_site.CustomAPI.ValidateConfig"
             },

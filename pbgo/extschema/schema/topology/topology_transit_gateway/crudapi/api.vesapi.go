@@ -1603,7 +1603,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Get"
             },
@@ -1678,7 +1678,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Delete"
             },
@@ -1761,7 +1761,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Replace"
             },
@@ -1908,7 +1908,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.List"
             },
@@ -1985,7 +1985,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Create"
             },
@@ -2132,7 +2132,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.ListStream"
             },
@@ -2239,7 +2239,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Get"
             },
@@ -2386,7 +2386,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.List"
             },
@@ -2468,7 +2468,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Delete"
             },
@@ -2551,7 +2551,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Replace"
             },
@@ -2635,7 +2635,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_transit_gateway-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_transit_gateway.crudapi.API.Create"
             },
@@ -3228,6 +3228,81 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "topologyAWSTGWAttachment": {
+            "type": "object",
+            "description": "AWS TGW Attachment",
+            "title": "AWSTGWAttachment",
+            "x-displayname": "AWS TGW Attachement",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSTGWAttachment",
+            "properties": {
+                "associated_route_table_id": {
+                    "type": "string",
+                    "description": "Associated Route Table ID",
+                    "title": "Associated Route Table ID",
+                    "x-displayname": "Associated Route Table ID"
+                },
+                "association_state": {
+                    "type": "string",
+                    "description": "Association State",
+                    "title": "Association State",
+                    "x-displayname": "Association State"
+                },
+                "cidr": {
+                    "type": "string",
+                    "description": "CIDR",
+                    "title": "CIDR",
+                    "x-displayname": "CIDR"
+                },
+                "cloud_connect": {
+                    "type": "array",
+                    "description": " Reference to the Cloud Connect",
+                    "title": "Cloud Connect",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Cloud Connect"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "TGW Attachment ID",
+                    "title": "ID",
+                    "x-displayname": "ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "TGW Attachment Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "resource_id": {
+                    "type": "string",
+                    "description": "Resource ID",
+                    "title": "Resource ID",
+                    "x-displayname": "Resource ID"
+                },
+                "resource_name": {
+                    "type": "string",
+                    "description": "Resource Name",
+                    "title": "Resource Name",
+                    "x-displayname": "Resource Name"
+                },
+                "resource_type": {
+                    "type": "string",
+                    "description": "Resource Type",
+                    "title": "Resource Type",
+                    "x-displayname": "Resource Type"
+                },
+                "segment": {
+                    "type": "array",
+                    "description": " Reference to the Segment",
+                    "title": "Segment",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Segment"
+                }
+            }
+        },
         "topologyMetaType": {
             "type": "object",
             "description": "A metadata for topology objects.",
@@ -3311,6 +3386,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "transit gateway",
             "x-ves-proto-message": "ves.io.schema.topology.TransitGatewayType",
             "properties": {
+                "attachments": {
+                    "type": "array",
+                    "description": "TGW Attachements",
+                    "title": "Attachments",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachment"
+                    },
+                    "x-displayname": "Attachments"
+                },
                 "auto_accept_shared_attachments": {
                     "type": "boolean",
                     "description": " Auto accept shared attachment",

@@ -678,7 +678,7 @@ var CustomAPIPrivateSwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-updateapiinventorylists"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-updateapiinventorylists"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiInventoryLists"
             },
@@ -778,7 +778,7 @@ var CustomAPIPrivateSwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-updateapidefinitionreference"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-updateapidefinitionreference"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_inventory.CustomAPIPrivate.UpdateApiDefinitionReference"
             },
@@ -878,7 +878,7 @@ var CustomAPIPrivateSwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-getpathsuggestions"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_inventory-customapiprivate-getpathsuggestions"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_inventory.CustomAPIPrivate.GetPathSuggestions"
             },
@@ -1112,7 +1112,8 @@ var CustomAPIPrivateSwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

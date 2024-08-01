@@ -686,7 +686,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-revokeglobalkubeconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-revokeglobalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.RevokeGlobalKubeConfig"
             },
@@ -770,7 +770,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-listglobalkubeconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-listglobalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.ListGlobalKubeConfig"
             },
@@ -857,7 +857,7 @@ var UamKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-createglobalkubeconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-uamkubeconfigapi-createglobalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UamKubeConfigAPI.CreateGlobalKubeConfig"
             },

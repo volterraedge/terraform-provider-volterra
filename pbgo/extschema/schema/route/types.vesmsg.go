@@ -3013,7 +3013,7 @@ var DefaultRouteDirectResponseValidator = func() *ValidateRouteDirectResponse {
 
 	vrhResponseBody := v.ResponseBodyValidationRuleHandler
 	rulesResponseBody := map[string]string{
-		"ves.io.schema.rules.string.max_bytes": "4096",
+		"ves.io.schema.rules.string.max_bytes": "65536",
 		"ves.io.schema.rules.string.min_bytes": "1",
 	}
 	vFn, err = vrhResponseBody(rulesResponseBody)

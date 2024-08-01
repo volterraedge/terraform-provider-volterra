@@ -757,6 +757,48 @@ func (v *ValidateL7AclRule) PathsValidationRuleHandler(rules map[string]string) 
 	return validatorFn, nil
 }
 
+func (v *ValidateL7AclRule) Ja4TlsFingerprintsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ja4_tls_fingerprints")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ja4_tls_fingerprints")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ja4_tls_fingerprints")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ja4_tls_fingerprints")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateL7AclRule) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*L7AclRule)
 	if !ok {
@@ -799,6 +841,14 @@ func (v *ValidateL7AclRule) Validate(ctx context.Context, pm interface{}, opts .
 	if fv, exists := v.FldValidators["ip_prefix"]; exists {
 		vOpts := append(opts, db.WithValidateField("ip_prefix"))
 		if err := fv(ctx, m.GetIpPrefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ja4_tls_fingerprints"]; exists {
+		vOpts := append(opts, db.WithValidateField("ja4_tls_fingerprints"))
+		if err := fv(ctx, m.GetJa4TlsFingerprints(), vOpts...); err != nil {
 			return err
 		}
 
@@ -919,7 +969,6 @@ var DefaultL7AclRuleValidator = func() *ValidateL7AclRule {
 
 	vrhPaths := v.PathsValidationRuleHandler
 	rulesPaths := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.http_path": "true",
 		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
 		"ves.io.schema.rules.repeated.items.string.not_empty": "true",
 		"ves.io.schema.rules.repeated.max_items":              "16",
@@ -931,6 +980,19 @@ var DefaultL7AclRuleValidator = func() *ValidateL7AclRule {
 		panic(errMsg)
 	}
 	v.FldValidators["paths"] = vFn
+
+	vrhJa4TlsFingerprints := v.Ja4TlsFingerprintsValidationRuleHandler
+	rulesJa4TlsFingerprints := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.len": "36",
+		"ves.io.schema.rules.repeated.max_items":        "64",
+		"ves.io.schema.rules.repeated.unique":           "true",
+	}
+	vFn, err = vrhJa4TlsFingerprints(rulesJa4TlsFingerprints)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for L7AclRule.ja4_tls_fingerprints: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ja4_tls_fingerprints"] = vFn
 
 	return v
 }()

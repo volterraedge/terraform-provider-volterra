@@ -861,7 +861,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setcloudsiteinfo"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setcloudsiteinfo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetCloudSiteInfo"
             },
@@ -961,7 +961,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setvipinfo"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setvipinfo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVIPInfo"
             },
@@ -1061,7 +1061,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setvpck8shostnames"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-setvpck8shostnames"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.CustomAPI.SetVPCK8SHostnames"
             },
@@ -1161,7 +1161,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-validateconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-customapi-validateconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.CustomAPI.ValidateConfig"
             },

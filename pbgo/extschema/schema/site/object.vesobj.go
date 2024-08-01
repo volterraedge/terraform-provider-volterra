@@ -1549,6 +1549,8 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 
 	v.FldValidators["volterra_software_status"] = VolterraSoftwareStatusValidator().Validate
 
+	v.FldValidators["hw_info"] = OsInfoValidator().Validate
+
 	v.FldValidators["operating_system_status"] = OperatingSystemStatusValidator().Validate
 
 	v.FldValidators["vnet_peering_status"] = AzureHubSpokeVnetPeeringStatusInfoValidator().Validate

@@ -19,6 +19,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.topology.ListCloudSubnetTagValuesRequest"] = ListCloudSubnetTagValuesRequestValidator()
 	vr["ves.io.schema.topology.ListCloudSubnetTagValuesResponse"] = ListCloudSubnetTagValuesResponseValidator()
 
+	vr["ves.io.schema.topology.AWSNetworkMetaData"] = AWSNetworkMetaDataValidator()
 	vr["ves.io.schema.topology.DCClusterGroupSummaryInfo"] = DCClusterGroupSummaryInfoValidator()
 	vr["ves.io.schema.topology.DCClusterGroupsSummaryRequest"] = DCClusterGroupsSummaryRequestValidator()
 	vr["ves.io.schema.topology.DCClusterTopologyRequest"] = DCClusterTopologyRequestValidator()
@@ -60,10 +61,15 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.topology.SubnetData"] = SubnetDataValidator()
 	vr["ves.io.schema.topology.SubnetMetaData"] = SubnetMetaDataValidator()
 	vr["ves.io.schema.topology.SubnetSummaryInfo"] = SubnetSummaryInfoValidator()
+	vr["ves.io.schema.topology.TGWRouteTablesRequest"] = TGWRouteTablesRequestValidator()
+	vr["ves.io.schema.topology.TGWRouteTablesResponse"] = TGWRouteTablesResponseValidator()
 	vr["ves.io.schema.topology.TopologyResponse"] = TopologyResponseValidator()
 
 	vr["ves.io.schema.topology.AWSPolicyType"] = AWSPolicyTypeValidator()
 	vr["ves.io.schema.topology.AWSRouteAttributes"] = AWSRouteAttributesValidator()
+	vr["ves.io.schema.topology.AWSTGWAttachment"] = AWSTGWAttachmentValidator()
+	vr["ves.io.schema.topology.AWSTGWAttachmentMetaData"] = AWSTGWAttachmentMetaDataValidator()
+	vr["ves.io.schema.topology.AWSTgwRouteAttributes"] = AWSTgwRouteAttributesValidator()
 	vr["ves.io.schema.topology.AddressInfoType"] = AddressInfoTypeValidator()
 	vr["ves.io.schema.topology.AzureResourceGroupInfo"] = AzureResourceGroupInfoValidator()
 	vr["ves.io.schema.topology.AzureVnetPeer"] = AzureVnetPeerValidator()

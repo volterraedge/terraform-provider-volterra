@@ -1088,7 +1088,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ui-static_component-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ui-static_component-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ui.static_component.API.List"
             },
@@ -1195,7 +1195,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ui-static_component-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ui-static_component-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ui.static_component.API.Get"
             },

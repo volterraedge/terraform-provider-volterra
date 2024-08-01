@@ -1149,7 +1149,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getsecurityconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getsecurityconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetSecurityConfig"
             },
@@ -1249,7 +1249,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-assignapidefinition"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-assignapidefinition"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.AssignAPIDefinition"
             },
@@ -1341,7 +1341,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-listavailableapidefinitions"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-listavailableapidefinitions"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions"
             },
@@ -1433,7 +1433,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getdosautomitigationrules"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getdosautomitigationrules"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDoSAutoMitigationRules"
             },
@@ -1533,7 +1533,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-deletedosautomitigationrule"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-deletedosautomitigationrule"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.DeleteDoSAutoMitigationRule"
             },
@@ -1625,7 +1625,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getdnsinfo"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-getdnsinfo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.GetDnsInfo"
             },
@@ -2322,7 +2322,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "paths": {
                     "type": "array",
-                    "description": " A list of exact path values to match the input HTTP path against\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact path values to match the input HTTP path against\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 16,
                     "items": {
                         "type": "string",
@@ -2331,7 +2331,6 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Paths",
                     "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.http_path": "true",
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "16",

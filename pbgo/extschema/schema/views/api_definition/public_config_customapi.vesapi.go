@@ -1005,7 +1005,7 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-getreferencinghttploadbalancers"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-getreferencinghttploadbalancers"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.GetReferencingHttpLoadbalancers"
             },
@@ -1105,7 +1105,7 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-markasnonapi"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-markasnonapi"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.MarkAsNonAPI"
             },
@@ -1205,7 +1205,7 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-movetoapinventory"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-movetoapinventory"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.MoveToAPInventory"
             },
@@ -1305,7 +1305,7 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-removefromapinventory"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-removefromapinventory"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.RemoveFromAPInventory"
             },
@@ -1405,7 +1405,7 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-unmarkasnonapi"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-publicconfigcustomapi-unmarkasnonapi"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.PublicConfigCustomAPI.UnmarkAsNonAPI"
             },
@@ -1505,7 +1505,8 @@ var PublicConfigCustomAPISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

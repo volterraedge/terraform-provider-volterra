@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_domain-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_domain-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_domain-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_domain-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_domain-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_domain-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_domain.API.Delete"
             },

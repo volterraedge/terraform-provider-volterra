@@ -1603,7 +1603,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Get"
             },
@@ -1678,7 +1678,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Delete"
             },
@@ -1761,7 +1761,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Replace"
             },
@@ -1908,7 +1908,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.List"
             },
@@ -1985,7 +1985,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Create"
             },
@@ -2132,7 +2132,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.ListStream"
             },
@@ -2239,7 +2239,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Get"
             },
@@ -2386,7 +2386,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.List"
             },
@@ -2468,7 +2468,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Delete"
             },
@@ -2551,7 +2551,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Replace"
             },
@@ -2635,7 +2635,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.crudapi.API.Create"
             },
@@ -2693,6 +2693,13 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "255",
                         "ves.io.schema.rules.string.min_len": "1"
                     }
+                },
+                "last_unsubscribe_timestamp": {
+                    "type": "string",
+                    "description": " Timestamp when the payg offering was last unsubscribed by the customer",
+                    "title": "Last Unsubscribe Timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Last Unsubscribe Timestamp"
                 },
                 "product_code": {
                     "type": "string",

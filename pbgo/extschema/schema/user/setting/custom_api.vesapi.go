@@ -3207,7 +3207,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-getadminntfnpreferences"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-getadminntfnpreferences"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.GetAdminNtfnPreferences"
             },
@@ -3286,7 +3286,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-updateadminntfnpreferences"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-updateadminntfnpreferences"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.UpdateAdminNtfnPreferences"
             },
@@ -3370,7 +3370,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-unsetadminntfnpreference"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-unsetadminntfnpreference"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.UnsetAdminNtfnPreference"
             },
@@ -3444,7 +3444,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-getcombinedntfnpreferences"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-getcombinedntfnpreferences"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.GetCombinedNtfnPreferences"
             },
@@ -3523,7 +3523,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-updatecombinedntfnpreferences"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-updatecombinedntfnpreferences"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.UpdateCombinedNtfnPreferences"
             },
@@ -3597,7 +3597,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-getntfnpreferences"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-getntfnpreferences"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.GetNtfnPreferences"
             },
@@ -3676,7 +3676,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-updatentfnpreferences"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-updatentfnpreferences"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.UpdateNtfnPreferences"
             },
@@ -3760,7 +3760,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-unsetntfnpreference"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-unsetntfnpreference"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.UnsetNtfnPreference"
             },
@@ -3844,7 +3844,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-resetotpdevicebyadmin"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-resetotpdevicebyadmin"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.ResetOtpDeviceByAdmin"
             },
@@ -3918,7 +3918,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-getusersessions"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-getusersessions"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.GetUserSessions"
             },
@@ -3992,7 +3992,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.Get"
             },
@@ -4071,7 +4071,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-update"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-update"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.Update"
             },
@@ -4155,7 +4155,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-disableuserinidm"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-disableuserinidm"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.DisableUserInIDM"
             },
@@ -4239,7 +4239,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-enableuserinidm"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-enableuserinidm"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.EnableUserInIDM"
             },
@@ -4313,7 +4313,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-getuserimage"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-getuserimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.GetUserImage"
             },
@@ -4382,7 +4382,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-deleteuserimage"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-deleteuserimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.DeleteUserImage"
             },
@@ -4461,7 +4461,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-updateuserimage"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-updateuserimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.UpdateUserImage"
             },
@@ -4545,7 +4545,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-requestinitialaccess"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-requestinitialaccess"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.RequestInitialAccess"
             },
@@ -4619,7 +4619,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-getviewpreference"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-getviewpreference"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.GetViewPreference"
             },
@@ -4698,7 +4698,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-setting-customapi-setviewpreference"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-setting-customapi-setviewpreference"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.setting.CustomAPI.SetViewPreference"
             },

@@ -74,6 +74,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_with_vip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.ztna_application.API.Create"] = []svcfw.EnvironmentField{
@@ -95,6 +99,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_with_vip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -121,6 +129,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_with_vip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.proxy_advertisement.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -141,6 +153,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_with_vip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.cloud_edge_segment.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
@@ -158,6 +174,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_with_vip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}
@@ -183,6 +203,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "items.#.get_spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
+		{
+			FieldPath:           "items.#.get_spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_with_vip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
 	}
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.ztna_application.API.Replace"] = []svcfw.EnvironmentField{
@@ -204,6 +228,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_segment.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.proxy_advertisement.advertise_custom.advertise_where.#.virtual_site_with_vip.ipv6",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 	}

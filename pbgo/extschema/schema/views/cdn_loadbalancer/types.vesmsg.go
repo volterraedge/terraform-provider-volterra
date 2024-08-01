@@ -17,6 +17,7 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_common_security "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
 	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
@@ -269,6 +270,12 @@ func (m *ApiProtection) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -331,6 +338,34 @@ func (m *ApiProtection) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *ApiProtection) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *ApiProtection_DefaultSensitiveDataPolicy:
+
+		return nil, nil
+
+	case *ApiProtection_SensitiveDataPolicy:
+
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateApiProtection struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -347,6 +382,14 @@ func (v *ValidateApiProtection) ApiDiscoveryChoiceValidationRuleHandler(rules ma
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateApiProtection) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -477,6 +520,42 @@ func (v *ValidateApiProtection) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
+		val := m.GetSensitiveDataPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sensitive_data_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *ApiProtection_DefaultSensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.default_sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*ApiProtection_DefaultSensitiveDataPolicy).DefaultSensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("default_sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ApiProtection_SensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*ApiProtection_SensitiveDataPolicy).SensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -514,11 +593,24 @@ var DefaultApiProtectionValidator = func() *ValidateApiProtection {
 	}
 	v.FldValidators["api_discovery_choice"] = vFn
 
+	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
+	rulesSensitiveDataPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSensitiveDataPolicyChoice(rulesSensitiveDataPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiProtection.sensitive_data_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sensitive_data_policy_choice"] = vFn
+
 	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
 	v.FldValidators["api_definition_choice.api_specification_on_cache_miss"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
 
 	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
 	v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+
+	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
 
 	v.FldValidators["api_protection_rules"] = ves_io_schema_views_common_waf.APIProtectionRulesValidator().Validate
 
@@ -652,6 +744,193 @@ var DefaultAuthenticationOptionsValidator = func() *ValidateAuthenticationOption
 
 func AuthenticationOptionsValidator() db.Validator {
 	return DefaultAuthenticationOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BotProtection) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotProtection) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotProtection) DeepCopy() *BotProtection {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotProtection{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotProtection) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotProtection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotProtectionValidator().Validate(ctx, m, opts...)
+}
+
+func (m *BotProtection) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBotDefenseChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *BotProtection) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *BotProtection_DisableBotDefense:
+
+		return nil, nil
+
+	case *BotProtection_BotDefense:
+
+		return nil, nil
+
+	case *BotProtection_BotDefenseAdvanced:
+
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateBotProtection struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotProtection) BotDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBotProtection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotProtection)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotProtection got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bot_defense_choice"]; exists {
+		val := m.GetBotDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotDefenseChoice().(type) {
+	case *BotProtection_DisableBotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*BotProtection_DisableBotDefense).DisableBotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("disable_bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotProtection_BotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*BotProtection_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotProtection_BotDefenseAdvanced:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense_advanced"]; exists {
+			val := m.GetBotDefenseChoice().(*BotProtection_BotDefenseAdvanced).BotDefenseAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotProtectionValidator = func() *ValidateBotProtection {
+	v := &ValidateBotProtection{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBotDefenseChoice := v.BotDefenseChoiceValidationRuleHandler
+	rulesBotDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotDefenseChoice(rulesBotDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotProtection.bot_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_defense_choice"] = vFn
+
+	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
+	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
+
+	return v
+}()
+
+func BotProtectionValidator() db.Validator {
+	return DefaultBotProtectionValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3711,6 +3990,140 @@ func CdnOriginPoolTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ClientSideDefense) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ClientSideDefense) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ClientSideDefense) DeepCopy() *ClientSideDefense {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ClientSideDefense{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ClientSideDefense) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ClientSideDefense) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ClientSideDefenseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateClientSideDefense struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateClientSideDefense) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_side_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateClientSideDefense) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ClientSideDefense)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ClientSideDefense got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["client_side_defense_choice"]; exists {
+		val := m.GetClientSideDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_side_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *ClientSideDefense_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*ClientSideDefense_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ClientSideDefense_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*ClientSideDefense_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultClientSideDefenseValidator = func() *ValidateClientSideDefense {
+	v := &ValidateClientSideDefense{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
+	rulesClientSideDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientSideDefenseChoice(rulesClientSideDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ClientSideDefense.client_side_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_side_defense_choice"] = vFn
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ves_io_schema_views_common_security.ClientSideDefenseTypeValidator().Validate
+
+	return v
+}()
+
+func ClientSideDefenseValidator() db.Validator {
+	return DefaultClientSideDefenseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CommonSecurityControls) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4009,6 +4422,14 @@ func (v *ValidateCommonSecurityControls) ServicePolicyChoiceValidationRuleHandle
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCommonSecurityControls) ThreatMeshChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
 	}
 	return validatorFn, nil
 }
@@ -4406,6 +4827,42 @@ func (v *ValidateCommonSecurityControls) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["threat_mesh_choice"]; exists {
+		val := m.GetThreatMeshChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_mesh_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatMeshChoice().(type) {
+	case *CommonSecurityControls_DisableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.disable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*CommonSecurityControls_DisableThreatMesh).DisableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("disable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CommonSecurityControls_EnableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.enable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*CommonSecurityControls_EnableThreatMesh).EnableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("enable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["trusted_clients"]; exists {
 		vOpts := append(opts, db.WithValidateField("trusted_clients"))
 		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
@@ -4509,6 +4966,17 @@ var DefaultCommonSecurityControlsValidator = func() *ValidateCommonSecurityContr
 	}
 	v.FldValidators["service_policy_choice"] = vFn
 
+	vrhThreatMeshChoice := v.ThreatMeshChoiceValidationRuleHandler
+	rulesThreatMeshChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatMeshChoice(rulesThreatMeshChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CommonSecurityControls.threat_mesh_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_mesh_choice"] = vFn
+
 	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
 	rulesUserIdChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4598,6 +5066,14 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.https")
 	}
 
+	if err := m.GetOtherSettings().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.other_settings")
+	}
+
+	if err := m.GetJwtValidation().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.jwt_validation")
+	}
+
 	return nil
 }
 
@@ -4634,6 +5110,30 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
 	} else {
@@ -4646,7 +5146,187 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWafChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *CreateSpecType_DisableApiDefinition:
+
+		return nil, nil
+
+	case *CreateSpecType_ApiSpecification:
+
+		drInfos, err := m.GetApiSpecification().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_ApiSpecificationOnCacheMiss:
+
+		drInfos, err := m.GetApiSpecificationOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecificationOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *CreateSpecType_DisableBotDefense:
+
+		return nil, nil
+
+	case *CreateSpecType_BotDefense:
+
+		return nil, nil
+
+	case *CreateSpecType_BotDefenseAdvanced:
+
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *CreateSpecType_NoChallenge:
+
+		return nil, nil
+
+	case *CreateSpecType_EnableChallenge:
+
+		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_ChallengeOnCacheMiss:
+
+		drInfos, err := m.GetChallengeOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetChallengeOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "challenge_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_JsChallenge:
+
+		return nil, nil
+
+	case *CreateSpecType_CaptchaChallenge:
+
+		return nil, nil
+
+	case *CreateSpecType_PolicyBasedChallenge:
+
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -4686,14 +5366,398 @@ func (m *CreateSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *CreateSpecType_DisableRateLimit:
+
+		return nil, nil
+
+	case *CreateSpecType_ApiRateLimit:
+
+		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_RateLimit:
+
+		drInfos, err := m.GetRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *CreateSpecType_DefaultSensitiveDataPolicy:
+
+		return nil, nil
+
+	case *CreateSpecType_SensitiveDataPolicy:
+
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+
+		return nil, nil
+
+	case *CreateSpecType_NoServicePolicies:
+
+		return nil, nil
+
+	case *CreateSpecType_ActiveServicePolicies:
+
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+func (m *CreateSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *CreateSpecType_UserIdClientIp:
+
+		return nil, nil
+
+	case *CreateSpecType_UserIdentification:
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetUserIdChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetUserIdChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUserIdChoice().(type) {
+	case *CreateSpecType_UserIdClientIp:
+
+	case *CreateSpecType_UserIdentification:
+		refdType, err := d.TypeForEntryKind("", "", "user_identification.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: user_identification")
+		}
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "user_identification.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+func (m *CreateSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *CreateSpecType_DisableWaf:
+
+		return nil, nil
+
+	case *CreateSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *CreateSpecType_AppFirewallOnCacheMiss:
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall_on_cache_miss",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CreateSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafChoice().(type) {
+	case *CreateSpecType_DisableWaf:
+
+	case *CreateSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *CreateSpecType_AppFirewallOnCacheMiss:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateSpecType) ApiDefinitionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_definition_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) BotDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_side_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) SlowDdosMitigationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for slow_ddos_mitigation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ThreatMeshChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) WafChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_choice")
 	}
 	return validatorFn, nil
 }
@@ -4761,6 +5825,390 @@ func (v *ValidateCreateSpecType) OriginPoolValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) CacheRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cache_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNCacheRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNCacheRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cache_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNCacheRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNCacheRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cache_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cache_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_exclusion_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleWafExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleWafExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_exclusion_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_exclusion_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ProtectedCookiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for protected_cookies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for protected_cookies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated protected_cookies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items protected_cookies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_security.DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_security.DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_security.DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_security.DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for blocked_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated blocked_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocked_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -4784,10 +6232,447 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_definition_choice"]; exists {
+		val := m.GetApiDefinitionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_definition_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDefinitionChoice().(type) {
+	case *CreateSpecType_DisableApiDefinition:
+		if fv, exists := v.FldValidators["api_definition_choice.disable_api_definition"]; exists {
+			val := m.GetApiDefinitionChoice().(*CreateSpecType_DisableApiDefinition).DisableApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("disable_api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ApiSpecification:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification"]; exists {
+			val := m.GetApiDefinitionChoice().(*CreateSpecType_ApiSpecification).ApiSpecification
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ApiSpecificationOnCacheMiss:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification_on_cache_miss"]; exists {
+			val := m.GetApiDefinitionChoice().(*CreateSpecType_ApiSpecificationOnCacheMiss).ApiSpecificationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *CreateSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*CreateSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*CreateSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ApiDiscoveryOnCacheMiss:
+		if fv, exists := v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"]; exists {
+			val := m.GetApiDiscoveryChoice().(*CreateSpecType_ApiDiscoveryOnCacheMiss).ApiDiscoveryOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("api_discovery_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("blocked_clients"))
+		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_defense_choice"]; exists {
+		val := m.GetBotDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotDefenseChoice().(type) {
+	case *CreateSpecType_DisableBotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*CreateSpecType_DisableBotDefense).DisableBotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("disable_bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*CreateSpecType_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BotDefenseAdvanced:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense_advanced"]; exists {
+			val := m.GetBotDefenseChoice().(*CreateSpecType_BotDefenseAdvanced).BotDefenseAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cache_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("cache_rules"))
+		if err := fv(ctx, m.GetCacheRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_type"]; exists {
+		val := m.GetChallengeType()
+		vOpts := append(opts,
+			db.WithValidateField("challenge_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChallengeType().(type) {
+	case *CreateSpecType_NoChallenge:
+		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
+			val := m.GetChallengeType().(*CreateSpecType_NoChallenge).NoChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("no_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableChallenge:
+		if fv, exists := v.FldValidators["challenge_type.enable_challenge"]; exists {
+			val := m.GetChallengeType().(*CreateSpecType_EnableChallenge).EnableChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("enable_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ChallengeOnCacheMiss:
+		if fv, exists := v.FldValidators["challenge_type.challenge_on_cache_miss"]; exists {
+			val := m.GetChallengeType().(*CreateSpecType_ChallengeOnCacheMiss).ChallengeOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("challenge_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_JsChallenge:
+		if fv, exists := v.FldValidators["challenge_type.js_challenge"]; exists {
+			val := m.GetChallengeType().(*CreateSpecType_JsChallenge).JsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_CaptchaChallenge:
+		if fv, exists := v.FldValidators["challenge_type.captcha_challenge"]; exists {
+			val := m.GetChallengeType().(*CreateSpecType_CaptchaChallenge).CaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_PolicyBasedChallenge:
+		if fv, exists := v.FldValidators["challenge_type.policy_based_challenge"]; exists {
+			val := m.GetChallengeType().(*CreateSpecType_PolicyBasedChallenge).PolicyBasedChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("policy_based_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_side_defense_choice"]; exists {
+		val := m.GetClientSideDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_side_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *CreateSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*CreateSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*CreateSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy"))
+		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_cache_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_cache_action"))
+		if err := fv(ctx, m.GetDefaultCacheAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetIpReputationChoice().(type) {
+	case *CreateSpecType_DisableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.disable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*CreateSpecType_DisableIpReputation).DisableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("disable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.enable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*CreateSpecType_EnableIpReputation).EnableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("enable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_IpReputationOnCacheMiss:
+		if fv, exists := v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"]; exists {
+			val := m.GetIpReputationChoice().(*CreateSpecType_IpReputationOnCacheMiss).IpReputationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("ip_reputation_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["jwt_validation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("jwt_validation"))
+		if err := fv(ctx, m.GetJwtValidation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *CreateSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*CreateSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4839,6 +6724,53 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *CreateSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CreateSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CreateSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_MaliciousUserDetectionOnCacheMiss:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.malicious_user_detection_on_cache_miss"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*CreateSpecType_MaliciousUserDetectionOnCacheMiss).MaliciousUserDetectionOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("malicious_user_detection_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["more_option"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("more_option"))
@@ -4852,6 +6784,324 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("origin_pool"))
 		if err := fv(ctx, m.GetOriginPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["other_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("other_settings"))
+		if err := fv(ctx, m.GetOtherSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protected_cookies"]; exists {
+		vOpts := append(opts, db.WithValidateField("protected_cookies"))
+		if err := fv(ctx, m.GetProtectedCookies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
+		val := m.GetRateLimitChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rate_limit_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRateLimitChoice().(type) {
+	case *CreateSpecType_DisableRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.disable_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*CreateSpecType_DisableRateLimit).DisableRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("disable_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ApiRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.api_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*CreateSpecType_ApiRateLimit).ApiRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("api_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_RateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*CreateSpecType_RateLimit).RateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
+		val := m.GetSensitiveDataPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sensitive_data_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *CreateSpecType_DefaultSensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.default_sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*CreateSpecType_DefaultSensitiveDataPolicy).DefaultSensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("default_sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*CreateSpecType_SensitiveDataPolicy).SensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*CreateSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*CreateSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*CreateSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["slow_ddos_mitigation_choice"]; exists {
+		val := m.GetSlowDdosMitigationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("slow_ddos_mitigation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSlowDdosMitigationChoice().(type) {
+	case *CreateSpecType_SystemDefaultTimeouts:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.system_default_timeouts"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*CreateSpecType_SystemDefaultTimeouts).SystemDefaultTimeouts
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("system_default_timeouts"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_SlowDdosMitigation:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*CreateSpecType_SlowDdosMitigation).SlowDdosMitigation
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("slow_ddos_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["threat_mesh_choice"]; exists {
+		val := m.GetThreatMeshChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_mesh_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatMeshChoice().(type) {
+	case *CreateSpecType_DisableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.disable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*CreateSpecType_DisableThreatMesh).DisableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("disable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.enable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*CreateSpecType_EnableThreatMesh).EnableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("enable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_clients"))
+		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_id_choice"]; exists {
+		val := m.GetUserIdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("user_id_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUserIdChoice().(type) {
+	case *CreateSpecType_UserIdClientIp:
+		if fv, exists := v.FldValidators["user_id_choice.user_id_client_ip"]; exists {
+			val := m.GetUserIdChoice().(*CreateSpecType_UserIdClientIp).UserIdClientIp
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_id_client_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_UserIdentification:
+		if fv, exists := v.FldValidators["user_id_choice.user_identification"]; exists {
+			val := m.GetUserIdChoice().(*CreateSpecType_UserIdentification).UserIdentification
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_identification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_choice"]; exists {
+		val := m.GetWafChoice()
+		vOpts := append(opts,
+			db.WithValidateField("waf_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafChoice().(type) {
+	case *CreateSpecType_DisableWaf:
+		if fv, exists := v.FldValidators["waf_choice.disable_waf"]; exists {
+			val := m.GetWafChoice().(*CreateSpecType_DisableWaf).DisableWaf
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("disable_waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*CreateSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_AppFirewallOnCacheMiss:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall_on_cache_miss"]; exists {
+			val := m.GetWafChoice().(*CreateSpecType_AppFirewallOnCacheMiss).AppFirewallOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_rules"))
+		if err := fv(ctx, m.GetWafExclusionRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4872,6 +7122,72 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
+	rulesApiDefinitionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDefinitionChoice(rulesApiDefinitionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.api_definition_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition_choice"] = vFn
+
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
+	vrhBotDefenseChoice := v.BotDefenseChoiceValidationRuleHandler
+	rulesBotDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotDefenseChoice(rulesBotDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.bot_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_defense_choice"] = vFn
+
+	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
+	rulesChallengeType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChallengeType(rulesChallengeType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.challenge_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_type"] = vFn
+
+	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
+	rulesClientSideDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientSideDefenseChoice(rulesClientSideDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.client_side_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_side_defense_choice"] = vFn
+
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4882,6 +7198,94 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.malicious_user_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malicious_user_detection_choice"] = vFn
+
+	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
+	rulesRateLimitChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.rate_limit_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
+	rulesSensitiveDataPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSensitiveDataPolicyChoice(rulesSensitiveDataPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.sensitive_data_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sensitive_data_policy_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
+	rulesSlowDdosMitigationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSlowDdosMitigationChoice(rulesSlowDdosMitigationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.slow_ddos_mitigation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slow_ddos_mitigation_choice"] = vFn
+
+	vrhThreatMeshChoice := v.ThreatMeshChoiceValidationRuleHandler
+	rulesThreatMeshChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatMeshChoice(rulesThreatMeshChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.threat_mesh_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_mesh_choice"] = vFn
+
+	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
+	rulesUserIdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.user_id_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_id_choice"] = vFn
+
+	vrhWafChoice := v.WafChoiceValidationRuleHandler
+	rulesWafChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWafChoice(rulesWafChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.waf_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -4912,11 +7316,155 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["origin_pool"] = vFn
 
+	vrhCacheRules := v.CacheRulesValidationRuleHandler
+	rulesCacheRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCacheRules(rulesCacheRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.cache_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_rules"] = vFn
+
+	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
+	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhWafExclusionRules(rulesWafExclusionRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.waf_exclusion_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_exclusion_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
+
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
+
+	vrhProtectedCookies := v.ProtectedCookiesValidationRuleHandler
+	rulesProtectedCookies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhProtectedCookies(rulesProtectedCookies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.protected_cookies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protected_cookies"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhTrustedClients := v.TrustedClientsValidationRuleHandler
+	rulesTrustedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhTrustedClients(rulesTrustedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.trusted_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_clients"] = vFn
+
+	vrhBlockedClients := v.BlockedClientsValidationRuleHandler
+	rulesBlockedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhBlockedClients(rulesBlockedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.blocked_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_clients"] = vFn
+
+	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+	v.FldValidators["api_definition_choice.api_specification_on_cache_miss"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+	v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+
+	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
+	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
+
+	v.FldValidators["challenge_type.enable_challenge"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.challenge_on_cache_miss"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ves_io_schema_views_common_security.ClientSideDefenseTypeValidator().Validate
+
+	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+	v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.http"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = CDNHTTPSAutoCertsTypeValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = CDNHTTPSCustomCertsTypeValidator().Validate
 
+	v.FldValidators["rate_limit_choice.api_rate_limit"] = ves_io_schema_views_common_waf.APIRateLimitValidator().Validate
+	v.FldValidators["rate_limit_choice.rate_limit"] = ves_io_schema_views_common_waf.RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ves_io_schema_views_common_waf.ServicePolicyListValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"] = ves_io_schema_virtual_host.SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall_on_cache_miss"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	v.FldValidators["more_option"] = AdvancedOptionsTypeValidator().Validate
+
+	v.FldValidators["other_settings"] = OtherSettingsValidator().Validate
+
+	v.FldValidators["default_cache_action"] = DefaultCacheActionValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = ves_io_schema_views_common_waf.APIProtectionRulesValidator().Validate
+
+	v.FldValidators["jwt_validation"] = ves_io_schema_views_common_waf.JWTValidationValidator().Validate
+
+	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	return v
 }()
@@ -5199,6 +7747,287 @@ func DefaultCacheTTLPropsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DoSProtection) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DoSProtection) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DoSProtection) DeepCopy() *DoSProtection {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DoSProtection{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DoSProtection) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DoSProtection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DoSProtectionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDoSProtection struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDoSProtection) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDoSProtection) SlowDdosMitigationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for slow_ddos_mitigation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDoSProtection) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_security.DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_security.DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_security.DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_security.DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDoSProtection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DoSProtection)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DoSProtection got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *DoSProtection_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DoSProtection_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DoSProtection_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DoSProtection_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*DoSProtection_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["slow_ddos_mitigation_choice"]; exists {
+		val := m.GetSlowDdosMitigationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("slow_ddos_mitigation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSlowDdosMitigationChoice().(type) {
+	case *DoSProtection_SystemDefaultTimeouts:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.system_default_timeouts"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*DoSProtection_SystemDefaultTimeouts).SystemDefaultTimeouts
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("system_default_timeouts"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DoSProtection_SlowDdosMitigation:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*DoSProtection_SlowDdosMitigation).SlowDdosMitigation
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("slow_ddos_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDoSProtectionValidator = func() *ValidateDoSProtection {
+	v := &ValidateDoSProtection{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DoSProtection.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
+	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
+	rulesSlowDdosMitigationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSlowDdosMitigationChoice(rulesSlowDdosMitigationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DoSProtection.slow_ddos_mitigation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slow_ddos_mitigation_choice"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DoSProtection.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"] = ves_io_schema_virtual_host.SlowDDoSMitigationValidator().Validate
+
+	return v
+}()
+
+func DoSProtectionValidator() db.Validator {
+	return DefaultDoSProtectionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GeoFilteringOptions) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5324,6 +8153,14 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GetSpecType.https")
 	}
 
+	if err := m.GetOtherSettings().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.other_settings")
+	}
+
+	if err := m.GetJwtValidation().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.jwt_validation")
+	}
+
 	return nil
 }
 
@@ -5360,6 +8197,30 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
 	} else {
@@ -5372,7 +8233,187 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWafChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GetSpecType_DisableApiDefinition:
+
+		return nil, nil
+
+	case *GetSpecType_ApiSpecification:
+
+		drInfos, err := m.GetApiSpecification().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_ApiSpecificationOnCacheMiss:
+
+		drInfos, err := m.GetApiSpecificationOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecificationOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *GetSpecType_DisableBotDefense:
+
+		return nil, nil
+
+	case *GetSpecType_BotDefense:
+
+		return nil, nil
+
+	case *GetSpecType_BotDefenseAdvanced:
+
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *GetSpecType_NoChallenge:
+
+		return nil, nil
+
+	case *GetSpecType_EnableChallenge:
+
+		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_ChallengeOnCacheMiss:
+
+		drInfos, err := m.GetChallengeOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetChallengeOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "challenge_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_JsChallenge:
+
+		return nil, nil
+
+	case *GetSpecType_CaptchaChallenge:
+
+		return nil, nil
+
+	case *GetSpecType_PolicyBasedChallenge:
+
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -5412,14 +8453,398 @@ func (m *GetSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *GetSpecType_DisableRateLimit:
+
+		return nil, nil
+
+	case *GetSpecType_ApiRateLimit:
+
+		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_RateLimit:
+
+		drInfos, err := m.GetRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GetSpecType_DefaultSensitiveDataPolicy:
+
+		return nil, nil
+
+	case *GetSpecType_SensitiveDataPolicy:
+
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *GetSpecType_ServicePoliciesFromNamespace:
+
+		return nil, nil
+
+	case *GetSpecType_NoServicePolicies:
+
+		return nil, nil
+
+	case *GetSpecType_ActiveServicePolicies:
+
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+func (m *GetSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *GetSpecType_UserIdClientIp:
+
+		return nil, nil
+
+	case *GetSpecType_UserIdentification:
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetUserIdChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetUserIdChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUserIdChoice().(type) {
+	case *GetSpecType_UserIdClientIp:
+
+	case *GetSpecType_UserIdentification:
+		refdType, err := d.TypeForEntryKind("", "", "user_identification.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: user_identification")
+		}
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "user_identification.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+func (m *GetSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *GetSpecType_DisableWaf:
+
+		return nil, nil
+
+	case *GetSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *GetSpecType_AppFirewallOnCacheMiss:
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall_on_cache_miss",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GetSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafChoice().(type) {
+	case *GetSpecType_DisableWaf:
+
+	case *GetSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *GetSpecType_AppFirewallOnCacheMiss:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetSpecType) ApiDefinitionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_definition_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) BotDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_side_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGetSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) SlowDdosMitigationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for slow_ddos_mitigation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ThreatMeshChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) WafChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_choice")
 	}
 	return validatorFn, nil
 }
@@ -5487,6 +8912,390 @@ func (v *ValidateGetSpecType) OriginPoolValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) CacheRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cache_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNCacheRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNCacheRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cache_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNCacheRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNCacheRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cache_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cache_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_exclusion_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleWafExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleWafExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_exclusion_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_exclusion_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ProtectedCookiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for protected_cookies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for protected_cookies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated protected_cookies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items protected_cookies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_security.DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_security.DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_security.DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_security.DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for blocked_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated blocked_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocked_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -5510,6 +9319,109 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["api_definition_choice"]; exists {
+		val := m.GetApiDefinitionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_definition_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GetSpecType_DisableApiDefinition:
+		if fv, exists := v.FldValidators["api_definition_choice.disable_api_definition"]; exists {
+			val := m.GetApiDefinitionChoice().(*GetSpecType_DisableApiDefinition).DisableApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("disable_api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ApiSpecification:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification"]; exists {
+			val := m.GetApiDefinitionChoice().(*GetSpecType_ApiSpecification).ApiSpecification
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ApiSpecificationOnCacheMiss:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification_on_cache_miss"]; exists {
+			val := m.GetApiDefinitionChoice().(*GetSpecType_ApiSpecificationOnCacheMiss).ApiSpecificationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GetSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GetSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GetSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ApiDiscoveryOnCacheMiss:
+		if fv, exists := v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GetSpecType_ApiDiscoveryOnCacheMiss).ApiDiscoveryOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("api_discovery_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
@@ -5519,10 +9431,232 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("blocked_clients"))
+		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_defense_choice"]; exists {
+		val := m.GetBotDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotDefenseChoice().(type) {
+	case *GetSpecType_DisableBotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GetSpecType_DisableBotDefense).DisableBotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("disable_bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GetSpecType_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BotDefenseAdvanced:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense_advanced"]; exists {
+			val := m.GetBotDefenseChoice().(*GetSpecType_BotDefenseAdvanced).BotDefenseAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cache_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("cache_rules"))
+		if err := fv(ctx, m.GetCacheRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cert_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cert_state"))
 		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_type"]; exists {
+		val := m.GetChallengeType()
+		vOpts := append(opts,
+			db.WithValidateField("challenge_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChallengeType().(type) {
+	case *GetSpecType_NoChallenge:
+		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
+			val := m.GetChallengeType().(*GetSpecType_NoChallenge).NoChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("no_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableChallenge:
+		if fv, exists := v.FldValidators["challenge_type.enable_challenge"]; exists {
+			val := m.GetChallengeType().(*GetSpecType_EnableChallenge).EnableChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("enable_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ChallengeOnCacheMiss:
+		if fv, exists := v.FldValidators["challenge_type.challenge_on_cache_miss"]; exists {
+			val := m.GetChallengeType().(*GetSpecType_ChallengeOnCacheMiss).ChallengeOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("challenge_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_JsChallenge:
+		if fv, exists := v.FldValidators["challenge_type.js_challenge"]; exists {
+			val := m.GetChallengeType().(*GetSpecType_JsChallenge).JsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_CaptchaChallenge:
+		if fv, exists := v.FldValidators["challenge_type.captcha_challenge"]; exists {
+			val := m.GetChallengeType().(*GetSpecType_CaptchaChallenge).CaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_PolicyBasedChallenge:
+		if fv, exists := v.FldValidators["challenge_type.policy_based_challenge"]; exists {
+			val := m.GetChallengeType().(*GetSpecType_PolicyBasedChallenge).PolicyBasedChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("policy_based_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_side_defense_choice"]; exists {
+		val := m.GetClientSideDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_side_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *GetSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GetSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GetSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy"))
+		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_cache_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_cache_action"))
+		if err := fv(ctx, m.GetDefaultCacheAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5548,11 +9682,123 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["host_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetIpReputationChoice().(type) {
+	case *GetSpecType_DisableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.disable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*GetSpecType_DisableIpReputation).DisableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("disable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.enable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*GetSpecType_EnableIpReputation).EnableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("enable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_IpReputationOnCacheMiss:
+		if fv, exists := v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"]; exists {
+			val := m.GetIpReputationChoice().(*GetSpecType_IpReputationOnCacheMiss).IpReputationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("ip_reputation_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["jwt_validation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("jwt_validation"))
+		if err := fv(ctx, m.GetJwtValidation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *GetSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GetSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5604,6 +9850,53 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *GetSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GetSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GetSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_MaliciousUserDetectionOnCacheMiss:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.malicious_user_detection_on_cache_miss"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GetSpecType_MaliciousUserDetectionOnCacheMiss).MaliciousUserDetectionOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("malicious_user_detection_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["more_option"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("more_option"))
@@ -5622,6 +9915,106 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["other_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("other_settings"))
+		if err := fv(ctx, m.GetOtherSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protected_cookies"]; exists {
+		vOpts := append(opts, db.WithValidateField("protected_cookies"))
+		if err := fv(ctx, m.GetProtectedCookies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
+		val := m.GetRateLimitChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rate_limit_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRateLimitChoice().(type) {
+	case *GetSpecType_DisableRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.disable_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*GetSpecType_DisableRateLimit).DisableRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("disable_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ApiRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.api_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*GetSpecType_ApiRateLimit).ApiRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("api_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_RateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*GetSpecType_RateLimit).RateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
+		val := m.GetSensitiveDataPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sensitive_data_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GetSpecType_DefaultSensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.default_sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*GetSpecType_DefaultSensitiveDataPolicy).DefaultSensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("default_sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*GetSpecType_SensitiveDataPolicy).SensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_domains"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_domains"))
@@ -5634,10 +10027,228 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *GetSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*GetSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GetSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GetSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["slow_ddos_mitigation_choice"]; exists {
+		val := m.GetSlowDdosMitigationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("slow_ddos_mitigation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSlowDdosMitigationChoice().(type) {
+	case *GetSpecType_SystemDefaultTimeouts:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.system_default_timeouts"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*GetSpecType_SystemDefaultTimeouts).SystemDefaultTimeouts
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("system_default_timeouts"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_SlowDdosMitigation:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*GetSpecType_SlowDdosMitigation).SlowDdosMitigation
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("slow_ddos_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["threat_mesh_choice"]; exists {
+		val := m.GetThreatMeshChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_mesh_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatMeshChoice().(type) {
+	case *GetSpecType_DisableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.disable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*GetSpecType_DisableThreatMesh).DisableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("disable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.enable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*GetSpecType_EnableThreatMesh).EnableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("enable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_clients"))
+		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_id_choice"]; exists {
+		val := m.GetUserIdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("user_id_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUserIdChoice().(type) {
+	case *GetSpecType_UserIdClientIp:
+		if fv, exists := v.FldValidators["user_id_choice.user_id_client_ip"]; exists {
+			val := m.GetUserIdChoice().(*GetSpecType_UserIdClientIp).UserIdClientIp
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_id_client_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_UserIdentification:
+		if fv, exists := v.FldValidators["user_id_choice.user_identification"]; exists {
+			val := m.GetUserIdChoice().(*GetSpecType_UserIdentification).UserIdentification
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_identification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_choice"]; exists {
+		val := m.GetWafChoice()
+		vOpts := append(opts,
+			db.WithValidateField("waf_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafChoice().(type) {
+	case *GetSpecType_DisableWaf:
+		if fv, exists := v.FldValidators["waf_choice.disable_waf"]; exists {
+			val := m.GetWafChoice().(*GetSpecType_DisableWaf).DisableWaf
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("disable_waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*GetSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_AppFirewallOnCacheMiss:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall_on_cache_miss"]; exists {
+			val := m.GetWafChoice().(*GetSpecType_AppFirewallOnCacheMiss).AppFirewallOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_rules"))
+		if err := fv(ctx, m.GetWafExclusionRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5658,6 +10269,72 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
+	rulesApiDefinitionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDefinitionChoice(rulesApiDefinitionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.api_definition_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition_choice"] = vFn
+
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
+	vrhBotDefenseChoice := v.BotDefenseChoiceValidationRuleHandler
+	rulesBotDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotDefenseChoice(rulesBotDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.bot_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_defense_choice"] = vFn
+
+	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
+	rulesChallengeType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChallengeType(rulesChallengeType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.challenge_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_type"] = vFn
+
+	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
+	rulesClientSideDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientSideDefenseChoice(rulesClientSideDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.client_side_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_side_defense_choice"] = vFn
+
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -5668,6 +10345,94 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.malicious_user_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malicious_user_detection_choice"] = vFn
+
+	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
+	rulesRateLimitChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.rate_limit_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
+	rulesSensitiveDataPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSensitiveDataPolicyChoice(rulesSensitiveDataPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.sensitive_data_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sensitive_data_policy_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
+	rulesSlowDdosMitigationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSlowDdosMitigationChoice(rulesSlowDdosMitigationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.slow_ddos_mitigation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slow_ddos_mitigation_choice"] = vFn
+
+	vrhThreatMeshChoice := v.ThreatMeshChoiceValidationRuleHandler
+	rulesThreatMeshChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatMeshChoice(rulesThreatMeshChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.threat_mesh_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_mesh_choice"] = vFn
+
+	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
+	rulesUserIdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.user_id_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_id_choice"] = vFn
+
+	vrhWafChoice := v.WafChoiceValidationRuleHandler
+	rulesWafChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWafChoice(rulesWafChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.waf_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -5698,11 +10463,155 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["origin_pool"] = vFn
 
+	vrhCacheRules := v.CacheRulesValidationRuleHandler
+	rulesCacheRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCacheRules(rulesCacheRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.cache_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_rules"] = vFn
+
+	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
+	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhWafExclusionRules(rulesWafExclusionRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.waf_exclusion_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_exclusion_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
+
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
+
+	vrhProtectedCookies := v.ProtectedCookiesValidationRuleHandler
+	rulesProtectedCookies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhProtectedCookies(rulesProtectedCookies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.protected_cookies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protected_cookies"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhTrustedClients := v.TrustedClientsValidationRuleHandler
+	rulesTrustedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhTrustedClients(rulesTrustedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.trusted_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_clients"] = vFn
+
+	vrhBlockedClients := v.BlockedClientsValidationRuleHandler
+	rulesBlockedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhBlockedClients(rulesBlockedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.blocked_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_clients"] = vFn
+
+	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+	v.FldValidators["api_definition_choice.api_specification_on_cache_miss"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+	v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+
+	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
+	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
+
+	v.FldValidators["challenge_type.enable_challenge"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.challenge_on_cache_miss"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ves_io_schema_views_common_security.ClientSideDefenseTypeValidator().Validate
+
+	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+	v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.http"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = CDNHTTPSAutoCertsTypeValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = CDNHTTPSCustomCertsTypeValidator().Validate
 
+	v.FldValidators["rate_limit_choice.api_rate_limit"] = ves_io_schema_views_common_waf.APIRateLimitValidator().Validate
+	v.FldValidators["rate_limit_choice.rate_limit"] = ves_io_schema_views_common_waf.RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ves_io_schema_views_common_waf.ServicePolicyListValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"] = ves_io_schema_virtual_host.SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall_on_cache_miss"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	v.FldValidators["more_option"] = AdvancedOptionsTypeValidator().Validate
+
+	v.FldValidators["other_settings"] = OtherSettingsValidator().Validate
+
+	v.FldValidators["default_cache_action"] = DefaultCacheActionValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = ves_io_schema_views_common_waf.APIProtectionRulesValidator().Validate
+
+	v.FldValidators["jwt_validation"] = ves_io_schema_views_common_waf.JWTValidationValidator().Validate
+
+	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["dns_info"] = ves_io_schema_virtual_host_dns_info.DnsInfoValidator().Validate
 
@@ -5742,6 +10651,14 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.https")
 	}
 
+	if err := m.GetOtherSettings().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.other_settings")
+	}
+
+	if err := m.GetJwtValidation().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.jwt_validation")
+	}
+
 	return nil
 }
 
@@ -5778,6 +10695,30 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
 	} else {
@@ -5790,13 +10731,193 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetWafChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GlobalSpecType_DisableApiDefinition:
+
+		return nil, nil
+
+	case *GlobalSpecType_ApiSpecification:
+
+		drInfos, err := m.GetApiSpecification().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_ApiSpecificationOnCacheMiss:
+
+		drInfos, err := m.GetApiSpecificationOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecificationOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *GlobalSpecType_DisableBotDefense:
+
+		return nil, nil
+
+	case *GlobalSpecType_BotDefense:
+
+		return nil, nil
+
+	case *GlobalSpecType_BotDefenseAdvanced:
+
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *GlobalSpecType_NoChallenge:
+
+		return nil, nil
+
+	case *GlobalSpecType_EnableChallenge:
+
+		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_ChallengeOnCacheMiss:
+
+		drInfos, err := m.GetChallengeOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetChallengeOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "challenge_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_JsChallenge:
+
+		return nil, nil
+
+	case *GlobalSpecType_CaptchaChallenge:
+
+		return nil, nil
+
+	case *GlobalSpecType_PolicyBasedChallenge:
+
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -5834,6 +10955,171 @@ func (m *GlobalSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, err
 
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *GlobalSpecType_DisableRateLimit:
+
+		return nil, nil
+
+	case *GlobalSpecType_ApiRateLimit:
+
+		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_RateLimit:
+
+		drInfos, err := m.GetRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GlobalSpecType_DefaultSensitiveDataPolicy:
+
+		return nil, nil
+
+	case *GlobalSpecType_SensitiveDataPolicy:
+
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+
+		return nil, nil
+
+	case *GlobalSpecType_NoServicePolicies:
+
+		return nil, nil
+
+	case *GlobalSpecType_ActiveServicePolicies:
+
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+func (m *GlobalSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *GlobalSpecType_UserIdClientIp:
+
+		return nil, nil
+
+	case *GlobalSpecType_UserIdentification:
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetUserIdChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetUserIdChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUserIdChoice().(type) {
+	case *GlobalSpecType_UserIdClientIp:
+
+	case *GlobalSpecType_UserIdentification:
+		refdType, err := d.TypeForEntryKind("", "", "user_identification.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: user_identification")
+		}
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "user_identification.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
@@ -5885,14 +11171,233 @@ func (m *GlobalSpecType) GetViewInternalDBEntries(ctx context.Context, d db.Inte
 	return entries, nil
 }
 
+func (m *GlobalSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *GlobalSpecType_DisableWaf:
+
+		return nil, nil
+
+	case *GlobalSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *GlobalSpecType_AppFirewallOnCacheMiss:
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall_on_cache_miss",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafChoice().(type) {
+	case *GlobalSpecType_DisableWaf:
+
+	case *GlobalSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *GlobalSpecType_AppFirewallOnCacheMiss:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGlobalSpecType) ApiDefinitionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_definition_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) BotDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_side_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) SlowDdosMitigationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for slow_ddos_mitigation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ThreatMeshChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) WafChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_choice")
 	}
 	return validatorFn, nil
 }
@@ -5960,6 +11465,390 @@ func (v *ValidateGlobalSpecType) OriginPoolValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) CacheRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cache_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNCacheRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNCacheRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cache_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNCacheRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNCacheRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cache_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cache_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_exclusion_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleWafExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleWafExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_exclusion_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_exclusion_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ProtectedCookiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for protected_cookies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for protected_cookies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated protected_cookies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items protected_cookies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_security.DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_security.DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_security.DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_security.DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for blocked_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated blocked_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocked_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -5983,6 +11872,109 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["api_definition_choice"]; exists {
+		val := m.GetApiDefinitionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_definition_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDefinitionChoice().(type) {
+	case *GlobalSpecType_DisableApiDefinition:
+		if fv, exists := v.FldValidators["api_definition_choice.disable_api_definition"]; exists {
+			val := m.GetApiDefinitionChoice().(*GlobalSpecType_DisableApiDefinition).DisableApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("disable_api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ApiSpecification:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification"]; exists {
+			val := m.GetApiDefinitionChoice().(*GlobalSpecType_ApiSpecification).ApiSpecification
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ApiSpecificationOnCacheMiss:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification_on_cache_miss"]; exists {
+			val := m.GetApiDefinitionChoice().(*GlobalSpecType_ApiSpecificationOnCacheMiss).ApiSpecificationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *GlobalSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GlobalSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GlobalSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ApiDiscoveryOnCacheMiss:
+		if fv, exists := v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"]; exists {
+			val := m.GetApiDiscoveryChoice().(*GlobalSpecType_ApiDiscoveryOnCacheMiss).ApiDiscoveryOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("api_discovery_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["auto_cert_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("auto_cert_info"))
@@ -6001,10 +11993,232 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["blocked_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("blocked_clients"))
+		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_defense_choice"]; exists {
+		val := m.GetBotDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotDefenseChoice().(type) {
+	case *GlobalSpecType_DisableBotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GlobalSpecType_DisableBotDefense).DisableBotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("disable_bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BotDefenseAdvanced:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense_advanced"]; exists {
+			val := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefenseAdvanced).BotDefenseAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cache_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("cache_rules"))
+		if err := fv(ctx, m.GetCacheRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cert_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cert_state"))
 		if err := fv(ctx, m.GetCertState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_type"]; exists {
+		val := m.GetChallengeType()
+		vOpts := append(opts,
+			db.WithValidateField("challenge_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChallengeType().(type) {
+	case *GlobalSpecType_NoChallenge:
+		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
+			val := m.GetChallengeType().(*GlobalSpecType_NoChallenge).NoChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("no_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableChallenge:
+		if fv, exists := v.FldValidators["challenge_type.enable_challenge"]; exists {
+			val := m.GetChallengeType().(*GlobalSpecType_EnableChallenge).EnableChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("enable_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ChallengeOnCacheMiss:
+		if fv, exists := v.FldValidators["challenge_type.challenge_on_cache_miss"]; exists {
+			val := m.GetChallengeType().(*GlobalSpecType_ChallengeOnCacheMiss).ChallengeOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("challenge_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_JsChallenge:
+		if fv, exists := v.FldValidators["challenge_type.js_challenge"]; exists {
+			val := m.GetChallengeType().(*GlobalSpecType_JsChallenge).JsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_CaptchaChallenge:
+		if fv, exists := v.FldValidators["challenge_type.captcha_challenge"]; exists {
+			val := m.GetChallengeType().(*GlobalSpecType_CaptchaChallenge).CaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_PolicyBasedChallenge:
+		if fv, exists := v.FldValidators["challenge_type.policy_based_challenge"]; exists {
+			val := m.GetChallengeType().(*GlobalSpecType_PolicyBasedChallenge).PolicyBasedChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("policy_based_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_side_defense_choice"]; exists {
+		val := m.GetClientSideDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_side_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *GlobalSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GlobalSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*GlobalSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy"))
+		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_cache_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_cache_action"))
+		if err := fv(ctx, m.GetDefaultCacheAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6030,11 +12244,123 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["host_name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("host_name"))
 		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetIpReputationChoice().(type) {
+	case *GlobalSpecType_DisableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.disable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*GlobalSpecType_DisableIpReputation).DisableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("disable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.enable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*GlobalSpecType_EnableIpReputation).EnableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("enable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_IpReputationOnCacheMiss:
+		if fv, exists := v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"]; exists {
+			val := m.GetIpReputationChoice().(*GlobalSpecType_IpReputationOnCacheMiss).IpReputationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("ip_reputation_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["jwt_validation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("jwt_validation"))
+		if err := fv(ctx, m.GetJwtValidation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *GlobalSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*GlobalSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -6086,6 +12412,53 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GlobalSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GlobalSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_MaliciousUserDetectionOnCacheMiss:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.malicious_user_detection_on_cache_miss"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*GlobalSpecType_MaliciousUserDetectionOnCacheMiss).MaliciousUserDetectionOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("malicious_user_detection_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["more_option"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("more_option"))
@@ -6104,12 +12477,195 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["other_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("other_settings"))
+		if err := fv(ctx, m.GetOtherSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protected_cookies"]; exists {
+		vOpts := append(opts, db.WithValidateField("protected_cookies"))
+		if err := fv(ctx, m.GetProtectedCookies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
+		val := m.GetRateLimitChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rate_limit_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRateLimitChoice().(type) {
+	case *GlobalSpecType_DisableRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.disable_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*GlobalSpecType_DisableRateLimit).DisableRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("disable_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ApiRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.api_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*GlobalSpecType_ApiRateLimit).ApiRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("api_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_RateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*GlobalSpecType_RateLimit).RateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
+		val := m.GetSensitiveDataPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sensitive_data_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *GlobalSpecType_DefaultSensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.default_sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*GlobalSpecType_DefaultSensitiveDataPolicy).DefaultSensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("default_sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*GlobalSpecType_SensitiveDataPolicy).SensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_domains"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_domains"))
 		for idx, item := range m.GetServiceDomains() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*GlobalSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GlobalSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*GlobalSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["slow_ddos_mitigation_choice"]; exists {
+		val := m.GetSlowDdosMitigationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("slow_ddos_mitigation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSlowDdosMitigationChoice().(type) {
+	case *GlobalSpecType_SystemDefaultTimeouts:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.system_default_timeouts"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*GlobalSpecType_SystemDefaultTimeouts).SystemDefaultTimeouts
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("system_default_timeouts"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_SlowDdosMitigation:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*GlobalSpecType_SlowDdosMitigation).SlowDdosMitigation
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("slow_ddos_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -6125,10 +12681,145 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["threat_mesh_choice"]; exists {
+		val := m.GetThreatMeshChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_mesh_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatMeshChoice().(type) {
+	case *GlobalSpecType_DisableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.disable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*GlobalSpecType_DisableThreatMesh).DisableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("disable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.enable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*GlobalSpecType_EnableThreatMesh).EnableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("enable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_clients"))
+		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_id_choice"]; exists {
+		val := m.GetUserIdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("user_id_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUserIdChoice().(type) {
+	case *GlobalSpecType_UserIdClientIp:
+		if fv, exists := v.FldValidators["user_id_choice.user_id_client_ip"]; exists {
+			val := m.GetUserIdChoice().(*GlobalSpecType_UserIdClientIp).UserIdClientIp
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_id_client_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_UserIdentification:
+		if fv, exists := v.FldValidators["user_id_choice.user_identification"]; exists {
+			val := m.GetUserIdChoice().(*GlobalSpecType_UserIdentification).UserIdentification
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_identification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
 		if err := fv(ctx, m.GetViewInternal(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_choice"]; exists {
+		val := m.GetWafChoice()
+		vOpts := append(opts,
+			db.WithValidateField("waf_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafChoice().(type) {
+	case *GlobalSpecType_DisableWaf:
+		if fv, exists := v.FldValidators["waf_choice.disable_waf"]; exists {
+			val := m.GetWafChoice().(*GlobalSpecType_DisableWaf).DisableWaf
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("disable_waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*GlobalSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_AppFirewallOnCacheMiss:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall_on_cache_miss"]; exists {
+			val := m.GetWafChoice().(*GlobalSpecType_AppFirewallOnCacheMiss).AppFirewallOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_rules"))
+		if err := fv(ctx, m.GetWafExclusionRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6149,6 +12840,72 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
+	rulesApiDefinitionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDefinitionChoice(rulesApiDefinitionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.api_definition_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition_choice"] = vFn
+
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
+	vrhBotDefenseChoice := v.BotDefenseChoiceValidationRuleHandler
+	rulesBotDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotDefenseChoice(rulesBotDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.bot_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_defense_choice"] = vFn
+
+	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
+	rulesChallengeType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChallengeType(rulesChallengeType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.challenge_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_type"] = vFn
+
+	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
+	rulesClientSideDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientSideDefenseChoice(rulesClientSideDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.client_side_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_side_defense_choice"] = vFn
+
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -6159,6 +12916,94 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.malicious_user_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malicious_user_detection_choice"] = vFn
+
+	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
+	rulesRateLimitChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.rate_limit_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
+	rulesSensitiveDataPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSensitiveDataPolicyChoice(rulesSensitiveDataPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.sensitive_data_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sensitive_data_policy_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
+	rulesSlowDdosMitigationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSlowDdosMitigationChoice(rulesSlowDdosMitigationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.slow_ddos_mitigation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slow_ddos_mitigation_choice"] = vFn
+
+	vrhThreatMeshChoice := v.ThreatMeshChoiceValidationRuleHandler
+	rulesThreatMeshChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatMeshChoice(rulesThreatMeshChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.threat_mesh_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_mesh_choice"] = vFn
+
+	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
+	rulesUserIdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.user_id_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_id_choice"] = vFn
+
+	vrhWafChoice := v.WafChoiceValidationRuleHandler
+	rulesWafChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWafChoice(rulesWafChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.waf_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -6189,11 +13034,155 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["origin_pool"] = vFn
 
+	vrhCacheRules := v.CacheRulesValidationRuleHandler
+	rulesCacheRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCacheRules(rulesCacheRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.cache_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_rules"] = vFn
+
+	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
+	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhWafExclusionRules(rulesWafExclusionRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.waf_exclusion_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_exclusion_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
+
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
+
+	vrhProtectedCookies := v.ProtectedCookiesValidationRuleHandler
+	rulesProtectedCookies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhProtectedCookies(rulesProtectedCookies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.protected_cookies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protected_cookies"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhTrustedClients := v.TrustedClientsValidationRuleHandler
+	rulesTrustedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhTrustedClients(rulesTrustedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.trusted_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_clients"] = vFn
+
+	vrhBlockedClients := v.BlockedClientsValidationRuleHandler
+	rulesBlockedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhBlockedClients(rulesBlockedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.blocked_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_clients"] = vFn
+
+	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+	v.FldValidators["api_definition_choice.api_specification_on_cache_miss"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+	v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+
+	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
+	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
+
+	v.FldValidators["challenge_type.enable_challenge"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.challenge_on_cache_miss"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ves_io_schema_views_common_security.ClientSideDefenseTypeValidator().Validate
+
+	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+	v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.http"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = CDNHTTPSAutoCertsTypeValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = CDNHTTPSCustomCertsTypeValidator().Validate
 
+	v.FldValidators["rate_limit_choice.api_rate_limit"] = ves_io_schema_views_common_waf.APIRateLimitValidator().Validate
+	v.FldValidators["rate_limit_choice.rate_limit"] = ves_io_schema_views_common_waf.RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ves_io_schema_views_common_waf.ServicePolicyListValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"] = ves_io_schema_virtual_host.SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall_on_cache_miss"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	v.FldValidators["more_option"] = AdvancedOptionsTypeValidator().Validate
+
+	v.FldValidators["other_settings"] = OtherSettingsValidator().Validate
+
+	v.FldValidators["default_cache_action"] = DefaultCacheActionValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = ves_io_schema_views_common_waf.APIProtectionRulesValidator().Validate
+
+	v.FldValidators["jwt_validation"] = ves_io_schema_views_common_waf.JWTValidationValidator().Validate
+
+	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -7562,6 +14551,142 @@ func OriginAdvancedConfigurationValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *OtherSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OtherSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *OtherSettings) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetHeaderOptions().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting OtherSettings.header_options")
+	}
+
+	return nil
+}
+
+func (m *OtherSettings) DeepCopy() *OtherSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OtherSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OtherSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OtherSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OtherSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOtherSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOtherSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OtherSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OtherSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["add_location"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("add_location"))
+		if err := fv(ctx, m.GetAddLocation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["geo_filtering"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("geo_filtering"))
+		if err := fv(ctx, m.GetGeoFiltering(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["header_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_options"))
+		if err := fv(ctx, m.GetHeaderOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_filtering"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip_filtering"))
+		if err := fv(ctx, m.GetIpFiltering(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["logging_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("logging_options"))
+		if err := fv(ctx, m.GetLoggingOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOtherSettingsValidator = func() *ValidateOtherSettings {
+	v := &ValidateOtherSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["logging_options"] = LoggingOptionsTypeValidator().Validate
+
+	v.FldValidators["header_options"] = HeaderControlTypeValidator().Validate
+
+	v.FldValidators["ip_filtering"] = IpFilteringOptionsValidator().Validate
+
+	v.FldValidators["geo_filtering"] = GeoFilteringOptionsValidator().Validate
+
+	return v
+}()
+
+func OtherSettingsValidator() db.Validator {
+	return DefaultOtherSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ProxyTypeHttpsAutoCerts) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -7809,6 +14934,14 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.https")
 	}
 
+	if err := m.GetOtherSettings().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.other_settings")
+	}
+
+	if err := m.GetJwtValidation().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.jwt_validation")
+	}
+
 	return nil
 }
 
@@ -7845,6 +14978,30 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiDefinitionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiDefinitionChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetApiProtectionRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetChallengeTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetChallengeTypeDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetMoreOptionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetMoreOptionDRefInfo() FAILED")
 	} else {
@@ -7857,7 +15014,187 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetRateLimitChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRateLimitChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSensitiveDataPolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServicePolicyChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServicePolicyChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetUserIdChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetUserIdChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWafChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetApiDefinitionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiDefinitionChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetApiDefinitionChoice().(type) {
+	case *ReplaceSpecType_DisableApiDefinition:
+
+		return nil, nil
+
+	case *ReplaceSpecType_ApiSpecification:
+
+		drInfos, err := m.GetApiSpecification().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecification().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_ApiSpecificationOnCacheMiss:
+
+		drInfos, err := m.GetApiSpecificationOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiSpecificationOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_specification_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetApiProtectionRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiProtectionRules() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetApiProtectionRules().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetApiProtectionRules().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "api_protection_rules." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetBotDefenseChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetBotDefenseChoice().(type) {
+	case *ReplaceSpecType_DisableBotDefense:
+
+		return nil, nil
+
+	case *ReplaceSpecType_BotDefense:
+
+		return nil, nil
+
+	case *ReplaceSpecType_BotDefenseAdvanced:
+
+		drInfos, err := m.GetBotDefenseAdvanced().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBotDefenseAdvanced().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bot_defense_advanced." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetChallengeTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetChallengeType() == nil {
+		return nil, nil
+	}
+	switch m.GetChallengeType().(type) {
+	case *ReplaceSpecType_NoChallenge:
+
+		return nil, nil
+
+	case *ReplaceSpecType_EnableChallenge:
+
+		drInfos, err := m.GetEnableChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEnableChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "enable_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_ChallengeOnCacheMiss:
+
+		drInfos, err := m.GetChallengeOnCacheMiss().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetChallengeOnCacheMiss().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "challenge_on_cache_miss." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_JsChallenge:
+
+		return nil, nil
+
+	case *ReplaceSpecType_CaptchaChallenge:
+
+		return nil, nil
+
+	case *ReplaceSpecType_PolicyBasedChallenge:
+
+		drInfos, err := m.GetPolicyBasedChallenge().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetPolicyBasedChallenge().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "policy_based_challenge." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -7897,14 +15234,398 @@ func (m *ReplaceSpecType) GetOriginPoolDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetRateLimitChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRateLimitChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetRateLimitChoice().(type) {
+	case *ReplaceSpecType_DisableRateLimit:
+
+		return nil, nil
+
+	case *ReplaceSpecType_ApiRateLimit:
+
+		drInfos, err := m.GetApiRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "api_rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_RateLimit:
+
+		drInfos, err := m.GetRateLimit().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRateLimit().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "rate_limit." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetSensitiveDataPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSensitiveDataPolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *ReplaceSpecType_DefaultSensitiveDataPolicy:
+
+		return nil, nil
+
+	case *ReplaceSpecType_SensitiveDataPolicy:
+
+		drInfos, err := m.GetSensitiveDataPolicy().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSensitiveDataPolicy().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "sensitive_data_policy." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetServicePolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServicePolicyChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetServicePolicyChoice().(type) {
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+
+		return nil, nil
+
+	case *ReplaceSpecType_NoServicePolicies:
+
+		return nil, nil
+
+	case *ReplaceSpecType_ActiveServicePolicies:
+
+		drInfos, err := m.GetActiveServicePolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetActiveServicePolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "active_service_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+func (m *ReplaceSpecType) GetUserIdChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetUserIdChoice().(type) {
+	case *ReplaceSpecType_UserIdClientIp:
+
+		return nil, nil
+
+	case *ReplaceSpecType_UserIdentification:
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("user_identification.Object")
+		dri := db.DRefInfo{
+			RefdType:   "user_identification.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "user_identification",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetUserIdChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetUserIdChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetUserIdChoice().(type) {
+	case *ReplaceSpecType_UserIdClientIp:
+
+	case *ReplaceSpecType_UserIdentification:
+		refdType, err := d.TypeForEntryKind("", "", "user_identification.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: user_identification")
+		}
+
+		vref := m.GetUserIdentification()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "user_identification.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+func (m *ReplaceSpecType) GetWafChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafChoice().(type) {
+	case *ReplaceSpecType_DisableWaf:
+
+		return nil, nil
+
+	case *ReplaceSpecType_AppFirewall:
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *ReplaceSpecType_AppFirewallOnCacheMiss:
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("app_firewall.Object")
+		dri := db.DRefInfo{
+			RefdType:   "app_firewall.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "app_firewall_on_cache_miss",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetWafChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ReplaceSpecType) GetWafChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafChoice().(type) {
+	case *ReplaceSpecType_DisableWaf:
+
+	case *ReplaceSpecType_AppFirewall:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewall()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *ReplaceSpecType_AppFirewallOnCacheMiss:
+		refdType, err := d.TypeForEntryKind("", "", "app_firewall.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: app_firewall")
+		}
+
+		vref := m.GetAppFirewallOnCacheMiss()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "app_firewall.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceSpecType) ApiDefinitionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_definition_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ApiDiscoveryChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for api_discovery_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) BotDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bot_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_side_defense_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) L7DdosAutoMitigationActionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for l7_ddos_auto_mitigation_action")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for loadbalancer_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SlowDdosMitigationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for slow_ddos_mitigation_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ThreatMeshChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) WafChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_choice")
 	}
 	return validatorFn, nil
 }
@@ -7972,6 +15693,390 @@ func (v *ValidateReplaceSpecType) OriginPoolValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) CacheRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for cache_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNCacheRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNCacheRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cache_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNCacheRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNCacheRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cache_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cache_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) WafExclusionRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_exclusion_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleWafExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleWafExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_exclusion_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_exclusion_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) DataGuardRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for data_guard_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleDataGuardRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleDataGuardRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for data_guard_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleDataGuardRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleDataGuardRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated data_guard_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items data_guard_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) GraphqlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for graphql_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.GraphQLRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.GraphQLRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for graphql_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.GraphQLRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.GraphQLRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated graphql_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items graphql_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ProtectedCookiesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for protected_cookies")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for protected_cookies")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated protected_cookies")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items protected_cookies")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) DdosMitigationRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ddos_mitigation_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_security.DDoSMitigationRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_security.DDoSMitigationRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ddos_mitigation_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_security.DDoSMitigationRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_security.DDoSMitigationRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ddos_mitigation_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ddos_mitigation_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) TrustedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for trusted_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for trusted_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated trusted_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items trusted_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) BlockedClientsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for blocked_clients")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views_common_waf.SimpleClientSrcRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views_common_waf.SimpleClientSrcRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for blocked_clients")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views_common_waf.SimpleClientSrcRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views_common_waf.SimpleClientSrcRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated blocked_clients")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items blocked_clients")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ReplaceSpecType)
 	if !ok {
@@ -7995,10 +16100,447 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["api_definition_choice"]; exists {
+		val := m.GetApiDefinitionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_definition_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDefinitionChoice().(type) {
+	case *ReplaceSpecType_DisableApiDefinition:
+		if fv, exists := v.FldValidators["api_definition_choice.disable_api_definition"]; exists {
+			val := m.GetApiDefinitionChoice().(*ReplaceSpecType_DisableApiDefinition).DisableApiDefinition
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("disable_api_definition"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ApiSpecification:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification"]; exists {
+			val := m.GetApiDefinitionChoice().(*ReplaceSpecType_ApiSpecification).ApiSpecification
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ApiSpecificationOnCacheMiss:
+		if fv, exists := v.FldValidators["api_definition_choice.api_specification_on_cache_miss"]; exists {
+			val := m.GetApiDefinitionChoice().(*ReplaceSpecType_ApiSpecificationOnCacheMiss).ApiSpecificationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_definition_choice"),
+				db.WithValidateField("api_specification_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_choice"]; exists {
+		val := m.GetApiDiscoveryChoice()
+		vOpts := append(opts,
+			db.WithValidateField("api_discovery_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetApiDiscoveryChoice().(type) {
+	case *ReplaceSpecType_DisableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.disable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ReplaceSpecType_DisableApiDiscovery).DisableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("disable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableApiDiscovery:
+		if fv, exists := v.FldValidators["api_discovery_choice.enable_api_discovery"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ReplaceSpecType_EnableApiDiscovery).EnableApiDiscovery
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("enable_api_discovery"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ApiDiscoveryOnCacheMiss:
+		if fv, exists := v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"]; exists {
+			val := m.GetApiDiscoveryChoice().(*ReplaceSpecType_ApiDiscoveryOnCacheMiss).ApiDiscoveryOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("api_discovery_choice"),
+				db.WithValidateField("api_discovery_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["api_protection_rules"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_protection_rules"))
+		if err := fv(ctx, m.GetApiProtectionRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["blocked_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("blocked_clients"))
+		if err := fv(ctx, m.GetBlockedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_defense_choice"]; exists {
+		val := m.GetBotDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bot_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBotDefenseChoice().(type) {
+	case *ReplaceSpecType_DisableBotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.disable_bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*ReplaceSpecType_DisableBotDefense).DisableBotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("disable_bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BotDefense:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense"]; exists {
+			val := m.GetBotDefenseChoice().(*ReplaceSpecType_BotDefense).BotDefense
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BotDefenseAdvanced:
+		if fv, exists := v.FldValidators["bot_defense_choice.bot_defense_advanced"]; exists {
+			val := m.GetBotDefenseChoice().(*ReplaceSpecType_BotDefenseAdvanced).BotDefenseAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("bot_defense_choice"),
+				db.WithValidateField("bot_defense_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cache_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("cache_rules"))
+		if err := fv(ctx, m.GetCacheRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["challenge_type"]; exists {
+		val := m.GetChallengeType()
+		vOpts := append(opts,
+			db.WithValidateField("challenge_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChallengeType().(type) {
+	case *ReplaceSpecType_NoChallenge:
+		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
+			val := m.GetChallengeType().(*ReplaceSpecType_NoChallenge).NoChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("no_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableChallenge:
+		if fv, exists := v.FldValidators["challenge_type.enable_challenge"]; exists {
+			val := m.GetChallengeType().(*ReplaceSpecType_EnableChallenge).EnableChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("enable_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ChallengeOnCacheMiss:
+		if fv, exists := v.FldValidators["challenge_type.challenge_on_cache_miss"]; exists {
+			val := m.GetChallengeType().(*ReplaceSpecType_ChallengeOnCacheMiss).ChallengeOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("challenge_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_JsChallenge:
+		if fv, exists := v.FldValidators["challenge_type.js_challenge"]; exists {
+			val := m.GetChallengeType().(*ReplaceSpecType_JsChallenge).JsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_CaptchaChallenge:
+		if fv, exists := v.FldValidators["challenge_type.captcha_challenge"]; exists {
+			val := m.GetChallengeType().(*ReplaceSpecType_CaptchaChallenge).CaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_PolicyBasedChallenge:
+		if fv, exists := v.FldValidators["challenge_type.policy_based_challenge"]; exists {
+			val := m.GetChallengeType().(*ReplaceSpecType_PolicyBasedChallenge).PolicyBasedChallenge
+			vOpts := append(opts,
+				db.WithValidateField("challenge_type"),
+				db.WithValidateField("policy_based_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["client_side_defense_choice"]; exists {
+		val := m.GetClientSideDefenseChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_side_defense_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientSideDefenseChoice().(type) {
+	case *ReplaceSpecType_DisableClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.disable_client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*ReplaceSpecType_DisableClientSideDefense).DisableClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("disable_client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ClientSideDefense:
+		if fv, exists := v.FldValidators["client_side_defense_choice.client_side_defense"]; exists {
+			val := m.GetClientSideDefenseChoice().(*ReplaceSpecType_ClientSideDefense).ClientSideDefense
+			vOpts := append(opts,
+				db.WithValidateField("client_side_defense_choice"),
+				db.WithValidateField("client_side_defense"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cors_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cors_policy"))
+		if err := fv(ctx, m.GetCorsPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["csrf_policy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csrf_policy"))
+		if err := fv(ctx, m.GetCsrfPolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["data_guard_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("data_guard_rules"))
+		if err := fv(ctx, m.GetDataGuardRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ddos_mitigation_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("ddos_mitigation_rules"))
+		if err := fv(ctx, m.GetDdosMitigationRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["default_cache_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_cache_action"))
+		if err := fv(ctx, m.GetDefaultCacheAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["graphql_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("graphql_rules"))
+		if err := fv(ctx, m.GetGraphqlRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetIpReputationChoice().(type) {
+	case *ReplaceSpecType_DisableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.disable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*ReplaceSpecType_DisableIpReputation).DisableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("disable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableIpReputation:
+		if fv, exists := v.FldValidators["ip_reputation_choice.enable_ip_reputation"]; exists {
+			val := m.GetIpReputationChoice().(*ReplaceSpecType_EnableIpReputation).EnableIpReputation
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("enable_ip_reputation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_IpReputationOnCacheMiss:
+		if fv, exists := v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"]; exists {
+			val := m.GetIpReputationChoice().(*ReplaceSpecType_IpReputationOnCacheMiss).IpReputationOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("ip_reputation_choice"),
+				db.WithValidateField("ip_reputation_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["jwt_validation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("jwt_validation"))
+		if err := fv(ctx, m.GetJwtValidation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action"]; exists {
+		val := m.GetL7DdosAutoMitigationAction()
+		vOpts := append(opts,
+			db.WithValidateField("l7_ddos_auto_mitigation_action"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetL7DdosAutoMitigationAction().(type) {
+	case *ReplaceSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_L7DdosActionBlock:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_block"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionBlock).L7DdosActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_L7DdosActionJsChallenge:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionJsChallenge).L7DdosActionJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetL7DdosAutoMitigationAction().(*ReplaceSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("l7_ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -8050,6 +16592,53 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
+		val := m.GetMaliciousUserDetectionChoice()
+		vOpts := append(opts,
+			db.WithValidateField("malicious_user_detection_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaliciousUserDetectionChoice().(type) {
+	case *ReplaceSpecType_DisableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*ReplaceSpecType_DisableMaliciousUserDetection).DisableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("disable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableMaliciousUserDetection:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.enable_malicious_user_detection"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*ReplaceSpecType_EnableMaliciousUserDetection).EnableMaliciousUserDetection
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("enable_malicious_user_detection"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_MaliciousUserDetectionOnCacheMiss:
+		if fv, exists := v.FldValidators["malicious_user_detection_choice.malicious_user_detection_on_cache_miss"]; exists {
+			val := m.GetMaliciousUserDetectionChoice().(*ReplaceSpecType_MaliciousUserDetectionOnCacheMiss).MaliciousUserDetectionOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("malicious_user_detection_choice"),
+				db.WithValidateField("malicious_user_detection_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["more_option"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("more_option"))
@@ -8063,6 +16652,324 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("origin_pool"))
 		if err := fv(ctx, m.GetOriginPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["other_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("other_settings"))
+		if err := fv(ctx, m.GetOtherSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["protected_cookies"]; exists {
+		vOpts := append(opts, db.WithValidateField("protected_cookies"))
+		if err := fv(ctx, m.GetProtectedCookies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
+		val := m.GetRateLimitChoice()
+		vOpts := append(opts,
+			db.WithValidateField("rate_limit_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRateLimitChoice().(type) {
+	case *ReplaceSpecType_DisableRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.disable_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*ReplaceSpecType_DisableRateLimit).DisableRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("disable_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ApiRateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.api_rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*ReplaceSpecType_ApiRateLimit).ApiRateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("api_rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_RateLimit:
+		if fv, exists := v.FldValidators["rate_limit_choice.rate_limit"]; exists {
+			val := m.GetRateLimitChoice().(*ReplaceSpecType_RateLimit).RateLimit
+			vOpts := append(opts,
+				db.WithValidateField("rate_limit_choice"),
+				db.WithValidateField("rate_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sensitive_data_policy_choice"]; exists {
+		val := m.GetSensitiveDataPolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("sensitive_data_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSensitiveDataPolicyChoice().(type) {
+	case *ReplaceSpecType_DefaultSensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.default_sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*ReplaceSpecType_DefaultSensitiveDataPolicy).DefaultSensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("default_sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SensitiveDataPolicy:
+		if fv, exists := v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"]; exists {
+			val := m.GetSensitiveDataPolicyChoice().(*ReplaceSpecType_SensitiveDataPolicy).SensitiveDataPolicy
+			vOpts := append(opts,
+				db.WithValidateField("sensitive_data_policy_choice"),
+				db.WithValidateField("sensitive_data_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
+		val := m.GetServicePolicyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("service_policy_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetServicePolicyChoice().(type) {
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+		if fv, exists := v.FldValidators["service_policy_choice.service_policies_from_namespace"]; exists {
+			val := m.GetServicePolicyChoice().(*ReplaceSpecType_ServicePoliciesFromNamespace).ServicePoliciesFromNamespace
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("service_policies_from_namespace"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_NoServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.no_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*ReplaceSpecType_NoServicePolicies).NoServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("no_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ActiveServicePolicies:
+		if fv, exists := v.FldValidators["service_policy_choice.active_service_policies"]; exists {
+			val := m.GetServicePolicyChoice().(*ReplaceSpecType_ActiveServicePolicies).ActiveServicePolicies
+			vOpts := append(opts,
+				db.WithValidateField("service_policy_choice"),
+				db.WithValidateField("active_service_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["slow_ddos_mitigation_choice"]; exists {
+		val := m.GetSlowDdosMitigationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("slow_ddos_mitigation_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetSlowDdosMitigationChoice().(type) {
+	case *ReplaceSpecType_SystemDefaultTimeouts:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.system_default_timeouts"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*ReplaceSpecType_SystemDefaultTimeouts).SystemDefaultTimeouts
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("system_default_timeouts"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_SlowDdosMitigation:
+		if fv, exists := v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"]; exists {
+			val := m.GetSlowDdosMitigationChoice().(*ReplaceSpecType_SlowDdosMitigation).SlowDdosMitigation
+			vOpts := append(opts,
+				db.WithValidateField("slow_ddos_mitigation_choice"),
+				db.WithValidateField("slow_ddos_mitigation"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["threat_mesh_choice"]; exists {
+		val := m.GetThreatMeshChoice()
+		vOpts := append(opts,
+			db.WithValidateField("threat_mesh_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetThreatMeshChoice().(type) {
+	case *ReplaceSpecType_DisableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.disable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*ReplaceSpecType_DisableThreatMesh).DisableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("disable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableThreatMesh:
+		if fv, exists := v.FldValidators["threat_mesh_choice.enable_threat_mesh"]; exists {
+			val := m.GetThreatMeshChoice().(*ReplaceSpecType_EnableThreatMesh).EnableThreatMesh
+			vOpts := append(opts,
+				db.WithValidateField("threat_mesh_choice"),
+				db.WithValidateField("enable_threat_mesh"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["trusted_clients"]; exists {
+		vOpts := append(opts, db.WithValidateField("trusted_clients"))
+		if err := fv(ctx, m.GetTrustedClients(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_id_choice"]; exists {
+		val := m.GetUserIdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("user_id_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUserIdChoice().(type) {
+	case *ReplaceSpecType_UserIdClientIp:
+		if fv, exists := v.FldValidators["user_id_choice.user_id_client_ip"]; exists {
+			val := m.GetUserIdChoice().(*ReplaceSpecType_UserIdClientIp).UserIdClientIp
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_id_client_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_UserIdentification:
+		if fv, exists := v.FldValidators["user_id_choice.user_identification"]; exists {
+			val := m.GetUserIdChoice().(*ReplaceSpecType_UserIdentification).UserIdentification
+			vOpts := append(opts,
+				db.WithValidateField("user_id_choice"),
+				db.WithValidateField("user_identification"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_choice"]; exists {
+		val := m.GetWafChoice()
+		vOpts := append(opts,
+			db.WithValidateField("waf_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafChoice().(type) {
+	case *ReplaceSpecType_DisableWaf:
+		if fv, exists := v.FldValidators["waf_choice.disable_waf"]; exists {
+			val := m.GetWafChoice().(*ReplaceSpecType_DisableWaf).DisableWaf
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("disable_waf"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AppFirewall:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall"]; exists {
+			val := m.GetWafChoice().(*ReplaceSpecType_AppFirewall).AppFirewall
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_AppFirewallOnCacheMiss:
+		if fv, exists := v.FldValidators["waf_choice.app_firewall_on_cache_miss"]; exists {
+			val := m.GetWafChoice().(*ReplaceSpecType_AppFirewallOnCacheMiss).AppFirewallOnCacheMiss
+			vOpts := append(opts,
+				db.WithValidateField("waf_choice"),
+				db.WithValidateField("app_firewall_on_cache_miss"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_rules"))
+		if err := fv(ctx, m.GetWafExclusionRules(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8083,6 +16990,72 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhApiDefinitionChoice := v.ApiDefinitionChoiceValidationRuleHandler
+	rulesApiDefinitionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDefinitionChoice(rulesApiDefinitionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.api_definition_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_definition_choice"] = vFn
+
+	vrhApiDiscoveryChoice := v.ApiDiscoveryChoiceValidationRuleHandler
+	rulesApiDiscoveryChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhApiDiscoveryChoice(rulesApiDiscoveryChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.api_discovery_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_discovery_choice"] = vFn
+
+	vrhBotDefenseChoice := v.BotDefenseChoiceValidationRuleHandler
+	rulesBotDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBotDefenseChoice(rulesBotDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.bot_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bot_defense_choice"] = vFn
+
+	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
+	rulesChallengeType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChallengeType(rulesChallengeType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.challenge_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["challenge_type"] = vFn
+
+	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
+	rulesClientSideDefenseChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientSideDefenseChoice(rulesClientSideDefenseChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.client_side_defense_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_side_defense_choice"] = vFn
+
+	vrhL7DdosAutoMitigationAction := v.L7DdosAutoMitigationActionValidationRuleHandler
+	rulesL7DdosAutoMitigationAction := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhL7DdosAutoMitigationAction(rulesL7DdosAutoMitigationAction)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.l7_ddos_auto_mitigation_action: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["l7_ddos_auto_mitigation_action"] = vFn
+
 	vrhLoadbalancerType := v.LoadbalancerTypeValidationRuleHandler
 	rulesLoadbalancerType := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -8093,6 +17066,94 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
+
+	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
+	rulesMaliciousUserDetectionChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.malicious_user_detection_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["malicious_user_detection_choice"] = vFn
+
+	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
+	rulesRateLimitChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.rate_limit_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limit_choice"] = vFn
+
+	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
+	rulesSensitiveDataPolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSensitiveDataPolicyChoice(rulesSensitiveDataPolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.sensitive_data_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sensitive_data_policy_choice"] = vFn
+
+	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
+	rulesServicePolicyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.service_policy_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_policy_choice"] = vFn
+
+	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
+	rulesSlowDdosMitigationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSlowDdosMitigationChoice(rulesSlowDdosMitigationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.slow_ddos_mitigation_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["slow_ddos_mitigation_choice"] = vFn
+
+	vrhThreatMeshChoice := v.ThreatMeshChoiceValidationRuleHandler
+	rulesThreatMeshChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhThreatMeshChoice(rulesThreatMeshChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.threat_mesh_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["threat_mesh_choice"] = vFn
+
+	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
+	rulesUserIdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.user_id_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_id_choice"] = vFn
+
+	vrhWafChoice := v.WafChoiceValidationRuleHandler
+	rulesWafChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWafChoice(rulesWafChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.waf_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_choice"] = vFn
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
@@ -8123,11 +17184,155 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["origin_pool"] = vFn
 
+	vrhCacheRules := v.CacheRulesValidationRuleHandler
+	rulesCacheRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhCacheRules(rulesCacheRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.cache_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_rules"] = vFn
+
+	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
+	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhWafExclusionRules(rulesWafExclusionRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.waf_exclusion_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_exclusion_rules"] = vFn
+
+	vrhDataGuardRules := v.DataGuardRulesValidationRuleHandler
+	rulesDataGuardRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDataGuardRules(rulesDataGuardRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.data_guard_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["data_guard_rules"] = vFn
+
+	vrhGraphqlRules := v.GraphqlRulesValidationRuleHandler
+	rulesGraphqlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "64",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhGraphqlRules(rulesGraphqlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.graphql_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["graphql_rules"] = vFn
+
+	vrhProtectedCookies := v.ProtectedCookiesValidationRuleHandler
+	rulesProtectedCookies := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "16",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhProtectedCookies(rulesProtectedCookies)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.protected_cookies: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["protected_cookies"] = vFn
+
+	vrhDdosMitigationRules := v.DdosMitigationRulesValidationRuleHandler
+	rulesDdosMitigationRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhDdosMitigationRules(rulesDdosMitigationRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.ddos_mitigation_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ddos_mitigation_rules"] = vFn
+
+	vrhTrustedClients := v.TrustedClientsValidationRuleHandler
+	rulesTrustedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhTrustedClients(rulesTrustedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.trusted_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["trusted_clients"] = vFn
+
+	vrhBlockedClients := v.BlockedClientsValidationRuleHandler
+	rulesBlockedClients := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhBlockedClients(rulesBlockedClients)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.blocked_clients: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["blocked_clients"] = vFn
+
+	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+	v.FldValidators["api_definition_choice.api_specification_on_cache_miss"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
+
+	v.FldValidators["api_discovery_choice.enable_api_discovery"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+	v.FldValidators["api_discovery_choice.api_discovery_on_cache_miss"] = ves_io_schema_views_common_waf.ApiDiscoverySettingValidator().Validate
+
+	v.FldValidators["bot_defense_choice.bot_defense"] = ves_io_schema_views_common_security.ShapeBotDefenseTypeValidator().Validate
+	v.FldValidators["bot_defense_choice.bot_defense_advanced"] = ves_io_schema_views_common_security.BotDefenseAdvancedTypeValidator().Validate
+
+	v.FldValidators["challenge_type.enable_challenge"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.challenge_on_cache_miss"] = ves_io_schema_views_common_waf.EnableChallengeValidator().Validate
+	v.FldValidators["challenge_type.js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.captcha_challenge"] = ves_io_schema_virtual_host.CaptchaChallengeTypeValidator().Validate
+	v.FldValidators["challenge_type.policy_based_challenge"] = ves_io_schema_views_common_waf.PolicyBasedChallengeValidator().Validate
+
+	v.FldValidators["client_side_defense_choice.client_side_defense"] = ves_io_schema_views_common_security.ClientSideDefenseTypeValidator().Validate
+
+	v.FldValidators["ip_reputation_choice.enable_ip_reputation"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+	v.FldValidators["ip_reputation_choice.ip_reputation_on_cache_miss"] = ves_io_schema_views_common_waf.IPThreatCategoryListTypeValidator().Validate
+
+	v.FldValidators["l7_ddos_auto_mitigation_action.l7_ddos_action_js_challenge"] = ves_io_schema_virtual_host.JavascriptChallengeTypeValidator().Validate
+
 	v.FldValidators["loadbalancer_type.http"] = ves_io_schema_views_http_loadbalancer.ProxyTypeHttpValidator().Validate
 	v.FldValidators["loadbalancer_type.https_auto_cert"] = CDNHTTPSAutoCertsTypeValidator().Validate
 	v.FldValidators["loadbalancer_type.https"] = CDNHTTPSCustomCertsTypeValidator().Validate
 
+	v.FldValidators["rate_limit_choice.api_rate_limit"] = ves_io_schema_views_common_waf.APIRateLimitValidator().Validate
+	v.FldValidators["rate_limit_choice.rate_limit"] = ves_io_schema_views_common_waf.RateLimitConfigTypeValidator().Validate
+
+	v.FldValidators["sensitive_data_policy_choice.sensitive_data_policy"] = ves_io_schema_views_common_security.SensitiveDataPolicySettingsValidator().Validate
+
+	v.FldValidators["service_policy_choice.active_service_policies"] = ves_io_schema_views_common_waf.ServicePolicyListValidator().Validate
+
+	v.FldValidators["slow_ddos_mitigation_choice.slow_ddos_mitigation"] = ves_io_schema_virtual_host.SlowDDoSMitigationValidator().Validate
+
+	v.FldValidators["user_id_choice.user_identification"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["waf_choice.app_firewall"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["waf_choice.app_firewall_on_cache_miss"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
 	v.FldValidators["more_option"] = AdvancedOptionsTypeValidator().Validate
+
+	v.FldValidators["other_settings"] = OtherSettingsValidator().Validate
+
+	v.FldValidators["default_cache_action"] = DefaultCacheActionValidator().Validate
+
+	v.FldValidators["csrf_policy"] = ves_io_schema.CsrfPolicyValidator().Validate
+
+	v.FldValidators["api_protection_rules"] = ves_io_schema_views_common_waf.APIProtectionRulesValidator().Validate
+
+	v.FldValidators["jwt_validation"] = ves_io_schema_views_common_waf.JWTValidationValidator().Validate
+
+	v.FldValidators["cors_policy"] = ves_io_schema.CorsPolicyValidator().Validate
 
 	return v
 }()
@@ -8917,6 +18122,311 @@ func WebApplicationFirewallValidator() db.Validator {
 }
 
 // create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetApiDefinitionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDefinitionChoice.(type) {
+	case nil:
+		o.ApiDefinitionChoice = nil
+
+	case *CreateSpecType_ApiSpecification:
+		o.ApiDefinitionChoice = &GlobalSpecType_ApiSpecification{ApiSpecification: of.ApiSpecification}
+
+	case *CreateSpecType_ApiSpecificationOnCacheMiss:
+		o.ApiDefinitionChoice = &GlobalSpecType_ApiSpecificationOnCacheMiss{ApiSpecificationOnCacheMiss: of.ApiSpecificationOnCacheMiss}
+
+	case *CreateSpecType_DisableApiDefinition:
+		o.ApiDefinitionChoice = &GlobalSpecType_DisableApiDefinition{DisableApiDefinition: of.DisableApiDefinition}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetApiDefinitionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDefinitionChoice.(type) {
+	case nil:
+		r.ApiDefinitionChoice = nil
+
+	case *GlobalSpecType_ApiSpecification:
+		r.ApiDefinitionChoice = &CreateSpecType_ApiSpecification{ApiSpecification: of.ApiSpecification}
+
+	case *GlobalSpecType_ApiSpecificationOnCacheMiss:
+		r.ApiDefinitionChoice = &CreateSpecType_ApiSpecificationOnCacheMiss{ApiSpecificationOnCacheMiss: of.ApiSpecificationOnCacheMiss}
+
+	case *GlobalSpecType_DisableApiDefinition:
+		r.ApiDefinitionChoice = &CreateSpecType_DisableApiDefinition{DisableApiDefinition: of.DisableApiDefinition}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetApiDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDiscoveryChoice.(type) {
+	case nil:
+		o.ApiDiscoveryChoice = nil
+
+	case *CreateSpecType_ApiDiscoveryOnCacheMiss:
+		o.ApiDiscoveryChoice = &GlobalSpecType_ApiDiscoveryOnCacheMiss{ApiDiscoveryOnCacheMiss: of.ApiDiscoveryOnCacheMiss}
+
+	case *CreateSpecType_DisableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *CreateSpecType_EnableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetApiDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDiscoveryChoice.(type) {
+	case nil:
+		r.ApiDiscoveryChoice = nil
+
+	case *GlobalSpecType_ApiDiscoveryOnCacheMiss:
+		r.ApiDiscoveryChoice = &CreateSpecType_ApiDiscoveryOnCacheMiss{ApiDiscoveryOnCacheMiss: of.ApiDiscoveryOnCacheMiss}
+
+	case *GlobalSpecType_DisableApiDiscovery:
+		r.ApiDiscoveryChoice = &CreateSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GlobalSpecType_EnableApiDiscovery:
+		r.ApiDiscoveryChoice = &CreateSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetBotDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotDefenseChoice.(type) {
+	case nil:
+		o.BotDefenseChoice = nil
+
+	case *CreateSpecType_BotDefense:
+		o.BotDefenseChoice = &GlobalSpecType_BotDefense{BotDefense: of.BotDefense}
+
+	case *CreateSpecType_BotDefenseAdvanced:
+		o.BotDefenseChoice = &GlobalSpecType_BotDefenseAdvanced{BotDefenseAdvanced: of.BotDefenseAdvanced}
+
+	case *CreateSpecType_DisableBotDefense:
+		o.BotDefenseChoice = &GlobalSpecType_DisableBotDefense{DisableBotDefense: of.DisableBotDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetBotDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotDefenseChoice.(type) {
+	case nil:
+		r.BotDefenseChoice = nil
+
+	case *GlobalSpecType_BotDefense:
+		r.BotDefenseChoice = &CreateSpecType_BotDefense{BotDefense: of.BotDefense}
+
+	case *GlobalSpecType_BotDefenseAdvanced:
+		r.BotDefenseChoice = &CreateSpecType_BotDefenseAdvanced{BotDefenseAdvanced: of.BotDefenseAdvanced}
+
+	case *GlobalSpecType_DisableBotDefense:
+		r.BotDefenseChoice = &CreateSpecType_DisableBotDefense{DisableBotDefense: of.DisableBotDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetChallengeTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ChallengeType.(type) {
+	case nil:
+		o.ChallengeType = nil
+
+	case *CreateSpecType_CaptchaChallenge:
+		o.ChallengeType = &GlobalSpecType_CaptchaChallenge{CaptchaChallenge: of.CaptchaChallenge}
+
+	case *CreateSpecType_ChallengeOnCacheMiss:
+		o.ChallengeType = &GlobalSpecType_ChallengeOnCacheMiss{ChallengeOnCacheMiss: of.ChallengeOnCacheMiss}
+
+	case *CreateSpecType_EnableChallenge:
+		o.ChallengeType = &GlobalSpecType_EnableChallenge{EnableChallenge: of.EnableChallenge}
+
+	case *CreateSpecType_JsChallenge:
+		o.ChallengeType = &GlobalSpecType_JsChallenge{JsChallenge: of.JsChallenge}
+
+	case *CreateSpecType_NoChallenge:
+		o.ChallengeType = &GlobalSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	case *CreateSpecType_PolicyBasedChallenge:
+		o.ChallengeType = &GlobalSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ChallengeType.(type) {
+	case nil:
+		r.ChallengeType = nil
+
+	case *GlobalSpecType_CaptchaChallenge:
+		r.ChallengeType = &CreateSpecType_CaptchaChallenge{CaptchaChallenge: of.CaptchaChallenge}
+
+	case *GlobalSpecType_ChallengeOnCacheMiss:
+		r.ChallengeType = &CreateSpecType_ChallengeOnCacheMiss{ChallengeOnCacheMiss: of.ChallengeOnCacheMiss}
+
+	case *GlobalSpecType_EnableChallenge:
+		r.ChallengeType = &CreateSpecType_EnableChallenge{EnableChallenge: of.EnableChallenge}
+
+	case *GlobalSpecType_JsChallenge:
+		r.ChallengeType = &CreateSpecType_JsChallenge{JsChallenge: of.JsChallenge}
+
+	case *GlobalSpecType_NoChallenge:
+		r.ChallengeType = &CreateSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	case *GlobalSpecType_PolicyBasedChallenge:
+		r.ChallengeType = &CreateSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetClientSideDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClientSideDefenseChoice.(type) {
+	case nil:
+		o.ClientSideDefenseChoice = nil
+
+	case *CreateSpecType_ClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *CreateSpecType_DisableClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetClientSideDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClientSideDefenseChoice.(type) {
+	case nil:
+		r.ClientSideDefenseChoice = nil
+
+	case *GlobalSpecType_ClientSideDefense:
+		r.ClientSideDefenseChoice = &CreateSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GlobalSpecType_DisableClientSideDefense:
+		r.ClientSideDefenseChoice = &CreateSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetIpReputationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IpReputationChoice.(type) {
+	case nil:
+		o.IpReputationChoice = nil
+
+	case *CreateSpecType_DisableIpReputation:
+		o.IpReputationChoice = &GlobalSpecType_DisableIpReputation{DisableIpReputation: of.DisableIpReputation}
+
+	case *CreateSpecType_EnableIpReputation:
+		o.IpReputationChoice = &GlobalSpecType_EnableIpReputation{EnableIpReputation: of.EnableIpReputation}
+
+	case *CreateSpecType_IpReputationOnCacheMiss:
+		o.IpReputationChoice = &GlobalSpecType_IpReputationOnCacheMiss{IpReputationOnCacheMiss: of.IpReputationOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetIpReputationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IpReputationChoice.(type) {
+	case nil:
+		r.IpReputationChoice = nil
+
+	case *GlobalSpecType_DisableIpReputation:
+		r.IpReputationChoice = &CreateSpecType_DisableIpReputation{DisableIpReputation: of.DisableIpReputation}
+
+	case *GlobalSpecType_EnableIpReputation:
+		r.IpReputationChoice = &CreateSpecType_EnableIpReputation{EnableIpReputation: of.EnableIpReputation}
+
+	case *GlobalSpecType_IpReputationOnCacheMiss:
+		r.IpReputationChoice = &CreateSpecType_IpReputationOnCacheMiss{IpReputationOnCacheMiss: of.IpReputationOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetL7DdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		o.L7DdosAutoMitigationAction = nil
+
+	case *CreateSpecType_L7DdosActionBlock:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *CreateSpecType_L7DdosActionDefault:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *CreateSpecType_L7DdosActionJsChallenge:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *CreateSpecType_L7DdosActionNone:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetL7DdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		r.L7DdosAutoMitigationAction = nil
+
+	case *GlobalSpecType_L7DdosActionBlock:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GlobalSpecType_L7DdosActionDefault:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GlobalSpecType_L7DdosActionNone:
+		r.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
 func (r *CreateSpecType) SetLoadbalancerTypeToGlobalSpecType(o *GlobalSpecType) error {
 	switch of := r.LoadbalancerType.(type) {
 	case nil:
@@ -8957,15 +18467,348 @@ func (r *CreateSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecType
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetMaliciousUserDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		o.MaliciousUserDetectionChoice = nil
+
+	case *CreateSpecType_DisableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *CreateSpecType_EnableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	case *CreateSpecType_MaliciousUserDetectionOnCacheMiss:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_MaliciousUserDetectionOnCacheMiss{MaliciousUserDetectionOnCacheMiss: of.MaliciousUserDetectionOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		r.MaliciousUserDetectionChoice = nil
+
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &CreateSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &CreateSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	case *GlobalSpecType_MaliciousUserDetectionOnCacheMiss:
+		r.MaliciousUserDetectionChoice = &CreateSpecType_MaliciousUserDetectionOnCacheMiss{MaliciousUserDetectionOnCacheMiss: of.MaliciousUserDetectionOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetRateLimitChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RateLimitChoice.(type) {
+	case nil:
+		o.RateLimitChoice = nil
+
+	case *CreateSpecType_ApiRateLimit:
+		o.RateLimitChoice = &GlobalSpecType_ApiRateLimit{ApiRateLimit: of.ApiRateLimit}
+
+	case *CreateSpecType_DisableRateLimit:
+		o.RateLimitChoice = &GlobalSpecType_DisableRateLimit{DisableRateLimit: of.DisableRateLimit}
+
+	case *CreateSpecType_RateLimit:
+		o.RateLimitChoice = &GlobalSpecType_RateLimit{RateLimit: of.RateLimit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetRateLimitChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RateLimitChoice.(type) {
+	case nil:
+		r.RateLimitChoice = nil
+
+	case *GlobalSpecType_ApiRateLimit:
+		r.RateLimitChoice = &CreateSpecType_ApiRateLimit{ApiRateLimit: of.ApiRateLimit}
+
+	case *GlobalSpecType_DisableRateLimit:
+		r.RateLimitChoice = &CreateSpecType_DisableRateLimit{DisableRateLimit: of.DisableRateLimit}
+
+	case *GlobalSpecType_RateLimit:
+		r.RateLimitChoice = &CreateSpecType_RateLimit{RateLimit: of.RateLimit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetSensitiveDataPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SensitiveDataPolicyChoice.(type) {
+	case nil:
+		o.SensitiveDataPolicyChoice = nil
+
+	case *CreateSpecType_DefaultSensitiveDataPolicy:
+		o.SensitiveDataPolicyChoice = &GlobalSpecType_DefaultSensitiveDataPolicy{DefaultSensitiveDataPolicy: of.DefaultSensitiveDataPolicy}
+
+	case *CreateSpecType_SensitiveDataPolicy:
+		o.SensitiveDataPolicyChoice = &GlobalSpecType_SensitiveDataPolicy{SensitiveDataPolicy: of.SensitiveDataPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetSensitiveDataPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SensitiveDataPolicyChoice.(type) {
+	case nil:
+		r.SensitiveDataPolicyChoice = nil
+
+	case *GlobalSpecType_DefaultSensitiveDataPolicy:
+		r.SensitiveDataPolicyChoice = &CreateSpecType_DefaultSensitiveDataPolicy{DefaultSensitiveDataPolicy: of.DefaultSensitiveDataPolicy}
+
+	case *GlobalSpecType_SensitiveDataPolicy:
+		r.SensitiveDataPolicyChoice = &CreateSpecType_SensitiveDataPolicy{SensitiveDataPolicy: of.SensitiveDataPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetServicePolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *CreateSpecType_ActiveServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *CreateSpecType_NoServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *CreateSpecType_ServicePoliciesFromNamespace:
+		o.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *GlobalSpecType_ActiveServicePolicies:
+		r.ServicePolicyChoice = &CreateSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GlobalSpecType_NoServicePolicies:
+		r.ServicePolicyChoice = &CreateSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		r.ServicePolicyChoice = &CreateSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetSlowDdosMitigationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SlowDdosMitigationChoice.(type) {
+	case nil:
+		o.SlowDdosMitigationChoice = nil
+
+	case *CreateSpecType_SlowDdosMitigation:
+		o.SlowDdosMitigationChoice = &GlobalSpecType_SlowDdosMitigation{SlowDdosMitigation: of.SlowDdosMitigation}
+
+	case *CreateSpecType_SystemDefaultTimeouts:
+		o.SlowDdosMitigationChoice = &GlobalSpecType_SystemDefaultTimeouts{SystemDefaultTimeouts: of.SystemDefaultTimeouts}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetSlowDdosMitigationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SlowDdosMitigationChoice.(type) {
+	case nil:
+		r.SlowDdosMitigationChoice = nil
+
+	case *GlobalSpecType_SlowDdosMitigation:
+		r.SlowDdosMitigationChoice = &CreateSpecType_SlowDdosMitigation{SlowDdosMitigation: of.SlowDdosMitigation}
+
+	case *GlobalSpecType_SystemDefaultTimeouts:
+		r.SlowDdosMitigationChoice = &CreateSpecType_SystemDefaultTimeouts{SystemDefaultTimeouts: of.SystemDefaultTimeouts}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetThreatMeshChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ThreatMeshChoice.(type) {
+	case nil:
+		o.ThreatMeshChoice = nil
+
+	case *CreateSpecType_DisableThreatMesh:
+		o.ThreatMeshChoice = &GlobalSpecType_DisableThreatMesh{DisableThreatMesh: of.DisableThreatMesh}
+
+	case *CreateSpecType_EnableThreatMesh:
+		o.ThreatMeshChoice = &GlobalSpecType_EnableThreatMesh{EnableThreatMesh: of.EnableThreatMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetThreatMeshChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ThreatMeshChoice.(type) {
+	case nil:
+		r.ThreatMeshChoice = nil
+
+	case *GlobalSpecType_DisableThreatMesh:
+		r.ThreatMeshChoice = &CreateSpecType_DisableThreatMesh{DisableThreatMesh: of.DisableThreatMesh}
+
+	case *GlobalSpecType_EnableThreatMesh:
+		r.ThreatMeshChoice = &CreateSpecType_EnableThreatMesh{EnableThreatMesh: of.EnableThreatMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetUserIdChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UserIdChoice.(type) {
+	case nil:
+		o.UserIdChoice = nil
+
+	case *CreateSpecType_UserIdClientIp:
+		o.UserIdChoice = &GlobalSpecType_UserIdClientIp{UserIdClientIp: of.UserIdClientIp}
+
+	case *CreateSpecType_UserIdentification:
+		o.UserIdChoice = &GlobalSpecType_UserIdentification{UserIdentification: of.UserIdentification}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetUserIdChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UserIdChoice.(type) {
+	case nil:
+		r.UserIdChoice = nil
+
+	case *GlobalSpecType_UserIdClientIp:
+		r.UserIdChoice = &CreateSpecType_UserIdClientIp{UserIdClientIp: of.UserIdClientIp}
+
+	case *GlobalSpecType_UserIdentification:
+		r.UserIdChoice = &CreateSpecType_UserIdentification{UserIdentification: of.UserIdentification}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.WafChoice.(type) {
+	case nil:
+		o.WafChoice = nil
+
+	case *CreateSpecType_AppFirewall:
+		o.WafChoice = &GlobalSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
+	case *CreateSpecType_AppFirewallOnCacheMiss:
+		o.WafChoice = &GlobalSpecType_AppFirewallOnCacheMiss{AppFirewallOnCacheMiss: of.AppFirewallOnCacheMiss}
+
+	case *CreateSpecType_DisableWaf:
+		o.WafChoice = &GlobalSpecType_DisableWaf{DisableWaf: of.DisableWaf}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.WafChoice.(type) {
+	case nil:
+		r.WafChoice = nil
+
+	case *GlobalSpecType_AppFirewall:
+		r.WafChoice = &CreateSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
+	case *GlobalSpecType_AppFirewallOnCacheMiss:
+		r.WafChoice = &CreateSpecType_AppFirewallOnCacheMiss{AppFirewallOnCacheMiss: of.AppFirewallOnCacheMiss}
+
+	case *GlobalSpecType_DisableWaf:
+		r.WafChoice = &CreateSpecType_DisableWaf{DisableWaf: of.DisableWaf}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AddLocation = f.GetAddLocation()
+	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.GetApiDiscoveryChoiceFromGlobalSpecType(f)
+	m.ApiProtectionRules = f.GetApiProtectionRules()
+	m.BlockedClients = f.GetBlockedClients()
+	m.GetBotDefenseChoiceFromGlobalSpecType(f)
+	m.CacheRules = f.GetCacheRules()
+	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
+	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
+	m.DataGuardRules = f.GetDataGuardRules()
+	m.DdosMitigationRules = f.GetDdosMitigationRules()
+	m.DefaultCacheAction = f.GetDefaultCacheAction()
 	m.Domains = f.GetDomains()
+	m.GraphqlRules = f.GetGraphqlRules()
+	m.GetIpReputationChoiceFromGlobalSpecType(f)
+	m.JwtValidation = f.GetJwtValidation()
+	m.GetL7DdosAutoMitigationActionFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
+	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
 	m.OriginPool = f.GetOriginPool()
+	m.OtherSettings = f.GetOtherSettings()
+	m.ProtectedCookies = f.GetProtectedCookies()
+	m.GetRateLimitChoiceFromGlobalSpecType(f)
+	m.GetSensitiveDataPolicyChoiceFromGlobalSpecType(f)
+	m.GetServicePolicyChoiceFromGlobalSpecType(f)
+	m.GetSlowDdosMitigationChoiceFromGlobalSpecType(f)
+	m.GetThreatMeshChoiceFromGlobalSpecType(f)
+	m.TrustedClients = f.GetTrustedClients()
+	m.GetUserIdChoiceFromGlobalSpecType(f)
+	m.GetWafChoiceFromGlobalSpecType(f)
+	m.WafExclusionRules = f.GetWafExclusionRules()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -8984,10 +18827,39 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.AddLocation = m1.AddLocation
+	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	m1.SetApiDiscoveryChoiceToGlobalSpecType(f)
+	f.ApiProtectionRules = m1.ApiProtectionRules
+	f.BlockedClients = m1.BlockedClients
+	m1.SetBotDefenseChoiceToGlobalSpecType(f)
+	f.CacheRules = m1.CacheRules
+	m1.SetChallengeTypeToGlobalSpecType(f)
+	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
+	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
+	f.DataGuardRules = m1.DataGuardRules
+	f.DdosMitigationRules = m1.DdosMitigationRules
+	f.DefaultCacheAction = m1.DefaultCacheAction
 	f.Domains = m1.Domains
+	f.GraphqlRules = m1.GraphqlRules
+	m1.SetIpReputationChoiceToGlobalSpecType(f)
+	f.JwtValidation = m1.JwtValidation
+	m1.SetL7DdosAutoMitigationActionToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
+	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
 	f.OriginPool = m1.OriginPool
+	f.OtherSettings = m1.OtherSettings
+	f.ProtectedCookies = m1.ProtectedCookies
+	m1.SetRateLimitChoiceToGlobalSpecType(f)
+	m1.SetSensitiveDataPolicyChoiceToGlobalSpecType(f)
+	m1.SetServicePolicyChoiceToGlobalSpecType(f)
+	m1.SetSlowDdosMitigationChoiceToGlobalSpecType(f)
+	m1.SetThreatMeshChoiceToGlobalSpecType(f)
+	f.TrustedClients = m1.TrustedClients
+	m1.SetUserIdChoiceToGlobalSpecType(f)
+	m1.SetWafChoiceToGlobalSpecType(f)
+	f.WafExclusionRules = m1.WafExclusionRules
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -8996,6 +18868,311 @@ func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *CreateSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetApiDefinitionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDefinitionChoice.(type) {
+	case nil:
+		o.ApiDefinitionChoice = nil
+
+	case *GetSpecType_ApiSpecification:
+		o.ApiDefinitionChoice = &GlobalSpecType_ApiSpecification{ApiSpecification: of.ApiSpecification}
+
+	case *GetSpecType_ApiSpecificationOnCacheMiss:
+		o.ApiDefinitionChoice = &GlobalSpecType_ApiSpecificationOnCacheMiss{ApiSpecificationOnCacheMiss: of.ApiSpecificationOnCacheMiss}
+
+	case *GetSpecType_DisableApiDefinition:
+		o.ApiDefinitionChoice = &GlobalSpecType_DisableApiDefinition{DisableApiDefinition: of.DisableApiDefinition}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetApiDefinitionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDefinitionChoice.(type) {
+	case nil:
+		r.ApiDefinitionChoice = nil
+
+	case *GlobalSpecType_ApiSpecification:
+		r.ApiDefinitionChoice = &GetSpecType_ApiSpecification{ApiSpecification: of.ApiSpecification}
+
+	case *GlobalSpecType_ApiSpecificationOnCacheMiss:
+		r.ApiDefinitionChoice = &GetSpecType_ApiSpecificationOnCacheMiss{ApiSpecificationOnCacheMiss: of.ApiSpecificationOnCacheMiss}
+
+	case *GlobalSpecType_DisableApiDefinition:
+		r.ApiDefinitionChoice = &GetSpecType_DisableApiDefinition{DisableApiDefinition: of.DisableApiDefinition}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetApiDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDiscoveryChoice.(type) {
+	case nil:
+		o.ApiDiscoveryChoice = nil
+
+	case *GetSpecType_ApiDiscoveryOnCacheMiss:
+		o.ApiDiscoveryChoice = &GlobalSpecType_ApiDiscoveryOnCacheMiss{ApiDiscoveryOnCacheMiss: of.ApiDiscoveryOnCacheMiss}
+
+	case *GetSpecType_DisableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GetSpecType_EnableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetApiDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDiscoveryChoice.(type) {
+	case nil:
+		r.ApiDiscoveryChoice = nil
+
+	case *GlobalSpecType_ApiDiscoveryOnCacheMiss:
+		r.ApiDiscoveryChoice = &GetSpecType_ApiDiscoveryOnCacheMiss{ApiDiscoveryOnCacheMiss: of.ApiDiscoveryOnCacheMiss}
+
+	case *GlobalSpecType_DisableApiDiscovery:
+		r.ApiDiscoveryChoice = &GetSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GlobalSpecType_EnableApiDiscovery:
+		r.ApiDiscoveryChoice = &GetSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetBotDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotDefenseChoice.(type) {
+	case nil:
+		o.BotDefenseChoice = nil
+
+	case *GetSpecType_BotDefense:
+		o.BotDefenseChoice = &GlobalSpecType_BotDefense{BotDefense: of.BotDefense}
+
+	case *GetSpecType_BotDefenseAdvanced:
+		o.BotDefenseChoice = &GlobalSpecType_BotDefenseAdvanced{BotDefenseAdvanced: of.BotDefenseAdvanced}
+
+	case *GetSpecType_DisableBotDefense:
+		o.BotDefenseChoice = &GlobalSpecType_DisableBotDefense{DisableBotDefense: of.DisableBotDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetBotDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotDefenseChoice.(type) {
+	case nil:
+		r.BotDefenseChoice = nil
+
+	case *GlobalSpecType_BotDefense:
+		r.BotDefenseChoice = &GetSpecType_BotDefense{BotDefense: of.BotDefense}
+
+	case *GlobalSpecType_BotDefenseAdvanced:
+		r.BotDefenseChoice = &GetSpecType_BotDefenseAdvanced{BotDefenseAdvanced: of.BotDefenseAdvanced}
+
+	case *GlobalSpecType_DisableBotDefense:
+		r.BotDefenseChoice = &GetSpecType_DisableBotDefense{DisableBotDefense: of.DisableBotDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetChallengeTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ChallengeType.(type) {
+	case nil:
+		o.ChallengeType = nil
+
+	case *GetSpecType_CaptchaChallenge:
+		o.ChallengeType = &GlobalSpecType_CaptchaChallenge{CaptchaChallenge: of.CaptchaChallenge}
+
+	case *GetSpecType_ChallengeOnCacheMiss:
+		o.ChallengeType = &GlobalSpecType_ChallengeOnCacheMiss{ChallengeOnCacheMiss: of.ChallengeOnCacheMiss}
+
+	case *GetSpecType_EnableChallenge:
+		o.ChallengeType = &GlobalSpecType_EnableChallenge{EnableChallenge: of.EnableChallenge}
+
+	case *GetSpecType_JsChallenge:
+		o.ChallengeType = &GlobalSpecType_JsChallenge{JsChallenge: of.JsChallenge}
+
+	case *GetSpecType_NoChallenge:
+		o.ChallengeType = &GlobalSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	case *GetSpecType_PolicyBasedChallenge:
+		o.ChallengeType = &GlobalSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ChallengeType.(type) {
+	case nil:
+		r.ChallengeType = nil
+
+	case *GlobalSpecType_CaptchaChallenge:
+		r.ChallengeType = &GetSpecType_CaptchaChallenge{CaptchaChallenge: of.CaptchaChallenge}
+
+	case *GlobalSpecType_ChallengeOnCacheMiss:
+		r.ChallengeType = &GetSpecType_ChallengeOnCacheMiss{ChallengeOnCacheMiss: of.ChallengeOnCacheMiss}
+
+	case *GlobalSpecType_EnableChallenge:
+		r.ChallengeType = &GetSpecType_EnableChallenge{EnableChallenge: of.EnableChallenge}
+
+	case *GlobalSpecType_JsChallenge:
+		r.ChallengeType = &GetSpecType_JsChallenge{JsChallenge: of.JsChallenge}
+
+	case *GlobalSpecType_NoChallenge:
+		r.ChallengeType = &GetSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	case *GlobalSpecType_PolicyBasedChallenge:
+		r.ChallengeType = &GetSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetClientSideDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClientSideDefenseChoice.(type) {
+	case nil:
+		o.ClientSideDefenseChoice = nil
+
+	case *GetSpecType_ClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GetSpecType_DisableClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetClientSideDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClientSideDefenseChoice.(type) {
+	case nil:
+		r.ClientSideDefenseChoice = nil
+
+	case *GlobalSpecType_ClientSideDefense:
+		r.ClientSideDefenseChoice = &GetSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GlobalSpecType_DisableClientSideDefense:
+		r.ClientSideDefenseChoice = &GetSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetIpReputationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IpReputationChoice.(type) {
+	case nil:
+		o.IpReputationChoice = nil
+
+	case *GetSpecType_DisableIpReputation:
+		o.IpReputationChoice = &GlobalSpecType_DisableIpReputation{DisableIpReputation: of.DisableIpReputation}
+
+	case *GetSpecType_EnableIpReputation:
+		o.IpReputationChoice = &GlobalSpecType_EnableIpReputation{EnableIpReputation: of.EnableIpReputation}
+
+	case *GetSpecType_IpReputationOnCacheMiss:
+		o.IpReputationChoice = &GlobalSpecType_IpReputationOnCacheMiss{IpReputationOnCacheMiss: of.IpReputationOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetIpReputationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IpReputationChoice.(type) {
+	case nil:
+		r.IpReputationChoice = nil
+
+	case *GlobalSpecType_DisableIpReputation:
+		r.IpReputationChoice = &GetSpecType_DisableIpReputation{DisableIpReputation: of.DisableIpReputation}
+
+	case *GlobalSpecType_EnableIpReputation:
+		r.IpReputationChoice = &GetSpecType_EnableIpReputation{EnableIpReputation: of.EnableIpReputation}
+
+	case *GlobalSpecType_IpReputationOnCacheMiss:
+		r.IpReputationChoice = &GetSpecType_IpReputationOnCacheMiss{IpReputationOnCacheMiss: of.IpReputationOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetL7DdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		o.L7DdosAutoMitigationAction = nil
+
+	case *GetSpecType_L7DdosActionBlock:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GetSpecType_L7DdosActionDefault:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GetSpecType_L7DdosActionJsChallenge:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GetSpecType_L7DdosActionNone:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetL7DdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		r.L7DdosAutoMitigationAction = nil
+
+	case *GlobalSpecType_L7DdosActionBlock:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GlobalSpecType_L7DdosActionDefault:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GlobalSpecType_L7DdosActionNone:
+		r.L7DdosAutoMitigationAction = &GetSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in GetSpecType from GlobalSpecType for oneof fields
@@ -9039,21 +19216,354 @@ func (r *GetSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecType) e
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetMaliciousUserDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		o.MaliciousUserDetectionChoice = nil
+
+	case *GetSpecType_DisableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GetSpecType_EnableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	case *GetSpecType_MaliciousUserDetectionOnCacheMiss:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_MaliciousUserDetectionOnCacheMiss{MaliciousUserDetectionOnCacheMiss: of.MaliciousUserDetectionOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		r.MaliciousUserDetectionChoice = nil
+
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &GetSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &GetSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	case *GlobalSpecType_MaliciousUserDetectionOnCacheMiss:
+		r.MaliciousUserDetectionChoice = &GetSpecType_MaliciousUserDetectionOnCacheMiss{MaliciousUserDetectionOnCacheMiss: of.MaliciousUserDetectionOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetRateLimitChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RateLimitChoice.(type) {
+	case nil:
+		o.RateLimitChoice = nil
+
+	case *GetSpecType_ApiRateLimit:
+		o.RateLimitChoice = &GlobalSpecType_ApiRateLimit{ApiRateLimit: of.ApiRateLimit}
+
+	case *GetSpecType_DisableRateLimit:
+		o.RateLimitChoice = &GlobalSpecType_DisableRateLimit{DisableRateLimit: of.DisableRateLimit}
+
+	case *GetSpecType_RateLimit:
+		o.RateLimitChoice = &GlobalSpecType_RateLimit{RateLimit: of.RateLimit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetRateLimitChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RateLimitChoice.(type) {
+	case nil:
+		r.RateLimitChoice = nil
+
+	case *GlobalSpecType_ApiRateLimit:
+		r.RateLimitChoice = &GetSpecType_ApiRateLimit{ApiRateLimit: of.ApiRateLimit}
+
+	case *GlobalSpecType_DisableRateLimit:
+		r.RateLimitChoice = &GetSpecType_DisableRateLimit{DisableRateLimit: of.DisableRateLimit}
+
+	case *GlobalSpecType_RateLimit:
+		r.RateLimitChoice = &GetSpecType_RateLimit{RateLimit: of.RateLimit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetSensitiveDataPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SensitiveDataPolicyChoice.(type) {
+	case nil:
+		o.SensitiveDataPolicyChoice = nil
+
+	case *GetSpecType_DefaultSensitiveDataPolicy:
+		o.SensitiveDataPolicyChoice = &GlobalSpecType_DefaultSensitiveDataPolicy{DefaultSensitiveDataPolicy: of.DefaultSensitiveDataPolicy}
+
+	case *GetSpecType_SensitiveDataPolicy:
+		o.SensitiveDataPolicyChoice = &GlobalSpecType_SensitiveDataPolicy{SensitiveDataPolicy: of.SensitiveDataPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetSensitiveDataPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SensitiveDataPolicyChoice.(type) {
+	case nil:
+		r.SensitiveDataPolicyChoice = nil
+
+	case *GlobalSpecType_DefaultSensitiveDataPolicy:
+		r.SensitiveDataPolicyChoice = &GetSpecType_DefaultSensitiveDataPolicy{DefaultSensitiveDataPolicy: of.DefaultSensitiveDataPolicy}
+
+	case *GlobalSpecType_SensitiveDataPolicy:
+		r.SensitiveDataPolicyChoice = &GetSpecType_SensitiveDataPolicy{SensitiveDataPolicy: of.SensitiveDataPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetServicePolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *GetSpecType_ActiveServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GetSpecType_NoServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GetSpecType_ServicePoliciesFromNamespace:
+		o.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *GlobalSpecType_ActiveServicePolicies:
+		r.ServicePolicyChoice = &GetSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GlobalSpecType_NoServicePolicies:
+		r.ServicePolicyChoice = &GetSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		r.ServicePolicyChoice = &GetSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetSlowDdosMitigationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SlowDdosMitigationChoice.(type) {
+	case nil:
+		o.SlowDdosMitigationChoice = nil
+
+	case *GetSpecType_SlowDdosMitigation:
+		o.SlowDdosMitigationChoice = &GlobalSpecType_SlowDdosMitigation{SlowDdosMitigation: of.SlowDdosMitigation}
+
+	case *GetSpecType_SystemDefaultTimeouts:
+		o.SlowDdosMitigationChoice = &GlobalSpecType_SystemDefaultTimeouts{SystemDefaultTimeouts: of.SystemDefaultTimeouts}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetSlowDdosMitigationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SlowDdosMitigationChoice.(type) {
+	case nil:
+		r.SlowDdosMitigationChoice = nil
+
+	case *GlobalSpecType_SlowDdosMitigation:
+		r.SlowDdosMitigationChoice = &GetSpecType_SlowDdosMitigation{SlowDdosMitigation: of.SlowDdosMitigation}
+
+	case *GlobalSpecType_SystemDefaultTimeouts:
+		r.SlowDdosMitigationChoice = &GetSpecType_SystemDefaultTimeouts{SystemDefaultTimeouts: of.SystemDefaultTimeouts}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetThreatMeshChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ThreatMeshChoice.(type) {
+	case nil:
+		o.ThreatMeshChoice = nil
+
+	case *GetSpecType_DisableThreatMesh:
+		o.ThreatMeshChoice = &GlobalSpecType_DisableThreatMesh{DisableThreatMesh: of.DisableThreatMesh}
+
+	case *GetSpecType_EnableThreatMesh:
+		o.ThreatMeshChoice = &GlobalSpecType_EnableThreatMesh{EnableThreatMesh: of.EnableThreatMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetThreatMeshChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ThreatMeshChoice.(type) {
+	case nil:
+		r.ThreatMeshChoice = nil
+
+	case *GlobalSpecType_DisableThreatMesh:
+		r.ThreatMeshChoice = &GetSpecType_DisableThreatMesh{DisableThreatMesh: of.DisableThreatMesh}
+
+	case *GlobalSpecType_EnableThreatMesh:
+		r.ThreatMeshChoice = &GetSpecType_EnableThreatMesh{EnableThreatMesh: of.EnableThreatMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetUserIdChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UserIdChoice.(type) {
+	case nil:
+		o.UserIdChoice = nil
+
+	case *GetSpecType_UserIdClientIp:
+		o.UserIdChoice = &GlobalSpecType_UserIdClientIp{UserIdClientIp: of.UserIdClientIp}
+
+	case *GetSpecType_UserIdentification:
+		o.UserIdChoice = &GlobalSpecType_UserIdentification{UserIdentification: of.UserIdentification}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetUserIdChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UserIdChoice.(type) {
+	case nil:
+		r.UserIdChoice = nil
+
+	case *GlobalSpecType_UserIdClientIp:
+		r.UserIdChoice = &GetSpecType_UserIdClientIp{UserIdClientIp: of.UserIdClientIp}
+
+	case *GlobalSpecType_UserIdentification:
+		r.UserIdChoice = &GetSpecType_UserIdentification{UserIdentification: of.UserIdentification}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.WafChoice.(type) {
+	case nil:
+		o.WafChoice = nil
+
+	case *GetSpecType_AppFirewall:
+		o.WafChoice = &GlobalSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
+	case *GetSpecType_AppFirewallOnCacheMiss:
+		o.WafChoice = &GlobalSpecType_AppFirewallOnCacheMiss{AppFirewallOnCacheMiss: of.AppFirewallOnCacheMiss}
+
+	case *GetSpecType_DisableWaf:
+		o.WafChoice = &GlobalSpecType_DisableWaf{DisableWaf: of.DisableWaf}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.WafChoice.(type) {
+	case nil:
+		r.WafChoice = nil
+
+	case *GlobalSpecType_AppFirewall:
+		r.WafChoice = &GetSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
+	case *GlobalSpecType_AppFirewallOnCacheMiss:
+		r.WafChoice = &GetSpecType_AppFirewallOnCacheMiss{AppFirewallOnCacheMiss: of.AppFirewallOnCacheMiss}
+
+	case *GlobalSpecType_DisableWaf:
+		r.WafChoice = &GetSpecType_DisableWaf{DisableWaf: of.DisableWaf}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AddLocation = f.GetAddLocation()
+	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.GetApiDiscoveryChoiceFromGlobalSpecType(f)
+	m.ApiProtectionRules = f.GetApiProtectionRules()
 	m.AutoCertInfo = f.GetAutoCertInfo()
+	m.BlockedClients = f.GetBlockedClients()
+	m.GetBotDefenseChoiceFromGlobalSpecType(f)
+	m.CacheRules = f.GetCacheRules()
 	m.CertState = f.GetCertState()
+	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
+	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
+	m.DataGuardRules = f.GetDataGuardRules()
+	m.DdosMitigationRules = f.GetDdosMitigationRules()
+	m.DefaultCacheAction = f.GetDefaultCacheAction()
 	m.DnsInfo = f.GetDnsInfo()
 	m.Domains = f.GetDomains()
+	m.GraphqlRules = f.GetGraphqlRules()
 	m.HostName = f.GetHostName()
+	m.GetIpReputationChoiceFromGlobalSpecType(f)
+	m.JwtValidation = f.GetJwtValidation()
+	m.GetL7DdosAutoMitigationActionFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
+	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
 	m.OriginPool = f.GetOriginPool()
+	m.OtherSettings = f.GetOtherSettings()
+	m.ProtectedCookies = f.GetProtectedCookies()
+	m.GetRateLimitChoiceFromGlobalSpecType(f)
+	m.GetSensitiveDataPolicyChoiceFromGlobalSpecType(f)
 	m.ServiceDomains = f.GetServiceDomains()
+	m.GetServicePolicyChoiceFromGlobalSpecType(f)
+	m.GetSlowDdosMitigationChoiceFromGlobalSpecType(f)
 	m.State = f.GetState()
+	m.GetThreatMeshChoiceFromGlobalSpecType(f)
+	m.TrustedClients = f.GetTrustedClients()
+	m.GetUserIdChoiceFromGlobalSpecType(f)
+	m.GetWafChoiceFromGlobalSpecType(f)
+	m.WafExclusionRules = f.GetWafExclusionRules()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -9072,16 +19582,45 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.AddLocation = m1.AddLocation
+	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	m1.SetApiDiscoveryChoiceToGlobalSpecType(f)
+	f.ApiProtectionRules = m1.ApiProtectionRules
 	f.AutoCertInfo = m1.AutoCertInfo
+	f.BlockedClients = m1.BlockedClients
+	m1.SetBotDefenseChoiceToGlobalSpecType(f)
+	f.CacheRules = m1.CacheRules
 	f.CertState = m1.CertState
+	m1.SetChallengeTypeToGlobalSpecType(f)
+	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
+	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
+	f.DataGuardRules = m1.DataGuardRules
+	f.DdosMitigationRules = m1.DdosMitigationRules
+	f.DefaultCacheAction = m1.DefaultCacheAction
 	f.DnsInfo = m1.DnsInfo
 	f.Domains = m1.Domains
+	f.GraphqlRules = m1.GraphqlRules
 	f.HostName = m1.HostName
+	m1.SetIpReputationChoiceToGlobalSpecType(f)
+	f.JwtValidation = m1.JwtValidation
+	m1.SetL7DdosAutoMitigationActionToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
+	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
 	f.OriginPool = m1.OriginPool
+	f.OtherSettings = m1.OtherSettings
+	f.ProtectedCookies = m1.ProtectedCookies
+	m1.SetRateLimitChoiceToGlobalSpecType(f)
+	m1.SetSensitiveDataPolicyChoiceToGlobalSpecType(f)
 	f.ServiceDomains = m1.ServiceDomains
+	m1.SetServicePolicyChoiceToGlobalSpecType(f)
+	m1.SetSlowDdosMitigationChoiceToGlobalSpecType(f)
 	f.State = m1.State
+	m1.SetThreatMeshChoiceToGlobalSpecType(f)
+	f.TrustedClients = m1.TrustedClients
+	m1.SetUserIdChoiceToGlobalSpecType(f)
+	m1.SetWafChoiceToGlobalSpecType(f)
+	f.WafExclusionRules = m1.WafExclusionRules
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -9090,6 +19629,311 @@ func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
 
 func (m *GetSpecType) ToGlobalSpecTypeWithoutDeepCopy(f *GlobalSpecType) {
 	m.toGlobalSpecType(f, false)
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetApiDefinitionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDefinitionChoice.(type) {
+	case nil:
+		o.ApiDefinitionChoice = nil
+
+	case *ReplaceSpecType_ApiSpecification:
+		o.ApiDefinitionChoice = &GlobalSpecType_ApiSpecification{ApiSpecification: of.ApiSpecification}
+
+	case *ReplaceSpecType_ApiSpecificationOnCacheMiss:
+		o.ApiDefinitionChoice = &GlobalSpecType_ApiSpecificationOnCacheMiss{ApiSpecificationOnCacheMiss: of.ApiSpecificationOnCacheMiss}
+
+	case *ReplaceSpecType_DisableApiDefinition:
+		o.ApiDefinitionChoice = &GlobalSpecType_DisableApiDefinition{DisableApiDefinition: of.DisableApiDefinition}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetApiDefinitionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDefinitionChoice.(type) {
+	case nil:
+		r.ApiDefinitionChoice = nil
+
+	case *GlobalSpecType_ApiSpecification:
+		r.ApiDefinitionChoice = &ReplaceSpecType_ApiSpecification{ApiSpecification: of.ApiSpecification}
+
+	case *GlobalSpecType_ApiSpecificationOnCacheMiss:
+		r.ApiDefinitionChoice = &ReplaceSpecType_ApiSpecificationOnCacheMiss{ApiSpecificationOnCacheMiss: of.ApiSpecificationOnCacheMiss}
+
+	case *GlobalSpecType_DisableApiDefinition:
+		r.ApiDefinitionChoice = &ReplaceSpecType_DisableApiDefinition{DisableApiDefinition: of.DisableApiDefinition}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetApiDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ApiDiscoveryChoice.(type) {
+	case nil:
+		o.ApiDiscoveryChoice = nil
+
+	case *ReplaceSpecType_ApiDiscoveryOnCacheMiss:
+		o.ApiDiscoveryChoice = &GlobalSpecType_ApiDiscoveryOnCacheMiss{ApiDiscoveryOnCacheMiss: of.ApiDiscoveryOnCacheMiss}
+
+	case *ReplaceSpecType_DisableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *ReplaceSpecType_EnableApiDiscovery:
+		o.ApiDiscoveryChoice = &GlobalSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetApiDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ApiDiscoveryChoice.(type) {
+	case nil:
+		r.ApiDiscoveryChoice = nil
+
+	case *GlobalSpecType_ApiDiscoveryOnCacheMiss:
+		r.ApiDiscoveryChoice = &ReplaceSpecType_ApiDiscoveryOnCacheMiss{ApiDiscoveryOnCacheMiss: of.ApiDiscoveryOnCacheMiss}
+
+	case *GlobalSpecType_DisableApiDiscovery:
+		r.ApiDiscoveryChoice = &ReplaceSpecType_DisableApiDiscovery{DisableApiDiscovery: of.DisableApiDiscovery}
+
+	case *GlobalSpecType_EnableApiDiscovery:
+		r.ApiDiscoveryChoice = &ReplaceSpecType_EnableApiDiscovery{EnableApiDiscovery: of.EnableApiDiscovery}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetBotDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.BotDefenseChoice.(type) {
+	case nil:
+		o.BotDefenseChoice = nil
+
+	case *ReplaceSpecType_BotDefense:
+		o.BotDefenseChoice = &GlobalSpecType_BotDefense{BotDefense: of.BotDefense}
+
+	case *ReplaceSpecType_BotDefenseAdvanced:
+		o.BotDefenseChoice = &GlobalSpecType_BotDefenseAdvanced{BotDefenseAdvanced: of.BotDefenseAdvanced}
+
+	case *ReplaceSpecType_DisableBotDefense:
+		o.BotDefenseChoice = &GlobalSpecType_DisableBotDefense{DisableBotDefense: of.DisableBotDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetBotDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.BotDefenseChoice.(type) {
+	case nil:
+		r.BotDefenseChoice = nil
+
+	case *GlobalSpecType_BotDefense:
+		r.BotDefenseChoice = &ReplaceSpecType_BotDefense{BotDefense: of.BotDefense}
+
+	case *GlobalSpecType_BotDefenseAdvanced:
+		r.BotDefenseChoice = &ReplaceSpecType_BotDefenseAdvanced{BotDefenseAdvanced: of.BotDefenseAdvanced}
+
+	case *GlobalSpecType_DisableBotDefense:
+		r.BotDefenseChoice = &ReplaceSpecType_DisableBotDefense{DisableBotDefense: of.DisableBotDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetChallengeTypeToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ChallengeType.(type) {
+	case nil:
+		o.ChallengeType = nil
+
+	case *ReplaceSpecType_CaptchaChallenge:
+		o.ChallengeType = &GlobalSpecType_CaptchaChallenge{CaptchaChallenge: of.CaptchaChallenge}
+
+	case *ReplaceSpecType_ChallengeOnCacheMiss:
+		o.ChallengeType = &GlobalSpecType_ChallengeOnCacheMiss{ChallengeOnCacheMiss: of.ChallengeOnCacheMiss}
+
+	case *ReplaceSpecType_EnableChallenge:
+		o.ChallengeType = &GlobalSpecType_EnableChallenge{EnableChallenge: of.EnableChallenge}
+
+	case *ReplaceSpecType_JsChallenge:
+		o.ChallengeType = &GlobalSpecType_JsChallenge{JsChallenge: of.JsChallenge}
+
+	case *ReplaceSpecType_NoChallenge:
+		o.ChallengeType = &GlobalSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	case *ReplaceSpecType_PolicyBasedChallenge:
+		o.ChallengeType = &GlobalSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ChallengeType.(type) {
+	case nil:
+		r.ChallengeType = nil
+
+	case *GlobalSpecType_CaptchaChallenge:
+		r.ChallengeType = &ReplaceSpecType_CaptchaChallenge{CaptchaChallenge: of.CaptchaChallenge}
+
+	case *GlobalSpecType_ChallengeOnCacheMiss:
+		r.ChallengeType = &ReplaceSpecType_ChallengeOnCacheMiss{ChallengeOnCacheMiss: of.ChallengeOnCacheMiss}
+
+	case *GlobalSpecType_EnableChallenge:
+		r.ChallengeType = &ReplaceSpecType_EnableChallenge{EnableChallenge: of.EnableChallenge}
+
+	case *GlobalSpecType_JsChallenge:
+		r.ChallengeType = &ReplaceSpecType_JsChallenge{JsChallenge: of.JsChallenge}
+
+	case *GlobalSpecType_NoChallenge:
+		r.ChallengeType = &ReplaceSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	case *GlobalSpecType_PolicyBasedChallenge:
+		r.ChallengeType = &ReplaceSpecType_PolicyBasedChallenge{PolicyBasedChallenge: of.PolicyBasedChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetClientSideDefenseChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ClientSideDefenseChoice.(type) {
+	case nil:
+		o.ClientSideDefenseChoice = nil
+
+	case *ReplaceSpecType_ClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *ReplaceSpecType_DisableClientSideDefense:
+		o.ClientSideDefenseChoice = &GlobalSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetClientSideDefenseChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ClientSideDefenseChoice.(type) {
+	case nil:
+		r.ClientSideDefenseChoice = nil
+
+	case *GlobalSpecType_ClientSideDefense:
+		r.ClientSideDefenseChoice = &ReplaceSpecType_ClientSideDefense{ClientSideDefense: of.ClientSideDefense}
+
+	case *GlobalSpecType_DisableClientSideDefense:
+		r.ClientSideDefenseChoice = &ReplaceSpecType_DisableClientSideDefense{DisableClientSideDefense: of.DisableClientSideDefense}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetIpReputationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.IpReputationChoice.(type) {
+	case nil:
+		o.IpReputationChoice = nil
+
+	case *ReplaceSpecType_DisableIpReputation:
+		o.IpReputationChoice = &GlobalSpecType_DisableIpReputation{DisableIpReputation: of.DisableIpReputation}
+
+	case *ReplaceSpecType_EnableIpReputation:
+		o.IpReputationChoice = &GlobalSpecType_EnableIpReputation{EnableIpReputation: of.EnableIpReputation}
+
+	case *ReplaceSpecType_IpReputationOnCacheMiss:
+		o.IpReputationChoice = &GlobalSpecType_IpReputationOnCacheMiss{IpReputationOnCacheMiss: of.IpReputationOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetIpReputationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.IpReputationChoice.(type) {
+	case nil:
+		r.IpReputationChoice = nil
+
+	case *GlobalSpecType_DisableIpReputation:
+		r.IpReputationChoice = &ReplaceSpecType_DisableIpReputation{DisableIpReputation: of.DisableIpReputation}
+
+	case *GlobalSpecType_EnableIpReputation:
+		r.IpReputationChoice = &ReplaceSpecType_EnableIpReputation{EnableIpReputation: of.EnableIpReputation}
+
+	case *GlobalSpecType_IpReputationOnCacheMiss:
+		r.IpReputationChoice = &ReplaceSpecType_IpReputationOnCacheMiss{IpReputationOnCacheMiss: of.IpReputationOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetL7DdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		o.L7DdosAutoMitigationAction = nil
+
+	case *ReplaceSpecType_L7DdosActionBlock:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *ReplaceSpecType_L7DdosActionDefault:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *ReplaceSpecType_L7DdosActionJsChallenge:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *ReplaceSpecType_L7DdosActionNone:
+		o.L7DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetL7DdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.L7DdosAutoMitigationAction.(type) {
+	case nil:
+		r.L7DdosAutoMitigationAction = nil
+
+	case *GlobalSpecType_L7DdosActionBlock:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionBlock{L7DdosActionBlock: of.L7DdosActionBlock}
+
+	case *GlobalSpecType_L7DdosActionDefault:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GlobalSpecType_L7DdosActionJsChallenge:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionJsChallenge{L7DdosActionJsChallenge: of.L7DdosActionJsChallenge}
+
+	case *GlobalSpecType_L7DdosActionNone:
+		r.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -9133,15 +19977,348 @@ func (r *ReplaceSpecType) GetLoadbalancerTypeFromGlobalSpecType(o *GlobalSpecTyp
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetMaliciousUserDetectionChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		o.MaliciousUserDetectionChoice = nil
+
+	case *ReplaceSpecType_DisableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *ReplaceSpecType_EnableMaliciousUserDetection:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	case *ReplaceSpecType_MaliciousUserDetectionOnCacheMiss:
+		o.MaliciousUserDetectionChoice = &GlobalSpecType_MaliciousUserDetectionOnCacheMiss{MaliciousUserDetectionOnCacheMiss: of.MaliciousUserDetectionOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetMaliciousUserDetectionChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.MaliciousUserDetectionChoice.(type) {
+	case nil:
+		r.MaliciousUserDetectionChoice = nil
+
+	case *GlobalSpecType_DisableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &ReplaceSpecType_DisableMaliciousUserDetection{DisableMaliciousUserDetection: of.DisableMaliciousUserDetection}
+
+	case *GlobalSpecType_EnableMaliciousUserDetection:
+		r.MaliciousUserDetectionChoice = &ReplaceSpecType_EnableMaliciousUserDetection{EnableMaliciousUserDetection: of.EnableMaliciousUserDetection}
+
+	case *GlobalSpecType_MaliciousUserDetectionOnCacheMiss:
+		r.MaliciousUserDetectionChoice = &ReplaceSpecType_MaliciousUserDetectionOnCacheMiss{MaliciousUserDetectionOnCacheMiss: of.MaliciousUserDetectionOnCacheMiss}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetRateLimitChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.RateLimitChoice.(type) {
+	case nil:
+		o.RateLimitChoice = nil
+
+	case *ReplaceSpecType_ApiRateLimit:
+		o.RateLimitChoice = &GlobalSpecType_ApiRateLimit{ApiRateLimit: of.ApiRateLimit}
+
+	case *ReplaceSpecType_DisableRateLimit:
+		o.RateLimitChoice = &GlobalSpecType_DisableRateLimit{DisableRateLimit: of.DisableRateLimit}
+
+	case *ReplaceSpecType_RateLimit:
+		o.RateLimitChoice = &GlobalSpecType_RateLimit{RateLimit: of.RateLimit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetRateLimitChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.RateLimitChoice.(type) {
+	case nil:
+		r.RateLimitChoice = nil
+
+	case *GlobalSpecType_ApiRateLimit:
+		r.RateLimitChoice = &ReplaceSpecType_ApiRateLimit{ApiRateLimit: of.ApiRateLimit}
+
+	case *GlobalSpecType_DisableRateLimit:
+		r.RateLimitChoice = &ReplaceSpecType_DisableRateLimit{DisableRateLimit: of.DisableRateLimit}
+
+	case *GlobalSpecType_RateLimit:
+		r.RateLimitChoice = &ReplaceSpecType_RateLimit{RateLimit: of.RateLimit}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetSensitiveDataPolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SensitiveDataPolicyChoice.(type) {
+	case nil:
+		o.SensitiveDataPolicyChoice = nil
+
+	case *ReplaceSpecType_DefaultSensitiveDataPolicy:
+		o.SensitiveDataPolicyChoice = &GlobalSpecType_DefaultSensitiveDataPolicy{DefaultSensitiveDataPolicy: of.DefaultSensitiveDataPolicy}
+
+	case *ReplaceSpecType_SensitiveDataPolicy:
+		o.SensitiveDataPolicyChoice = &GlobalSpecType_SensitiveDataPolicy{SensitiveDataPolicy: of.SensitiveDataPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetSensitiveDataPolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SensitiveDataPolicyChoice.(type) {
+	case nil:
+		r.SensitiveDataPolicyChoice = nil
+
+	case *GlobalSpecType_DefaultSensitiveDataPolicy:
+		r.SensitiveDataPolicyChoice = &ReplaceSpecType_DefaultSensitiveDataPolicy{DefaultSensitiveDataPolicy: of.DefaultSensitiveDataPolicy}
+
+	case *GlobalSpecType_SensitiveDataPolicy:
+		r.SensitiveDataPolicyChoice = &ReplaceSpecType_SensitiveDataPolicy{SensitiveDataPolicy: of.SensitiveDataPolicy}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetServicePolicyChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ServicePolicyChoice.(type) {
+	case nil:
+		o.ServicePolicyChoice = nil
+
+	case *ReplaceSpecType_ActiveServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *ReplaceSpecType_NoServicePolicies:
+		o.ServicePolicyChoice = &GlobalSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *ReplaceSpecType_ServicePoliciesFromNamespace:
+		o.ServicePolicyChoice = &GlobalSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetServicePolicyChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ServicePolicyChoice.(type) {
+	case nil:
+		r.ServicePolicyChoice = nil
+
+	case *GlobalSpecType_ActiveServicePolicies:
+		r.ServicePolicyChoice = &ReplaceSpecType_ActiveServicePolicies{ActiveServicePolicies: of.ActiveServicePolicies}
+
+	case *GlobalSpecType_NoServicePolicies:
+		r.ServicePolicyChoice = &ReplaceSpecType_NoServicePolicies{NoServicePolicies: of.NoServicePolicies}
+
+	case *GlobalSpecType_ServicePoliciesFromNamespace:
+		r.ServicePolicyChoice = &ReplaceSpecType_ServicePoliciesFromNamespace{ServicePoliciesFromNamespace: of.ServicePoliciesFromNamespace}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetSlowDdosMitigationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.SlowDdosMitigationChoice.(type) {
+	case nil:
+		o.SlowDdosMitigationChoice = nil
+
+	case *ReplaceSpecType_SlowDdosMitigation:
+		o.SlowDdosMitigationChoice = &GlobalSpecType_SlowDdosMitigation{SlowDdosMitigation: of.SlowDdosMitigation}
+
+	case *ReplaceSpecType_SystemDefaultTimeouts:
+		o.SlowDdosMitigationChoice = &GlobalSpecType_SystemDefaultTimeouts{SystemDefaultTimeouts: of.SystemDefaultTimeouts}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetSlowDdosMitigationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.SlowDdosMitigationChoice.(type) {
+	case nil:
+		r.SlowDdosMitigationChoice = nil
+
+	case *GlobalSpecType_SlowDdosMitigation:
+		r.SlowDdosMitigationChoice = &ReplaceSpecType_SlowDdosMitigation{SlowDdosMitigation: of.SlowDdosMitigation}
+
+	case *GlobalSpecType_SystemDefaultTimeouts:
+		r.SlowDdosMitigationChoice = &ReplaceSpecType_SystemDefaultTimeouts{SystemDefaultTimeouts: of.SystemDefaultTimeouts}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetThreatMeshChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ThreatMeshChoice.(type) {
+	case nil:
+		o.ThreatMeshChoice = nil
+
+	case *ReplaceSpecType_DisableThreatMesh:
+		o.ThreatMeshChoice = &GlobalSpecType_DisableThreatMesh{DisableThreatMesh: of.DisableThreatMesh}
+
+	case *ReplaceSpecType_EnableThreatMesh:
+		o.ThreatMeshChoice = &GlobalSpecType_EnableThreatMesh{EnableThreatMesh: of.EnableThreatMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetThreatMeshChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ThreatMeshChoice.(type) {
+	case nil:
+		r.ThreatMeshChoice = nil
+
+	case *GlobalSpecType_DisableThreatMesh:
+		r.ThreatMeshChoice = &ReplaceSpecType_DisableThreatMesh{DisableThreatMesh: of.DisableThreatMesh}
+
+	case *GlobalSpecType_EnableThreatMesh:
+		r.ThreatMeshChoice = &ReplaceSpecType_EnableThreatMesh{EnableThreatMesh: of.EnableThreatMesh}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetUserIdChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UserIdChoice.(type) {
+	case nil:
+		o.UserIdChoice = nil
+
+	case *ReplaceSpecType_UserIdClientIp:
+		o.UserIdChoice = &GlobalSpecType_UserIdClientIp{UserIdClientIp: of.UserIdClientIp}
+
+	case *ReplaceSpecType_UserIdentification:
+		o.UserIdChoice = &GlobalSpecType_UserIdentification{UserIdentification: of.UserIdentification}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetUserIdChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UserIdChoice.(type) {
+	case nil:
+		r.UserIdChoice = nil
+
+	case *GlobalSpecType_UserIdClientIp:
+		r.UserIdChoice = &ReplaceSpecType_UserIdClientIp{UserIdClientIp: of.UserIdClientIp}
+
+	case *GlobalSpecType_UserIdentification:
+		r.UserIdChoice = &ReplaceSpecType_UserIdentification{UserIdentification: of.UserIdentification}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetWafChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.WafChoice.(type) {
+	case nil:
+		o.WafChoice = nil
+
+	case *ReplaceSpecType_AppFirewall:
+		o.WafChoice = &GlobalSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
+	case *ReplaceSpecType_AppFirewallOnCacheMiss:
+		o.WafChoice = &GlobalSpecType_AppFirewallOnCacheMiss{AppFirewallOnCacheMiss: of.AppFirewallOnCacheMiss}
+
+	case *ReplaceSpecType_DisableWaf:
+		o.WafChoice = &GlobalSpecType_DisableWaf{DisableWaf: of.DisableWaf}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetWafChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.WafChoice.(type) {
+	case nil:
+		r.WafChoice = nil
+
+	case *GlobalSpecType_AppFirewall:
+		r.WafChoice = &ReplaceSpecType_AppFirewall{AppFirewall: of.AppFirewall}
+
+	case *GlobalSpecType_AppFirewallOnCacheMiss:
+		r.WafChoice = &ReplaceSpecType_AppFirewallOnCacheMiss{AppFirewallOnCacheMiss: of.AppFirewallOnCacheMiss}
+
+	case *GlobalSpecType_DisableWaf:
+		r.WafChoice = &ReplaceSpecType_DisableWaf{DisableWaf: of.DisableWaf}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.AddLocation = f.GetAddLocation()
+	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
+	m.GetApiDiscoveryChoiceFromGlobalSpecType(f)
+	m.ApiProtectionRules = f.GetApiProtectionRules()
+	m.BlockedClients = f.GetBlockedClients()
+	m.GetBotDefenseChoiceFromGlobalSpecType(f)
+	m.CacheRules = f.GetCacheRules()
+	m.GetChallengeTypeFromGlobalSpecType(f)
+	m.GetClientSideDefenseChoiceFromGlobalSpecType(f)
+	m.CorsPolicy = f.GetCorsPolicy()
+	m.CsrfPolicy = f.GetCsrfPolicy()
+	m.DataGuardRules = f.GetDataGuardRules()
+	m.DdosMitigationRules = f.GetDdosMitigationRules()
+	m.DefaultCacheAction = f.GetDefaultCacheAction()
 	m.Domains = f.GetDomains()
+	m.GraphqlRules = f.GetGraphqlRules()
+	m.GetIpReputationChoiceFromGlobalSpecType(f)
+	m.JwtValidation = f.GetJwtValidation()
+	m.GetL7DdosAutoMitigationActionFromGlobalSpecType(f)
 	m.GetLoadbalancerTypeFromGlobalSpecType(f)
+	m.GetMaliciousUserDetectionChoiceFromGlobalSpecType(f)
 	m.MoreOption = f.GetMoreOption()
 	m.OriginPool = f.GetOriginPool()
+	m.OtherSettings = f.GetOtherSettings()
+	m.ProtectedCookies = f.GetProtectedCookies()
+	m.GetRateLimitChoiceFromGlobalSpecType(f)
+	m.GetSensitiveDataPolicyChoiceFromGlobalSpecType(f)
+	m.GetServicePolicyChoiceFromGlobalSpecType(f)
+	m.GetSlowDdosMitigationChoiceFromGlobalSpecType(f)
+	m.GetThreatMeshChoiceFromGlobalSpecType(f)
+	m.TrustedClients = f.GetTrustedClients()
+	m.GetUserIdChoiceFromGlobalSpecType(f)
+	m.GetWafChoiceFromGlobalSpecType(f)
+	m.WafExclusionRules = f.GetWafExclusionRules()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -9160,10 +20337,39 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.AddLocation = m1.AddLocation
+	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
+	m1.SetApiDiscoveryChoiceToGlobalSpecType(f)
+	f.ApiProtectionRules = m1.ApiProtectionRules
+	f.BlockedClients = m1.BlockedClients
+	m1.SetBotDefenseChoiceToGlobalSpecType(f)
+	f.CacheRules = m1.CacheRules
+	m1.SetChallengeTypeToGlobalSpecType(f)
+	m1.SetClientSideDefenseChoiceToGlobalSpecType(f)
+	f.CorsPolicy = m1.CorsPolicy
+	f.CsrfPolicy = m1.CsrfPolicy
+	f.DataGuardRules = m1.DataGuardRules
+	f.DdosMitigationRules = m1.DdosMitigationRules
+	f.DefaultCacheAction = m1.DefaultCacheAction
 	f.Domains = m1.Domains
+	f.GraphqlRules = m1.GraphqlRules
+	m1.SetIpReputationChoiceToGlobalSpecType(f)
+	f.JwtValidation = m1.JwtValidation
+	m1.SetL7DdosAutoMitigationActionToGlobalSpecType(f)
 	m1.SetLoadbalancerTypeToGlobalSpecType(f)
+	m1.SetMaliciousUserDetectionChoiceToGlobalSpecType(f)
 	f.MoreOption = m1.MoreOption
 	f.OriginPool = m1.OriginPool
+	f.OtherSettings = m1.OtherSettings
+	f.ProtectedCookies = m1.ProtectedCookies
+	m1.SetRateLimitChoiceToGlobalSpecType(f)
+	m1.SetSensitiveDataPolicyChoiceToGlobalSpecType(f)
+	m1.SetServicePolicyChoiceToGlobalSpecType(f)
+	m1.SetSlowDdosMitigationChoiceToGlobalSpecType(f)
+	m1.SetThreatMeshChoiceToGlobalSpecType(f)
+	f.TrustedClients = m1.TrustedClients
+	m1.SetUserIdChoiceToGlobalSpecType(f)
+	m1.SetWafChoiceToGlobalSpecType(f)
+	f.WafExclusionRules = m1.WafExclusionRules
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

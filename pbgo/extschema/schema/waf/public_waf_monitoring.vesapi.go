@@ -879,7 +879,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-clientrulehitsmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-clientrulehitsmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics"
             },
@@ -971,7 +971,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-clientsecurityeventsmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-clientsecurityeventsmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics"
             },
@@ -1063,7 +1063,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-serverrulehitsmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-serverrulehitsmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics"
             },
@@ -1155,7 +1155,7 @@ var WAFMonitoringAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-serversecurityeventsmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf-wafmonitoringapi-serversecurityeventsmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics"
             },

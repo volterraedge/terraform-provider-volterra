@@ -988,7 +988,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-evaluateapiaccess"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-customapi-evaluateapiaccess"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.EvaluateAPIAccess"
             },
@@ -1072,7 +1072,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-evaluatebatchapiaccess"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-customapi-evaluatebatchapiaccess"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.EvaluateBatchAPIAccess"
             },
@@ -1156,7 +1156,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-lookupuserroles"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-customapi-lookupuserroles"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.LookupUserRoles"
             },
@@ -1248,7 +1248,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-suggestvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-customapi-suggestvalues"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.SuggestValues"
             },
@@ -1340,7 +1340,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-customapi-cascadedelete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-customapi-cascadedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.CustomAPI.CascadeDelete"
             },

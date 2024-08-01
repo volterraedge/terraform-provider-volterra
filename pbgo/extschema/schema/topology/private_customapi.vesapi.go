@@ -800,7 +800,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagkeys"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagkeys"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagKeys"
             },
@@ -916,7 +916,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagvalues"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagValues"
             },
@@ -1024,7 +1024,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagkeys"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagkeys"
                 },
                 "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys"
@@ -1141,7 +1141,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagvalues"
                 },
                 "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues"
@@ -1250,7 +1250,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagkeys"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagkeys"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagKeys"
             },
@@ -1366,7 +1366,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudnetworktagvalues"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudNetworkTagValues"
             },
@@ -1474,7 +1474,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagkeys"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagkeys"
                 },
                 "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagKeys"
@@ -1591,7 +1591,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-privatecustomapi-listcloudsubnettagvalues"
                 },
                 "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.topology.PrivateCustomAPI.ListCloudSubnetTagValues"

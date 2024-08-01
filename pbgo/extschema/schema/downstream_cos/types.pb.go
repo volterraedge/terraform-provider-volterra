@@ -33,23 +33,14 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // Limit is specified in terms of: L=Tr/Cr, where:
 // Tr = Tenant (or CoS) event rate
 // Cr = envoy worker estimated event rate capacity.
-// Event rate is the number of downstream socket-level connect and read events per second, handled by Envoy.
+// Event rate is the sum rate of http requests and new connection events.
 // Limit utilization is calculated and enforced on per-cpu (per envoy worker) basis.
 // When traffic volume crosses the limit threshold, enforcement action associated with the limit type may be
 // applied to existing and new connections in order to bring the traffic volume under the threshold value.
-// soft_limit and hard_limit enforcement may be activated/deactivated multiple times during the lifetime
-// of a connection.
+// Some enforcement types (such as soft and hard limit) may be activated/deactivated multiple times during the lifetime
+// of downstream connection.
 // Enforcement decision and duration are derived from limit values, tenant/cos downstream traffic volume,
 // connection establishment rate, and envoy worker capacity.
-//
-// While it is allowed to set none, any or all of available limit types, it is recommended to use the following
-// combinations:
-// 1) no limits - monitor a group of tenants associated with a class of service, in order to determine limit
-// threshold values.
-// 2) soft_limit - traffic prioritization, with minimal negative impact in case of misconfiguration.
-// 3) soft_limit and hard_limit - full enforcement, large-scale DDoS mitigation.
-// 4) soft_limit, hard_limit, close_limit - full enforcement, large-scale DDoS mitigation, including attacks with very
-// large number of network connections.
 type PerCpuUtilizationLimit struct {
 	// Soft Limit
 	//
@@ -70,6 +61,17 @@ type PerCpuUtilizationLimit struct {
 	// Connection close is done in two steps: first stop socket reads for a duration, and then close connection.
 	// This is a DDoS protection measure.
 	CloseLimit *schema.FractionalPercent `protobuf:"bytes,3,opt,name=close_limit,json=closeLimit,proto3" json:"close_limit,omitempty"`
+	// HTTP Limit
+	//
+	// x-displayName: "HTTP Limit"
+	// Apply HTTP protocol-specific throttling options, when this limit threshold is exceeded.
+	// HTTP throttling options are defined in HttpLimitOptions.
+	HttpLimit *schema.FractionalPercent `protobuf:"bytes,4,opt,name=http_limit,json=httpLimit,proto3" json:"http_limit,omitempty"`
+	// Route Priority Limit
+	//
+	// x-displayName: "Route Priority Limit"
+	// Lower http route priority, when this limit threshold is exceeded.
+	RoutePriorityLimit *schema.FractionalPercent `protobuf:"bytes,5,opt,name=route_priority_limit,json=routePriorityLimit,proto3" json:"route_priority_limit,omitempty"`
 }
 
 func (m *PerCpuUtilizationLimit) Reset()      { *m = PerCpuUtilizationLimit{} }
@@ -121,6 +123,179 @@ func (m *PerCpuUtilizationLimit) GetCloseLimit() *schema.FractionalPercent {
 	return nil
 }
 
+func (m *PerCpuUtilizationLimit) GetHttpLimit() *schema.FractionalPercent {
+	if m != nil {
+		return m.HttpLimit
+	}
+	return nil
+}
+
+func (m *PerCpuUtilizationLimit) GetRoutePriorityLimit() *schema.FractionalPercent {
+	if m != nil {
+		return m.RoutePriorityLimit
+	}
+	return nil
+}
+
+// HttpLimitOptions
+//
+// x-displayName: "HTTP Limit Options"
+// Http Protocol Settings applied to connections when HTTP Limit threshold is exceeded.
+type HttpLimitOptions struct {
+	// HTTP2 Maximum Concurrent Streams
+	//
+	// x-displayName: "HTTP2 Maximum Concurrent Streams"
+	// Applied to newly established connection.
+	// If set to 0, this option will not be applied during enforcement.
+	MaxConcurrentStreams uint32 `protobuf:"varint,1,opt,name=max_concurrent_streams,json=maxConcurrentStreams,proto3" json:"max_concurrent_streams,omitempty"`
+	// Maximum requests per HTTP Connection
+	//
+	// x-displayName: "Maximum requests per HTTP Connection"
+	// Setting this parameter to 1 will disable connection keep alive.
+	// For HTTP2 this setting is approximate, due to its asynchronous nature.
+	// Applied both to newly created and already established connections. If connection has already received more
+	// requests then set by this option - connection termination sequence will begin immediately.
+	// If set to 0, this option will not be applied during enforcement.
+	MaxRequestsPerConnection uint32 `protobuf:"varint,2,opt,name=max_requests_per_connection,json=maxRequestsPerConnection,proto3" json:"max_requests_per_connection,omitempty"`
+	// Delayed Close Timeout
+	//
+	// x-displayName: "Delayed Close Timeout"
+	// Maximum amount of time Envoy will wait to close downstream network connection, after initiating connection
+	// termination sequence. This is needed for some clients to be able to process in-flight HTTP responses.
+	// If set to 0, this option will not be applied during enforcement - envoy defaults will be used instead.
+	// This is specified in milliseconds.
+	DelayedCloseTimeout uint32 `protobuf:"varint,3,opt,name=delayed_close_timeout,json=delayedCloseTimeout,proto3" json:"delayed_close_timeout,omitempty"`
+	// Drain Timeout
+	//
+	// x-displayName: "Drain Timeout"
+	// Time envoy will wait between sending the first HTTP2 GOAWAY frame and final GOAWAY frame. During this time
+	// Envoy will continue to accept new streams.
+	// If set to 0, this option will not be applied during enforcement - envoy defaults will be used instead.
+	// This is specified in milliseconds.
+	DrainTimeout uint32 `protobuf:"varint,4,opt,name=drain_timeout,json=drainTimeout,proto3" json:"drain_timeout,omitempty"`
+	// Idle Timeout
+	//
+	// x-displayName: "Idle Timeout"
+	// Idle timeout for connections.
+	// This is specified in milliseconds.
+	IdleTimeout uint64 `protobuf:"varint,5,opt,name=idle_timeout,json=idleTimeout,proto3" json:"idle_timeout,omitempty"`
+	// Stream Idle Timeout
+	//
+	// x-displayName: "Stream Idle Timeout"
+	// Maximum time request stream may remain idle.
+	// This is specified in milliseconds.
+	StreamIdleTimeout uint64 `protobuf:"varint,6,opt,name=stream_idle_timeout,json=streamIdleTimeout,proto3" json:"stream_idle_timeout,omitempty"`
+	// Request Timeout
+	//
+	// x-displayName: "Request Timeout"
+	// Time envoy will wait for entire request to be received.
+	// This is specified in milliseconds.
+	RequestTimeout uint64 `protobuf:"varint,7,opt,name=request_timeout,json=requestTimeout,proto3" json:"request_timeout,omitempty"`
+	// Request Headers Timeout
+	//
+	// x-displayName: "Request Headers Timeout"
+	// Time envoy will wait for request headers to be received.
+	// This is specified in milliseconds.
+	RequestHeadersTimeout uint64 `protobuf:"varint,8,opt,name=request_headers_timeout,json=requestHeadersTimeout,proto3" json:"request_headers_timeout,omitempty"`
+	// Max Connection Duration
+	//
+	// x-displayName: "Max Connection Duration"
+	// Maximum duration for connections.
+	// This is specified in milliseconds.
+	MaxConnectionDuration uint64 `protobuf:"varint,9,opt,name=max_connection_duration,json=maxConnectionDuration,proto3" json:"max_connection_duration,omitempty"`
+}
+
+func (m *HttpLimitOptions) Reset()      { *m = HttpLimitOptions{} }
+func (*HttpLimitOptions) ProtoMessage() {}
+func (*HttpLimitOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_80855f3dbb83809d, []int{1}
+}
+func (m *HttpLimitOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HttpLimitOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HttpLimitOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HttpLimitOptions.Merge(m, src)
+}
+func (m *HttpLimitOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *HttpLimitOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_HttpLimitOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HttpLimitOptions proto.InternalMessageInfo
+
+func (m *HttpLimitOptions) GetMaxConcurrentStreams() uint32 {
+	if m != nil {
+		return m.MaxConcurrentStreams
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetMaxRequestsPerConnection() uint32 {
+	if m != nil {
+		return m.MaxRequestsPerConnection
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetDelayedCloseTimeout() uint32 {
+	if m != nil {
+		return m.DelayedCloseTimeout
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetDrainTimeout() uint32 {
+	if m != nil {
+		return m.DrainTimeout
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetIdleTimeout() uint64 {
+	if m != nil {
+		return m.IdleTimeout
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetStreamIdleTimeout() uint64 {
+	if m != nil {
+		return m.StreamIdleTimeout
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetRequestTimeout() uint64 {
+	if m != nil {
+		return m.RequestTimeout
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetRequestHeadersTimeout() uint64 {
+	if m != nil {
+		return m.RequestHeadersTimeout
+	}
+	return 0
+}
+
+func (m *HttpLimitOptions) GetMaxConnectionDuration() uint64 {
+	if m != nil {
+		return m.MaxConnectionDuration
+	}
+	return 0
+}
+
 // GlobalSpecType
 //
 // x-displayName: "Downstream Class of Service Specification"
@@ -137,12 +312,22 @@ type GlobalSpecType struct {
 	// x-displayName: "CoS Limit"
 	// Limit imposed on sum traffic of all tenants associated with this class of service.
 	CosLimit *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
+	// Listener Limit
+	//
+	// x-displayName: "Listener Limit"
+	// Limit imposed on traffic of individual listener associated with this class of service.
+	ListenerLimit *PerCpuUtilizationLimit `protobuf:"bytes,3,opt,name=listener_limit,json=listenerLimit,proto3" json:"listener_limit,omitempty"`
+	// Http Limit Options
+	//
+	// x-displayName: "HTTP Limit Options"
+	// HTTP Protocol Settings applied to connections when HTTP Limit threshold is exceeded.
+	HttpLimitOptions *HttpLimitOptions `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{1}
+	return fileDescriptor_80855f3dbb83809d, []int{2}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -181,15 +366,31 @@ func (m *GlobalSpecType) GetCosLimit() *PerCpuUtilizationLimit {
 	return nil
 }
 
+func (m *GlobalSpecType) GetListenerLimit() *PerCpuUtilizationLimit {
+	if m != nil {
+		return m.ListenerLimit
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetHttpLimitOptions() *HttpLimitOptions {
+	if m != nil {
+		return m.HttpLimitOptions
+	}
+	return nil
+}
+
 type GetSpecType struct {
-	TenantLimit *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
-	CosLimit    *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
+	TenantLimit      *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
+	CosLimit         *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
+	ListenerLimit    *PerCpuUtilizationLimit `protobuf:"bytes,3,opt,name=listener_limit,json=listenerLimit,proto3" json:"listener_limit,omitempty"`
+	HttpLimitOptions *HttpLimitOptions       `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{2}
+	return fileDescriptor_80855f3dbb83809d, []int{3}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -228,15 +429,31 @@ func (m *GetSpecType) GetCosLimit() *PerCpuUtilizationLimit {
 	return nil
 }
 
+func (m *GetSpecType) GetListenerLimit() *PerCpuUtilizationLimit {
+	if m != nil {
+		return m.ListenerLimit
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetHttpLimitOptions() *HttpLimitOptions {
+	if m != nil {
+		return m.HttpLimitOptions
+	}
+	return nil
+}
+
 type CreateSpecType struct {
-	TenantLimit *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
-	CosLimit    *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
+	TenantLimit      *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
+	CosLimit         *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
+	ListenerLimit    *PerCpuUtilizationLimit `protobuf:"bytes,3,opt,name=listener_limit,json=listenerLimit,proto3" json:"listener_limit,omitempty"`
+	HttpLimitOptions *HttpLimitOptions       `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{3}
+	return fileDescriptor_80855f3dbb83809d, []int{4}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -275,15 +492,31 @@ func (m *CreateSpecType) GetCosLimit() *PerCpuUtilizationLimit {
 	return nil
 }
 
+func (m *CreateSpecType) GetListenerLimit() *PerCpuUtilizationLimit {
+	if m != nil {
+		return m.ListenerLimit
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetHttpLimitOptions() *HttpLimitOptions {
+	if m != nil {
+		return m.HttpLimitOptions
+	}
+	return nil
+}
+
 type ReplaceSpecType struct {
-	TenantLimit *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
-	CosLimit    *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
+	TenantLimit      *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
+	CosLimit         *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
+	ListenerLimit    *PerCpuUtilizationLimit `protobuf:"bytes,3,opt,name=listener_limit,json=listenerLimit,proto3" json:"listener_limit,omitempty"`
+	HttpLimitOptions *HttpLimitOptions       `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{4}
+	return fileDescriptor_80855f3dbb83809d, []int{5}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -322,8 +555,23 @@ func (m *ReplaceSpecType) GetCosLimit() *PerCpuUtilizationLimit {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetListenerLimit() *PerCpuUtilizationLimit {
+	if m != nil {
+		return m.ListenerLimit
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetHttpLimitOptions() *HttpLimitOptions {
+	if m != nil {
+		return m.HttpLimitOptions
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*PerCpuUtilizationLimit)(nil), "ves.io.schema.downstream_cos.PerCpuUtilizationLimit")
+	proto.RegisterType((*HttpLimitOptions)(nil), "ves.io.schema.downstream_cos.HttpLimitOptions")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.downstream_cos.GlobalSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.downstream_cos.GetSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.downstream_cos.CreateSpecType")
@@ -335,36 +583,57 @@ func init() {
 }
 
 var fileDescriptor_80855f3dbb83809d = []byte{
-	// 463 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x94, 0xcf, 0x8a, 0x13, 0x41,
-	0x10, 0xc6, 0xa7, 0x15, 0xc4, 0xed, 0xc8, 0x8a, 0x39, 0xf8, 0x27, 0x2e, 0x4d, 0xc8, 0x69, 0x2f,
-	0xe9, 0x01, 0xf5, 0xe4, 0x41, 0xd1, 0x05, 0xf7, 0xe2, 0x61, 0x8d, 0x8a, 0xe0, 0x25, 0xf4, 0x74,
-	0x2a, 0x93, 0xc6, 0x9e, 0xa9, 0xa6, 0xbb, 0x93, 0x75, 0x3d, 0xf9, 0x00, 0x1e, 0x7c, 0x0c, 0x1f,
-	0xc2, 0x07, 0x10, 0x11, 0x9c, 0x63, 0x2e, 0x82, 0x99, 0x5c, 0x3c, 0xee, 0x23, 0xc8, 0xfc, 0x51,
-	0xec, 0x65, 0x91, 0xc5, 0x9b, 0xb9, 0x75, 0xf1, 0xd5, 0xf7, 0x9b, 0xaf, 0x6a, 0xa0, 0xe8, 0xee,
-	0x02, 0x1c, 0x57, 0x18, 0x3b, 0x39, 0x83, 0x4c, 0xc4, 0x13, 0x3c, 0xcc, 0x9d, 0xb7, 0x20, 0xb2,
-	0xb1, 0x44, 0x17, 0xfb, 0x23, 0x03, 0x8e, 0x1b, 0x8b, 0x1e, 0xbb, 0x3b, 0x4d, 0x27, 0x6f, 0x3a,
-	0x79, 0xd8, 0xd9, 0x1b, 0xa6, 0xca, 0xcf, 0xe6, 0x09, 0x97, 0x98, 0xc5, 0x29, 0xa6, 0x18, 0xd7,
-	0xa6, 0x64, 0x3e, 0xad, 0xab, 0xba, 0xa8, 0x5f, 0x0d, 0xac, 0x77, 0x2d, 0xfc, 0x6c, 0x0e, 0xbe,
-	0x15, 0x6e, 0x86, 0x02, 0x1a, 0xaf, 0x30, 0x6f, 0x23, 0xf4, 0x6e, 0x84, 0xe2, 0x1f, 0xe9, 0x7a,
-	0x3b, 0xa1, 0xb4, 0x10, 0x5a, 0x4d, 0x84, 0x87, 0x56, 0xed, 0x9f, 0x50, 0x15, 0x1c, 0x8e, 0x03,
-	0xf4, 0xe0, 0x1b, 0xa1, 0x57, 0x0f, 0xc0, 0xee, 0x99, 0xf9, 0x73, 0xaf, 0xb4, 0x7a, 0x23, 0x2a,
-	0xf1, 0xb1, 0xca, 0x94, 0xef, 0xde, 0xa7, 0xd4, 0xe1, 0xd4, 0x8f, 0x75, 0x55, 0x5d, 0x27, 0x7d,
-	0xb2, 0xdb, 0xb9, 0xd5, 0xe7, 0xe1, 0x36, 0x1e, 0x59, 0x21, 0x2b, 0x87, 0xd0, 0x07, 0x60, 0x25,
-	0xe4, 0x7e, 0xb4, 0x55, 0x79, 0x7e, 0x03, 0x66, 0xc2, 0x4e, 0x5a, 0xc0, 0xb9, 0xb3, 0x02, 0x2a,
-	0x4f, 0x03, 0x78, 0x40, 0x3b, 0x52, 0xa3, 0x83, 0x96, 0x70, 0xfe, 0x8c, 0x04, 0x5a, 0x9b, 0x6a,
-	0xc4, 0xe0, 0x23, 0xa1, 0xdb, 0xfb, 0x1a, 0x13, 0xa1, 0x9f, 0x1a, 0x90, 0xcf, 0x8e, 0x0c, 0x74,
-	0x5f, 0xd0, 0x4b, 0x1e, 0x72, 0x91, 0x87, 0x93, 0xdd, 0xe1, 0x7f, 0xfb, 0xcf, 0xfc, 0xf4, 0x1d,
-	0x8d, 0x3a, 0x0d, 0xa9, 0x89, 0xfb, 0x84, 0x6e, 0x49, 0x74, 0xc1, 0xb8, 0xff, 0x46, 0xbd, 0x28,
-	0xd1, 0x35, 0xf1, 0xbf, 0x10, 0xda, 0xd9, 0x07, 0xff, 0x3f, 0x66, 0xbf, 0x7b, 0xe5, 0xf3, 0xbd,
-	0x13, 0xab, 0x1f, 0x7c, 0x25, 0x74, 0x7b, 0xcf, 0x82, 0xf0, 0xb0, 0x29, 0x13, 0x15, 0x84, 0x5e,
-	0x1e, 0x81, 0xd1, 0x42, 0x6e, 0xca, 0x48, 0x0f, 0xdf, 0x91, 0x62, 0xc5, 0xa2, 0xe5, 0x8a, 0x45,
-	0xc7, 0x2b, 0x46, 0xde, 0x96, 0x8c, 0x7c, 0x28, 0x19, 0xf9, 0x54, 0x32, 0x52, 0x94, 0x8c, 0x2c,
-	0x4b, 0x46, 0xbe, 0x97, 0x8c, 0xfc, 0x28, 0x59, 0x74, 0x5c, 0x32, 0xf2, 0x7e, 0xcd, 0xa2, 0x62,
-	0xcd, 0xa2, 0xe5, 0x9a, 0x45, 0x2f, 0x47, 0x29, 0x9a, 0x57, 0x29, 0x5f, 0xa0, 0xf6, 0x60, 0xad,
-	0xe0, 0x73, 0x17, 0xd7, 0x8f, 0x29, 0xda, 0x6c, 0x68, 0x2c, 0x2e, 0xd4, 0x04, 0xec, 0xf0, 0x97,
-	0x1c, 0x9b, 0x24, 0xc5, 0x18, 0x5e, 0xfb, 0xf6, 0x3c, 0x9d, 0x7a, 0x8b, 0x93, 0x0b, 0xf5, 0xa1,
-	0xba, 0xfd, 0x33, 0x00, 0x00, 0xff, 0xff, 0x41, 0x9f, 0x61, 0xb3, 0xb2, 0x05, 0x00, 0x00,
+	// 785 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0x4f, 0x6f, 0xeb, 0x44,
+	0x14, 0xc5, 0xe3, 0x24, 0xef, 0xf1, 0x32, 0x69, 0xf2, 0x5e, 0xdd, 0x7f, 0x21, 0xad, 0xac, 0x92,
+	0x0d, 0x55, 0xa5, 0xda, 0x12, 0x20, 0x16, 0x48, 0xb4, 0xa2, 0x41, 0xb4, 0x48, 0x08, 0x8a, 0x5b,
+	0x84, 0x04, 0x48, 0xd6, 0xc4, 0xbe, 0x4d, 0x46, 0xd8, 0x1e, 0x33, 0x1e, 0xa7, 0x09, 0x2b, 0x76,
+	0x48, 0xc0, 0xa2, 0x1f, 0x83, 0xcf, 0xc0, 0x8a, 0x25, 0x62, 0xd5, 0x65, 0x97, 0xd4, 0xdd, 0xc0,
+	0x8a, 0x8a, 0x0d, 0x5b, 0xe4, 0x99, 0x71, 0x5a, 0x87, 0xaa, 0x8a, 0xba, 0x78, 0xdd, 0x74, 0x17,
+	0xfb, 0x9c, 0xf3, 0x9b, 0xc9, 0xbd, 0x73, 0xad, 0x41, 0x1b, 0x43, 0x88, 0x4d, 0x42, 0xad, 0xd8,
+	0x1d, 0x40, 0x80, 0x2d, 0x8f, 0x9e, 0x84, 0x31, 0x67, 0x80, 0x03, 0xc7, 0xa5, 0xb1, 0xc5, 0xc7,
+	0x11, 0xc4, 0x66, 0xc4, 0x28, 0xa7, 0xfa, 0x9a, 0x74, 0x9a, 0xd2, 0x69, 0x16, 0x9d, 0xed, 0xad,
+	0x3e, 0xe1, 0x83, 0xa4, 0x67, 0xba, 0x34, 0xb0, 0xfa, 0xb4, 0x4f, 0x2d, 0x11, 0xea, 0x25, 0xc7,
+	0xe2, 0x49, 0x3c, 0x88, 0x5f, 0x12, 0xd6, 0x5e, 0x29, 0x2e, 0x1b, 0x02, 0x57, 0xc2, 0x6a, 0x51,
+	0xa0, 0x11, 0x27, 0x34, 0x54, 0x5b, 0x68, 0xbf, 0x5a, 0x14, 0x6f, 0xec, 0xae, 0xbd, 0x56, 0x94,
+	0x86, 0xd8, 0x27, 0x1e, 0xe6, 0xa0, 0xd4, 0xf5, 0x29, 0x95, 0xc0, 0x89, 0x53, 0x40, 0x77, 0xfe,
+	0x29, 0xa3, 0xe5, 0x03, 0x60, 0xdd, 0x28, 0xf9, 0x8c, 0x13, 0x9f, 0x7c, 0x8b, 0x33, 0xf1, 0x23,
+	0x12, 0x10, 0xae, 0xef, 0x20, 0x14, 0xd3, 0x63, 0xee, 0xf8, 0xd9, 0x53, 0x4b, 0x5b, 0xd7, 0x36,
+	0xea, 0x6f, 0xac, 0x9b, 0xc5, 0x6a, 0x7c, 0xc0, 0xb0, 0x9b, 0x25, 0xb0, 0x7f, 0x00, 0xcc, 0x85,
+	0x90, 0xdb, 0xb5, 0x2c, 0x33, 0x01, 0x0c, 0x30, 0xf3, 0x14, 0xa0, 0x3c, 0x2b, 0x20, 0xcb, 0x48,
+	0xc0, 0x7b, 0xa8, 0xee, 0xfa, 0x34, 0x06, 0x45, 0xa8, 0xcc, 0x48, 0x40, 0x22, 0x74, 0xbd, 0x07,
+	0xce, 0x23, 0x45, 0xa8, 0xce, 0xbc, 0x07, 0xce, 0x23, 0x09, 0xb0, 0xd1, 0x22, 0xa3, 0x09, 0x07,
+	0x27, 0x62, 0x84, 0x32, 0xc2, 0xc7, 0x0a, 0xf5, 0x64, 0x46, 0x94, 0x2e, 0xd2, 0x07, 0x2a, 0x2c,
+	0x98, 0x9d, 0xbf, 0x2b, 0xe8, 0xc5, 0x7e, 0xbe, 0xc2, 0x27, 0xb2, 0x1f, 0xfa, 0x0e, 0x5a, 0x0e,
+	0xf0, 0xc8, 0x71, 0x69, 0xe8, 0x26, 0x8c, 0x41, 0xc8, 0x1d, 0x79, 0xcc, 0x62, 0x51, 0xfa, 0xc6,
+	0x6e, 0xed, 0x97, 0xbf, 0x7e, 0xad, 0x54, 0x37, 0xcb, 0x2d, 0xcf, 0x5e, 0x0c, 0xf0, 0xa8, 0x3b,
+	0xf1, 0x1d, 0x4a, 0x9b, 0xfe, 0x2e, 0x5a, 0xcd, 0x00, 0x0c, 0xbe, 0x49, 0x20, 0xe6, 0xb1, 0x13,
+	0x01, 0xcb, 0x68, 0x21, 0x88, 0x1d, 0x89, 0xfa, 0x37, 0xec, 0x56, 0x80, 0x47, 0xb6, 0x72, 0x64,
+	0x7d, 0x9f, 0xe8, 0xfa, 0x36, 0x5a, 0xf2, 0xc0, 0xc7, 0x63, 0xf0, 0x1c, 0x59, 0x74, 0x4e, 0x02,
+	0xa0, 0x89, 0x2c, 0x7b, 0x63, 0x17, 0x65, 0xcb, 0x3f, 0xd9, 0xac, 0xb4, 0x4e, 0x3f, 0xb6, 0x17,
+	0x94, 0xb1, 0x9b, 0xf9, 0x8e, 0xa4, 0x4d, 0xb7, 0x50, 0xc3, 0x63, 0x98, 0x84, 0x93, 0x5c, 0xf5,
+	0x7f, 0xb9, 0x39, 0x61, 0xc8, 0x03, 0xaf, 0xa1, 0x39, 0xe2, 0xf9, 0xd7, 0xeb, 0x64, 0x15, 0xad,
+	0xda, 0xf5, 0xec, 0x5d, 0x6e, 0x31, 0xd1, 0x82, 0x9a, 0xb5, 0x82, 0xf3, 0xa9, 0x70, 0xce, 0x4b,
+	0xe9, 0xc3, 0x1b, 0xfe, 0xd7, 0xd1, 0x73, 0xf5, 0xf7, 0x27, 0xde, 0x57, 0x84, 0xb7, 0xa9, 0x5e,
+	0xe7, 0xc6, 0xb7, 0xd1, 0x4a, 0x6e, 0x1c, 0x00, 0xf6, 0x80, 0xc5, 0x93, 0xc0, 0x33, 0x11, 0x58,
+	0x52, 0xf2, 0xbe, 0x54, 0x6f, 0xe4, 0x54, 0x93, 0x54, 0xd9, 0x1c, 0x2f, 0x61, 0x62, 0x66, 0x5a,
+	0x35, 0x99, 0x93, 0xad, 0x51, 0xea, 0xfb, 0x4a, 0xec, 0xfc, 0x5b, 0x46, 0xcd, 0x3d, 0x9f, 0xf6,
+	0xb0, 0x7f, 0x18, 0x81, 0x7b, 0x34, 0x8e, 0x40, 0xff, 0x1c, 0xcd, 0x71, 0x08, 0x71, 0x58, 0x1c,
+	0xb0, 0xb7, 0xcc, 0xbb, 0x3e, 0x37, 0xe6, 0xed, 0xa3, 0x6a, 0xd7, 0x25, 0x49, 0x9e, 0xd8, 0x4f,
+	0x51, 0xcd, 0xa5, 0x71, 0x61, 0xea, 0xee, 0x47, 0x7d, 0xe6, 0xd2, 0x58, 0x22, 0xbf, 0x44, 0x4d,
+	0x9f, 0xc4, 0x1c, 0x42, 0x60, 0x85, 0x59, 0xbc, 0x1f, 0xb7, 0x91, 0xb3, 0x24, 0xfc, 0x2b, 0xa4,
+	0x5f, 0x8f, 0x68, 0xfe, 0x79, 0x52, 0xa3, 0x6a, 0xde, 0xbd, 0xc0, 0xf4, 0x10, 0xd9, 0x2f, 0x06,
+	0x53, 0x6f, 0x3a, 0xdf, 0x57, 0x50, 0x7d, 0x0f, 0xf8, 0x63, 0xd9, 0x5f, 0x6a, 0xd9, 0xdf, 0x99,
+	0xff, 0x7d, 0x7b, 0xea, 0xc0, 0x77, 0x7e, 0xa8, 0xa0, 0x66, 0x97, 0x01, 0xe6, 0xf0, 0xd8, 0x8c,
+	0x07, 0x6f, 0xc6, 0x8f, 0x15, 0xf4, 0xdc, 0x86, 0xc8, 0xc7, 0xee, 0x63, 0x37, 0x1e, 0xbc, 0x1b,
+	0xbb, 0x3f, 0x69, 0x67, 0x17, 0x46, 0xe9, 0xfc, 0xc2, 0x28, 0x5d, 0x5d, 0x18, 0xda, 0x77, 0xa9,
+	0xa1, 0xfd, 0x9c, 0x1a, 0xda, 0x6f, 0xa9, 0xa1, 0x9d, 0xa5, 0x86, 0x76, 0x9e, 0x1a, 0xda, 0x1f,
+	0xa9, 0xa1, 0xfd, 0x99, 0x1a, 0xa5, 0xab, 0xd4, 0xd0, 0x4e, 0x2f, 0x8d, 0xd2, 0xd9, 0xa5, 0x51,
+	0x3a, 0xbf, 0x34, 0x4a, 0x5f, 0xd8, 0x7d, 0x1a, 0x7d, 0xdd, 0x37, 0x87, 0xd4, 0xe7, 0xc0, 0x18,
+	0x36, 0x93, 0xd8, 0x12, 0x3f, 0x8e, 0x29, 0x0b, 0xb6, 0x22, 0x46, 0x87, 0xc4, 0x03, 0xb6, 0x95,
+	0xcb, 0x56, 0xd4, 0xeb, 0x53, 0x0b, 0x46, 0x5c, 0xdd, 0x08, 0x6f, 0xbd, 0xfe, 0xf6, 0x9e, 0x8a,
+	0xbb, 0xe1, 0x9b, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0x0e, 0xf2, 0x03, 0x1c, 0x25, 0x0b, 0x00,
+	0x00,
 }
 
 func (this *PerCpuUtilizationLimit) Equal(that interface{}) bool {
@@ -395,6 +664,60 @@ func (this *PerCpuUtilizationLimit) Equal(that interface{}) bool {
 	if !this.CloseLimit.Equal(that1.CloseLimit) {
 		return false
 	}
+	if !this.HttpLimit.Equal(that1.HttpLimit) {
+		return false
+	}
+	if !this.RoutePriorityLimit.Equal(that1.RoutePriorityLimit) {
+		return false
+	}
+	return true
+}
+func (this *HttpLimitOptions) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HttpLimitOptions)
+	if !ok {
+		that2, ok := that.(HttpLimitOptions)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxConcurrentStreams != that1.MaxConcurrentStreams {
+		return false
+	}
+	if this.MaxRequestsPerConnection != that1.MaxRequestsPerConnection {
+		return false
+	}
+	if this.DelayedCloseTimeout != that1.DelayedCloseTimeout {
+		return false
+	}
+	if this.DrainTimeout != that1.DrainTimeout {
+		return false
+	}
+	if this.IdleTimeout != that1.IdleTimeout {
+		return false
+	}
+	if this.StreamIdleTimeout != that1.StreamIdleTimeout {
+		return false
+	}
+	if this.RequestTimeout != that1.RequestTimeout {
+		return false
+	}
+	if this.RequestHeadersTimeout != that1.RequestHeadersTimeout {
+		return false
+	}
+	if this.MaxConnectionDuration != that1.MaxConnectionDuration {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType) Equal(that interface{}) bool {
@@ -420,6 +743,12 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.CosLimit.Equal(that1.CosLimit) {
+		return false
+	}
+	if !this.ListenerLimit.Equal(that1.ListenerLimit) {
+		return false
+	}
+	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
 		return false
 	}
 	return true
@@ -449,6 +778,12 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	if !this.CosLimit.Equal(that1.CosLimit) {
 		return false
 	}
+	if !this.ListenerLimit.Equal(that1.ListenerLimit) {
+		return false
+	}
+	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
+		return false
+	}
 	return true
 }
 func (this *CreateSpecType) Equal(that interface{}) bool {
@@ -474,6 +809,12 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.CosLimit.Equal(that1.CosLimit) {
+		return false
+	}
+	if !this.ListenerLimit.Equal(that1.ListenerLimit) {
+		return false
+	}
+	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
 		return false
 	}
 	return true
@@ -503,13 +844,19 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.CosLimit.Equal(that1.CosLimit) {
 		return false
 	}
+	if !this.ListenerLimit.Equal(that1.ListenerLimit) {
+		return false
+	}
+	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
+		return false
+	}
 	return true
 }
 func (this *PerCpuUtilizationLimit) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
+	s := make([]string, 0, 9)
 	s = append(s, "&downstream_cos.PerCpuUtilizationLimit{")
 	if this.SoftLimit != nil {
 		s = append(s, "SoftLimit: "+fmt.Sprintf("%#v", this.SoftLimit)+",\n")
@@ -520,6 +867,30 @@ func (this *PerCpuUtilizationLimit) GoString() string {
 	if this.CloseLimit != nil {
 		s = append(s, "CloseLimit: "+fmt.Sprintf("%#v", this.CloseLimit)+",\n")
 	}
+	if this.HttpLimit != nil {
+		s = append(s, "HttpLimit: "+fmt.Sprintf("%#v", this.HttpLimit)+",\n")
+	}
+	if this.RoutePriorityLimit != nil {
+		s = append(s, "RoutePriorityLimit: "+fmt.Sprintf("%#v", this.RoutePriorityLimit)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HttpLimitOptions) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 13)
+	s = append(s, "&downstream_cos.HttpLimitOptions{")
+	s = append(s, "MaxConcurrentStreams: "+fmt.Sprintf("%#v", this.MaxConcurrentStreams)+",\n")
+	s = append(s, "MaxRequestsPerConnection: "+fmt.Sprintf("%#v", this.MaxRequestsPerConnection)+",\n")
+	s = append(s, "DelayedCloseTimeout: "+fmt.Sprintf("%#v", this.DelayedCloseTimeout)+",\n")
+	s = append(s, "DrainTimeout: "+fmt.Sprintf("%#v", this.DrainTimeout)+",\n")
+	s = append(s, "IdleTimeout: "+fmt.Sprintf("%#v", this.IdleTimeout)+",\n")
+	s = append(s, "StreamIdleTimeout: "+fmt.Sprintf("%#v", this.StreamIdleTimeout)+",\n")
+	s = append(s, "RequestTimeout: "+fmt.Sprintf("%#v", this.RequestTimeout)+",\n")
+	s = append(s, "RequestHeadersTimeout: "+fmt.Sprintf("%#v", this.RequestHeadersTimeout)+",\n")
+	s = append(s, "MaxConnectionDuration: "+fmt.Sprintf("%#v", this.MaxConnectionDuration)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -527,13 +898,19 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 8)
 	s = append(s, "&downstream_cos.GlobalSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
 	}
 	if this.CosLimit != nil {
 		s = append(s, "CosLimit: "+fmt.Sprintf("%#v", this.CosLimit)+",\n")
+	}
+	if this.ListenerLimit != nil {
+		s = append(s, "ListenerLimit: "+fmt.Sprintf("%#v", this.ListenerLimit)+",\n")
+	}
+	if this.HttpLimitOptions != nil {
+		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -542,13 +919,19 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 8)
 	s = append(s, "&downstream_cos.GetSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
 	}
 	if this.CosLimit != nil {
 		s = append(s, "CosLimit: "+fmt.Sprintf("%#v", this.CosLimit)+",\n")
+	}
+	if this.ListenerLimit != nil {
+		s = append(s, "ListenerLimit: "+fmt.Sprintf("%#v", this.ListenerLimit)+",\n")
+	}
+	if this.HttpLimitOptions != nil {
+		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -557,13 +940,19 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 8)
 	s = append(s, "&downstream_cos.CreateSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
 	}
 	if this.CosLimit != nil {
 		s = append(s, "CosLimit: "+fmt.Sprintf("%#v", this.CosLimit)+",\n")
+	}
+	if this.ListenerLimit != nil {
+		s = append(s, "ListenerLimit: "+fmt.Sprintf("%#v", this.ListenerLimit)+",\n")
+	}
+	if this.HttpLimitOptions != nil {
+		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -572,13 +961,19 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 8)
 	s = append(s, "&downstream_cos.ReplaceSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
 	}
 	if this.CosLimit != nil {
 		s = append(s, "CosLimit: "+fmt.Sprintf("%#v", this.CosLimit)+",\n")
+	}
+	if this.ListenerLimit != nil {
+		s = append(s, "ListenerLimit: "+fmt.Sprintf("%#v", this.ListenerLimit)+",\n")
+	}
+	if this.HttpLimitOptions != nil {
+		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -611,6 +1006,30 @@ func (m *PerCpuUtilizationLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	_ = i
 	var l int
 	_ = l
+	if m.RoutePriorityLimit != nil {
+		{
+			size, err := m.RoutePriorityLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.HttpLimit != nil {
+		{
+			size, err := m.HttpLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
 	if m.CloseLimit != nil {
 		{
 			size, err := m.CloseLimit.MarshalToSizedBuffer(dAtA[:i])
@@ -650,6 +1069,74 @@ func (m *PerCpuUtilizationLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
+func (m *HttpLimitOptions) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HttpLimitOptions) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HttpLimitOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MaxConnectionDuration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaxConnectionDuration))
+		i--
+		dAtA[i] = 0x48
+	}
+	if m.RequestHeadersTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RequestHeadersTimeout))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.RequestTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RequestTimeout))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.StreamIdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.StreamIdleTimeout))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.IdleTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IdleTimeout))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.DrainTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DrainTimeout))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.DelayedCloseTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DelayedCloseTimeout))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.MaxRequestsPerConnection != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaxRequestsPerConnection))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.MaxConcurrentStreams != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaxConcurrentStreams))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -670,6 +1157,30 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HttpLimitOptions != nil {
+		{
+			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ListenerLimit != nil {
+		{
+			size, err := m.ListenerLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if m.CosLimit != nil {
 		{
 			size, err := m.CosLimit.MarshalToSizedBuffer(dAtA[:i])
@@ -717,6 +1228,30 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HttpLimitOptions != nil {
+		{
+			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ListenerLimit != nil {
+		{
+			size, err := m.ListenerLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if m.CosLimit != nil {
 		{
 			size, err := m.CosLimit.MarshalToSizedBuffer(dAtA[:i])
@@ -764,6 +1299,30 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HttpLimitOptions != nil {
+		{
+			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ListenerLimit != nil {
+		{
+			size, err := m.ListenerLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if m.CosLimit != nil {
 		{
 			size, err := m.CosLimit.MarshalToSizedBuffer(dAtA[:i])
@@ -811,6 +1370,30 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.HttpLimitOptions != nil {
+		{
+			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.ListenerLimit != nil {
+		{
+			size, err := m.ListenerLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if m.CosLimit != nil {
 		{
 			size, err := m.CosLimit.MarshalToSizedBuffer(dAtA[:i])
@@ -867,6 +1450,50 @@ func (m *PerCpuUtilizationLimit) Size() (n int) {
 		l = m.CloseLimit.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.HttpLimit != nil {
+		l = m.HttpLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.RoutePriorityLimit != nil {
+		l = m.RoutePriorityLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *HttpLimitOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MaxConcurrentStreams != 0 {
+		n += 1 + sovTypes(uint64(m.MaxConcurrentStreams))
+	}
+	if m.MaxRequestsPerConnection != 0 {
+		n += 1 + sovTypes(uint64(m.MaxRequestsPerConnection))
+	}
+	if m.DelayedCloseTimeout != 0 {
+		n += 1 + sovTypes(uint64(m.DelayedCloseTimeout))
+	}
+	if m.DrainTimeout != 0 {
+		n += 1 + sovTypes(uint64(m.DrainTimeout))
+	}
+	if m.IdleTimeout != 0 {
+		n += 1 + sovTypes(uint64(m.IdleTimeout))
+	}
+	if m.StreamIdleTimeout != 0 {
+		n += 1 + sovTypes(uint64(m.StreamIdleTimeout))
+	}
+	if m.RequestTimeout != 0 {
+		n += 1 + sovTypes(uint64(m.RequestTimeout))
+	}
+	if m.RequestHeadersTimeout != 0 {
+		n += 1 + sovTypes(uint64(m.RequestHeadersTimeout))
+	}
+	if m.MaxConnectionDuration != 0 {
+		n += 1 + sovTypes(uint64(m.MaxConnectionDuration))
+	}
 	return n
 }
 
@@ -882,6 +1509,14 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.CosLimit != nil {
 		l = m.CosLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ListenerLimit != nil {
+		l = m.ListenerLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HttpLimitOptions != nil {
+		l = m.HttpLimitOptions.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -901,6 +1536,14 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.CosLimit.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.ListenerLimit != nil {
+		l = m.ListenerLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HttpLimitOptions != nil {
+		l = m.HttpLimitOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -916,6 +1559,14 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.CosLimit != nil {
 		l = m.CosLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ListenerLimit != nil {
+		l = m.ListenerLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HttpLimitOptions != nil {
+		l = m.HttpLimitOptions.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -935,6 +1586,14 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.CosLimit.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.ListenerLimit != nil {
+		l = m.ListenerLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HttpLimitOptions != nil {
+		l = m.HttpLimitOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -952,6 +1611,26 @@ func (this *PerCpuUtilizationLimit) String() string {
 		`SoftLimit:` + strings.Replace(fmt.Sprintf("%v", this.SoftLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
 		`HardLimit:` + strings.Replace(fmt.Sprintf("%v", this.HardLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
 		`CloseLimit:` + strings.Replace(fmt.Sprintf("%v", this.CloseLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
+		`HttpLimit:` + strings.Replace(fmt.Sprintf("%v", this.HttpLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
+		`RoutePriorityLimit:` + strings.Replace(fmt.Sprintf("%v", this.RoutePriorityLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HttpLimitOptions) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&HttpLimitOptions{`,
+		`MaxConcurrentStreams:` + fmt.Sprintf("%v", this.MaxConcurrentStreams) + `,`,
+		`MaxRequestsPerConnection:` + fmt.Sprintf("%v", this.MaxRequestsPerConnection) + `,`,
+		`DelayedCloseTimeout:` + fmt.Sprintf("%v", this.DelayedCloseTimeout) + `,`,
+		`DrainTimeout:` + fmt.Sprintf("%v", this.DrainTimeout) + `,`,
+		`IdleTimeout:` + fmt.Sprintf("%v", this.IdleTimeout) + `,`,
+		`StreamIdleTimeout:` + fmt.Sprintf("%v", this.StreamIdleTimeout) + `,`,
+		`RequestTimeout:` + fmt.Sprintf("%v", this.RequestTimeout) + `,`,
+		`RequestHeadersTimeout:` + fmt.Sprintf("%v", this.RequestHeadersTimeout) + `,`,
+		`MaxConnectionDuration:` + fmt.Sprintf("%v", this.MaxConnectionDuration) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -963,6 +1642,8 @@ func (this *GlobalSpecType) String() string {
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -974,6 +1655,8 @@ func (this *GetSpecType) String() string {
 	s := strings.Join([]string{`&GetSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -985,6 +1668,8 @@ func (this *CreateSpecType) String() string {
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -996,6 +1681,8 @@ func (this *ReplaceSpecType) String() string {
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
+		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1145,6 +1832,302 @@ func (m *PerCpuUtilizationLimit) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLimit == nil {
+				m.HttpLimit = &schema.FractionalPercent{}
+			}
+			if err := m.HttpLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RoutePriorityLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.RoutePriorityLimit == nil {
+				m.RoutePriorityLimit = &schema.FractionalPercent{}
+			}
+			if err := m.RoutePriorityLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HttpLimitOptions) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HttpLimitOptions: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HttpLimitOptions: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxConcurrentStreams", wireType)
+			}
+			m.MaxConcurrentStreams = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxConcurrentStreams |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxRequestsPerConnection", wireType)
+			}
+			m.MaxRequestsPerConnection = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxRequestsPerConnection |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DelayedCloseTimeout", wireType)
+			}
+			m.DelayedCloseTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DelayedCloseTimeout |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DrainTimeout", wireType)
+			}
+			m.DrainTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DrainTimeout |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IdleTimeout", wireType)
+			}
+			m.IdleTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IdleTimeout |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StreamIdleTimeout", wireType)
+			}
+			m.StreamIdleTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.StreamIdleTimeout |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestTimeout", wireType)
+			}
+			m.RequestTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RequestTimeout |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestHeadersTimeout", wireType)
+			}
+			m.RequestHeadersTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RequestHeadersTimeout |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxConnectionDuration", wireType)
+			}
+			m.MaxConnectionDuration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaxConnectionDuration |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1267,6 +2250,78 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				m.CosLimit = &PerCpuUtilizationLimit{}
 			}
 			if err := m.CosLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListenerLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ListenerLimit == nil {
+				m.ListenerLimit = &PerCpuUtilizationLimit{}
+			}
+			if err := m.ListenerLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLimitOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLimitOptions == nil {
+				m.HttpLimitOptions = &HttpLimitOptions{}
+			}
+			if err := m.HttpLimitOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -1395,6 +2450,78 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListenerLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ListenerLimit == nil {
+				m.ListenerLimit = &PerCpuUtilizationLimit{}
+			}
+			if err := m.ListenerLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLimitOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLimitOptions == nil {
+				m.HttpLimitOptions = &HttpLimitOptions{}
+			}
+			if err := m.HttpLimitOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1520,6 +2647,78 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListenerLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ListenerLimit == nil {
+				m.ListenerLimit = &PerCpuUtilizationLimit{}
+			}
+			if err := m.ListenerLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLimitOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLimitOptions == nil {
+				m.HttpLimitOptions = &HttpLimitOptions{}
+			}
+			if err := m.HttpLimitOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -1642,6 +2841,78 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				m.CosLimit = &PerCpuUtilizationLimit{}
 			}
 			if err := m.CosLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListenerLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ListenerLimit == nil {
+				m.ListenerLimit = &PerCpuUtilizationLimit{}
+			}
+			if err := m.ListenerLimit.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLimitOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HttpLimitOptions == nil {
+				m.HttpLimitOptions = &HttpLimitOptions{}
+			}
+			if err := m.HttpLimitOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

@@ -403,7 +403,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dc_cluster_group-customdataapi-metrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dc_cluster_group-customdataapi-metrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dc_cluster_group.CustomDataAPI.Metrics"
             },

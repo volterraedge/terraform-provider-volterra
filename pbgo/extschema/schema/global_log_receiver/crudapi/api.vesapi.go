@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.crudapi.API.Create"
             },
@@ -3276,12 +3276,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Specification",
             "x-ves-displayorder": "14,1,6",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
-            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
+            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"dns_logs\",\"request_logs\",\"security_events\"]",
             "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GlobalSpecType",
             "properties": {
                 "audit_logs": {
-                    "description": "Exclusive with [request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
+                    "description": "Exclusive with [dns_logs request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
                     "title": "Audit Logs",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Audit Logs"
@@ -3309,6 +3309,12 @@ var APISwaggerJSON string = `{
                     "title": "Datadog Receiver",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
+                },
+                "dns_logs": {
+                    "description": "Exclusive with [audit_logs request_logs security_events]\n Send DNS Requests Logs (corresponding to DNS requests received)",
+                    "title": "DNS Request Logs",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "DNS Request Logs"
                 },
                 "gcp_bucket_receiver": {
                     "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
@@ -3359,7 +3365,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IBM QRadar Receiver"
                 },
                 "request_logs": {
-                    "description": "Exclusive with [audit_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
+                    "description": "Exclusive with [audit_logs dns_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
                     "title": "Request Logs",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Request Logs"
@@ -3371,7 +3377,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "S3 Receiver"
                 },
                 "security_events": {
-                    "description": "Exclusive with [audit_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
+                    "description": "Exclusive with [audit_logs dns_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
                     "title": "Security Events",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Security Events"

@@ -427,6 +427,15 @@ func (v *ValidateColumn) Validate(ctx context.Context, pm interface{}, opts ...d
 
 	}
 
+	if fv, exists := v.FldValidators["show_copy_button"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("show_copy_button"))
+		if err := fv(ctx, m.GetShowCopyButton(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["title"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("title"))
@@ -2676,6 +2685,24 @@ func (v *ValidateRepeatedOptions) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["custom_empty_table_text"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("custom_empty_table_text"))
+		if err := fv(ctx, m.GetCustomEmptyTableText(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["disable_create_on_table"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable_create_on_table"))
+		if err := fv(ctx, m.GetDisableCreateOnTable(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["ordered_list"]; exists {

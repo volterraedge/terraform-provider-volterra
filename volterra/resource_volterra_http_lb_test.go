@@ -304,6 +304,8 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		}
 		resource "volterra_http_loadbalancer" "%[1]s" {
 		  name = "%[1]s"
+		  default_sensitive_data_policy    = true
+		  disable_threat_mesh              = true
 		  disable_api_definition           = true
           disable_api_discovery            = true      
           disable_malicious_user_detection = true
@@ -358,15 +360,14 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		    }
 		  }
 		  more_option {
-			custom_errors                       = {}
-			disable_default_error_pages         = false
-			disable_path_normalize              = true
-			enable_path_normalize               = false
-			enable_strict_sni_host_header_check = false
-			idle_timeout                        = %[5]d
-			max_request_header_size             = 80
-			request_headers_to_remove           = []
-			response_headers_to_remove          = []
+			disable_default_error_pages         = true
+  			disable_path_normalize              = true
+  			enable_path_normalize               = false
+  			enable_strict_sni_host_header_check = true
+  			idle_timeout                        = %[5]d
+  			max_request_header_size             = 80
+  			request_headers_to_remove           = []
+  			response_headers_to_remove          = []
 
 			request_headers_to_add {
 				append = false
@@ -469,8 +470,8 @@ func TestHTTPLBWithAutoCert(t *testing.T) {
 				LoadbalancerType: &http_lb.GlobalSpecType_HttpsAutoCert{
 					HttpsAutoCert: &http_lb.ProxyTypeHttpsAutoCerts{
 						AddHsts: true,
-						PortChoice: &http_lb.ProxyTypeHttpsAutoCerts_PortRanges{
-							PortRanges: "80,443",
+						PortChoice: &http_lb.ProxyTypeHttpsAutoCerts_Port{
+							Port: 443,
 						},
 					},
 				},
@@ -517,6 +518,8 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 		}
 		resource "volterra_http_loadbalancer" "%[1]s" {
 		  name = "%[1]s"
+		  default_sensitive_data_policy    = true
+		  disable_threat_mesh              = true
 		  disable_api_definition           = true
           disable_api_discovery            = true       
           disable_malicious_user_detection = true
@@ -541,7 +544,7 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 			no_mtls                  = true
 			non_default_loadbalancer = true
 			pass_through             = false
-			port_ranges = "80,443"
+			port = "443"
 		  }
 		  disable_rate_limit = true
 		  no_service_policies = true

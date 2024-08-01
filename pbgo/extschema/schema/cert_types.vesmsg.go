@@ -325,6 +325,14 @@ type ValidateCertificateParamsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCertificateParamsType) ClientCertificateVerifyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_certificate_verify_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCertificateParamsType) CertificatesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -541,6 +549,53 @@ func (v *ValidateCertificateParamsType) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["client_certificate_verify_choice"]; exists {
+		val := m.GetClientCertificateVerifyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_certificate_verify_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientCertificateVerifyChoice().(type) {
+	case *CertificateParamsType_NoClientCertificate:
+		if fv, exists := v.FldValidators["client_certificate_verify_choice.no_client_certificate"]; exists {
+			val := m.GetClientCertificateVerifyChoice().(*CertificateParamsType_NoClientCertificate).NoClientCertificate
+			vOpts := append(opts,
+				db.WithValidateField("client_certificate_verify_choice"),
+				db.WithValidateField("no_client_certificate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CertificateParamsType_ClientCertificateRequired:
+		if fv, exists := v.FldValidators["client_certificate_verify_choice.client_certificate_required"]; exists {
+			val := m.GetClientCertificateVerifyChoice().(*CertificateParamsType_ClientCertificateRequired).ClientCertificateRequired
+			vOpts := append(opts,
+				db.WithValidateField("client_certificate_verify_choice"),
+				db.WithValidateField("client_certificate_required"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CertificateParamsType_ClientCertificateOptional:
+		if fv, exists := v.FldValidators["client_certificate_verify_choice.client_certificate_optional"]; exists {
+			val := m.GetClientCertificateVerifyChoice().(*CertificateParamsType_ClientCertificateOptional).ClientCertificateOptional
+			vOpts := append(opts,
+				db.WithValidateField("client_certificate_verify_choice"),
+				db.WithValidateField("client_certificate_optional"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["crl"]; exists {
 		vOpts := append(opts, db.WithValidateField("crl"))
 		if err := fv(ctx, m.GetCrl(), vOpts...); err != nil {
@@ -607,6 +662,17 @@ var DefaultCertificateParamsTypeValidator = func() *ValidateCertificateParamsTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhClientCertificateVerifyChoice := v.ClientCertificateVerifyChoiceValidationRuleHandler
+	rulesClientCertificateVerifyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientCertificateVerifyChoice(rulesClientCertificateVerifyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CertificateParamsType.client_certificate_verify_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_certificate_verify_choice"] = vFn
 
 	vrhCertificates := v.CertificatesValidationRuleHandler
 	rulesCertificates := map[string]string{
@@ -806,6 +872,14 @@ type ValidateDownstreamTlsParamsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDownstreamTlsParamsType) ClientCertificateVerifyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for client_certificate_verify_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateDownstreamTlsParamsType) CrlValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -916,6 +990,53 @@ func (v *ValidateDownstreamTlsParamsType) Validate(ctx context.Context, pm inter
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["client_certificate_verify_choice"]; exists {
+		val := m.GetClientCertificateVerifyChoice()
+		vOpts := append(opts,
+			db.WithValidateField("client_certificate_verify_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetClientCertificateVerifyChoice().(type) {
+	case *DownstreamTlsParamsType_NoClientCertificate:
+		if fv, exists := v.FldValidators["client_certificate_verify_choice.no_client_certificate"]; exists {
+			val := m.GetClientCertificateVerifyChoice().(*DownstreamTlsParamsType_NoClientCertificate).NoClientCertificate
+			vOpts := append(opts,
+				db.WithValidateField("client_certificate_verify_choice"),
+				db.WithValidateField("no_client_certificate"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DownstreamTlsParamsType_ClientCertificateRequired:
+		if fv, exists := v.FldValidators["client_certificate_verify_choice.client_certificate_required"]; exists {
+			val := m.GetClientCertificateVerifyChoice().(*DownstreamTlsParamsType_ClientCertificateRequired).ClientCertificateRequired
+			vOpts := append(opts,
+				db.WithValidateField("client_certificate_verify_choice"),
+				db.WithValidateField("client_certificate_required"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DownstreamTlsParamsType_ClientCertificateOptional:
+		if fv, exists := v.FldValidators["client_certificate_verify_choice.client_certificate_optional"]; exists {
+			val := m.GetClientCertificateVerifyChoice().(*DownstreamTlsParamsType_ClientCertificateOptional).ClientCertificateOptional
+			vOpts := append(opts,
+				db.WithValidateField("client_certificate_verify_choice"),
+				db.WithValidateField("client_certificate_optional"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["common_params"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("common_params"))
@@ -964,6 +1085,17 @@ var DefaultDownstreamTlsParamsTypeValidator = func() *ValidateDownstreamTlsParam
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhClientCertificateVerifyChoice := v.ClientCertificateVerifyChoiceValidationRuleHandler
+	rulesClientCertificateVerifyChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhClientCertificateVerifyChoice(rulesClientCertificateVerifyChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DownstreamTlsParamsType.client_certificate_verify_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["client_certificate_verify_choice"] = vFn
 
 	vrhCrl := v.CrlValidationRuleHandler
 	rulesCrl := map[string]string{
@@ -1861,6 +1993,22 @@ type ValidateUpstreamTlsParamsType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateUpstreamTlsParamsType) MaxSessionKeysTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_session_keys_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamTlsParamsType) MaxSessionKeysTypeMaxSessionKeysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxSessionKeys, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_session_keys")
+	}
+	return oValidatorFn_MaxSessionKeys, nil
+}
+
 func (v *ValidateUpstreamTlsParamsType) SniChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -1897,6 +2045,53 @@ func (v *ValidateUpstreamTlsParamsType) Validate(ctx context.Context, pm interfa
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["max_session_keys_type"]; exists {
+		val := m.GetMaxSessionKeysType()
+		vOpts := append(opts,
+			db.WithValidateField("max_session_keys_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxSessionKeysType().(type) {
+	case *UpstreamTlsParamsType_DefaultSessionKeyCaching:
+		if fv, exists := v.FldValidators["max_session_keys_type.default_session_key_caching"]; exists {
+			val := m.GetMaxSessionKeysType().(*UpstreamTlsParamsType_DefaultSessionKeyCaching).DefaultSessionKeyCaching
+			vOpts := append(opts,
+				db.WithValidateField("max_session_keys_type"),
+				db.WithValidateField("default_session_key_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParamsType_DisableSessionKeyCaching:
+		if fv, exists := v.FldValidators["max_session_keys_type.disable_session_key_caching"]; exists {
+			val := m.GetMaxSessionKeysType().(*UpstreamTlsParamsType_DisableSessionKeyCaching).DisableSessionKeyCaching
+			vOpts := append(opts,
+				db.WithValidateField("max_session_keys_type"),
+				db.WithValidateField("disable_session_key_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParamsType_MaxSessionKeys:
+		if fv, exists := v.FldValidators["max_session_keys_type.max_session_keys"]; exists {
+			val := m.GetMaxSessionKeysType().(*UpstreamTlsParamsType_MaxSessionKeys).MaxSessionKeys
+			vOpts := append(opts,
+				db.WithValidateField("max_session_keys_type"),
+				db.WithValidateField("max_session_keys"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["sni_choice"]; exists {
@@ -1996,6 +2191,30 @@ var DefaultUpstreamTlsParamsTypeValidator = func() *ValidateUpstreamTlsParamsTyp
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhMaxSessionKeysType := v.MaxSessionKeysTypeValidationRuleHandler
+	rulesMaxSessionKeysType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxSessionKeysType(rulesMaxSessionKeysType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamTlsParamsType.max_session_keys_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_session_keys_type"] = vFn
+
+	vrhMaxSessionKeysTypeMaxSessionKeys := v.MaxSessionKeysTypeMaxSessionKeysValidationRuleHandler
+	rulesMaxSessionKeysTypeMaxSessionKeys := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "2",
+		"ves.io.schema.rules.uint32.lte": "64",
+	}
+	vFnMap["max_session_keys_type.max_session_keys"], err = vrhMaxSessionKeysTypeMaxSessionKeys(rulesMaxSessionKeysTypeMaxSessionKeys)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UpstreamTlsParamsType.max_session_keys_type_max_session_keys: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_session_keys_type.max_session_keys"] = vFnMap["max_session_keys_type.max_session_keys"]
 
 	vrhSniChoice := v.SniChoiceValidationRuleHandler
 	rulesSniChoice := map[string]string{

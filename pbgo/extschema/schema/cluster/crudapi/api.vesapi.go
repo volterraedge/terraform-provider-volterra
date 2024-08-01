@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cluster-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cluster-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cluster.crudapi.API.Create"
             },
@@ -4294,7 +4294,8 @@ var APISwaggerJSON string = `{
             "description": "TLS configuration for upstream connections",
             "title": "UpstreamTlsParamsType",
             "x-displayname": "Upstream TLS Parameters",
-            "x-ves-displayorder": "5,6",
+            "x-ves-displayorder": "5,6,8",
+            "x-ves-oneof-field-max_session_keys_type": "[\"default_session_key_caching\",\"disable_session_key_caching\",\"max_session_keys\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-oneof-field-tls_params_choice": "[\"cert_params\",\"common_params\"]",
             "x-ves-proto-message": "ves.io.schema.UpstreamTlsParamsType",
@@ -4311,11 +4312,34 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaTlsParamsType",
                     "x-displayname": "Inline TLS Parameters"
                 },
+                "default_session_key_caching": {
+                    "description": "Exclusive with [disable_session_key_caching max_session_keys]\n Default session key caching. Only one session key will be cached.",
+                    "title": "Default Session Key Caching",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Session Key Caching"
+                },
+                "disable_session_key_caching": {
+                    "description": "Exclusive with [default_session_key_caching max_session_keys]\n Disable session key caching. This will disable TLS session resumption.",
+                    "title": "Disable Session Key Caching",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Session Key Caching"
+                },
                 "disable_sni": {
                     "description": "Exclusive with [sni use_host_header_as_sni]\n Do not use SNI.",
                     "title": "disable_sni",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No SNI"
+                },
+                "max_session_keys": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_session_key_caching disable_session_key_caching]\n x-example:\"25\"\n Number of session keys that are cached.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2\n  ves.io.schema.rules.uint32.lte: 64\n",
+                    "title": "Max Session Keys Cached",
+                    "format": "int64",
+                    "x-displayname": "Max Session Keys Cached",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2",
+                        "ves.io.schema.rules.uint32.lte": "64"
+                    }
                 },
                 "sni": {
                     "type": "string",

@@ -702,7 +702,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-customapi-confirmalertreceiver"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_receiver-customapi-confirmalertreceiver"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.CustomAPI.ConfirmAlertReceiver"
             },
@@ -802,7 +802,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-customapi-testalertreceiver"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_receiver-customapi-testalertreceiver"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.CustomAPI.TestAlertReceiver"
             },
@@ -902,7 +902,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_receiver-customapi-verifyalertreceiver"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_receiver-customapi-verifyalertreceiver"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_receiver.CustomAPI.VerifyAlertReceiver"
             },

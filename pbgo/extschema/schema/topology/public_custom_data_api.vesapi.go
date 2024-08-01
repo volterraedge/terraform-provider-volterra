@@ -79,6 +79,15 @@ func (c *CustomDataAPIGrpcClient) doRPCGetSiteNetworks(ctx context.Context, yaml
 	return rsp, err
 }
 
+func (c *CustomDataAPIGrpcClient) doRPCGetTGWRouteTables(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &TGWRouteTablesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.TGWRouteTablesRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetTGWRouteTables(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomDataAPIGrpcClient) doRPCSiteMeshGroupsSummary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &SiteMeshGroupsSummaryRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -145,6 +154,8 @@ func NewCustomDataAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetRouteTable"] = ccl.doRPCGetRouteTable
 
 	rpcFns["GetSiteNetworks"] = ccl.doRPCGetSiteNetworks
+
+	rpcFns["GetTGWRouteTables"] = ccl.doRPCGetTGWRouteTables
 
 	rpcFns["SiteMeshGroupsSummary"] = ccl.doRPCSiteMeshGroupsSummary
 
@@ -377,6 +388,7 @@ func (c *CustomDataAPIRestClient) doRPCGetNetworkRouteTables(ctx context.Context
 		for _, item := range req.RouteTableIds {
 			q.Add("route_table_ids", fmt.Sprintf("%v", item))
 		}
+		q.Add("site", fmt.Sprintf("%v", req.Site))
 		for _, item := range req.SubnetCidrs {
 			q.Add("subnet_cidrs", fmt.Sprintf("%v", item))
 		}
@@ -583,6 +595,95 @@ func (c *CustomDataAPIRestClient) doRPCGetSiteNetworks(ctx context.Context, call
 	pbRsp := &SiteNetworksResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.SiteNetworksResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomDataAPIRestClient) doRPCGetTGWRouteTables(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &TGWRouteTablesRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.topology.TGWRouteTablesRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		for _, item := range req.AttachmentIds {
+			q.Add("attachment_ids", fmt.Sprintf("%v", item))
+		}
+		q.Add("id", fmt.Sprintf("%v", req.Id))
+		for _, item := range req.RouteTableIds {
+			q.Add("route_table_ids", fmt.Sprintf("%v", item))
+		}
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &TGWRouteTablesResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.topology.TGWRouteTablesResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -880,6 +981,8 @@ func NewCustomDataAPIRestClient(baseURL string, hc http.Client) server.CustomCli
 
 	rpcFns["GetSiteNetworks"] = ccl.doRPCGetSiteNetworks
 
+	rpcFns["GetTGWRouteTables"] = ccl.doRPCGetTGWRouteTables
+
 	rpcFns["SiteMeshGroupsSummary"] = ccl.doRPCSiteMeshGroupsSummary
 
 	rpcFns["SiteMeshTopology"] = ccl.doRPCSiteMeshTopology
@@ -917,6 +1020,10 @@ func (c *customDataAPIInprocClient) GetRouteTable(ctx context.Context, in *Route
 func (c *customDataAPIInprocClient) GetSiteNetworks(ctx context.Context, in *SiteNetworksRequest, opts ...grpc.CallOption) (*SiteNetworksResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.GetSiteNetworks")
 	return c.CustomDataAPIServer.GetSiteNetworks(ctx, in)
+}
+func (c *customDataAPIInprocClient) GetTGWRouteTables(ctx context.Context, in *TGWRouteTablesRequest, opts ...grpc.CallOption) (*TGWRouteTablesResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.GetTGWRouteTables")
+	return c.CustomDataAPIServer.GetTGWRouteTables(ctx, in)
 }
 func (c *customDataAPIInprocClient) SiteMeshGroupsSummary(ctx context.Context, in *SiteMeshGroupsSummaryRequest, opts ...grpc.CallOption) (*TopologyResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.topology.CustomDataAPI.SiteMeshGroupsSummary")
@@ -1197,6 +1304,55 @@ func (s *customDataAPISrv) GetSiteNetworks(ctx context.Context, in *SiteNetworks
 
 	return rsp, nil
 }
+func (s *customDataAPISrv) GetTGWRouteTables(ctx context.Context, in *TGWRouteTablesRequest) (*TGWRouteTablesResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.topology.CustomDataAPI")
+	cah, ok := ah.(CustomDataAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomDataAPIServer", ah)
+	}
+
+	var (
+		rsp *TGWRouteTablesResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.topology.TGWRouteTablesRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomDataAPI.GetTGWRouteTables' operation on 'topology'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.topology.CustomDataAPI.GetTGWRouteTables"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetTGWRouteTables(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.topology.TGWRouteTablesResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *customDataAPISrv) SiteMeshGroupsSummary(ctx context.Context, in *SiteMeshGroupsSummaryRequest) (*TopologyResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.topology.CustomDataAPI")
 	cah, ok := ah.(CustomDataAPIServer)
@@ -1452,7 +1608,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-dcclustertopology"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-dcclustertopology"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.DCClusterTopology"
             },
@@ -1526,7 +1682,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-dcclustergroupssummary"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-dcclustergroupssummary"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.DCClusterGroupsSummary"
             },
@@ -1651,6 +1807,14 @@ var CustomDataAPISwaggerJSON string = `{
                         },
                         "collectionFormat": "multi",
                         "x-displayname": "Regions"
+                    },
+                    {
+                        "name": "site",
+                        "description": "x-example: \"site-name1\"\nSite Name",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Site"
                     }
                 ],
                 "tags": [
@@ -1658,7 +1822,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-getnetworkroutetables"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-getnetworkroutetables"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.GetNetworkRouteTables"
             },
@@ -1742,7 +1906,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-getroutetable"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-getroutetable"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.GetRouteTable"
             },
@@ -1826,7 +1990,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-getsitenetworks"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-getsitenetworks"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.GetSiteNetworks"
             },
@@ -1918,7 +2082,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-sitetopology"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-sitetopology"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.SiteTopology"
             },
@@ -2010,7 +2174,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-sitemeshtopology"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-sitemeshtopology"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.SiteMeshTopology"
             },
@@ -2084,9 +2248,117 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-customdataapi-sitemeshgroupssummary"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-sitemeshgroupssummary"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.SiteMeshGroupsSummary"
+            },
+            "x-displayname": "Topology APIs",
+            "x-ves-proto-service": "ves.io.schema.topology.CustomDataAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/topology/tgw/{id}/route_tables": {
+            "get": {
+                "summary": "Get TGW Route Tables",
+                "description": "Gets Route Tables Associated with a TGW",
+                "operationId": "ves.io.schema.topology.CustomDataAPI.GetTGWRouteTables",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/topologyTGWRouteTablesResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "Id\n\nx-example: \"tgw-1234567898\"\nx-required\nTGW Id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Id"
+                    },
+                    {
+                        "name": "route_table_ids",
+                        "description": "x-example: \"rtb-1234567898, rtb-2345678901\"\nRoute Table Ids used as filters",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "x-displayname": "Route Table Ids"
+                    },
+                    {
+                        "name": "attachment_ids",
+                        "description": "x-example: \"attach-1234567898, attach-2345678901\"\nRoute Table Ids used as filters",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "x-displayname": "TGW Attachment Ids"
+                    }
+                ],
+                "tags": [
+                    "CustomDataAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-customdataapi-gettgwroutetables"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.topology.CustomDataAPI.GetTGWRouteTables"
             },
             "x-displayname": "Topology APIs",
             "x-ves-proto-service": "ves.io.schema.topology.CustomDataAPI",
@@ -2997,6 +3269,27 @@ var CustomDataAPISwaggerJSON string = `{
                 }
             }
         },
+        "topologyAWSNetworkMetaData": {
+            "type": "object",
+            "description": "Network attributes specific to AWS.",
+            "title": "AWSNetworkMetaData",
+            "x-displayname": "AWS Network Meta Data",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSNetworkMetaData",
+            "properties": {
+                "metadata": {
+                    "description": "AWS TGW Metadata",
+                    "title": "AWS TGW Metadata",
+                    "$ref": "#/definitions/topologyMetaType",
+                    "x-displayname": "AWS TGW Metadata"
+                },
+                "transit_gateway": {
+                    "description": "AWS TGW Data",
+                    "title": "AWS TGW Data",
+                    "$ref": "#/definitions/topologyTransitGatewayType",
+                    "x-displayname": "AWS TGW Data"
+                }
+            }
+        },
         "topologyAWSRouteAttributes": {
             "type": "object",
             "description": "Route attributes specific to AWS.",
@@ -3010,6 +3303,151 @@ var CustomDataAPISwaggerJSON string = `{
                     "title": "Propagated",
                     "format": "boolean",
                     "x-displayname": "Propagated"
+                },
+                "tgw": {
+                    "description": "TGW Route Attribues\n\nExample: - tgw-",
+                    "title": "TGW",
+                    "$ref": "#/definitions/topologyAWSTgwRouteAttributes",
+                    "x-displayname": "TGW"
+                }
+            }
+        },
+        "topologyAWSTGWAttachment": {
+            "type": "object",
+            "description": "AWS TGW Attachment",
+            "title": "AWSTGWAttachment",
+            "x-displayname": "AWS TGW Attachement",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSTGWAttachment",
+            "properties": {
+                "associated_route_table_id": {
+                    "type": "string",
+                    "description": "Associated Route Table ID",
+                    "title": "Associated Route Table ID",
+                    "x-displayname": "Associated Route Table ID"
+                },
+                "association_state": {
+                    "type": "string",
+                    "description": "Association State",
+                    "title": "Association State",
+                    "x-displayname": "Association State"
+                },
+                "cidr": {
+                    "type": "string",
+                    "description": "CIDR",
+                    "title": "CIDR",
+                    "x-displayname": "CIDR"
+                },
+                "cloud_connect": {
+                    "type": "array",
+                    "description": " Reference to the Cloud Connect",
+                    "title": "Cloud Connect",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Cloud Connect"
+                },
+                "id": {
+                    "type": "string",
+                    "description": "TGW Attachment ID",
+                    "title": "ID",
+                    "x-displayname": "ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "TGW Attachment Name",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "resource_id": {
+                    "type": "string",
+                    "description": "Resource ID",
+                    "title": "Resource ID",
+                    "x-displayname": "Resource ID"
+                },
+                "resource_name": {
+                    "type": "string",
+                    "description": "Resource Name",
+                    "title": "Resource Name",
+                    "x-displayname": "Resource Name"
+                },
+                "resource_type": {
+                    "type": "string",
+                    "description": "Resource Type",
+                    "title": "Resource Type",
+                    "x-displayname": "Resource Type"
+                },
+                "segment": {
+                    "type": "array",
+                    "description": " Reference to the Segment",
+                    "title": "Segment",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Segment"
+                }
+            }
+        },
+        "topologyAWSTGWAttachmentMetaData": {
+            "type": "object",
+            "description": "AWS TGW AWSTGWAttachment MetaData",
+            "title": "AWSTGWAttachmentMetaData",
+            "x-displayname": "AWS TGW AWSTGWAttachment MetaData",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSTGWAttachmentMetaData",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "TGW Attachment ID",
+                    "title": "Attachment ID",
+                    "x-displayname": "Attachment ID"
+                },
+                "resource_id": {
+                    "type": "string",
+                    "description": "Resource ID",
+                    "title": "Resource ID",
+                    "x-displayname": "Resource ID"
+                },
+                "resource_name": {
+                    "type": "string",
+                    "description": "Resource Name",
+                    "title": "Resource Name",
+                    "x-displayname": "Resource Name"
+                },
+                "resource_type": {
+                    "type": "string",
+                    "description": "Resource Type",
+                    "title": "Resource Type",
+                    "x-displayname": "Resource Type"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "Association/Propagation State",
+                    "title": "Association/Propagation State",
+                    "x-displayname": "Association/Propagation State"
+                }
+            }
+        },
+        "topologyAWSTgwRouteAttributes": {
+            "type": "object",
+            "description": "Route attributes specific to AWS TGW.",
+            "title": "AWSTgwRouteAttributes",
+            "x-displayname": "AWS TGW Route Attributes",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSTgwRouteAttributes",
+            "properties": {
+                "next_hop_attachment": {
+                    "type": "array",
+                    "description": " Next Hop Attachment\n\nExample: - next_hop_attachment-",
+                    "title": "Next Hop Attachment",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachmentMetaData"
+                    },
+                    "x-displayname": "Next Hop Attachment"
+                },
+                "route_type": {
+                    "type": "string",
+                    "description": " Route Type\n\nExample: - \"propagated\"-",
+                    "title": "Route Type",
+                    "x-displayname": "Route Type",
+                    "x-ves-example": "propagated"
                 }
             }
         },
@@ -3057,6 +3495,21 @@ var CustomDataAPISwaggerJSON string = `{
                     "title": "Virtual Network Resource Group"
                 }
             }
+        },
+        "topologyCloudNetworkType": {
+            "type": "string",
+            "description": "Cloud Network Type.\n\nNetwork None\nNetwork Type Azure Hub VNET\nNetwork Type Spoke VNET\nNetwork Type Service VPC\nNetwork Type Spoke VPC",
+            "title": "Cloud NetworkType",
+            "enum": [
+                "NETWORK_TYPE_NONE",
+                "NETWORK_TYPE_HUB_VNET",
+                "NETWORK_TYPE_SPOKE_VNET",
+                "NETWORK_TYPE_SERVICE_VPC",
+                "NETWORK_TYPE_SPOKE_VPC"
+            ],
+            "default": "NETWORK_TYPE_NONE",
+            "x-displayname": "Cloud Network Type",
+            "x-ves-proto-enum": "ves.io.schema.topology.CloudNetworkType"
         },
         "topologyDCClusterGroupSummaryInfo": {
             "type": "object",
@@ -3187,6 +3640,19 @@ var CustomDataAPISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Priority"
                 },
+                "route_name": {
+                    "type": "string",
+                    "description": " GCP Route Name\n\nExample: - \"default-route\"-",
+                    "title": "GCP Route Name",
+                    "x-displayname": "GCP Route Name",
+                    "x-ves-example": "default-route"
+                },
+                "route_type": {
+                    "description": " GCP Route Type\n\nExample: - GCP_ROUTE_TYPE_STATIC-",
+                    "title": "GCP Route Type",
+                    "$ref": "#/definitions/topologyGCPRouteType",
+                    "x-displayname": "GCP Route Type"
+                },
                 "scope_limits": {
                     "type": "array",
                     "description": " Limits on the scope of route like network tag\n\nExample: - \"tag-1, tag-2\"-",
@@ -3198,6 +3664,21 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-ves-example": "tag-1, tag-2"
                 }
             }
+        },
+        "topologyGCPRouteType": {
+            "type": "string",
+            "description": "x-displayName: GCP Route type\nGCP Route Type\n\n - GCP_ROUTE_TYPE_NONE: GCP Route Type None\n\nx-displayName: GCP Route Type None\nGCP Route Type None\n - GCP_ROUTE_TYPE_TRANSIT: GCP Route Type Transit\n\nx-displayName: GCP Route Type Transit\nGCP Route Type Transit\n - GCP_ROUTE_TYPE_SUBNET: GCP Route Type Subnet\n\nx-displayName: GCP Route Type Subnet\nGCP Route Type Subnet\n - GCP_ROUTE_TYPE_STATIC: GCP Route Type Static\n\nx-displayName: GCP Route Type Static\nGCP Route Type Static\n - GCP_ROUTE_TYPE_BGP: GCP Route Type BGP\n\nx-displayName: GCP Route Type BGP\nGCP Route Type BGP",
+            "title": "GCPRouteType",
+            "enum": [
+                "GCP_ROUTE_TYPE_NONE",
+                "GCP_ROUTE_TYPE_TRANSIT",
+                "GCP_ROUTE_TYPE_SUBNET",
+                "GCP_ROUTE_TYPE_STATIC",
+                "GCP_ROUTE_TYPE_BGP"
+            ],
+            "default": "GCP_ROUTE_TYPE_NONE",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.topology.GCPRouteType"
         },
         "topologyGatewayTypeEnum": {
             "type": "string",
@@ -3385,13 +3866,14 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyLinkStatus": {
             "type": "string",
-            "description": "Enumerates link status.\n\nStatus not applicable for this link\nStatus unknown for this link\nIndicates status up/active\nIndicates status down/inactive",
+            "description": "Enumerates link status.\n\nStatus not applicable for this link\nStatus unknown for this link\nIndicates status up/active\nIndicates status down/inactive\nIndicates status degraded",
             "title": "LinkStatus",
             "enum": [
                 "LINK_STATUS_NOT_APPLICABLE",
                 "LINK_STATUS_UNKNOWN",
                 "LINK_STATUS_UP",
-                "LINK_STATUS_DOWN"
+                "LINK_STATUS_DOWN",
+                "LINK_STATUS_DEGRADED"
             ],
             "default": "LINK_STATUS_NOT_APPLICABLE",
             "x-displayname": "Link Status",
@@ -3439,6 +3921,67 @@ var CustomDataAPISwaggerJSON string = `{
                     "description": " Name of the LB",
                     "title": "Name",
                     "x-displayname": "Name"
+                }
+            }
+        },
+        "topologyMetaType": {
+            "type": "object",
+            "description": "A metadata for topology objects.",
+            "title": "Metadata",
+            "x-displayname": "MetaType",
+            "x-ves-proto-message": "ves.io.schema.topology.MetaType",
+            "properties": {
+                "creds": {
+                    "type": "array",
+                    "description": " Reference to cloud credentials to fetch cloud resources.",
+                    "title": "Cloud Credentials",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Cloud Credentials"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " ID in the external system (such as cloud specific ID).",
+                    "title": "ID",
+                    "x-displayname": "ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name in the external system.",
+                    "title": "Name",
+                    "x-displayname": "Name"
+                },
+                "owner_id": {
+                    "type": "string",
+                    "description": " owner id in the cloud side.",
+                    "title": "OwnerID",
+                    "x-displayname": "Owner ID"
+                },
+                "provider_type": {
+                    "description": " provider type",
+                    "title": "Provider Type",
+                    "$ref": "#/definitions/topologyProviderType",
+                    "x-displayname": "Provider Type"
+                },
+                "raw_json": {
+                    "type": "string",
+                    "description": " raw json string",
+                    "title": "Raw JSON",
+                    "x-displayname": "Raw JSON"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " status of topology node",
+                    "title": "Status",
+                    "x-displayname": "Status"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Map of string keys and values that annotated in the topology node.\n\nExample: - \"value\"-",
+                    "title": "tags",
+                    "x-displayname": "Tags",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3692,16 +4235,43 @@ var CustomDataAPISwaggerJSON string = `{
             "title": "NetworkRoutesMetaData",
             "x-ves-proto-message": "ves.io.schema.topology.NetworkRoutesMetaData",
             "properties": {
-                "network_id": {
+                "cloud_resource_id": {
+                    "type": "string",
+                    "description": " Cloud Resource Id",
+                    "title": "Cloud Resource Id",
+                    "x-displayname": "Cloud Resource Id"
+                },
+                "id": {
                     "type": "string",
                     "description": " Network Id",
                     "title": "Network Id",
-                    "x-displayname": "Network Id"
+                    "x-displayname": "Id"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Network Name",
+                    "title": "Network Name",
+                    "x-displayname": "Name"
+                },
+                "network_type": {
+                    "description": " Network Type",
+                    "title": "Network Type",
+                    "$ref": "#/definitions/topologyCloudNetworkType",
+                    "x-displayname": "Network Type"
+                },
+                "regions": {
+                    "type": "array",
+                    "description": " Regions in Network",
+                    "title": "Regions",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Regions"
                 },
                 "route_tables_metadata": {
                     "type": "array",
                     "description": " Network Route Tables Metadata",
-                    "title": "Network Routes Metadata",
+                    "title": "Network Route Tables Metadata",
                     "items": {
                         "$ref": "#/definitions/topologyNetworkRouteTableMetaData"
                     },
@@ -4072,7 +4642,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyRouteNextHopTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nx-displayName: LOAD BALANCER\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nx-displayName: VPC NETWORK\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nx-displayName: VPC PEERING\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nx-displayName: INTERNAL LOAD BALANCER\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nx-displayName: INSTANCE\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nx-displayName: INTERCONNECT\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nx-displayName: INTERNET GATEWAY\nINTERNET GATEWAY\n - IP: IP\n\nx-displayName: IP\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nx-displayName: VPN TUNNEL\nVPN TUNNEL",
+            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nx-displayName: LOAD BALANCER\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nx-displayName: VPC NETWORK\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nx-displayName: VPC PEERING\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nx-displayName: INTERNAL LOAD BALANCER\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nx-displayName: INSTANCE\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nx-displayName: INTERCONNECT\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nx-displayName: INTERNET GATEWAY\nINTERNET GATEWAY\n - IP: IP\n\nx-displayName: IP\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nx-displayName: VPN TUNNEL\nVPN TUNNEL\n - TGW_ATTACHMENT: TGW ATTACHMENT\n\nx-displayName: TGW ATTACHMENT\nTGW ATTACHMENT",
             "title": "RouteNextHopTypeEnum",
             "enum": [
                 "VIRTUAL_NETWORK_GATEWAY",
@@ -4091,7 +4661,8 @@ var CustomDataAPISwaggerJSON string = `{
                 "INTERCONNECT",
                 "INTERNET_GATEWAY",
                 "IP",
-                "VPN_TUNNEL"
+                "VPN_TUNNEL",
+                "TGW_ATTACHMENT"
             ],
             "default": "VIRTUAL_NETWORK_GATEWAY",
             "x-displayname": "",
@@ -4115,12 +4686,17 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyRouteStateTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteStateTypeEnum\nRouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nx-displayName: ACTIVE_STATE\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nx-displayName: INVALID_STATE\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nx-displayName: STATE_NOT_APPLICABLE\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this",
+            "description": "x-displayName: RouteStateTypeEnum\nRouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nx-displayName: ACTIVE_STATE\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nx-displayName: INVALID_STATE\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nx-displayName: STATE_NOT_APPLICABLE\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this\n - STATE_BLACKHOLE: STATE_BLACKHOLE\n\nx-displayName: STATE_BLACKHOLE\nSTATE_BLACKHOLE\n - STATE_UNAVAILABLE: STATE_UNAVAILABLE\n\nx-displayName: STATE_UNAVAILABLE\nSTATE_UNAVAILABLE\n - STATE_PENDING: STATE_PENDING\n\nx-displayName: STATE_PENDING\nSTATE_PENDING\n - STATE_DELETING: STATE_DELETING\n\nx-displayName: STATE_DELETING\nSTATE_DELETING\n - STATE_DELETED: STATE_DELETING\n\nx-displayName: STATE_DELETED\nSTATE_DELETED",
             "title": "RouteStateTypeEnum",
             "enum": [
                 "ACTIVE_STATE",
                 "INVALID_STATE",
-                "STATE_NOT_APPLICABLE"
+                "STATE_NOT_APPLICABLE",
+                "STATE_BLACKHOLE",
+                "STATE_UNAVAILABLE",
+                "STATE_PENDING",
+                "STATE_DELETING",
+                "STATE_DELETED"
             ],
             "default": "ACTIVE_STATE",
             "x-displayname": "",
@@ -4197,6 +4773,21 @@ var CustomDataAPISwaggerJSON string = `{
                 }
             }
         },
+        "topologyRouteTableStateEnum": {
+            "type": "string",
+            "description": "Route table state\n\nRoute table state None\nRoute table state Pending\nRoute table state Availble\nRoute table state Deleting\nRoute table state Deleted",
+            "title": "RouteTableStateEnum",
+            "enum": [
+                "ROUTE_TABLE_STATE_NONE",
+                "ROUTE_TABLE_STATE_PENDING",
+                "ROUTE_TABLE_STATE_AVAILABLE",
+                "ROUTE_TABLE_STATE_DELETING",
+                "ROUTE_TABLE_STATE_DELETED"
+            ],
+            "default": "ROUTE_TABLE_STATE_NONE",
+            "x-displayname": "Route Table State",
+            "x-ves-proto-enum": "ves.io.schema.topology.RouteTableStateEnum"
+        },
         "topologyRouteTableType": {
             "type": "object",
             "description": "A canonical form of the route table.",
@@ -4204,6 +4795,15 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "Route Table",
             "x-ves-proto-message": "ves.io.schema.topology.RouteTableType",
             "properties": {
+                "associations": {
+                    "type": "array",
+                    "description": " list of associations",
+                    "title": "Associations",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachmentMetaData"
+                    },
+                    "x-displayname": "Associations"
+                },
                 "explicit_subnet": {
                     "type": "array",
                     "description": " Reference to the subnet explicitly accociated.",
@@ -4230,6 +4830,21 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Network"
+                },
+                "propagations": {
+                    "type": "array",
+                    "description": " list of propagations",
+                    "title": "Propagations",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachmentMetaData"
+                    },
+                    "x-displayname": "Propagations"
+                },
+                "route_table_state": {
+                    "description": " state of the route table.",
+                    "title": "Route Table State",
+                    "$ref": "#/definitions/topologyRouteTableStateEnum",
+                    "x-displayname": "Route Table State"
                 },
                 "route_table_type": {
                     "description": " type of this route table.",
@@ -4417,8 +5032,15 @@ var CustomDataAPISwaggerJSON string = `{
             "description": "List of Networks Associated to Site",
             "title": "Site Networks Response",
             "x-displayname": "Site Networks Response",
+            "x-ves-oneof-field-cloud_network_meta_data": "[\"aws\"]",
             "x-ves-proto-message": "ves.io.schema.topology.SiteNetworksResponse",
             "properties": {
+                "aws": {
+                    "description": "Exclusive with []\nAWS network meta data",
+                    "title": "AWS",
+                    "$ref": "#/definitions/topologyAWSNetworkMetaData",
+                    "x-displayname": "AWS"
+                },
                 "routes_metadata": {
                     "type": "array",
                     "description": " Network Routes Meta Data",
@@ -4543,6 +5165,24 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "Subnet MetaData",
             "x-ves-proto-message": "ves.io.schema.topology.SubnetMetaData",
             "properties": {
+                "cidr_v4": {
+                    "type": "array",
+                    "description": " IPv4 Cidr",
+                    "title": "IPv4 Cidr",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Cidr"
+                },
+                "cidr_v6": {
+                    "type": "array",
+                    "description": " IPv6 Cidr",
+                    "title": "IPv6 Cidr",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Cidr"
+                },
                 "cloud_resource_id": {
                     "type": "string",
                     "description": " Cloud Resource Identifier the subnet",
@@ -4632,6 +5272,24 @@ var CustomDataAPISwaggerJSON string = `{
                 }
             }
         },
+        "topologyTGWRouteTablesResponse": {
+            "type": "object",
+            "description": "List of RouteTables Associated with TGW",
+            "title": "TGW Route Tables Response",
+            "x-displayname": "TGW Route Tables Response",
+            "x-ves-proto-message": "ves.io.schema.topology.TGWRouteTablesResponse",
+            "properties": {
+                "routes_data": {
+                    "type": "array",
+                    "description": " TGW Routes Data",
+                    "title": "TGW Routes Data",
+                    "items": {
+                        "$ref": "#/definitions/topologyRouteTableData"
+                    },
+                    "x-displayname": "TGW Routes Data"
+                }
+            }
+        },
         "topologyTopologyResponse": {
             "type": "object",
             "description": "Relationship between the resources associated with a site is represented as a graph, where each resource/entity is\nrepresented as a node (example: Site (CE, RE), Network (VPC, Virtual Network), Subnet, etc.,) and their association is\nrepresented as edges (example: Site (CE) - Site (CE, RE), Network (VPC) - Subnets, etc.,). All edges are directed.\nHowever if 2 nodes have bidirectional connection, (example: Site - Site), there may be 2 edges in the response for the same\npair of nodes.",
@@ -4676,6 +5334,15 @@ var CustomDataAPISwaggerJSON string = `{
             "x-displayname": "transit gateway",
             "x-ves-proto-message": "ves.io.schema.topology.TransitGatewayType",
             "properties": {
+                "attachments": {
+                    "type": "array",
+                    "description": "TGW Attachements",
+                    "title": "Attachments",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachment"
+                    },
+                    "x-displayname": "Attachments"
+                },
                 "auto_accept_shared_attachments": {
                     "type": "boolean",
                     "description": " Auto accept shared attachment",

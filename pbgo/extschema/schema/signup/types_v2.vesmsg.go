@@ -96,31 +96,6 @@ func (v *ValidateAccountMeta) TosVersionValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateAccountMeta) TosAcceptedAtValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	var (
-		reqdValidatorFn db.ValidatorFunc
-		err             error
-	)
-
-	reqdValidatorFn, err = db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for tos_accepted_at")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if reqdValidatorFn != nil {
-			if err = reqdValidatorFn(ctx, val, opts...); err != nil {
-				return err
-			}
-		}
-		// TODO: lookup configured third-party type validators
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateAccountMeta) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AccountMeta)
 	if !ok {
@@ -212,9 +187,7 @@ var DefaultAccountMetaValidator = func() *ValidateAccountMeta {
 
 	vrhTosVersion := v.TosVersionValidationRuleHandler
 	rulesTosVersion := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "12",
-		"ves.io.schema.rules.string.min_len":   "2",
+		"ves.io.schema.rules.string.max_len": "12",
 	}
 	vFn, err = vrhTosVersion(rulesTosVersion)
 	if err != nil {
@@ -222,18 +195,6 @@ var DefaultAccountMetaValidator = func() *ValidateAccountMeta {
 		panic(errMsg)
 	}
 	v.FldValidators["tos_version"] = vFn
-
-	vrhTosAcceptedAt := v.TosAcceptedAtValidationRuleHandler
-	rulesTosAcceptedAt := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.timestamp.lt_now": "true",
-	}
-	vFn, err = vrhTosAcceptedAt(rulesTosAcceptedAt)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AccountMeta.tos_accepted_at: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["tos_accepted_at"] = vFn
 
 	return v
 }()

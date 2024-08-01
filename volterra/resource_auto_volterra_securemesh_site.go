@@ -1389,6 +1389,11 @@ func resourceVolterraSecuremeshSite() *schema.Resource {
 																												},
 																											},
 
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
 																											"pools": {
 
 																												Type:     schema.TypeList,
@@ -5008,6 +5013,12 @@ func resourceVolterraSecuremeshSiteCreate(d *schema.ResourceData, meta interface
 																			}
 
 																		}
+
+																	}
+
+																	if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																		dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
 
 																	}
 
@@ -9324,6 +9335,12 @@ func resourceVolterraSecuremeshSiteUpdate(d *schema.ResourceData, meta interface
 																			}
 
 																		}
+
+																	}
+
+																	if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																		dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
 
 																	}
 

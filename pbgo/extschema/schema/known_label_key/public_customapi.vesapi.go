@@ -695,7 +695,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-known_label_key-customapi-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-known_label_key-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.known_label_key.CustomAPI.Create"
             },
@@ -787,7 +787,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-known_label_key-customapi-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-known_label_key-customapi-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.known_label_key.CustomAPI.Delete"
             },
@@ -867,18 +867,17 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "query",
-                        "description": "Query Type\n\nGeneric Get of all available labels for a given tenant\nGet exact match of label.key = label.value Or label.key(label.value)\nGet prefix match of label.key\nGet all available known label keys that can be applied to sites",
+                        "description": "Query Type\n\nGeneric Get of all available labels for a given tenant\nGet exact match of label.key = label.value Or label.key(label.value)\nGet prefix match of label.key",
                         "in": "query",
                         "required": false,
                         "type": "string",
                         "enum": [
                             "QUERY_ALL_LABEL_KEYS",
                             "QUERY_EXACT_LABEL_KEY",
-                            "QUERY_PREFIX_LABEL_KEYS",
-                            "QUERY_SITE_LABEL_KEYS"
+                            "QUERY_PREFIX_LABEL_KEYS"
                         ],
                         "default": "QUERY_ALL_LABEL_KEYS",
-                        "x-displayname": "Site Label Keys"
+                        "x-displayname": "Label Key Prefix"
                     },
                     {
                         "name": "key",
@@ -894,7 +893,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-known_label_key-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-known_label_key-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.known_label_key.CustomAPI.Get"
             },
@@ -1022,13 +1021,12 @@ var CustomAPISwaggerJSON string = `{
         },
         "known_label_keyQueryType": {
             "type": "string",
-            "description": "x-displayName: \"Query Type\"\nType of label key query\n\n - QUERY_ALL_LABEL_KEYS: x-displayName: \"All Labels\"\nGeneric Get of all available labels for a given tenant\n - QUERY_EXACT_LABEL_KEY: x-displayName: \"Exact Label Key\"\nGet exact match of label.key = label.value Or label.key(label.value)\n - QUERY_PREFIX_LABEL_KEYS: x-displayName: \"Label Key Prefix\"\nGet prefix match of label.key\n - QUERY_SITE_LABEL_KEYS: x-displayName: \"Site Label Keys\"\nGet all available known label keys that can be applied to sites",
+            "description": "x-displayName: \"Query Type\"\nType of label key query\n\n - QUERY_ALL_LABEL_KEYS: x-displayName: \"All Labels\"\nGeneric Get of all available labels for a given tenant\n - QUERY_EXACT_LABEL_KEY: x-displayName: \"Exact Label Key\"\nGet exact match of label.key = label.value Or label.key(label.value)\n - QUERY_PREFIX_LABEL_KEYS: x-displayName: \"Label Key Prefix\"\nGet prefix match of label.key",
             "title": "QueryType",
             "enum": [
                 "QUERY_ALL_LABEL_KEYS",
                 "QUERY_EXACT_LABEL_KEY",
-                "QUERY_PREFIX_LABEL_KEYS",
-                "QUERY_SITE_LABEL_KEYS"
+                "QUERY_PREFIX_LABEL_KEYS"
             ],
             "default": "QUERY_ALL_LABEL_KEYS"
         }

@@ -13,11 +13,12 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
-	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
+
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 )
 
@@ -1087,6 +1088,24 @@ func resourceVolterraOriginPool() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"default_session_key_caching": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"disable_session_key_caching": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_session_keys": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
 
 						"no_mtls": {
 
@@ -3047,6 +3066,43 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			maxSessionKeysTypeTypeFound := false
+
+			if v, ok := cs["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_DefaultSessionKeyCaching{}
+					maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsChoiceInt.UseTls.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := cs["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_DisableSessionKeyCaching{}
+					maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsChoiceInt.UseTls.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := cs["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+				maxSessionKeysTypeInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_MaxSessionKeys{}
+
+				tlsChoiceInt.UseTls.MaxSessionKeysType = maxSessionKeysTypeInt
+
+				maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
+
+			}
 
 			mtlsChoiceTypeFound := false
 
@@ -5171,6 +5227,43 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			maxSessionKeysTypeTypeFound := false
+
+			if v, ok := cs["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_DefaultSessionKeyCaching{}
+					maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsChoiceInt.UseTls.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := cs["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_DisableSessionKeyCaching{}
+					maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsChoiceInt.UseTls.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := cs["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+				maxSessionKeysTypeInt := &ves_io_schema_views_origin_pool.UpstreamTlsParameters_MaxSessionKeys{}
+
+				tlsChoiceInt.UseTls.MaxSessionKeysType = maxSessionKeysTypeInt
+
+				maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
+
+			}
 
 			mtlsChoiceTypeFound := false
 
