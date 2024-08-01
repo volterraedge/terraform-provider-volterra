@@ -1275,12 +1275,29 @@ func (m *AzureVnetSiteType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *AzureVnetSiteType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *AzureVnetSiteType) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
 // Redact squashes sensitive info in m (in-place)
 func (m *AzureVnetSiteType) Redact(ctx context.Context) error {
 	// clear fields with confidential option set (at message or field level)
 	if m == nil {
 		return nil
 	}
+
+	m.AdminPasswordBlindfolded = ""
 
 	if err := m.GetExpressRoute().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting AzureVnetSiteType.express_route")
@@ -1332,6 +1349,33 @@ func (v *ValidateAzureVnetSiteType) Validate(ctx context.Context, pm interface{}
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
+		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
+		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["availability_set"]; exists {

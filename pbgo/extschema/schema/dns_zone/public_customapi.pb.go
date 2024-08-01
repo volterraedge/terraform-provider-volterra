@@ -345,19 +345,19 @@ func (m *ImportAXFRRequest) GetTsigConfiguration() *TSIGConfiguration {
 type TSIGConfiguration struct {
 	// TSIG Key Name
 	//
-	// x-displayName: "TSIG key name"
+	// x-displayName: "TSIG Key Name"
 	// x-example: "my-tsig-key"
 	// TSIG key name as used in TSIG protocol extension
 	TsigKeyName string `protobuf:"bytes,1,opt,name=tsig_key_name,json=tsigKeyName,proto3" json:"tsig_key_name,omitempty"`
 	// TSIG Key Algorithm
 	//
-	// x-displayName: "TSIG Key algorithm"
+	// x-displayName: "TSIG Key Algorithm"
 	// x-example: "hmac-sha512"
 	// TSIG key value must be compatible with the specified algorithm
 	TsigKeyAlgorithm TSIGKeyAlgorithm `protobuf:"varint,2,opt,name=tsig_key_algorithm,json=tsigKeyAlgorithm,proto3,enum=ves.io.schema.dns_zone.TSIGKeyAlgorithm" json:"tsig_key_algorithm,omitempty"`
-	// TSIG Key value
+	// TSIG Key Value
 	//
-	// x-displayName: "TSIG key value in base 64 format"
+	// x-displayName: "TSIG Key Value in Base 64 Format"
 	// x-example: "my-tsig-value"
 	TsigKeyValue *schema.SecretType `protobuf:"bytes,3,opt,name=tsig_key_value,json=tsigKeyValue,proto3" json:"tsig_key_value,omitempty"`
 }

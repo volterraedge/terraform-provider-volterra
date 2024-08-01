@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-downstream_cos-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.downstream_cos.crudapi.API.Create"
             },
@@ -2848,6 +2848,18 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
                     "x-displayname": "CoS Limit"
                 },
+                "http_limit_options": {
+                    "description": " HTTP Protocol Settings applied to connections when HTTP Limit threshold is exceeded.",
+                    "title": "Http Limit Options",
+                    "$ref": "#/definitions/downstream_cosHttpLimitOptions",
+                    "x-displayname": "HTTP Limit Options"
+                },
+                "listener_limit": {
+                    "description": " Limit imposed on traffic of individual listener associated with this class of service.",
+                    "title": "Listener Limit",
+                    "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
+                    "x-displayname": "Listener Limit"
+                },
                 "tenant_limit": {
                     "description": " Limit imposed on traffic of each individual tenant associated with this class of service.",
                     "title": "Tenant Limit",
@@ -2856,9 +2868,90 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "downstream_cosHttpLimitOptions": {
+            "type": "object",
+            "description": "Http Protocol Settings applied to connections when HTTP Limit threshold is exceeded.",
+            "title": "HttpLimitOptions",
+            "x-displayname": "HTTP Limit Options",
+            "x-ves-proto-message": "ves.io.schema.downstream_cos.HttpLimitOptions",
+            "properties": {
+                "delayed_close_timeout": {
+                    "type": "integer",
+                    "description": " Maximum amount of time Envoy will wait to close downstream network connection, after initiating connection\n termination sequence. This is needed for some clients to be able to process in-flight HTTP responses.\n If set to 0, this option will not be applied during enforcement - envoy defaults will be used instead.\n This is specified in milliseconds.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 10000\n",
+                    "title": "Delayed Close Timeout",
+                    "format": "int64",
+                    "x-displayname": "Delayed Close Timeout",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "10000"
+                    }
+                },
+                "drain_timeout": {
+                    "type": "integer",
+                    "description": " Time envoy will wait between sending the first HTTP2 GOAWAY frame and final GOAWAY frame. During this time\n Envoy will continue to accept new streams.\n If set to 0, this option will not be applied during enforcement - envoy defaults will be used instead.\n This is specified in milliseconds.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 10000\n",
+                    "title": "Drain Timeout",
+                    "format": "int64",
+                    "x-displayname": "Drain Timeout",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "10000"
+                    }
+                },
+                "idle_timeout": {
+                    "type": "string",
+                    "description": " Idle timeout for connections.\n This is specified in milliseconds.",
+                    "title": "Idle Timeout",
+                    "format": "uint64",
+                    "x-displayname": "Idle Timeout"
+                },
+                "max_concurrent_streams": {
+                    "type": "integer",
+                    "description": " Applied to newly established connection.\n If set to 0, this option will not be applied during enforcement.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "title": "HTTP2 Maximum Concurrent Streams",
+                    "format": "int64",
+                    "x-displayname": "HTTP2 Maximum Concurrent Streams",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
+                },
+                "max_connection_duration": {
+                    "type": "string",
+                    "description": " Maximum duration for connections.\n This is specified in milliseconds.",
+                    "title": "Max Connection Duration",
+                    "format": "uint64",
+                    "x-displayname": "Max Connection Duration"
+                },
+                "max_requests_per_connection": {
+                    "type": "integer",
+                    "description": " Setting this parameter to 1 will disable connection keep alive.\n For HTTP2 this setting is approximate, due to its asynchronous nature.\n Applied both to newly created and already established connections. If connection has already received more\n requests then set by this option - connection termination sequence will begin immediately.\n If set to 0, this option will not be applied during enforcement.",
+                    "title": "Maximum requests per HTTP Connection",
+                    "format": "int64",
+                    "x-displayname": "Maximum requests per HTTP Connection"
+                },
+                "request_headers_timeout": {
+                    "type": "string",
+                    "description": " Time envoy will wait for request headers to be received.\n This is specified in milliseconds.",
+                    "title": "Request Headers Timeout",
+                    "format": "uint64",
+                    "x-displayname": "Request Headers Timeout"
+                },
+                "request_timeout": {
+                    "type": "string",
+                    "description": " Time envoy will wait for entire request to be received.\n This is specified in milliseconds.",
+                    "title": "Request Timeout",
+                    "format": "uint64",
+                    "x-displayname": "Request Timeout"
+                },
+                "stream_idle_timeout": {
+                    "type": "string",
+                    "description": " Maximum time request stream may remain idle.\n This is specified in milliseconds.",
+                    "title": "Stream Idle Timeout",
+                    "format": "uint64",
+                    "x-displayname": "Stream Idle Timeout"
+                }
+            }
+        },
         "downstream_cosPerCpuUtilizationLimit": {
             "type": "object",
-            "description": "Defines utilization limits for downstream traffic.\nLimit is specified in terms of: L=Tr/Cr, where:\nTr = Tenant (or CoS) event rate\nCr = envoy worker estimated event rate capacity.\nEvent rate is the number of downstream socket-level connect and read events per second, handled by Envoy.\nLimit utilization is calculated and enforced on per-cpu (per envoy worker) basis.\nWhen traffic volume crosses the limit threshold, enforcement action associated with the limit type may be\napplied to existing and new connections in order to bring the traffic volume under the threshold value.\nsoft_limit and hard_limit enforcement may be activated/deactivated multiple times during the lifetime\nof a connection.\nEnforcement decision and duration are derived from limit values, tenant/cos downstream traffic volume,\nconnection establishment rate, and envoy worker capacity.\n\nWhile it is allowed to set none, any or all of available limit types, it is recommended to use the following\ncombinations:\n1) no limits - monitor a group of tenants associated with a class of service, in order to determine limit\nthreshold values.\n2) soft_limit - traffic prioritization, with minimal negative impact in case of misconfiguration.\n3) soft_limit and hard_limit - full enforcement, large-scale DDoS mitigation.\n4) soft_limit, hard_limit, close_limit - full enforcement, large-scale DDoS mitigation, including attacks with very\nlarge number of network connections.",
+            "description": "Defines utilization limits for downstream traffic.\nLimit is specified in terms of: L=Tr/Cr, where:\nTr = Tenant (or CoS) event rate\nCr = envoy worker estimated event rate capacity.\nEvent rate is the sum rate of http requests and new connection events.\nLimit utilization is calculated and enforced on per-cpu (per envoy worker) basis.\nWhen traffic volume crosses the limit threshold, enforcement action associated with the limit type may be\napplied to existing and new connections in order to bring the traffic volume under the threshold value.\nSome enforcement types (such as soft and hard limit) may be activated/deactivated multiple times during the lifetime\nof downstream connection.\nEnforcement decision and duration are derived from limit values, tenant/cos downstream traffic volume,\nconnection establishment rate, and envoy worker capacity.",
             "title": "Per Cpu Utilization Limit",
             "x-displayname": "PerCpuUtilizationLimit Specification",
             "x-ves-proto-message": "ves.io.schema.downstream_cos.PerCpuUtilizationLimit",
@@ -2874,6 +2967,18 @@ var APISwaggerJSON string = `{
                     "title": "Hard Limit",
                     "$ref": "#/definitions/schemaFractionalPercent",
                     "x-displayname": "Hard Limit"
+                },
+                "http_limit": {
+                    "description": " Apply HTTP protocol-specific throttling options, when this limit threshold is exceeded.\n HTTP throttling options are defined in HttpLimitOptions.",
+                    "title": "HTTP Limit",
+                    "$ref": "#/definitions/schemaFractionalPercent",
+                    "x-displayname": "HTTP Limit"
+                },
+                "route_priority_limit": {
+                    "description": " Lower http route priority, when this limit threshold is exceeded.",
+                    "title": "Route Priority Limit",
+                    "$ref": "#/definitions/schemaFractionalPercent",
+                    "x-displayname": "Route Priority Limit"
                 },
                 "soft_limit": {
                     "description": " Define Soft utilization limit.\n Connections may be be placed in low read priority mode, when this limit threshold is exceeded.",

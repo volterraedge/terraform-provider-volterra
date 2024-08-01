@@ -757,8 +757,8 @@ func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "F5XC DNS Management Subscription API",
-        "description": "x-required\nUse this API to subscribe to F5XC DNS Management",
+        "title": "F5XC DNS Management RRSet API",
+        "description": "x-required\nAPIs to manage a DNS RRSets",
         "version": "version not set"
     },
     "schemes": [
@@ -864,11 +864,11 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.rrset.CustomAPI.Create"
             },
-            "x-displayname": "F5XC DNS Management Subscription API",
+            "x-displayname": "F5XC DNS Management RRSet API",
             "x-ves-proto-service": "ves.io.schema.dns_zone.rrset.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
@@ -971,7 +971,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.rrset.CustomAPI.Get"
             },
@@ -1073,7 +1073,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.rrset.CustomAPI.Delete"
             },
@@ -1183,11 +1183,11 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-rrset-customapi-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.rrset.CustomAPI.Replace"
             },
-            "x-displayname": "F5XC DNS Management Subscription API",
+            "x-displayname": "F5XC DNS Management RRSet API",
             "x-ves-proto-service": "ves.io.schema.dns_zone.rrset.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
@@ -1936,7 +1936,7 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Name servers",
+                    "x-displayname": "Name Servers",
                     "x-ves-example": "ns1.example.com",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -1974,7 +1974,7 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Domain name",
+                    "x-displayname": "Domain Name",
                     "x-ves-example": "my.example.com",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2043,20 +2043,20 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "values": {
                     "type": "array",
-                    "description": "\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 512\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4000\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Text",
                     "minItems": 1,
                     "maxItems": 100,
                     "items": {
                         "type": "string",
-                        "maxLength": 512
+                        "maxLength": 4000
                     },
                     "x-displayname": "Text",
                     "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_len": "512",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "4000",
                         "ves.io.schema.rules.repeated.max_items": "100",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3167,6 +3167,6 @@ var CustomAPISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "F5XC DNS Management Subscription API",
+    "x-displayname": "F5XC DNS Management RRSet API",
     "x-ves-proto-file": "ves.io/schema/dns_zone/rrset/public_customapi.proto"
 }`

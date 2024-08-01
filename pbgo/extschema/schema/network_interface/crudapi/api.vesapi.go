@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_interface-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_interface-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_interface.crudapi.API.Create"
             },
@@ -2884,6 +2884,7 @@ var APISwaggerJSON string = `{
             "description": "DHCP IPV6 network type configuration",
             "title": "DHCPIPV6NetworkType",
             "x-displayname": "DHCPIPV6NetworkType",
+            "x-ves-displayorder": "1,5,4",
             "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6NetworkType",
             "properties": {
@@ -2895,6 +2896,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "2001::0/64",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                },
+                "pool_settings": {
+                    "description": " Controls how DHCPV6 pools are handled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "DHCP Pool Settings",
+                    "$ref": "#/definitions/network_interfaceDHCPPoolSettingType",
+                    "x-displayname": "DHCP Pool Settings",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "pools": {
@@ -2981,9 +2992,9 @@ var APISwaggerJSON string = `{
                 },
                 "fixed_ip_map": {
                     "type": "object",
-                    "description": " Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
+                    "description": " Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address\n Assign fixed IPv6 addresses based on the MAC Address of the DHCP Client.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
                     "title": "Fixed IPV6 Assignments",
-                    "x-displayname": "Fixed MAC address to IPV6 Assignments",
+                    "x-displayname": "Fixed MAC Address to IPV6 Assignments",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.mac": "true",
@@ -3002,16 +3013,16 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceDHCPInterfaceIPType": {
             "type": "object",
-            "description": "Map of Interface IP assignments per node",
-            "title": "Interface IP Assignments",
-            "x-displayname": "Interface IP Assignments",
+            "description": "Specify static IPv4 addresses per node.",
+            "title": "Interface IPv4 Assignments",
+            "x-displayname": "Interface IPv4 Assignments",
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPInterfaceIPType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Site:Node to IP address.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
+                    "description": " Specify static IPv4 addresses per site:node.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Site:Node to IP mapping",
-                    "x-displayname": "Site:Node to IP Mapping",
+                    "x-displayname": "Site:Node to IPv4 Address Mapping",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "128",
@@ -3057,9 +3068,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dgw_address": {
                     "type": "string",
-                    "description": "Exclusive with [first_address last_address]\n Configured address from the network prefix is chosen as default gateway.\n\nExample: - \"10.1.1.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [first_address last_address]\n Enter a IPv4 address from the network prefix to be used as the default gateway.\n\nExample: - \"10.1.1.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Configured Address",
-                    "x-displayname": "Configured Address",
+                    "x-displayname": "Static IPv4 Configuration",
                     "x-ves-example": "10.1.1.10",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
@@ -3067,9 +3078,9 @@ var APISwaggerJSON string = `{
                 },
                 "dns_address": {
                     "type": "string",
-                    "description": "Exclusive with [same_as_dgw]\n Configured address is chosen as DNS server address in DHCP response.\n\nExample: - \"10.1.1.11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [same_as_dgw]\n Enter a IPv4 address from the network prefix to be used as the DNS server.\n\nExample: - \"10.1.1.11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Configured Address",
-                    "x-displayname": "Configured Address",
+                    "x-displayname": "Static IPv4 Configuration",
                     "x-ves-example": "10.1.1.11",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
@@ -3089,7 +3100,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with []\n Network Prefix for a single site.\n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with []\n Set the network prefix for the site. ex: 10.1.1.0/24\n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "Network Prefix",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "10.1.1.0/24",
@@ -3131,7 +3142,7 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceDHCPPoolSettingType": {
             "type": "string",
-            "description": "Identifies the how to pick the network for Interface.\n\nAddress ranges in DHCP pool list are allocation list\nAddress ranges in DHCP pool list are exclude list",
+            "description": "Identifies the how to pick the network for Interface.\n\nAddress ranges in DHCP pool list are used for IP Address allocation\nAddress ranges in DHCP pool list are excluded from IP Address allocation",
             "title": "DHCP POOL SETTING",
             "enum": [
                 "INCLUDE_IP_ADDRESSES_FROM_DHCP_POOLS",
@@ -3178,20 +3189,20 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPServerParametersType",
             "properties": {
                 "automatic_from_end": {
-                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from End of the first network in the list",
+                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from end of the first network in the DHCP Network list",
                     "title": "Automatic End",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatic End"
                 },
                 "automatic_from_start": {
-                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the list",
+                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the DHCP Network list",
                     "title": "Automatic Start",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatic Start"
                 },
                 "dhcp_networks": {
                     "type": "array",
-                    "description": " List of networks from which DHCP server can allocate ip addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of networks from which DHCP Server can allocate IPv4 Addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "DHCP Networks",
                     "minItems": 1,
                     "maxItems": 1,
@@ -3209,9 +3220,9 @@ var APISwaggerJSON string = `{
                 },
                 "fixed_ip_map": {
                     "type": "object",
-                    "description": " Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
+                    "description": " Assign fixed IPv4 addresses based on the MAC Address of the DHCP Client.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Fixed IP Assignments",
-                    "x-displayname": "Fixed MAC address to IP Assignments",
+                    "x-displayname": "Fixed MAC Address to IPv4 Assignments",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.mac": "true",
@@ -3221,10 +3232,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "interface_ip_map": {
-                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Configured address for every node",
-                    "title": "Configured Address",
+                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Statically configure a IPv4 address for every node",
+                    "title": "Static IPv4 Configuration",
                     "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType",
-                    "x-displayname": "Configured"
+                    "x-displayname": "Static IPv4 Configuration"
                 }
             }
         },
@@ -3326,12 +3337,12 @@ var APISwaggerJSON string = `{
                     "title": "Device"
                 },
                 "dhcp_client": {
-                    "description": "x-displayName: \"DHCP Client\"\nInterface gets it IP address from external DHCP server",
+                    "description": "x-displayName: \"DHCP Client\"\nInterface gets it's IP address from external DHCP server",
                     "title": "DHCP Client",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "dhcp_server": {
-                    "description": "x-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "description": "x-displayName: \"DHCP Server\"\nDHCP Server is configured for this interface. IP for this Interface will be derived from the DHCP Server configuration.",
                     "title": "DHCP Server",
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
                 },
@@ -3507,10 +3518,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "dhcp_server_params": {
-                    "description": " DHCP server parameters",
-                    "title": "DHCP server parameters",
+                    "description": " DHCP Server parameters",
+                    "title": "DHCP Server parameters",
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType",
-                    "x-displayname": "DHCP server parameters"
+                    "x-displayname": "DHCP Server parameters"
                 },
                 "interface_ip_map": {
                     "type": "object",
@@ -3657,12 +3668,13 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information\n Allowed only /64 prefix length as per RFC 4862\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n  ves.io.schema.rules.string.pattern: .*::/64$\n",
                     "title": "Prefix Info",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "2001::0/64",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                        "ves.io.schema.rules.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.string.pattern": ".*::/64$"
                     }
                 },
                 "stateful": {
@@ -3681,13 +3693,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.IPV6AutoConfigType",
             "properties": {
                 "host": {
-                    "description": "Exclusive with [router]\n System behaves like Auto config host and receives the auto configuration parameters from other\n auto configuration routers",
+                    "description": "Exclusive with [router]\n System behaves like auto config host and receives the auto configuration parameters from other\n auto configuration routers. This is similar to a DHCP Client.",
                     "title": "host",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Auto Config Host"
                 },
                 "router": {
-                    "description": "Exclusive with [host]\n System behaves like Auto config Router and provides auto config parameters",
+                    "description": "Exclusive with [host]\n System behaves like auto config Router and provides auto config parameters. This is similar to a DHCP Server.",
                     "title": "router",
                     "$ref": "#/definitions/network_interfaceIPV6AutoConfigRouterType",
                     "x-displayname": "Auto Config Router"
@@ -3711,7 +3723,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [configured_list]\n Choose the address from the network prefix range as dns server",
                     "title": "Local Dns Address",
                     "$ref": "#/definitions/network_interfaceIPV6LocalDnsAddress",
-                    "x-displayname": "Local Dns Address"
+                    "x-displayname": "Local DNS Address"
                 }
             }
         },
@@ -3895,7 +3907,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "dhcp_server": {
-                    "description": "x-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "description": "x-displayName: \"DHCP Server\"\nDHCP Server is configured for this interface. IP for this Interface will be derived from the DHCP Server configuration.",
                     "title": "DHCP Server",
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
                 },

@@ -1176,6 +1176,10 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return nil
 	}
 
+	if err := m.GetAwsParameters().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.aws_parameters")
+	}
+
 	if err := m.GetVnConfig().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.vn_config")
 	}
@@ -2037,6 +2041,10 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 	// clear fields with confidential option set (at message or field level)
 	if m == nil {
 		return nil
+	}
+
+	if err := m.GetAwsParameters().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.aws_parameters")
 	}
 
 	if err := m.GetVnConfig().Redact(ctx); err != nil {
@@ -2997,6 +3005,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 	// clear fields with confidential option set (at message or field level)
 	if m == nil {
 		return nil
+	}
+
+	if err := m.GetAwsParameters().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.aws_parameters")
 	}
 
 	if err := m.GetVnConfig().Redact(ctx); err != nil {
@@ -4085,6 +4097,10 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.vn_config")
 	}
 
+	if err := m.GetAwsParameters().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ReplaceSpecType.aws_parameters")
+	}
+
 	return nil
 }
 
@@ -5093,6 +5109,16 @@ func (m *ServicesVPCReplaceType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ServicesVPCReplaceType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
 func (m *ServicesVPCReplaceType) DeepCopy() *ServicesVPCReplaceType {
 	if m == nil {
 		return nil
@@ -5843,6 +5869,20 @@ func (m *ServicesVPCType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+// Redact squashes sensitive info in m (in-place)
+func (m *ServicesVPCType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetAdminPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting ServicesVPCType.admin_password")
+	}
+
+	return nil
+}
+
 func (m *ServicesVPCType) DeepCopy() *ServicesVPCType {
 	if m == nil {
 		return nil
@@ -6119,6 +6159,15 @@ func (v *ValidateServicesVPCType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["aws_certified_hw"]; exists {
@@ -6586,6 +6635,8 @@ var DefaultServicesVPCTypeValidator = func() *ValidateServicesVPCType {
 
 	v.FldValidators["tgw_choice.new_tgw"] = TGWParamsTypeValidator().Validate
 	v.FldValidators["tgw_choice.existing_tgw"] = ExistingTGWTypeValidator().Validate
+
+	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
 }()

@@ -1287,7 +1287,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-clonefromdnsdomain"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-clonefromdnsdomain"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.CloneFromDNSDomain"
             },
@@ -1371,7 +1371,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importf5cszone"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-importf5cszone"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportF5CSZone"
             },
@@ -1455,7 +1455,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importaxfr"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-importaxfr"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportAXFR"
             },
@@ -1539,7 +1539,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindcreate"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindcreate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportBINDCreate"
             },
@@ -1623,7 +1623,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindvalidate"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-importbindvalidate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.ImportBINDValidate"
             },
@@ -1715,7 +1715,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-getlocalzonefile"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-getlocalzonefile"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.GetLocalZoneFile"
             },
@@ -1807,7 +1807,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customapi-getremotezonefile"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customapi-getremotezonefile"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomAPI.GetRemoteZoneFile"
             },
@@ -2602,7 +2602,7 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Name servers",
+                    "x-displayname": "Name Servers",
                     "x-ves-example": "ns1.example.com",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2640,7 +2640,7 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "Domain name",
+                    "x-displayname": "Domain Name",
                     "x-ves-example": "my.example.com",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -2737,20 +2737,20 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "values": {
                     "type": "array",
-                    "description": "\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 512\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.max_len: 4000\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Text",
                     "minItems": 1,
                     "maxItems": 100,
                     "items": {
                         "type": "string",
-                        "maxLength": 512
+                        "maxLength": 4000
                     },
                     "x-displayname": "Text",
                     "x-ves-example": "value",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_len": "512",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "4000",
                         "ves.io.schema.rules.repeated.max_items": "100",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3422,6 +3422,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "allow_http_lb_managed_records": {
                     "type": "boolean",
+                    "description": " Option to allow user-created HTTP, TCP, and CDN load balancer related resource records to be automatically managed in a protected RRset.",
                     "format": "boolean"
                 },
                 "default_rr_set_group": {
@@ -3812,7 +3813,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " retry value indicates when secondary nameservers should retry to request the serial number if primary does not respond\n\nExample: - \"7200\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 2147483647\n",
                     "title": "Retry (in seconds)",
                     "format": "int64",
-                    "x-displayname": "Retry interval",
+                    "x-displayname": "Retry Interval",
                     "x-ves-example": "7200",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "60",
@@ -4169,7 +4170,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " TSIG key value must be compatible with the specified algorithm\n\nExample: - \"hmac-sha512\"-",
                     "title": "TSIG Key Algorithm",
                     "$ref": "#/definitions/dns_zoneTSIGKeyAlgorithm",
-                    "x-displayname": "TSIG Key algorithm",
+                    "x-displayname": "TSIG Key Algorithm",
                     "x-ves-example": "hmac-sha512"
                 },
                 "tsig_key_name": {
@@ -4177,7 +4178,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " TSIG key name as used in TSIG protocol extension\n\nExample: - \"my-tsig-key\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "TSIG Key Name",
                     "maxLength": 256,
-                    "x-displayname": "TSIG key name",
+                    "x-displayname": "TSIG Key Name",
                     "x-ves-example": "my-tsig-key",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.hostname": "true",
@@ -4186,9 +4187,9 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "tsig_key_value": {
                     "description": "\n\nExample: - \"my-tsig-value\"-",
-                    "title": "TSIG Key value",
+                    "title": "TSIG Key Value",
                     "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "TSIG key value in base 64 format",
+                    "x-displayname": "TSIG Key Value in Base 64 Format",
                     "x-ves-example": "my-tsig-value"
                 }
             }
@@ -4207,7 +4208,7 @@ var CustomAPISwaggerJSON string = `{
                 "HMAC_SHA512"
             ],
             "default": "UNDEFINED",
-            "x-displayname": "TSIG Key algorithm",
+            "x-displayname": "TSIG Key Algorithm",
             "x-ves-proto-enum": "ves.io.schema.dns_zone.TSIGKeyAlgorithm"
         },
         "dns_zoneValidZone": {

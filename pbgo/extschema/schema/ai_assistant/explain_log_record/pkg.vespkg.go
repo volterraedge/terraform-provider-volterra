@@ -10,7 +10,9 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ai_assistant.explain_log_record.Bot"] = BotValidator()
+	vr["ves.io.schema.ai_assistant.explain_log_record.BotDefenseEventDetails"] = BotDefenseEventDetailsValidator()
 	vr["ves.io.schema.ai_assistant.explain_log_record.ExplainLogRecordResponse"] = ExplainLogRecordResponseValidator()
+	vr["ves.io.schema.ai_assistant.explain_log_record.RequestDetails"] = RequestDetailsValidator()
 	vr["ves.io.schema.ai_assistant.explain_log_record.Signature"] = SignatureValidator()
 	vr["ves.io.schema.ai_assistant.explain_log_record.SvcPolicyEventDetails"] = SvcPolicyEventDetailsValidator()
 	vr["ves.io.schema.ai_assistant.explain_log_record.ThreatCampaign"] = ThreatCampaignValidator()

@@ -1092,6 +1092,18 @@ func (v *ValidateMultiFieldAggregationBucket) Validate(ctx context.Context, pm i
 
 	}
 
+	if fv, exists := v.FldValidators["sub_aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sub_aggs"))
+		for key, value := range m.GetSubAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -1185,6 +1197,84 @@ var DefaultMultiFieldAggregationDataValidator = func() *ValidateMultiFieldAggreg
 
 func MultiFieldAggregationDataValidator() db.Validator {
 	return DefaultMultiFieldAggregationDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MultiFieldSubAggregationData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MultiFieldSubAggregationData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MultiFieldSubAggregationData) DeepCopy() *MultiFieldSubAggregationData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MultiFieldSubAggregationData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MultiFieldSubAggregationData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MultiFieldSubAggregationData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MultiFieldSubAggregationDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMultiFieldSubAggregationData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMultiFieldSubAggregationData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MultiFieldSubAggregationData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MultiFieldSubAggregationData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cardinality_aggregation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cardinality_aggregation"))
+		if err := fv(ctx, m.GetCardinalityAggregation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMultiFieldSubAggregationDataValidator = func() *ValidateMultiFieldSubAggregationData {
+	v := &ValidateMultiFieldSubAggregationData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MultiFieldSubAggregationDataValidator() db.Validator {
+	return DefaultMultiFieldSubAggregationDataValidator
 }
 
 // augmented methods on protoc/std generated struct

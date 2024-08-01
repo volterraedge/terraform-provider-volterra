@@ -839,7 +839,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-registration-customapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.List"
             },
@@ -923,7 +923,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-registration-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.Get"
             },
@@ -1000,7 +1000,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-registration-customapi-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.Delete"
             },
@@ -1085,7 +1085,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-registration-customapi-updatestatus"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-registration-customapi-updatestatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.registration.CustomAPI.UpdateStatus"
             },

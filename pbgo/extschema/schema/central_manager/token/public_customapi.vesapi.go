@@ -821,7 +821,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-token-customapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-token-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.token.CustomAPI.List"
             },
@@ -900,7 +900,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-token-customapi-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-token-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.token.CustomAPI.Create"
             },
@@ -984,7 +984,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-token-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-token-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.token.CustomAPI.Get"
             },
@@ -1061,7 +1061,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-token-customapi-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-token-customapi-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.token.CustomAPI.Delete"
             },

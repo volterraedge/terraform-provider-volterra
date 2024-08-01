@@ -555,7 +555,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customdataapi-dnszonemetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customdataapi-dnszonemetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneMetrics"
             },
@@ -647,7 +647,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_zone-customdataapi-dnszonerequestlogs"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_zone-customdataapi-dnszonerequestlogs"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_zone.CustomDataAPI.DnsZoneRequestLogs"
             },

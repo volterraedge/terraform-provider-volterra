@@ -1,19 +1,26 @@
+
+
+
+
+
+
+
+
+
+
+
+
 ---
-
 page_title: "Volterra: aws_tgw_site"
+description: "The aws_tgw_site allows CRUD of Aws Tgw Site  resource on Volterra SaaS"
+---
+# Resource volterra_aws_tgw_site
 
-description: "The aws_tgw_site allows CRUD of Aws Tgw Site resource on Volterra SaaS"
--------------------------------------------------------------------------------------
+The Aws Tgw Site  allows CRUD of Aws Tgw Site  resource on Volterra SaaS
 
-Resource volterra_aws_tgw_site
-==============================
+~> **Note:** Please refer to [Aws Tgw Site  API docs](https://docs.cloud.f5.com/docs-v2/api/views-aws-tgw-site) to learn more
 
-The Aws Tgw Site allows CRUD of Aws Tgw Site resource on Volterra SaaS
-
-~> **Note:** Please refer to [Aws Tgw Site API docs](https://docs.cloud.f5.com/docs/api/views-aws-tgw-site) to learn more
-
-Example Usage
--------------
+## Example Usage
 
 ```hcl
 resource "volterra_aws_tgw_site" "example" {
@@ -21,6 +28,26 @@ resource "volterra_aws_tgw_site" "example" {
   namespace = "staging"
 
   aws_parameters {
+    admin_password {
+      blindfold_secret_info_internal {
+        decryption_provider = "value"
+
+        location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+        store_provider = "value"
+      }
+
+      secret_encoding_type = "secret_encoding_type"
+
+      // One of the arguments from this list "blindfold_secret_info vault_secret_info clear_secret_info wingman_secret_info" must be set
+
+      clear_secret_info {
+        provider = "box-provider"
+
+        url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+      }
+    }
+
     aws_certified_hw = "aws-byol-multi-nic-voltmesh"
 
     aws_region = "us-east-1"
@@ -77,12 +104,12 @@ resource "volterra_aws_tgw_site" "example" {
 
       // One of the arguments from this list "name_tag autogenerate" must be set
 
-      name_tag = "name_tag"
+      autogenerate = true
       primary_ipv4 = "10.1.0.0/16"
     }
     ssh_key = "ssh-rsa AAAAB..."
 
-    // One of the arguments from this list "existing_tgw new_tgw" must be set
+    // One of the arguments from this list "new_tgw existing_tgw" must be set
 
     new_tgw {
       // One of the arguments from this list "system_generated user_assigned" must be set
@@ -90,40 +117,26 @@ resource "volterra_aws_tgw_site" "example" {
       system_generated = true
     }
 
-    // One of the arguments from this list "total_nodes no_worker_nodes nodes_per_az" must be set
+    // One of the arguments from this list "nodes_per_az total_nodes no_worker_nodes" must be set
 
-    total_nodes = "1"
+    nodes_per_az = "2"
   }
 
-  // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
+  // One of the arguments from this list "default_blocked_services block_all_services blocked_services" must be set
 
-  block_all_services = true
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "web_user_interface dns ssh" can be set
 
-  // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
+      web_user_interface = true
 
-  direct_connect_enabled {
-    // One of the arguments from this list "auto_asn custom_asn" must be set
-
-    auto_asn = true
-
-    // One of the arguments from this list "standard_vifs manual_gw hosted_vifs" must be set
-
-    hosted_vifs {
-      // One of the arguments from this list "site_registration_over_internet site_registration_over_direct_connect" can be set
-
-      site_registration_over_internet = true
-
-      vif_list {
-        vif_id = "dxvif-fgwtckim"
-
-        // One of the arguments from this list "same_as_site_region other_region" must be set
-
-        other_region = "other_region"
-      }
-
-      vifs = ["value"]
+      network_type = "network_type"
     }
   }
+
+  // One of the arguments from this list "direct_connect_enabled private_connectivity direct_connect_disabled" must be set
+
+  direct_connect_disabled = true
 
   // One of the arguments from this list "logs_streaming_disabled log_receiver" must be set
 
@@ -132,68 +145,852 @@ resource "volterra_aws_tgw_site" "example" {
 
 ```
 
-Argument Reference
-------------------
+## Argument Reference
 
 ### Metadata Argument Reference
-
 `annotations` - (Optional) queryable and should be preserved when modifying objects. (`String`).
+
 
 `description` - (Optional) Human readable description for the object (`String`).
 
+
 `disable` - (Optional) A value of true will administratively disable the object (`Bool`).
+
 
 `labels` - (Optional) by selector expression (`String`).
 
+
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
+
 `namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
+
+
 
 ### Spec Argument Reference
 
 `aws_parameters` - (Required) Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc. See [Aws Parameters ](#aws-parameters) below for details.
 
+
+		
+
+
+		
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
 `block_all_services` - (Optional) Block DNS, SSH & WebUI services on Site (`Bool`).
 
+
 `blocked_services` - (Optional) Use custom blocked services configuration, to list the services which need to be blocked. See [Blocked Services Choice Blocked Services ](#blocked-services-choice-blocked-services) below for details.
+		
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
 
 `default_blocked_services` - (Optional) Allow access to DNS, SSH services on Site (`Bool`).
 
+
+
+
 `coordinates` - (Optional) Site longitude and latitude co-ordinates. See [Coordinates ](#coordinates) below for details.
+
+
+
+
 
 `custom_dns` - (Optional) custom dns configure to the CE site. See [Custom Dns ](#custom-dns) below for details.
 
+
+
+
+
+
+
+
 `direct_connect_disabled` - (Optional) Disable Private Connectivity to Site (`Bool`).
 
+
 `direct_connect_enabled` - (Optional) Direct Connect Connection to Site is enabled(Legacy). See [Direct Connect Choice Direct Connect Enabled ](#direct-connect-choice-direct-connect-enabled) below for details.
+		
+
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
 
 `private_connectivity` - (Optional) Enable Private Connectivity to Site via CloudLink. See [Direct Connect Choice Private Connectivity ](#direct-connect-choice-private-connectivity) below for details.
+		
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
 
 `kubernetes_upgrade_drain` - (Optional) Enable Kubernetes Drain during OS or SW upgrade. See [Kubernetes Upgrade Drain ](#kubernetes-upgrade-drain) below for details.
 
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+
+
 `log_receiver` - (Optional) Select log receiver for logs streaming. See [ref](#ref) below for details.
+
 
 `logs_streaming_disabled` - (Optional) Logs Streaming is disabled (`Bool`).
 
+
+
+
 `offline_survivability_mode` - (Optional) Enable/Disable offline survivability mode. See [Offline Survivability Mode ](#offline-survivability-mode) below for details.
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
 
 `os` - (Optional) Operating System Details. See [Os ](#os) below for details.
 
+
+
+
+		
+
+
+
+
+
+
 `performance_enhancement_mode` - (Optional) Performance Enhancement Mode to optimize for L3 or L7 networking. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
 
 `sw` - (Optional) F5XC Software Details. See [Sw ](#sw) below for details.
 
+
+
+
+		
+
+
+
+
+
+
 `tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
+
+
 
 `tgw_security` - (Optional) Security Configuration for transit gateway. See [Tgw Security ](#tgw-security) below for details.
 
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
 `vn_config` - (Optional) Site Network related details will be configured. See [Vn Config ](#vn-config) below for details.
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+		
+
+
+		
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+		
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+		
+
+
+
+
 
 `vpc_attachments` - (Optional) Note that this choice would be deprecated in the near release.. See [Vpc Attachments ](#vpc-attachments) below for details.
 
-### Aws Parameters
 
-Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
+		
+
+
+
+
+
+### Aws Parameters 
+
+ Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
+
+`admin_password` - (Optional) Admin password user for accessing site through serial console .. See [Aws Parameters Admin Password ](#aws-parameters-admin-password) below for details.(Deprecated)
 
 `aws_certified_hw` - (Optional) Name for AWS certified hardware. (`String`).(Deprecated)
 
@@ -201,61 +998,90 @@ Example of the managed AWS resources to name few are VPC, TGW, Route Tables etc.
 
 `az_nodes` - (Required) Only Single AZ or Three AZ(s) nodes are supported currently.. See [Aws Parameters Az Nodes ](#aws-parameters-az-nodes) below for details.
 
+
+
 ###### One of the arguments from this list "aws_cred, assisted" must be set
 
 `assisted` - (Optional) In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script. (`Bool`).(Deprecated)
 
+
 `aws_cred` - (Optional) Reference to AWS cloud credential object used to deploy cloud resources. See [ref](#ref) below for details.
+
 
 `disk_size` - (Optional) Node disk size for all node in the F5XC site. Unit is GiB (`Int`).
 
 `instance_type` - (Required) Instance size based on the performance. (`String`).
 
-###### One of the arguments from this list "enable_internet_vip, disable_internet_vip" must be set
+
+
+###### One of the arguments from this list "disable_internet_vip, enable_internet_vip" must be set
 
 `disable_internet_vip` - (Optional) VIPs cannot be advertised to the internet directly on this Site (`Bool`).
 
+
 `enable_internet_vip` - (Optional) VIPs can be advertised to the internet directly on this Site (`Bool`).
 
-###### One of the arguments from this list "f5xc_security_group, custom_security_group" must be set
+
+
+
+###### One of the arguments from this list "custom_security_group, f5xc_security_group" must be set
 
 `custom_security_group` - (Optional) With this option, ingress and egress traffic will be controlled via security group ids.. See [Security Group Choice Custom Security Group ](#security-group-choice-custom-security-group) below for details.
 
+
 `f5xc_security_group` - (Optional) With this option, ingress and egress traffic will be controlled via f5xc created security group. (`Bool`).
+
+
+
 
 ###### One of the arguments from this list "new_vpc, vpc_id" must be set
 
 `new_vpc` - (Optional) Details needed to create new VPC. See [Service Vpc Choice New Vpc ](#service-vpc-choice-new-vpc) below for details.
 
+
 `vpc_id` - (Optional) Existing VPC ID (`String`).
 
+
 `ssh_key` - (Required) Public SSH key for accessing nodes of the site. (`String`).
+
+
 
 ###### One of the arguments from this list "new_tgw, existing_tgw" must be set
 
 `existing_tgw` - (Optional) Information about existing TGW. See [Tgw Choice Existing Tgw ](#tgw-choice-existing-tgw) below for details.
 
+
 `new_tgw` - (Optional) Details needed to create new TGW. See [Tgw Choice New Tgw ](#tgw-choice-new-tgw) below for details.
+
+
+
 
 ###### One of the arguments from this list "nodes_per_az, total_nodes, no_worker_nodes" must be set
 
 `no_worker_nodes` - (Optional) Worker nodes is set to zero (`Bool`).
 
+
 `nodes_per_az` - (Optional) Desired Worker Nodes Per AZ. Max limit is up to 21 (`Int`).
+
 
 `total_nodes` - (Optional) Total number of worker nodes to be deployed across all AZ's used in the Site (`Int`).
 
-### Coordinates
 
-Site longitude and latitude co-ordinates.
+
+
+### Coordinates 
+
+ Site longitude and latitude co-ordinates.
 
 `latitude` - (Optional) Latitude of the site location (`Float`).
 
 `longitude` - (Optional) longitude of site location (`Float`).
 
-### Custom Dns
 
-custom dns configure to the CE site.
+
+### Custom Dns 
+
+ custom dns configure to the CE site.
 
 `inside_nameserver` - (Optional) Optional DNS server IP to be used for name resolution in inside network (`String`).
 
@@ -265,157 +1091,279 @@ custom dns configure to the CE site.
 
 `outside_nameserver_v6` - (Optional) Optional DNS server IPv6 to be used for name resolution in outside network (`String`).
 
-### Kubernetes Upgrade Drain
 
-Enable Kubernetes Drain during OS or SW upgrade.
+
+### Kubernetes Upgrade Drain 
+
+ Enable Kubernetes Drain during OS or SW upgrade.
+
+
 
 ###### One of the arguments from this list "enable_upgrade_drain, disable_upgrade_drain" must be set
 
-`disable_upgrade_drain` - (Optional) Disable Node by Node Upgrade during Software or OS version upgrade (`Bool`).
+`disable_upgrade_drain` - (Optional) x-displayName: "Disable Node by Node Upgrade" (`Bool`).
 
-`enable_upgrade_drain` - (Optional) Enable Node by Node Upgrade during Software or OS version upgrade. See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
-### Offline Survivability Mode
+`enable_upgrade_drain` - (Optional) x-displayName: "Enable Node by Node Upgrade". See [Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain ](#kubernetes-upgrade-drain-enable-choice-enable-upgrade-drain) below for details.
 
-Enable/Disable offline survivability mode.
+
+
+
+### Offline Survivability Mode 
+
+ Enable/Disable offline survivability mode.
+
+
 
 ###### One of the arguments from this list "no_offline_survivability_mode, enable_offline_survivability_mode" must be set
 
-`enable_offline_survivability_mode` - (Optional) When this feature is enabled on an existing site, the pods/services on this site will be restarted. (`Bool`).
+`enable_offline_survivability_mode` - (Optional) x-displayName: "Enabled" (`Bool`).
 
-`no_offline_survivability_mode` - (Optional) When this feature is disabled on an existing site, the pods/services on this site will be restarted. (`Bool`).
 
-### Os
+`no_offline_survivability_mode` - (Optional) x-displayName: "Disabled" (`Bool`).
 
-Operating System Details.
+
+
+
+### Os 
+
+ Operating System Details.
+
+
 
 ###### One of the arguments from this list "default_os_version, operating_system_version" must be set
 
 `default_os_version` - (Optional) Will assign latest available OS version (`Bool`).
 
-`operating_system_version` - (Optional) Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10. (`String`).
 
-### Performance Enhancement Mode
+`operating_system_version` - (Optional) Specify a OS version to be used e.g. 9.2024.6. (`String`).
 
-Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-###### One of the arguments from this list "perf_mode_l7_enhanced, perf_mode_l3_enhanced" must be set
 
-`perf_mode_l3_enhanced` - (Optional) When the mode is toggled to l3 enhanced, traffic disruption will be seen. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
 
-`perf_mode_l7_enhanced` - (Optional) When the mode is toggled to l7 enhanced, traffic disruption will be seen (`Bool`).
+### Performance Enhancement Mode 
 
-### Sw
+ Performance Enhancement Mode to optimize for L3 or L7 networking.
 
-F5XC Software Details.
+
+
+###### One of the arguments from this list "perf_mode_l3_enhanced, perf_mode_l7_enhanced" must be set
+
+`perf_mode_l3_enhanced` - (Optional) Site optimized for L3 traffic processing. See [Perf Mode Choice Perf Mode L3 Enhanced ](#perf-mode-choice-perf-mode-l3-enhanced) below for details.
+
+
+`perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
+
+
+
+
+### Sw 
+
+ F5XC Software Details.
+
+
 
 ###### One of the arguments from this list "default_sw_version, volterra_software_version" must be set
 
-`default_sw_version` - (Optional) Will assign latest available SW version (`Bool`).
+`default_sw_version` - (Optional) Will assign latest available F5XC Software Version (`Bool`).
 
-`volterra_software_version` - (Optional) F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002. (`String`).
 
-### Tgw Security
+`volterra_software_version` - (Optional) Specify a F5XC Software Version to be used e.g. crt-20210329-1002. (`String`).
 
-Security Configuration for transit gateway.
+
+
+
+### Tgw Security 
+
+ Security Configuration for transit gateway.
+
+
 
 ###### One of the arguments from this list "no_east_west_policy, active_east_west_service_policies, east_west_service_policy_allow_all" must be set
 
 `active_east_west_service_policies` - (Optional) Enable service policy so east-west traffic goes via proxy. See [East West Service Policy Choice Active East West Service Policies ](#east-west-service-policy-choice-active-east-west-service-policies) below for details.
 
+
 `east_west_service_policy_allow_all` - (Optional) Enable service policy with allow all so east-west traffic goes via proxy for monitoring (`Bool`).
+
 
 `no_east_west_policy` - (Optional) Disable service policy so that east-west traffic does not go via proxy (`Bool`).
 
-###### One of the arguments from this list "active_forward_proxy_policies, forward_proxy_allow_all, no_forward_proxy" must be set
+
+
+
+###### One of the arguments from this list "no_forward_proxy, active_forward_proxy_policies, forward_proxy_allow_all" must be set
 
 `active_forward_proxy_policies` - (Optional) Enable Forward Proxy for this site and manage policies. See [Forward Proxy Choice Active Forward Proxy Policies ](#forward-proxy-choice-active-forward-proxy-policies) below for details.
 
+
 `forward_proxy_allow_all` - (Optional) Enable Forward Proxy for this site and allow all requests. (`Bool`).
 
+
 `no_forward_proxy` - (Optional) Disable Forward Proxy for this site (`Bool`).
+
+
+
 
 ###### One of the arguments from this list "no_network_policy, active_network_policies, active_enhanced_firewall_policies" must be set
 
 `active_enhanced_firewall_policies` - (Optional) with an additional option for service insertion.. See [Network Policy Choice Active Enhanced Firewall Policies ](#network-policy-choice-active-enhanced-firewall-policies) below for details.
 
+
 `active_network_policies` - (Optional) Firewall Policies active for this site.. See [Network Policy Choice Active Network Policies ](#network-policy-choice-active-network-policies) below for details.
+
 
 `no_network_policy` - (Optional) Firewall Policy is disabled for this site. (`Bool`).
 
-### Vn Config
 
-Site Network related details will be configured.
+
+
+### Vn Config 
+
+ Site Network related details will be configured.
 
 `allowed_vip_port` - (Optional) Allowed VIP Port Configuration. See [Vn Config Allowed Vip Port ](#vn-config-allowed-vip-port) below for details.
 
 `allowed_vip_port_sli` - (Optional) Allowed VIP Port Configuration for Inside Network. See [Vn Config Allowed Vip Port Sli ](#vn-config-allowed-vip-port-sli) below for details.
 
+
+
 ###### One of the arguments from this list "no_dc_cluster_group, dc_cluster_group_outside_vn, dc_cluster_group_inside_vn" must be set
 
 `dc_cluster_group_inside_vn` - (Optional) This site is member of dc cluster group connected via inside network. See [ref](#ref) below for details.
 
+
 `dc_cluster_group_outside_vn` - (Optional) This site is member of dc cluster group connected via outside network. See [ref](#ref) below for details.
 
+
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
+
+
+
 
 ###### One of the arguments from this list "no_global_network, global_network_list" must be set
 
 `global_network_list` - (Optional) List of global network connections. See [Global Network Choice Global Network List ](#global-network-choice-global-network-list) below for details.
 
+
 `no_global_network` - (Optional) No global network to connect (`Bool`).
 
-###### One of the arguments from this list "inside_static_routes, no_inside_static_routes" must be set
+
+
+
+###### One of the arguments from this list "no_inside_static_routes, inside_static_routes" must be set
 
 `inside_static_routes` - (Optional) Manage static routes for inside network.. See [Inside Static Route Choice Inside Static Routes ](#inside-static-route-choice-inside-static-routes) below for details.
 
+
 `no_inside_static_routes` - (Optional) Static Routes disabled for inside network. (`Bool`).
+
+
+
 
 ###### One of the arguments from this list "no_outside_static_routes, outside_static_routes" must be set
 
 `no_outside_static_routes` - (Optional) Static Routes disabled for outside network. (`Bool`).
 
+
 `outside_static_routes` - (Optional) Manage static routes for outside network.. See [Outside Static Route Choice Outside Static Routes ](#outside-static-route-choice-outside-static-routes) below for details.
+
+
+
 
 ###### One of the arguments from this list "sm_connection_pvt_ip, sm_connection_public_ip" must be set
 
 `sm_connection_public_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
 
+
 `sm_connection_pvt_ip` - (Optional) creating ipsec between two sites which are part of the site mesh group (`Bool`).
 
-### Vpc Attachments
 
-Note that this choice would be deprecated in the near release..
+
+
+### Vpc Attachments 
+
+ Note that this choice would be deprecated in the near release..
 
 `vpc_list` - (Optional) List of VPC attachments to transit gateway. See [Vpc Attachments Vpc List ](#vpc-attachments-vpc-list) below for details.
 
-### Asn Choice Auto Asn
 
-Automatically set ASN.
 
-### Asn Choice System Generated
+### Admin Password Blindfold Secret Info Internal 
 
-F5XC will automatically assign a private ASN for TGW and F5XC Site.
+ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
-### Asn Choice User Assigned
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
-User is managing the ASN for TGW and F5XC Site..
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+
+
+### Asn Choice Auto Asn 
+
+ Automatically set ASN.
+
+
+
+### Asn Choice System Generated 
+
+ F5XC will automatically assign a private ASN for TGW and F5XC Site.
+
+
+
+### Asn Choice User Assigned 
+
+ User is managing the ASN for TGW and F5XC Site..
 
 `tgw_asn` - (Optional) TGW ASN. Allowed range for 16-bit private ASNs include 64512 to 65534. (`Int`).
 
 `volterra_site_asn` - (Optional) F5XC Site ASN. (`Int`).
 
-### Aws Parameters Az Nodes
 
-Only Single AZ or Three AZ(s) nodes are supported currently..
+
+### Aws Parameters Admin Password 
+
+ Admin password user for accessing site through serial console ..
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+
+
+###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+
+
+
+### Aws Parameters Az Nodes 
+
+ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
+
+
 
 ###### One of the arguments from this list "reserved_inside_subnet, inside_subnet" must be set
 
 `inside_subnet` - (Optional) Select Existing Subnet or Create New. See [Choice Inside Subnet ](#choice-inside-subnet) below for details.
 
+
 `reserved_inside_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (`Bool`).
+
 
 `disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).(Deprecated)
 
@@ -423,83 +1371,123 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `workload_subnet` - (Optional) Subnet in which workloads are launched. See [Az Nodes Workload Subnet ](#az-nodes-workload-subnet) below for details.
 
-### Az Nodes Outside Subnet
 
-Subnet for the outside interface of the node.
 
-###### One of the arguments from this list "subnet_param, existing_subnet_id" must be set
+### Az Nodes Outside Subnet 
 
-`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+ Subnet for the outside interface of the node.
 
-`subnet_param` - (Optional) Parameters for creating new subnet. See [Choice Subnet Param ](#choice-subnet-param) below for details.
 
-### Az Nodes Workload Subnet
-
-Subnet in which workloads are launched.
 
 ###### One of the arguments from this list "subnet_param, existing_subnet_id" must be set
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
+
 `subnet_param` - (Optional) Parameters for creating new subnet. See [Choice Subnet Param ](#choice-subnet-param) below for details.
 
-### Blocked Services Blocked Sevice
 
-Use custom blocked services configuration.
+
+
+### Az Nodes Workload Subnet 
+
+ Subnet in which workloads are launched.
+
+
+
+###### One of the arguments from this list "subnet_param, existing_subnet_id" must be set
+
+`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+
+
+`subnet_param` - (Optional) Parameters for creating new subnet. See [Choice Subnet Param ](#choice-subnet-param) below for details.
+
+
+
+
+### Blocked Services Blocked Sevice 
+
+ x-displayName: "Disable Node Local Services".
+
+
+
 
 ###### One of the arguments from this list "web_user_interface, dns, ssh" can be set
 
 `dns` - (Optional) Matches DNS port 53 (`Bool`).
 
-`ssh` - (Optional) Matches ssh port 22 (`Bool`).
 
-`web_user_interface` - (Optional) Matches the web user interface port (`Bool`).
+`ssh` - (Optional) x-displayName: "SSH" (`Bool`).
 
-`network_type` - (Optional) Network type in which these ports get blocked (`String`).
 
-### Blocked Services Choice Blocked Services
+`web_user_interface` - (Optional) x-displayName: "Web UI" (`Bool`).
 
-Use custom blocked services configuration, to list the services which need to be blocked.
 
-`blocked_sevice` - (Optional) Use custom blocked services configuration. See [Blocked Services Blocked Sevice ](#blocked-services-blocked-sevice) below for details.
+`network_type` - (Optional) Site Local VRF on which this service will be disabled (`String`).
 
-### Blocked Services Value Type Choice Dns
 
-Matches DNS port 53.
 
-### Blocked Services Value Type Choice Ssh
+### Blocked Services Choice Blocked Services 
 
-Matches ssh port 22.
+ Use custom blocked services configuration, to list the services which need to be blocked.
 
-### Blocked Services Value Type Choice Web User Interface
+`blocked_sevice` - (Optional) x-displayName: "Disable Node Local Services". See [Blocked Services Blocked Sevice ](#blocked-services-blocked-sevice) below for details.
 
-Matches the web user interface port.
 
-### Choice Inside Subnet
 
-Select Existing Subnet or Create New.
+### Blocked Services Value Type Choice Dns 
 
-###### One of the arguments from this list "subnet_param, existing_subnet_id" must be set
+ Matches DNS port 53.
+
+
+
+### Blocked Services Value Type Choice Ssh 
+
+ x-displayName: "SSH".
+
+
+
+### Blocked Services Value Type Choice Web User Interface 
+
+ x-displayName: "Web UI".
+
+
+
+### Choice Inside Subnet 
+
+ Select Existing Subnet or Create New.
+
+
+
+###### One of the arguments from this list "existing_subnet_id, subnet_param" must be set
 
 `existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
 
+
 `subnet_param` - (Optional) Parameters for creating new subnet. See [Choice Subnet Param ](#choice-subnet-param) below for details.
 
-### Choice Reserved Inside Subnet
 
-Autogenerate and reserve a subnet from the Primary CIDR.
 
-### Choice Subnet Param
 
-Parameters for creating new subnet.
+### Choice Reserved Inside Subnet 
+
+ Autogenerate and reserve a subnet from the Primary CIDR.
+
+
+
+### Choice Subnet Param 
+
+ Parameters for creating new subnet.
 
 `ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
 
 `ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).
 
-### Config Mode Choice Custom Static Route
 
-Use Custom static route to configure all advanced options.
+
+### Config Mode Choice Custom Static Route 
+
+ Use Custom static route to configure all advanced options.
 
 `attrs` - (Optional) List of route attributes associated with the static route (`List of Strings`).
 
@@ -509,49 +1497,67 @@ Use Custom static route to configure all advanced options.
 
 `subnets` - (Required) List of route prefixes. See [Custom Static Route Subnets ](#custom-static-route-subnets) below for details.
 
-### Connection Choice Sli To Global Dr
 
-Site local inside is connected directly to a given global network.
 
-`global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
+### Connection Choice Sli To Global Dr 
 
-### Connection Choice Slo To Global Dr
-
-Site local outside is connected directly to a given global network.
+ Site local inside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
 
-### Connectivity Options Site Registration Over Direct Connect
 
-Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
+
+### Connection Choice Slo To Global Dr 
+
+ Site local outside is connected directly to a given global network.
+
+`global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
+
+
+
+### Connectivity Options Site Registration Over Direct Connect 
+
+ Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection.
 
 `cloudlink_network_name` - (Required) Establish private connectivity with the F5 Distributed Cloud Global Network using a Private ADN network. To provision a Private ADN network, please contact F5 Distributed Cloud support. (`String`).
 
-### Connectivity Options Site Registration Over Internet
 
-Site Registration and Site to RE tunnels go over the internet gateway.
 
-### Custom Certificate Private Key
+### Connectivity Options Site Registration Over Internet 
 
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
+ Site Registration and Site to RE tunnels go over the internet gateway.
+
+
+
+### Custom Certificate Private Key 
+
+ TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
 
 `blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
 
 `secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
 
-###### One of the arguments from this list "blindfold_secret_info, vault_secret_info, clear_secret_info, wingman_secret_info" must be set
+
+
+###### One of the arguments from this list "vault_secret_info, clear_secret_info, wingman_secret_info, blindfold_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
+
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
 
 `vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
 
+
 `wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
-### Custom Static Route Nexthop
 
-Nexthop for the route.
+
+
+### Custom Static Route Nexthop 
+
+ Nexthop for the route.
 
 `interface` - (Optional) Nexthop is network interface when type is "Network-Interface". See [ref](#ref) below for details.
 
@@ -559,365 +1565,547 @@ Nexthop for the route.
 
 `type` - (Optional) Identifies the type of next-hop (`String`).
 
-### Custom Static Route Subnets
 
-List of route prefixes.
+
+### Custom Static Route Subnets 
+
+ List of route prefixes.
+
+
 
 ###### One of the arguments from this list "ipv6, ipv4" must be set
 
 `ipv4` - (Optional) IPv4 Subnet Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
+
 `ipv6` - (Optional) IPv6 Subnet Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
 
-### Dc Cluster Group Choice No Dc Cluster Group
 
-This site is not a member of dc cluster group.
 
-### Deployment Assisted
 
-In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script..
+### Dc Cluster Group Choice No Dc Cluster Group 
 
-### Direct Connect Choice Direct Connect Enabled
+ This site is not a member of dc cluster group.
 
-Direct Connect Connection to Site is enabled(Legacy).
+
+
+### Deployment Assisted 
+
+ In assisted deployment get AWS parameters generated in status of this objects and run volterra provided terraform script..
+
+
+
+### Direct Connect Choice Direct Connect Enabled 
+
+ Direct Connect Connection to Site is enabled(Legacy).
+
+
 
 ###### One of the arguments from this list "auto_asn, custom_asn" must be set
 
 `auto_asn` - (Optional) Automatically set ASN (`Bool`).
 
+
 `custom_asn` - (Optional) Custom Autonomous System Number (`Int`).
 
-###### One of the arguments from this list "hosted_vifs, standard_vifs, manual_gw" must be set
+
+
+
+###### One of the arguments from this list "standard_vifs, manual_gw, hosted_vifs" must be set
 
 `hosted_vifs` - (Optional) and automatically associate provided hosted VIF and also setup BGP Peering.. See [Vif Choice Hosted Vifs ](#vif-choice-hosted-vifs) below for details.
 
+
 `manual_gw` - (Optional) and a user associate AWS DirectConnect Gateway with it. (`Bool`).(Deprecated)
+
 
 `standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (`Bool`).
 
-### Direct Connect Choice Private Connectivity
 
-Enable Private Connectivity to Site via CloudLink.
+
+
+### Direct Connect Choice Private Connectivity 
+
+ Enable Private Connectivity to Site via CloudLink.
 
 `cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
+
+
+
 
 ###### One of the arguments from this list "outside, inside" can be set
 
 `inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (`Bool`).
 
+
 `outside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site (`Bool`).
 
-### East West Service Policy Choice Active East West Service Policies
 
-Enable service policy so east-west traffic goes via proxy.
+
+
+### East West Service Policy Choice Active East West Service Policies 
+
+ Enable service policy so east-west traffic goes via proxy.
 
 `service_policies` - (Optional) A list of references to service_policy objects.. See [ref](#ref) below for details.
 
-### East West Service Policy Choice East West Service Policy Allow All
 
-Enable service policy with allow all so east-west traffic goes via proxy for monitoring.
 
-### East West Service Policy Choice No East West Policy
+### East West Service Policy Choice East West Service Policy Allow All 
 
-Disable service policy so that east-west traffic does not go via proxy.
+ Enable service policy with allow all so east-west traffic goes via proxy for monitoring.
 
-### Enable Disable Choice Disable Interception
 
-Disable Interception.
 
-### Enable Disable Choice Enable Interception
+### East West Service Policy Choice No East West Policy 
 
-Enable Interception.
+ Disable service policy so that east-west traffic does not go via proxy.
 
-### Forward Proxy Choice Active Forward Proxy Policies
 
-Enable Forward Proxy for this site and manage policies.
 
-`forward_proxy_policies` - (Required) List of Forward Proxy Policies. See [ref](#ref) below for details.
+### Enable Disable Choice Disable Interception 
 
-### Forward Proxy Choice Disable Forward Proxy
+ Disable Interception.
 
-Forward Proxy is disabled for this connector.
 
-### Forward Proxy Choice Enable Forward Proxy
 
-Forward Proxy is enabled for this connector.
+### Enable Disable Choice Enable Interception 
+
+ Enable Interception.
+
+
+
+### Forward Proxy Choice Active Forward Proxy Policies 
+
+ Enable Forward Proxy for this site and manage policies.
+
+`forward_proxy_policies` - (Required) Ordered List of Forward Proxy Policies active. See [ref](#ref) below for details.
+
+
+
+### Forward Proxy Choice Disable Forward Proxy 
+
+ Forward Proxy is disabled for this connector.
+
+
+
+### Forward Proxy Choice Enable Forward Proxy 
+
+ Forward Proxy is enabled for this connector.
 
 `connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
 
 `max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
 
+
+
+
 ###### One of the arguments from this list "no_interception, tls_intercept" can be set
 
 `no_interception` - (Optional) No TLS interception is enabled for this network connector (`Bool`).(Deprecated)
 
+
 `tls_intercept` - (Optional) Specify TLS interception configuration for the network connector. See [Tls Interception Choice Tls Intercept ](#tls-interception-choice-tls-intercept) below for details.(Deprecated)
+
 
 `white_listed_ports` - (Optional) Example "tmate" server port (`Int`).
 
 `white_listed_prefixes` - (Optional) Example "tmate" server ip (`String`).
 
-### Forward Proxy Choice Forward Proxy Allow All
 
-Enable Forward Proxy for this site and allow all requests..
 
-### Forward Proxy Choice No Forward Proxy
+### Forward Proxy Choice Forward Proxy Allow All 
 
-Disable Forward Proxy for this site.
+ Enable Forward Proxy for this site and allow all requests..
 
-### Global Network Choice Global Network List
 
-List of global network connections.
+
+### Forward Proxy Choice No Forward Proxy 
+
+ Disable Forward Proxy for this site.
+
+
+
+### Global Network Choice Global Network List 
+
+ List of global network connections.
 
 `global_network_connections` - (Required) Global network connections. See [Global Network List Global Network Connections ](#global-network-list-global-network-connections) below for details.
 
-### Global Network Choice No Global Network
 
-No global network to connect.
 
-### Global Network List Global Network Connections
+### Global Network Choice No Global Network 
 
-Global network connections.
+ No global network to connect.
+
+
+
+### Global Network List Global Network Connections 
+
+ Global network connections.
+
+
 
 ###### One of the arguments from this list "sli_to_global_dr, slo_to_global_dr" must be set
 
 `sli_to_global_dr` - (Optional) Site local inside is connected directly to a given global network. See [Connection Choice Sli To Global Dr ](#connection-choice-sli-to-global-dr) below for details.
 
+
 `slo_to_global_dr` - (Optional) Site local outside is connected directly to a given global network. See [Connection Choice Slo To Global Dr ](#connection-choice-slo-to-global-dr) below for details.
+
+
+
+
 
 ###### One of the arguments from this list "disable_forward_proxy, enable_forward_proxy" can be set
 
 `disable_forward_proxy` - (Optional) Forward Proxy is disabled for this connector (`Bool`).(Deprecated)
 
+
 `enable_forward_proxy` - (Optional) Forward Proxy is enabled for this connector. See [Forward Proxy Choice Enable Forward Proxy ](#forward-proxy-choice-enable-forward-proxy) below for details.(Deprecated)
 
-### Hosted Vifs Vif List
 
-List of Hosted VIF Config.
+
+
+### Hosted Vifs Vif List 
+
+ List of Hosted VIF Config.
 
 `vif_id` - (Required) AWS Direct Connect VIF ID that needs to be connected to the site (`String`).
+
+
 
 ###### One of the arguments from this list "same_as_site_region, other_region" must be set
 
 `other_region` - (Optional) Other Region (`String`).
 
+
 `same_as_site_region` - (Optional) Use same region as that of the Site (`Bool`).
 
-### Inside Static Route Choice Inside Static Routes
 
-Manage static routes for inside network..
+
+
+### Inside Static Route Choice Inside Static Routes 
+
+ Manage static routes for inside network..
 
 `static_route_list` - (Required) List of Static routes. See [Inside Static Routes Static Route List ](#inside-static-routes-static-route-list) below for details.
 
-### Inside Static Route Choice No Inside Static Routes
 
-Static Routes disabled for inside network..
 
-### Inside Static Routes Static Route List
+### Inside Static Route Choice No Inside Static Routes 
 
-List of Static routes.
+ Static Routes disabled for inside network..
+
+
+
+### Inside Static Routes Static Route List 
+
+ List of Static routes.
+
+
 
 ###### One of the arguments from this list "simple_static_route, custom_static_route" must be set
 
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Config Mode Choice Custom Static Route ](#config-mode-choice-custom-static-route) below for details.
 
+
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
 
-### Interception Policy Choice Enable For All Domains
 
-Enable interception for all domains.
 
-### Interception Policy Choice Policy
 
-Policy to enable/disable specific domains, with implicit enable all domains.
+### Interception Policy Choice Enable For All Domains 
+
+ Enable interception for all domains.
+
+
+
+### Interception Policy Choice Policy 
+
+ Policy to enable/disable specific domains, with implicit enable all domains.
 
 `interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Policy Interception Rules ](#policy-interception-rules) below for details.
 
-### Interception Rules Domain Match
 
-Domain value or regular expression to match.
 
-###### One of the arguments from this list "suffix_value, regex_value, exact_value" must be set
+### Interception Rules Domain Match 
+
+ Domain value or regular expression to match.
+
+
+
+###### One of the arguments from this list "exact_value, suffix_value, regex_value" must be set
 
 `exact_value` - (Optional) Exact domain name. (`String`).
 
+
 `regex_value` - (Optional) Regular Expression value for the domain name (`String`).
+
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
-### Internet Vip Choice Disable Internet Vip
 
-VIPs cannot be advertised to the internet directly on this Site.
 
-### Internet Vip Choice Enable Internet Vip
 
-VIPs can be advertised to the internet directly on this Site.
+### Internet Vip Choice Disable Internet Vip 
 
-### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain
+ VIPs cannot be advertised to the internet directly on this Site.
 
-Disable Node by Node Upgrade during Software or OS version upgrade.
 
-### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain
 
-Enable Node by Node Upgrade during Software or OS version upgrade.
+### Internet Vip Choice Enable Internet Vip 
+
+ VIPs can be advertised to the internet directly on this Site.
+
+
+
+### Kubernetes Upgrade Drain Enable Choice Disable Upgrade Drain 
+
+ x-displayName: "Disable Node by Node Upgrade".
+
+
+
+### Kubernetes Upgrade Drain Enable Choice Enable Upgrade Drain 
+
+ x-displayName: "Enable Node by Node Upgrade".
+
+
 
 ###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 
-`drain_max_unavailable_node_count` - (Optional) Max unavailable worker node count during Software or OS version upgrade (`Int`).
+`drain_max_unavailable_node_count` - (Optional) x-example: "1" (`Int`).
 
-`drain_max_unavailable_node_percentage` - (Optional) Max unavailable worker node in percentage during Software or OS version upgrade, with minimum unavailable 1 node (`Int`).(Deprecated)
 
-`drain_node_timeout` - (Required) Second to wait before skipping a pod eviction, equivalent to `skip-wait-for-delete-timeout` option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict). (`Int`).
+`drain_max_unavailable_node_percentage` - (Optional) Max number of worker nodes to be upgraded in parallel by percentage. Note: 1% would mean batch size of 1 worker node. (`Int`).(Deprecated)
+
+
+`drain_node_timeout` - (Required) (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value). (`Int`).
+
+
 
 ###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
 
 `disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
 
+
 `enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
-### Name Choice Autogenerate
 
-Autogenerate the VPC Name.
 
-### Network Options Inside
 
-CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
+### Name Choice Autogenerate 
 
-### Network Options Outside
+ Autogenerate the VPC Name.
 
-CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
 
-### Network Policy Choice Active Enhanced Firewall Policies
 
-with an additional option for service insertion..
+### Network Options Inside 
 
-`enhanced_firewall_policies` - (Required) Ordered List of Enhaned Firewall Policy active for this network firewall. See [ref](#ref) below for details.
+ CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
 
-### Network Policy Choice Active Network Policies
 
-Firewall Policies active for this site..
+
+### Network Options Outside 
+
+ CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
+
+
+
+### Network Policy Choice Active Enhanced Firewall Policies 
+
+ with an additional option for service insertion..
+
+`enhanced_firewall_policies` - (Required) Ordered List of Enhanced Firewall Policies active. See [ref](#ref) below for details.
+
+
+
+### Network Policy Choice Active Network Policies 
+
+ Firewall Policies active for this site..
 
 `network_policies` - (Required) Ordered List of Firewall Policies active for this network firewall. See [ref](#ref) below for details.
 
-### Network Policy Choice No Network Policy
 
-Firewall Policy is disabled for this site..
 
-### Nexthop Nexthop Address
+### Network Policy Choice No Network Policy 
 
-Nexthop address when type is "Use-Configured".
+ Firewall Policy is disabled for this site..
+
+
+
+### Nexthop Nexthop Address 
+
+ Nexthop address when type is "Use-Configured".
+
+
+
 
 ###### One of the arguments from this list "ipv4, ipv6" can be set
 
 `ipv4` - (Optional) IPv4 Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
+
 `ipv6` - (Optional) IPv6 Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
 
-### Ocsp Stapling Choice Custom Hash Algorithms
 
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
+
+
+### Ocsp Stapling Choice Custom Hash Algorithms 
+
+ Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
 
 `hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
 
-### Ocsp Stapling Choice Disable Ocsp Stapling
 
-This is the default behavior if no choice is selected..
 
-### Ocsp Stapling Choice Use System Defaults
+### Ocsp Stapling Choice Disable Ocsp Stapling 
 
-F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
+ This is the default behavior if no choice is selected..
 
-### Offline Survivability Mode Choice Enable Offline Survivability Mode
 
-When this feature is enabled on an existing site, the pods/services on this site will be restarted..
 
-### Offline Survivability Mode Choice No Offline Survivability Mode
+### Ocsp Stapling Choice Use System Defaults 
 
-When this feature is disabled on an existing site, the pods/services on this site will be restarted..
+ F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
-### Operating System Version Choice Default Os Version
 
-Will assign latest available OS version.
 
-### Outside Static Route Choice No Outside Static Routes
+### Offline Survivability Mode Choice Enable Offline Survivability Mode 
 
-Static Routes disabled for outside network..
+ x-displayName: "Enabled".
 
-### Outside Static Route Choice Outside Static Routes
 
-Manage static routes for outside network..
+
+### Offline Survivability Mode Choice No Offline Survivability Mode 
+
+ x-displayName: "Disabled".
+
+
+
+### Operating System Version Choice Default Os Version 
+
+ Will assign latest available OS version.
+
+
+
+### Outside Static Route Choice No Outside Static Routes 
+
+ Static Routes disabled for outside network..
+
+
+
+### Outside Static Route Choice Outside Static Routes 
+
+ Manage static routes for outside network..
 
 `static_route_list` - (Required) List of Static routes. See [Outside Static Routes Static Route List ](#outside-static-routes-static-route-list) below for details.
 
-### Outside Static Routes Static Route List
 
-List of Static routes.
+
+### Outside Static Routes Static Route List 
+
+ List of Static routes.
+
+
 
 ###### One of the arguments from this list "simple_static_route, custom_static_route" must be set
 
 `custom_static_route` - (Optional) Use Custom static route to configure all advanced options. See [Config Mode Choice Custom Static Route ](#config-mode-choice-custom-static-route) below for details.
 
+
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
 
-### Perf Mode Choice Jumbo
 
-L3 performance mode enhancement to use jumbo frame.
 
-### Perf Mode Choice No Jumbo
 
-L3 performance mode enhancement without jumbo frame.
+### Perf Mode Choice Jumbo 
 
-### Perf Mode Choice Perf Mode L3 Enhanced
+ x-displayName: "Enabled".
 
-When the mode is toggled to l3 enhanced, traffic disruption will be seen.
+
+
+### Perf Mode Choice No Jumbo 
+
+ x-displayName: "Disabled".
+
+
+
+### Perf Mode Choice Perf Mode L3 Enhanced 
+
+ Site optimized for L3 traffic processing.
+
+
 
 ###### One of the arguments from this list "no_jumbo, jumbo" must be set
 
-`jumbo` - (Optional) L3 performance mode enhancement to use jumbo frame (`Bool`).
+`jumbo` - (Optional) x-displayName: "Enabled" (`Bool`).
 
-`no_jumbo` - (Optional) L3 performance mode enhancement without jumbo frame (`Bool`).
 
-### Perf Mode Choice Perf Mode L7 Enhanced
+`no_jumbo` - (Optional) x-displayName: "Disabled" (`Bool`).
 
-When the mode is toggled to l7 enhanced, traffic disruption will be seen.
 
-### Policy Interception Rules
 
-List of ordered rules to enable or disable for TLS interception.
+
+### Perf Mode Choice Perf Mode L7 Enhanced 
+
+ Site optimized for L7 traffic processing.
+
+
+
+### Policy Interception Rules 
+
+ List of ordered rules to enable or disable for TLS interception.
 
 `domain_match` - (Required) Domain value or regular expression to match. See [Interception Rules Domain Match ](#interception-rules-domain-match) below for details.
+
+
 
 ###### One of the arguments from this list "enable_interception, disable_interception" must be set
 
 `disable_interception` - (Optional) Disable Interception (`Bool`).
 
+
 `enable_interception` - (Optional) Enable Interception (`Bool`).
 
-### Port Choice Custom Ports
 
-Custom list of ports to be allowed.
+
+
+### Port Choice Custom Ports 
+
+ Custom list of ports to be allowed.
 
 `port_ranges` - (Required) Port Ranges (`String`).
 
-### Port Choice Disable Allowed Vip Port
 
-HTTP Port (80) & HTTPS Port (443) will be disabled..
 
-### Port Choice Use Http Https Port
+### Port Choice Disable Allowed Vip Port 
 
-HTTP Port (80) & HTTPS Port (443) will be allowed..
+ HTTP Port (80) & HTTPS Port (443) will be disabled..
 
-### Port Choice Use Http Port
 
-Only HTTP Port (80) will be allowed..
 
-### Port Choice Use Https Port
+### Port Choice Use Http Https Port 
 
-Only HTTPS Port (443) will be allowed..
+ HTTP Port (80) & HTTPS Port (443) will be allowed..
 
-### Private Key Blindfold Secret Info Internal
 
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+### Port Choice Use Http Port 
+
+ Only HTTP Port (80) will be allowed..
+
+
+
+### Port Choice Use Https Port 
+
+ Only HTTPS Port (443) will be allowed..
+
+
+
+### Private Key Blindfold Secret Info Internal 
+
+ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -925,7 +2113,10 @@ Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Ref
+
+
+### Ref 
+
 
 Reference to another volterra object is shown like below
 
@@ -935,9 +2126,11 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
-### Secret Info Oneof Blindfold Secret Info
 
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
+
+### Secret Info Oneof Blindfold Secret Info 
+
+ Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
 
 `decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
 
@@ -945,17 +2138,21 @@ Blindfold Secret is used for the secrets managed by F5XC Secret Management Servi
 
 `store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
-### Secret Info Oneof Clear Secret Info
 
-Clear Secret is used for the secrets that are not encrypted.
+
+### Secret Info Oneof Clear Secret Info 
+
+ Clear Secret is used for the secrets that are not encrypted.
 
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Secret Info Oneof Vault Secret Info
 
-Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+### Secret Info Oneof Vault Secret Info 
+
+ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `key` - (Optional) If not provided entire secret will be returned. (`String`).
 
@@ -967,71 +2164,99 @@ Vault Secret is used for the secrets managed by Hashicorp Vault.
 
 `version` - (Optional) If not provided latest version will be returned. (`Int`).
 
-### Secret Info Oneof Wingman Secret Info
 
-Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+### Secret Info Oneof Wingman Secret Info 
+
+ Secret is given as bootstrap secret in F5XC Security Sidecar.
 
 `name` - (Required) Name of the secret. (`String`).
 
-### Security Group Choice Custom Security Group
 
-With this option, ingress and egress traffic will be controlled via security group ids..
+
+### Security Group Choice Custom Security Group 
+
+ With this option, ingress and egress traffic will be controlled via security group ids..
 
 `inside_security_group_id` - (Optional) Security Group ID to be attached to SLI(Site Local Inside) Interface (`String`).
 
 `outside_security_group_id` - (Optional) Security Group ID to be attached to SLO(Site Local Outside) Interface (`String`).
 
-### Security Group Choice F5xc Security Group
 
-With this option, ingress and egress traffic will be controlled via f5xc created security group..
 
-### Service Vpc Choice New Vpc
+### Security Group Choice F5xc Security Group 
 
-Details needed to create new VPC.
+ With this option, ingress and egress traffic will be controlled via f5xc created security group..
+
+
+
+### Service Vpc Choice New Vpc 
+
+ Details needed to create new VPC.
 
 `allocate_ipv6` - (Optional) Allocate IPv6 CIDR block from AWS (`Bool`).(Deprecated)
+
+
 
 ###### One of the arguments from this list "name_tag, autogenerate" must be set
 
 `autogenerate` - (Optional) Autogenerate the VPC Name (`Bool`).
 
+
 `name_tag` - (Optional) Specify the VPC Name (`String`).
+
 
 `primary_ipv4` - (Required) The Primary IPv4 block cannot be modified. All subnets prefixes in this VPC must be part of this CIDR block. (`String`).
 
-### Signing Cert Choice Custom Certificate
 
-Certificates for generating intermediate certificate for TLS interception..
+
+### Signing Cert Choice Custom Certificate 
+
+ Certificates for generating intermediate certificate for TLS interception..
 
 `certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
 
 `description` - (Optional) Description for the certificate (`String`).
 
-###### One of the arguments from this list "use_system_defaults, disable_ocsp_stapling, custom_hash_algorithms" can be set
+
+
+
+###### One of the arguments from this list "custom_hash_algorithms, use_system_defaults, disable_ocsp_stapling" can be set
 
 `custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
 
+
 `disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
+
 
 `use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
 
+
 `private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Custom Certificate Private Key ](#custom-certificate-private-key) below for details.
 
-### Signing Cert Choice Volterra Certificate
 
-F5XC certificates for generating intermediate certificate for TLS interception..
 
-### Site Mesh Group Choice Sm Connection Public Ip
+### Signing Cert Choice Volterra Certificate 
 
-creating ipsec between two sites which are part of the site mesh group.
+ F5XC certificates for generating intermediate certificate for TLS interception..
 
-### Site Mesh Group Choice Sm Connection Pvt Ip
 
-creating ipsec between two sites which are part of the site mesh group.
 
-### Tgw Choice Existing Tgw
+### Site Mesh Group Choice Sm Connection Public Ip 
 
-Information about existing TGW.
+ creating ipsec between two sites which are part of the site mesh group.
+
+
+
+### Site Mesh Group Choice Sm Connection Pvt Ip 
+
+ creating ipsec between two sites which are part of the site mesh group.
+
+
+
+### Tgw Choice Existing Tgw 
+
+ Information about existing TGW.
 
 `tgw_asn` - (Optional) TGW ASN. (`Int`).
 
@@ -1039,157 +2264,234 @@ Information about existing TGW.
 
 `volterra_site_asn` - (Optional) F5XC Site ASN. (`Int`).
 
-### Tgw Choice New Tgw
 
-Details needed to create new TGW.
+
+### Tgw Choice New Tgw 
+
+ Details needed to create new TGW.
+
+
 
 ###### One of the arguments from this list "system_generated, user_assigned" must be set
 
 `system_generated` - (Optional) F5XC will automatically assign a private ASN for TGW and F5XC Site (`Bool`).
 
+
 `user_assigned` - (Optional) User is managing the ASN for TGW and F5XC Site.. See [Asn Choice User Assigned ](#asn-choice-user-assigned) below for details.
 
-### Tls Interception Choice No Interception
 
-No TLS interception is enabled for this network connector.
 
-### Tls Interception Choice Tls Intercept
 
-Specify TLS interception configuration for the network connector.
+### Tls Interception Choice No Interception 
+
+ No TLS interception is enabled for this network connector.
+
+
+
+### Tls Interception Choice Tls Intercept 
+
+ Specify TLS interception configuration for the network connector.
+
+
 
 ###### One of the arguments from this list "enable_for_all_domains, policy" must be set
 
 `enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
 
+
 `policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Interception Policy Choice Policy ](#interception-policy-choice-policy) below for details.
+
+
+
 
 ###### One of the arguments from this list "custom_certificate, volterra_certificate" must be set
 
 `custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Signing Cert Choice Custom Certificate ](#signing-cert-choice-custom-certificate) below for details.
 
+
 `volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (`Bool`).
+
+
+
 
 ###### One of the arguments from this list "trusted_ca_url, volterra_trusted_ca" must be set
 
 `trusted_ca_url` - (Optional) Custom Root CA Certificate for validating upstream server certificate (`String`).
 
+
 `volterra_trusted_ca` - (Optional) F5XC Root CA Certificate for validating upstream server certificate (`Bool`).
 
-### Trusted Ca Choice Volterra Trusted Ca
 
-F5XC Root CA Certificate for validating upstream server certificate.
 
-### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
 
-Disable Vega Upgrade Mode.
+### Trusted Ca Choice Volterra Trusted Ca 
 
-### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+ F5XC Root CA Certificate for validating upstream server certificate.
 
-When enabled, vega will inform RE to stop traffic to the specific node..
 
-### Ver Ipv4
 
-IPv4 Address.
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode 
+
+ Disable Vega Upgrade Mode.
+
+
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode 
+
+ When enabled, vega will inform RE to stop traffic to the specific node..
+
+
+
+### Ver Ipv4 
+
+ IPv4 Address.
 
 `addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
 
-### Ver Ipv4
 
-IPv4 Subnet Address.
+
+### Ver Ipv4 
+
+ IPv4 Subnet Address.
 
 `plen` - (Optional) Prefix-length of the IPv4 subnet. Must be <= 32 (`Int`).
 
 `prefix` - (Optional) Prefix part of the IPv4 subnet in string form with dot-decimal notation (`String`).
 
-### Ver Ipv6
 
-IPv6 Address.
+
+### Ver Ipv6 
+
+ IPv6 Address.
 
 `addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
-### Ver Ipv6
 
-IPv6 Subnet Address.
+
+### Ver Ipv6 
+
+ IPv6 Subnet Address.
 
 `plen` - (Optional) Prefix length of the IPv6 subnet. Must be <= 128 (`Int`).
 
 `prefix` - (Optional) e.g. "2001:db8::2::" (`String`).
 
-### Vif Choice Hosted Vifs
 
-and automatically associate provided hosted VIF and also setup BGP Peering..
+
+### Vif Choice Hosted Vifs 
+
+ and automatically associate provided hosted VIF and also setup BGP Peering..
+
+
+
 
 ###### One of the arguments from this list "site_registration_over_internet, site_registration_over_direct_connect" can be set
 
 `site_registration_over_direct_connect` - (Optional) Site Registration and Site to RE tunnels go over the AWS Direct Connect Connection. See [Connectivity Options Site Registration Over Direct Connect ](#connectivity-options-site-registration-over-direct-connect) below for details.
 
+
 `site_registration_over_internet` - (Optional) Site Registration and Site to RE tunnels go over the internet gateway (`Bool`).
+
 
 `vif_list` - (Optional) List of Hosted VIF Config. See [Hosted Vifs Vif List ](#hosted-vifs-vif-list) below for details.
 
 `vifs` - (Optional) VIFs (`String`).(Deprecated)
 
-### Vif Choice Manual Gw
 
-and a user associate AWS DirectConnect Gateway with it..
 
-### Vif Choice Standard Vifs
+### Vif Choice Manual Gw 
 
-and a user associate VIF to the DirectConnect gateway and setup BGP Peering..
+ and a user associate AWS DirectConnect Gateway with it..
 
-### Vif Region Choice Same As Site Region
 
-Use same region as that of the Site.
 
-### Vn Config Allowed Vip Port
+### Vif Choice Standard Vifs 
 
-Allowed VIP Port Configuration.
+ and a user associate VIF to the DirectConnect gateway and setup BGP Peering..
 
-###### One of the arguments from this list "use_https_port, use_http_https_port, custom_ports, disable_allowed_vip_port, use_http_port" can be set
 
-`custom_ports` - (Optional) Custom list of ports to be allowed. See [Port Choice Custom Ports ](#port-choice-custom-ports) below for details.
 
-`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (`Bool`).
+### Vif Region Choice Same As Site Region 
 
-`use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (`Bool`).
+ Use same region as that of the Site.
 
-`use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (`Bool`).
 
-`use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (`Bool`).
 
-### Vn Config Allowed Vip Port Sli
+### Vn Config Allowed Vip Port 
 
-Allowed VIP Port Configuration for Inside Network.
+ Allowed VIP Port Configuration.
 
-###### One of the arguments from this list "use_http_https_port, custom_ports, disable_allowed_vip_port, use_http_port, use_https_port" can be set
+
+
+
+###### One of the arguments from this list "disable_allowed_vip_port, use_http_port, use_https_port, use_http_https_port, custom_ports" can be set
 
 `custom_ports` - (Optional) Custom list of ports to be allowed. See [Port Choice Custom Ports ](#port-choice-custom-ports) below for details.
 
+
 `disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (`Bool`).
+
 
 `use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (`Bool`).
 
+
 `use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (`Bool`).
+
 
 `use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (`Bool`).
 
-### Volterra Sw Version Choice Default Sw Version
 
-Will assign latest available SW version.
 
-### Vpc Attachments Vpc List
 
-List of VPC attachments to transit gateway.
+### Vn Config Allowed Vip Port Sli 
+
+ Allowed VIP Port Configuration for Inside Network.
+
+
+
+
+###### One of the arguments from this list "custom_ports, disable_allowed_vip_port, use_http_port, use_https_port, use_http_https_port" can be set
+
+`custom_ports` - (Optional) Custom list of ports to be allowed. See [Port Choice Custom Ports ](#port-choice-custom-ports) below for details.
+
+
+`disable_allowed_vip_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be disabled. (`Bool`).
+
+
+`use_http_https_port` - (Optional) HTTP Port (80) & HTTPS Port (443) will be allowed. (`Bool`).
+
+
+`use_http_port` - (Optional) Only HTTP Port (80) will be allowed. (`Bool`).
+
+
+`use_https_port` - (Optional) Only HTTPS Port (443) will be allowed. (`Bool`).
+
+
+
+
+### Volterra Sw Version Choice Default Sw Version 
+
+ Will assign latest available F5XC Software Version.
+
+
+
+### Vpc Attachments Vpc List 
+
+ List of VPC attachments to transit gateway.
 
 `labels` - (Optional) Add labels for the VPC attachment. These labels can then be used in policies such as enhanced firewall. (`String`).
 
 `vpc_id` - (Optional) Information about existing VPC (`String`).
 
-### Worker Nodes No Worker Nodes
 
-Worker nodes is set to zero.
 
-Attribute Reference
--------------------
+### Worker Nodes No Worker Nodes 
 
--	`id` - This is the id of the configured aws_tgw_site.
+ Worker nodes is set to zero.
+
+
+
+## Attribute Reference
+
+* `id` - This is the id of the configured aws_tgw_site.
+

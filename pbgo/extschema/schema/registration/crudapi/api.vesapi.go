@@ -1603,7 +1603,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Get"
             },
@@ -1678,7 +1678,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Delete"
             },
@@ -1761,7 +1761,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Replace"
             },
@@ -1908,7 +1908,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.List"
             },
@@ -1985,7 +1985,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Create"
             },
@@ -2132,7 +2132,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.ListStream"
             },
@@ -2239,7 +2239,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Get"
             },
@@ -2386,7 +2386,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.List"
             },
@@ -2468,7 +2468,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Delete"
             },
@@ -2551,7 +2551,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Replace"
             },
@@ -2635,7 +2635,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.crudapi.API.Create"
             },
@@ -3423,7 +3423,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
-            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl",
+            "description": "Tunnel encapsulation to be used between sites\n\nTunnel can operate in both IPsec and SSL, with IPsec being prefered over SSL.\nTunnel is of type IPsec\nTunnel is of type SSL",
             "title": "Site to site tunnel type",
             "enum": [
                 "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
@@ -4207,6 +4207,17 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/siteNetworkDevice"
                     },
                     "x-displayname": "Network"
+                },
+                "numa_nodes": {
+                    "type": "integer",
+                    "description": " Non-uniform memory access (NUMA) nodes count\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n",
+                    "title": "NUMA Nodes Count",
+                    "format": "int32",
+                    "x-displayname": "NUMA nodes count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0"
+                    }
                 },
                 "os": {
                     "description": " os holds all general OS information",

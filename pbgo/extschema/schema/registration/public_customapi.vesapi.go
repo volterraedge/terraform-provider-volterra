@@ -53,6 +53,15 @@ func (c *CustomAPIGrpcClient) doRPCGet(ctx context.Context, yamlReq string, opts
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetImageDownloadUrl(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetImageDownloadUrlReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.registration.GetImageDownloadUrlReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetImageDownloadUrl(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -107,6 +116,15 @@ func (c *CustomAPIGrpcClient) doRPCRegistrationCreate(ctx context.Context, yamlR
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SuggestValuesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.registration.SuggestValuesReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.SuggestValues(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -141,6 +159,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["Get"] = ccl.doRPCGet
 
+	rpcFns["GetImageDownloadUrl"] = ccl.doRPCGetImageDownloadUrl
+
 	rpcFns["List"] = ccl.doRPCList
 
 	rpcFns["ListRegistrationsBySite"] = ccl.doRPCListRegistrationsBySite
@@ -152,6 +172,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["RegistrationConfig"] = ccl.doRPCRegistrationConfig
 
 	rpcFns["RegistrationCreate"] = ccl.doRPCRegistrationCreate
+
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
 	ccl.rpcFns = rpcFns
 
@@ -327,6 +349,89 @@ func (c *CustomAPIRestClient) doRPCGet(ctx context.Context, callOpts *server.Cus
 	pbRsp := &GetResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.GetResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetImageDownloadUrl(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetImageDownloadUrlReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.registration.GetImageDownloadUrlReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("provider", fmt.Sprintf("%v", req.Provider))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetImageDownloadUrlResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.GetImageDownloadUrlResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -639,6 +744,7 @@ func (c *CustomAPIRestClient) doRPCRegistrationApprove(ctx context.Context, call
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("passport", fmt.Sprintf("%v", req.Passport))
+		q.Add("preferred_active_re", fmt.Sprintf("%v", req.PreferredActiveRe))
 		q.Add("state", fmt.Sprintf("%v", req.State))
 		q.Add("tunnel_type", fmt.Sprintf("%v", req.TunnelType))
 
@@ -853,6 +959,92 @@ func (c *CustomAPIRestClient) doRPCRegistrationCreate(ctx context.Context, callO
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SuggestValuesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.registration.SuggestValuesReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("field_path", fmt.Sprintf("%v", req.FieldPath))
+		q.Add("match_value", fmt.Sprintf("%v", req.MatchValue))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("request_body", fmt.Sprintf("%v", req.RequestBody))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SuggestValuesResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.SuggestValuesResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -881,6 +1073,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["Get"] = ccl.doRPCGet
 
+	rpcFns["GetImageDownloadUrl"] = ccl.doRPCGetImageDownloadUrl
+
 	rpcFns["List"] = ccl.doRPCList
 
 	rpcFns["ListRegistrationsBySite"] = ccl.doRPCListRegistrationsBySite
@@ -892,6 +1086,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["RegistrationConfig"] = ccl.doRPCRegistrationConfig
 
 	rpcFns["RegistrationCreate"] = ccl.doRPCRegistrationCreate
+
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
 	ccl.rpcFns = rpcFns
 
@@ -912,6 +1108,10 @@ func (c *customAPIInprocClient) Delete(ctx context.Context, in *DeleteRequest, o
 func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.Get")
 	return c.CustomAPIServer.Get(ctx, in)
+}
+func (c *customAPIInprocClient) GetImageDownloadUrl(ctx context.Context, in *GetImageDownloadUrlReq, opts ...grpc.CallOption) (*GetImageDownloadUrlResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.GetImageDownloadUrl")
+	return c.CustomAPIServer.GetImageDownloadUrl(ctx, in)
 }
 func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.List")
@@ -936,6 +1136,10 @@ func (c *customAPIInprocClient) RegistrationConfig(ctx context.Context, in *Conf
 func (c *customAPIInprocClient) RegistrationCreate(ctx context.Context, in *RegistrationCreateRequest, opts ...grpc.CallOption) (*Object, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.RegistrationCreate")
 	return c.CustomAPIServer.RegistrationCreate(ctx, in)
+}
+func (c *customAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.SuggestValues")
+	return c.CustomAPIServer.SuggestValues(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -1054,6 +1258,55 @@ func (s *customAPISrv) Get(ctx context.Context, in *GetRequest) (*GetResponse, e
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.GetResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetImageDownloadUrl(ctx context.Context, in *GetImageDownloadUrlReq) (*GetImageDownloadUrlResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.registration.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetImageDownloadUrlResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.registration.GetImageDownloadUrlReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetImageDownloadUrl' operation on 'registration'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.GetImageDownloadUrl"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetImageDownloadUrl(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.GetImageDownloadUrlResp", rsp)...)
 
 	return rsp, nil
 }
@@ -1351,6 +1604,55 @@ func (s *customAPISrv) RegistrationCreate(ctx context.Context, in *RegistrationC
 
 	return rsp, nil
 }
+func (s *customAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) (*SuggestValuesResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.registration.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *SuggestValuesResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.registration.SuggestValuesReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.SuggestValues' operation on 'registration'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.SuggestValues"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SuggestValues(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.SuggestValuesResp", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 	return &customAPISrv{svc: svc}
@@ -1375,6 +1677,174 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/get-image-download-url": {
+            "post": {
+                "summary": "Get Image Download Url",
+                "description": "Returns image download url for each provider",
+                "operationId": "ves.io.schema.registration.CustomAPI.GetImageDownloadUrl",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/registrationGetImageDownloadUrlResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registrationGetImageDownloadUrlReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-getimagedownloadurl"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.GetImageDownloadUrl"
+            },
+            "x-displayname": "Registration",
+            "x-ves-proto-service": "ves.io.schema.registration.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/suggest-values": {
+            "post": {
+                "summary": "Suggest Values",
+                "description": "Returns suggested values for the specified field in the given Create/Replace/Custom request",
+                "operationId": "ves.io.schema.registration.CustomAPI.SuggestValues",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/schemaregistrationSuggestValuesResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registrationSuggestValuesReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-suggestvalues"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.SuggestValues"
+            },
+            "x-displayname": "Registration",
+            "x-ves-proto-service": "ves.io.schema.registration.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/listregistrationsbystate": {
             "post": {
                 "summary": "List Registrations By State",
@@ -1459,7 +1929,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-listregistrationsbystate"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-listregistrationsbystate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.ListRegistrationsByState"
             },
@@ -1559,7 +2029,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-registrationapprove"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-registrationapprove"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationApprove"
             },
@@ -1675,7 +2145,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.List"
             },
@@ -1784,7 +2254,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.Get"
             },
@@ -1878,7 +2348,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.Delete"
             },
@@ -1970,7 +2440,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-listregistrationsbysite"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-listregistrationsbysite"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.ListRegistrationsBySite"
             },
@@ -2054,7 +2524,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-registrationcreate"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-registrationcreate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationCreate"
             },
@@ -2138,7 +2608,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-customapi-registrationconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-registrationconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.RegistrationConfig"
             },
@@ -2290,6 +2760,13 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/registrationPassport",
                     "x-displayname": "Passport"
                 },
+                "preferred_active_re": {
+                    "type": "string",
+                    "description": " Optional.\n Preferred Active RE connection for CE(s) using private VN\n\nExample: - \"value\"-",
+                    "title": "Preferred Active RE",
+                    "x-displayname": "Preferred Active RE",
+                    "x-ves-example": "value"
+                },
                 "tunnel_type": {
                     "description": " Tunnel type specifies the type of tunnel to be used for traffic between the sites.",
                     "title": "Site to site tunnel type",
@@ -2379,6 +2856,47 @@ var CustomAPISwaggerJSON string = `{
                     "title": "spec",
                     "$ref": "#/definitions/schemaregistrationCreateSpecType",
                     "x-displayname": "Spec"
+                }
+            }
+        },
+        "registrationGetImageDownloadUrlReq": {
+            "type": "object",
+            "description": "Request to get image download url",
+            "title": "Get Image Download Url request",
+            "x-displayname": "Get Image Download Url Request",
+            "x-ves-proto-message": "ves.io.schema.registration.GetImageDownloadUrlReq",
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "description": " provider for that image\n\nExample: - \"kvm\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Provider",
+                    "x-displayname": "Provider",
+                    "x-ves-example": "kvm",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "registrationGetImageDownloadUrlResp": {
+            "type": "object",
+            "description": "Response to get image download url",
+            "title": "Get Image Download Url response",
+            "x-displayname": "Get Image Download Url Response",
+            "x-ves-proto-message": "ves.io.schema.registration.GetImageDownloadUrlResp",
+            "properties": {
+                "image_download_url": {
+                    "type": "string",
+                    "description": " URL of image download",
+                    "title": "Image Download Url",
+                    "x-displayname": "Image Download Url"
+                },
+                "image_md5_download_url": {
+                    "type": "string",
+                    "description": " URL of image md5 download",
+                    "title": "Image Md5 Download Url",
+                    "x-displayname": "Image Md5 Download Url"
                 }
             }
         },
@@ -3046,6 +3564,50 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "registrationSuggestValuesReq": {
+            "type": "object",
+            "description": "Request body of SuggestValues request",
+            "title": "SuggestValuesReq",
+            "x-displayname": "Request for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.registration.SuggestValuesReq",
+            "properties": {
+                "field_path": {
+                    "type": "string",
+                    "description": " JSON path of the field for which the suggested values are being requested.\n\nExample: - \"spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "field_path",
+                    "maxLength": 1024,
+                    "x-displayname": "Field Path",
+                    "x-ves-example": "spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
+                "match_value": {
+                    "type": "string",
+                    "description": " A substring that must be present in either the value or description of each SuggestedItem in the response.\n\nExample: - \"some-substring\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "match_value",
+                    "maxLength": 256,
+                    "x-displayname": "Match Value",
+                    "x-ves-example": "some-substring",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the suggestions are scoped.\n\nExample: - \"foobar\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "foobar"
+                },
+                "request_body": {
+                    "description": " Body of the Create/Replace/Custom request in whose context the suggested values for the field are being requested.",
+                    "title": "request_body",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Request Body"
+                }
+            }
+        },
         "registrationWorkloadContext": {
             "type": "object",
             "description": "x-displayName: \"Workload Context\"\nWorkloadContext defines context for workload templates and infrastructure configuration\nused in vpm",
@@ -3417,7 +3979,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
-            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl",
+            "description": "Tunnel encapsulation to be used between sites\n\nTunnel can operate in both IPsec and SSL, with IPsec being prefered over SSL.\nTunnel is of type IPsec\nTunnel is of type SSL",
             "title": "Site to site tunnel type",
             "enum": [
                 "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
@@ -3872,6 +4434,98 @@ var CustomAPISwaggerJSON string = `{
                     "title": "object status",
                     "$ref": "#/definitions/ioschemaStatusType",
                     "x-displayname": "Object Status"
+                }
+            }
+        },
+        "schemaregistrationSuggestValuesResp": {
+            "type": "object",
+            "description": "Response body of SuggestValues request",
+            "title": "SuggestValuesResp",
+            "x-displayname": "Response for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.registration.SuggestValuesResp",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of suggested items.",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/schemaregistrationSuggestedItem"
+                    },
+                    "x-displayname": "Suggested Items"
+                }
+            }
+        },
+        "schemaregistrationSuggestedItem": {
+            "type": "object",
+            "description": "A tuple with a suggested value and it's description.",
+            "title": "SuggestedItem",
+            "x-displayname": "Suggested Item",
+            "x-ves-oneof-field-value_choice": "[\"ref_value\",\"str_value\"]",
+            "x-ves-proto-message": "ves.io.schema.registration.SuggestedItem",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Optional description for the suggested value.",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "ref_value": {
+                    "description": "Exclusive with [str_value]\n",
+                    "title": "str_value",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Object Reference"
+                },
+                "str_value": {
+                    "type": "string",
+                    "description": "Exclusive with [ref_value]\n",
+                    "title": "str_value",
+                    "x-displayname": "String"
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
                 }
             }
         },
@@ -4379,6 +5033,17 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/siteNetworkDevice"
                     },
                     "x-displayname": "Network"
+                },
+                "numa_nodes": {
+                    "type": "integer",
+                    "description": " Non-uniform memory access (NUMA) nodes count\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n",
+                    "title": "NUMA Nodes Count",
+                    "format": "int32",
+                    "x-displayname": "NUMA nodes count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0"
+                    }
                 },
                 "os": {
                     "description": " os holds all general OS information",

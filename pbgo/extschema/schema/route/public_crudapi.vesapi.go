@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-route-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-route-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-route-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-route-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-route-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-route-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.route.API.Delete"
             },
@@ -3276,14 +3276,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "response_body": {
                     "type": "string",
-                    "description": " response body to send\n\nExample: - \"OK\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 4096\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " response body to send\n\nExample: - \"OK\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 65536\n  ves.io.schema.rules.string.min_bytes: 1\n",
                     "title": "response_body",
                     "minLength": 1,
-                    "maxLength": 4096,
+                    "maxLength": 65536,
                     "x-displayname": "Response Body",
                     "x-ves-example": "OK",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "4096",
+                        "ves.io.schema.rules.string.max_bytes": "65536",
                         "ves.io.schema.rules.string.min_bytes": "1"
                     }
                 },
@@ -4188,7 +4188,8 @@ var APISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

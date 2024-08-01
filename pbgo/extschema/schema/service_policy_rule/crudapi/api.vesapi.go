@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-service_policy_rule-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.service_policy_rule.crudapi.API.Create"
             },
@@ -3644,6 +3644,31 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/schemaL4DestType"
                     }
+                }
+            }
+        },
+        "policyMaskingConfig": {
+            "type": "object",
+            "description": "x-displayName: \"Masking Configuration\"\nMasking configuration comprise a list of masking fields values and an action - mask or report.",
+            "title": "Masking Configuration",
+            "properties": {
+                "fields": {
+                    "type": "array",
+                    "description": "x-displayName: \"Fields Values\"\nx-example: \"[user.password, credit_card]\"\nA list of JSONPath fields values to match the request/response payload against.",
+                    "title": "Fields",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "mask": {
+                    "description": "x-displayName: \"Mask Sensitive Data\"\nMask sensitive data action",
+                    "title": "Mask Sensitive Data",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "report": {
+                    "description": "x-displayName: \"Report Sensitive Data\"\nReport sensitive data action",
+                    "title": "Report sensitive data",
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },
@@ -4683,7 +4708,8 @@ var APISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

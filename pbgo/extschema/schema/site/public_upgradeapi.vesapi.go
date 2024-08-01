@@ -553,7 +553,7 @@ var UpgradeAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-upgradeapi-upgradeos"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-upgradeapi-upgradeos"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UpgradeAPI.UpgradeOS"
             },
@@ -653,7 +653,7 @@ var UpgradeAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-upgradeapi-upgradesw"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-upgradeapi-upgradesw"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.UpgradeAPI.UpgradeSW"
             },

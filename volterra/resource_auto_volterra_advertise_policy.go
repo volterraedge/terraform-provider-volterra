@@ -122,6 +122,33 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"client_certificate_optional": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"client_certificate_required": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"no_client_certificate": {
+
+							Type:     schema.TypeSet,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
 						"common_params": {
 
 							Type:     schema.TypeSet,
@@ -473,8 +500,9 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 						},
 
 						"require_client_certificate": {
-							Type:     schema.TypeBool,
-							Optional: true,
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"xfcc_header_elements": {
@@ -861,6 +889,35 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 		createSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
 			tlsParametersMapStrToI := set.(map[string]interface{})
+
+			clientCertificateVerifyChoiceTypeFound := false
+
+			if _, ok := tlsParametersMapStrToI["client_certificate_optional"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateOptional{}
+				clientCertificateVerifyChoiceInt.ClientCertificateOptional = &ves_io_schema.Empty{}
+				tlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := tlsParametersMapStrToI["client_certificate_required"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateRequired{}
+				clientCertificateVerifyChoiceInt.ClientCertificateRequired = &ves_io_schema.Empty{}
+				tlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := tlsParametersMapStrToI["no_client_certificate"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_NoClientCertificate{}
+				clientCertificateVerifyChoiceInt.NoClientCertificate = &ves_io_schema.Empty{}
+				tlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
 
@@ -1739,6 +1796,35 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 		updateSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
 			tlsParametersMapStrToI := set.(map[string]interface{})
+
+			clientCertificateVerifyChoiceTypeFound := false
+
+			if _, ok := tlsParametersMapStrToI["client_certificate_optional"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateOptional{}
+				clientCertificateVerifyChoiceInt.ClientCertificateOptional = &ves_io_schema.Empty{}
+				tlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := tlsParametersMapStrToI["client_certificate_required"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateRequired{}
+				clientCertificateVerifyChoiceInt.ClientCertificateRequired = &ves_io_schema.Empty{}
+				tlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := tlsParametersMapStrToI["no_client_certificate"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_NoClientCertificate{}
+				clientCertificateVerifyChoiceInt.NoClientCertificate = &ves_io_schema.Empty{}
+				tlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
 
 			if v, ok := tlsParametersMapStrToI["common_params"]; ok && !isIntfNil(v) {
 

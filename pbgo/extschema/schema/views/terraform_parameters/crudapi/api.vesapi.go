@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.ListStream"
             },
@@ -2288,7 +2288,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
             },
@@ -2433,7 +2433,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.ListStream"
             },
@@ -2538,7 +2538,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Get"
             },
@@ -2685,7 +2685,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.List"
             },
@@ -2832,7 +2832,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
             },
@@ -2912,7 +2912,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete"
             },
@@ -2995,7 +2995,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace"
             },
@@ -3079,7 +3079,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Create"
             },
@@ -4948,7 +4948,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Get"
             },
@@ -5023,7 +5023,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete"
             },
@@ -5106,7 +5106,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace"
             },
@@ -5253,7 +5253,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.List"
             },
@@ -5330,7 +5330,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Create"
             },
@@ -5477,7 +5477,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.ListStream"
             },
@@ -5624,7 +5624,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
             },
@@ -5769,7 +5769,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.ListStream"
             },
@@ -5874,7 +5874,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Get"
             },
@@ -6021,7 +6021,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.List"
             },
@@ -6168,7 +6168,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-statusapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.StatusAPI.List"
             },
@@ -6248,7 +6248,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Delete"
             },
@@ -6331,7 +6331,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Replace"
             },
@@ -6415,7 +6415,7 @@ var StatusAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.crudapi.API.Create"
             },

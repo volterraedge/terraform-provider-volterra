@@ -1603,7 +1603,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Get"
             },
@@ -1678,7 +1678,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Delete"
             },
@@ -1761,7 +1761,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Replace"
             },
@@ -1908,7 +1908,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.List"
             },
@@ -1985,7 +1985,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Create"
             },
@@ -2132,7 +2132,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.ListStream"
             },
@@ -2239,7 +2239,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Get"
             },
@@ -2386,7 +2386,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.List"
             },
@@ -2468,7 +2468,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Delete"
             },
@@ -2551,7 +2551,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Replace"
             },
@@ -2635,7 +2635,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-xc_saas-asb-message-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Create"
             },
@@ -3415,30 +3415,21 @@ var APISwaggerJSON string = `{
                 },
                 "tos_accepted_at": {
                     "type": "string",
-                    "description": " terms of services accepted timestamp\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.timestamp.lt_now: true\n",
+                    "description": " terms of services accepted timestamp\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-",
                     "title": "TOS Accepted Timestamp",
                     "format": "date-time",
                     "x-displayname": "TOS Accepted Timestamp",
-                    "x-ves-example": "2020-04-20T12:32:51.341959216Z",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.timestamp.lt_now": "true"
-                    }
+                    "x-ves-example": "2020-04-20T12:32:51.341959216Z"
                 },
                 "tos_version": {
                     "type": "string",
-                    "description": " terms of services version\n\nExample: - \"v2022.3.14\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 12\n  ves.io.schema.rules.string.min_len: 2\n",
+                    "description": " terms of services version\n\nExample: - \"v2022.3.14\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 12\n",
                     "title": "TOS Version",
-                    "minLength": 2,
                     "maxLength": 12,
                     "x-displayname": "TOS Version",
                     "x-ves-example": "v2022.3.14",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "12",
-                        "ves.io.schema.rules.string.min_len": "2"
+                        "ves.io.schema.rules.string.max_len": "12"
                     }
                 }
             }

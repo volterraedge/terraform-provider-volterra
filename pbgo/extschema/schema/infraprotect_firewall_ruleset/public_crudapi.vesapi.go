@@ -1358,7 +1358,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-infraprotect_firewall_ruleset-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-infraprotect_firewall_ruleset-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.infraprotect_firewall_ruleset.API.Replace"
             },
@@ -1474,7 +1474,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-infraprotect_firewall_ruleset-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-infraprotect_firewall_ruleset-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.infraprotect_firewall_ruleset.API.List"
             },
@@ -1583,7 +1583,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-infraprotect_firewall_ruleset-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-infraprotect_firewall_ruleset-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.infraprotect_firewall_ruleset.API.Get"
             },

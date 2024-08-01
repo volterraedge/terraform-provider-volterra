@@ -531,7 +531,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-nginx-one-subscription-customapi-subscribe"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-nginx-one-subscription-customapi-subscribe"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.nginx.one.subscription.CustomAPI.Subscribe"
             },
@@ -615,7 +615,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-nginx-one-subscription-customapi-unsubscribe"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-nginx-one-subscription-customapi-unsubscribe"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.nginx.one.subscription.CustomAPI.Unsubscribe"
             },

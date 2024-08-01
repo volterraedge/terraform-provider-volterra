@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.crudapi.API.Create"
             },
@@ -3308,7 +3308,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRouteAttrType": {
             "type": "string",
-            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the\nvirtual network. Host OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
+            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the virtual network.\nHost OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
             "title": "Route Attribute",
             "enum": [
                 "ROUTE_ATTR_NO_OP",

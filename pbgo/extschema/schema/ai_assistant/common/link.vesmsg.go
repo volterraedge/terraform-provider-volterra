@@ -63,6 +63,16 @@ type ValidateDashboardLink struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDashboardLink) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for key")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDashboardLink) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DashboardLink)
 	if !ok {
@@ -75,6 +85,15 @@ func (v *ValidateDashboardLink) Validate(ctx context.Context, pm interface{}, op
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["log_filters"]; exists {
@@ -116,6 +135,15 @@ func (v *ValidateDashboardLink) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["title"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("title"))
+		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))
@@ -131,6 +159,25 @@ func (v *ValidateDashboardLink) Validate(ctx context.Context, pm interface{}, op
 // Well-known symbol for default validator implementation
 var DefaultDashboardLinkValidator = func() *ValidateDashboardLink {
 	v := &ValidateDashboardLink{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKey := v.KeyValidationRuleHandler
+	rulesKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhKey(rulesKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DashboardLink.key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["key"] = vFn
 
 	return v
 }()
@@ -180,6 +227,16 @@ type ValidateGenericLink struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGenericLink) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for key")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGenericLink) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GenericLink)
 	if !ok {
@@ -192,6 +249,24 @@ func (v *ValidateGenericLink) Validate(ctx context.Context, pm interface{}, opts
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["title"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("title"))
+		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["url"]; exists {
@@ -209,6 +284,25 @@ func (v *ValidateGenericLink) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGenericLinkValidator = func() *ValidateGenericLink {
 	v := &ValidateGenericLink{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhKey := v.KeyValidationRuleHandler
+	rulesKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhKey(rulesKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GenericLink.key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["key"] = vFn
 
 	return v
 }()
@@ -258,16 +352,6 @@ type ValidateLink struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateLink) KeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for key")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateLink) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*Link)
 	if !ok {
@@ -280,15 +364,6 @@ func (v *ValidateLink) Validate(ctx context.Context, pm interface{}, opts ...db.
 	}
 	if m == nil {
 		return nil
-	}
-
-	if fv, exists := v.FldValidators["key"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("key"))
-		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
-			return err
-		}
-
 	}
 
 	switch m.GetLinkType().(type) {
@@ -317,15 +392,6 @@ func (v *ValidateLink) Validate(ctx context.Context, pm interface{}, opts ...db.
 
 	}
 
-	if fv, exists := v.FldValidators["title"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("title"))
-		if err := fv(ctx, m.GetTitle(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -333,24 +399,8 @@ func (v *ValidateLink) Validate(ctx context.Context, pm interface{}, opts ...db.
 var DefaultLinkValidator = func() *ValidateLink {
 	v := &ValidateLink{FldValidators: map[string]db.ValidatorFunc{}}
 
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhKey := v.KeyValidationRuleHandler
-	rulesKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhKey(rulesKey)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for Link.key: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["key"] = vFn
+	v.FldValidators["link_type.generic_link"] = GenericLinkValidator().Validate
+	v.FldValidators["link_type.dashboard_link"] = DashboardLinkValidator().Validate
 
 	return v
 }()

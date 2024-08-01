@@ -173,6 +173,17 @@ func (v *ValidateSubscribeRequest) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
+	case *SubscribeRequest_F5XcUniversalZtnaStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_universal_ztna_standard"]; exists {
+			val := m.GetAddonChoice().(*SubscribeRequest_F5XcUniversalZtnaStandard).F5XcUniversalZtnaStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_universal_ztna_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -424,6 +435,17 @@ func (v *ValidateUnsubscribeRequest) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("addon_choice"),
 				db.WithValidateField("f5xc_web_app_scanning_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UnsubscribeRequest_F5XcUniversalZtnaStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_universal_ztna_standard"]; exists {
+			val := m.GetAddonChoice().(*UnsubscribeRequest_F5XcUniversalZtnaStandard).F5XcUniversalZtnaStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_universal_ztna_standard"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

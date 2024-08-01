@@ -1459,7 +1459,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-subscribe"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-subscribe"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.Subscribe"
             },
@@ -1543,7 +1543,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-unsubscribe"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-unsubscribe"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.Unsubscribe"
             },
@@ -1635,7 +1635,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdnaccesslogs"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdnaccesslogs"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogs"
             },
@@ -1727,7 +1727,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdnaccesslogaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdnaccesslogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogAggregationQuery"
             },
@@ -1819,7 +1819,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-getserviceoperation"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-getserviceoperation"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.GetServiceOperation"
             },
@@ -1911,7 +1911,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-listserviceoperations"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-listserviceoperations"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.ListServiceOperations"
             },
@@ -2003,7 +2003,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdnmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdnmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNMetrics"
             },
@@ -2103,7 +2103,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdncachepurge"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-customapi-cdncachepurge"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge"
             },
@@ -2780,7 +2780,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "hostname": {
                     "type": "string",
-                    "description": "Exclusive with [pattern purge_all url]\n Format: string.\n Purge cache with origin domain name that matches with configured cache key\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "description": "Exclusive with [pattern purge_all url]\n Format: string.\n Purge all content by Hostname\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.vh_domain: true\n",
                     "title": "Hostname",
                     "x-displayname": "Hostname",
                     "x-ves-example": "xyz.com",
@@ -2790,11 +2790,11 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "pattern": {
                     "type": "string",
-                    "description": "Exclusive with [hostname purge_all url]\n Format: string.\n Purge only the objects with cache key matching the pattern\n\nExample: - \"*.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "description": "Exclusive with [hostname purge_all url]\n Format: string.\n Purge content using RegEx\n\nExample: - \"*.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
                     "title": "Regex Pattern to match",
                     "minLength": 1,
                     "maxLength": 256,
-                    "x-displayname": "Pattern (RegEx)",
+                    "x-displayname": "Pattern",
                     "x-ves-example": "*.ts",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
@@ -2803,10 +2803,10 @@ var CustomAPISwaggerJSON string = `{
                     }
                 },
                 "purge_all": {
-                    "description": "Exclusive with [hostname pattern url]\n purge cache for a specific distribution",
+                    "description": "Exclusive with [hostname pattern url]\n Purge all cached content for this distribution",
                     "title": "Purge All",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Purge All"
+                    "x-displayname": "All"
                 },
                 "soft_purge": {
                     "description": "Exclusive with [hard_purge]\n Invalidate the Cache entries",
@@ -2816,7 +2816,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "url": {
                     "type": "string",
-                    "description": "Exclusive with [hostname pattern purge_all]\n Format: string.\n Purge cache with uri/path or in combination with origin-domain/path that is configured in cache key\n\nExample: - \"/path1\"-",
+                    "description": "Exclusive with [hostname pattern purge_all]\n Format: string.\n Purge cache by using a URL path\n\nExample: - \"/path1\"-",
                     "title": "URL",
                     "x-displayname": "URL",
                     "x-ves-example": "/path1"
@@ -3664,6 +3664,11 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Order by\"\nOrder by data for the metrics field aggregation bucket",
                     "title": "Order by",
                     "$ref": "#/definitions/logOrderByData"
+                },
+                "sub_aggs": {
+                    "type": "object",
+                    "description": "x-displayName: \"Sub Aggregation\"\nSub aggregation data for the multi field aggregation bucket",
+                    "title": "sub aggregation"
                 }
             }
         },
@@ -3679,6 +3684,18 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/logMultiFieldAggregationBucket"
                     }
+                }
+            }
+        },
+        "logMultiFieldSubAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Multi Field SubAggregation\"\nField subaggregation data",
+            "title": "MultiFieldSubAggregationData",
+            "properties": {
+                "cardinality_aggregation": {
+                    "description": "cardinality aggregation data",
+                    "title": "cardinality aggregation\nx-displayName: \"Cardinality Aggregation\"",
+                    "$ref": "#/definitions/logCardinalityAggregationData"
                 }
             }
         },

@@ -120,6 +120,120 @@ func BotValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BotDefenseEventDetails) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BotDefenseEventDetails) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BotDefenseEventDetails) DeepCopy() *BotDefenseEventDetails {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BotDefenseEventDetails{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BotDefenseEventDetails) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BotDefenseEventDetails) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BotDefenseEventDetailsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBotDefenseEventDetails struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBotDefenseEventDetails) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BotDefenseEventDetails)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BotDefenseEventDetails got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("action"))
+		if err := fv(ctx, m.GetAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["automation_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("automation_type"))
+		if err := fv(ctx, m.GetAutomationType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bot_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_type"))
+		if err := fv(ctx, m.GetBotType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_path"))
+		if err := fv(ctx, m.GetRequestPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBotDefenseEventDetailsValidator = func() *ValidateBotDefenseEventDetails {
+	v := &ValidateBotDefenseEventDetails{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BotDefenseEventDetailsValidator() db.Validator {
+	return DefaultBotDefenseEventDetailsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ExplainLogRecordResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -214,6 +328,28 @@ func (v *ValidateExplainLogRecordResponse) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
+	case *ExplainLogRecordResponse_BotDefenseEventDetails:
+		if fv, exists := v.FldValidators["details.bot_defense_event_details"]; exists {
+			val := m.GetDetails().(*ExplainLogRecordResponse_BotDefenseEventDetails).BotDefenseEventDetails
+			vOpts := append(opts,
+				db.WithValidateField("details"),
+				db.WithValidateField("bot_defense_event_details"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ExplainLogRecordResponse_RequestDetails:
+		if fv, exists := v.FldValidators["details.request_details"]; exists {
+			val := m.GetDetails().(*ExplainLogRecordResponse_RequestDetails).RequestDetails
+			vOpts := append(opts,
+				db.WithValidateField("details"),
+				db.WithValidateField("request_details"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -238,6 +374,111 @@ var DefaultExplainLogRecordResponseValidator = func() *ValidateExplainLogRecordR
 
 func ExplainLogRecordResponseValidator() db.Validator {
 	return DefaultExplainLogRecordResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RequestDetails) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RequestDetails) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RequestDetails) DeepCopy() *RequestDetails {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RequestDetails{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RequestDetails) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RequestDetails) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RequestDetailsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRequestDetails struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRequestDetails) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RequestDetails)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RequestDetails got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rsp_code"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rsp_code"))
+		if err := fv(ctx, m.GetRspCode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["rsp_code_details"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("rsp_code_details"))
+		if err := fv(ctx, m.GetRspCodeDetails(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["upstream_protocol_error_reason"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_protocol_error_reason"))
+		if err := fv(ctx, m.GetUpstreamProtocolErrorReason(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRequestDetailsValidator = func() *ValidateRequestDetails {
+	v := &ValidateRequestDetails{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func RequestDetailsValidator() db.Validator {
+	return DefaultRequestDetailsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -344,6 +585,15 @@ func (v *ValidateSignature) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
 
@@ -680,6 +930,15 @@ func (v *ValidateViolation) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("state"))
+		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
 			return err
 		}
 

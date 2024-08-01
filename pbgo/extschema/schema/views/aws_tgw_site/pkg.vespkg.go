@@ -75,6 +75,7 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.aws_tgw_site.API.Create"] = []string{
+		"spec.aws_parameters.admin_password",
 		"spec.aws_parameters.assisted",
 		"spec.aws_parameters.az_nodes.#.disk_size",
 		"spec.vn_config.global_network_list.global_network_connections.#.enable_forward_proxy.tls_intercept.custom_certificate.private_key.blindfold_secret_info_internal",

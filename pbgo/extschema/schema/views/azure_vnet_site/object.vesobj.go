@@ -19,6 +19,7 @@ import (
 	"gopkg.volterra.us/stdlib/store"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_cloud_connect "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 
 	"github.com/google/uuid"
@@ -1318,6 +1319,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["vnet_attachment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet_attachment"))
+		if err := fv(ctx, e.GetVnetAttachment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1326,6 +1336,8 @@ var DefaultStatusObjectValidator = func() *ValidateStatusObject {
 	v := &ValidateStatusObject{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["conditions"] = ves_io_schema.ConditionTypeValidator().Validate
+
+	v.FldValidators["vnet_attachment"] = ves_io_schema_cloud_connect.AzureAttachmentsListStatusTypeValidator().Validate
 
 	return v
 }()

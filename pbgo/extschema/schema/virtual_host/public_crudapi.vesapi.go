@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_host-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.API.Delete"
             },
@@ -2311,20 +2311,32 @@ var APISwaggerJSON string = `{
             "description": "TLS configuration for downstream connections",
             "title": "DownstreamTlsParamsType",
             "x-displayname": "Downstream TLS Parameters",
+            "x-ves-oneof-field-client_certificate_verify_choice": "[\"client_certificate_optional\",\"client_certificate_required\",\"no_client_certificate\"]",
             "x-ves-proto-message": "ves.io.schema.DownstreamTlsParamsType",
             "properties": {
+                "client_certificate_optional": {
+                    "description": "Exclusive with [client_certificate_required no_client_certificate]\n Client certificate is optional. If the client has provided a certificate,\n the load balancer will verify it. If certification verification fails,\n the connection will be terminated. If the client does not provide a certificate,\n the connection will be accepted.",
+                    "title": "client_certificate_optional",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client Certificate Optional"
+                },
+                "client_certificate_required": {
+                    "description": "Exclusive with [client_certificate_optional no_client_certificate]\n Client certificate is mandatory. F5XC will reject connections without a valid client\n certificate.",
+                    "title": "client_certificate_required",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Require Client Certificate"
+                },
                 "common_params": {
                     "description": " Common TLS parameters used in both upstream and downstream connections",
                     "title": "common_params",
                     "$ref": "#/definitions/schemaTlsParamsType",
                     "x-displayname": "Common Parameters"
                 },
-                "require_client_certificate": {
-                    "type": "boolean",
-                    "description": " If true, F5XC will reject connections without a valid client\n certificate.",
-                    "title": "require_client_certificate",
-                    "format": "boolean",
-                    "x-displayname": "Require Client Certificate(enable mTLS)"
+                "no_client_certificate": {
+                    "description": "Exclusive with [client_certificate_optional client_certificate_required]\n Client certificate is not required. If the client has provided a certificate,\n it will be ignored (not used for verification)",
+                    "title": "no_client_certificate",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client Certificate not required"
                 },
                 "xfcc_header_elements": {
                     "type": "array",
@@ -2501,6 +2513,7 @@ var APISwaggerJSON string = `{
             "title": "CertificateParamsType",
             "x-displayname": "Certificate Parameters",
             "x-ves-displayorder": "1,2,3,4,5",
+            "x-ves-oneof-field-client_certificate_verify_choice": "[\"client_certificate_optional\",\"client_certificate_required\",\"no_client_certificate\"]",
             "x-ves-proto-message": "ves.io.schema.CertificateParamsType",
             "properties": {
                 "certificates": {
@@ -2534,6 +2547,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "client_certificate_optional": {
+                    "description": "Exclusive with [client_certificate_required no_client_certificate]\n Client certificate is optional. If the client has provided a certificate,\n the load balancer will verify it. If certification verification fails,\n the connection will be terminated. If the client does not provide a certificate,\n the connection will be accepted.",
+                    "title": "client_certificate_optional",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client Certificate Optional"
+                },
+                "client_certificate_required": {
+                    "description": "Exclusive with [client_certificate_optional no_client_certificate]\n Client certificate is mandatory. F5XC will reject connections without a valid client\n certificate.",
+                    "title": "client_certificate_required",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Require Client Certificate"
+                },
                 "maximum_protocol_version": {
                     "description": " Maximum TLS protocol version.",
                     "title": "maximum_protocol_version",
@@ -2546,12 +2571,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaTlsProtocol",
                     "x-displayname": "Minimum TLS Version"
                 },
-                "require_client_certificate": {
-                    "type": "boolean",
-                    "description": " If true, F5XC will reject connections without a valid client\n certificate.",
-                    "title": "require_client_certificate",
-                    "format": "boolean",
-                    "x-displayname": "Require Client Certificate(enable mTLS)"
+                "no_client_certificate": {
+                    "description": "Exclusive with [client_certificate_optional client_certificate_required]\n Client certificate is not required. If the client has provided a certificate,\n it will be ignored (not used for verification)",
+                    "title": "no_client_certificate",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Client Certificate not required"
                 },
                 "validation_params": {
                     "description": " This includes URL for a trust store, whether SAN verification is required\n and list of Subject Alt Names for verification",
@@ -4023,7 +4047,7 @@ var APISwaggerJSON string = `{
             "description": "Creates virtual host in a given namespace.",
             "title": "Create virtual host",
             "x-displayname": "Create Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76,79,82",
+            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
@@ -4216,18 +4240,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
                 },
-                "rate_limiter": {
-                    "type": "array",
-                    "description": " A reference to rate_limiter object.\n Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rate Limiter",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
                 "rate_limiter_allowed_prefixes": {
                     "type": "array",
                     "description": " References to ip_prefix_set objects.\n Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -4359,7 +4371,7 @@ var APISwaggerJSON string = `{
             "description": "Get virtual host from a given namespace.",
             "title": "Get virtual host",
             "x-displayname": "Get Virtual Host",
-            "x-ves-displayorder": "10,15,2,3,5,85,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76,79,82",
+            "x-ves-displayorder": "10,15,2,3,5,85,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
@@ -4587,18 +4599,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
                 },
-                "rate_limiter": {
-                    "type": "array",
-                    "description": " A reference to rate_limiter object.\n Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rate Limiter",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
-                },
                 "rate_limiter_allowed_prefixes": {
                     "type": "array",
                     "description": " References to ip_prefix_set objects.\n Requests from source IP addresses that are covered by one of the allowed IP Prefixes are not subjected to rate limiting.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
@@ -4760,7 +4760,7 @@ var APISwaggerJSON string = `{
             "description": "Replace a given virtual host in a given namespace.",
             "title": "Replace virtual host",
             "x-displayname": "Replace Virtual Host",
-            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,26,27,25,32,34,76,79,82",
+            "x-ves-displayorder": "15,2,3,5,85,18,19,38,6,17,7,8,12,13,20,28,21,22,33,23,30,35,27,25,32,34,76,79,82",
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
@@ -4952,18 +4952,6 @@ var APISwaggerJSON string = `{
                     "description": " Indicates whether the type of proxy is UDP/Secret Management Access",
                     "$ref": "#/definitions/virtual_hostProxyType",
                     "x-displayname": "Proxy Type"
-                },
-                "rate_limiter": {
-                    "type": "array",
-                    "description": " A reference to rate_limiter object.\n Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Rate Limiter",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
-                    }
                 },
                 "rate_limiter_allowed_prefixes": {
                     "type": "array",
@@ -5884,6 +5872,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostMaskingConfiguration": {
+            "type": "object",
+            "description": "x-displayName: \"Masking Configuration\"\nMasking configuration settings",
+            "title": "Masking Configuration",
+            "properties": {
+                "disable_masking": {
+                    "description": "x-displayName: \"Disable Masking\"\nNo Masking for this VH",
+                    "title": "Disable Masking",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "enable_masking": {
+                    "description": "x-displayName: \"Enable Masking\"\nEnable Masking for this VH",
+                    "title": "Enable Masking",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                }
+            }
+        },
         "virtual_hostOpenApiValidationSettings": {
             "type": "object",
             "description": "x-displayName: \"OpenAPI Validation Settings\"\nx-required\nSettings in VH of enabled OpenAPI validation",
@@ -5901,6 +5906,12 @@ var APISwaggerJSON string = `{
                     "title": "allow only specified query parameter",
                     "format": "boolean"
                 },
+                "fail_close": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"internal failure configuration\"\nSet to fail validation on internal errors",
+                    "title": "fail configuration",
+                    "format": "boolean"
+                },
                 "fail_oversized_body_validation": {
                     "type": "boolean",
                     "description": "x-displayName: \"Fail Oversized Body Validation\"\nSet to fail validation on request/response with too long body",
@@ -5911,12 +5922,13 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostProxyType": {
             "type": "string",
-            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy\n - DNS_PROXY: DNS_PROXY\n\nInstall DNS proxy\n - ZTNA_PROXY: ZTNA_PROXY\n\nInstall ZTNA proxy",
+            "description": "ProxyType tells the type of proxy to install for the virtual host.\n\nOnly the following combination of VirtualHosts within same AdvertisePolicy is permitted\n(None of them should have \"*\" in domains when used with other VirtualHosts in same AdvertisePolicy)\n1. Multiple TCP_PROXY_WITH_SNI and multiple HTTPS_PROXY\n2. Multiple HTTP_PROXY\n3. Multiple HTTPS_PROXY\n4. Multiple TCP_PROXY_WITH_SNI\n\nHTTPS_PROXY without TLS parameters is not permitted\nHTTP_PROXY/HTTPS_PROXY/TCP_PROXY_WITH_SNI/SMA_PROXY with empty domains is not permitted\nTCP_PROXY_WITH_SNI/SMA_PROXY should not have \"*\" in domains\n\n - HTTP_PROXY: HTTP_PROXY\n\nInstall HTTP proxy. HTTP Proxy is the default proxy installed.\n - TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - TLS_TCP_PROXY: TCP_PROXY\n\nInstall TCP proxy\n - TLS_TCP_PROXY_WITH_SNI: TCP_PROXY_WITH_SNI\n\nInstall TCP proxy with SNI Routing\n - HTTPS_PROXY: HTTPS_PROXY\n\nInstall HTTPS proxy\n - UDP_PROXY: UDP_PROXY\n\nInstall UDP proxy\n - SMA_PROXY: SMA_PROXY\n\nInstall Secret Management Access proxy\n - DNS_PROXY: DNS_PROXY\n\nInstall DNS proxy\n - ZTNA_PROXY: ZTNA_PROXY\n\nInstall ZTNA proxy.This is going to be deprecated with UZTNA_PROXY.\n - UZTNA_PROXY: UZTNA_PROXY\n\nInstall UZTNA proxy",
             "enum": [
                 "UDP_PROXY",
                 "SMA_PROXY",
                 "DNS_PROXY",
-                "ZTNA_PROXY"
+                "ZTNA_PROXY",
+                "UZTNA_PROXY"
             ],
             "default": "HTTP_PROXY",
             "x-displayname": "Type of Proxy",
@@ -6136,7 +6148,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",
@@ -6144,7 +6156,8 @@ var APISwaggerJSON string = `{
                 "API_GATEWAY",
                 "TCP_LOAD_BALANCER",
                 "PROXY",
-                "CDN_LOAD_BALANCER"
+                "CDN_LOAD_BALANCER",
+                "NGINX_SERVER"
             ],
             "default": "VIRTUAL_SERVICE",
             "x-displayname": "Virtual Host Type",

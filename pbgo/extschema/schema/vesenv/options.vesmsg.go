@@ -781,6 +781,17 @@ func (v *ValidateBFSecretChoice) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *BFSecretChoice_VesBrmDataDeliverySecret:
+		if fv, exists := v.FldValidators["choice.ves_brm_data_delivery_secret"]; exists {
+			val := m.GetChoice().(*BFSecretChoice_VesBrmDataDeliverySecret).VesBrmDataDeliverySecret
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ves_brm_data_delivery_secret"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1838,17 +1849,6 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
-	case *ServiceSlugChoice_Aip:
-		if fv, exists := v.FldValidators["choice.aip"]; exists {
-			val := m.GetChoice().(*ServiceSlugChoice_Aip).Aip
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("aip"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *ServiceSlugChoice_LogReceiver:
 		if fv, exists := v.FldValidators["choice.log_receiver"]; exists {
 			val := m.GetChoice().(*ServiceSlugChoice_LogReceiver).LogReceiver
@@ -2009,6 +2009,39 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("sync_cloud_data"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Bigipconnector:
+		if fv, exists := v.FldValidators["choice.bigipconnector"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Bigipconnector).Bigipconnector
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("bigipconnector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Maurice:
+		if fv, exists := v.FldValidators["choice.maurice"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Maurice).Maurice
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("maurice"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceSlugChoice_Gia:
+		if fv, exists := v.FldValidators["choice.gia"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_Gia).Gia
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("gia"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

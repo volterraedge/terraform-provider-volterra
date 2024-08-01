@@ -18,6 +18,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.user.Object"] = ObjectValidator()
 	vr["ves.io.schema.user.StatusObject"] = StatusObjectValidator()
 
+	vr["ves.io.schema.user.CreateUserRequest"] = CreateUserRequestValidator()
+	vr["ves.io.schema.user.CreateUserResponse"] = CreateUserResponseValidator()
 	vr["ves.io.schema.user.LastLoginUpdateRequest"] = LastLoginUpdateRequestValidator()
 	vr["ves.io.schema.user.LastLoginUpdateResponse"] = LastLoginUpdateResponseValidator()
 	vr["ves.io.schema.user.ListByNotifPrefRequest"] = ListByNotifPrefRequestValidator()

@@ -40,6 +40,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.policy.JWTClaimMatcherType"] = JWTClaimMatcherTypeValidator()
 	vr["ves.io.schema.policy.JwtTokenAuthOptions"] = JwtTokenAuthOptionsValidator()
 	vr["ves.io.schema.policy.L4DestMatcherType"] = L4DestMatcherTypeValidator()
+	vr["ves.io.schema.policy.MaskingConfig"] = MaskingConfigValidator()
 	vr["ves.io.schema.policy.MatcherType"] = MatcherTypeValidator()
 	vr["ves.io.schema.policy.MatcherTypeBasic"] = MatcherTypeBasicValidator()
 	vr["ves.io.schema.policy.ModifyAction"] = ModifyActionValidator()

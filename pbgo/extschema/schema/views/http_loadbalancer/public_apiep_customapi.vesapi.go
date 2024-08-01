@@ -861,7 +861,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsforgroups"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsforgroups"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups"
             },
@@ -953,7 +953,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getswaggerspec"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getswaggerspec"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetSwaggerSpec"
             },
@@ -1053,7 +1053,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsschemaupdates"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsschemaupdates"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsSchemaUpdates"
             },
@@ -1153,7 +1153,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-updateapiendpointsschemas"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-updateapiendpointsschemas"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.UpdateAPIEndpointsSchemas"
             },
@@ -1200,6 +1200,43 @@ var ApiepLBCustomAPISwaggerJSON string = `{
             "default": "APIEP_CATEGORY_DISCOVERED",
             "x-displayname": "Category of the API Endpoint",
             "x-ves-proto-enum": "ves.io.schema.app_type.APIEPCategory"
+        },
+        "app_typeAPIEPSecurityRisk": {
+            "type": "string",
+            "description": "Signifies API Endpoint Security Risk Level\n\nSecurity risk is not detected (for example, when no traffic).\nAPI Endpoint has low security risk.\nAPI Endpoint has medium security risk.\nAPI Endpoint has high security risk.\nAPI Endpoint has critical security risk.",
+            "title": "APIEP Security Risk",
+            "enum": [
+                "APIEP_SEC_RISK_NONE",
+                "APIEP_SEC_RISK_LOW",
+                "APIEP_SEC_RISK_MED",
+                "APIEP_SEC_RISK_HIGH",
+                "APIEP_SEC_RISK_CRITICAL"
+            ],
+            "default": "APIEP_SEC_RISK_NONE",
+            "x-displayname": "API Endpoint Security Risk",
+            "x-ves-proto-enum": "ves.io.schema.app_type.APIEPSecurityRisk"
+        },
+        "app_typeRiskScore": {
+            "type": "object",
+            "description": "Risk score of the vulnerabilities found for this API Endpoint.",
+            "title": "RiskScore",
+            "x-displayname": "Risk score",
+            "x-ves-proto-message": "ves.io.schema.app_type.RiskScore",
+            "properties": {
+                "score": {
+                    "type": "number",
+                    "description": " Score of the vulnerabilities found for this API Endpoint.",
+                    "title": "score",
+                    "format": "float",
+                    "x-displayname": "Score"
+                },
+                "severity": {
+                    "description": " Severity of the vulnerabilities found for this API Endpoint.",
+                    "title": "severity",
+                    "$ref": "#/definitions/app_typeAPIEPSecurityRisk",
+                    "x-displayname": "Severity"
+                }
+            }
         },
         "app_typeSensitiveDataType": {
             "type": "string",
@@ -1249,6 +1286,12 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                     "title": "Path",
                     "x-displayname": "Path",
                     "x-ves-example": "/api/v1/users/{id}"
+                },
+                "risk_score": {
+                    "description": " Risk score for this API Endpoint.",
+                    "title": "Risk score",
+                    "$ref": "#/definitions/app_typeRiskScore",
+                    "x-displayname": "Risk score"
                 },
                 "sensitive_data": {
                     "type": "array",
@@ -1489,7 +1532,8 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

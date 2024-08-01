@@ -1664,6 +1664,414 @@ func APIRateLimitValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *APIRateLimitLegacy) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIRateLimitLegacy) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIRateLimitLegacy) DeepCopy() *APIRateLimitLegacy {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIRateLimitLegacy{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIRateLimitLegacy) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIRateLimitLegacy) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIRateLimitLegacyValidator().Validate(ctx, m, opts...)
+}
+
+func (m *APIRateLimitLegacy) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetApiEndpointRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetApiEndpointRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpAllowedListChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpAllowedListChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetServerUrlRulesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetServerUrlRulesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *APIRateLimitLegacy) GetApiEndpointRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetApiEndpointRules() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetApiEndpointRules() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetApiEndpointRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("api_endpoint_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *APIRateLimitLegacy) GetIpAllowedListChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpAllowedListChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetIpAllowedListChoice().(type) {
+	case *APIRateLimitLegacy_NoIpAllowedList:
+
+		return nil, nil
+
+	case *APIRateLimitLegacy_IpAllowedList:
+
+		return nil, nil
+
+	case *APIRateLimitLegacy_CustomIpAllowedList:
+
+		drInfos, err := m.GetCustomIpAllowedList().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCustomIpAllowedList().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "custom_ip_allowed_list." + dri.DRField
+		}
+		return drInfos, err
+
+	case *APIRateLimitLegacy_BypassRateLimitingRules:
+
+		drInfos, err := m.GetBypassRateLimitingRules().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBypassRateLimitingRules().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bypass_rate_limiting_rules." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *APIRateLimitLegacy) GetServerUrlRulesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetServerUrlRules() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetServerUrlRules() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetServerUrlRules() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("server_url_rules[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateAPIRateLimitLegacy struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIRateLimitLegacy) IpAllowedListChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip_allowed_list_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIRateLimitLegacy) ServerUrlRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for server_url_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ServerUrlRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ServerUrlRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for server_url_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ServerUrlRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ServerUrlRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated server_url_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items server_url_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIRateLimitLegacy) ApiEndpointRulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for api_endpoint_rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ApiEndpointRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ApiEndpointRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for api_endpoint_rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ApiEndpointRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ApiEndpointRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated api_endpoint_rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items api_endpoint_rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIRateLimitLegacy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIRateLimitLegacy)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIRateLimitLegacy got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_endpoint_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("api_endpoint_rules"))
+		if err := fv(ctx, m.GetApiEndpointRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ip_allowed_list_choice"]; exists {
+		val := m.GetIpAllowedListChoice()
+		vOpts := append(opts,
+			db.WithValidateField("ip_allowed_list_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetIpAllowedListChoice().(type) {
+	case *APIRateLimitLegacy_NoIpAllowedList:
+		if fv, exists := v.FldValidators["ip_allowed_list_choice.no_ip_allowed_list"]; exists {
+			val := m.GetIpAllowedListChoice().(*APIRateLimitLegacy_NoIpAllowedList).NoIpAllowedList
+			vOpts := append(opts,
+				db.WithValidateField("ip_allowed_list_choice"),
+				db.WithValidateField("no_ip_allowed_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIRateLimitLegacy_IpAllowedList:
+		if fv, exists := v.FldValidators["ip_allowed_list_choice.ip_allowed_list"]; exists {
+			val := m.GetIpAllowedListChoice().(*APIRateLimitLegacy_IpAllowedList).IpAllowedList
+			vOpts := append(opts,
+				db.WithValidateField("ip_allowed_list_choice"),
+				db.WithValidateField("ip_allowed_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIRateLimitLegacy_CustomIpAllowedList:
+		if fv, exists := v.FldValidators["ip_allowed_list_choice.custom_ip_allowed_list"]; exists {
+			val := m.GetIpAllowedListChoice().(*APIRateLimitLegacy_CustomIpAllowedList).CustomIpAllowedList
+			vOpts := append(opts,
+				db.WithValidateField("ip_allowed_list_choice"),
+				db.WithValidateField("custom_ip_allowed_list"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIRateLimitLegacy_BypassRateLimitingRules:
+		if fv, exists := v.FldValidators["ip_allowed_list_choice.bypass_rate_limiting_rules"]; exists {
+			val := m.GetIpAllowedListChoice().(*APIRateLimitLegacy_BypassRateLimitingRules).BypassRateLimitingRules
+			vOpts := append(opts,
+				db.WithValidateField("ip_allowed_list_choice"),
+				db.WithValidateField("bypass_rate_limiting_rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_url_rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("server_url_rules"))
+		if err := fv(ctx, m.GetServerUrlRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIRateLimitLegacyValidator = func() *ValidateAPIRateLimitLegacy {
+	v := &ValidateAPIRateLimitLegacy{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpAllowedListChoice := v.IpAllowedListChoiceValidationRuleHandler
+	rulesIpAllowedListChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhIpAllowedListChoice(rulesIpAllowedListChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIRateLimitLegacy.ip_allowed_list_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip_allowed_list_choice"] = vFn
+
+	vrhServerUrlRules := v.ServerUrlRulesValidationRuleHandler
+	rulesServerUrlRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhServerUrlRules(rulesServerUrlRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIRateLimitLegacy.server_url_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["server_url_rules"] = vFn
+
+	vrhApiEndpointRules := v.ApiEndpointRulesValidationRuleHandler
+	rulesApiEndpointRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhApiEndpointRules(rulesApiEndpointRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIRateLimitLegacy.api_endpoint_rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["api_endpoint_rules"] = vFn
+
+	v.FldValidators["ip_allowed_list_choice.ip_allowed_list"] = ves_io_schema_views.PrefixStringListTypeValidator().Validate
+	v.FldValidators["ip_allowed_list_choice.custom_ip_allowed_list"] = CustomIpAllowedListValidator().Validate
+	v.FldValidators["ip_allowed_list_choice.bypass_rate_limiting_rules"] = BypassRateLimitingRulesValidator().Validate
+
+	return v
+}()
+
+func APIRateLimitLegacyValidator() db.Validator {
+	return DefaultAPIRateLimitLegacyValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *APISpecificationSettings) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5423,7 +5831,7 @@ func (m *JWKS) Redact(ctx context.Context) error {
 		return nil
 	}
 
-	m.Cleartext = "REDACTED"
+	m.Cleartext = "Redacted"
 
 	return nil
 }
@@ -6320,6 +6728,32 @@ func (v *ValidateOpenApiValidationCommonSettings) Validate(ctx context.Context, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetFailConfiguration().(type) {
+	case *OpenApiValidationCommonSettings_FailOpen:
+		if fv, exists := v.FldValidators["fail_configuration.fail_open"]; exists {
+			val := m.GetFailConfiguration().(*OpenApiValidationCommonSettings_FailOpen).FailOpen
+			vOpts := append(opts,
+				db.WithValidateField("fail_configuration"),
+				db.WithValidateField("fail_open"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *OpenApiValidationCommonSettings_FailClose:
+		if fv, exists := v.FldValidators["fail_configuration.fail_close"]; exists {
+			val := m.GetFailConfiguration().(*OpenApiValidationCommonSettings_FailClose).FailClose
+			vOpts := append(opts,
+				db.WithValidateField("fail_configuration"),
+				db.WithValidateField("fail_close"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	switch m.GetOversizedBodyChoice().(type) {

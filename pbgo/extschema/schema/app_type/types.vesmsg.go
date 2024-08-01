@@ -238,6 +238,15 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["avg_latency"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("avg_latency"))
+		if err := fv(ctx, m.GetAvgLatency(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["base_path"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("base_path"))
@@ -268,6 +277,18 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["compliances"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compliances"))
+		for idx, item := range m.GetCompliances() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("domains"))
@@ -292,10 +313,31 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["engines"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("engines"))
+		for idx, item := range m.GetEngines() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["has_learnt_schema"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("has_learnt_schema"))
 		if err := fv(ctx, m.GetHasLearntSchema(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_latency"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_latency"))
+		if err := fv(ctx, m.GetMaxLatency(), vOpts...); err != nil {
 			return err
 		}
 
@@ -323,6 +365,15 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 		vOpts := append(opts, db.WithValidateField("pii_level"))
 		if err := fv(ctx, m.GetPiiLevel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["req_rate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("req_rate"))
+		if err := fv(ctx, m.GetReqRate(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4162,6 +4213,18 @@ func (v *ValidateSensitiveData) Validate(ctx context.Context, pm interface{}, op
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["compliances"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("compliances"))
+		for idx, item := range m.GetCompliances() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["examples"]; exists {

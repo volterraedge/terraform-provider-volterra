@@ -4378,6 +4378,10 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting CreateSpecType.voltstack_cluster")
 	}
 
+	if err := m.GetAdminPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CreateSpecType.admin_password")
+	}
+
 	return nil
 }
 
@@ -4842,6 +4846,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5563,6 +5576,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
+	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
+
 	return v
 }()
 
@@ -5593,6 +5608,10 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GetSpecType.voltstack_cluster")
+	}
+
+	if err := m.GetAdminPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.admin_password")
 	}
 
 	return nil
@@ -6133,6 +6152,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6978,6 +7006,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
+	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
+
 	v.FldValidators["cloud_site_info"] = AWSVPCSiteInfoTypeValidator().Validate
 
 	v.FldValidators["direct_connect_info"] = ves_io_schema_views.DirectConnectInfoValidator().Validate
@@ -7012,6 +7042,10 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetVoltstackCluster().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.voltstack_cluster")
+	}
+
+	if err := m.GetAdminPassword().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.admin_password")
 	}
 
 	return nil
@@ -7662,6 +7696,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("address"))
 		if err := fv(ctx, m.GetAddress(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
 			return err
 		}
 
@@ -8546,6 +8589,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["custom_dns"] = ves_io_schema_views.CustomDNSValidator().Validate
 
 	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
+
+	v.FldValidators["admin_password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	v.FldValidators["tf_params"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -10657,6 +10702,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.Address = f.GetAddress()
+	m.AdminPassword = f.GetAdminPassword()
 	m.AwsRegion = f.GetAwsRegion()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.Coordinates = f.GetCoordinates()
@@ -10696,6 +10742,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.Address = m1.Address
+	f.AdminPassword = m1.AdminPassword
 	f.AwsRegion = m1.AwsRegion
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.Coordinates = m1.Coordinates
@@ -11077,6 +11124,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.Address = f.GetAddress()
+	m.AdminPassword = f.GetAdminPassword()
 	m.AwsRegion = f.GetAwsRegion()
 	m.GetBlockedServicesChoiceFromGlobalSpecType(f)
 	m.CloudSiteInfo = f.GetCloudSiteInfo()
@@ -11125,6 +11173,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.Address = m1.Address
+	f.AdminPassword = m1.AdminPassword
 	f.AwsRegion = m1.AwsRegion
 	m1.SetBlockedServicesChoiceToGlobalSpecType(f)
 	f.CloudSiteInfo = m1.CloudSiteInfo

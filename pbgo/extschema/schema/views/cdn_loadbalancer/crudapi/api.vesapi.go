@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.crudapi.API.Create"
             },
@@ -2745,238 +2745,154 @@ var APISwaggerJSON string = `{
         },
         "app_typeAPIEndpoint": {
             "type": "object",
-            "description": "x-required\nThe rule is applied only for the specified api endpoints.",
+            "description": "x-required\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
             "title": "api endpoint",
-            "x-displayname": "API Endpoint",
-            "x-ves-proto-message": "ves.io.schema.app_type.APIEndpoint",
             "properties": {
                 "api_endpoint_path": {
                     "type": "string",
-                    "description": " The rule is applied only for the specified api endpoints.\n\nExample: - \"/endpoint1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n  ves.io.schema.rules.string.templated_http_path: true\n",
-                    "title": "api endpoint path",
-                    "maxLength": 1024,
-                    "x-displayname": "API Endpoint",
-                    "x-ves-example": "/endpoint1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "1024",
-                        "ves.io.schema.rules.string.templated_http_path": "true"
-                    }
+                    "description": "x-required\nx-example: \"/endpoint1\"\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
+                    "title": "api endpoint path"
                 },
                 "methods": {
                     "type": "array",
-                    "description": " List of methods values to match against.\n\nExample: - \"['GET', 'POST', 'DELETE']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Methods\"\nList of methods values to match against.\nx-required\nx-example: \"['GET', 'POST', 'DELETE']\"",
                     "title": "methods",
-                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaHttpMethod"
-                    },
-                    "x-displayname": "Methods",
-                    "x-ves-example": "['GET', 'POST', 'DELETE']",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "app_typeBuiltInSensitiveDataType": {
             "type": "object",
-            "description": "x-example: \"[EMAIL, CC]\"\nMessage wrapper for built-in sensitive data type.",
+            "description": "x-displayName: \"Built-In Sensitive Data Type\"\nx-example: \"[EMAIL, CC]\"\nMessage wrapper for built-in sensitive data type.",
             "title": "BuiltInSensitiveDataType",
-            "x-displayname": "Built-In Sensitive Data Type",
-            "x-ves-proto-message": "ves.io.schema.app_type.BuiltInSensitiveDataType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " Built-in rule for sensitive data detection.\n\nExample: - \"[EMAIL, CC]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n",
-                    "title": "name",
-                    "minLength": 1,
-                    "x-displayname": "Name",
-                    "x-ves-example": "[EMAIL, CC]",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.min_len": "1"
-                    }
+                    "description": "x-displayName: \"Name\"\nx-example: \"[EMAIL, CC]\"\nx-required\nBuilt-in rule for sensitive data detection.",
+                    "title": "name"
                 }
             }
         },
         "app_typeCustomDataDetectionConfig": {
             "type": "object",
-            "description": "The custom data detection config specifies targets, scopes \u0026 the pattern to be detected.",
+            "description": "x-displayName: \"Custom Data Detection Config\"\nThe custom data detection config specifies targets, scopes \u0026 the pattern to be detected.",
             "title": "CustomDataDetectionConfig",
-            "x-displayname": "Custom Data Detection Config",
-            "x-ves-oneof-field-domain_choice": "[\"any_domain\",\"specific_domain\"]",
-            "x-ves-oneof-field-pattern_choice": "[\"key_pattern\",\"key_value_pattern\",\"value_pattern\"]",
-            "x-ves-oneof-field-section_choice": "[\"all_request_sections\",\"all_response_sections\",\"all_sections\",\"custom_sections\"]",
-            "x-ves-oneof-field-target_choice": "[\"any_target\",\"api_endpoint_target\"]",
-            "x-ves-proto-message": "ves.io.schema.app_type.CustomDataDetectionConfig",
             "properties": {
                 "all_request_sections": {
-                    "description": "Exclusive with [all_response_sections all_sections custom_sections]\n",
+                    "description": "x-displayName: \"All Request\"",
                     "title": "all_request_sections",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "All Request"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "all_response_sections": {
-                    "description": "Exclusive with [all_request_sections all_sections custom_sections]\n",
+                    "description": "x-displayName: \"All Response\"",
                     "title": "all_response_sections",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "All Response"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "all_sections": {
-                    "description": "Exclusive with [all_request_sections all_response_sections custom_sections]\n",
+                    "description": "x-displayName: \"All Request \u0026 Response\"",
                     "title": "all_sections",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "All Request \u0026 Response"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "any_domain": {
-                    "description": "Exclusive with [specific_domain]\n The rule will apply for all domains.",
+                    "description": "x-displayName: \"Any Domain\"\nThe rule will apply for all domains.",
                     "title": "any domain",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Any Domain"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "any_target": {
-                    "description": "Exclusive with [api_endpoint_target]\n The rule will be applied for all requests on this LB.",
+                    "description": "x-displayName: \"All API Endpoints\"\nThe rule will be applied for all requests on this LB.",
                     "title": "any domain",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "All API Endpoints"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "api_endpoint_target": {
-                    "description": "Exclusive with [any_target]\n The rule is applied only for the specified api endpoints.\n\nExample: - \"/endpoint1\"-",
+                    "description": "x-example: \"/endpoint1\"\nx-displayName: \"API Endpoint\"\nThe rule is applied only for the specified api endpoints.",
                     "title": "api endpoint target",
-                    "$ref": "#/definitions/app_typeAPIEndpoint",
-                    "x-displayname": "API Endpoint",
-                    "x-ves-example": "/endpoint1"
+                    "$ref": "#/definitions/app_typeAPIEndpoint"
+                },
+                "api_group": {
+                    "type": "string",
+                    "description": "x-displayName: \"API Group\"\nx-example: \"oas-all-operations\"\nThe rule is applied on the APIs that belong to specified api_group.\nAPI groups derived from API Definition swaggers.\nFor example oas-all-operations including all paths and methods from the swaggers, oas-base-urls covering all requests under base-paths from the swaggers.\nCustom groups can be created if user tags paths or operations with \"x-volterra-api-group\" extensions inside swaggers.",
+                    "title": "api_group"
+                },
+                "base_path": {
+                    "type": "string",
+                    "description": "x-example: \"/v1\"\nx-displayName: \"Base Path\"\nThe rule is applied only for the requests matching the specified base path.",
+                    "title": "base path"
                 },
                 "custom_sections": {
-                    "description": "Exclusive with [all_request_sections all_response_sections all_sections]\n",
+                    "description": "x-displayName: \"Custom Sections\"",
                     "title": "sections",
-                    "$ref": "#/definitions/app_typeCustomSections",
-                    "x-displayname": "Custom Sections"
+                    "$ref": "#/definitions/app_typeCustomSections"
                 },
                 "key_pattern": {
-                    "description": "Exclusive with [key_value_pattern value_pattern]\n Search for pattern across all field names in the specified sections.",
+                    "description": "x-displayName: \"Key Pattern\"\nSearch for pattern across all field names in the specified sections.",
                     "title": "key pattern",
-                    "$ref": "#/definitions/app_typeKeyPattern",
-                    "x-displayname": "Key Pattern"
+                    "$ref": "#/definitions/app_typeKeyPattern"
                 },
                 "key_value_pattern": {
-                    "description": "Exclusive with [key_pattern value_pattern]\n Search for specific field and value patterns in the specified sections.",
+                    "description": "x-displayName: \"Key-Value Pattern\"\nSearch for specific field and value patterns in the specified sections.",
                     "title": "key-value pattern",
-                    "$ref": "#/definitions/app_typeKeyValuePattern",
-                    "x-displayname": "Key-Value Pattern"
+                    "$ref": "#/definitions/app_typeKeyValuePattern"
                 },
                 "specific_domain": {
                     "type": "string",
-                    "description": "Exclusive with [any_domain]\n The rule will apply for a specific domain.\n For example: api.example.com\n\nExample: - \"api.example.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.vh_domain: true\n",
-                    "title": "domain",
-                    "maxLength": 128,
-                    "x-displayname": "Specific Domain",
-                    "x-ves-example": "api.example.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "128",
-                        "ves.io.schema.rules.string.vh_domain": "true"
-                    }
+                    "description": "x-displayName: \"Specific Domain\"\nx-example: \"api.example.com\"\nThe rule will apply for a specific domain.\nFor example: api.example.com",
+                    "title": "domain"
                 },
                 "value_pattern": {
-                    "description": "Exclusive with [key_pattern key_value_pattern]\n Search for pattern across all field values in the specified sections.",
+                    "description": "x-displayName: \"Value Pattern\"\nSearch for pattern across all field values in the specified sections.",
                     "title": "value pattern",
-                    "$ref": "#/definitions/app_typeValuePattern",
-                    "x-displayname": "Value Pattern"
+                    "$ref": "#/definitions/app_typeValuePattern"
                 }
             }
         },
         "app_typeCustomSections": {
             "type": "object",
-            "description": "Request \u0026 Response Sections.",
+            "description": "x-displayName: \"Custom Sections\"\nRequest \u0026 Response Sections.",
             "title": "CustomSections",
-            "x-displayname": "Custom Sections",
-            "x-ves-proto-message": "ves.io.schema.app_type.CustomSections",
             "properties": {
                 "custom_sections": {
                     "type": "array",
-                    "description": " Request \u0026 Response Sections.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Custom Sections\"\nx-required\nRequest \u0026 Response Sections.",
                     "title": "custom_sections",
                     "items": {
                         "$ref": "#/definitions/schemaHttpSections"
-                    },
-                    "x-displayname": "Custom Sections",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "app_typeCustomSensitiveDataDetectionRule": {
             "type": "object",
-            "description": "Custom Sensitive Data Rule Definition.",
+            "description": "x-displayName: \"Custom Sensitive Data Detection Rule\"\nCustom Sensitive Data Rule Definition.",
             "title": "CustomSensitiveDataRule",
-            "x-displayname": "Custom Sensitive Data Detection Rule",
-            "x-ves-proto-message": "ves.io.schema.app_type.CustomSensitiveDataDetectionRule",
             "properties": {
                 "metadata": {
-                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Metadata\"\nCommon attributes for the rule including name and description.",
                     "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType",
-                    "x-displayname": "Metadata",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaMessageMetaType"
                 },
                 "sensitive_data_detection_config": {
-                    "description": " The custom data detection config specifies targets, scopes \u0026 the pattern to be detected.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Sensitive Data Detection Config\"\nThe custom data detection config specifies targets, scopes \u0026 the pattern to be detected.",
                     "title": "sensitive_data_detection_config",
-                    "$ref": "#/definitions/app_typeCustomDataDetectionConfig",
-                    "x-displayname": "Sensitive Data Detection Config",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/app_typeCustomDataDetectionConfig"
                 },
                 "sensitive_data_type": {
-                    "description": " If the pattern is detected, the request is labeled with specified sensitive data type.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Sensitive Data Type\"\nIf the pattern is detected, the request is labeled with specified sensitive data type.",
                     "title": "sensitive_data_type",
-                    "$ref": "#/definitions/app_typeCustomSensitiveDataType",
-                    "x-displayname": "Sensitive Data Type",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/app_typeCustomSensitiveDataType"
                 }
             }
         },
         "app_typeCustomSensitiveDataType": {
             "type": "object",
-            "description": "The type/category of the sensitive data this rule detects. e.g. Email, Credit Card etc.",
+            "description": "x-displayName: \"Custom Sensitive Data Type\"\nThe type/category of the sensitive data this rule detects. e.g. Email, Credit Card etc.",
             "title": "CustomSensitiveDataType",
-            "x-displayname": "Custom Sensitive Data Type",
-            "x-ves-proto-message": "ves.io.schema.app_type.CustomSensitiveDataType",
             "properties": {
                 "type": {
                     "type": "string",
-                    "description": " The request is labeled as specified sensitive data type.\n\nExample: - \"EMAIL\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.ves_object_name: true\n",
-                    "title": "sensitive data type",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Type",
-                    "x-ves-example": "EMAIL",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.ves_object_name": "true"
-                    }
+                    "description": "x-required\nx-displayName: \"Type\"\nx-example: \"EMAIL\"\nThe request is labeled as specified sensitive data type.",
+                    "title": "sensitive data type"
                 }
             }
         },
@@ -3003,225 +2919,154 @@ var APISwaggerJSON string = `{
         },
         "app_typeKeyPattern": {
             "type": "object",
-            "description": "Pattern to detect. Could be exact match or regex match.",
+            "description": "x-displayName: \"Key Pattern\"\nPattern to detect. Could be exact match or regex match.",
             "title": "Key Pattern",
-            "x-displayname": "Key Pattern",
-            "x-ves-oneof-field-key_pattern": "[\"exact_value\",\"regex_value\"]",
-            "x-ves-proto-message": "ves.io.schema.app_type.KeyPattern",
             "properties": {
                 "exact_value": {
                     "type": "string",
-                    "description": "Exclusive with [regex_value]\n Search for values with exact match.\n\nExample: - \"x-volt-header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
-                    "title": "exact value",
-                    "maxLength": 256,
-                    "x-displayname": "Exact Value",
-                    "x-ves-example": "x-volt-header",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.not_empty": "true"
-                    }
+                    "description": "x-displayName: \"Exact Value\"\nx-example: \"x-volt-header\"\nSearch for values with exact match.",
+                    "title": "exact value"
                 },
                 "regex_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value]\n Search for values matching this regular expression.\n\nExample: - \"'^new.*$', 'san f.*', '.* del .*'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "regex value",
-                    "maxLength": 256,
-                    "x-displayname": "Regex Value",
-                    "x-ves-example": "'^new.*$', 'san f.*', '.* del .*'",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.not_empty": "true",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
+                    "description": "x-displayName: \"Regex Value\"\nx-example: \"'^new.*$', 'san f.*', '.* del .*'\"\nSearch for values matching this regular expression.",
+                    "title": "regex value"
                 }
             }
         },
         "app_typeKeyValuePattern": {
             "type": "object",
-            "description": "Search for specific key \u0026 value patterns in the specified sections.",
+            "description": "x-displayName: \"Key \u0026 Value Pattern\"\nSearch for specific key \u0026 value patterns in the specified sections.",
             "title": "Key-Value Pattern",
-            "x-displayname": "Key \u0026 Value Pattern",
-            "x-ves-proto-message": "ves.io.schema.app_type.KeyValuePattern",
             "properties": {
                 "key_pattern": {
-                    "description": " Pattern for key/field.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Key Pattern\"\nx-required\nPattern for key/field.",
                     "title": "key_pattern",
-                    "$ref": "#/definitions/app_typeKeyPattern",
-                    "x-displayname": "Key Pattern",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/app_typeKeyPattern"
                 },
                 "value_pattern": {
-                    "description": " Pattern for value.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Value Pattern\"\nx-required\nPattern for value.",
                     "title": "value_pattern",
-                    "$ref": "#/definitions/app_typeValuePattern",
-                    "x-displayname": "Value Pattern",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/app_typeValuePattern"
                 }
             }
         },
         "app_typeSensitiveDataDetectionRules": {
             "type": "object",
-            "description": "Rules to manage/configure sensitive data detection in requests and/or response sections.",
+            "description": "x-displayName: \"Sensitive Data Detection Rules\"\nRules to manage/configure sensitive data detection in requests and/or response sections.",
             "title": "Sensitive Data Detection Rules",
-            "x-displayname": "Sensitive Data Detection Rules",
-            "x-ves-proto-message": "ves.io.schema.app_type.SensitiveDataDetectionRules",
             "properties": {
                 "custom_sensitive_data_detection_rules": {
                     "type": "array",
-                    "description": " Rules to detect custom sensitive data in requests and/or responses sections.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Defined Custom Sensitive Data Types\"\nRules to detect custom sensitive data in requests and/or responses sections.",
                     "title": "custom sensitive data rules",
-                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/app_typeCustomSensitiveDataDetectionRule"
-                    },
-                    "x-displayname": "Defined Custom Sensitive Data Types",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "100",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "disabled_built_in_rules": {
                     "type": "array",
-                    "description": " List of disabled built-in sensitive data detection rules.\n\nExample: - \"[EMAIL, CC]\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Disabled Built-In Sensitive Data Types\"\nx-example: \"[EMAIL, CC]\"\nList of disabled built-in sensitive data detection rules.",
                     "title": "disabled_built_in_rules",
-                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/app_typeBuiltInSensitiveDataType"
-                    },
-                    "x-displayname": "Disabled Built-In Sensitive Data Types",
-                    "x-ves-example": "[EMAIL, CC]",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "100",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
             }
         },
         "app_typeValuePattern": {
             "type": "object",
-            "description": "Pattern to detect. Could be exact match or regex match.",
+            "description": "x-displayName: \"Value Pattern\"\nPattern to detect. Could be exact match or regex match.",
             "title": "Value Pattern",
-            "x-displayname": "Value Pattern",
-            "x-ves-oneof-field-value_pattern": "[\"exact_value\",\"regex_value\"]",
-            "x-ves-proto-message": "ves.io.schema.app_type.ValuePattern",
             "properties": {
                 "exact_value": {
                     "type": "string",
-                    "description": "Exclusive with [regex_value]\n Pattern value to be detected.\n\nExample: - \"x-volt-header\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
-                    "title": "exact value",
-                    "maxLength": 256,
-                    "x-displayname": "Exact Value",
-                    "x-ves-example": "x-volt-header",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.not_empty": "true"
-                    }
+                    "description": "x-displayName: \"Exact Value\"\nx-example: \"x-volt-header\"\nPattern value to be detected.",
+                    "title": "exact value"
                 },
                 "regex_value": {
                     "type": "string",
-                    "description": "Exclusive with [exact_value]\n Regular expression for this pattern.\n\nExample: - \"'^new.*$', 'san f.*', '.* del .*'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "regex value",
-                    "maxLength": 256,
-                    "x-displayname": "Regex Value",
-                    "x-ves-example": "'^new.*$', 'san f.*', '.* del .*'",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "256",
-                        "ves.io.schema.rules.string.not_empty": "true",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
+                    "description": "x-displayName: \"Regex Value\"\nx-example: \"'^new.*$', 'san f.*', '.* del .*'\"\nRegular expression for this pattern.",
+                    "title": "regex value"
                 }
             }
         },
         "cdn_loadbalancerApiProtection": {
             "type": "object",
-            "description": "API Definition based on the imported swagger specs",
+            "description": "x-displayName: \"API Definition\"\nAPI Definition based on the imported swagger specs",
             "title": "API Definition",
-            "x-displayname": "API Definition",
-            "x-ves-oneof-field-api_definition_choice": "[\"api_specification\",\"api_specification_on_cache_miss\",\"disable_api_definition\"]",
-            "x-ves-oneof-field-api_discovery_choice": "[\"api_discovery_on_cache_miss\",\"disable_api_discovery\",\"enable_api_discovery\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ApiProtection",
             "properties": {
                 "api_discovery_on_cache_miss": {
-                    "description": "Exclusive with [disable_api_discovery enable_api_discovery]\n Enable api discovery only on cache miss in this distribution",
+                    "description": "x-displayName: \"Enable Only on Cache Miss\"\nEnable api discovery only on cache miss in this distribution",
                     "title": "Enable API Discovery Only on Cache Miss",
-                    "$ref": "#/definitions/common_wafApiDiscoverySetting",
-                    "x-displayname": "Enable Only on Cache Miss"
+                    "$ref": "#/definitions/common_wafApiDiscoverySetting"
                 },
                 "api_protection_rules": {
-                    "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
+                    "description": "x-displayName: \"API Protection Rules\"\nAPI Protection Rules can be defined in two categories.\nThe first category includes fine-grained rules, per API path and methods.\nThe second category includes rules per API groups or Server URLs.\nIf request matches any rule in the first category, second category rules are not evaluated.\nRules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
                     "title": "API Protection rules",
-                    "$ref": "#/definitions/common_wafAPIProtectionRules",
-                    "x-displayname": "API Protection Rules"
+                    "$ref": "#/definitions/common_wafAPIProtectionRules"
                 },
                 "api_specification": {
-                    "description": "Exclusive with [api_specification_on_cache_miss disable_api_definition]\n Specify API definition and OpenAPI Validation",
+                    "description": "x-displayName: \"Enable for All Requests\"\nSpecify API definition and OpenAPI Validation",
                     "title": "API Specification",
-                    "$ref": "#/definitions/common_wafAPISpecificationSettings",
-                    "x-displayname": "Enable for All Requests"
+                    "$ref": "#/definitions/common_wafAPISpecificationSettings"
                 },
                 "api_specification_on_cache_miss": {
-                    "description": "Exclusive with [api_specification disable_api_definition]\n Enable API definition and OpenAPI Validation only on cache miss in this distribution",
+                    "description": "x-displayName: \"Enable Only on Cache Miss\"\nEnable API definition and OpenAPI Validation only on cache miss in this distribution",
                     "title": "Enable API Specification Only on Cache Miss",
-                    "$ref": "#/definitions/common_wafAPISpecificationSettings",
-                    "x-displayname": "Enable Only on Cache Miss"
+                    "$ref": "#/definitions/common_wafAPISpecificationSettings"
+                },
+                "default_sensitive_data_policy": {
+                    "description": "x-displayName: \"Default\"\nApply system default sensitive data discovery",
+                    "title": "Apply sensitive data discovery",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_api_definition": {
-                    "description": "Exclusive with [api_specification api_specification_on_cache_miss]\n API Definition is not currently used for this load balancer",
+                    "description": "x-displayName: \"Disable\"\nAPI Definition is not currently used for this load balancer",
                     "title": "Don not use API Definition",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_api_discovery": {
-                    "description": "Exclusive with [api_discovery_on_cache_miss enable_api_discovery]\n Disable api discovery for this distribution",
+                    "description": "x-displayName: \"Disable\"\nDisable api discovery for this distribution",
                     "title": "Disable API discovery",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable_api_discovery": {
-                    "description": "Exclusive with [api_discovery_on_cache_miss disable_api_discovery]\n Enable api discovery for all requests in this distribution",
+                    "description": "x-displayName: \"Enable for All Requests\"\nEnable api discovery for all requests in this distribution",
                     "title": "Enable API discovery",
-                    "$ref": "#/definitions/common_wafApiDiscoverySetting",
-                    "x-displayname": "Enable for All Requests"
+                    "$ref": "#/definitions/common_wafApiDiscoverySetting"
                 },
                 "jwt_validation": {
-                    "description": " JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\n JWTs before they are passed to origin APIs. JWT Validation will also stop requests with expired\n tokens or tokens that are not yet valid.",
+                    "description": "x-displayName: \"JWT Validation\"\nJWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\nJWTs before they are passed to origin APIs. JWT Validation will also stop requests with expired\ntokens or tokens that are not yet valid.",
                     "title": "JWT Validation",
-                    "$ref": "#/definitions/common_wafJWTValidation",
-                    "x-displayname": "JWT Validation"
+                    "$ref": "#/definitions/common_wafJWTValidation"
+                },
+                "sensitive_data_policy": {
+                    "description": "x-displayName: \"Custom\"\nApply custom sensitive data discovery",
+                    "title": "Apply Specified Sensitive Data Discovery",
+                    "$ref": "#/definitions/common_securitySensitiveDataPolicySettings"
                 }
             }
         },
         "cdn_loadbalancerAuthenticationOptions": {
             "type": "object",
-            "description": "Options to authenticate incoming client requests",
+            "description": "x-displayName: \"Authentication Options\"\nOptions to authenticate incoming client requests",
             "title": "AuthenticationOptions",
-            "x-displayname": "Authentication Options",
-            "x-ves-oneof-field-auth_options": "[\"custom\",\"disable_auth\",\"jwt\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.AuthenticationOptions",
             "properties": {
                 "custom": {
-                    "description": "Exclusive with [disable_auth jwt]\n Enable Custom Authentication",
+                    "description": "x-displayName: \"Custom Authentication\"\nEnable Custom Authentication",
                     "title": "Custom Authentication",
-                    "$ref": "#/definitions/cdn_loadbalancerCDNCustomAuthentication",
-                    "x-displayname": "Custom Authentication"
+                    "$ref": "#/definitions/cdn_loadbalancerCDNCustomAuthentication"
                 },
                 "disable_auth": {
-                    "description": "Exclusive with [custom jwt]\n No Authentication",
+                    "description": "x-displayName: \"No Authentication\"\nNo Authentication",
                     "title": "No Authentication",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "No Authentication"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "jwt": {
-                    "description": "Exclusive with [custom disable_auth]\n Enable JWT Authentication",
+                    "description": "x-displayName: \"JWT Token Authentication\"\nEnable JWT Authentication",
                     "title": "JWT Token Authentication",
-                    "$ref": "#/definitions/policyJwtTokenAuthOptions",
-                    "x-displayname": "JWT Token Authentication"
+                    "$ref": "#/definitions/policyJwtTokenAuthOptions"
                 }
             }
         },
@@ -3379,20 +3224,13 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCDNCustomAuthentication": {
             "type": "object",
-            "description": "Custom  Authentication",
+            "description": "x-displayName: \"Custom Authentication\"\nCustom  Authentication",
             "title": "CDNCustomAuthentication",
-            "x-displayname": "Custom Authentication",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CDNCustomAuthentication",
             "properties": {
                 "custom_auth_config": {
                     "type": "string",
-                    "description": " This is custom authentication configuration parameters. Please reach out to the support for custom authentication details.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n",
-                    "title": "custom_auth_config",
-                    "maxLength": 4096,
-                    "x-displayname": "Custom Auth Config",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "4096"
-                    }
+                    "description": "x-displayName: \"Custom Auth Config\"\nx-example: \"\"\nThis is custom authentication configuration parameters. Please reach out to the support for custom authentication details.",
+                    "title": "custom_auth_config"
                 }
             }
         },
@@ -3788,34 +3626,21 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCacheOptions": {
             "type": "object",
-            "description": "This defines the options related to content caching",
+            "description": "x-displayName: \"Cache Options\"\nThis defines the options related to content caching",
             "title": "Cache options",
-            "x-displayname": "Cache Options",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CacheOptions",
             "properties": {
                 "cache_rules": {
                     "type": "array",
-                    "description": " Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Cache Rules\"\nRules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.",
                     "title": "List of Cache rules(These rules are ORed)",
-                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/cdn_loadbalancerCDNCacheRule"
-                    },
-                    "x-displayname": "Cache Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "default_cache_action": {
-                    "description": " Default value for Cache action.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Default Cache Action\"\nx-required\nDefault value for Cache action.",
                     "title": "Default Cache Action",
-                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheAction",
-                    "x-displayname": "Default Cache Action",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheAction"
                 }
             }
         },
@@ -3975,169 +3800,139 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerCommonSecurityControls": {
             "type": "object",
+            "description": "x-displayName: \"Common Security Controls\"",
             "title": "Common Security Controls",
-            "x-displayname": "Common Security Controls",
-            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"challenge_on_cache_miss\",\"enable_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
-            "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\",\"ip_reputation_on_cache_miss\"]",
-            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\",\"malicious_user_detection_on_cache_miss\"]",
-            "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
-            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
-            "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.CommonSecurityControls",
             "properties": {
                 "active_service_policies": {
-                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
+                    "description": "x-displayName: \"Apply Specified Service Policies\"\nApply the specified list of service policies and bypass the namespace service policy set",
                     "title": "Apply Specified Service Policies",
-                    "$ref": "#/definitions/common_wafServicePolicyList",
-                    "x-displayname": "Apply Specified Service Policies"
+                    "$ref": "#/definitions/common_wafServicePolicyList"
                 },
                 "api_rate_limit": {
-                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
+                    "description": "x-displayName: \"API Rate Limit\"\nDefine rate limiting for one or more API endpoints",
                     "title": "Rate Limiting Parameters",
-                    "$ref": "#/definitions/common_wafAPIRateLimit",
-                    "x-displayname": "API Rate Limit"
+                    "$ref": "#/definitions/common_wafAPIRateLimit"
                 },
                 "blocked_clients": {
                     "type": "array",
-                    "description": " Define rules to block IP Prefixes or AS numbers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": "x-displayName: \"Client Blocking Rules\"\nDefine rules to block IP Prefixes or AS numbers.",
                     "title": "Client Blocking Rules",
-                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/common_wafSimpleClientSrcRule"
-                    },
-                    "x-displayname": "Client Blocking Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
                 },
                 "captcha_challenge": {
-                    "description": "Exclusive with [challenge_on_cache_miss enable_challenge js_challenge no_challenge policy_based_challenge]\n Configure Captcha challenge on this load balancer",
+                    "description": "x-displayName: \"Captcha Challenge\"\nConfigure Captcha challenge on this load balancer",
                     "title": "Captcha Challenge",
-                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
-                    "x-displayname": "Captcha Challenge"
+                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType"
                 },
                 "challenge_on_cache_miss": {
-                    "description": "Exclusive with [captcha_challenge enable_challenge js_challenge no_challenge policy_based_challenge]\n Configure auto mitigation i.e risk based challenges for malicious users only on cache miss in this load balancer",
+                    "description": "x-displayName: \"Enable Only on Cache Miss\"\nConfigure auto mitigation i.e risk based challenges for malicious users only on cache miss in this load balancer",
                     "title": "Enable Challenge Only on Cache Miss",
-                    "$ref": "#/definitions/common_wafEnableChallenge",
-                    "x-displayname": "Enable Only on Cache Miss"
+                    "$ref": "#/definitions/common_wafEnableChallenge"
                 },
                 "cors_policy": {
-                    "description": " Cross-Origin Resource Sharing requests configuration\n\n CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",
+                    "description": "x-displayName: \"CORS Policy\"\nCross-Origin Resource Sharing requests configuration\n\nCORS is a mechanism that uses additional HTTP headers to tell a browser to let\na web application running at one origin (domain) have permission to access selected\nresources from a server at a different origin",
                     "title": "cors_policy",
-                    "$ref": "#/definitions/schemaCorsPolicy",
-                    "x-displayname": "CORS Policy"
+                    "$ref": "#/definitions/schemaCorsPolicy"
                 },
                 "disable_ip_reputation": {
-                    "description": "Exclusive with [enable_ip_reputation ip_reputation_on_cache_miss]\n No IP reputation configured this distribution",
+                    "description": "x-displayName: \"Disable\"\nNo IP reputation configured this distribution",
                     "title": "disable_ip_reputation",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_malicious_user_detection": {
-                    "description": "Exclusive with [enable_malicious_user_detection malicious_user_detection_on_cache_miss]\n Disable malicious user detection for this distribution",
+                    "description": "x-displayName: \"Disable\"\nDisable malicious user detection for this distribution",
                     "title": "Disable malicious user detection",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "disable_rate_limit": {
-                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
+                    "description": "x-displayName: \"Disable\"\nRate limiting is not currently enabled for this load balancer",
                     "title": "Disable Rate Limiting",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "disable_threat_mesh": {
+                    "description": "x-displayName: \"Disable\"",
+                    "title": "disable_threat_mesh",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "enable_challenge": {
-                    "description": "Exclusive with [captcha_challenge challenge_on_cache_miss js_challenge no_challenge policy_based_challenge]\n Configure auto mitigation i.e risk based challenges for malicious users for this load balancer",
+                    "description": "x-displayName: \"Enable for All Requests\"\nConfigure auto mitigation i.e risk based challenges for malicious users for this load balancer",
                     "title": "Enable",
-                    "$ref": "#/definitions/common_wafEnableChallenge",
-                    "x-displayname": "Enable for All Requests"
+                    "$ref": "#/definitions/common_wafEnableChallenge"
                 },
                 "enable_ip_reputation": {
-                    "description": "Exclusive with [disable_ip_reputation ip_reputation_on_cache_miss]\n Enable IP reputation for all requests in this distribution",
+                    "description": "x-displayName: \"Enable for All Requests\"\nEnable IP reputation for all requests in this distribution",
                     "title": "enable_ip_reputation",
-                    "$ref": "#/definitions/viewscommon_wafIPThreatCategoryListType",
-                    "x-displayname": "Enable for All Requests"
+                    "$ref": "#/definitions/viewscommon_wafIPThreatCategoryListType"
                 },
                 "enable_malicious_user_detection": {
-                    "description": "Exclusive with [disable_malicious_user_detection malicious_user_detection_on_cache_miss]\n Enable malicious user detection for all requests in this distribution",
+                    "description": "x-displayName: \"Enable for All Requests\"\nEnable malicious user detection for all requests in this distribution",
                     "title": "Enable malicious user detection",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable for All Requests"
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "enable_threat_mesh": {
+                    "description": "x-displayName: \"Enable\"",
+                    "title": "enable_threat_mesh",
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "ip_reputation_on_cache_miss": {
-                    "description": "Exclusive with [disable_ip_reputation enable_ip_reputation]\n Enable IP reputation only on cache miss in this distribution",
+                    "description": "x-displayName: \"Enable Only on Cache Miss\"\nEnable IP reputation only on cache miss in this distribution",
                     "title": "Enable Ip Reuputation Only on Cache Miss",
-                    "$ref": "#/definitions/viewscommon_wafIPThreatCategoryListType",
-                    "x-displayname": "Enable Only on Cache Miss"
+                    "$ref": "#/definitions/viewscommon_wafIPThreatCategoryListType"
                 },
                 "js_challenge": {
-                    "description": "Exclusive with [captcha_challenge challenge_on_cache_miss enable_challenge no_challenge policy_based_challenge]\n Configure JavaScript challenge on this load balancer",
+                    "description": "x-displayName: \"JavaScript Challenge\"\nConfigure JavaScript challenge on this load balancer",
                     "title": "JavaScript Challenge",
-                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
-                    "x-displayname": "JavaScript Challenge"
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType"
                 },
                 "malicious_user_detection_on_cache_miss": {
-                    "description": "Exclusive with [disable_malicious_user_detection enable_malicious_user_detection]\n Enable malicious user detection only on cache miss in this distribution",
+                    "description": "x-displayName: \"Enable Only on Cache Miss\"\nEnable malicious user detection only on cache miss in this distribution",
                     "title": "Enable Malicious User Detection Only on Cache Miss",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable Only on Cache Miss"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_challenge": {
-                    "description": "Exclusive with [captcha_challenge challenge_on_cache_miss enable_challenge js_challenge policy_based_challenge]\n No challenge is enabled for this load balancer",
+                    "description": "x-displayName: \"Disable\"\nNo challenge is enabled for this load balancer",
                     "title": "Disable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "no_service_policies": {
-                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
+                    "description": "x-displayName: \"Do Not Apply Service Policies\"\nDo not apply any service policies i.e. bypass the namespace service policy set",
                     "title": "Do Not Apply Service Policies",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Do Not Apply Service Policies"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "policy_based_challenge": {
-                    "description": "Exclusive with [captcha_challenge challenge_on_cache_miss enable_challenge js_challenge no_challenge]\n Specifies the settings for policy rule based challenge",
+                    "description": "x-displayName: \"Policy Based Challenge\"\nSpecifies the settings for policy rule based challenge",
                     "title": "policy based challenge",
-                    "$ref": "#/definitions/viewscommon_wafPolicyBasedChallenge",
-                    "x-displayname": "Policy Based Challenge"
+                    "$ref": "#/definitions/viewscommon_wafPolicyBasedChallenge"
                 },
                 "rate_limit": {
-                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this load balancer",
+                    "description": "x-displayName: \"Custom Rate Limiting Parameters\"\nDefine custom rate limiting parameters for this load balancer",
                     "title": "Custom Rate Limiting Parameters",
-                    "$ref": "#/definitions/common_wafRateLimitConfigType",
-                    "x-displayname": "Custom Rate Limiting Parameters"
+                    "$ref": "#/definitions/common_wafRateLimitConfigType"
                 },
                 "service_policies_from_namespace": {
-                    "description": "Exclusive with [active_service_policies no_service_policies]\n Apply the active service policies configured as part of the namespace service policy set",
+                    "description": "x-displayName: \"Apply Namespace Service Policies\"\nApply the active service policies configured as part of the namespace service policy set",
                     "title": "Apply Namespace Service Policies",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Apply Namespace Service Policies"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "trusted_clients": {
                     "type": "array",
-                    "description": " Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": "x-displayName: \"Trusted Client Rules\"\nDefine rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients.",
                     "title": "Trusted Client Rules",
-                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/common_wafSimpleClientSrcRule"
-                    },
-                    "x-displayname": "Trusted Client Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
                 },
                 "user_id_client_ip": {
-                    "description": "Exclusive with [user_identification]\n Use the Client IP address as the user identifier.",
+                    "description": "x-displayName: \"Client IP Address\"\nUse the Client IP address as the user identifier.",
                     "title": "user_id_client_ip",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Client IP Address"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "user_identification": {
-                    "description": "Exclusive with [user_id_client_ip]\n A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier.",
+                    "description": "x-displayName: \"User Identification Policy\"\nA reference to user_identification object.\nThe rules in the user_identification object are evaluated to determine the user identifier.",
                     "title": "user_identification",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "User Identification Policy"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -4189,23 +3984,18 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerGeoFilteringOptions": {
             "type": "object",
-            "description": "Options to filter based on Geo prefix",
+            "description": "x-displayName: \"Geo Filtering Options\"\nOptions to filter based on Geo prefix",
             "title": "GeoFilteringOptions",
-            "x-displayname": "Geo Filtering Options",
-            "x-ves-oneof-field-geo_filtering_type": "[\"allow_list\",\"block_list\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.GeoFilteringOptions",
             "properties": {
                 "allow_list": {
-                    "description": "Exclusive with [block_list]\n Allow list of countries",
+                    "description": "x-displayName: \"Allow List\"\nAllow list of countries",
                     "title": "Geo filtering type Allow List",
-                    "$ref": "#/definitions/policyCountryCodeList",
-                    "x-displayname": "Allow List"
+                    "$ref": "#/definitions/policyCountryCodeList"
                 },
                 "block_list": {
-                    "description": "Exclusive with [allow_list]\n Block list of countries",
+                    "description": "x-displayName: \"Block List\"\nBlock list of countries",
                     "title": "geo filtering type Block List",
-                    "$ref": "#/definitions/policyCountryCodeList",
-                    "x-displayname": "Block List"
+                    "$ref": "#/definitions/policyCountryCodeList"
                 }
             }
         },
@@ -4298,23 +4088,18 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerIpFilteringOptions": {
             "type": "object",
-            "description": "Options to filter based on IP prefix",
+            "description": "x-displayName: \"IP Filtering Options\"\nOptions to filter based on IP prefix",
             "title": "IpFilteringOptions",
-            "x-displayname": "IP Filtering Options",
-            "x-ves-oneof-field-ip_filtering_type": "[\"allow_list\",\"block_list\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.IpFilteringOptions",
             "properties": {
                 "allow_list": {
-                    "description": "Exclusive with [block_list]\n Allow list of ip prefixes",
+                    "description": "x-displayName: \"Allow List\"\nAllow list of ip prefixes",
                     "title": "Ip filtering type Allow List",
-                    "$ref": "#/definitions/policyPrefixMatchList",
-                    "x-displayname": "Allow List"
+                    "$ref": "#/definitions/policyPrefixMatchList"
                 },
                 "block_list": {
-                    "description": "Exclusive with [allow_list]\n Block list of ip prefixes",
+                    "description": "x-displayName: \"Block List\"\nBlock list of ip prefixes",
                     "title": "Ip filtering type Block List",
-                    "$ref": "#/definitions/policyPrefixMatchList",
-                    "x-displayname": "Block List"
+                    "$ref": "#/definitions/policyPrefixMatchList"
                 }
             }
         },
@@ -4387,46 +4172,69 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cdn_loadbalancerOtherSettings": {
+            "type": "object",
+            "description": "Other Settings",
+            "title": "Other Settings",
+            "x-displayname": "Other Settings",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.OtherSettings",
+            "properties": {
+                "add_location": {
+                    "type": "boolean",
+                    "description": " x-example: true\n Appends header x-volterra-location = \u003cre-site-name\u003e in responses.\n\nExample: - \"true\"-",
+                    "title": "Add Site information",
+                    "format": "boolean",
+                    "x-displayname": "Add Location",
+                    "x-ves-example": "true"
+                },
+                "header_options": {
+                    "description": " Request/Response header related options",
+                    "title": "Header Control",
+                    "$ref": "#/definitions/cdn_loadbalancerHeaderControlType",
+                    "x-displayname": "Header Control"
+                },
+                "logging_options": {
+                    "description": " Logging related options",
+                    "title": "Logging Options",
+                    "$ref": "#/definitions/cdn_loadbalancerLoggingOptionsType",
+                    "x-displayname": "Logging Options"
+                }
+            }
+        },
         "cdn_loadbalancerSecurityOptionsType": {
             "type": "object",
-            "description": "This defines various options related to security",
+            "description": "x-displayName: \"Security Options\"\nThis defines various options related to security",
             "title": "Security options",
-            "x-displayname": "Security Options",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.SecurityOptionsType",
             "properties": {
                 "api_protection": {
+                    "description": "x-displayName: \"API Protection\"",
                     "title": "API Protection",
-                    "$ref": "#/definitions/cdn_loadbalancerApiProtection",
-                    "x-displayname": "API Protection"
+                    "$ref": "#/definitions/cdn_loadbalancerApiProtection"
                 },
                 "auth_options": {
-                    "description": " Authentication Options",
+                    "description": "x-displayName: \"Authentication Options\"\nAuthentication Options",
                     "title": "authentication",
-                    "$ref": "#/definitions/cdn_loadbalancerAuthenticationOptions",
-                    "x-displayname": "Authentication Options"
+                    "$ref": "#/definitions/cdn_loadbalancerAuthenticationOptions"
                 },
                 "common_security_controls": {
+                    "description": "x-displayName: \"Common Security Controls\"",
                     "title": "Common Security Controls",
-                    "$ref": "#/definitions/cdn_loadbalancerCommonSecurityControls",
-                    "x-displayname": "Common Security Controls"
+                    "$ref": "#/definitions/cdn_loadbalancerCommonSecurityControls"
                 },
                 "geo_filtering": {
-                    "description": " Geo filtering options",
+                    "description": "x-displayName: \"Client Geo filtering Options\"\nGeo filtering options",
                     "title": "geo_filtering",
-                    "$ref": "#/definitions/cdn_loadbalancerGeoFilteringOptions",
-                    "x-displayname": "Client Geo filtering Options"
+                    "$ref": "#/definitions/cdn_loadbalancerGeoFilteringOptions"
                 },
                 "ip_filtering": {
-                    "description": " IP filtering options",
+                    "description": "x-displayName: \"Client IP filtering Options\"\nIP filtering options",
                     "title": "ip_filtering",
-                    "$ref": "#/definitions/cdn_loadbalancerIpFilteringOptions",
-                    "x-displayname": "Client IP filtering Options"
+                    "$ref": "#/definitions/cdn_loadbalancerIpFilteringOptions"
                 },
                 "web_app_firewall": {
-                    "description": " Web Application Firewall",
+                    "description": "x-displayName: \"Web Application Firewall\"\nWeb Application Firewall",
                     "title": "Web Application Firewall",
-                    "$ref": "#/definitions/cdn_loadbalancerWebApplicationFirewall",
-                    "x-displayname": "Web Application Firewall"
+                    "$ref": "#/definitions/cdn_loadbalancerWebApplicationFirewall"
                 }
             }
         },
@@ -4483,90 +4291,59 @@ var APISwaggerJSON string = `{
         },
         "cdn_loadbalancerWebApplicationFirewall": {
             "type": "object",
-            "description": "Web Application Firewall",
+            "description": "x-displayName: \"Web Application Firewall\"\nWeb Application Firewall",
             "title": "Web Application Firewall",
-            "x-displayname": "Web Application Firewall",
-            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"app_firewall_on_cache_miss\",\"disable_waf\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.WebApplicationFirewall",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with [app_firewall_on_cache_miss disable_waf]\n Enable WAF configuration for all requests in this distribution",
+                    "description": "x-displayName: \"Enable for All Requests\"\nEnable WAF configuration for all requests in this distribution",
                     "title": "Application Firewall for All Requests",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable for All Requests"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "app_firewall_on_cache_miss": {
-                    "description": "Exclusive with [app_firewall disable_waf]\n Enable WAF configuration only on cache miss in this distribution",
+                    "description": "x-displayName: \"Enable Only on Cache Miss\"\nEnable WAF configuration only on cache miss in this distribution",
                     "title": "Application Firewall Enable Only on Cache Miss",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Enable Only on Cache Miss"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "csrf_policy": {
-                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
+                    "description": "x-displayName: \"Cross-Site Request Forgery Protection\"\nCross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\nThe policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n1. The origin that caused the user agent to issue the request (source origin).\n2. The origin that the request is going to (target origin).\nWhen the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\nBecause CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
                     "title": "csrf_policy",
-                    "$ref": "#/definitions/schemaCsrfPolicy",
-                    "x-displayname": "Cross-Site Request Forgery Protection"
+                    "$ref": "#/definitions/schemaCsrfPolicy"
                 },
                 "data_guard_rules": {
                     "type": "array",
-                    "description": " Data Guard prevents responses from exposing sensitive information by masking the data.\n The system masks credit card numbers and social security numbers leaked from the application from within the http response with a string of asterisks (*).\n Note: App Firewall should be enabled, to use Data Guard feature.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": "x-displayName: \"Data Guard Rules\"\nData Guard prevents responses from exposing sensitive information by masking the data.\nThe system masks credit card numbers and social security numbers leaked from the application from within the http response with a string of asterisks (*).\nNote: App Firewall should be enabled, to use Data Guard feature.",
                     "title": "Data Guard Rules",
-                    "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policySimpleDataGuardRule"
-                    },
-                    "x-displayname": "Data Guard Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "64",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
                 },
                 "disable_waf": {
-                    "description": "Exclusive with [app_firewall app_firewall_on_cache_miss]\n No WAF configuration for this load balancer",
+                    "description": "x-displayName: \"Disable\"\nNo WAF configuration for this load balancer",
                     "title": "Disable WAF",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "graphql_rules": {
                     "type": "array",
-                    "description": " GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable\n description of the data in API. GraphQL gives clients the power to ask for exactly what they need, makes it\n easier to evolve APIs over time, and enables powerful developer tools. Policy configuration to analyze GraphQL\n queries and prevent GraphQL tailored attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": "x-displayName: \"GraphQL Inspection\"\nGraphQL is a query language and server-side runtime for APIs which provides a complete and understandable\ndescription of the data in API. GraphQL gives clients the power to ask for exactly what they need, makes it\neasier to evolve APIs over time, and enables powerful developer tools. Policy configuration to analyze GraphQL\nqueries and prevent GraphQL tailored attacks.",
                     "title": "GraphQL Inspection",
-                    "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyGraphQLRule"
-                    },
-                    "x-displayname": "GraphQL Inspection",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "64",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
                 },
                 "protected_cookies": {
                     "type": "array",
-                    "description": " Allows setting attributes (SameSite, Secure, and HttpOnly) on cookies in responses.\n Cookie Tampering Protection prevents attackers from modifying the value of session cookies.\n For Cookie Tampering Protection, enabling a web app firewall (WAF) is a prerequisite.\n The configured mode of WAF (monitoring or blocking) will be enforced on the request when cookie tampering is identified.\n Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Cookie Protection\"\nAllows setting attributes (SameSite, Secure, and HttpOnly) on cookies in responses.\nCookie Tampering Protection prevents attackers from modifying the value of session cookies.\nFor Cookie Tampering Protection, enabling a web app firewall (WAF) is a prerequisite.\nThe configured mode of WAF (monitoring or blocking) will be enforced on the request when cookie tampering is identified.\nNote: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.",
                     "title": "Cookie protection",
-                    "maxItems": 16,
                     "items": {
                         "$ref": "#/definitions/schemaCookieManipulationOptionType"
-                    },
-                    "x-displayname": "Cookie Protection",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": "x-displayName: \"WAF Exclusion Rules\"\nDefine the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\nThe match criteria include domain, path and method.\nWAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\nIt's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\nFor each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\nWhen an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.",
                     "title": "WAF Exclusion Rules",
-                    "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
-                    },
-                    "x-displayname": "WAF Exclusion Rules",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "256",
-                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
                 }
             }
@@ -4582,6 +4359,995 @@ var APISwaggerJSON string = `{
             "default": "EOK",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.views.cdn_loadbalancer.crudapi.ErrorCode"
+        },
+        "common_securityAppEndpointType": {
+            "type": "object",
+            "description": "Application Endpoint.",
+            "title": "AppEndpointType",
+            "x-displayname": "Application Endpoint",
+            "x-ves-displayorder": "1,2,13,3,5,4,8,12,16",
+            "x-ves-oneof-field-app_traffic_type_choice": "[\"mobile\",\"web\",\"web_mobile\"]",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-oneof-field-flow_label_choice": "[\"flow_label\",\"undefined_flow_label\"]",
+            "x-ves-oneof-field-goodbot_choice": "[\"allow_good_bots\",\"mitigate_good_bots\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.AppEndpointType",
+            "properties": {
+                "allow_good_bots": {
+                    "description": "Exclusive with [mitigate_good_bots]\n System flags Good Bot traffic and allow it to continue to the origin",
+                    "title": "x-displayName: \"Allow All Good Bots to Continue to Origin\"",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Allow All Good Bots to Continue to Origin"
+                },
+                "any_domain": {
+                    "description": "Exclusive with [domain]\n Any Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any Domain"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\n Domain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType",
+                    "x-displayname": "Domain"
+                },
+                "flow_label": {
+                    "description": "Exclusive with [undefined_flow_label]\n",
+                    "title": "flow_label",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelCategoriesChoiceType",
+                    "x-displayname": "Specify Endpoint label category"
+                },
+                "http_methods": {
+                    "type": "array",
+                    "description": " List of HTTP methods.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.in: [0,1,3,4,10]\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "HTTP Methods",
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "items": {
+                        "$ref": "#/definitions/schemaBotHttpMethod"
+                    },
+                    "x-displayname": "HTTP Methods",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.in": "[0,1,3,4,10]",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "mitigate_good_bots": {
+                    "description": "Exclusive with [allow_good_bots]\n System flags Good Bot Traffic, but mitigation is handled in the  same manner as malicious automated traffic defined above",
+                    "title": "x-displayName: \"Apply Mitigation to Good Bots\"",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Apply Mitigation to Good Bots"
+                },
+                "mitigation": {
+                    "description": " Mitigation action.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Mitigation",
+                    "$ref": "#/definitions/policyShapeBotMitigationAction",
+                    "x-displayname": "Bot Traffic Mitigation",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "mobile": {
+                    "description": "Exclusive with [web web_mobile]\n Mobile traffic channel.",
+                    "title": "MobileTrafficChannel",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Mobile Traffic"
+                },
+                "path": {
+                    "description": " Matching URI path of the route.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "protocol": {
+                    "description": " Protocol.",
+                    "title": "Protocol",
+                    "$ref": "#/definitions/common_securityURLScheme",
+                    "x-displayname": "Protocol"
+                },
+                "undefined_flow_label": {
+                    "description": "Exclusive with [flow_label]\n",
+                    "title": "undefined",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Undefined"
+                },
+                "web": {
+                    "description": "Exclusive with [mobile web_mobile]\n Web traffic channel.",
+                    "title": "WebTrafficChannel",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Web Traffic"
+                },
+                "web_mobile": {
+                    "description": "Exclusive with [mobile web]\n Web and mobile traffic channel.",
+                    "title": "WebMobileTrafficChannel",
+                    "$ref": "#/definitions/common_securityWebMobileTrafficType",
+                    "x-displayname": "Web and Mobile Traffic"
+                }
+            }
+        },
+        "common_securityBotAdvancedMobileSDKConfigType": {
+            "type": "object",
+            "description": "x-displayName: \"Mobile Request Identifier Headers\"\nMobile Request Identifier Headers.",
+            "title": "BotAdvancedMobileSDKConfigType",
+            "properties": {
+                "mobile_identifier": {
+                    "description": "x-displayName: \"Mobile Request Identifier Headers\"\nMobile Request Identifier Headers Type.",
+                    "title": "MobileTrafficIdentifierType",
+                    "$ref": "#/definitions/common_securityMobileTrafficIdentifierType"
+                }
+            }
+        },
+        "common_securityBotDefenseAdvancedPolicyType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Advanced Policy\"\nThis defines various configuration options for Bot Defense Advanced Policy.",
+            "title": "BotDefenseAdvancedPolicyType",
+            "properties": {
+                "disable_mobile_sdk": {
+                    "description": "x-displayName: \"Disable Mobile SDK\"\nDisable Mobile SDK.",
+                    "title": "Disable Mobile SDK",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "js_download_path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Web Client JavaScript Download Path\"\nx-example: \"/common.js\"\nx-required\nCustomize Bot Defense Web Client JavaScript path",
+                    "title": "js_download_path"
+                },
+                "mobile_sdk_config": {
+                    "description": "x-displayName: \"Enable Mobile SDK\"\nEnable Mobile SDK Configuration",
+                    "title": "Enable Mobile SDK",
+                    "$ref": "#/definitions/common_securityBotAdvancedMobileSDKConfigType"
+                },
+                "protected_app_endpoints": {
+                    "type": "array",
+                    "description": "x-displayName: \"Protected App Endpoints\"\nx-required\nList of protected endpoints (max 128 items)",
+                    "title": "ProtectedAppEndpointType",
+                    "items": {
+                        "$ref": "#/definitions/common_securityProtectedAppEndpointType"
+                    }
+                }
+            }
+        },
+        "common_securityBotDefenseAdvancedType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Defense Advanced\"\nBot Defense Advanced",
+            "title": "BotDefenseAdvancedType",
+            "properties": {
+                "mobile": {
+                    "description": "x-displayName: \"Infrastructure For Mobile\"\nSelect infrastructure for mobile.",
+                    "title": "Mobile",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "policy": {
+                    "description": "x-displayName: \"Bot Defense Advanced Policy\"\nx-required\nBot Defense Advanced Policy.",
+                    "title": "BotDefenseAdvancedPolicyType",
+                    "$ref": "#/definitions/common_securityBotDefenseAdvancedPolicyType"
+                },
+                "web": {
+                    "description": "x-displayName: \"Infrastructure For Web\"\nSelect infrastructure for web.",
+                    "title": "Web",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
+        "common_securityCSDJavaScriptInsertAllWithExceptionsType": {
+            "type": "object",
+            "description": "Insert Client-Side Defense JavaScript in all pages  with the exceptions",
+            "title": "CSDJavaScriptInsertAllWithExceptionsType",
+            "x-displayname": "Insert JavaScript in All Pages with the Exceptions",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.CSDJavaScriptInsertAllWithExceptionsType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exclude_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/common_securityShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Pages",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "common_securityCSDJavaScriptInsertType": {
+            "type": "object",
+            "description": "This defines custom JavaScript insertion rules for Client-Side Defense Policy.",
+            "title": "CSDJavaScriptInsertType",
+            "x-displayname": "JavaScript Custom Insertion Rules",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.CSDJavaScriptInsertType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exclude_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/common_securityShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Paths",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "rules": {
+                    "type": "array",
+                    "description": " Required list of pages to insert Client-Side Defense client JavaScript.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "rules",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/common_securityCSDJavaScriptInsertionRule"
+                    },
+                    "x-displayname": "JavaScript Insertions",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "common_securityCSDJavaScriptInsertionRule": {
+            "type": "object",
+            "description": "This defines a rule for Client-Side Defense JavaScript insertion.",
+            "title": "CSDJavaScriptInsertionRule",
+            "x-displayname": "JavaScript Insertion Rule",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.CSDJavaScriptInsertionRule",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\n Any Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any Domain"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\n Domain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType",
+                    "x-displayname": "Domain"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "description": " URI path matcher.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "common_securityClientSideDefensePolicyType": {
+            "type": "object",
+            "description": "This defines various configuration options for Client-Side Defense policy.",
+            "title": "ClientSideDefensePolicyType",
+            "x-displayname": "Client-Side Defense Policy",
+            "x-ves-oneof-field-java_script_choice": "[\"disable_js_insert\",\"js_insert_all_pages\",\"js_insert_all_pages_except\",\"js_insertion_rules\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ClientSideDefensePolicyType",
+            "properties": {
+                "disable_js_insert": {
+                    "description": "Exclusive with [js_insert_all_pages js_insert_all_pages_except js_insertion_rules]\n Disable JavaScript insertion.",
+                    "title": "Disable JavaScript Insertion",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable JavaScript Insertion"
+                },
+                "js_insert_all_pages": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages_except js_insertion_rules]\n Insert Client-Side Defense JavaScript in all pages.",
+                    "title": "Insert JavaScript in All Pages",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Insert JavaScript in All Pages"
+                },
+                "js_insert_all_pages_except": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insertion_rules]\n Insert Client-Side Defense JavaScript in all pages with the exceptions.",
+                    "title": "Insert JavaScript in All Pages with the Exceptions",
+                    "$ref": "#/definitions/common_securityCSDJavaScriptInsertAllWithExceptionsType",
+                    "x-displayname": "Insert JavaScript in All Pages with the Exceptions"
+                },
+                "js_insertion_rules": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insert_all_pages_except]\n Specify custom JavaScript insertion rules.",
+                    "title": "Custom JavaScript Insertion Rules",
+                    "$ref": "#/definitions/common_securityCSDJavaScriptInsertType",
+                    "x-displayname": "Custom JavaScript Insertion Rules"
+                }
+            }
+        },
+        "common_securityClientSideDefenseType": {
+            "type": "object",
+            "description": "This defines various configuration options for Client-Side Defense Policy.",
+            "title": "ClientSideDefenseType",
+            "x-displayname": "Client-Side Defense",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ClientSideDefenseType",
+            "properties": {
+                "policy": {
+                    "description": " Configure the pages where you want Client-Side Defense Protection.\n Please ensure that the same domains are configured in the Client-Side Defense configuration.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "ClientSideDefensePolicyType",
+                    "$ref": "#/definitions/common_securityClientSideDefensePolicyType",
+                    "x-displayname": "Client-Side Defense Policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "common_securityDDoSClientSource": {
+            "type": "object",
+            "description": "DDoS Mitigation sources to be blocked",
+            "title": "DDoSClientSource",
+            "x-displayname": "DDoS Client Source Choice",
+            "x-ves-displayorder": "1,3,5",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.DDoSClientSource",
+            "properties": {
+                "asn_list": {
+                    "description": " Addresses that belong to the ASNs in the given list\n The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.",
+                    "title": "asn_list",
+                    "$ref": "#/definitions/policyAsnMatchList",
+                    "x-displayname": "ASN List"
+                },
+                "country_list": {
+                    "type": "array",
+                    "description": " Sources that are located in one of the countries in the given list\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.items.enum.not_in: [0]\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "country_list",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyCountryCode"
+                    },
+                    "x-displayname": "Country List",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.items.enum.not_in": "[0]",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "tls_fingerprint_matcher": {
+                    "description": " TLS JA3 fingerprints to be matched.\n The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.",
+                    "title": "TLS JA3 fingerprint matcher",
+                    "$ref": "#/definitions/policyTlsFingerprintMatcherType",
+                    "x-displayname": "TLS Fingerprint Matcher"
+                }
+            }
+        },
+        "common_securityDDoSMitigationRule": {
+            "type": "object",
+            "description": "DDoS Mitigation Rule specifies the sources to be blocked",
+            "title": "DDoSMitigationRule",
+            "x-displayname": "DDoS Mitigation Rule",
+            "x-ves-displayorder": "1,2,7,10",
+            "x-ves-oneof-field-mitigation_action": "[\"block\"]",
+            "x-ves-oneof-field-mitigation_choice": "[\"ddos_client_source\",\"ip_prefix_list\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.DDoSMitigationRule",
+            "properties": {
+                "block": {
+                    "description": "Exclusive with []\n Block user for a duration determined by the expiration time",
+                    "title": "Block User",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Block User"
+                },
+                "ddos_client_source": {
+                    "description": "Exclusive with [ip_prefix_list]\n Combination of Region, ASN and TLS Fingerprints\n\nValidation Rules:\n  ves.io.schema.rules.message.required_one_nonzero_field: true\n",
+                    "title": "ddos_client_source",
+                    "$ref": "#/definitions/common_securityDDoSClientSource",
+                    "x-displayname": "DDoS Client Source",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required_one_nonzero_field": "true"
+                    }
+                },
+                "expiration_timestamp": {
+                    "type": "string",
+                    "description": " The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in\n the configuration but is not applied anymore.\n\nExample: - \"2019-12-31:44:34.171543432Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.timestamp.within.seconds: 31536000\n",
+                    "title": "expiration timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Expiration Timestamp",
+                    "x-ves-example": "2019-12-31:44:34.171543432Z",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.timestamp.within.seconds": "31536000"
+                    }
+                },
+                "ip_prefix_list": {
+                    "description": "Exclusive with [ddos_client_source]\n IPv4 prefix string.",
+                    "title": "ip source",
+                    "$ref": "#/definitions/policyPrefixMatchList",
+                    "x-displayname": "IP Source"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "common_securityMobileIdentifier": {
+            "type": "string",
+            "description": "Mobile identifier type\n\n - HEADERS: Headers\n\nHeaders",
+            "title": "MobileIdentifier",
+            "enum": [
+                "HEADERS"
+            ],
+            "default": "HEADERS",
+            "x-displayname": "Mobile Identifier",
+            "x-ves-proto-enum": "ves.io.schema.views.common_security.MobileIdentifier"
+        },
+        "common_securityMobileSDKConfigType": {
+            "type": "object",
+            "description": "Mobile SDK configuration.",
+            "title": "MobileSDKConfigType",
+            "x-displayname": "Mobile SDK Configuration",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.MobileSDKConfigType",
+            "properties": {
+                "mobile_identifier": {
+                    "description": " Mobile traffic identifier type.",
+                    "title": "Mobile Traffic Identifier Type",
+                    "$ref": "#/definitions/common_securityMobileTrafficIdentifierType",
+                    "x-displayname": "Mobile Traffic Identifier"
+                }
+            }
+        },
+        "common_securityMobileTrafficIdentifierType": {
+            "type": "object",
+            "description": "Mobile traffic identifier type.",
+            "title": "MobileTrafficIdentifierType",
+            "x-displayname": "Mobile Traffic Identifier",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.MobileTrafficIdentifierType",
+            "properties": {
+                "headers": {
+                    "type": "array",
+                    "description": " Headers that can be used to identify mobile traffic.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Mobile headers",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/policyHeaderMatcherTypeBasic"
+                    },
+                    "x-displayname": "Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "common_securityProtectedAppEndpointType": {
+            "type": "object",
+            "description": "x-displayName: \"Protected App Endpoint\"\nProtected Application Endpoint.",
+            "title": "ProtectedAppEndpointType",
+            "properties": {
+                "any_domain": {
+                    "description": "x-displayName: \"Any Domain\"\nAny Domain",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "domain": {
+                    "description": "x-displayName: \"Domain\"\nSelect Domain matcher",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType"
+                },
+                "flow_label": {
+                    "description": "x-displayName: \"Specify endpoint label category\"",
+                    "title": "flow_label",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelCategoriesChoiceType"
+                },
+                "http_methods": {
+                    "type": "array",
+                    "description": "x-displayName: \"HTTP Methods\"\nx-required\nList of HTTP methods.",
+                    "title": "HTTP Methods",
+                    "items": {
+                        "$ref": "#/definitions/schemaBotHttpMethod"
+                    }
+                },
+                "metadata": {
+                    "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the rule including name and description.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType"
+                },
+                "mobile_client": {
+                    "description": "x-displayName: \"Mobile Traffic\"\nMobile traffic channel.",
+                    "title": "MobileTraffic",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "path": {
+                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/id/1\"\nx-example: \"/id/*\"\nx-example: \"*login\"\nAccepts wildcards * to match multiple characters or ? to match a single character",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType"
+                },
+                "query": {
+                    "type": "array",
+                    "description": "x-displayName: \"Query\"\nx-example: \"(^|[^\\\\w])action=login([^\\\\w]|$)\"\nEnter a regular expression or exact value to match your query parameters of interest",
+                    "title": "Query",
+                    "items": {
+                        "$ref": "#/definitions/common_securityQuery"
+                    }
+                },
+                "request_body": {
+                    "type": "array",
+                    "description": "x-displayName: \"Request Body\"\nRequest Body",
+                    "title": "Request Body",
+                    "items": {
+                        "$ref": "#/definitions/common_securityRequestBody"
+                    }
+                },
+                "undefined_flow_label": {
+                    "description": "x-displayName: \"Undefined\"",
+                    "title": "undefined",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "web_client": {
+                    "description": "x-displayName: \"Web Traffic\"\nWeb traffic channel.",
+                    "title": "WebTraffic",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "web_mobile_client": {
+                    "description": "x-displayName: \"Web and Mobile Traffic\"\nWeb and mobile traffic channel.",
+                    "title": "WebMobileTraffic",
+                    "$ref": "#/definitions/common_securityWebMobileTrafficType"
+                }
+            }
+        },
+        "common_securityQuery": {
+            "type": "object",
+            "description": "x-displayName: \"Query Parameter Matcher\"\nQuery Parameter Matcher",
+            "title": "Query",
+            "properties": {
+                "check_presence": {
+                    "description": "x-displayName: \"Presence\"\nParameter name taken which is exist in the query parameter",
+                    "title": "check_presence",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "exact_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact Value\"\nx-example: \"login\"\nExact query value to match",
+                    "title": "exact value"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Query Parameter Name\"\nx-example: \"id\"\nEnter query parameter name",
+                    "title": "Name"
+                },
+                "regex_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex Value\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)$'\"\nRegular expression of query match (e.g. the value .* will match on all query)",
+                    "title": "regex value"
+                }
+            }
+        },
+        "common_securityRequestBody": {
+            "type": "object",
+            "description": "x-displayName: \"Request Body Parameter Matcher\"\nRequest Body Parameter Matcher",
+            "title": "RequestBody",
+            "properties": {
+                "exact_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Exact Value\"\nx-example: \"login\"\nExact query value to match",
+                    "title": "exact value"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Request Body Parameter Name\"\nx-example: \"id\"\nEnter request body parameter name",
+                    "title": "Name"
+                },
+                "regex_value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Regex Value\"\nx-example: \"([a-z]([-a-z0-9]*[a-z0-9])?)$'\"\nRegular expression of query match (e.g. the value .* will match on all query)",
+                    "title": "regex value"
+                }
+            }
+        },
+        "common_securitySensitiveDataPolicySettings": {
+            "type": "object",
+            "description": "Settings for data type policy",
+            "title": "SensitiveDataPolicySettings",
+            "x-displayname": "Sensitive Data Discovery",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.SensitiveDataPolicySettings",
+            "properties": {
+                "sensitive_data_policy_ref": {
+                    "description": " Specify Sensitive Data Discovery\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Specify Sensitive Data Discovery",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Specify Sensitive Data Discovery",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "common_securityShapeBotDefensePolicyType": {
+            "type": "object",
+            "description": "This defines various configuration options for Bot Defense policy.",
+            "title": "ShapeShapeBotDefensePolicyType",
+            "x-displayname": "Bot Defense Policy",
+            "x-ves-oneof-field-java_script_choice": "[\"disable_js_insert\",\"js_insert_all_pages\",\"js_insert_all_pages_except\",\"js_insertion_rules\"]",
+            "x-ves-oneof-field-mobile_sdk_choice": "[\"disable_mobile_sdk\",\"mobile_sdk_config\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeBotDefensePolicyType",
+            "properties": {
+                "disable_js_insert": {
+                    "description": "Exclusive with [js_insert_all_pages js_insert_all_pages_except js_insertion_rules]\n Disable JavaScript insertion.",
+                    "title": "Disable JavaScript Insertion",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable JavaScript Insertion"
+                },
+                "disable_mobile_sdk": {
+                    "description": "Exclusive with [mobile_sdk_config]\n Disable Mobile SDK.",
+                    "title": "Disable Mobile SDK",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Mobile SDK"
+                },
+                "javascript_mode": {
+                    "description": " Determine the mode in which the JavaScript is loaded into the entry page.\n The JavaScript is split into 2 chunks.\n The larger chunk can be loaded asynchronously or synchronously. It can also be cacheable or non-cacheable on the browser.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "javascript_mode",
+                    "$ref": "#/definitions/schemaJavaScriptMode",
+                    "x-displayname": "Web Client JavaScript Mode",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "js_download_path": {
+                    "type": "string",
+                    "description": " Customize Bot Defense Client JavaScript path. If not specified, default -/common.js-\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n",
+                    "title": "js_download_path",
+                    "x-displayname": "JavaScript Download Path",
+                    "x-ves-example": "value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true"
+                    }
+                },
+                "js_insert_all_pages": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages_except js_insertion_rules]\n Insert Bot Defense JavaScript in all pages.",
+                    "title": "Insert JavaScript in All Pages",
+                    "$ref": "#/definitions/common_securityShapeJavaScriptInsertAllType",
+                    "x-displayname": "Insert JavaScript in All Pages"
+                },
+                "js_insert_all_pages_except": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insertion_rules]\n Insert Bot Defense JavaScript in all pages with the exceptions.",
+                    "title": "Insert JavaScript in All Pages with the Exceptions",
+                    "$ref": "#/definitions/common_securityShapeJavaScriptInsertAllWithExceptionsType",
+                    "x-displayname": "Insert JavaScript in All Pages with the Exceptions"
+                },
+                "js_insertion_rules": {
+                    "description": "Exclusive with [disable_js_insert js_insert_all_pages js_insert_all_pages_except]\n Specify custom JavaScript insertion rules.",
+                    "title": "Custom JavaScript Insertion Rules",
+                    "$ref": "#/definitions/common_securityShapeJavaScriptInsertType",
+                    "x-displayname": "Custom JavaScript Insertion Rules"
+                },
+                "mobile_sdk_config": {
+                    "description": "Exclusive with [disable_mobile_sdk]\n Mobile SDK configuration",
+                    "title": "Mobile SDK configuration",
+                    "$ref": "#/definitions/common_securityMobileSDKConfigType",
+                    "x-displayname": "Mobile SDK Configuration"
+                },
+                "protected_app_endpoints": {
+                    "type": "array",
+                    "description": " List of protected application endpoints (max 128 items).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AppEndpointType",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/common_securityAppEndpointType"
+                    },
+                    "x-displayname": "App Endpoint Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "common_securityShapeBotDefenseRegion": {
+            "type": "string",
+            "description": "Defines a selection for Bot Defense region\n\n - AUTO: AUTO\n\nAutomatic selection based on client IP address\n - US: US\n\nUS region\n - EU: EU\n\nEuropean Union region\n - ASIA: ASIA\n\nAsia region",
+            "title": "ShapeBotDefenseRegion",
+            "enum": [
+                "AUTO",
+                "US",
+                "EU",
+                "ASIA"
+            ],
+            "default": "AUTO",
+            "x-displayname": "Bot Defense Region",
+            "x-ves-proto-enum": "ves.io.schema.views.common_security.ShapeBotDefenseRegion"
+        },
+        "common_securityShapeBotDefenseType": {
+            "type": "object",
+            "description": "This defines various configuration options for Bot Defense Policy.",
+            "title": "ShapeBotDefenseType",
+            "x-displayname": "Bot Defense",
+            "x-ves-oneof-field-cors_support_choice": "[\"disable_cors_support\",\"enable_cors_support\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeBotDefenseType",
+            "properties": {
+                "disable_cors_support": {
+                    "description": "Exclusive with [enable_cors_support]\n Blocks Bot Defense from working with existing CORS policies on your \n application. This will significantly impact Bot Defense's ability to \n protect against Bot Attacks.",
+                    "title": "Disable CORS Support",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_cors_support": {
+                    "description": "Exclusive with [disable_cors_support]\n Allows Bot Defense to work with your existing CORS policies.",
+                    "title": "Enable CORS Support",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable"
+                },
+                "policy": {
+                    "description": " Bot Defense Policy.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "ShapeBotDefensePolicyType",
+                    "$ref": "#/definitions/common_securityShapeBotDefensePolicyType",
+                    "x-displayname": "Bot Defense Policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "regional_endpoint": {
+                    "description": " Specify Bot Defense region to use\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bot Defense Region",
+                    "$ref": "#/definitions/common_securityShapeBotDefenseRegion",
+                    "x-displayname": "Bot Defense Region",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "timeout": {
+                    "type": "integer",
+                    "description": " The timeout for the inference check, in milliseconds.\n\nExample: - \"300\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 60000\n",
+                    "title": "timeout",
+                    "format": "int64",
+                    "x-displayname": "Timeout",
+                    "x-ves-example": "300",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "60000"
+                    }
+                }
+            }
+        },
+        "common_securityShapeJavaScriptExclusionRule": {
+            "type": "object",
+            "description": "Define JavaScript insertion exclusion rule",
+            "title": "ShapeJavaScriptExclusionRule",
+            "x-displayname": "JavaScript Insertion Exclusion Rule",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeJavaScriptExclusionRule",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\n Any Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any Domain"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\n Domain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType",
+                    "x-displayname": "Domain"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "description": " URI path matcher.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "common_securityShapeJavaScriptInsertAllType": {
+            "type": "object",
+            "description": "Insert Bot Defense JavaScript in all pages",
+            "title": "ShapeJavaScriptInsertAllType",
+            "x-displayname": "Insert Bot Defense JavaScript in All Pages",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeJavaScriptInsertAllType",
+            "properties": {
+                "javascript_location": {
+                    "description": " Defines where to insert Bot Defense JavaScript in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/viewscommon_securityJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                }
+            }
+        },
+        "common_securityShapeJavaScriptInsertAllWithExceptionsType": {
+            "type": "object",
+            "description": "Insert Bot Defense JavaScript in all pages  with the exceptions",
+            "title": "ShapeJavaScriptInsertAllWithExceptionsType",
+            "x-displayname": "Insert JavaScript in All Pages with the Exceptions",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeJavaScriptInsertAllWithExceptionsType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exclude_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/common_securityShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Pages",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "javascript_location": {
+                    "description": " Defines where to insert Bot Defense JavaScript in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/viewscommon_securityJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                }
+            }
+        },
+        "common_securityShapeJavaScriptInsertType": {
+            "type": "object",
+            "description": "This defines custom JavaScript insertion rules for Bot Defense Policy.",
+            "title": "ShapeJavaScriptInsertType",
+            "x-displayname": "JavaScript Custom Insertion Rules",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeJavaScriptInsertType",
+            "properties": {
+                "exclude_list": {
+                    "type": "array",
+                    "description": " Optional JavaScript insertions exclude list of domain and path matchers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "exclude_list",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/common_securityShapeJavaScriptExclusionRule"
+                    },
+                    "x-displayname": "Exclude Paths",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "rules": {
+                    "type": "array",
+                    "description": " Required list of pages to insert Bot Defense client JavaScript.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "rules",
+                    "minItems": 1,
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/common_securityShapeJavaScriptInsertionRule"
+                    },
+                    "x-displayname": "JavaScript Insertions",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "common_securityShapeJavaScriptInsertionRule": {
+            "type": "object",
+            "description": "This defines a rule for Bot Defense JavaScript insertion.",
+            "title": "ShapeJavaScriptInsertionRule",
+            "x-displayname": "JavaScript Insertion Rule",
+            "x-ves-oneof-field-domain_matcher_choice": "[\"any_domain\",\"domain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.ShapeJavaScriptInsertionRule",
+            "properties": {
+                "any_domain": {
+                    "description": "Exclusive with [domain]\n Any Domain.",
+                    "title": "Any domain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Any Domain"
+                },
+                "domain": {
+                    "description": "Exclusive with [any_domain]\n Domain matcher.",
+                    "title": "Domain",
+                    "$ref": "#/definitions/schemaDomainType",
+                    "x-displayname": "Domain"
+                },
+                "javascript_location": {
+                    "description": " Defines where to insert Bot Defense JavaScript in HTML page.",
+                    "title": "javascript_location",
+                    "$ref": "#/definitions/viewscommon_securityJavaScriptLocation",
+                    "x-displayname": "JavaScript Location"
+                },
+                "metadata": {
+                    "description": " Common attributes for the rule including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "path": {
+                    "description": " URI path matcher.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Path",
+                    "$ref": "#/definitions/ioschemaPathMatcherType",
+                    "x-displayname": "Path",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "common_securityURLScheme": {
+            "type": "string",
+            "description": "SchemeType is used to indicate URL scheme.\n\n - BOTH: BOTH\n\nURL scheme for https:// or http://.\n - HTTP: HTTP\n\nURL scheme http:// only.\n - HTTPS: HTTPS\n\nURL scheme https:// only.",
+            "title": "URLSchemeType",
+            "enum": [
+                "BOTH",
+                "HTTP",
+                "HTTPS"
+            ],
+            "default": "BOTH",
+            "x-displayname": "URL Scheme",
+            "x-ves-proto-enum": "ves.io.schema.views.common_security.URLScheme"
+        },
+        "common_securityWebMobileTrafficType": {
+            "type": "object",
+            "description": "Web and Mobile traffic type",
+            "title": "WebMobileTrafficType",
+            "x-displayname": "Web and Mobile traffic type",
+            "x-ves-proto-message": "ves.io.schema.views.common_security.WebMobileTrafficType",
+            "properties": {
+                "mobile_identifier": {
+                    "description": " Mobile identifier type",
+                    "title": "Mobile Identifier",
+                    "$ref": "#/definitions/common_securityMobileIdentifier",
+                    "x-displayname": "Mobile Identifier"
+                }
+            }
         },
         "common_wafAPIEndpointProtectionRule": {
             "type": "object",
@@ -4953,12 +5719,6 @@ var APISwaggerJSON string = `{
                     "title": "Enable learning from redirected request traffic",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Enable Learning From Redirect Traffic"
-                },
-                "sensitive_data_detection_rules": {
-                    "description": " Manage rules to detect sensitive data in requests and/or response sections.",
-                    "title": "sensitive data rules",
-                    "$ref": "#/definitions/app_typeSensitiveDataDetectionRules",
-                    "x-displayname": "Sensitive Data Detection"
                 }
             }
         },
@@ -5688,6 +6448,7 @@ var APISwaggerJSON string = `{
             "description": "OpenAPI specification validation settings relevant for \"API Inventory\" enforcement and for \"Custom list\" enforcement",
             "title": "OpenAPI specification validation common settings",
             "x-displayname": "Common Settings",
+            "x-ves-oneof-field-fail_configuration": "[]",
             "x-ves-oneof-field-oversized_body_choice": "[\"oversized_body_fail_validation\",\"oversized_body_skip_validation\"]",
             "x-ves-oneof-field-property_validation_settings_choice": "[\"property_validation_settings_custom\",\"property_validation_settings_default\"]",
             "x-ves-proto-message": "ves.io.schema.views.common_waf.OpenApiValidationCommonSettings",
@@ -6829,17 +7590,41 @@ var APISwaggerJSON string = `{
             "description": "Upstream TLS Parameters",
             "title": "UpstreamTlsParameters",
             "x-displayname": "TLS Parameters for Origin Servers",
-            "x-ves-displayorder": "10,2,8,9",
+            "x-ves-displayorder": "10,2,8,9,15",
+            "x-ves-oneof-field-max_session_keys_type": "[\"default_session_key_caching\",\"disable_session_key_caching\",\"max_session_keys\"]",
             "x-ves-oneof-field-mtls_choice": "[\"no_mtls\",\"use_mtls\",\"use_mtls_obj\"]",
             "x-ves-oneof-field-server_validation_choice": "[\"skip_server_verification\",\"use_server_verification\",\"volterra_trusted_ca\"]",
             "x-ves-oneof-field-sni_choice": "[\"disable_sni\",\"sni\",\"use_host_header_as_sni\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.UpstreamTlsParameters",
             "properties": {
+                "default_session_key_caching": {
+                    "description": "Exclusive with [disable_session_key_caching max_session_keys]\n Default session key caching. Only one session key will be cached.",
+                    "title": "Default Session Key Caching",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default Session Key Caching"
+                },
+                "disable_session_key_caching": {
+                    "description": "Exclusive with [default_session_key_caching max_session_keys]\n Disable session key caching. This will disable TLS session resumption.",
+                    "title": "Disable Session Key Caching",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Session Key Caching"
+                },
                 "disable_sni": {
                     "description": "Exclusive with [sni use_host_header_as_sni]\n Do not use SNI.",
                     "title": "disable_sni",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No SNI"
+                },
+                "max_session_keys": {
+                    "type": "integer",
+                    "description": "Exclusive with [default_session_key_caching disable_session_key_caching]\n x-example:\"25\"\n Number of session keys that are cached.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2\n  ves.io.schema.rules.uint32.lte: 64\n",
+                    "title": "Max Session Keys Cached",
+                    "format": "int64",
+                    "x-displayname": "Max Session Keys Cached",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2",
+                        "ves.io.schema.rules.uint32.lte": "64"
+                    }
                 },
                 "no_mtls": {
                     "description": "Exclusive with [use_mtls use_mtls_obj]\n",
@@ -7629,36 +8414,22 @@ var APISwaggerJSON string = `{
         },
         "policyCountryCodeList": {
             "type": "object",
-            "description": "List of Country Codes to match against.",
+            "description": "x-displayName: \"Country Codes List\"\nList of Country Codes to match against.",
             "title": "Country Code List",
-            "x-displayname": "Country Codes List",
-            "x-ves-proto-message": "ves.io.schema.policy.CountryCodeList",
             "properties": {
                 "country_codes": {
                     "type": "array",
-                    "description": " List of Country Codes\n\nExample: - \"IN, DE\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Country Codes List\"\nx-example: \"IN, DE\"\nx-required\nList of Country Codes",
                     "title": "country codes",
-                    "minItems": 1,
-                    "maxItems": 64,
                     "items": {
                         "$ref": "#/definitions/policyCountryCode"
-                    },
-                    "x-displayname": "Country Codes List",
-                    "x-ves-example": "IN, DE",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "64",
-                        "ves.io.schema.rules.repeated.min_items": "1",
-                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "invert_match": {
                     "type": "boolean",
-                    "description": " Invert the match result.",
+                    "description": "x-displayName: \"Invert Match Result\"\nInvert the match result.",
                     "title": "invert_matcher",
-                    "format": "boolean",
-                    "x-displayname": "Invert Match Result"
+                    "format": "boolean"
                 }
             }
         },
@@ -7833,48 +8604,70 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "policyHttpCookieName": {
+        "policyHeaderMatcherTypeBasic": {
             "type": "object",
-            "description": "Specifies the name of the cookie field",
-            "title": "HttpCookieName",
-            "x-displayname": "Name of the cookie field",
-            "x-ves-proto-message": "ves.io.schema.policy.HttpCookieName",
+            "description": "A header matcher specifies the name of a single HTTP header and the criteria for the input request to match it. The input has a list of actual values for each\nheader name in the original HTTP request.\nA header matcher can check for one of the following:\n* Presence or absence of the header in the input\n* At least one of the values for the header in the input satisfies the MatcherType item",
+            "title": "HeaderMatcherTypeBasic",
+            "x-displayname": "Header Matcher",
+            "x-ves-displayorder": "1,6",
+            "x-ves-oneof-field-match": "[\"check_not_present\",\"check_present\",\"item\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.HeaderMatcherTypeBasic",
             "properties": {
+                "check_not_present": {
+                    "description": "Exclusive with [check_present item]\n Check that the header is not present.",
+                    "title": "check_not_present",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Not Present"
+                },
+                "check_present": {
+                    "description": "Exclusive with [check_not_present item]\n Check that the header is present.",
+                    "title": "check_present",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Present"
+                },
+                "item": {
+                    "description": "Exclusive with [check_not_present check_present]\n Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.",
+                    "title": "item",
+                    "$ref": "#/definitions/policyMatcherType",
+                    "x-displayname": "Match Values"
+                },
                 "name": {
                     "type": "string",
-                    "description": " A case-insensitive cookie name.\n\nExample: - \"token\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
-                    "title": "name",
-                    "maxLength": 256,
-                    "x-displayname": "Cookie Name",
-                    "x-ves-example": "token",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "256"
-                    }
-                }
-            }
-        },
-        "policyHttpHeaderName": {
-            "type": "object",
-            "description": "Specifies the name of the field",
-            "title": "HttpHeaderName",
-            "x-displayname": "Name of the field",
-            "x-ves-proto-message": "ves.io.schema.policy.HttpHeaderName",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " A case-insensitive field header name.\n\nExample: - \"X-Token\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Accept-Encoding\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
                     "title": "name",
                     "maxLength": 256,
                     "x-displayname": "Header Name",
-                    "x-ves-example": "X-Token",
+                    "x-ves-example": "Accept-Encoding",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.http_header_field": "true",
                         "ves.io.schema.rules.string.max_bytes": "256"
                     }
+                }
+            }
+        },
+        "policyHttpCookieName": {
+            "type": "object",
+            "description": "x-displayName: \"Name of the cookie field\"\nSpecifies the name of the cookie field",
+            "title": "HttpCookieName",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Cookie Name\"\nx-example: \"token\"\nx-required\nA case-insensitive cookie name.",
+                    "title": "name"
+                }
+            }
+        },
+        "policyHttpHeaderName": {
+            "type": "object",
+            "description": "x-displayName: \"Name of the field\"\nSpecifies the name of the field",
+            "title": "HttpHeaderName",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Header Name\"\nx-example: \"X-Token\"\nx-required\nA case-insensitive field header name.",
+                    "title": "name"
                 }
             }
         },
@@ -7912,23 +8705,13 @@ var APISwaggerJSON string = `{
         },
         "policyHttpQueryParameterName": {
             "type": "object",
-            "description": "Specifies the key name of the query parameter",
+            "description": "x-displayName: \"Key name of the query parameter\"\nSpecifies the key name of the query parameter",
             "title": "HttpQueryParameterName",
-            "x-displayname": "Key name of the query parameter",
-            "x-ves-proto-message": "ves.io.schema.policy.HttpQueryParameterName",
             "properties": {
                 "key": {
                     "type": "string",
-                    "description": " A case-sensitive HTTP query parameter name.\n\nExample: - \"sourceid\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
-                    "title": "key",
-                    "maxLength": 256,
-                    "x-displayname": "Query Parameter Name",
-                    "x-ves-example": "sourceid",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "256"
-                    }
+                    "description": "x-displayName: \"Query Parameter Name\"\nx-example: \"sourceid\"\nx-required\nA case-sensitive HTTP query parameter name.",
+                    "title": "key"
                 }
             }
         },
@@ -8036,54 +8819,38 @@ var APISwaggerJSON string = `{
         },
         "policyJwtTokenAuthOptions": {
             "type": "object",
-            "description": "JWT token Authentication",
+            "description": "x-displayName: \"JWT Token Authentication\"\nJWT token Authentication",
             "title": "JwtTokenAuthOptions",
-            "x-displayname": "JWT Token Authentication",
-            "x-ves-displayorder": "1,7,2",
-            "x-ves-oneof-field-token_source": "[\"bearer_token\",\"cookie\",\"header\",\"query_param\"]",
-            "x-ves-proto-message": "ves.io.schema.policy.JwtTokenAuthOptions",
             "properties": {
                 "backup_key": {
-                    "description": " Backup JWT Key - If specified is also checked in addition to the primary secret key\n\nExample: - \"{!\u003c=,d_]b[UFX78T\"-",
+                    "description": "x-displayName: \"Backup Key\"\nx-example: \"{!\u003c=,d_]b[UFX78T\"\nBackup JWT Key - If specified is also checked in addition to the primary secret key",
                     "title": "backup_key",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Backup Key",
-                    "x-ves-example": "{!\u003c=,d_]b[UFX78T"
+                    "$ref": "#/definitions/schemaSecretType"
                 },
                 "bearer_token": {
-                    "description": "Exclusive with [cookie header query_param]\n Token is found in the Bearer-Token",
+                    "description": "x-displayName: \"Bearer-Token\"\nToken is found in the Bearer-Token",
                     "title": "Bearer-Token",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Bearer-Token"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "cookie": {
-                    "description": "Exclusive with [bearer_token header query_param]\n Token is found in the cookie",
+                    "description": "x-displayName: \"Cookie\"\nToken is found in the cookie",
                     "title": "Cookie",
-                    "$ref": "#/definitions/policyHttpCookieName",
-                    "x-displayname": "Cookie"
+                    "$ref": "#/definitions/policyHttpCookieName"
                 },
                 "header": {
-                    "description": "Exclusive with [bearer_token cookie query_param]\n Token is found in the header",
+                    "description": "x-displayName: \"Header\"\nToken is found in the header",
                     "title": "Header",
-                    "$ref": "#/definitions/policyHttpHeaderName",
-                    "x-displayname": "Header"
+                    "$ref": "#/definitions/policyHttpHeaderName"
                 },
                 "query_param": {
-                    "description": "Exclusive with [bearer_token cookie header]\n Token is found in the Query-Param",
+                    "description": "x-displayName: \"Query-Param\"\nToken is found in the Query-Param",
                     "title": "Query-Param",
-                    "$ref": "#/definitions/policyHttpQueryParameterName",
-                    "x-displayname": "Query-Param"
+                    "$ref": "#/definitions/policyHttpQueryParameterName"
                 },
                 "secret_key": {
-                    "description": " Secret Key for JWT\n\nExample: - \"{!\u003c=,d_]b[UFX78T\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Secret Key\"\nx-required\nx-example: \"{!\u003c=,d_]b[UFX78T\"\nSecret Key for JWT",
                     "title": "secret_key",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Secret Key",
-                    "x-ves-example": "{!\u003c=,d_]b[UFX78T",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaSecretType"
                 }
             }
         },
@@ -8324,6 +9091,145 @@ var APISwaggerJSON string = `{
                     "x-displayname": "HTTP Query Parameters",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16"
+                    }
+                }
+            }
+        },
+        "policyShapeBotBlockMitigationActionType": {
+            "type": "object",
+            "description": "Block request and respond with custom content.",
+            "title": "ShapeBotBlockMitigationActionType",
+            "x-displayname": "Block bot mitigation",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotBlockMitigationActionType",
+            "properties": {
+                "body": {
+                    "type": "string",
+                    "description": " Custom body message is of type uri_ref. Currently supported URL schemes is string:///.\n For string:/// scheme, message needs to be encoded in Base64 format.\n You can specify this message as base64 encoded plain text message e.g. \"Your request was blocked\"\n or it can be HTML paragraph or a body string encoded as base64 string\n E.g. \"\u003cp\u003e Your request was blocked \u003c/p\u003e\". Base64 encoded string for this html is \"LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"\n\nExample: - \"string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 4096\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "title": "body",
+                    "maxLength": 4096,
+                    "x-displayname": "Body",
+                    "x-ves-example": "string://LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "4096",
+                        "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                },
+                "status": {
+                    "description": " HTTP Status code to respond with\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: [0]\n",
+                    "title": "Status",
+                    "$ref": "#/definitions/schemaHttpStatusCode",
+                    "x-displayname": "Status",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.enum.not_in": "[0]"
+                    }
+                }
+            }
+        },
+        "policyShapeBotFlagMitigationActionChoiceType": {
+            "type": "object",
+            "description": "Flag mitigation action.",
+            "title": "ShapeBotFlagMitigationActionChoiceType",
+            "x-displayname": "Select Flag Bot Mitigation Action",
+            "x-ves-oneof-field-send_headers_choice": "[\"append_headers\",\"no_headers\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotFlagMitigationActionChoiceType",
+            "properties": {
+                "append_headers": {
+                    "description": "Exclusive with [no_headers]\n Append mitigation headers.",
+                    "title": "append_headers",
+                    "$ref": "#/definitions/policyShapeBotFlagMitigationActionType",
+                    "x-displayname": "Append Headers"
+                },
+                "no_headers": {
+                    "description": "Exclusive with [append_headers]\n No mitigation headers.",
+                    "title": "no_headers",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Headers"
+                }
+            }
+        },
+        "policyShapeBotFlagMitigationActionType": {
+            "type": "object",
+            "description": "Append flag mitigation headers to forwarded request.",
+            "title": "ShapeBotFlagMitigationActionType",
+            "x-displayname": "Append Flag Mitigation Headers",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotFlagMitigationActionType",
+            "properties": {
+                "auto_type_header_name": {
+                    "type": "string",
+                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Bot-Automation-Type\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "auto_type_header_name",
+                    "maxLength": 256,
+                    "x-displayname": "Automation Type Header Name",
+                    "x-ves-example": "Bot-Automation-Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
+                },
+                "inference_header_name": {
+                    "type": "string",
+                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Bot-Inference\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "inference_header_name",
+                    "maxLength": 256,
+                    "x-displayname": "Inference Header Name",
+                    "x-ves-example": "Bot-Inference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
+                }
+            }
+        },
+        "policyShapeBotMitigationAction": {
+            "type": "object",
+            "description": "Modify Bot Defense behavior for a matching request.",
+            "title": "ShapeBotMitigationAction",
+            "x-displayname": "Bot Mitigation Action",
+            "x-ves-oneof-field-action_type": "[\"block\",\"flag\",\"redirect\"]",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotMitigationAction",
+            "properties": {
+                "block": {
+                    "description": "Exclusive with [flag redirect]\n Block bot request and send response with custom content.",
+                    "title": "Block",
+                    "$ref": "#/definitions/policyShapeBotBlockMitigationActionType",
+                    "x-displayname": "Block"
+                },
+                "flag": {
+                    "description": "Exclusive with [block redirect]\n Flag the request while not taking any invasive actions.",
+                    "title": "Flag",
+                    "$ref": "#/definitions/policyShapeBotFlagMitigationActionChoiceType",
+                    "x-displayname": "Flag"
+                },
+                "redirect": {
+                    "description": "Exclusive with [block flag]\n Redirect bot request to a custom URI.",
+                    "title": "Redirect",
+                    "$ref": "#/definitions/policyShapeBotRedirectMitigationActionType",
+                    "x-displayname": "Redirect"
+                }
+            }
+        },
+        "policyShapeBotRedirectMitigationActionType": {
+            "type": "object",
+            "description": "Redirect request to a custom URI.",
+            "title": "ShapeBotRedirectMitigationTypeAction",
+            "x-displayname": "Redirect bot mitigation",
+            "x-ves-proto-message": "ves.io.schema.policy.ShapeBotRedirectMitigationActionType",
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "description": " URI location for redirect may be relative or absolute.\n\nExample: - \"Enter URI\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.url_or_uri_ref: true\n",
+                    "title": "URI",
+                    "x-displayname": "URI",
+                    "x-ves-example": "Enter URI",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.url_or_uri_ref": "true"
                     }
                 }
             }
@@ -8786,6 +9692,431 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaBotDefenseFlowLabelAccountManagementChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Account Management Category",
+            "title": "BotDefenseFlowLabelAccountManagementChoiceType",
+            "x-displayname": "Bot Defense Flow Label Account Management Category",
+            "x-ves-oneof-field-label_choice": "[\"create\",\"password_reset\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelAccountManagementChoiceType",
+            "properties": {
+                "create": {
+                    "description": "Exclusive with [password_reset]\n",
+                    "title": "Create",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Account Creation"
+                },
+                "password_reset": {
+                    "description": "Exclusive with [create]\n",
+                    "title": "Password Reset",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Password Reset"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelAuthenticationChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Authentication Category",
+            "title": "BotDefenseFlowLabelCategoryChoiceType",
+            "x-displayname": "Bot Defense Flow Label Authentication Category",
+            "x-ves-oneof-field-label_choice": "[\"login\",\"login_mfa\",\"login_partner\",\"logout\",\"token_refresh\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelAuthenticationChoiceType",
+            "properties": {
+                "login": {
+                    "description": "Exclusive with [login_mfa login_partner logout token_refresh]\n",
+                    "title": "Login",
+                    "$ref": "#/definitions/schemaBotDefenseTransactionResult",
+                    "x-displayname": "Login"
+                },
+                "login_mfa": {
+                    "description": "Exclusive with [login login_partner logout token_refresh]\n",
+                    "title": "LoginMFA",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Login MFA"
+                },
+                "login_partner": {
+                    "description": "Exclusive with [login login_mfa logout token_refresh]\n",
+                    "title": "login_partner",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Login for a Channel Partner"
+                },
+                "logout": {
+                    "description": "Exclusive with [login login_mfa login_partner token_refresh]\n",
+                    "title": "logout",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Logout"
+                },
+                "token_refresh": {
+                    "description": "Exclusive with [login login_mfa login_partner logout]\n",
+                    "title": "token_refresh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Token Refresh"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelCategoriesChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Category allows to associate traffic with selected category",
+            "title": "BotDefenseFlowLabelCategoryChoiceType",
+            "x-displayname": "Bot Defense Flow Label Category",
+            "x-ves-oneof-field-flow_label_choice": "[\"account_management\",\"authentication\",\"financial_services\",\"flight\",\"profile_management\",\"search\",\"shopping_gift_cards\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelCategoriesChoiceType",
+            "properties": {
+                "account_management": {
+                    "description": "Exclusive with [authentication financial_services flight profile_management search shopping_gift_cards]\n",
+                    "title": "Account Management",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelAccountManagementChoiceType",
+                    "x-displayname": "Account Management"
+                },
+                "authentication": {
+                    "description": "Exclusive with [account_management financial_services flight profile_management search shopping_gift_cards]\n",
+                    "title": "Authentication",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelAuthenticationChoiceType",
+                    "x-displayname": "Authentication"
+                },
+                "financial_services": {
+                    "description": "Exclusive with [account_management authentication flight profile_management search shopping_gift_cards]\n",
+                    "title": "Financial Services",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelFinancialServicesChoiceType",
+                    "x-displayname": "Financial Services"
+                },
+                "flight": {
+                    "description": "Exclusive with [account_management authentication financial_services profile_management search shopping_gift_cards]\n",
+                    "title": "Flight",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelFlightChoiceType",
+                    "x-displayname": "Flight"
+                },
+                "profile_management": {
+                    "description": "Exclusive with [account_management authentication financial_services flight search shopping_gift_cards]\n",
+                    "title": "Profile Management",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelProfileManagementChoiceType",
+                    "x-displayname": "Profile Management"
+                },
+                "search": {
+                    "description": "Exclusive with [account_management authentication financial_services flight profile_management shopping_gift_cards]\n",
+                    "title": "Search",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelSearchChoiceType",
+                    "x-displayname": "Search"
+                },
+                "shopping_gift_cards": {
+                    "description": "Exclusive with [account_management authentication financial_services flight profile_management search]\n",
+                    "title": "Shopping",
+                    "$ref": "#/definitions/schemaBotDefenseFlowLabelShoppingGiftCardsChoiceType",
+                    "x-displayname": "Shopping \u0026 Gift Cards"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelFinancialServicesChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Financial Services Category",
+            "title": "BotDefenseFlowLabelFinancialServicesChoiceType",
+            "x-displayname": "Bot Defense Flow Label Financial Services Category",
+            "x-ves-oneof-field-label_choice": "[\"apply\",\"money_transfer\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelFinancialServicesChoiceType",
+            "properties": {
+                "apply": {
+                    "description": "Exclusive with [money_transfer]\n",
+                    "title": "apply",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Apply for a Financial Service Account (e.g., credit card, banking, retirement account)"
+                },
+                "money_transfer": {
+                    "description": "Exclusive with [apply]\n",
+                    "title": "money_transfer",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Money Transfer"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelFlightChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Flight Category",
+            "title": "BotDefenseFlowLabelFlightChoiceType",
+            "x-displayname": "Bot Defense Flow Label Flight Category",
+            "x-ves-oneof-field-label_choice": "[\"checkin\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelFlightChoiceType",
+            "properties": {
+                "checkin": {
+                    "description": "Exclusive with []\n",
+                    "title": "flight_search",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Check into Flight"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelProfileManagementChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Profile Management Category",
+            "title": "BotDefenseFlowLabelProfileManagementChoiceType",
+            "x-displayname": "Bot Defense Flow Label Profile Management Category",
+            "x-ves-oneof-field-label_choice": "[\"create\",\"update\",\"view\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelProfileManagementChoiceType",
+            "properties": {
+                "create": {
+                    "description": "Exclusive with [update view]\n",
+                    "title": "Create",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Profile Creation"
+                },
+                "update": {
+                    "description": "Exclusive with [create view]\n",
+                    "title": "update",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Profile Update"
+                },
+                "view": {
+                    "description": "Exclusive with [create update]\n",
+                    "title": "view",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Profile View"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelSearchChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Search Category",
+            "title": "BotDefenseFlowLabelSearchChoiceType",
+            "x-displayname": "Bot Defense Flow Label Search Category",
+            "x-ves-oneof-field-label_choice": "[\"flight_search\",\"product_search\",\"reservation_search\",\"room_search\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelSearchChoiceType",
+            "properties": {
+                "flight_search": {
+                    "description": "Exclusive with [product_search reservation_search room_search]\n",
+                    "title": "flight_search",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Flight Search"
+                },
+                "product_search": {
+                    "description": "Exclusive with [flight_search reservation_search room_search]\n",
+                    "title": "product_search",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Product Search"
+                },
+                "reservation_search": {
+                    "description": "Exclusive with [flight_search product_search room_search]\n",
+                    "title": "reservation_search",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Reservation Search (e.g., sporting events, concerts)"
+                },
+                "room_search": {
+                    "description": "Exclusive with [flight_search product_search reservation_search]\n",
+                    "title": "room_search",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Room Search"
+                }
+            }
+        },
+        "schemaBotDefenseFlowLabelShoppingGiftCardsChoiceType": {
+            "type": "object",
+            "description": "Bot Defense Flow Label Shopping \u0026 Gift Cards Category",
+            "title": "BotDefenseFlowLabelShoppingGiftCardsChoiceType",
+            "x-displayname": "Bot Defense Flow Label Shopping \u0026 Gift Cards Category",
+            "x-ves-oneof-field-label_choice": "[\"gift_card_make_purchase_with_gift_card\",\"gift_card_validation\",\"shop_add_to_cart\",\"shop_checkout\",\"shop_choose_seat\",\"shop_enter_drawing_submission\",\"shop_make_payment\",\"shop_order\",\"shop_price_inquiry\",\"shop_promo_code_validation\",\"shop_purchase_gift_card\",\"shop_update_quantity\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseFlowLabelShoppingGiftCardsChoiceType",
+            "properties": {
+                "gift_card_make_purchase_with_gift_card": {
+                    "description": "Exclusive with [gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "Purchase with Gift Card",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Purchase with Gift Card"
+                },
+                "gift_card_validation": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "Gift Card Validation",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Gift Card Validation"
+                },
+                "shop_add_to_cart": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "add_to_cart",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Add to Cart"
+                },
+                "shop_checkout": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "checkout",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Checkout"
+                },
+                "shop_choose_seat": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "Select Seat(s)",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Select Seat(s)"
+                },
+                "shop_enter_drawing_submission": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "Enter Drawing Submission",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enter Drawing Submission"
+                },
+                "shop_make_payment": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "make_payment",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Payment / Billing"
+                },
+                "shop_order": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "order",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Order Submit"
+                },
+                "shop_price_inquiry": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_promo_code_validation shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "price_inquiry",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Price Inquiry"
+                },
+                "shop_promo_code_validation": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_purchase_gift_card shop_update_quantity]\n",
+                    "title": "promo_code_validation",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Promo Code Validation"
+                },
+                "shop_purchase_gift_card": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_update_quantity]\n",
+                    "title": "shop_purchase_gift_card",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Purchase a Gift Card"
+                },
+                "shop_update_quantity": {
+                    "description": "Exclusive with [gift_card_make_purchase_with_gift_card gift_card_validation shop_add_to_cart shop_checkout shop_choose_seat shop_enter_drawing_submission shop_make_payment shop_order shop_price_inquiry shop_promo_code_validation shop_purchase_gift_card]\n",
+                    "title": "Update Quantity",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Update Quantity"
+                }
+            }
+        },
+        "schemaBotDefenseTransactionResult": {
+            "type": "object",
+            "description": "Bot Defense Transaction Result",
+            "title": "BotDefenseTransactionResult",
+            "x-displayname": "Bot Defense Transaction Result",
+            "x-ves-oneof-field-transaction_result_choice": "[\"disable_transaction_result\",\"transaction_result\"]",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseTransactionResult",
+            "properties": {
+                "disable_transaction_result": {
+                    "description": "Exclusive with [transaction_result]\n Disable collection of transaction result.",
+                    "title": "Disable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "transaction_result": {
+                    "description": "Exclusive with [disable_transaction_result]\n Collect transaction result.",
+                    "title": "Transaction result",
+                    "$ref": "#/definitions/schemaBotDefenseTransactionResultType",
+                    "x-displayname": "Transaction result"
+                }
+            }
+        },
+        "schemaBotDefenseTransactionResultCondition": {
+            "type": "object",
+            "description": "Bot Defense Transaction Result Condition",
+            "title": "BotDefenseTransactionResultCondition",
+            "x-displayname": "Bot Defense Transaction Result Condition",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseTransactionResultCondition",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " A case-insensitive HTTP header name.\n\nExample: - \"Accept-Encoding\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_header_field: true\n  ves.io.schema.rules.string.max_bytes: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "Header Name",
+                    "x-ves-example": "Accept-Encoding",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_header_field": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256"
+                    }
+                },
+                "regex_values": {
+                    "type": "array",
+                    "description": " A list of regular expressions to match the input against.\n\nExample: - \"['^new .*$', 'san f.*', '.* del .*']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.items.string.regex: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "regex values",
+                    "maxItems": 16,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Regex Values",
+                    "x-ves-example": "['^new .*$', 'san f.*', '.* del .*']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.items.string.regex": "true",
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "status": {
+                    "description": " HTTP Status code\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "HTTP Status code for response",
+                    "$ref": "#/definitions/schemaHttpStatusCode",
+                    "x-displayname": "HTTP Status code",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "schemaBotDefenseTransactionResultType": {
+            "type": "object",
+            "description": "Bot Defense Transaction ResultType",
+            "title": "BotDefenseTransactionResultType",
+            "x-displayname": "Bot Defense Transaction Result Type",
+            "x-ves-displayorder": "4,3",
+            "x-ves-proto-message": "ves.io.schema.BotDefenseTransactionResultType",
+            "properties": {
+                "failure_conditions": {
+                    "type": "array",
+                    "description": " Failure Conditions\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Failure Conditions",
+                    "maxItems": 3,
+                    "items": {
+                        "$ref": "#/definitions/schemaBotDefenseTransactionResultCondition"
+                    },
+                    "x-displayname": "Failure Conditions",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "success_conditions": {
+                    "type": "array",
+                    "description": " Success Conditions\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 3\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Success Conditions",
+                    "maxItems": 3,
+                    "items": {
+                        "$ref": "#/definitions/schemaBotDefenseTransactionResultCondition"
+                    },
+                    "x-displayname": "Success Conditions",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "3",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "schemaBotHttpMethod": {
+            "type": "string",
+            "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method\nGET method for XMLHttpRequest or Fetch\nPOST method\nPUT method\nPATCH method\nDELETE method\nGET method for HTML document",
+            "title": "BotHttpMethod",
+            "enum": [
+                "METHOD_ANY",
+                "METHOD_GET",
+                "METHOD_POST",
+                "METHOD_PUT",
+                "METHOD_PATCH",
+                "METHOD_DELETE",
+                "METHOD_GET_DOCUMENT"
+            ],
+            "default": "METHOD_ANY",
+            "x-displayname": "HTTP Method",
+            "x-ves-proto-enum": "ves.io.schema.BotHttpMethod"
+        },
         "schemaClearSecretInfoType": {
             "type": "object",
             "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
@@ -9137,6 +10468,58 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaDomainType": {
+            "type": "object",
+            "description": "Domains names",
+            "title": "Domains",
+            "x-displayname": "Domains",
+            "x-ves-oneof-field-domain_choice": "[\"exact_value\",\"regex_value\",\"suffix_value\"]",
+            "x-ves-proto-message": "ves.io.schema.DomainType",
+            "properties": {
+                "exact_value": {
+                    "type": "string",
+                    "description": "Exclusive with [regex_value suffix_value]\n Exact domain name.\n\nExample: - \"abc.zyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "exact value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Exact Value",
+                    "x-ves-example": "abc.zyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "regex_value": {
+                    "type": "string",
+                    "description": "Exclusive with [exact_value suffix_value]\n Regular Expression value for the domain name\n\nExample: - \"([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "regex values of Domains",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Regex Values of Domains",
+                    "x-ves-example": "([a-z]([-a-z0-9]*[a-z0-9])?)\\.com$'",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                },
+                "suffix_value": {
+                    "type": "string",
+                    "description": "Exclusive with [exact_value regex_value]\n Suffix of domain name e.g \"xyz.com\" will match \"*.xyz.com\" and \"xyz.com\"\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "suffix value",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Suffix Value",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                }
+            }
+        },
         "schemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -9244,7 +10627,8 @@ var APISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",
@@ -9252,18 +10636,84 @@ var APISwaggerJSON string = `{
         },
         "schemaHttpSections": {
             "type": "string",
-            "description": "Request \u0026 Response Sections.\n\n - HTTP_SECTION_NONE: None\n\nALL_SECTIONS\n - HTTP_SECTION_QUERY_PARAMS: QUERY_PARAMS\n\n - HTTP_SECTION_REQ_HEADERS: REQ_HEADERS\n\n - HTTP_SECTION_RSP_HEADERS: RSP_HEADERS\n\n - HTTP_SECTION_REQ_BODY: REQ_BODY\n\n - HTTP_SECTION_RSP_BODY: RSP_BODY\n",
+            "description": "x-displayName: \"HTTP Sections\"\nRequest \u0026 Response Sections.\n\n - HTTP_SECTION_NONE: None\n\nALL_SECTIONS\nx-displayName: \"None\"\n - HTTP_SECTION_QUERY_PARAMS: QUERY_PARAMS\n\nx-displayName: \"Request Query Params\"\n - HTTP_SECTION_REQ_HEADERS: REQ_HEADERS\n\nx-displayName: \"Request Headers\"\n - HTTP_SECTION_RSP_HEADERS: RSP_HEADERS\n\nx-displayName: \"Response Headers\"\n - HTTP_SECTION_REQ_BODY: REQ_BODY\n\nx-displayName: \"Request Body\"\n - HTTP_SECTION_RSP_BODY: RSP_BODY\n\nx-displayName: \"Response Body\"",
             "title": "HTTPSections",
             "enum": [
+                "HTTP_SECTION_NONE",
                 "HTTP_SECTION_QUERY_PARAMS",
                 "HTTP_SECTION_REQ_HEADERS",
                 "HTTP_SECTION_RSP_HEADERS",
                 "HTTP_SECTION_REQ_BODY",
                 "HTTP_SECTION_RSP_BODY"
             ],
-            "default": "HTTP_SECTION_NONE",
-            "x-displayname": "HTTP Sections",
-            "x-ves-proto-enum": "ves.io.schema.HttpSections"
+            "default": "HTTP_SECTION_NONE"
+        },
+        "schemaHttpStatusCode": {
+            "type": "string",
+            "description": "HTTP response status codes\n\nEmptyStatusCode response codes means it is not specified\nContinue status code\nOK status code\nCreated status code\nAccepted status code\nNon Authoritative Information status code\nNo Content status code\nReset Content status code\nPartial Content status code\nMulti Status status code\nAlready Reported status code\nIm Used status code\nMultiple Choices status code\nMoved Permanently status code\nFound status code\nSee Other status code\nNot Modified status code\nUse Proxy status code\nTemporary Redirect status code\nPermanent Redirect status code\nBad Request status code\nUnauthorized status code\nPayment Required status code\nForbidden status code\nNot Found status code\nMethod Not Allowed status code\nNot Acceptable status code\nProxy Authentication Required status code\nRequest Timeout status code\nConflict status code\nGone status code\nLength Required status code\nPrecondition Failed status code\nPayload Too Large status code\nUri Too Long status code\nUnsupported Media Type status code\nRange Not Satisfiable status code\nExpectation Failed status code\nMisdirected Request status code\nUnprocessable Entity status code\nLocked status code\nFailed Dependency status code\nUpgrade Required status code\nPrecondition Required status code\nToo Many Requests status code\nRequest Header Fields Too Large status code\nInternal Server Error status code\nNot Implemented status code\nBad Gateway status code\nService Unavailable status code\nGateway Timeout status code\nHttp Version Not Supported status code\nVariant Also Negotiates status code\nInsufficient Storage status code\nLoop Detected status code\nNot Extended status code\nNetwork Authentication Required status code",
+            "title": "HttpStatusCode",
+            "enum": [
+                "EmptyStatusCode",
+                "Continue",
+                "OK",
+                "Created",
+                "Accepted",
+                "NonAuthoritativeInformation",
+                "NoContent",
+                "ResetContent",
+                "PartialContent",
+                "MultiStatus",
+                "AlreadyReported",
+                "IMUsed",
+                "MultipleChoices",
+                "MovedPermanently",
+                "Found",
+                "SeeOther",
+                "NotModified",
+                "UseProxy",
+                "TemporaryRedirect",
+                "PermanentRedirect",
+                "BadRequest",
+                "Unauthorized",
+                "PaymentRequired",
+                "Forbidden",
+                "NotFound",
+                "MethodNotAllowed",
+                "NotAcceptable",
+                "ProxyAuthenticationRequired",
+                "RequestTimeout",
+                "Conflict",
+                "Gone",
+                "LengthRequired",
+                "PreconditionFailed",
+                "PayloadTooLarge",
+                "URITooLong",
+                "UnsupportedMediaType",
+                "RangeNotSatisfiable",
+                "ExpectationFailed",
+                "MisdirectedRequest",
+                "UnprocessableEntity",
+                "Locked",
+                "FailedDependency",
+                "UpgradeRequired",
+                "PreconditionRequired",
+                "TooManyRequests",
+                "RequestHeaderFieldsTooLarge",
+                "InternalServerError",
+                "NotImplemented",
+                "BadGateway",
+                "ServiceUnavailable",
+                "GatewayTimeout",
+                "HTTPVersionNotSupported",
+                "VariantAlsoNegotiates",
+                "InsufficientStorage",
+                "LoopDetected",
+                "NotExtended",
+                "NetworkAuthenticationRequired"
+            ],
+            "default": "EmptyStatusCode",
+            "x-displayname": "HTTP Status Code",
+            "x-ves-proto-enum": "ves.io.schema.HttpStatusCode"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -9303,6 +10753,20 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Result"
                 }
             }
+        },
+        "schemaJavaScriptMode": {
+            "type": "string",
+            "description": "Web Client JavaScript Mode.\n\nBot Defense JavaScript for telemetry collection is requested asynchronously, and it is non-cacheable\nBot Defense JavaScript for telemetry collection is requested asynchronously, and it is cacheable\nBot Defense JavaScript for telemetry collection is requested synchronously, and it is non-cacheable\nBot Defense JavaScript for telemetry collection is requested synchronously, and it is cacheable",
+            "title": "JavaScript Mode",
+            "enum": [
+                "ASYNC_JS_NO_CACHING",
+                "ASYNC_JS_CACHING",
+                "SYNC_JS_NO_CACHING",
+                "SYNC_JS_CACHING"
+            ],
+            "default": "ASYNC_JS_NO_CACHING",
+            "x-displayname": "Web Client JavaScript Mode",
+            "x-ves-proto-enum": "ves.io.schema.JavaScriptMode"
         },
         "schemaLabelSelectorType": {
             "type": "object",
@@ -10427,34 +11891,33 @@ var APISwaggerJSON string = `{
         },
         "viewscdn_loadbalancerAdvancedOptionsType": {
             "type": "object",
-            "description": "This defines various options to define a route",
+            "description": "x-displayName: \"Advanced Options\"\nThis defines various options to define a route",
             "title": "Advanced options",
-            "x-displayname": "Advanced Options",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.AdvancedOptionsType",
             "properties": {
                 "cache_options": {
-                    "description": " Cache Options",
+                    "description": "x-displayName: \"Cache Options\"\nCache Options",
                     "title": "Cache Options",
-                    "$ref": "#/definitions/cdn_loadbalancerCacheOptions",
-                    "x-displayname": "Cache Options"
+                    "$ref": "#/definitions/cdn_loadbalancerCacheOptions"
+                },
+                "cache_ttl_options": {
+                    "description": "x-displayName: \"Cache Options\"\nCache Options",
+                    "title": "Cache Options",
+                    "$ref": "#/definitions/cdn_loadbalancerCacheTTLOptionsType"
                 },
                 "header_options": {
-                    "description": " Request/Response header related options",
+                    "description": "x-displayName: \"Header Control\"\nRequest/Response header related options",
                     "title": "Header Control",
-                    "$ref": "#/definitions/cdn_loadbalancerHeaderControlType",
-                    "x-displayname": "Header Control"
+                    "$ref": "#/definitions/cdn_loadbalancerHeaderControlType"
                 },
                 "logging_options": {
-                    "description": " Logging related options",
+                    "description": "x-displayName: \"Logging Options\"\nLogging related options",
                     "title": "Logging Options",
-                    "$ref": "#/definitions/cdn_loadbalancerLoggingOptionsType",
-                    "x-displayname": "Logging Options"
+                    "$ref": "#/definitions/cdn_loadbalancerLoggingOptionsType"
                 },
                 "security_options": {
-                    "description": " Security related options",
+                    "description": "x-displayName: \"Security Options\"\nSecurity related options",
                     "title": "Security Options",
-                    "$ref": "#/definitions/cdn_loadbalancerSecurityOptionsType",
-                    "x-displayname": "Security Options"
+                    "$ref": "#/definitions/cdn_loadbalancerSecurityOptionsType"
                 }
             }
         },
@@ -10463,16 +11926,53 @@ var APISwaggerJSON string = `{
             "description": "Shape of the CDN loadbalancer specification",
             "title": "GlobalSpecType",
             "x-displayname": "Global Specification",
+            "x-ves-oneof-field-api_definition_choice": "[\"api_specification\",\"disable_api_definition\"]",
+            "x-ves-oneof-field-api_discovery_choice": "[\"disable_api_discovery\",\"enable_api_discovery\"]",
+            "x-ves-oneof-field-bot_defense_choice": "[\"bot_defense\"]",
+            "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"enable_challenge\",\"js_challenge\",\"no_challenge\",\"policy_based_challenge\"]",
+            "x-ves-oneof-field-client_side_defense_choice": "[\"client_side_defense\",\"disable_client_side_defense\"]",
+            "x-ves-oneof-field-ip_reputation_choice": "[\"disable_ip_reputation\",\"enable_ip_reputation\"]",
+            "x-ves-oneof-field-l7_ddos_auto_mitigation_action": "[\"l7_ddos_action_block\",\"l7_ddos_action_default\",\"l7_ddos_action_js_challenge\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"http\",\"https\",\"https_auto_cert\"]",
+            "x-ves-oneof-field-malicious_user_detection_choice": "[\"disable_malicious_user_detection\",\"enable_malicious_user_detection\"]",
+            "x-ves-oneof-field-rate_limit_choice": "[\"api_rate_limit\",\"disable_rate_limit\",\"rate_limit\"]",
+            "x-ves-oneof-field-sensitive_data_policy_choice": "[\"default_sensitive_data_policy\",\"sensitive_data_policy\"]",
+            "x-ves-oneof-field-service_policy_choice": "[\"active_service_policies\",\"no_service_policies\",\"service_policies_from_namespace\"]",
+            "x-ves-oneof-field-slow_ddos_mitigation_choice": "[\"slow_ddos_mitigation\",\"system_default_timeouts\"]",
+            "x-ves-oneof-field-threat_mesh_choice": "[\"disable_threat_mesh\",\"enable_threat_mesh\"]",
+            "x-ves-oneof-field-user_id_choice": "[\"user_id_client_ip\",\"user_identification\"]",
+            "x-ves-oneof-field-waf_choice": "[\"app_firewall\",\"disable_waf\"]",
             "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.GlobalSpecType",
             "properties": {
-                "add_location": {
-                    "type": "boolean",
-                    "description": " x-example: true\n Appends header x-volterra-location = \u003cre-site-name\u003e in responses.\n\nExample: - \"true\"-",
-                    "title": "Add Site information",
-                    "format": "boolean",
-                    "x-displayname": "Add Location",
-                    "x-ves-example": "true"
+                "active_service_policies": {
+                    "description": "Exclusive with [no_service_policies service_policies_from_namespace]\n Apply the specified list of service policies and bypass the namespace service policy set",
+                    "title": "Apply Specified Service Policies",
+                    "$ref": "#/definitions/common_wafServicePolicyList",
+                    "x-displayname": "Apply Specified Service Policies"
+                },
+                "api_protection_rules": {
+                    "description": " API Protection Rules can be defined in two categories.\n The first category includes fine-grained rules, per API path and methods.\n The second category includes rules per API groups or Server URLs.\n If request matches any rule in the first category, second category rules are not evaluated.\n Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.",
+                    "title": "API Protection rules",
+                    "$ref": "#/definitions/common_wafAPIProtectionRules",
+                    "x-displayname": "API Protection Rules"
+                },
+                "api_rate_limit": {
+                    "description": "Exclusive with [disable_rate_limit rate_limit]\n Define rate limiting for one or more API endpoints",
+                    "title": "Rate Limiting Parameters",
+                    "$ref": "#/definitions/common_wafAPIRateLimit",
+                    "x-displayname": "API Rate Limit"
+                },
+                "api_specification": {
+                    "description": "Exclusive with [disable_api_definition]\n Specify API definition and OpenAPI Validation",
+                    "title": "API Specification",
+                    "$ref": "#/definitions/common_wafAPISpecificationSettings",
+                    "x-displayname": "Enable for All Requests"
+                },
+                "app_firewall": {
+                    "description": "Exclusive with [disable_waf]\n Enable WAF configuration for all requests in this distribution",
+                    "title": "Application Firewall for All Requests",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable for All Requests"
                 },
                 "auto_cert_info": {
                     "description": " Auto certificate related information",
@@ -10486,11 +11986,157 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostCertificationState",
                     "x-displayname": "Auto Cert State"
                 },
+                "blocked_clients": {
+                    "type": "array",
+                    "description": " Define rules to block IP Prefixes or AS numbers.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "Client Blocking Rules",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/common_wafSimpleClientSrcRule"
+                    },
+                    "x-displayname": "Client Blocking Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                },
+                "bot_defense": {
+                    "description": "Exclusive with []\n Select Bot Defense Standard",
+                    "title": "Enable Bot Defense Standard",
+                    "$ref": "#/definitions/common_securityShapeBotDefenseType",
+                    "x-displayname": "Enable Bot Defense Standard"
+                },
+                "cache_rules": {
+                    "type": "array",
+                    "description": " Rules are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "List of Cache rules(These rules are ORed)",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/cdn_loadbalancerCDNCacheRule"
+                    },
+                    "x-displayname": "Cache Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "captcha_challenge": {
+                    "description": "Exclusive with [enable_challenge js_challenge no_challenge policy_based_challenge]\n Configure Captcha challenge on this load balancer",
+                    "title": "Captcha Challenge",
+                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
+                    "x-displayname": "Captcha Challenge"
+                },
                 "cert_state": {
                     "description": " State of Custom certificate or Auto certificate generation.",
                     "title": "Cert State",
                     "$ref": "#/definitions/virtual_hostCertificationState",
                     "x-displayname": "Cert State"
+                },
+                "client_side_defense": {
+                    "description": "Exclusive with [disable_client_side_defense]\n Client-Side Defense configuration for JavaScript insertion",
+                    "title": "Client-Side Defense",
+                    "$ref": "#/definitions/common_securityClientSideDefenseType",
+                    "x-displayname": "Enable"
+                },
+                "cors_policy": {
+                    "description": " Cross-Origin Resource Sharing requests configuration\n\n CORS is a mechanism that uses additional HTTP headers to tell a browser to let\n a web application running at one origin (domain) have permission to access selected\n resources from a server at a different origin",
+                    "title": "cors_policy",
+                    "$ref": "#/definitions/schemaCorsPolicy",
+                    "x-displayname": "CORS Policy"
+                },
+                "csrf_policy": {
+                    "description": " Cross-Site Request Forgery (CSRF) is an attack that occurs when a malicious third-party website exploits a vulnerability thats allows them to submit an undesired request on user's behalf.\n\n The policy checks where a request is coming from to determine if the request's origin is the same as its destination. The policy relies on two pieces of information used in determining if a request originated from the same host.\n\n 1. The origin that caused the user agent to issue the request (source origin).\n 2. The origin that the request is going to (target origin).\n When the policy evaluating a request, it ensures both pieces of information are present and compare their values. If the source origin is missing or origins do not match the request is rejected. The exception to this being the source-origin has been added to the policy as valid.\n Because CSRF attacks specifically target state-changing requests, the policy only acts on the HTTP requests that have state-changing method (PUT,POST, etc.).",
+                    "title": "csrf_policy",
+                    "$ref": "#/definitions/schemaCsrfPolicy",
+                    "x-displayname": "Cross-Site Request Forgery Protection"
+                },
+                "data_guard_rules": {
+                    "type": "array",
+                    "description": " Data Guard prevents responses from exposing sensitive information by masking the data.\n The system masks credit card numbers and social security numbers leaked from the application from within the http response with a string of asterisks (*).\n Note: App Firewall should be enabled, to use Data Guard feature.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "Data Guard Rules",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policySimpleDataGuardRule"
+                    },
+                    "x-displayname": "Data Guard Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                },
+                "ddos_mitigation_rules": {
+                    "type": "array",
+                    "description": " Define manual mitigation rules to block L7 DDoS attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "DDoS Mitigation Rules",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/common_securityDDoSMitigationRule"
+                    },
+                    "x-displayname": "DDoS Mitigation Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                },
+                "default_cache_action": {
+                    "description": " Default value for Cache action.",
+                    "title": "Default Cache Action",
+                    "$ref": "#/definitions/cdn_loadbalancerDefaultCacheAction",
+                    "x-displayname": "Default Cache Action"
+                },
+                "default_sensitive_data_policy": {
+                    "description": "Exclusive with [sensitive_data_policy]\n Apply system default sensitive data discovery",
+                    "title": "Apply sensitive data discovery",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "disable_api_definition": {
+                    "description": "Exclusive with [api_specification]\n API Definition is not currently used for this load balancer",
+                    "title": "Don not use API Definition",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_api_discovery": {
+                    "description": "Exclusive with [enable_api_discovery]\n Disable api discovery for this distribution",
+                    "title": "Disable API discovery",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_client_side_defense": {
+                    "description": "Exclusive with [client_side_defense]\n No Client-Side Defense configuration for this load balancer",
+                    "title": "Disable Client-Side Defense",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_ip_reputation": {
+                    "description": "Exclusive with [enable_ip_reputation]\n No IP reputation configured this distribution",
+                    "title": "disable_ip_reputation",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_malicious_user_detection": {
+                    "description": "Exclusive with [enable_malicious_user_detection]\n Disable malicious user detection for this distribution",
+                    "title": "Disable malicious user detection",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_rate_limit": {
+                    "description": "Exclusive with [api_rate_limit rate_limit]\n Rate limiting is not currently enabled for this load balancer",
+                    "title": "Disable Rate Limiting",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_threat_mesh": {
+                    "description": "Exclusive with [enable_threat_mesh]\n",
+                    "title": "disable_threat_mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disable_waf": {
+                    "description": "Exclusive with [app_firewall]\n No WAF configuration for this load balancer",
+                    "title": "Disable WAF",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "dns_info": {
                     "type": "array",
@@ -10526,6 +12172,50 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "enable_api_discovery": {
+                    "description": "Exclusive with [disable_api_discovery]\n Enable api discovery for all requests in this distribution",
+                    "title": "Enable API discovery",
+                    "$ref": "#/definitions/common_wafApiDiscoverySetting",
+                    "x-displayname": "Enable for All Requests"
+                },
+                "enable_challenge": {
+                    "description": "Exclusive with [captcha_challenge js_challenge no_challenge policy_based_challenge]\n Configure auto mitigation i.e risk based challenges for malicious users for this load balancer",
+                    "title": "Enable",
+                    "$ref": "#/definitions/common_wafEnableChallenge",
+                    "x-displayname": "Enable for All Requests"
+                },
+                "enable_ip_reputation": {
+                    "description": "Exclusive with [disable_ip_reputation]\n Enable IP reputation for all requests in this distribution",
+                    "title": "enable_ip_reputation",
+                    "$ref": "#/definitions/viewscommon_wafIPThreatCategoryListType",
+                    "x-displayname": "Enable for All Requests"
+                },
+                "enable_malicious_user_detection": {
+                    "description": "Exclusive with [disable_malicious_user_detection]\n Enable malicious user detection for all requests in this distribution",
+                    "title": "Enable malicious user detection",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable for All Requests"
+                },
+                "enable_threat_mesh": {
+                    "description": "Exclusive with [disable_threat_mesh]\n",
+                    "title": "enable_threat_mesh",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable"
+                },
+                "graphql_rules": {
+                    "type": "array",
+                    "description": " GraphQL is a query language and server-side runtime for APIs which provides a complete and understandable\n description of the data in API. GraphQL gives clients the power to ask for exactly what they need, makes it\n easier to evolve APIs over time, and enables powerful developer tools. Policy configuration to analyze GraphQL\n queries and prevent GraphQL tailored attacks.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "GraphQL Inspection",
+                    "maxItems": 64,
+                    "items": {
+                        "$ref": "#/definitions/policyGraphQLRule"
+                    },
+                    "x-displayname": "GraphQL Inspection",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                },
                 "host_name": {
                     "type": "string",
                     "description": " Internally generated host name to be used for the virtual host\n\nExample: - \"ves-io-cf8684b9-a18f-4843-a24f-1f9ee8ea2776.ac.vh.ves.io\"-",
@@ -10551,11 +12241,47 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/cdn_loadbalancerCDNHTTPSAutoCertsType",
                     "x-displayname": "HTTPS with Automatic Certificate"
                 },
-                "more_option": {
-                    "description": " More options like header manipulation, compression etc.",
-                    "title": "More Options",
-                    "$ref": "#/definitions/viewscdn_loadbalancerAdvancedOptionsType",
-                    "x-displayname": "More Options"
+                "js_challenge": {
+                    "description": "Exclusive with [captcha_challenge enable_challenge no_challenge policy_based_challenge]\n Configure JavaScript challenge on this load balancer",
+                    "title": "JavaScript Challenge",
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
+                    "x-displayname": "JavaScript Challenge"
+                },
+                "jwt_validation": {
+                    "description": " JWT Validation stops JWT replay attacks and JWT tampering by cryptographically verifying incoming\n JWTs before they are passed to origin APIs. JWT Validation will also stop requests with expired\n tokens or tokens that are not yet valid.",
+                    "title": "JWT Validation",
+                    "$ref": "#/definitions/common_wafJWTValidation",
+                    "x-displayname": "JWT Validation"
+                },
+                "l7_ddos_action_block": {
+                    "description": "Exclusive with [l7_ddos_action_default l7_ddos_action_js_challenge]\n Block suspicious sources",
+                    "title": "block",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Block"
+                },
+                "l7_ddos_action_default": {
+                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_js_challenge]\n Block suspicious sources",
+                    "title": "Default",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "l7_ddos_action_js_challenge": {
+                    "description": "Exclusive with [l7_ddos_action_block l7_ddos_action_default]\n Serve JavaScript challenge to suspicious sources",
+                    "title": "JavaScript Challenge",
+                    "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
+                    "x-displayname": "JavaScript Challenge"
+                },
+                "no_challenge": {
+                    "description": "Exclusive with [captcha_challenge enable_challenge js_challenge policy_based_challenge]\n No challenge is enabled for this load balancer",
+                    "title": "Disable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "no_service_policies": {
+                    "description": "Exclusive with [active_service_policies service_policies_from_namespace]\n Do not apply any service policies i.e. bypass the namespace service policy set",
+                    "title": "Do Not Apply Service Policies",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Do Not Apply Service Policies"
                 },
                 "origin_pool": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -10567,6 +12293,43 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "other_settings": {
+                    "title": "Other Settings",
+                    "$ref": "#/definitions/cdn_loadbalancerOtherSettings",
+                    "x-displayname": "Other Settings"
+                },
+                "policy_based_challenge": {
+                    "description": "Exclusive with [captcha_challenge enable_challenge js_challenge no_challenge]\n Specifies the settings for policy rule based challenge",
+                    "title": "policy based challenge",
+                    "$ref": "#/definitions/viewscommon_wafPolicyBasedChallenge",
+                    "x-displayname": "Policy Based Challenge"
+                },
+                "protected_cookies": {
+                    "type": "array",
+                    "description": " Allows setting attributes (SameSite, Secure, and HttpOnly) on cookies in responses.\n Cookie Tampering Protection prevents attackers from modifying the value of session cookies.\n For Cookie Tampering Protection, enabling a web app firewall (WAF) is a prerequisite.\n The configured mode of WAF (monitoring or blocking) will be enforced on the request when cookie tampering is identified.\n Note: We recommend enabling Secure and HttpOnly attributes along with cookie tampering protection.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookie protection",
+                    "maxItems": 16,
+                    "items": {
+                        "$ref": "#/definitions/schemaCookieManipulationOptionType"
+                    },
+                    "x-displayname": "Cookie Protection",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "16",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "rate_limit": {
+                    "description": "Exclusive with [api_rate_limit disable_rate_limit]\n Define custom rate limiting parameters for this load balancer",
+                    "title": "Custom Rate Limiting Parameters",
+                    "$ref": "#/definitions/common_wafRateLimitConfigType",
+                    "x-displayname": "Custom Rate Limiting Parameters"
+                },
+                "sensitive_data_policy": {
+                    "description": "Exclusive with [default_sensitive_data_policy]\n Apply custom sensitive data discovery",
+                    "title": "Apply Specified Sensitive Data Discovery",
+                    "$ref": "#/definitions/common_securitySensitiveDataPolicySettings",
+                    "x-displayname": "Custom"
+                },
                 "service_domains": {
                     "type": "array",
                     "description": " CNAME provided from service per domain",
@@ -10576,11 +12339,69 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Service Domains"
                 },
+                "service_policies_from_namespace": {
+                    "description": "Exclusive with [active_service_policies no_service_policies]\n Apply the active service policies configured as part of the namespace service policy set",
+                    "title": "Apply Namespace Service Policies",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Apply Namespace Service Policies"
+                },
+                "slow_ddos_mitigation": {
+                    "description": "Exclusive with [system_default_timeouts]\n Custom Settings for Slow DDoS Mitigation",
+                    "title": "Slow DDoS Mitigation",
+                    "$ref": "#/definitions/virtual_hostSlowDDoSMitigation",
+                    "x-displayname": "Custom"
+                },
                 "state": {
                     "description": " State of the virtual host",
                     "title": "Virtual Host state",
                     "$ref": "#/definitions/virtual_hostVirtualHostState",
                     "x-displayname": "Virtual Host State"
+                },
+                "system_default_timeouts": {
+                    "description": "Exclusive with [slow_ddos_mitigation]\n Default Settings for Slow DDoS Mitigation",
+                    "title": "System Default Settings",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Default"
+                },
+                "trusted_clients": {
+                    "type": "array",
+                    "description": " Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "Trusted Client Rules",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/common_wafSimpleClientSrcRule"
+                    },
+                    "x-displayname": "Trusted Client Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
+                },
+                "user_id_client_ip": {
+                    "description": "Exclusive with [user_identification]\n Use the Client IP address as the user identifier.",
+                    "title": "user_id_client_ip",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Client IP Address"
+                },
+                "user_identification": {
+                    "description": "Exclusive with [user_id_client_ip]\n A reference to user_identification object.\n The rules in the user_identification object are evaluated to determine the user identifier.",
+                    "title": "user_identification",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "User Identification Policy"
+                },
+                "waf_exclusion_rules": {
+                    "type": "array",
+                    "description": " Define the Signature IDs, Violations, Attack Types and Bot Names that should be excluded from WAF processing on specific match criteria.\n The match criteria include domain, path and method.\n WAF Exclusion rules is a sequential engine where rules are evaluated one after the other.\n It's important to define the correct order for WAF exclusion rules to get the intended result, rules are evaluated from top to bottom in the list.\n For each request, its characteristics are evaluated based on the match criteria in each WAF exclusion rule, starting from the top.\n When an exclusion rule is matched, then this exclusion rule takes effect and no more rules are evaluated.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "title": "WAF Exclusion Rules",
+                    "maxItems": 256,
+                    "items": {
+                        "$ref": "#/definitions/policySimpleWafExclusionRule"
+                    },
+                    "x-displayname": "WAF Exclusion Rules",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "256",
+                        "ves.io.schema.rules.repeated.unique_metadata_name": "true"
+                    }
                 }
             }
         },
@@ -10594,6 +12415,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "GC Spec"
                 }
             }
+        },
+        "viewscommon_securityJavaScriptLocation": {
+            "type": "string",
+            "description": "All inside networks.\n\nInsert JavaScript after \u003chead\u003e tag\nInsert JavaScript after \u003c/title\u003e tag.\nInsert JavaScript before first \u003cscript\u003e tag",
+            "title": "JavaScriptLocation",
+            "enum": [
+                "AFTER_HEAD",
+                "AFTER_TITLE_END",
+                "BEFORE_SCRIPT"
+            ],
+            "default": "AFTER_HEAD",
+            "x-displayname": "JavaScript Location",
+            "x-ves-proto-enum": "ves.io.schema.views.common_security.JavaScriptLocation"
         },
         "viewscommon_wafIPThreatCategoryListType": {
             "type": "object",
@@ -10942,6 +12776,46 @@ var APISwaggerJSON string = `{
                     "title": "Service Domain",
                     "x-displayname": "Service Domain",
                     "x-ves-example": "ves-io-cdn-cdn-acmecorp-com.demo1.ac.vh.volterra.us"
+                }
+            }
+        },
+        "virtual_hostSlowDDoSMitigation": {
+            "type": "object",
+            "description": "\"Slow and low\" attacks tie up server resources, leaving none available for servicing\nrequests from actual users.",
+            "title": "Slow DDoS Mitigation",
+            "x-displayname": "Slow DDoS Mitigation",
+            "x-ves-oneof-field-request_timeout_choice": "[\"disable_request_timeout\",\"request_timeout\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.SlowDDoSMitigation",
+            "properties": {
+                "disable_request_timeout": {
+                    "description": "Exclusive with [request_timeout]\n",
+                    "title": "No Timeout",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No Timeout"
+                },
+                "request_headers_timeout": {
+                    "type": "integer",
+                    "description": " The amount of time the client has to send only the headers on the request stream before\n the stream is cancelled. The default value is 10000 milliseconds. This setting\n provides protection against Slowloris attacks.\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 30000\n",
+                    "title": "Request Headers Timeout",
+                    "format": "int64",
+                    "x-displayname": "Request Headers Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2000",
+                        "ves.io.schema.rules.uint32.lte": "30000"
+                    }
+                },
+                "request_timeout": {
+                    "type": "integer",
+                    "description": "Exclusive with [disable_request_timeout]\n\n\nExample: - \"60000\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 2000\n  ves.io.schema.rules.uint32.lte: 300000\n",
+                    "title": "Custom Timeout",
+                    "format": "int64",
+                    "x-displayname": "Custom Timeout",
+                    "x-ves-example": "60000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "2000",
+                        "ves.io.schema.rules.uint32.lte": "300000"
+                    }
                 }
             }
         },

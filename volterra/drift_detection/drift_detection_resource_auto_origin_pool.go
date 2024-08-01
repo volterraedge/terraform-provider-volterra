@@ -59,7 +59,7 @@ func DriftDetectionSpec_OriginPool(d *schema.ResourceData, resp vesapi.GetObject
 
 	d.Set("same_as_endpoint_port", isEmpty(spec.GcSpec.GetSameAsEndpointPort()))
 
-	d.Set("healthcheck", FlattenCertificates(spec.GcSpec.GetHealthcheck()))
+	d.Set("healthcheck", FlattenVObjectRefTypeList(spec.GcSpec.GetHealthcheck()))
 
 	d.Set("loadbalancer_algorithm", spec.GcSpec.GetLoadbalancerAlgorithm().String())
 

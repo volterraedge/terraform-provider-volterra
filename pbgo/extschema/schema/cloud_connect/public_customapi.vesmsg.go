@@ -24,6 +24,99 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *FieldData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *FieldData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *FieldData) DeepCopy() *FieldData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &FieldData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *FieldData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *FieldData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return FieldDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateFieldData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateFieldData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*FieldData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *FieldData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		for idx, item := range m.GetValue() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultFieldDataValidator = func() *ValidateFieldData {
+	v := &ValidateFieldData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func FieldDataValidator() db.Validator {
+	return DefaultFieldDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetMetricsRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -177,6 +270,15 @@ func (v *ValidateGetMetricsRequest) Validate(ctx context.Context, pm interface{}
 	if fv, exists := v.FldValidators["field_selector"]; exists {
 		vOpts := append(opts, db.WithValidateField("field_selector"))
 		if err := fv(ctx, m.GetFieldSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["is_trend_request"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("is_trend_request"))
+		if err := fv(ctx, m.GetIsTrendRequest(), vOpts...); err != nil {
 			return err
 		}
 
@@ -447,6 +549,54 @@ type ValidateListMetricsRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListMetricsRequest) LabelFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for label_filter")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*LabelFilter, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := LabelFilterValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for label_filter")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*LabelFilter)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*LabelFilter, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated label_filter")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items label_filter")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListMetricsRequest) FieldSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepEnumItemRules(rules)
@@ -495,36 +645,6 @@ func (v *ValidateListMetricsRequest) FieldSelectorValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateListMetricsRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateListMetricsRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateListMetricsRequest) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateListMetricsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListMetricsRequest)
 	if !ok {
@@ -539,15 +659,6 @@ func (v *ValidateListMetricsRequest) Validate(ctx context.Context, pm interface{
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["end_time"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("end_time"))
-		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["field_selector"]; exists {
 		vOpts := append(opts, db.WithValidateField("field_selector"))
 		if err := fv(ctx, m.GetFieldSelector(), vOpts...); err != nil {
@@ -557,30 +668,8 @@ func (v *ValidateListMetricsRequest) Validate(ctx context.Context, pm interface{
 	}
 
 	if fv, exists := v.FldValidators["label_filter"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("label_filter"))
-		for idx, item := range m.GetLabelFilter() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["start_time"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("start_time"))
-		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["step"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("step"))
-		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
 			return err
 		}
 
@@ -601,6 +690,17 @@ var DefaultListMetricsRequestValidator = func() *ValidateListMetricsRequest {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhLabelFilter := v.LabelFilterValidationRuleHandler
+	rulesLabelFilter := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "100",
+	}
+	vFn, err = vrhLabelFilter(rulesLabelFilter)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListMetricsRequest.label_filter: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_filter"] = vFn
+
 	vrhFieldSelector := v.FieldSelectorValidationRuleHandler
 	rulesFieldSelector := map[string]string{
 		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
@@ -612,39 +712,6 @@ var DefaultListMetricsRequestValidator = func() *ValidateListMetricsRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["field_selector"] = vFn
-
-	vrhStartTime := v.StartTimeValidationRuleHandler
-	rulesStartTime := map[string]string{
-		"ves.io.schema.rules.string.query_time": "true",
-	}
-	vFn, err = vrhStartTime(rulesStartTime)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ListMetricsRequest.start_time: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["start_time"] = vFn
-
-	vrhEndTime := v.EndTimeValidationRuleHandler
-	rulesEndTime := map[string]string{
-		"ves.io.schema.rules.string.query_time": "true",
-	}
-	vFn, err = vrhEndTime(rulesEndTime)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ListMetricsRequest.end_time: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["end_time"] = vFn
-
-	vrhStep := v.StepValidationRuleHandler
-	rulesStep := map[string]string{
-		"ves.io.schema.rules.string.query_step": "true",
-	}
-	vFn, err = vrhStep(rulesStep)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ListMetricsRequest.step: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["step"] = vFn
 
 	return v
 }()
@@ -694,16 +761,6 @@ type ValidateListMetricsResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateListMetricsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateListMetricsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListMetricsResponse)
 	if !ok {
@@ -718,35 +775,14 @@ func (v *ValidateListMetricsResponse) Validate(ctx context.Context, pm interface
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["data"]; exists {
+	if fv, exists := v.FldValidators["cloud_connect"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("data"))
-		for idx, item := range m.GetData() {
+		vOpts := append(opts, db.WithValidateField("cloud_connect"))
+		for idx, item := range m.GetCloudConnect() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["edges"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("edges"))
-		for idx, item := range m.GetEdges() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["step"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("step"))
-		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
-			return err
 		}
 
 	}
@@ -757,25 +793,6 @@ func (v *ValidateListMetricsResponse) Validate(ctx context.Context, pm interface
 // Well-known symbol for default validator implementation
 var DefaultListMetricsResponseValidator = func() *ValidateListMetricsResponse {
 	v := &ValidateListMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhStep := v.StepValidationRuleHandler
-	rulesStep := map[string]string{
-		"ves.io.schema.rules.string.time_interval": "true",
-	}
-	vFn, err = vrhStep(rulesStep)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ListMetricsResponse.step: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["step"] = vFn
 
 	return v
 }()
@@ -823,6 +840,54 @@ func (m *ListSegmentMetricsRequest) Validate(ctx context.Context, opts ...db.Val
 
 type ValidateListSegmentMetricsRequest struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListSegmentMetricsRequest) LabelFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for label_filter")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*LabelFilter, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := LabelFilterValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for label_filter")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*LabelFilter)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*LabelFilter, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated label_filter")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items label_filter")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateListSegmentMetricsRequest) FieldSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -934,14 +999,19 @@ func (v *ValidateListSegmentMetricsRequest) Validate(ctx context.Context, pm int
 
 	}
 
-	if fv, exists := v.FldValidators["label_filter"]; exists {
+	if fv, exists := v.FldValidators["is_trend_request"]; exists {
 
+		vOpts := append(opts, db.WithValidateField("is_trend_request"))
+		if err := fv(ctx, m.GetIsTrendRequest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["label_filter"]; exists {
 		vOpts := append(opts, db.WithValidateField("label_filter"))
-		for idx, item := range m.GetLabelFilter() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -978,6 +1048,17 @@ var DefaultListSegmentMetricsRequestValidator = func() *ValidateListSegmentMetri
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhLabelFilter := v.LabelFilterValidationRuleHandler
+	rulesLabelFilter := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "100",
+	}
+	vFn, err = vrhLabelFilter(rulesLabelFilter)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListSegmentMetricsRequest.label_filter: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_filter"] = vFn
 
 	vrhFieldSelector := v.FieldSelectorValidationRuleHandler
 	rulesFieldSelector := map[string]string{
@@ -1160,4 +1241,420 @@ var DefaultListSegmentMetricsResponseValidator = func() *ValidateListSegmentMetr
 
 func ListSegmentMetricsResponseValidator() db.Validator {
 	return DefaultListSegmentMetricsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TopCloudConnectData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TopCloudConnectData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TopCloudConnectData) DeepCopy() *TopCloudConnectData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TopCloudConnectData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TopCloudConnectData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TopCloudConnectData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TopCloudConnectDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTopCloudConnectData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTopCloudConnectData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TopCloudConnectData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TopCloudConnectData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data"))
+		for idx, item := range m.GetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTopCloudConnectDataValidator = func() *ValidateTopCloudConnectData {
+	v := &ValidateTopCloudConnectData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TopCloudConnectDataValidator() db.Validator {
+	return DefaultTopCloudConnectDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TopCloudConnectRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TopCloudConnectRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TopCloudConnectRequest) DeepCopy() *TopCloudConnectRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TopCloudConnectRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TopCloudConnectRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TopCloudConnectRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TopCloudConnectRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTopCloudConnectRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTopCloudConnectRequest) FieldSelectorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(FieldSelector)
+		return int32(i)
+	}
+	// FieldSelector_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, FieldSelector_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for field_selector")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []FieldSelector, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for field_selector")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]FieldSelector)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []FieldSelector, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated field_selector")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items field_selector")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTopCloudConnectRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTopCloudConnectRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTopCloudConnectRequest) LimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for limit")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTopCloudConnectRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TopCloudConnectRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TopCloudConnectRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["field_selector"]; exists {
+		vOpts := append(opts, db.WithValidateField("field_selector"))
+		if err := fv(ctx, m.GetFieldSelector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("filter"))
+		if err := fv(ctx, m.GetFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit"))
+		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTopCloudConnectRequestValidator = func() *ValidateTopCloudConnectRequest {
+	v := &ValidateTopCloudConnectRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhFieldSelector := v.FieldSelectorValidationRuleHandler
+	rulesFieldSelector := map[string]string{
+		"ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+		"ves.io.schema.rules.repeated.unique":                  "true",
+	}
+	vFn, err = vrhFieldSelector(rulesFieldSelector)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TopCloudConnectRequest.field_selector: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["field_selector"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TopCloudConnectRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TopCloudConnectRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	vrhLimit := v.LimitValidationRuleHandler
+	rulesLimit := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFn, err = vrhLimit(rulesLimit)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TopCloudConnectRequest.limit: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["limit"] = vFn
+
+	return v
+}()
+
+func TopCloudConnectRequestValidator() db.Validator {
+	return DefaultTopCloudConnectRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TopCloudConnectResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TopCloudConnectResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TopCloudConnectResponse) DeepCopy() *TopCloudConnectResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TopCloudConnectResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TopCloudConnectResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TopCloudConnectResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TopCloudConnectResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTopCloudConnectResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTopCloudConnectResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TopCloudConnectResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TopCloudConnectResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data"))
+		for idx, item := range m.GetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTopCloudConnectResponseValidator = func() *ValidateTopCloudConnectResponse {
+	v := &ValidateTopCloudConnectResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TopCloudConnectResponseValidator() db.Validator {
+	return DefaultTopCloudConnectResponseValidator
 }

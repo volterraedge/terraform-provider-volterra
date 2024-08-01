@@ -20,6 +20,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.downstream_cos.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.downstream_cos.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.downstream_cos.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.downstream_cos.HttpLimitOptions"] = HttpLimitOptionsValidator()
 	vr["ves.io.schema.downstream_cos.PerCpuUtilizationLimit"] = PerCpuUtilizationLimitValidator()
 	vr["ves.io.schema.downstream_cos.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 

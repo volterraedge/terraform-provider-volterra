@@ -393,7 +393,7 @@ var WafSignatureChangelogCustomApiSwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-waf_signatures_changelog-wafsignaturechangelogcustomapi-getreleasedsignatures"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_signatures_changelog-wafsignaturechangelogcustomapi-getreleasedsignatures"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.waf_signatures_changelog.WafSignatureChangelogCustomApi.GetReleasedSignatures"
             },

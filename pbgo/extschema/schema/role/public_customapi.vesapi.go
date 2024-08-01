@@ -842,7 +842,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-customapi-customlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-role-customapi-customlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomList"
             },
@@ -929,7 +929,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-customapi-customcreate"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-role-customapi-customcreate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomCreate"
             },
@@ -1021,7 +1021,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-role-customapi-customget"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-role-customapi-customget"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.role.CustomAPI.CustomGet"
             },
