@@ -682,8 +682,28 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 
 									alertlabelStaticMap := intVal.(map[string]interface{})
 
-									if w, ok := alertlabelStaticMap["matcher_type"]; ok && !isIntfNil(w) {
-										alertlabel[key.(string)].MatcherType = nil
+									matcherTypeTypeFound := false
+
+									if v, ok := alertlabelStaticMap["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+										matcherTypeTypeFound = true
+										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+										alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+										matcherTypeInt.ExactMatch = v.(string)
+
+									}
+
+									if v, ok := alertlabelStaticMap["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+										matcherTypeTypeFound = true
+										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+										alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+										matcherTypeInt.RegexMatch = v.(string)
+
 									}
 
 									// break after one loop
@@ -1264,8 +1284,28 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 
 									alertlabelStaticMap := intVal.(map[string]interface{})
 
-									if w, ok := alertlabelStaticMap["matcher_type"]; ok && !isIntfNil(w) {
-										alertlabel[key.(string)].MatcherType = nil
+									matcherTypeTypeFound := false
+
+									if v, ok := alertlabelStaticMap["exact_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+										matcherTypeTypeFound = true
+										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_ExactMatch{}
+
+										alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+										matcherTypeInt.ExactMatch = v.(string)
+
+									}
+
+									if v, ok := alertlabelStaticMap["regex_match"]; ok && !isIntfNil(v) && !matcherTypeTypeFound {
+
+										matcherTypeTypeFound = true
+										matcherTypeInt := &ves_io_schema_alert_policy.LabelMatcher_RegexMatch{}
+
+										alertlabel[key.(string)].MatcherType = matcherTypeInt
+
+										matcherTypeInt.RegexMatch = v.(string)
+
 									}
 
 									// break after one loop

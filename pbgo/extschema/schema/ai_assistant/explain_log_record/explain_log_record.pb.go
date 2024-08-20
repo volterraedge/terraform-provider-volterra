@@ -40,33 +40,40 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type Accuracy int32
 
 const (
+	// None
+	//
+	// x-displayName: "None"
+	// No accuracy
+	ACCURACY_NONE Accuracy = 0
 	// Low
 	//
 	// x-displayName: "Low"
 	// Specifies low accuracy of the signature
-	LOW_ACCURACY Accuracy = 0
+	ACCURACY_LOW Accuracy = 1
 	// Medium
 	//
 	// x-displayName: "Medium"
 	// Specifies medium accuracy of the signature
-	MEDIUM_ACCURACY Accuracy = 1
+	ACCURACY_MEDIUM Accuracy = 2
 	// High
 	//
 	// x-displayName: "High"
 	// Specifies high accuracy of the signature
-	HIGH_ACCURACY Accuracy = 2
+	ACCURACY_HIGH Accuracy = 3
 )
 
 var Accuracy_name = map[int32]string{
-	0: "LOW_ACCURACY",
-	1: "MEDIUM_ACCURACY",
-	2: "HIGH_ACCURACY",
+	0: "ACCURACY_NONE",
+	1: "ACCURACY_LOW",
+	2: "ACCURACY_MEDIUM",
+	3: "ACCURACY_HIGH",
 }
 
 var Accuracy_value = map[string]int32{
-	"LOW_ACCURACY":    0,
-	"MEDIUM_ACCURACY": 1,
-	"HIGH_ACCURACY":   2,
+	"ACCURACY_NONE":   0,
+	"ACCURACY_LOW":    1,
+	"ACCURACY_MEDIUM": 2,
+	"ACCURACY_HIGH":   3,
 }
 
 func (Accuracy) EnumDescriptor() ([]byte, []int) {
@@ -80,26 +87,33 @@ func (Accuracy) EnumDescriptor() ([]byte, []int) {
 type IPReputation int32
 
 const (
+	// None
+	//
+	// x-displayName: "None"
+	// No IP reputation
+	IP_REPUTATION_NONE IPReputation = 0
 	// Low
 	//
 	// x-displayName: "Low"
 	// Specifies low IP risk/trustworthiness
-	LOW_REPUTATION IPReputation = 0
+	IP_REPUTATION_LOW IPReputation = 1
 	// High
 	//
 	// x-displayName: "High"
 	// Specifies high IP risk/trustworthiness
-	HIGH_REPUTATION IPReputation = 1
+	IP_REPUTATION_HIGH IPReputation = 2
 )
 
 var IPReputation_name = map[int32]string{
-	0: "LOW_REPUTATION",
-	1: "HIGH_REPUTATION",
+	0: "IP_REPUTATION_NONE",
+	1: "IP_REPUTATION_LOW",
+	2: "IP_REPUTATION_HIGH",
 }
 
 var IPReputation_value = map[string]int32{
-	"LOW_REPUTATION":  0,
-	"HIGH_REPUTATION": 1,
+	"IP_REPUTATION_NONE": 0,
+	"IP_REPUTATION_LOW":  1,
+	"IP_REPUTATION_HIGH": 2,
 }
 
 func (IPReputation) EnumDescriptor() ([]byte, []int) {
@@ -113,26 +127,33 @@ func (IPReputation) EnumDescriptor() ([]byte, []int) {
 type EnforcementMode int32
 
 const (
+	// None
+	//
+	// x-displayName: "None"
+	// No enforcement
+	ENFORCEMENT_NONE EnforcementMode = 0
 	// Monitoring
 	//
 	// x-displayName: "Monitoring"
 	// Monitoring mode of waf
-	MONITORING EnforcementMode = 0
+	MONITORING EnforcementMode = 1
 	// Blocking
 	//
 	// x-displayName: "Blocking"
 	// Blocking mode of waf
-	BLOCKING EnforcementMode = 1
+	BLOCKING EnforcementMode = 2
 )
 
 var EnforcementMode_name = map[int32]string{
-	0: "MONITORING",
-	1: "BLOCKING",
+	0: "ENFORCEMENT_NONE",
+	1: "MONITORING",
+	2: "BLOCKING",
 }
 
 var EnforcementMode_value = map[string]int32{
-	"MONITORING": 0,
-	"BLOCKING":   1,
+	"ENFORCEMENT_NONE": 0,
+	"MONITORING":       1,
+	"BLOCKING":         2,
 }
 
 func (EnforcementMode) EnumDescriptor() ([]byte, []int) {
@@ -146,26 +167,40 @@ func (EnforcementMode) EnumDescriptor() ([]byte, []int) {
 type Action int32
 
 const (
+	// None
+	//
+	// x-displayName: "None"
+	// No action
+	ACTION_NONE Action = 0
 	// Allow
 	//
 	// x-displayName: "Allow"
 	// The request was allowed to pass
-	ALLOW Action = 0
+	ALLOW Action = 1
 	// Block
 	//
 	// x-displayName: "Block"
 	// The request was blocked
-	BLOCK Action = 1
+	BLOCK Action = 2
+	// Redirect
+	//
+	// x-displayName: "Redirect"
+	// The request was redirected
+	REDIRECT Action = 3
 )
 
 var Action_name = map[int32]string{
-	0: "ALLOW",
-	1: "BLOCK",
+	0: "ACTION_NONE",
+	1: "ALLOW",
+	2: "BLOCK",
+	3: "REDIRECT",
 }
 
 var Action_value = map[string]int32{
-	"ALLOW": 0,
-	"BLOCK": 1,
+	"ACTION_NONE": 0,
+	"ALLOW":       1,
+	"BLOCK":       2,
+	"REDIRECT":    3,
 }
 
 func (Action) EnumDescriptor() ([]byte, []int) {
@@ -203,6 +238,8 @@ type ExplainLogRecordResponse struct {
 	// Types that are valid to be assigned to Details:
 	//	*ExplainLogRecordResponse_WafEventDetails
 	//	*ExplainLogRecordResponse_SvcPolicyEventDetails
+	//	*ExplainLogRecordResponse_BotDefenseEventDetails
+	//	*ExplainLogRecordResponse_RequestDetails
 	Details isExplainLogRecordResponse_Details `protobuf_oneof:"details"`
 }
 
@@ -251,9 +288,17 @@ type ExplainLogRecordResponse_WafEventDetails struct {
 type ExplainLogRecordResponse_SvcPolicyEventDetails struct {
 	SvcPolicyEventDetails *SvcPolicyEventDetails `protobuf:"bytes,6,opt,name=svc_policy_event_details,json=svcPolicyEventDetails,proto3,oneof" json:"svc_policy_event_details,omitempty"`
 }
+type ExplainLogRecordResponse_BotDefenseEventDetails struct {
+	BotDefenseEventDetails *BotDefenseEventDetails `protobuf:"bytes,7,opt,name=bot_defense_event_details,json=botDefenseEventDetails,proto3,oneof" json:"bot_defense_event_details,omitempty"`
+}
+type ExplainLogRecordResponse_RequestDetails struct {
+	RequestDetails *RequestDetails `protobuf:"bytes,8,opt,name=request_details,json=requestDetails,proto3,oneof" json:"request_details,omitempty"`
+}
 
-func (*ExplainLogRecordResponse_WafEventDetails) isExplainLogRecordResponse_Details()       {}
-func (*ExplainLogRecordResponse_SvcPolicyEventDetails) isExplainLogRecordResponse_Details() {}
+func (*ExplainLogRecordResponse_WafEventDetails) isExplainLogRecordResponse_Details()        {}
+func (*ExplainLogRecordResponse_SvcPolicyEventDetails) isExplainLogRecordResponse_Details()  {}
+func (*ExplainLogRecordResponse_BotDefenseEventDetails) isExplainLogRecordResponse_Details() {}
+func (*ExplainLogRecordResponse_RequestDetails) isExplainLogRecordResponse_Details()         {}
 
 func (m *ExplainLogRecordResponse) GetDetails() isExplainLogRecordResponse_Details {
 	if m != nil {
@@ -297,11 +342,27 @@ func (m *ExplainLogRecordResponse) GetSvcPolicyEventDetails() *SvcPolicyEventDet
 	return nil
 }
 
+func (m *ExplainLogRecordResponse) GetBotDefenseEventDetails() *BotDefenseEventDetails {
+	if x, ok := m.GetDetails().(*ExplainLogRecordResponse_BotDefenseEventDetails); ok {
+		return x.BotDefenseEventDetails
+	}
+	return nil
+}
+
+func (m *ExplainLogRecordResponse) GetRequestDetails() *RequestDetails {
+	if x, ok := m.GetDetails().(*ExplainLogRecordResponse_RequestDetails); ok {
+		return x.RequestDetails
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ExplainLogRecordResponse) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ExplainLogRecordResponse_WafEventDetails)(nil),
 		(*ExplainLogRecordResponse_SvcPolicyEventDetails)(nil),
+		(*ExplainLogRecordResponse_BotDefenseEventDetails)(nil),
+		(*ExplainLogRecordResponse_RequestDetails)(nil),
 	}
 }
 
@@ -386,7 +447,7 @@ func (m *WAFEventDetails) GetAction() Action {
 	if m != nil {
 		return m.Action
 	}
-	return ALLOW
+	return ACTION_NONE
 }
 
 func (m *WAFEventDetails) GetAppFirewall() string {
@@ -400,7 +461,7 @@ func (m *WAFEventDetails) GetEnforcementMode() EnforcementMode {
 	if m != nil {
 		return m.EnforcementMode
 	}
-	return MONITORING
+	return ENFORCEMENT_NONE
 }
 
 func (m *WAFEventDetails) GetSignatures() []*Signature {
@@ -516,7 +577,7 @@ func (m *SvcPolicyEventDetails) GetAction() Action {
 	if m != nil {
 		return m.Action
 	}
-	return ALLOW
+	return ACTION_NONE
 }
 
 func (m *SvcPolicyEventDetails) GetPolicy() string {
@@ -551,14 +612,209 @@ func (m *SvcPolicyEventDetails) GetIpTrustworthiness() IPReputation {
 	if m != nil {
 		return m.IpTrustworthiness
 	}
-	return LOW_REPUTATION
+	return IP_REPUTATION_NONE
 }
 
 func (m *SvcPolicyEventDetails) GetIpRisk() IPReputation {
 	if m != nil {
 		return m.IpRisk
 	}
-	return LOW_REPUTATION
+	return IP_REPUTATION_NONE
+}
+
+// BotDefenseEventDetails
+//
+// x-displayName: "Bot Defense Event Details"
+// Bot Defense security events details
+type BotDefenseEventDetails struct {
+	// action
+	//
+	// x-example: "Block"
+	// x-displayName: "Action"
+	// Event action
+	Action Action `protobuf:"varint,1,opt,name=action,proto3,enum=ves.io.schema.ai_assistant.explain_log_record.Action" json:"action,omitempty"`
+	// automation_type
+	//
+	// x-example: "Token Missing"
+	// x-displayName: "Automation type"
+	// Bot automation type
+	AutomationType string `protobuf:"bytes,2,opt,name=automation_type,json=automationType,proto3" json:"automation_type,omitempty"`
+	// bot_type
+	//
+	// x-example: "MALICIOUS"
+	// x-displayName: "Bot type"
+	// Bot type
+	BotType string `protobuf:"bytes,3,opt,name=bot_type,json=botType,proto3" json:"bot_type,omitempty"`
+	// request_path
+	//
+	// x-example: "/api/support/cases/case1"
+	// x-displayName: "Request Path"
+	// Request path
+	RequestPath string `protobuf:"bytes,4,opt,name=request_path,json=requestPath,proto3" json:"request_path,omitempty"`
+	// method
+	//
+	// x-example: "GET"
+	// x-displayName: "Method"
+	// Method of the request
+	Method string `protobuf:"bytes,5,opt,name=method,proto3" json:"method,omitempty"`
+}
+
+func (m *BotDefenseEventDetails) Reset()      { *m = BotDefenseEventDetails{} }
+func (*BotDefenseEventDetails) ProtoMessage() {}
+func (*BotDefenseEventDetails) Descriptor() ([]byte, []int) {
+	return fileDescriptor_372bf5d0c54c0c62, []int{3}
+}
+func (m *BotDefenseEventDetails) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BotDefenseEventDetails) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_BotDefenseEventDetails.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *BotDefenseEventDetails) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BotDefenseEventDetails.Merge(m, src)
+}
+func (m *BotDefenseEventDetails) XXX_Size() int {
+	return m.Size()
+}
+func (m *BotDefenseEventDetails) XXX_DiscardUnknown() {
+	xxx_messageInfo_BotDefenseEventDetails.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BotDefenseEventDetails proto.InternalMessageInfo
+
+func (m *BotDefenseEventDetails) GetAction() Action {
+	if m != nil {
+		return m.Action
+	}
+	return ACTION_NONE
+}
+
+func (m *BotDefenseEventDetails) GetAutomationType() string {
+	if m != nil {
+		return m.AutomationType
+	}
+	return ""
+}
+
+func (m *BotDefenseEventDetails) GetBotType() string {
+	if m != nil {
+		return m.BotType
+	}
+	return ""
+}
+
+func (m *BotDefenseEventDetails) GetRequestPath() string {
+	if m != nil {
+		return m.RequestPath
+	}
+	return ""
+}
+
+func (m *BotDefenseEventDetails) GetMethod() string {
+	if m != nil {
+		return m.Method
+	}
+	return ""
+}
+
+// RequestDetails
+//
+// x-displayName: "Request Details"
+// Request details
+type RequestDetails struct {
+	// rsp_code
+	//
+	// x-example: "200"
+	// x-displayName: "Response Code"
+	// rsp_code
+	RspCode uint32 `protobuf:"varint,1,opt,name=rsp_code,json=rspCode,proto3" json:"rsp_code,omitempty"`
+	// rsp_code_details
+	//
+	// x-example: "via upstream"
+	// x-displayName: "Response Code Details"
+	// rsp_code_details
+	RspCodeDetails string `protobuf:"bytes,2,opt,name=rsp_code_details,json=rspCodeDetails,proto3" json:"rsp_code_details,omitempty"`
+	// upstream_protocol_error_reason
+	//
+	// x-example: "headers_count_exceeds_limit"
+	// x-displayName: "Upstream Protocol Error Reason"
+	// upstream_protocol_error_reason
+	UpstreamProtocolErrorReason string `protobuf:"bytes,3,opt,name=upstream_protocol_error_reason,json=upstreamProtocolErrorReason,proto3" json:"upstream_protocol_error_reason,omitempty"`
+	// domain
+	//
+	// x-example: "example.com"
+	// x-displayName: "domain"
+	// domain
+	Domain string `protobuf:"bytes,4,opt,name=domain,proto3" json:"domain,omitempty"`
+}
+
+func (m *RequestDetails) Reset()      { *m = RequestDetails{} }
+func (*RequestDetails) ProtoMessage() {}
+func (*RequestDetails) Descriptor() ([]byte, []int) {
+	return fileDescriptor_372bf5d0c54c0c62, []int{4}
+}
+func (m *RequestDetails) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RequestDetails) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_RequestDetails.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *RequestDetails) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RequestDetails.Merge(m, src)
+}
+func (m *RequestDetails) XXX_Size() int {
+	return m.Size()
+}
+func (m *RequestDetails) XXX_DiscardUnknown() {
+	xxx_messageInfo_RequestDetails.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RequestDetails proto.InternalMessageInfo
+
+func (m *RequestDetails) GetRspCode() uint32 {
+	if m != nil {
+		return m.RspCode
+	}
+	return 0
+}
+
+func (m *RequestDetails) GetRspCodeDetails() string {
+	if m != nil {
+		return m.RspCodeDetails
+	}
+	return ""
+}
+
+func (m *RequestDetails) GetUpstreamProtocolErrorReason() string {
+	if m != nil {
+		return m.UpstreamProtocolErrorReason
+	}
+	return ""
+}
+
+func (m *RequestDetails) GetDomain() string {
+	if m != nil {
+		return m.Domain
+	}
+	return ""
 }
 
 // Signature
@@ -602,12 +858,18 @@ type Signature struct {
 	// x-displayName: "Matching Info"
 	// Matching info
 	MatchingInfo string `protobuf:"bytes,6,opt,name=matching_info,json=matchingInfo,proto3" json:"matching_info,omitempty"`
+	// state
+	//
+	// x-example: "Enabled"
+	// x-displayName: "State"
+	// State of the signature, can be enabled, suppressed and etc
+	State string `protobuf:"bytes,7,opt,name=state,proto3" json:"state,omitempty"`
 }
 
 func (m *Signature) Reset()      { *m = Signature{} }
 func (*Signature) ProtoMessage() {}
 func (*Signature) Descriptor() ([]byte, []int) {
-	return fileDescriptor_372bf5d0c54c0c62, []int{3}
+	return fileDescriptor_372bf5d0c54c0c62, []int{5}
 }
 func (m *Signature) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -661,7 +923,7 @@ func (m *Signature) GetAccuracy() Accuracy {
 	if m != nil {
 		return m.Accuracy
 	}
-	return LOW_ACCURACY
+	return ACCURACY_NONE
 }
 
 func (m *Signature) GetContext() string {
@@ -674,6 +936,13 @@ func (m *Signature) GetContext() string {
 func (m *Signature) GetMatchingInfo() string {
 	if m != nil {
 		return m.MatchingInfo
+	}
+	return ""
+}
+
+func (m *Signature) GetState() string {
+	if m != nil {
+		return m.State
 	}
 	return ""
 }
@@ -707,12 +976,18 @@ type Violation struct {
 	// x-displayName: "Matching Info"
 	// Matching info
 	MatchingInfo string `protobuf:"bytes,4,opt,name=matching_info,json=matchingInfo,proto3" json:"matching_info,omitempty"`
+	// state
+	//
+	// x-example: "Enabled"
+	// x-displayName: "State"
+	// State of the violation, can be enabled, suppressed and etc
+	State string `protobuf:"bytes,5,opt,name=state,proto3" json:"state,omitempty"`
 }
 
 func (m *Violation) Reset()      { *m = Violation{} }
 func (*Violation) ProtoMessage() {}
 func (*Violation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_372bf5d0c54c0c62, []int{4}
+	return fileDescriptor_372bf5d0c54c0c62, []int{6}
 }
 func (m *Violation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -769,6 +1044,13 @@ func (m *Violation) GetMatchingInfo() string {
 	return ""
 }
 
+func (m *Violation) GetState() string {
+	if m != nil {
+		return m.State
+	}
+	return ""
+}
+
 // ThreatCampaign
 //
 // x-displayName: "Threat Campaign"
@@ -797,7 +1079,7 @@ type ThreatCampaign struct {
 func (m *ThreatCampaign) Reset()      { *m = ThreatCampaign{} }
 func (*ThreatCampaign) ProtoMessage() {}
 func (*ThreatCampaign) Descriptor() ([]byte, []int) {
-	return fileDescriptor_372bf5d0c54c0c62, []int{5}
+	return fileDescriptor_372bf5d0c54c0c62, []int{7}
 }
 func (m *ThreatCampaign) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -875,7 +1157,7 @@ type Bot struct {
 func (m *Bot) Reset()      { *m = Bot{} }
 func (*Bot) ProtoMessage() {}
 func (*Bot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_372bf5d0c54c0c62, []int{6}
+	return fileDescriptor_372bf5d0c54c0c62, []int{8}
 }
 func (m *Bot) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -933,6 +1215,8 @@ func init() {
 	proto.RegisterType((*ExplainLogRecordResponse)(nil), "ves.io.schema.ai_assistant.explain_log_record.ExplainLogRecordResponse")
 	proto.RegisterType((*WAFEventDetails)(nil), "ves.io.schema.ai_assistant.explain_log_record.WAFEventDetails")
 	proto.RegisterType((*SvcPolicyEventDetails)(nil), "ves.io.schema.ai_assistant.explain_log_record.SvcPolicyEventDetails")
+	proto.RegisterType((*BotDefenseEventDetails)(nil), "ves.io.schema.ai_assistant.explain_log_record.BotDefenseEventDetails")
+	proto.RegisterType((*RequestDetails)(nil), "ves.io.schema.ai_assistant.explain_log_record.RequestDetails")
 	proto.RegisterType((*Signature)(nil), "ves.io.schema.ai_assistant.explain_log_record.Signature")
 	proto.RegisterType((*Violation)(nil), "ves.io.schema.ai_assistant.explain_log_record.Violation")
 	proto.RegisterType((*ThreatCampaign)(nil), "ves.io.schema.ai_assistant.explain_log_record.ThreatCampaign")
@@ -944,74 +1228,91 @@ func init() {
 }
 
 var fileDescriptor_372bf5d0c54c0c62 = []byte{
-	// 1070 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0x4d, 0x6f, 0xe3, 0x44,
-	0x18, 0xc7, 0xe3, 0xc4, 0x4d, 0x93, 0xa7, 0xdd, 0xc4, 0x3b, 0xb0, 0xc8, 0x2a, 0xc8, 0x94, 0x20,
-	0xad, 0x4a, 0xa5, 0x26, 0x52, 0x10, 0x5a, 0x24, 0x04, 0x52, 0xfa, 0xb6, 0x4d, 0x69, 0x9b, 0xca,
-	0x9b, 0x52, 0xe0, 0x62, 0x4d, 0x9d, 0x89, 0x33, 0xd4, 0xf1, 0x8c, 0x3c, 0x93, 0xb4, 0x39, 0x2d,
-	0x1f, 0x81, 0x2b, 0xdf, 0x80, 0xef, 0xc0, 0x17, 0xe0, 0xd8, 0xe3, 0x9e, 0x10, 0x4d, 0x39, 0x70,
-	0xac, 0xf8, 0x04, 0xc8, 0x63, 0x27, 0x4d, 0xb2, 0x41, 0x10, 0xd8, 0xdb, 0x3c, 0xff, 0x99, 0xe7,
-	0x37, 0xf3, 0xbc, 0xcc, 0xd8, 0xb0, 0xdf, 0x27, 0xa2, 0x4c, 0x59, 0x45, 0xb8, 0x1d, 0xd2, 0xc5,
-	0x15, 0x4c, 0x1d, 0x2c, 0x04, 0x15, 0x12, 0x07, 0xb2, 0x42, 0xae, 0xb9, 0x8f, 0x69, 0xe0, 0xf8,
-	0xcc, 0x73, 0x42, 0xe2, 0xb2, 0xb0, 0x35, 0x47, 0x2a, 0xf3, 0x90, 0x49, 0x86, 0xb6, 0x62, 0x4e,
-	0x39, 0xe6, 0x94, 0x27, 0x39, 0xe5, 0xd7, 0x9d, 0xd6, 0xb6, 0x3c, 0x2a, 0x3b, 0xbd, 0x8b, 0xb2,
-	0xcb, 0xba, 0x15, 0x8f, 0x79, 0xac, 0xa2, 0x28, 0x17, 0xbd, 0xb6, 0xb2, 0x94, 0xa1, 0x46, 0x31,
-	0x7d, 0xed, 0xdd, 0xe9, 0x53, 0x32, 0x2e, 0x29, 0x0b, 0x44, 0x32, 0xb9, 0x3e, 0x3d, 0xc9, 0x99,
-	0x4f, 0xdd, 0x41, 0x45, 0x0e, 0x38, 0x19, 0xad, 0x78, 0x6f, 0x7a, 0x45, 0x1f, 0xfb, 0xb4, 0x85,
-	0x25, 0x99, 0xef, 0xdf, 0xa7, 0xe4, 0xca, 0x99, 0xda, 0xa1, 0x74, 0x9f, 0x06, 0x73, 0x2f, 0x0e,
-	0xe2, 0x88, 0x79, 0xb6, 0x0a, 0xc1, 0x26, 0x82, 0xb3, 0x40, 0x10, 0x64, 0xc2, 0xb2, 0xe8, 0x75,
-	0xbb, 0x38, 0x1c, 0x98, 0xda, 0xba, 0xb6, 0x91, 0xb7, 0x47, 0x26, 0x5a, 0x83, 0x1c, 0x0e, 0xb0,
-	0x3f, 0x10, 0x54, 0x98, 0x69, 0x35, 0x35, 0xb6, 0x23, 0x2f, 0xec, 0xaa, 0x3d, 0xcc, 0x4c, 0xec,
-	0x95, 0x98, 0xc8, 0x87, 0xc7, 0x57, 0xb8, 0xed, 0x90, 0x3e, 0x09, 0xa4, 0xd3, 0x22, 0x12, 0x53,
-	0x5f, 0x98, 0x4b, 0xeb, 0xda, 0xc6, 0x4a, 0xf5, 0x8b, 0xf2, 0x42, 0x59, 0x2e, 0x9f, 0xd7, 0xf6,
-	0xf7, 0x22, 0xcc, 0x6e, 0x4c, 0x39, 0x48, 0xd9, 0xc5, 0x2b, 0xdc, 0x9e, 0x94, 0xd0, 0x4b, 0x30,
-	0x45, 0xdf, 0x75, 0xe2, 0xa4, 0xcd, 0x6c, 0x9a, 0x55, 0x9b, 0xee, 0x2e, 0xb8, 0xe9, 0x8b, 0xbe,
-	0x7b, 0xaa, 0x68, 0x33, 0x5b, 0x3f, 0x11, 0xf3, 0x26, 0xb6, 0x8b, 0xb0, 0x9c, 0xec, 0x87, 0xf4,
-	0x9b, 0x9f, 0x35, 0xfd, 0x50, 0xcf, 0xe9, 0xc6, 0x52, 0xe9, 0x57, 0x1d, 0x8a, 0x33, 0xc7, 0x47,
-	0xc7, 0x90, 0x8d, 0x93, 0x64, 0xe6, 0xd6, 0xb5, 0x8d, 0x42, 0xf5, 0x93, 0x05, 0x4f, 0x56, 0x53,
-	0xce, 0x76, 0x02, 0x41, 0x1f, 0xc0, 0x2a, 0xe6, 0xdc, 0x69, 0xd3, 0x90, 0x5c, 0x61, 0xdf, 0x4f,
-	0x4a, 0xb4, 0x82, 0x39, 0xdf, 0x4f, 0x24, 0x44, 0xc1, 0x20, 0x41, 0x9b, 0x85, 0x2e, 0xe9, 0x46,
-	0x89, 0xe9, 0xb2, 0x16, 0x51, 0xe5, 0x2a, 0x2c, 0x5c, 0x8a, 0xbd, 0x07, 0xcc, 0x31, 0x6b, 0x11,
-	0xbb, 0x48, 0xa6, 0x05, 0xf4, 0x35, 0x80, 0xa0, 0x5e, 0x80, 0x65, 0x2f, 0x24, 0xc2, 0xd4, 0xd7,
-	0x33, 0x1b, 0x2b, 0xd5, 0x4f, 0x17, 0x4d, 0xfd, 0x08, 0x60, 0x4f, 0xb0, 0x22, 0x72, 0x9f, 0x32,
-	0x1f, 0xc7, 0xdd, 0xb6, 0xf4, 0x9f, 0xc8, 0x5f, 0x8d, 0x00, 0xf6, 0x04, 0x0b, 0x75, 0xc0, 0x90,
-	0x9d, 0x90, 0x60, 0xe9, 0xb8, 0xb8, 0xcb, 0x31, 0xf5, 0x02, 0x61, 0xe6, 0x15, 0xff, 0xf3, 0x05,
-	0xf9, 0x4d, 0x85, 0xd9, 0x49, 0x28, 0x76, 0x51, 0x4e, 0xd9, 0x02, 0xed, 0x42, 0xe6, 0x82, 0x49,
-	0x73, 0x59, 0x75, 0x64, 0x75, 0x41, 0xf8, 0x36, 0x93, 0x76, 0xe4, 0x7e, 0xa8, 0xe7, 0x34, 0x23,
-	0x7d, 0xa8, 0xe7, 0xb2, 0xc6, 0x72, 0xe9, 0xcf, 0x0c, 0x3c, 0x99, 0xdb, 0xaa, 0x6f, 0xba, 0xcd,
-	0xde, 0x81, 0x6c, 0x7c, 0xbb, 0x92, 0x06, 0x4b, 0x2c, 0xf4, 0x11, 0x18, 0xc9, 0xad, 0x0b, 0x70,
-	0x97, 0x08, 0x8e, 0x5d, 0x92, 0x3c, 0x05, 0xc5, 0x58, 0x3f, 0x19, 0xc9, 0xe8, 0x7d, 0x58, 0x49,
-	0x96, 0x86, 0x3d, 0x9f, 0x98, 0xba, 0x5a, 0x05, 0xb1, 0x64, 0xf7, 0xfc, 0xa8, 0x79, 0xde, 0xa6,
-	0xdc, 0x19, 0xd7, 0x42, 0x12, 0x8f, 0x85, 0x94, 0xc4, 0xc5, 0x28, 0x54, 0x9f, 0xce, 0x04, 0x10,
-	0x3b, 0x96, 0xeb, 0xa7, 0xa3, 0xac, 0xab, 0xf5, 0x03, 0x1b, 0x51, 0x3e, 0xa5, 0x50, 0x22, 0xd0,
-	0x77, 0x80, 0x22, 0x72, 0xd8, 0x13, 0xf2, 0x8a, 0x85, 0xb2, 0x43, 0x03, 0x22, 0xe2, 0x97, 0xa1,
-	0x50, 0xfd, 0x6c, 0xc1, 0xc4, 0xd4, 0x4f, 0x6d, 0xc2, 0x7b, 0x32, 0xee, 0xa3, 0xc7, 0x94, 0x37,
-	0xa7, 0xa9, 0xa8, 0x09, 0xcb, 0x94, 0x3b, 0x21, 0x15, 0x97, 0xaa, 0xd0, 0xff, 0x73, 0x83, 0x2c,
-	0xe5, 0x36, 0x15, 0x97, 0xe3, 0xa2, 0x2f, 0x19, 0xd9, 0xd2, 0xef, 0x1a, 0xe4, 0xc7, 0x97, 0x04,
-	0x15, 0x20, 0x4d, 0x5b, 0xc9, 0xa3, 0x9d, 0xa6, 0x2d, 0x84, 0x40, 0x8f, 0x4a, 0x91, 0xd4, 0x49,
-	0x8d, 0xa3, 0xd4, 0x63, 0x29, 0xb1, 0x7b, 0xe9, 0x44, 0x1f, 0x94, 0xa4, 0x40, 0x10, 0x4b, 0xcd,
-	0x01, 0x27, 0xe8, 0x05, 0xe4, 0xb0, 0xeb, 0xf6, 0x42, 0xec, 0x0e, 0x54, 0x61, 0x0a, 0xd5, 0x67,
-	0x0b, 0xf7, 0x4b, 0xec, 0x6e, 0x8f, 0x41, 0xd1, 0xd7, 0xc1, 0x65, 0x81, 0x24, 0xd7, 0x52, 0xbd,
-	0xfc, 0x79, 0x7b, 0x64, 0xa2, 0x0f, 0xe1, 0x51, 0x17, 0x4b, 0xb7, 0x43, 0x03, 0xcf, 0xa1, 0x41,
-	0x9b, 0xa9, 0x52, 0xe4, 0xed, 0xd5, 0x91, 0x58, 0x0f, 0xda, 0xac, 0xf4, 0x12, 0xf2, 0xe3, 0x0b,
-	0x3b, 0x8e, 0x4a, 0xfb, 0xfb, 0xa8, 0xd2, 0xaf, 0x45, 0x35, 0x71, 0x80, 0xcc, 0x3f, 0x1c, 0x40,
-	0x9f, 0x73, 0x80, 0x33, 0x28, 0x4c, 0xdf, 0xe8, 0x37, 0x92, 0xeb, 0xd2, 0x19, 0x64, 0xb6, 0x99,
-	0x9c, 0x1b, 0x11, 0x02, 0x7d, 0x22, 0x14, 0x35, 0x46, 0x4f, 0xa1, 0xe0, 0xfa, 0x51, 0xea, 0xdb,
-	0xd4, 0x55, 0xb9, 0x48, 0x90, 0x33, 0xea, 0xe6, 0x2e, 0xe4, 0x46, 0x35, 0x40, 0x06, 0xac, 0x1e,
-	0x35, 0xce, 0x9d, 0xda, 0xce, 0xce, 0x99, 0x5d, 0xdb, 0xf9, 0xc6, 0x48, 0xa1, 0xb7, 0xa0, 0x78,
-	0xbc, 0xb7, 0x5b, 0x3f, 0x3b, 0x7e, 0x10, 0x35, 0xf4, 0x18, 0x1e, 0x1d, 0xd4, 0x9f, 0x1f, 0x3c,
-	0x48, 0xe9, 0xcd, 0x67, 0xb0, 0x3a, 0xd9, 0x7f, 0x08, 0x41, 0x21, 0x22, 0xd9, 0x7b, 0xa7, 0x67,
-	0xcd, 0x5a, 0xb3, 0xde, 0x38, 0x89, 0x59, 0xca, 0x6d, 0x42, 0xd4, 0x36, 0x2b, 0x50, 0x9c, 0xf9,
-	0x3a, 0xa0, 0x02, 0xc0, 0x71, 0xe3, 0xa4, 0xde, 0x6c, 0xd8, 0xf5, 0x93, 0xe7, 0x46, 0x0a, 0xad,
-	0x42, 0x6e, 0xfb, 0xa8, 0xb1, 0xf3, 0x65, 0x64, 0x69, 0x9b, 0x16, 0x64, 0xe3, 0x37, 0x06, 0xe5,
-	0x61, 0xa9, 0x76, 0x74, 0xd4, 0x38, 0x37, 0x52, 0xd1, 0x50, 0x2d, 0x31, 0xb4, 0xed, 0x1f, 0xb5,
-	0x9b, 0x5b, 0x2b, 0xf5, 0xea, 0xd6, 0x4a, 0xdd, 0xdf, 0x5a, 0xda, 0xf7, 0x43, 0x4b, 0xfb, 0x69,
-	0x68, 0x69, 0xbf, 0x0c, 0x2d, 0xed, 0x66, 0x68, 0x69, 0xbf, 0x0d, 0x2d, 0xed, 0x8f, 0xa1, 0x95,
-	0xba, 0x1f, 0x5a, 0xda, 0x0f, 0x77, 0x56, 0xea, 0xe6, 0xce, 0x4a, 0xbd, 0xba, 0xb3, 0x52, 0xdf,
-	0xba, 0x1e, 0xe3, 0x97, 0x5e, 0xb9, 0xcf, 0x7c, 0x49, 0xc2, 0x10, 0x97, 0x7b, 0xa2, 0xa2, 0x06,
-	0x6d, 0x16, 0x76, 0xb7, 0x78, 0xc8, 0xfa, 0xb4, 0x45, 0xc2, 0xad, 0xd1, 0x74, 0x85, 0x5f, 0x78,
-	0xac, 0x42, 0xae, 0x65, 0xf2, 0xdb, 0xf4, 0xef, 0x7e, 0x20, 0x2f, 0xb2, 0xea, 0x8f, 0xea, 0xe3,
-	0xbf, 0x02, 0x00, 0x00, 0xff, 0xff, 0xc2, 0xa2, 0x45, 0xe2, 0x78, 0x0a, 0x00, 0x00,
+	// 1338 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0xcf, 0x6f, 0x1b, 0xc5,
+	0x17, 0xf7, 0xfa, 0x57, 0xec, 0x97, 0xd4, 0xde, 0xcc, 0xb7, 0x8d, 0xdc, 0xf6, 0x2b, 0x93, 0x1a,
+	0xa9, 0x84, 0x48, 0xb1, 0xa5, 0x20, 0x04, 0x12, 0x2a, 0x52, 0xe2, 0x38, 0xad, 0x4b, 0xe2, 0x44,
+	0x5b, 0x87, 0x02, 0x97, 0xd5, 0x78, 0x3d, 0xb6, 0x87, 0xec, 0xee, 0x2c, 0x33, 0x63, 0xa7, 0x39,
+	0x81, 0xf8, 0x0b, 0xb8, 0x70, 0xe0, 0x3f, 0xe0, 0xcc, 0x95, 0x7f, 0x80, 0x63, 0x8e, 0x3d, 0x01,
+	0x4d, 0x25, 0xc4, 0xb1, 0xe2, 0xc8, 0x09, 0xed, 0xec, 0xac, 0x63, 0xbb, 0xe6, 0x87, 0xa1, 0xb7,
+	0x7d, 0x6f, 0xde, 0xfb, 0xbc, 0x9f, 0xf3, 0xd9, 0x5d, 0xd8, 0x1f, 0x11, 0x51, 0xa5, 0xac, 0x26,
+	0x9c, 0x01, 0xf1, 0x70, 0x0d, 0x53, 0x1b, 0x0b, 0x41, 0x85, 0xc4, 0xbe, 0xac, 0x91, 0x27, 0x81,
+	0x8b, 0xa9, 0x6f, 0xbb, 0xac, 0x6f, 0x73, 0xe2, 0x30, 0xde, 0x9d, 0xa3, 0xaa, 0x06, 0x9c, 0x49,
+	0x86, 0xb6, 0x22, 0x9c, 0x6a, 0x84, 0x53, 0x9d, 0xc4, 0xa9, 0xbe, 0xec, 0x74, 0x6b, 0xab, 0x4f,
+	0xe5, 0x60, 0xd8, 0xa9, 0x3a, 0xcc, 0xab, 0xf5, 0x59, 0x9f, 0xd5, 0x14, 0x4a, 0x67, 0xd8, 0x53,
+	0x92, 0x12, 0xd4, 0x53, 0x84, 0x7e, 0xeb, 0xf6, 0x74, 0x96, 0x2c, 0x90, 0x94, 0xf9, 0x42, 0x1f,
+	0xae, 0x4f, 0x1f, 0x06, 0xcc, 0xa5, 0xce, 0x79, 0x4d, 0x9e, 0x07, 0x24, 0xb6, 0xf8, 0xff, 0xb4,
+	0xc5, 0x08, 0xbb, 0xb4, 0x8b, 0x25, 0x99, 0xef, 0x3f, 0xa2, 0xe4, 0xcc, 0x9e, 0x8a, 0x50, 0xf9,
+	0x29, 0x0d, 0xa5, 0x46, 0x54, 0xc4, 0x01, 0xeb, 0x5b, 0xaa, 0x04, 0x8b, 0x88, 0x80, 0xf9, 0x82,
+	0xa0, 0x12, 0x2c, 0x89, 0xa1, 0xe7, 0x61, 0x7e, 0x5e, 0x32, 0xd6, 0x8d, 0x8d, 0xbc, 0x15, 0x8b,
+	0xe8, 0x16, 0xe4, 0xb0, 0x8f, 0xdd, 0x73, 0x41, 0x45, 0x29, 0xa9, 0x8e, 0xc6, 0x72, 0xe8, 0x85,
+	0x1d, 0x15, 0xa3, 0x94, 0x8a, 0xbc, 0xb4, 0x88, 0x5c, 0x58, 0x3d, 0xc3, 0x3d, 0x9b, 0x8c, 0x88,
+	0x2f, 0xed, 0x2e, 0x91, 0x98, 0xba, 0xa2, 0x94, 0x59, 0x37, 0x36, 0x96, 0xb7, 0xdf, 0xaf, 0x2e,
+	0xd4, 0xe5, 0xea, 0xe3, 0x9d, 0xfd, 0x46, 0x08, 0xb3, 0x17, 0xa1, 0x3c, 0x48, 0x58, 0xc5, 0x33,
+	0xdc, 0x9b, 0x54, 0xa1, 0xcf, 0xa1, 0x24, 0x46, 0x8e, 0x1d, 0x35, 0x6d, 0x26, 0x68, 0x56, 0x05,
+	0xdd, 0x5b, 0x30, 0xe8, 0xa3, 0x91, 0x73, 0xac, 0xd0, 0x66, 0x42, 0xdf, 0x10, 0xf3, 0x0e, 0xd0,
+	0x97, 0x06, 0xdc, 0xec, 0xb0, 0x30, 0x68, 0x8f, 0xf8, 0x82, 0xcc, 0xa4, 0xb0, 0xa4, 0x52, 0x68,
+	0x2c, 0x98, 0xc2, 0x2e, 0x93, 0x7b, 0x11, 0xdc, 0x4c, 0x0e, 0x6b, 0x9d, 0xb9, 0x27, 0x68, 0x00,
+	0x45, 0x4e, 0x3e, 0x1b, 0x12, 0x71, 0x15, 0x39, 0xa7, 0x22, 0xdf, 0x5b, 0x30, 0xb2, 0x15, 0xa1,
+	0x5c, 0x45, 0x2c, 0xf0, 0x29, 0xcd, 0x6e, 0x11, 0x96, 0x74, 0x04, 0x94, 0xbe, 0xf8, 0xde, 0x48,
+	0x3f, 0x4c, 0xe7, 0xd2, 0x66, 0xa6, 0xf2, 0x63, 0x1a, 0x8a, 0x33, 0xd3, 0x42, 0x87, 0x90, 0x8d,
+	0x76, 0x42, 0xe5, 0x52, 0xd8, 0x7e, 0x7b, 0xc1, 0x5c, 0x76, 0x94, 0xb3, 0xa5, 0x41, 0xd0, 0x1d,
+	0x58, 0xc1, 0x41, 0x60, 0xf7, 0x28, 0x27, 0x67, 0xd8, 0x75, 0xf5, 0x46, 0x2e, 0xe3, 0x20, 0xd8,
+	0xd7, 0x2a, 0x44, 0xc1, 0x24, 0x7e, 0x8f, 0x71, 0x87, 0x78, 0xe1, 0x10, 0x3c, 0xd6, 0x25, 0x6a,
+	0x3b, 0x0b, 0x0b, 0x6f, 0x5e, 0xe3, 0x0a, 0xe6, 0x90, 0x75, 0x89, 0x55, 0x24, 0xd3, 0x0a, 0xf4,
+	0x11, 0x80, 0xa0, 0x7d, 0x1f, 0xcb, 0x21, 0x27, 0xa2, 0x94, 0x5e, 0x4f, 0x6d, 0x2c, 0x6f, 0xbf,
+	0xbb, 0xe8, 0xa6, 0xc5, 0x00, 0xd6, 0x04, 0x56, 0x88, 0x3c, 0xa2, 0xcc, 0xc5, 0xd1, 0xe5, 0xca,
+	0xfc, 0x2b, 0xe4, 0x0f, 0x63, 0x00, 0x6b, 0x02, 0x0b, 0x0d, 0xc0, 0x94, 0x03, 0x4e, 0xb0, 0xb4,
+	0x1d, 0xec, 0x05, 0x98, 0xf6, 0x7d, 0x51, 0xca, 0x2b, 0xfc, 0x45, 0xd7, 0xa4, 0xad, 0x60, 0xea,
+	0x1a, 0xc5, 0x2a, 0xca, 0x29, 0x59, 0xa0, 0x3d, 0x48, 0x75, 0x98, 0xd4, 0xdb, 0xbf, 0xbd, 0xf8,
+	0xf6, 0x5b, 0xa1, 0xfb, 0xc3, 0x74, 0xce, 0x30, 0x93, 0x0f, 0xd3, 0xb9, 0xac, 0xb9, 0x54, 0xf9,
+	0x2d, 0x05, 0x37, 0xe6, 0xde, 0xcc, 0x57, 0xbd, 0x66, 0x6b, 0x90, 0x8d, 0xc8, 0x44, 0x2f, 0x98,
+	0x96, 0xd0, 0x9b, 0x60, 0x6a, 0x92, 0xf1, 0xb1, 0x47, 0x44, 0x80, 0x1d, 0xa2, 0x99, 0xaf, 0x18,
+	0xe9, 0x5b, 0xb1, 0x1a, 0xbd, 0x06, 0xcb, 0xda, 0x94, 0x0f, 0x5d, 0x52, 0x4a, 0x2b, 0x2b, 0x88,
+	0x54, 0xd6, 0xd0, 0x0d, 0x97, 0xe7, 0x3a, 0x0d, 0xec, 0xf1, 0x2c, 0x24, 0xe9, 0x33, 0x4e, 0x49,
+	0x34, 0x8c, 0xc2, 0xf6, 0xdd, 0x99, 0x02, 0x22, 0xc7, 0x6a, 0xf3, 0x38, 0xee, 0xba, 0xb2, 0x3f,
+	0xb7, 0x10, 0x0d, 0xa6, 0x34, 0x94, 0x08, 0xf4, 0x29, 0xa0, 0x10, 0x99, 0x0f, 0x85, 0x3c, 0x63,
+	0x5c, 0x0e, 0xa8, 0x4f, 0x44, 0x44, 0x84, 0x85, 0xed, 0xf7, 0x16, 0x6c, 0x4c, 0xf3, 0xd8, 0x22,
+	0xc1, 0x50, 0x46, 0x7b, 0xb4, 0x4a, 0x83, 0xf6, 0x34, 0x2a, 0x6a, 0xc3, 0x12, 0x0d, 0x6c, 0x4e,
+	0xc5, 0xa9, 0x1a, 0xf4, 0x7f, 0x0c, 0x90, 0xa5, 0x81, 0x45, 0xc5, 0xe9, 0x78, 0xe8, 0x19, 0x33,
+	0x5b, 0xf9, 0xc5, 0x80, 0xb5, 0xf9, 0x5c, 0x38, 0x31, 0x75, 0xe3, 0x55, 0x4c, 0xfd, 0x0d, 0x28,
+	0xe2, 0xa1, 0x64, 0x9e, 0xca, 0xc5, 0x0e, 0xdf, 0xbd, 0x7a, 0xfc, 0x85, 0x2b, 0x75, 0xfb, 0x3c,
+	0x20, 0xe8, 0x26, 0xe4, 0x42, 0xb6, 0x57, 0x16, 0xfa, 0xc5, 0xd7, 0x61, 0x52, 0x1d, 0xdd, 0x81,
+	0x95, 0x98, 0x84, 0x03, 0x2c, 0x07, 0x7a, 0xee, 0xcb, 0x5a, 0x77, 0x8c, 0xe5, 0x20, 0x5c, 0x2e,
+	0x8f, 0xc8, 0x01, 0xeb, 0xaa, 0x17, 0x62, 0xde, 0xd2, 0x52, 0xe5, 0x3b, 0x03, 0x0a, 0xd3, 0xd4,
+	0x1b, 0x06, 0xe2, 0x22, 0xb0, 0x9d, 0x90, 0xc3, 0xc2, 0x12, 0xaf, 0x59, 0x4b, 0x5c, 0x04, 0xf5,
+	0x90, 0x7b, 0x36, 0xc0, 0x8c, 0x8f, 0xc6, 0x74, 0xaf, 0xb3, 0xd5, 0x26, 0x31, 0x48, 0x1d, 0xca,
+	0xc3, 0x40, 0x48, 0x4e, 0xb0, 0x67, 0xab, 0x4f, 0x01, 0x87, 0xb9, 0x36, 0xe1, 0x9c, 0x71, 0x9b,
+	0x13, 0x2c, 0x98, 0xaf, 0x6b, 0xb8, 0x1d, 0x5b, 0x1d, 0x6b, 0xa3, 0x46, 0x68, 0x63, 0x29, 0x93,
+	0x30, 0xe9, 0x2e, 0xf3, 0x30, 0xf5, 0x75, 0x45, 0x5a, 0xaa, 0xfc, 0x6e, 0x40, 0x7e, 0x4c, 0x61,
+	0xa8, 0x00, 0x49, 0xda, 0xd5, 0x5f, 0x10, 0x49, 0xda, 0x45, 0x08, 0xd2, 0xe1, 0x45, 0xd1, 0x89,
+	0xa9, 0xe7, 0xf0, 0x62, 0x60, 0x29, 0xb1, 0x73, 0x3a, 0xd9, 0x3f, 0x88, 0x54, 0xaa, 0x85, 0x8f,
+	0x20, 0x87, 0x1d, 0x67, 0xc8, 0xb1, 0x73, 0xae, 0x82, 0x15, 0xb6, 0xdf, 0x59, 0x78, 0xae, 0x91,
+	0xbb, 0x35, 0x06, 0x0a, 0x3f, 0x55, 0x1c, 0xe6, 0x4b, 0xf2, 0x44, 0xea, 0xae, 0xc7, 0x22, 0x7a,
+	0x1d, 0xae, 0x79, 0x58, 0x3a, 0x03, 0xea, 0xf7, 0x6d, 0xea, 0xf7, 0x98, 0xba, 0x28, 0x79, 0x6b,
+	0x25, 0x56, 0x36, 0xfd, 0x1e, 0x43, 0xd7, 0x21, 0x23, 0x24, 0x96, 0x44, 0x2d, 0x79, 0xde, 0x8a,
+	0x84, 0xca, 0xd7, 0x06, 0xe4, 0xc7, 0x2c, 0x3b, 0x2e, 0xd6, 0xf8, 0xf3, 0x62, 0x93, 0x2f, 0x15,
+	0x3b, 0x91, 0x57, 0xea, 0x6f, 0xf2, 0x4a, 0xff, 0x55, 0x5e, 0x99, 0xc9, 0xbc, 0x4e, 0xa0, 0x30,
+	0x4d, 0xce, 0xaf, 0x64, 0x30, 0x95, 0x13, 0x48, 0xed, 0x32, 0x39, 0xb7, 0x4e, 0x04, 0xe9, 0x89,
+	0x02, 0xd5, 0x33, 0xba, 0x0b, 0x05, 0xc7, 0x0d, 0xe7, 0xd4, 0xa3, 0x8e, 0xea, 0x90, 0x86, 0x9c,
+	0xd1, 0x6e, 0x3e, 0x86, 0x5c, 0x3c, 0x30, 0xb4, 0x0a, 0xd7, 0x76, 0xea, 0xf5, 0x13, 0x6b, 0xa7,
+	0xfe, 0xb1, 0xdd, 0x3a, 0x6a, 0x35, 0xcc, 0x04, 0x32, 0x61, 0x65, 0xac, 0x3a, 0x38, 0x7a, 0x6c,
+	0x1a, 0xe8, 0x7f, 0x50, 0x1c, 0x6b, 0x0e, 0x1b, 0x7b, 0xcd, 0x93, 0x43, 0x33, 0x39, 0xe5, 0xf9,
+	0xa0, 0x79, 0xff, 0x81, 0x99, 0xda, 0x3c, 0x81, 0x95, 0x49, 0x76, 0x41, 0x6b, 0x80, 0x9a, 0xc7,
+	0xb6, 0xd5, 0x38, 0x3e, 0x69, 0xef, 0xb4, 0x9b, 0x47, 0xad, 0x38, 0xc2, 0x0d, 0x58, 0x9d, 0xd6,
+	0x47, 0x61, 0x5e, 0x32, 0x57, 0xb0, 0xc9, 0xcd, 0x06, 0x14, 0x67, 0xbe, 0x0c, 0xd0, 0x75, 0x30,
+	0x1b, 0xad, 0xfd, 0x23, 0xab, 0xde, 0x38, 0x6c, 0xb4, 0xda, 0x31, 0x6e, 0x01, 0xe0, 0xf0, 0xa8,
+	0xd5, 0x6c, 0x1f, 0x59, 0xcd, 0xd6, 0x7d, 0xd3, 0x40, 0x2b, 0x90, 0xdb, 0x3d, 0x38, 0xaa, 0x7f,
+	0x10, 0x4a, 0xc9, 0xcd, 0x7b, 0x90, 0x8d, 0xf8, 0x07, 0x15, 0x61, 0x79, 0xa7, 0x3e, 0x99, 0x50,
+	0x1e, 0x32, 0x3b, 0x07, 0x51, 0x12, 0x79, 0xc8, 0x28, 0x1f, 0x33, 0x19, 0xba, 0x5b, 0x8d, 0xbd,
+	0xa6, 0xd5, 0xa8, 0xb7, 0xcd, 0xd4, 0xee, 0x37, 0xc6, 0xc5, 0xb3, 0x72, 0xe2, 0xe9, 0xb3, 0x72,
+	0xe2, 0xc5, 0xb3, 0xb2, 0xf1, 0xc5, 0x65, 0xd9, 0xf8, 0xf6, 0xb2, 0x6c, 0xfc, 0x70, 0x59, 0x36,
+	0x2e, 0x2e, 0xcb, 0xc6, 0xcf, 0x97, 0x65, 0xe3, 0xd7, 0xcb, 0x72, 0xe2, 0xc5, 0x65, 0xd9, 0xf8,
+	0xea, 0x79, 0x39, 0x71, 0xf1, 0xbc, 0x9c, 0x78, 0xfa, 0xbc, 0x9c, 0xf8, 0xc4, 0xe9, 0xb3, 0xe0,
+	0xb4, 0x5f, 0x1d, 0x31, 0x57, 0x12, 0xce, 0x71, 0x75, 0x28, 0x6a, 0xea, 0xa1, 0xc7, 0xb8, 0xb7,
+	0x15, 0x70, 0x36, 0xa2, 0x5d, 0xc2, 0xb7, 0xe2, 0xe3, 0x5a, 0xd0, 0xe9, 0xb3, 0x1a, 0x79, 0x22,
+	0xf5, 0x6f, 0xc5, 0x3f, 0xfb, 0xc1, 0xea, 0x64, 0x15, 0xcd, 0xbc, 0xf5, 0x47, 0x00, 0x00, 0x00,
+	0xff, 0xff, 0x37, 0x95, 0xdb, 0x9e, 0x98, 0x0d, 0x00, 0x00,
 }
 
 func (x Accuracy) String() string {
@@ -1129,6 +1430,54 @@ func (this *ExplainLogRecordResponse_SvcPolicyEventDetails) Equal(that interface
 	}
 	return true
 }
+func (this *ExplainLogRecordResponse_BotDefenseEventDetails) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ExplainLogRecordResponse_BotDefenseEventDetails)
+	if !ok {
+		that2, ok := that.(ExplainLogRecordResponse_BotDefenseEventDetails)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotDefenseEventDetails.Equal(that1.BotDefenseEventDetails) {
+		return false
+	}
+	return true
+}
+func (this *ExplainLogRecordResponse_RequestDetails) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ExplainLogRecordResponse_RequestDetails)
+	if !ok {
+		that2, ok := that.(ExplainLogRecordResponse_RequestDetails)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RequestDetails.Equal(that1.RequestDetails) {
+		return false
+	}
+	return true
+}
 func (this *WAFEventDetails) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1233,6 +1582,75 @@ func (this *SvcPolicyEventDetails) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *BotDefenseEventDetails) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BotDefenseEventDetails)
+	if !ok {
+		that2, ok := that.(BotDefenseEventDetails)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Action != that1.Action {
+		return false
+	}
+	if this.AutomationType != that1.AutomationType {
+		return false
+	}
+	if this.BotType != that1.BotType {
+		return false
+	}
+	if this.RequestPath != that1.RequestPath {
+		return false
+	}
+	if this.Method != that1.Method {
+		return false
+	}
+	return true
+}
+func (this *RequestDetails) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RequestDetails)
+	if !ok {
+		that2, ok := that.(RequestDetails)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.RspCode != that1.RspCode {
+		return false
+	}
+	if this.RspCodeDetails != that1.RspCodeDetails {
+		return false
+	}
+	if this.UpstreamProtocolErrorReason != that1.UpstreamProtocolErrorReason {
+		return false
+	}
+	if this.Domain != that1.Domain {
+		return false
+	}
+	return true
+}
 func (this *Signature) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1270,6 +1688,9 @@ func (this *Signature) Equal(that interface{}) bool {
 	if this.MatchingInfo != that1.MatchingInfo {
 		return false
 	}
+	if this.State != that1.State {
+		return false
+	}
 	return true
 }
 func (this *Violation) Equal(that interface{}) bool {
@@ -1301,6 +1722,9 @@ func (this *Violation) Equal(that interface{}) bool {
 		return false
 	}
 	if this.MatchingInfo != that1.MatchingInfo {
+		return false
+	}
+	if this.State != that1.State {
 		return false
 	}
 	return true
@@ -1369,7 +1793,7 @@ func (this *ExplainLogRecordResponse) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 11)
 	s = append(s, "&explain_log_record.ExplainLogRecordResponse{")
 	s = append(s, "Summary: "+fmt.Sprintf("%#v", this.Summary)+",\n")
 	s = append(s, "Analysis: "+fmt.Sprintf("%#v", this.Analysis)+",\n")
@@ -1394,6 +1818,22 @@ func (this *ExplainLogRecordResponse_SvcPolicyEventDetails) GoString() string {
 	}
 	s := strings.Join([]string{`&explain_log_record.ExplainLogRecordResponse_SvcPolicyEventDetails{` +
 		`SvcPolicyEventDetails:` + fmt.Sprintf("%#v", this.SvcPolicyEventDetails) + `}`}, ", ")
+	return s
+}
+func (this *ExplainLogRecordResponse_BotDefenseEventDetails) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&explain_log_record.ExplainLogRecordResponse_BotDefenseEventDetails{` +
+		`BotDefenseEventDetails:` + fmt.Sprintf("%#v", this.BotDefenseEventDetails) + `}`}, ", ")
+	return s
+}
+func (this *ExplainLogRecordResponse_RequestDetails) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&explain_log_record.ExplainLogRecordResponse_RequestDetails{` +
+		`RequestDetails:` + fmt.Sprintf("%#v", this.RequestDetails) + `}`}, ", ")
 	return s
 }
 func (this *WAFEventDetails) GoString() string {
@@ -1436,11 +1876,38 @@ func (this *SvcPolicyEventDetails) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *BotDefenseEventDetails) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&explain_log_record.BotDefenseEventDetails{")
+	s = append(s, "Action: "+fmt.Sprintf("%#v", this.Action)+",\n")
+	s = append(s, "AutomationType: "+fmt.Sprintf("%#v", this.AutomationType)+",\n")
+	s = append(s, "BotType: "+fmt.Sprintf("%#v", this.BotType)+",\n")
+	s = append(s, "RequestPath: "+fmt.Sprintf("%#v", this.RequestPath)+",\n")
+	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RequestDetails) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&explain_log_record.RequestDetails{")
+	s = append(s, "RspCode: "+fmt.Sprintf("%#v", this.RspCode)+",\n")
+	s = append(s, "RspCodeDetails: "+fmt.Sprintf("%#v", this.RspCodeDetails)+",\n")
+	s = append(s, "UpstreamProtocolErrorReason: "+fmt.Sprintf("%#v", this.UpstreamProtocolErrorReason)+",\n")
+	s = append(s, "Domain: "+fmt.Sprintf("%#v", this.Domain)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *Signature) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 11)
 	s = append(s, "&explain_log_record.Signature{")
 	s = append(s, "Id: "+fmt.Sprintf("%#v", this.Id)+",\n")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
@@ -1448,6 +1915,7 @@ func (this *Signature) GoString() string {
 	s = append(s, "Accuracy: "+fmt.Sprintf("%#v", this.Accuracy)+",\n")
 	s = append(s, "Context: "+fmt.Sprintf("%#v", this.Context)+",\n")
 	s = append(s, "MatchingInfo: "+fmt.Sprintf("%#v", this.MatchingInfo)+",\n")
+	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1455,12 +1923,13 @@ func (this *Violation) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&explain_log_record.Violation{")
 	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
 	s = append(s, "AttackType: "+fmt.Sprintf("%#v", this.AttackType)+",\n")
 	s = append(s, "Context: "+fmt.Sprintf("%#v", this.Context)+",\n")
 	s = append(s, "MatchingInfo: "+fmt.Sprintf("%#v", this.MatchingInfo)+",\n")
+	s = append(s, "State: "+fmt.Sprintf("%#v", this.State)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1591,6 +2060,48 @@ func (m *ExplainLogRecordResponse_SvcPolicyEventDetails) MarshalToSizedBuffer(dA
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ExplainLogRecordResponse_BotDefenseEventDetails) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExplainLogRecordResponse_BotDefenseEventDetails) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotDefenseEventDetails != nil {
+		{
+			size, err := m.BotDefenseEventDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintExplainLogRecord(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ExplainLogRecordResponse_RequestDetails) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ExplainLogRecordResponse_RequestDetails) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RequestDetails != nil {
+		{
+			size, err := m.RequestDetails.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintExplainLogRecord(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
 func (m *WAFEventDetails) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1706,20 +2217,20 @@ func (m *SvcPolicyEventDetails) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	var l int
 	_ = l
 	if len(m.IpThreatCategories) > 0 {
-		dAtA5 := make([]byte, len(m.IpThreatCategories)*10)
-		var j4 int
+		dAtA7 := make([]byte, len(m.IpThreatCategories)*10)
+		var j6 int
 		for _, num := range m.IpThreatCategories {
 			for num >= 1<<7 {
-				dAtA5[j4] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA7[j6] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j4++
+				j6++
 			}
-			dAtA5[j4] = uint8(num)
-			j4++
+			dAtA7[j6] = uint8(num)
+			j6++
 		}
-		i -= j4
-		copy(dAtA[i:], dAtA5[:j4])
-		i = encodeVarintExplainLogRecord(dAtA, i, uint64(j4))
+		i -= j6
+		copy(dAtA[i:], dAtA7[:j6])
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(j6))
 		i--
 		dAtA[i] = 0x4a
 	}
@@ -1762,6 +2273,111 @@ func (m *SvcPolicyEventDetails) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *BotDefenseEventDetails) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BotDefenseEventDetails) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BotDefenseEventDetails) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Method) > 0 {
+		i -= len(m.Method)
+		copy(dAtA[i:], m.Method)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.Method)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.RequestPath) > 0 {
+		i -= len(m.RequestPath)
+		copy(dAtA[i:], m.RequestPath)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.RequestPath)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.BotType) > 0 {
+		i -= len(m.BotType)
+		copy(dAtA[i:], m.BotType)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.BotType)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.AutomationType) > 0 {
+		i -= len(m.AutomationType)
+		copy(dAtA[i:], m.AutomationType)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.AutomationType)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Action != 0 {
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(m.Action))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RequestDetails) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RequestDetails) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RequestDetails) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Domain) > 0 {
+		i -= len(m.Domain)
+		copy(dAtA[i:], m.Domain)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.Domain)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.UpstreamProtocolErrorReason) > 0 {
+		i -= len(m.UpstreamProtocolErrorReason)
+		copy(dAtA[i:], m.UpstreamProtocolErrorReason)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.UpstreamProtocolErrorReason)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.RspCodeDetails) > 0 {
+		i -= len(m.RspCodeDetails)
+		copy(dAtA[i:], m.RspCodeDetails)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.RspCodeDetails)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.RspCode != 0 {
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(m.RspCode))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *Signature) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1782,6 +2398,13 @@ func (m *Signature) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.State) > 0 {
+		i -= len(m.State)
+		copy(dAtA[i:], m.State)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.State)))
+		i--
+		dAtA[i] = 0x3a
+	}
 	if len(m.MatchingInfo) > 0 {
 		i -= len(m.MatchingInfo)
 		copy(dAtA[i:], m.MatchingInfo)
@@ -1845,6 +2468,13 @@ func (m *Violation) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.State) > 0 {
+		i -= len(m.State)
+		copy(dAtA[i:], m.State)
+		i = encodeVarintExplainLogRecord(dAtA, i, uint64(len(m.State)))
+		i--
+		dAtA[i] = 0x2a
+	}
 	if len(m.MatchingInfo) > 0 {
 		i -= len(m.MatchingInfo)
 		copy(dAtA[i:], m.MatchingInfo)
@@ -2023,6 +2653,30 @@ func (m *ExplainLogRecordResponse_SvcPolicyEventDetails) Size() (n int) {
 	}
 	return n
 }
+func (m *ExplainLogRecordResponse_BotDefenseEventDetails) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotDefenseEventDetails != nil {
+		l = m.BotDefenseEventDetails.Size()
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	return n
+}
+func (m *ExplainLogRecordResponse_RequestDetails) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RequestDetails != nil {
+		l = m.RequestDetails.Size()
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	return n
+}
 func (m *WAFEventDetails) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2101,6 +2755,58 @@ func (m *SvcPolicyEventDetails) Size() (n int) {
 	return n
 }
 
+func (m *BotDefenseEventDetails) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Action != 0 {
+		n += 1 + sovExplainLogRecord(uint64(m.Action))
+	}
+	l = len(m.AutomationType)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	l = len(m.BotType)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	l = len(m.RequestPath)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	l = len(m.Method)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	return n
+}
+
+func (m *RequestDetails) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RspCode != 0 {
+		n += 1 + sovExplainLogRecord(uint64(m.RspCode))
+	}
+	l = len(m.RspCodeDetails)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	l = len(m.UpstreamProtocolErrorReason)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	l = len(m.Domain)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	return n
+}
+
 func (m *Signature) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2130,6 +2836,10 @@ func (m *Signature) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovExplainLogRecord(uint64(l))
 	}
+	l = len(m.State)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
 	return n
 }
 
@@ -2152,6 +2862,10 @@ func (m *Violation) Size() (n int) {
 		n += 1 + l + sovExplainLogRecord(uint64(l))
 	}
 	l = len(m.MatchingInfo)
+	if l > 0 {
+		n += 1 + l + sovExplainLogRecord(uint64(l))
+	}
+	l = len(m.State)
 	if l > 0 {
 		n += 1 + l + sovExplainLogRecord(uint64(l))
 	}
@@ -2239,6 +2953,26 @@ func (this *ExplainLogRecordResponse_SvcPolicyEventDetails) String() string {
 	}, "")
 	return s
 }
+func (this *ExplainLogRecordResponse_BotDefenseEventDetails) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ExplainLogRecordResponse_BotDefenseEventDetails{`,
+		`BotDefenseEventDetails:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseEventDetails), "BotDefenseEventDetails", "BotDefenseEventDetails", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ExplainLogRecordResponse_RequestDetails) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ExplainLogRecordResponse_RequestDetails{`,
+		`RequestDetails:` + strings.Replace(fmt.Sprintf("%v", this.RequestDetails), "RequestDetails", "RequestDetails", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *WAFEventDetails) String() string {
 	if this == nil {
 		return "nil"
@@ -2286,6 +3020,33 @@ func (this *SvcPolicyEventDetails) String() string {
 	}, "")
 	return s
 }
+func (this *BotDefenseEventDetails) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BotDefenseEventDetails{`,
+		`Action:` + fmt.Sprintf("%v", this.Action) + `,`,
+		`AutomationType:` + fmt.Sprintf("%v", this.AutomationType) + `,`,
+		`BotType:` + fmt.Sprintf("%v", this.BotType) + `,`,
+		`RequestPath:` + fmt.Sprintf("%v", this.RequestPath) + `,`,
+		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RequestDetails) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RequestDetails{`,
+		`RspCode:` + fmt.Sprintf("%v", this.RspCode) + `,`,
+		`RspCodeDetails:` + fmt.Sprintf("%v", this.RspCodeDetails) + `,`,
+		`UpstreamProtocolErrorReason:` + fmt.Sprintf("%v", this.UpstreamProtocolErrorReason) + `,`,
+		`Domain:` + fmt.Sprintf("%v", this.Domain) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *Signature) String() string {
 	if this == nil {
 		return "nil"
@@ -2297,6 +3058,7 @@ func (this *Signature) String() string {
 		`Accuracy:` + fmt.Sprintf("%v", this.Accuracy) + `,`,
 		`Context:` + fmt.Sprintf("%v", this.Context) + `,`,
 		`MatchingInfo:` + fmt.Sprintf("%v", this.MatchingInfo) + `,`,
+		`State:` + fmt.Sprintf("%v", this.State) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2310,6 +3072,7 @@ func (this *Violation) String() string {
 		`AttackType:` + fmt.Sprintf("%v", this.AttackType) + `,`,
 		`Context:` + fmt.Sprintf("%v", this.Context) + `,`,
 		`MatchingInfo:` + fmt.Sprintf("%v", this.MatchingInfo) + `,`,
+		`State:` + fmt.Sprintf("%v", this.State) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2540,6 +3303,76 @@ func (m *ExplainLogRecordResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Details = &ExplainLogRecordResponse_SvcPolicyEventDetails{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotDefenseEventDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &BotDefenseEventDetails{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Details = &ExplainLogRecordResponse_BotDefenseEventDetails{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestDetails", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RequestDetails{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Details = &ExplainLogRecordResponse_RequestDetails{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3101,6 +3934,374 @@ func (m *SvcPolicyEventDetails) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *BotDefenseEventDetails) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowExplainLogRecord
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BotDefenseEventDetails: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BotDefenseEventDetails: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Action", wireType)
+			}
+			m.Action = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Action |= Action(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AutomationType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AutomationType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotType", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BotType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestPath", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestPath = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Method = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipExplainLogRecord(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RequestDetails) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowExplainLogRecord
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RequestDetails: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RequestDetails: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RspCode", wireType)
+			}
+			m.RspCode = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RspCode |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RspCodeDetails", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RspCodeDetails = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpstreamProtocolErrorReason", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UpstreamProtocolErrorReason = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Domain = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipExplainLogRecord(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *Signature) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3309,6 +4510,38 @@ func (m *Signature) Unmarshal(dAtA []byte) error {
 			}
 			m.MatchingInfo = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.State = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipExplainLogRecord(dAtA[iNdEx:])
@@ -3489,6 +4722,38 @@ func (m *Violation) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.MatchingInfo = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowExplainLogRecord
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthExplainLogRecord
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.State = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

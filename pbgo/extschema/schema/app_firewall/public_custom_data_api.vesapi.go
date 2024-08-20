@@ -557,7 +557,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-customdataapi-metricsallnamespaces"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_firewall-customdataapi-metricsallnamespaces"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.CustomDataAPI.MetricsAllNamespaces"
             },
@@ -649,7 +649,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_firewall-customdataapi-metrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_firewall-customdataapi-metrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_firewall.CustomDataAPI.Metrics"
             },

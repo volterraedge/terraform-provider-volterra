@@ -157,6 +157,12 @@ func resourceVolterraVirtualHost() *schema.Resource {
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
+									"fail_close": {
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"fail_oversized_body_validation": {
 										Type:       schema.TypeBool,
 										Optional:   true,
@@ -1358,6 +1364,37 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				Optional: true,
 			},
 
+			"masking_config": {
+
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_masking": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"enable_masking": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"max_direct_response_body_size": {
+				Type:       schema.TypeInt,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
 			"max_request_header_size": {
 				Type:     schema.TypeInt,
 				Optional: true,
@@ -1378,34 +1415,6 @@ func resourceVolterraVirtualHost() *schema.Resource {
 			"proxy": {
 				Type:     schema.TypeString,
 				Optional: true,
-			},
-
-			"rate_limiter": {
-
-				Type:     schema.TypeList,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"kind": {
-							Type:     schema.TypeString,
-							Computed: true,
-						},
-
-						"name": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"namespace": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-						"tenant": {
-							Type:     schema.TypeString,
-							Optional: true,
-						},
-					},
-				},
 			},
 
 			"rate_limiter_allowed_prefixes": {
@@ -2047,6 +2056,36 @@ func resourceVolterraVirtualHost() *schema.Resource {
 							},
 						},
 
+						"client_certificate_optional": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"client_certificate_required": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"no_client_certificate": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
 						"crl": {
 
 							Type:       schema.TypeList,
@@ -2204,6 +2243,36 @@ func resourceVolterraVirtualHost() *schema.Resource {
 				Deprecated: "This field is deprecated and will be removed in future release.",
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"client_certificate_optional": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"client_certificate_required": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"no_client_certificate": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
 
 						"common_params": {
 
@@ -2931,6 +3000,12 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 					if v, ok := cs["allow_only_specified_query_params"]; ok && !isIntfNil(v) {
 
 						openApiValidationChoiceInt.EnableOpenApiValidation.AllowOnlySpecifiedQueryParams = v.(bool)
+
+					}
+
+					if v, ok := cs["fail_close"]; ok && !isIntfNil(v) {
+
+						openApiValidationChoiceInt.EnableOpenApiValidation.FailClose = v.(bool)
 
 					}
 
@@ -4402,6 +4477,53 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//masking_config
+	if v, ok := d.GetOk("masking_config"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		maskingConfig := &ves_io_schema_virtual_host.MaskingConfiguration{}
+		createSpec.MaskingConfig = maskingConfig
+		for _, set := range sl {
+			maskingConfigMapStrToI := set.(map[string]interface{})
+
+			maskingChoiceTypeFound := false
+
+			if v, ok := maskingConfigMapStrToI["disable_masking"]; ok && !isIntfNil(v) && !maskingChoiceTypeFound {
+
+				maskingChoiceTypeFound = true
+
+				if v.(bool) {
+					maskingChoiceInt := &ves_io_schema_virtual_host.MaskingConfiguration_DisableMasking{}
+					maskingChoiceInt.DisableMasking = &ves_io_schema.Empty{}
+					maskingConfig.MaskingChoice = maskingChoiceInt
+				}
+
+			}
+
+			if v, ok := maskingConfigMapStrToI["enable_masking"]; ok && !isIntfNil(v) && !maskingChoiceTypeFound {
+
+				maskingChoiceTypeFound = true
+
+				if v.(bool) {
+					maskingChoiceInt := &ves_io_schema_virtual_host.MaskingConfiguration_EnableMasking{}
+					maskingChoiceInt.EnableMasking = &ves_io_schema.Empty{}
+					maskingConfig.MaskingChoice = maskingChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	//max_direct_response_body_size
+	if v, ok := d.GetOk("max_direct_response_body_size"); ok && !isIntfNil(v) {
+
+		createSpec.MaxDirectResponseBodySize =
+			uint32(v.(int))
+
+	}
+
 	//max_request_header_size
 	if v, ok := d.GetOk("max_request_header_size"); ok && !isIntfNil(v) {
 
@@ -4442,39 +4564,6 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 	if v, ok := d.GetOk("proxy"); ok && !isIntfNil(v) {
 
 		createSpec.Proxy = ves_io_schema_virtual_host.ProxyType(ves_io_schema_virtual_host.ProxyType_value[v.(string)])
-
-	}
-
-	//rate_limiter
-	if v, ok := d.GetOk("rate_limiter"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		rateLimiterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.RateLimiter = rateLimiterInt
-		for i, ps := range sl {
-
-			rlMapToStrVal := ps.(map[string]interface{})
-			rateLimiterInt[i] = &ves_io_schema.ObjectRefType{}
-
-			rateLimiterInt[i].Kind = "rate_limiter"
-
-			if v, ok := rlMapToStrVal["name"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Name = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Uid = v.(string)
-			}
-
-		}
 
 	}
 
@@ -5250,6 +5339,35 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			clientCertificateVerifyChoiceTypeFound := false
+
+			if _, ok := cs["client_certificate_optional"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.CertificateParamsType_ClientCertificateOptional{}
+				clientCertificateVerifyChoiceInt.ClientCertificateOptional = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsCertParams.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["client_certificate_required"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.CertificateParamsType_ClientCertificateRequired{}
+				clientCertificateVerifyChoiceInt.ClientCertificateRequired = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsCertParams.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["no_client_certificate"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.CertificateParamsType_NoClientCertificate{}
+				clientCertificateVerifyChoiceInt.NoClientCertificate = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsCertParams.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
 			if v, ok := cs["crl"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
@@ -5412,6 +5530,35 @@ func resourceVolterraVirtualHostCreate(d *schema.ResourceData, meta interface{})
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			clientCertificateVerifyChoiceTypeFound := false
+
+			if _, ok := cs["client_certificate_optional"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateOptional{}
+				clientCertificateVerifyChoiceInt.ClientCertificateOptional = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["client_certificate_required"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateRequired{}
+				clientCertificateVerifyChoiceInt.ClientCertificateRequired = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["no_client_certificate"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_NoClientCertificate{}
+				clientCertificateVerifyChoiceInt.NoClientCertificate = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
 
 			if v, ok := cs["common_params"]; ok && !isIntfNil(v) {
 
@@ -6223,6 +6370,12 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 					if v, ok := cs["allow_only_specified_query_params"]; ok && !isIntfNil(v) {
 
 						openApiValidationChoiceInt.EnableOpenApiValidation.AllowOnlySpecifiedQueryParams = v.(bool)
+
+					}
+
+					if v, ok := cs["fail_close"]; ok && !isIntfNil(v) {
+
+						openApiValidationChoiceInt.EnableOpenApiValidation.FailClose = v.(bool)
 
 					}
 
@@ -7671,6 +7824,51 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	if v, ok := d.GetOk("masking_config"); ok && !isIntfNil(v) {
+
+		sl := v.(*schema.Set).List()
+		maskingConfig := &ves_io_schema_virtual_host.MaskingConfiguration{}
+		updateSpec.MaskingConfig = maskingConfig
+		for _, set := range sl {
+			maskingConfigMapStrToI := set.(map[string]interface{})
+
+			maskingChoiceTypeFound := false
+
+			if v, ok := maskingConfigMapStrToI["disable_masking"]; ok && !isIntfNil(v) && !maskingChoiceTypeFound {
+
+				maskingChoiceTypeFound = true
+
+				if v.(bool) {
+					maskingChoiceInt := &ves_io_schema_virtual_host.MaskingConfiguration_DisableMasking{}
+					maskingChoiceInt.DisableMasking = &ves_io_schema.Empty{}
+					maskingConfig.MaskingChoice = maskingChoiceInt
+				}
+
+			}
+
+			if v, ok := maskingConfigMapStrToI["enable_masking"]; ok && !isIntfNil(v) && !maskingChoiceTypeFound {
+
+				maskingChoiceTypeFound = true
+
+				if v.(bool) {
+					maskingChoiceInt := &ves_io_schema_virtual_host.MaskingConfiguration_EnableMasking{}
+					maskingChoiceInt.EnableMasking = &ves_io_schema.Empty{}
+					maskingConfig.MaskingChoice = maskingChoiceInt
+				}
+
+			}
+
+		}
+
+	}
+
+	if v, ok := d.GetOk("max_direct_response_body_size"); ok && !isIntfNil(v) {
+
+		updateSpec.MaxDirectResponseBodySize =
+			uint32(v.(int))
+
+	}
+
 	if v, ok := d.GetOk("max_request_header_size"); ok && !isIntfNil(v) {
 
 		updateSpec.MaxRequestHeaderSize =
@@ -7707,38 +7905,6 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 	if v, ok := d.GetOk("proxy"); ok && !isIntfNil(v) {
 
 		updateSpec.Proxy = ves_io_schema_virtual_host.ProxyType(ves_io_schema_virtual_host.ProxyType_value[v.(string)])
-
-	}
-
-	if v, ok := d.GetOk("rate_limiter"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		rateLimiterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.RateLimiter = rateLimiterInt
-		for i, ps := range sl {
-
-			rlMapToStrVal := ps.(map[string]interface{})
-			rateLimiterInt[i] = &ves_io_schema.ObjectRefType{}
-
-			rateLimiterInt[i].Kind = "rate_limiter"
-
-			if v, ok := rlMapToStrVal["name"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Name = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Uid = v.(string)
-			}
-
-		}
 
 	}
 
@@ -8499,6 +8665,35 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 
 			}
 
+			clientCertificateVerifyChoiceTypeFound := false
+
+			if _, ok := cs["client_certificate_optional"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.CertificateParamsType_ClientCertificateOptional{}
+				clientCertificateVerifyChoiceInt.ClientCertificateOptional = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsCertParams.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["client_certificate_required"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.CertificateParamsType_ClientCertificateRequired{}
+				clientCertificateVerifyChoiceInt.ClientCertificateRequired = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsCertParams.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["no_client_certificate"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.CertificateParamsType_NoClientCertificate{}
+				clientCertificateVerifyChoiceInt.NoClientCertificate = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsCertParams.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
 			if v, ok := cs["crl"]; ok && !isIntfNil(v) {
 
 				sl := v.([]interface{})
@@ -8661,6 +8856,35 @@ func resourceVolterraVirtualHostUpdate(d *schema.ResourceData, meta interface{})
 		sl := v.(*schema.Set).List()
 		for _, set := range sl {
 			cs := set.(map[string]interface{})
+
+			clientCertificateVerifyChoiceTypeFound := false
+
+			if _, ok := cs["client_certificate_optional"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateOptional{}
+				clientCertificateVerifyChoiceInt.ClientCertificateOptional = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["client_certificate_required"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_ClientCertificateRequired{}
+				clientCertificateVerifyChoiceInt.ClientCertificateRequired = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
+
+			if _, ok := cs["no_client_certificate"]; ok && !clientCertificateVerifyChoiceTypeFound {
+
+				clientCertificateVerifyChoiceTypeFound = true
+				clientCertificateVerifyChoiceInt := &ves_io_schema.DownstreamTlsParamsType_NoClientCertificate{}
+				clientCertificateVerifyChoiceInt.NoClientCertificate = &ves_io_schema.Empty{}
+				tlsCertificatesChoiceInt.TlsParameters.ClientCertificateVerifyChoice = clientCertificateVerifyChoiceInt
+
+			}
 
 			if v, ok := cs["common_params"]; ok && !isIntfNil(v) {
 

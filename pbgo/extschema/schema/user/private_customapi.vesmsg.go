@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -21,6 +23,393 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateUserRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateUserRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateUserRequest) DeepCopy() *CreateUserRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateUserRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateUserRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateUserRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateUserRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateUserRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateUserRequest) TenantIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateUserRequest) LastNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for last_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateUserRequest) UserEmailValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for user_email")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateUserRequest) UserGroupNamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for user_group_names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for user_group_names")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated user_group_names")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items user_group_names")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateUserRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateUserRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateUserRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["first_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("first_name"))
+		if err := fv(ctx, m.GetFirstName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_name"))
+		if err := fv(ctx, m.GetLastName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_access"))
+		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_id"))
+		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_email"))
+		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		if err := fv(ctx, m.GetUserGroupNames(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateUserRequestValidator = func() *ValidateCreateUserRequest {
+	v := &ValidateCreateUserRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTenantId := v.TenantIdValidationRuleHandler
+	rulesTenantId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhTenantId(rulesTenantId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateUserRequest.tenant_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant_id"] = vFn
+
+	vrhLastName := v.LastNameValidationRuleHandler
+	rulesLastName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhLastName(rulesLastName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateUserRequest.last_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["last_name"] = vFn
+
+	vrhUserEmail := v.UserEmailValidationRuleHandler
+	rulesUserEmail := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.email":     "true",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhUserEmail(rulesUserEmail)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateUserRequest.user_email: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_email"] = vFn
+
+	vrhUserGroupNames := v.UserGroupNamesValidationRuleHandler
+	rulesUserGroupNames := map[string]string{
+		"ves.io.schema.rules.map.keys.string.ves_object_name": "true",
+	}
+	vFn, err = vrhUserGroupNames(rulesUserGroupNames)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateUserRequest.user_group_names: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["user_group_names"] = vFn
+
+	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
+
+	return v
+}()
+
+func CreateUserRequestValidator() db.Validator {
+	return DefaultCreateUserRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateUserResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateUserResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateUserResponse) DeepCopy() *CreateUserResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateUserResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateUserResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateUserResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateUserResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateUserResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateUserResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateUserResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateUserResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domain_owner"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain_owner"))
+		if err := fv(ctx, m.GetDomainOwner(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["idm_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("idm_type"))
+		if err := fv(ctx, m.GetIdmType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sync_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sync_mode"))
+		if err := fv(ctx, m.GetSyncMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_id"))
+		if err := fv(ctx, m.GetTenantId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_email"))
+		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		for idx, item := range m.GetUserGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_type"))
+		if err := fv(ctx, m.GetUserType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateUserResponseValidator = func() *ValidateCreateUserResponse {
+	v := &ValidateCreateUserResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CreateUserResponseValidator() db.Validator {
+	return DefaultCreateUserResponseValidator
+}
 
 // augmented methods on protoc/std generated struct
 

@@ -692,7 +692,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy-customapi-listpolicy"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-secret_policy-customapi-listpolicy"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy.CustomAPI.ListPolicy"
             },
@@ -791,7 +791,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy-customapi-recoverpolicy"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-secret_policy-customapi-recoverpolicy"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy.CustomAPI.RecoverPolicy"
             },
@@ -890,7 +890,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-secret_policy-customapi-deletepolicy"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-secret_policy-customapi-deletepolicy"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.secret_policy.CustomAPI.DeletePolicy"
             },

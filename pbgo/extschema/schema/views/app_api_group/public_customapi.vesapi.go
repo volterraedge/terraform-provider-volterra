@@ -545,7 +545,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-app_api_group-customapi-evaluateapigroup"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-app_api_group-customapi-evaluateapigroup"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.app_api_group.CustomAPI.EvaluateApiGroup"
             },
@@ -637,7 +637,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-app_api_group-customapi-getapigroupsstats"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-app_api_group-customapi-getapigroupsstats"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.app_api_group.CustomAPI.GetApiGroupsStats"
             },
@@ -918,7 +918,8 @@ var CustomAPISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

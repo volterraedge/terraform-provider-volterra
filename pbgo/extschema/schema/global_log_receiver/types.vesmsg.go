@@ -1444,6 +1444,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_DnsLogs:
+		if fv, exists := v.FldValidators["log_type.dns_logs"]; exists {
+			val := m.GetLogType().(*CreateSpecType_DnsLogs).DnsLogs
+			vOpts := append(opts,
+				db.WithValidateField("log_type"),
+				db.WithValidateField("dns_logs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2879,6 +2890,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_DnsLogs:
+		if fv, exists := v.FldValidators["log_type.dns_logs"]; exists {
+			val := m.GetLogType().(*GetSpecType_DnsLogs).DnsLogs
+			vOpts := append(opts,
+				db.WithValidateField("log_type"),
+				db.WithValidateField("dns_logs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3503,6 +3525,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("log_type"),
 				db.WithValidateField("audit_logs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DnsLogs:
+		if fv, exists := v.FldValidators["log_type.dns_logs"]; exists {
+			val := m.GetLogType().(*GlobalSpecType_DnsLogs).DnsLogs
+			vOpts := append(opts,
+				db.WithValidateField("log_type"),
+				db.WithValidateField("dns_logs"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -5286,6 +5319,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_DnsLogs:
+		if fv, exists := v.FldValidators["log_type.dns_logs"]; exists {
+			val := m.GetLogType().(*ReplaceSpecType_DnsLogs).DnsLogs
+			vOpts := append(opts,
+				db.WithValidateField("log_type"),
+				db.WithValidateField("dns_logs"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -6619,6 +6663,9 @@ func (r *CreateSpecType) SetLogTypeToGlobalSpecType(o *GlobalSpecType) error {
 	case *CreateSpecType_AuditLogs:
 		o.LogType = &GlobalSpecType_AuditLogs{AuditLogs: of.AuditLogs}
 
+	case *CreateSpecType_DnsLogs:
+		o.LogType = &GlobalSpecType_DnsLogs{DnsLogs: of.DnsLogs}
+
 	case *CreateSpecType_RequestLogs:
 		o.LogType = &GlobalSpecType_RequestLogs{RequestLogs: of.RequestLogs}
 
@@ -6638,6 +6685,9 @@ func (r *CreateSpecType) GetLogTypeFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_AuditLogs:
 		r.LogType = &CreateSpecType_AuditLogs{AuditLogs: of.AuditLogs}
+
+	case *GlobalSpecType_DnsLogs:
+		r.LogType = &CreateSpecType_DnsLogs{DnsLogs: of.DnsLogs}
 
 	case *GlobalSpecType_RequestLogs:
 		r.LogType = &CreateSpecType_RequestLogs{RequestLogs: of.RequestLogs}
@@ -6845,6 +6895,9 @@ func (r *GetSpecType) SetLogTypeToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_AuditLogs:
 		o.LogType = &GlobalSpecType_AuditLogs{AuditLogs: of.AuditLogs}
 
+	case *GetSpecType_DnsLogs:
+		o.LogType = &GlobalSpecType_DnsLogs{DnsLogs: of.DnsLogs}
+
 	case *GetSpecType_RequestLogs:
 		o.LogType = &GlobalSpecType_RequestLogs{RequestLogs: of.RequestLogs}
 
@@ -6864,6 +6917,9 @@ func (r *GetSpecType) GetLogTypeFromGlobalSpecType(o *GlobalSpecType) error {
 
 	case *GlobalSpecType_AuditLogs:
 		r.LogType = &GetSpecType_AuditLogs{AuditLogs: of.AuditLogs}
+
+	case *GlobalSpecType_DnsLogs:
+		r.LogType = &GetSpecType_DnsLogs{DnsLogs: of.DnsLogs}
 
 	case *GlobalSpecType_RequestLogs:
 		r.LogType = &GetSpecType_RequestLogs{RequestLogs: of.RequestLogs}
@@ -7071,6 +7127,9 @@ func (r *ReplaceSpecType) SetLogTypeToGlobalSpecType(o *GlobalSpecType) error {
 	case *ReplaceSpecType_AuditLogs:
 		o.LogType = &GlobalSpecType_AuditLogs{AuditLogs: of.AuditLogs}
 
+	case *ReplaceSpecType_DnsLogs:
+		o.LogType = &GlobalSpecType_DnsLogs{DnsLogs: of.DnsLogs}
+
 	case *ReplaceSpecType_RequestLogs:
 		o.LogType = &GlobalSpecType_RequestLogs{RequestLogs: of.RequestLogs}
 
@@ -7090,6 +7149,9 @@ func (r *ReplaceSpecType) GetLogTypeFromGlobalSpecType(o *GlobalSpecType) error 
 
 	case *GlobalSpecType_AuditLogs:
 		r.LogType = &ReplaceSpecType_AuditLogs{AuditLogs: of.AuditLogs}
+
+	case *GlobalSpecType_DnsLogs:
+		r.LogType = &ReplaceSpecType_DnsLogs{DnsLogs: of.DnsLogs}
 
 	case *GlobalSpecType_RequestLogs:
 		r.LogType = &ReplaceSpecType_RequestLogs{RequestLogs: of.RequestLogs}

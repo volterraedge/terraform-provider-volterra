@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.API.Delete"
             },
@@ -2253,7 +2253,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enhanced_firewall_policies": {
                     "type": "array",
-                    "description": " Ordered List of Enhaned Firewall Policy active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Ordered List of Enhanced Firewall Policies active\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Enhanced Firewall Policy",
                     "minItems": 1,
                     "maxItems": 128,
@@ -2298,14 +2298,14 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveForwardProxyPoliciesType": {
             "type": "object",
-            "description": "List of Forward Proxy Policies",
+            "description": "Ordered List of Forward Proxy Policies active",
             "title": "Active Forward Proxy Policies Type",
             "x-displayname": "Active Forward Proxy Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": " List of Forward Proxy Policies\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Ordered List of Forward Proxy Policies active\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Forward Proxy Policies",
                     "minItems": 1,
                     "maxItems": 128,

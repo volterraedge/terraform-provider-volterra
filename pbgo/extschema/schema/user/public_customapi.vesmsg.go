@@ -1153,6 +1153,22 @@ type ValidateGetUserRoleResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetUserRoleResponse) SignupOriginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.SignupOrigin)
+		return int32(i)
+	}
+	// ves_io_schema.SignupOrigin_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.SignupOrigin_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for signup_origin")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetUserRoleResponse)
 	if !ok {
@@ -1424,6 +1440,15 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["signup_origin"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("signup_origin"))
+		if err := fv(ctx, m.GetSignupOrigin(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
@@ -1553,6 +1578,25 @@ func (v *ValidateGetUserRoleResponse) Validate(ctx context.Context, pm interface
 // Well-known symbol for default validator implementation
 var DefaultGetUserRoleResponseValidator = func() *ValidateGetUserRoleResponse {
 	v := &ValidateGetUserRoleResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSignupOrigin := v.SignupOriginValidationRuleHandler
+	rulesSignupOrigin := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSignupOrigin(rulesSignupOrigin)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetUserRoleResponse.signup_origin: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["signup_origin"] = vFn
 
 	v.FldValidators["namespace_roles"] = ves_io_schema.NamespaceRoleTypeValidator().Validate
 

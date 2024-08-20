@@ -377,6 +377,24 @@ func resourceVolterraCluster() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"default_session_key_caching": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"disable_session_key_caching": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_session_keys": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"disable_sni": {
 
 							Type:     schema.TypeSet,
@@ -1365,6 +1383,43 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		createSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
 			tlsParametersMapStrToI := set.(map[string]interface{})
+
+			maxSessionKeysTypeTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DefaultSessionKeyCaching{}
+					maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DisableSessionKeyCaching{}
+					maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+				maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_MaxSessionKeys{}
+
+				tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+
+				maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
+
+			}
 
 			sniChoiceTypeFound := false
 
@@ -2462,6 +2517,43 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		updateSpec.TlsParameters = tlsParameters
 		for _, set := range sl {
 			tlsParametersMapStrToI := set.(map[string]interface{})
+
+			maxSessionKeysTypeTypeFound := false
+
+			if v, ok := tlsParametersMapStrToI["default_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DefaultSessionKeyCaching{}
+					maxSessionKeysTypeInt.DefaultSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["disable_session_key_caching"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+
+				if v.(bool) {
+					maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_DisableSessionKeyCaching{}
+					maxSessionKeysTypeInt.DisableSessionKeyCaching = &ves_io_schema.Empty{}
+					tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+				}
+
+			}
+
+			if v, ok := tlsParametersMapStrToI["max_session_keys"]; ok && !isIntfNil(v) && !maxSessionKeysTypeTypeFound {
+
+				maxSessionKeysTypeTypeFound = true
+				maxSessionKeysTypeInt := &ves_io_schema.UpstreamTlsParamsType_MaxSessionKeys{}
+
+				tlsParameters.MaxSessionKeysType = maxSessionKeysTypeInt
+
+				maxSessionKeysTypeInt.MaxSessionKeys = uint32(v.(int))
+
+			}
 
 			sniChoiceTypeFound := false
 

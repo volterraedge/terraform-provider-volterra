@@ -911,7 +911,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.Create"
             },
@@ -1011,7 +1011,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-registration-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.API.Replace"
             },
@@ -2384,6 +2384,17 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/siteNetworkDevice"
                     },
                     "x-displayname": "Network"
+                },
+                "numa_nodes": {
+                    "type": "integer",
+                    "description": " Non-uniform memory access (NUMA) nodes count\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n",
+                    "title": "NUMA Nodes Count",
+                    "format": "int32",
+                    "x-displayname": "NUMA nodes count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0"
+                    }
                 },
                 "os": {
                     "description": " os holds all general OS information",

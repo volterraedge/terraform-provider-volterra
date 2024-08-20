@@ -577,7 +577,7 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-mobileintegratorcustomapi-listmobileintegrators"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-stored_object-mobileintegratorcustomapi-listmobileintegrators"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.MobileIntegratorCustomAPI.ListMobileIntegrators"
             },
@@ -685,7 +685,7 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-mobileintegratorcustomapi-getmobileintegrator"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-stored_object-mobileintegratorcustomapi-getmobileintegrator"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.MobileIntegratorCustomAPI.GetMobileIntegrator"
             },
@@ -716,7 +716,8 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

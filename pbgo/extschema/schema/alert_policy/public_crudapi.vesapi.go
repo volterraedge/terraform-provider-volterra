@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_policy-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_policy-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_policy-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_policy-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-alert_policy-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-alert_policy-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.alert_policy.API.Delete"
             },
@@ -2195,7 +2195,7 @@ var APISwaggerJSON string = `{
     "definitions": {
         "alert_policyAlertName": {
             "type": "string",
-            "description": "List of Alert Names\n\nCustomer tunnel interface down\nPhysical Interface down\nTunnel Interfaces to Customer Site Down\nVirutal Host server error\nVirtual Host client error\nService Health Low\nService Unavailable\nVirtual Host server error\nVirtual Host client error\nEndpoint Healthcheck failure\nSynthetic monitor health critical\nMalicious user detected\nVirtual Host WAF security events detected\nVirtual Host API security events detected\nVirtual Host Service Policy security events detected\nVirtual Host Many Malicious Bots based WAF security events detected\nVirtual Host Many Malicious Bots based Bot Defense security events detected\nVirtual Host Many Threat campaign based WAF security events detected\nSuspicious domain identified by Client-Side Defense service\nClient-Side Defense has identified a suspicious script that is reading sensitive form field\nError rate anomaly detected\nRequest rate anomaly detected\nRequest throughput anomaly detected\nResponse latency anomaly detected\nResponse throughput anomaly detected\nTLS Automatic Certificate renewal is failing\nTLS Automatic Certificate renewal is still failing after multiple retries\nTLS Automatic Certificate has expired\nTLS Custom Certificate will expire in less than 28 days\nTLS Custom Certificate will expire in less than 15 days\nTLS Custom Certificate has expired\nDDoS security event detected\nDNS Zone Ignored a Duplicate Record Create Request",
+            "description": "List of Alert Names\n\nCustomer tunnel interface down\nPhysical Interface down\nTunnel Interfaces to Customer Site Down\nVirutal Host server error\nVirtual Host client error\nService Health Low\nService Unavailable\nVirtual Host server error\nVirtual Host client error\nEndpoint Healthcheck failure\nSynthetic monitor health critical\nMalicious user detected\nVirtual Host WAF security events detected\nVirtual Host API security events detected\nVirtual Host Service Policy security events detected\nVirtual Host Many Malicious Bots based WAF security events detected\nVirtual Host Many Malicious Bots based Bot Defense security events detected\nVirtual Host Many Threat campaign based WAF security events detected\nSuspicious domain identified by Client-Side Defense service\nClient-Side Defense has identified a suspicious script that is reading sensitive form field\nError rate anomaly detected\nRequest rate anomaly detected\nRequest throughput anomaly detected\nResponse latency anomaly detected\nResponse throughput anomaly detected\nTLS Automatic Certificate renewal is failing\nTLS Automatic Certificate renewal is still failing after multiple retries\nTLS Automatic Certificate has expired\nTLS Custom Certificate will expire in less than 28 days\nTLS Custom Certificate will expire in less than 15 days\nTLS Custom Certificate has expired\nDDoS security event detected\nDNS Zone Ignored a Duplicate Record Create Request\nUnused APIs Detected\nShadow APIs Detected\nEndpoints With Sensitive Data In Response Detected\nHigh Risk Score Endpoints Detected",
             "title": "AlertName",
             "enum": [
                 "SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN",
@@ -2230,7 +2230,11 @@ var APISwaggerJSON string = `{
                 "TLS_CUSTOM_CERTIFICATE_EXPIRING_SOON",
                 "TLS_CUSTOM_CERTIFICATE_EXPIRED",
                 "L7DDOS",
-                "DNS_ZONE_IGNORED_DUPLICATE_RECORD"
+                "DNS_ZONE_IGNORED_DUPLICATE_RECORD",
+                "API_SECURITY_UNUSED_API_DETECTED",
+                "API_SECURITY_SHADOW_API_DETECTED",
+                "API_SECURITY_SENSITIVE_DATA_IN_RESPONSE_DETECTED",
+                "API_SECURITY_RISK_SCORE_HIGH_DETECTED"
             ],
             "default": "SITE_CUSTOMER_TUNNEL_INTERFACE_DOWN",
             "x-displayname": "AlertName",

@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-network_firewall-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.network_firewall.crudapi.API.Create"
             },
@@ -2888,7 +2888,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enhanced_firewall_policies": {
                     "type": "array",
-                    "description": " Ordered List of Enhaned Firewall Policy active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Ordered List of Enhanced Firewall Policies active\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Enhanced Firewall Policy",
                     "minItems": 1,
                     "maxItems": 128,
@@ -2922,12 +2922,12 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveForwardProxyPoliciesType": {
             "type": "object",
-            "description": "x-displayName: \"Active Forward Proxy Policies Type\"\nList of Forward Proxy Policies",
+            "description": "x-displayName: \"Active Forward Proxy Policies Type\"\nOrdered List of Forward Proxy Policies active",
             "title": "Active Forward Proxy Policies Type",
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": "x-displayName: \"Forward Proxy Policies\"\nx-required\nList of Forward Proxy Policies",
+                    "description": "x-displayName: \"Forward Proxy Policies\"\nx-required\nOrdered List of Forward Proxy Policies active",
                     "title": "Forward Proxy Policies",
                     "items": {
                         "$ref": "#/definitions/schemaviewsObjectRefType"

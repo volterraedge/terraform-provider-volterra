@@ -85,6 +85,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.openapi_validation_action",
 		"spec.rule_list.rules.#.spec.origin_server_subsets_action",
 		"spec.rule_list.rules.#.spec.rate_limiter.#",
+		"spec.rule_list.rules.#.spec.response_masking_config",
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
 		"spec.rule_list.rules.#.spec.shape_protected_endpoint_action",
@@ -117,10 +118,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
-		{
-			FieldPath:           "spec.simple_rules.#.threat_mesh_action",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.Get"] = []svcfw.EnvironmentField{
@@ -148,10 +145,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.deny_list.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
-		{
-			FieldPath:           "spec.simple_rules.#.threat_mesh_action",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
-		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.service_policy.API.List"] = []svcfw.EnvironmentField{
@@ -162,10 +155,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.deny_list.prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-		{
-			FieldPath:           "items.#.get_spec.simple_rules.#.threat_mesh_action",
-			AllowedEnvironments: []string{"crt", "demo1", "test"},
 		},
 	}
 
@@ -192,6 +181,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.openapi_validation_action",
 		"spec.rule_list.rules.#.spec.origin_server_subsets_action",
 		"spec.rule_list.rules.#.spec.rate_limiter.#",
+		"spec.rule_list.rules.#.spec.response_masking_config",
 		"spec.rule_list.rules.#.spec.scheme.#",
 		"spec.rule_list.rules.#.spec.server_selector",
 		"spec.rule_list.rules.#.spec.shape_protected_endpoint_action",

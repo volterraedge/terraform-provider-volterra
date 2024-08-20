@@ -452,6 +452,28 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_ActiveCustomerSupportTickets:
+		if fv, exists := v.FldValidators["choice.active_customer_support_tickets"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_ActiveCustomerSupportTickets).ActiveCustomerSupportTickets
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("active_customer_support_tickets"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_VirtualHostLargeDirectResponseSize:
+		if fv, exists := v.FldValidators["choice.virtual_host_large_direct_response_size"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_VirtualHostLargeDirectResponseSize).VirtualHostLargeDirectResponseSize
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("virtual_host_large_direct_response_size"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

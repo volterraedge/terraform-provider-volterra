@@ -2651,7 +2651,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-allapplicationinventory"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-allapplicationinventory"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventory"
             },
@@ -2735,7 +2735,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-allapplicationinventorywaf"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-allapplicationinventorywaf"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.AllApplicationInventoryWaf"
             },
@@ -2819,7 +2819,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-networkinginventory"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-networkinginventory"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.NetworkingInventory"
             },
@@ -2903,7 +2903,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-updateallowadvertiseonpublic"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-updateallowadvertiseonpublic"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.UpdateAllowAdvertiseOnPublic"
             },
@@ -2987,7 +2987,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-validaterules"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-validaterules"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.ValidateRules"
             },
@@ -3071,7 +3071,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactivealertpolicies"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactivealertpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveAlertPolicies"
             },
@@ -3158,7 +3158,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactivealertpolicies"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactivealertpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveAlertPolicies"
             },
@@ -3242,7 +3242,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactivenetworkpolicies"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactivenetworkpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveNetworkPolicies"
             },
@@ -3329,7 +3329,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactivenetworkpolicies"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactivenetworkpolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveNetworkPolicies"
             },
@@ -3413,7 +3413,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactiveservicepolicies"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getactiveservicepolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetActiveServicePolicies"
             },
@@ -3500,7 +3500,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactiveservicepolicies"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setactiveservicepolicies"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetActiveServicePolicies"
             },
@@ -3592,7 +3592,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-applicationinventory"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-applicationinventory"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.ApplicationInventory"
             },
@@ -3676,7 +3676,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getfastaclsforinternetvips"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-getfastaclsforinternetvips"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.GetFastACLsForInternetVIPs"
             },
@@ -3763,7 +3763,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setfastaclsforinternetvips"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-setfastaclsforinternetvips"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SetFastACLsForInternetVIPs"
             },
@@ -3855,7 +3855,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-suggestvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-suggestvalues"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.SuggestValues"
             },
@@ -3947,7 +3947,7 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-cascadedelete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacecustomapi-cascadedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCustomAPI.CascadeDelete"
             },

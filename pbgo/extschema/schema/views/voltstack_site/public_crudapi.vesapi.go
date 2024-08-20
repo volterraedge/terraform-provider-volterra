@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-voltstack_site-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-voltstack_site-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-voltstack_site-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-voltstack_site-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-voltstack_site-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-voltstack_site-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.voltstack_site.API.Delete"
             },
@@ -2658,56 +2658,56 @@ var APISwaggerJSON string = `{
         },
         "fleetBlockedServices": {
             "type": "object",
-            "description": "Blocked Services configured explicitly\nBy default all services are allowed and get blocked when config is updated",
-            "title": "BlockedServices specifies the ports of platform services blocked explicitly",
-            "x-displayname": "Blocked Services",
+            "description": "Disable a node local service on this site.",
+            "title": "Disable Node Local Service",
+            "x-displayname": "Disable Node Local Service",
             "x-ves-oneof-field-blocked_services_value_type_choice": "[\"dns\",\"ssh\",\"web_user_interface\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
                     "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
-                    "title": "DNS port",
+                    "title": "DNS",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "DNS port"
+                    "x-displayname": "DNS"
                 },
                 "network_type": {
-                    "description": " Network type in which these ports get blocked\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "description": " Site Local VRF on which this service will be disabled\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
                     "title": "network_type",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Network Type",
+                    "x-displayname": "Site Local VRF",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.enum.in": "[0,1]"
                     }
                 },
                 "ssh": {
-                    "description": "Exclusive with [dns web_user_interface]\n Matches ssh port 22",
-                    "title": "SSH port",
+                    "description": "Exclusive with [dns web_user_interface]\n",
+                    "title": "SSH",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "SSH port"
+                    "x-displayname": "SSH"
                 },
                 "web_user_interface": {
-                    "description": "Exclusive with [dns ssh]\n Matches the web user interface port",
-                    "title": "Web UI port",
+                    "description": "Exclusive with [dns ssh]\n",
+                    "title": "Web UI",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Web UI port"
+                    "x-displayname": "Web UI"
                 }
             }
         },
         "fleetBlockedServicesListType": {
             "type": "object",
-            "description": "List of all custom blocked services configuration",
-            "title": "Custom Blocked Services Configuration List",
-            "x-displayname": "Custom Blocked Services Configuration List",
+            "description": "Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
+            "title": "Disable Node Local Services",
+            "x-displayname": "Disable Node Local Services",
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServicesListType",
             "properties": {
                 "blocked_sevice": {
                     "type": "array",
-                    "description": " Use custom blocked services configuration\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Custom Blocked Services Configuration",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Disable Node Local Services",
                     "items": {
                         "$ref": "#/definitions/fleetBlockedServices"
                     },
-                    "x-displayname": "Custom Blocked Services Configuration",
+                    "x-displayname": "Disable Node Local Services",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -3099,7 +3099,7 @@ var APISwaggerJSON string = `{
                 },
                 "link_polling_interval": {
                     "type": "integer",
-                    "description": " Link polling interval in millisecond\n\nExample: - \"1000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 500\n  ves.io.schema.rules.uint32.lte: 5000\n",
+                    "description": " Link polling interval in milliseconds\n\nExample: - \"1000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 500\n  ves.io.schema.rules.uint32.lte: 5000\n",
                     "title": "Link Polling Interval",
                     "format": "int64",
                     "x-displayname": "Link Polling Interval",
@@ -3127,7 +3127,7 @@ var APISwaggerJSON string = `{
                 },
                 "name": {
                     "type": "string",
-                    "description": " Bond device name\n\nExample: - \"bond0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Name for the Bond. Ex 'bond0'\n\nExample: - \"bond0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Bond Device",
                     "maxLength": 64,
                     "x-displayname": "Bond Device Name",
@@ -4626,7 +4626,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enhanced_firewall_policies": {
                     "type": "array",
-                    "description": " Ordered List of Enhaned Firewall Policy active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Ordered List of Enhanced Firewall Policies active\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Enhanced Firewall Policy",
                     "minItems": 1,
                     "maxItems": 128,
@@ -4645,14 +4645,14 @@ var APISwaggerJSON string = `{
         },
         "network_firewallActiveForwardProxyPoliciesType": {
             "type": "object",
-            "description": "List of Forward Proxy Policies",
+            "description": "Ordered List of Forward Proxy Policies active",
             "title": "Active Forward Proxy Policies Type",
             "x-displayname": "Active Forward Proxy Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": " List of Forward Proxy Policies\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Ordered List of Forward Proxy Policies active\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Forward Proxy Policies",
                     "minItems": 1,
                     "maxItems": 128,
@@ -4700,6 +4700,7 @@ var APISwaggerJSON string = `{
             "description": "DHCP IPV6 network type configuration",
             "title": "DHCPIPV6NetworkType",
             "x-displayname": "DHCPIPV6NetworkType",
+            "x-ves-displayorder": "1,5,4",
             "x-ves-oneof-field-network_prefix_choice": "[\"network_prefix\"]",
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPIPV6NetworkType",
             "properties": {
@@ -4711,6 +4712,16 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "2001::0/64",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                },
+                "pool_settings": {
+                    "description": " Controls how DHCPV6 pools are handled\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "DHCP Pool Settings",
+                    "$ref": "#/definitions/network_interfaceDHCPPoolSettingType",
+                    "x-displayname": "DHCP Pool Settings",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "pools": {
@@ -4797,9 +4808,9 @@ var APISwaggerJSON string = `{
                 },
                 "fixed_ip_map": {
                     "type": "object",
-                    "description": " Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
+                    "description": " Fixed MAC address to ipv6 assignments, Key: Mac address, Value: IPV6 Address\n Assign fixed IPv6 addresses based on the MAC Address of the DHCP Client.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv6: true\n",
                     "title": "Fixed IPV6 Assignments",
-                    "x-displayname": "Fixed MAC address to IPV6 Assignments",
+                    "x-displayname": "Fixed MAC Address to IPV6 Assignments",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.mac": "true",
@@ -4818,16 +4829,16 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceDHCPInterfaceIPType": {
             "type": "object",
-            "description": "Map of Interface IP assignments per node",
-            "title": "Interface IP Assignments",
-            "x-displayname": "Interface IP Assignments",
+            "description": "Specify static IPv4 addresses per node.",
+            "title": "Interface IPv4 Assignments",
+            "x-displayname": "Interface IPv4 Assignments",
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPInterfaceIPType",
             "properties": {
                 "interface_ip_map": {
                     "type": "object",
-                    "description": " Map of Site:Node to IP address.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
+                    "description": " Specify static IPv4 addresses per site:node.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 128\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 64\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Site:Node to IP mapping",
-                    "x-displayname": "Site:Node to IP Mapping",
+                    "x-displayname": "Site:Node to IPv4 Address Mapping",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "128",
@@ -4873,9 +4884,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dgw_address": {
                     "type": "string",
-                    "description": "Exclusive with [first_address last_address]\n Configured address from the network prefix is chosen as default gateway.\n\nExample: - \"10.1.1.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [first_address last_address]\n Enter a IPv4 address from the network prefix to be used as the default gateway.\n\nExample: - \"10.1.1.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Configured Address",
-                    "x-displayname": "Configured Address",
+                    "x-displayname": "Static IPv4 Configuration",
                     "x-ves-example": "10.1.1.10",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
@@ -4883,9 +4894,9 @@ var APISwaggerJSON string = `{
                 },
                 "dns_address": {
                     "type": "string",
-                    "description": "Exclusive with [same_as_dgw]\n Configured address is chosen as DNS server address in DHCP response.\n\nExample: - \"10.1.1.11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [same_as_dgw]\n Enter a IPv4 address from the network prefix to be used as the DNS server.\n\nExample: - \"10.1.1.11\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "Configured Address",
-                    "x-displayname": "Configured Address",
+                    "x-displayname": "Static IPv4 Configuration",
                     "x-ves-example": "10.1.1.11",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
@@ -4905,7 +4916,7 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with []\n Network Prefix for a single site.\n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
+                    "description": "Exclusive with []\n Set the network prefix for the site. ex: 10.1.1.0/24\n\nExample: - \"10.1.1.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4_prefix: true\n",
                     "title": "Network Prefix",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "10.1.1.0/24",
@@ -4947,7 +4958,7 @@ var APISwaggerJSON string = `{
         },
         "network_interfaceDHCPPoolSettingType": {
             "type": "string",
-            "description": "Identifies the how to pick the network for Interface.\n\nAddress ranges in DHCP pool list are allocation list\nAddress ranges in DHCP pool list are exclude list",
+            "description": "Identifies the how to pick the network for Interface.\n\nAddress ranges in DHCP pool list are used for IP Address allocation\nAddress ranges in DHCP pool list are excluded from IP Address allocation",
             "title": "DHCP POOL SETTING",
             "enum": [
                 "INCLUDE_IP_ADDRESSES_FROM_DHCP_POOLS",
@@ -4994,20 +5005,20 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.DHCPServerParametersType",
             "properties": {
                 "automatic_from_end": {
-                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from End of the first network in the list",
+                    "description": "Exclusive with [automatic_from_start interface_ip_map]\n Assign automatically from end of the first network in the DHCP Network list",
                     "title": "Automatic End",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Automatic End"
                 },
                 "automatic_from_start": {
-                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the list",
+                    "description": "Exclusive with [automatic_from_end interface_ip_map]\n Assign automatically from start of the first network in the DHCP Network list",
                     "title": "Automatic Start",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Automatic Start"
                 },
                 "dhcp_networks": {
                     "type": "array",
-                    "description": " List of networks from which DHCP server can allocate ip addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of networks from which DHCP Server can allocate IPv4 Addresses\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "DHCP Networks",
                     "minItems": 1,
                     "maxItems": 1,
@@ -5025,9 +5036,9 @@ var APISwaggerJSON string = `{
                 },
                 "fixed_ip_map": {
                     "type": "object",
-                    "description": " Fixed MAC address to ip assignments, Key: Mac address, Value: IP Address\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
+                    "description": " Assign fixed IPv4 addresses based on the MAC Address of the DHCP Client.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.mac: true\n  ves.io.schema.rules.map.max_pairs: 128\n  ves.io.schema.rules.map.unique_values: true\n  ves.io.schema.rules.map.values.string.ipv4: true\n",
                     "title": "Fixed IP Assignments",
-                    "x-displayname": "Fixed MAC address to IP Assignments",
+                    "x-displayname": "Fixed MAC Address to IPv4 Assignments",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.mac": "true",
@@ -5037,10 +5048,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "interface_ip_map": {
-                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Configured address for every node",
-                    "title": "Configured Address",
+                    "description": "Exclusive with [automatic_from_end automatic_from_start]\n Statically configure a IPv4 address for every node",
+                    "title": "Static IPv4 Configuration",
                     "$ref": "#/definitions/network_interfaceDHCPInterfaceIPType",
-                    "x-displayname": "Configured"
+                    "x-displayname": "Static IPv4 Configuration"
                 }
             }
         },
@@ -5226,16 +5237,16 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "dhcp_client": {
-                    "description": "Exclusive with [dhcp_server static_ip]\n Interface gets it IP address from external DHCP server",
+                    "description": "Exclusive with [dhcp_server static_ip]\n Interface gets it's IP address from external DHCP server",
                     "title": "DHCP Client",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "DHCP Client"
                 },
                 "dhcp_server": {
-                    "description": "Exclusive with [dhcp_client static_ip]\n DHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "description": "Exclusive with [dhcp_client static_ip]\n DHCP Server is configured for this interface. IP for this Interface will be derived from the DHCP Server configuration.",
                     "title": "DHCP Server",
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType",
-                    "x-displayname": "DHCP server"
+                    "x-displayname": "DHCP Server"
                 },
                 "ipv6_auto_config": {
                     "description": " Configuration corresponding to IPV6 auto configuration",
@@ -5378,12 +5389,13 @@ var APISwaggerJSON string = `{
                 },
                 "network_prefix": {
                     "type": "string",
-                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "description": "Exclusive with [stateful]\n Nework prefix that is used as Prefix information\n Allowed only /64 prefix length as per RFC 4862\n\nExample: - \"2001::0/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n  ves.io.schema.rules.string.pattern: .*::/64$\n",
                     "title": "Prefix Info",
                     "x-displayname": "Network Prefix",
                     "x-ves-example": "2001::0/64",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                        "ves.io.schema.rules.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.string.pattern": ".*::/64$"
                     }
                 },
                 "stateful": {
@@ -5402,13 +5414,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.network_interface.IPV6AutoConfigType",
             "properties": {
                 "host": {
-                    "description": "Exclusive with [router]\n System behaves like Auto config host and receives the auto configuration parameters from other\n auto configuration routers",
+                    "description": "Exclusive with [router]\n System behaves like auto config host and receives the auto configuration parameters from other\n auto configuration routers. This is similar to a DHCP Client.",
                     "title": "host",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Auto Config Host"
                 },
                 "router": {
-                    "description": "Exclusive with [host]\n System behaves like Auto config Router and provides auto config parameters",
+                    "description": "Exclusive with [host]\n System behaves like auto config Router and provides auto config parameters. This is similar to a DHCP Server.",
                     "title": "router",
                     "$ref": "#/definitions/network_interfaceIPV6AutoConfigRouterType",
                     "x-displayname": "Auto Config Router"
@@ -5432,7 +5444,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [configured_list]\n Choose the address from the network prefix range as dns server",
                     "title": "Local Dns Address",
                     "$ref": "#/definitions/network_interfaceIPV6LocalDnsAddress",
-                    "x-displayname": "Local Dns Address"
+                    "x-displayname": "Local DNS Address"
                 }
             }
         },
@@ -5523,7 +5535,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "dhcp_server": {
-                    "description": "x-displayName: \"DHCP server\"\nDHCP Server is configured for this interface, Interface IP from DHCP server configuration.",
+                    "description": "x-displayName: \"DHCP Server\"\nDHCP Server is configured for this interface. IP for this Interface will be derived from the DHCP Server configuration.",
                     "title": "DHCP Server",
                     "$ref": "#/definitions/network_interfaceDHCPServerParametersType"
                 },
@@ -6289,7 +6301,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRouteAttrType": {
             "type": "string",
-            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the\nvirtual network. Host OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
+            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the virtual network.\nHost OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
             "title": "Route Attribute",
             "enum": [
                 "ROUTE_ATTR_NO_OP",
@@ -6717,7 +6729,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVipVrrpType": {
             "type": "string",
-            "description": "VRRP advertisement mode for VIP\n\nInvalid VRRP mode\nVRRP advertisement enabled for virtual-ip\nVRRP advertisement disabled for virtual-ip",
+            "description": "VRRP advertisement mode for VIP\n\nInvalid VRRP mode",
             "title": "VipVrrpType",
             "enum": [
                 "VIP_VRRP_INVALID",
@@ -6980,7 +6992,7 @@ var APISwaggerJSON string = `{
         },
         "viewsKubernetesUpgradeDrain": {
             "type": "object",
-            "description": "Node by Node Upgrade during Software or OS version upgrade",
+            "description": "Specify how worker nodes within a site will be upgraded.",
             "title": "Node by Node Upgrade",
             "x-displayname": "Node by Node Upgrade [BETA]",
             "x-ves-displayorder": "1",
@@ -6988,13 +7000,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
             "properties": {
                 "disable_upgrade_drain": {
-                    "description": "Exclusive with [enable_upgrade_drain]\n Disable  Node by Node Upgrade during Software or OS version upgrade",
+                    "description": "Exclusive with [enable_upgrade_drain]\n",
                     "title": "Disable upgrade drain",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Node by Node Upgrade"
                 },
                 "enable_upgrade_drain": {
-                    "description": "Exclusive with [disable_upgrade_drain]\n Enable Node by Node Upgrade during Software or OS version upgrade",
+                    "description": "Exclusive with [disable_upgrade_drain]\n",
                     "title": "Enable Node by Node Upgrade",
                     "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
                     "x-displayname": "Enable Node by Node Upgrade"
@@ -7003,9 +7015,9 @@ var APISwaggerJSON string = `{
         },
         "viewsKubernetesUpgradeDrainConfig": {
             "type": "object",
-            "description": "Node by Node upgrade config during Software or OS version upgrade",
-            "title": "Node by Node Upgrade",
-            "x-displayname": "Node by Node Upgrade Config",
+            "description": "Specify batch upgrade settings for worker nodes within a site.",
+            "title": "Enable Node by Node Upgrade",
+            "x-displayname": "Enable Node by Node Upgrade",
             "x-ves-oneof-field-drain_max_unavailable_choice": "[\"drain_max_unavailable_node_count\"]",
             "x-ves-oneof-field-vega_upgrade_mode_toggle_choice": "[\"disable_vega_upgrade_mode\",\"enable_vega_upgrade_mode\"]",
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrainConfig",
@@ -7018,10 +7030,10 @@ var APISwaggerJSON string = `{
                 },
                 "drain_max_unavailable_node_count": {
                     "type": "integer",
-                    "description": "Exclusive with []\n Max unavailable worker node count during Software or OS version upgrade\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
-                    "title": "Max Unavailable Node Count",
+                    "description": "Exclusive with []\n\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
+                    "title": "Node Batch Size Count",
                     "format": "int64",
-                    "x-displayname": "Max Unavailable Worker Node Count",
+                    "x-displayname": "Node Batch Size Count",
                     "x-ves-example": "1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
@@ -7030,10 +7042,10 @@ var APISwaggerJSON string = `{
                 },
                 "drain_node_timeout": {
                     "type": "integer",
-                    "description": " Second to wait before skipping a pod eviction, equivalent to -skip-wait-for-delete-timeout- option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
-                    "title": "Pod Eviction Timeout",
+                    "description": " Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes.\n (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
+                    "title": "Upgrade Wait Time",
                     "format": "int64",
-                    "x-displayname": "Pod Eviction Timeout",
+                    "x-displayname": "Upgrade Wait Time",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -7082,29 +7094,29 @@ var APISwaggerJSON string = `{
         },
         "viewsOfflineSurvivabilityModeType": {
             "type": "object",
-            "description": "Offline Survivability Mode",
+            "description": "Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\nWhen this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\nThe certificates needed to keep the services running on this site are signed using a local CA.\nSecrets would also be cached locally to handle the connectivity loss.\nWhen the mode is toggled, services will restart and traffic disruption will be seen.",
             "title": "Offline Survivability Mode",
             "x-displayname": "Offline Survivability Mode",
             "x-ves-oneof-field-offline_survivability_mode_choice": "[\"enable_offline_survivability_mode\",\"no_offline_survivability_mode\"]",
             "x-ves-proto-message": "ves.io.schema.views.OfflineSurvivabilityModeType",
             "properties": {
                 "enable_offline_survivability_mode": {
-                    "description": "Exclusive with [no_offline_survivability_mode]\n Enable Offline Survivability Mode.\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle the connectivity loss.\n When this feature is enabled on an existing site, the pods/services on this site will be restarted.",
+                    "description": "Exclusive with [no_offline_survivability_mode]\n",
                     "title": "Enable Offline Survivability Mode",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable Offline Survivability Mode"
+                    "x-displayname": "Enabled"
                 },
                 "no_offline_survivability_mode": {
-                    "description": "Exclusive with [enable_offline_survivability_mode]\n Disable Offline Survivability Mode.\n When this feature is disabled on an existing site, the pods/services on this site will be restarted.",
+                    "description": "Exclusive with [enable_offline_survivability_mode]\n",
                     "title": "Disable Offline Survivability Mode",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Offline Survivability Mode"
+                    "x-displayname": "Disabled"
                 }
             }
         },
         "viewsOperatingSystemType": {
             "type": "object",
-            "description": "This is to specify volterra operating version choice",
+            "description": "Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used.\nRefer to release notes to find required released OS versions.",
             "title": "Operating System Version",
             "x-displayname": "Operating System Version",
             "x-ves-displayorder": "1",
@@ -7119,11 +7131,11 @@ var APISwaggerJSON string = `{
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_os_version]\n Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.\n\nExample: - \"7.2009.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "description": "Exclusive with [default_os_version]\n Specify a OS version to be used e.g. 9.2024.6.\n\nExample: - \"9.2024.6\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
                     "title": "Operating System Version",
                     "maxLength": 20,
                     "x-displayname": "Operating System Version",
-                    "x-ves-example": "7.2009.10",
+                    "x-ves-example": "9.2024.6",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "20"
                     }
@@ -7173,7 +7185,7 @@ var APISwaggerJSON string = `{
         },
         "viewsVolterraSoftwareType": {
             "type": "object",
-            "description": "This is to specify volterra software version choice",
+            "description": "Select the F5XC Software Version for the site. By default, latest available F5XC Software Version will be used.\nRefer to release notes to find required released SW versions.",
             "title": "F5XC Software Version",
             "x-displayname": "F5XC Software Version",
             "x-ves-displayorder": "1",
@@ -7181,14 +7193,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
             "properties": {
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available F5XC Software Version",
                     "title": "Default SW Version",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Latest SW Version"
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\n F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "description": "Exclusive with [default_sw_version]\n Specify a F5XC Software Version to be used e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
                     "title": "F5XC Software Version",
                     "maxLength": 20,
                     "x-displayname": "F5XC Software Version",
@@ -7264,7 +7276,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Storage Configuration"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior, which allows SSH (port 22), HTTPS (port 65500) and ICMP node access in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },
@@ -7488,7 +7500,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Storage Configuration"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior, which allows SSH (port 22), HTTPS (port 65500) and ICMP node access in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },
@@ -7726,7 +7738,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom Storage Configuration"
                 },
                 "default_blocked_services": {
-                    "description": "Exclusive with [blocked_services]\n Use default behavior of allowing ports mentioned in blocked services",
+                    "description": "Exclusive with [blocked_services]\n Use default behavior, which allows SSH (port 22), HTTPS (port 65500) and ICMP node access in blocked services",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Blocked Service Configuration"
                 },
@@ -7893,7 +7905,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "attrs": {
                     "type": "array",
-                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane (host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Attributes",
                     "maxItems": 4,
                     "items": {
@@ -7906,20 +7918,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
                 "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
                     "title": "Interface",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Interface"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -7958,7 +7970,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "attrs": {
                     "type": "array",
-                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane (host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Attributes",
                     "maxItems": 4,
                     "items": {
@@ -7971,20 +7983,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
                 "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
                     "title": "Interface",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Interface"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {

@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_network-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_network-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_network.API.Delete"
             },
@@ -2595,7 +2595,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRouteAttrType": {
             "type": "string",
-            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the\nvirtual network. Host OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
+            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the virtual network.\nHost OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
             "title": "Route Attribute",
             "enum": [
                 "ROUTE_ATTR_NO_OP",
@@ -3679,7 +3679,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "attrs": {
                     "type": "array",
-                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane (host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Attributes",
                     "maxItems": 4,
                     "items": {
@@ -3692,20 +3692,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
                 "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
                     "title": "Interface",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Interface"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -3744,7 +3744,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "attrs": {
                     "type": "array",
-                    "description": " List of attributes that control forwarding, dynamic routing and control plane(host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of attributes that control forwarding, dynamic routing and control plane (host) reachability\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Attributes",
                     "maxItems": 4,
                     "items": {
@@ -3757,20 +3757,20 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to default gateway",
+                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
                 "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to the interface",
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
                     "title": "Interface",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Interface"
                 },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {

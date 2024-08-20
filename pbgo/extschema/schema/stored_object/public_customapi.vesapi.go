@@ -885,7 +885,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-listobjects"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-stored_object-customapi-listobjects"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.ListObjects"
             },
@@ -1002,7 +1002,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-deleteobject"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-stored_object-customapi-deleteobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.DeleteObject"
             },
@@ -1105,7 +1105,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-createobject"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-stored_object-customapi-createobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.CreateObject"
             },
@@ -1213,7 +1213,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-getobject"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-stored_object-customapi-getobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.GetObject"
             },
@@ -1325,7 +1325,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-stored_object-customapi-deleteobject"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-stored_object-customapi-deleteobject"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.stored_object.CustomAPI.DeleteObject"
             },
@@ -1356,7 +1356,8 @@ var CustomAPISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dos_mitigation-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dos_mitigation.crudapi.API.Create"
             },
@@ -3820,9 +3820,25 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "ja4_tls_fingerprints": {
+                    "type": "array",
+                    "description": " A list of exact TLS JA4 fingerprints to match the input TLS JA4 fingerprint against\n\nExample: - \"t13d1516h2_8daaf6152771_199a283f251c\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.len: 36\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ja4_tls_fingerprints",
+                    "maxItems": 64,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "JA4 TLS Fingerprints",
+                    "x-ves-example": "t13d1516h2_8daaf6152771_199a283f251c",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.len": "36",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "paths": {
                     "type": "array",
-                    "description": " A list of exact path values to match the input HTTP path against\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_path: true\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of exact path values to match the input HTTP path against\n\nExample: - \"['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "paths",
                     "maxItems": 16,
                     "items": {
@@ -3832,12 +3848,17 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Paths",
                     "x-ves-example": "['/api/web/namespaces/project179/users/user1', '/api/config/namespaces/accounting/bgps', '/api/data/namespaces/project443/virtual_host_101']",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.http_path": "true",
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "throttling": {
+                    "description": " When configured, traffic to the virtual host will be throttled",
+                    "title": "throttling",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Throttling"
                 },
                 "tls_fingerprints": {
                     "type": "array",

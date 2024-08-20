@@ -7947,9 +7947,8 @@ var DefaultNamespaceAccessTypeValidator = func() *ValidateNamespaceAccessType {
 
 	vrhNamespaceRoleMap := v.NamespaceRoleMapValidationRuleHandler
 	rulesNamespaceRoleMap := map[string]string{
-		"ves.io.schema.rules.map.keys.string.max_len":         "256",
-		"ves.io.schema.rules.map.keys.string.ves_object_name": "true",
-		"ves.io.schema.rules.message.required":                "true",
+		"ves.io.schema.rules.map.keys.string.max_len": "256",
+		"ves.io.schema.rules.message.required":        "true",
 	}
 	vFn, err = vrhNamespaceRoleMap(rulesNamespaceRoleMap)
 	if err != nil {

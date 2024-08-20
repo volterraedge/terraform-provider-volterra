@@ -450,6 +450,22 @@ func (v *ValidateDHCPIPV6NetworkType) PoolsValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateDHCPIPV6NetworkType) PoolSettingsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(DHCPPoolSettingType)
+		return int32(i)
+	}
+	// DHCPPoolSettingType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, DHCPPoolSettingType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for pool_settings")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDHCPIPV6NetworkType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DHCPIPV6NetworkType)
 	if !ok {
@@ -496,6 +512,15 @@ func (v *ValidateDHCPIPV6NetworkType) Validate(ctx context.Context, pm interface
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pool_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("pool_settings"))
+		if err := fv(ctx, m.GetPoolSettings(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -557,6 +582,17 @@ var DefaultDHCPIPV6NetworkTypeValidator = func() *ValidateDHCPIPV6NetworkType {
 		panic(errMsg)
 	}
 	v.FldValidators["pools"] = vFn
+
+	vrhPoolSettings := v.PoolSettingsValidationRuleHandler
+	rulesPoolSettings := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPoolSettings(rulesPoolSettings)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHCPIPV6NetworkType.pool_settings: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pool_settings"] = vFn
 
 	v.FldValidators["network_prefix_choice.network_prefix_allocator"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -6338,6 +6374,7 @@ var DefaultIPV6AutoConfigRouterTypeValidator = func() *ValidateIPV6AutoConfigRou
 	vrhAddressChoiceNetworkPrefix := v.AddressChoiceNetworkPrefixValidationRuleHandler
 	rulesAddressChoiceNetworkPrefix := map[string]string{
 		"ves.io.schema.rules.string.ipv6_prefix": "true",
+		"ves.io.schema.rules.string.pattern":     ".*::/64$",
 	}
 	vFnMap["address_choice.network_prefix"], err = vrhAddressChoiceNetworkPrefix(rulesAddressChoiceNetworkPrefix)
 	if err != nil {

@@ -1049,7 +1049,7 @@ type StaticRouteViewType struct {
 	//
 	// x-displayName: "Select Type of Next Hop"
 	// x-required
-	// Select type of next hop default gateway, ip address or interface
+	// Select type of next hop. Traffic matching the IP prefixes can be sent to a specific IP address, a default gateway or an interface.
 	//
 	// Types that are valid to be assigned to NextHopChoice:
 	//	*StaticRouteViewType_IpAddress
@@ -1059,7 +1059,7 @@ type StaticRouteViewType struct {
 	// Attributes
 	//
 	// x-displayName: "Attributes"
-	// List of attributes that control forwarding, dynamic routing and control plane(host) reachability
+	// List of attributes that control forwarding, dynamic routing and control plane (host) reachability
 	Attrs []schema.RouteAttrType `protobuf:"varint,6,rep,packed,name=attrs,proto3,enum=ves.io.schema.RouteAttrType" json:"attrs,omitempty"`
 }
 
@@ -1179,7 +1179,7 @@ type StaticV6RouteViewType struct {
 	//
 	// x-displayName: "Select Type of Next Hop"
 	// x-required
-	// Select type of next hop default gateway, ip address or interface
+	// Select type of next hop. Traffic matching the IP prefixes can be sent to a specific IP address, a default gateway or an interface.
 	//
 	// Types that are valid to be assigned to NextHopChoice:
 	//	*StaticV6RouteViewType_IpAddress
@@ -1189,7 +1189,7 @@ type StaticV6RouteViewType struct {
 	// Attributes
 	//
 	// x-displayName: "Attributes"
-	// List of attributes that control forwarding, dynamic routing and control plane(host) reachability
+	// List of attributes that control forwarding, dynamic routing and control plane (host) reachability
 	Attrs []schema.RouteAttrType `protobuf:"varint,6,rep,packed,name=attrs,proto3,enum=ves.io.schema.RouteAttrType" json:"attrs,omitempty"`
 }
 

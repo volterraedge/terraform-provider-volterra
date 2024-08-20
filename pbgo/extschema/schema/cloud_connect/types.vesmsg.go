@@ -1792,6 +1792,18 @@ func (v *ValidateAWSVPCAttachmentType) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["routing_choice"]; exists {
 		val := m.GetRoutingChoice()
 		vOpts := append(opts,
@@ -2035,15 +2047,6 @@ func (v *ValidateAzureAttachmentsStatusType) Validate(ctx context.Context, pm in
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["creation_time"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("creation_time"))
-		if err := fv(ctx, m.GetCreationTime(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["deployment_status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("deployment_status"))
@@ -2066,6 +2069,15 @@ func (v *ValidateAzureAttachmentsStatusType) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("hub_vnet_name"))
 		if err := fv(ctx, m.GetHubVnetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["hub_vnet_resource_group"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("hub_vnet_resource_group"))
+		if err := fv(ctx, m.GetHubVnetResourceGroup(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2102,6 +2114,15 @@ func (v *ValidateAzureAttachmentsStatusType) Validate(ctx context.Context, pm in
 
 		vOpts := append(opts, db.WithValidateField("provisioning_state"))
 		if err := fv(ctx, m.GetProvisioningState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["spoke_subscription_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("spoke_subscription_id"))
+		if err := fv(ctx, m.GetSpokeSubscriptionId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2149,6 +2170,15 @@ func (v *ValidateAzureAttachmentsStatusType) Validate(ctx context.Context, pm in
 
 	}
 
+	if fv, exists := v.FldValidators["vnet_cidr"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vnet_cidr"))
+		if err := fv(ctx, m.GetVnetCidr(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2163,6 +2193,103 @@ var DefaultAzureAttachmentsStatusTypeValidator = func() *ValidateAzureAttachment
 
 func AzureAttachmentsStatusTypeValidator() db.Validator {
 	return DefaultAzureAttachmentsStatusTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AzureDefaultRoute) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AzureDefaultRoute) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AzureDefaultRoute) DeepCopy() *AzureDefaultRoute {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AzureDefaultRoute{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AzureDefaultRoute) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AzureDefaultRoute) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AzureDefaultRouteValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAzureDefaultRoute struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureDefaultRoute) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AzureDefaultRoute)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AzureDefaultRoute got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetDefaultRouteChoice().(type) {
+	case *AzureDefaultRoute_AllRouteTables:
+		if fv, exists := v.FldValidators["default_route_choice.all_route_tables"]; exists {
+			val := m.GetDefaultRouteChoice().(*AzureDefaultRoute_AllRouteTables).AllRouteTables
+			vOpts := append(opts,
+				db.WithValidateField("default_route_choice"),
+				db.WithValidateField("all_route_tables"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureDefaultRoute_SelectiveRouteTables:
+		if fv, exists := v.FldValidators["default_route_choice.selective_route_tables"]; exists {
+			val := m.GetDefaultRouteChoice().(*AzureDefaultRoute_SelectiveRouteTables).SelectiveRouteTables
+			vOpts := append(opts,
+				db.WithValidateField("default_route_choice"),
+				db.WithValidateField("selective_route_tables"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAzureDefaultRouteValidator = func() *ValidateAzureDefaultRoute {
+	v := &ValidateAzureDefaultRoute{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["default_route_choice.selective_route_tables"] = AzureRouteTablesValidator().Validate
+
+	return v
+}()
+
+func AzureDefaultRouteValidator() db.Validator {
+	return DefaultAzureDefaultRouteValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2306,8 +2433,8 @@ var DefaultAzureRouteTableWithStaticRouteValidator = func() *ValidateAzureRouteT
 
 	vrhRouteTableId := v.RouteTableIdValidationRuleHandler
 	rulesRouteTableId := map[string]string{
-		"ves.io.schema.rules.string.max_len": "64",
-		"ves.io.schema.rules.string.pattern": "^(rt-)([a-z0-9]{8}|[a-z0-9]{17})$",
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.pattern": "^\\/[-\\w\\._\\(\\)]+\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$",
 	}
 	vFn, err = vrhRouteTableId(rulesRouteTableId)
 	if err != nil {
@@ -2608,8 +2735,8 @@ var DefaultAzureRouteTablesValidator = func() *ValidateAzureRouteTables {
 	vrhRouteTableId := v.RouteTableIdValidationRuleHandler
 	rulesRouteTableId := map[string]string{
 		"ves.io.schema.rules.repeated.unique": "true",
-		"ves.io.schema.rules.string.max_len":  "64",
-		"ves.io.schema.rules.string.pattern":  "^(rt-)([a-z0-9]{8}|[a-z0-9]{17})$",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.pattern":  "^\\/[-\\w\\._\\(\\)]+\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$",
 	}
 	vFn, err = vrhRouteTableId(rulesRouteTableId)
 	if err != nil {
@@ -2741,6 +2868,17 @@ func (v *ValidateAzureVNETAttachmentType) Validate(ctx context.Context, pm inter
 				return err
 			}
 		}
+	case *AzureVNETAttachmentType_DefaultRoute:
+		if fv, exists := v.FldValidators["routing_choice.default_route"]; exists {
+			val := m.GetRoutingChoice().(*AzureVNETAttachmentType_DefaultRoute).DefaultRoute
+			vOpts := append(opts,
+				db.WithValidateField("routing_choice"),
+				db.WithValidateField("default_route"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2803,7 +2941,8 @@ var DefaultAzureVNETAttachmentTypeValidator = func() *ValidateAzureVNETAttachmen
 	vrhVnetId := v.VnetIdValidationRuleHandler
 	rulesVnetId := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.pattern":   "^\\/[-\\w\\._\\(\\)]+\\/[a-zA-Z][a-zA-Z0-9-]{0,78}[a-zA-Z0-9]$",
 	}
 	vFn, err = vrhVnetId(rulesVnetId)
 	if err != nil {
@@ -2813,6 +2952,7 @@ var DefaultAzureVNETAttachmentTypeValidator = func() *ValidateAzureVNETAttachmen
 	v.FldValidators["vnet_id"] = vFn
 
 	v.FldValidators["routing_choice.custom_routing"] = AzureRouteTableWithStaticRouteListTypeValidator().Validate
+	v.FldValidators["routing_choice.default_route"] = AzureDefaultRouteValidator().Validate
 
 	return v
 }()
@@ -3003,27 +3143,6 @@ func (v *ValidateAzureVNETSiteType) SiteValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateAzureVNETSiteType) CredValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cred")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateAzureVNETSiteType) VnetAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -3112,17 +3231,6 @@ var DefaultAzureVNETSiteTypeValidator = func() *ValidateAzureVNETSiteType {
 	}
 	v.FldValidators["site"] = vFn
 
-	vrhCred := v.CredValidationRuleHandler
-	rulesCred := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhCred(rulesCred)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVNETSiteType.cred: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["cred"] = vFn
-
 	vrhVnetAttachments := v.VnetAttachmentsValidationRuleHandler
 	rulesVnetAttachments := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -3133,6 +3241,8 @@ var DefaultAzureVNETSiteTypeValidator = func() *ValidateAzureVNETSiteType {
 		panic(errMsg)
 	}
 	v.FldValidators["vnet_attachments"] = vFn
+
+	v.FldValidators["cred"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()
@@ -3283,6 +3393,99 @@ var DefaultAzureVnetAttachmentListTypeValidator = func() *ValidateAzureVnetAttac
 
 func AzureVnetAttachmentListTypeValidator() db.Validator {
 	return DefaultAzureVnetAttachmentListTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CloudConnectData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CloudConnectData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CloudConnectData) DeepCopy() *CloudConnectData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CloudConnectData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CloudConnectData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CloudConnectData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CloudConnectDataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCloudConnectData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCloudConnectData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CloudConnectData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CloudConnectData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("data"))
+		for idx, item := range m.GetData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCloudConnectDataValidator = func() *ValidateCloudConnectData {
+	v := &ValidateCloudConnectData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CloudConnectDataValidator() db.Validator {
+	return DefaultCloudConnectDataValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5616,52 +5819,7 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetCloudDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetCloudDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	if fdrInfos, err := m.GetSegmentDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetSegmentDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
-	return drInfos, nil
-
-}
-
-// GetDRefInfo for the field's type
-func (m *ReplaceSpecType) GetCloudDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetCloud() == nil {
-		return nil, nil
-	}
-	switch m.GetCloud().(type) {
-	case *ReplaceSpecType_AwsRe:
-
-		return nil, nil
-
-	case *ReplaceSpecType_AwsTgwSite:
-
-		return nil, nil
-
-	case *ReplaceSpecType_AzureVnetSite:
-
-		drInfos, err := m.GetAzureVnetSite().GetDRefInfo()
-		if err != nil {
-			return nil, errors.Wrap(err, "GetAzureVnetSite().GetDRefInfo() FAILED")
-		}
-		for i := range drInfos {
-			dri := &drInfos[i]
-			dri.DRField = "azure_vnet_site." + dri.DRField
-		}
-		return drInfos, err
-
-	default:
-		return nil, nil
-	}
+	return m.GetSegmentDRefInfo()
 
 }
 
@@ -5856,7 +6014,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["cloud.aws_re"] = ReplaceAWSRETypeValidator().Validate
 	v.FldValidators["cloud.aws_tgw_site"] = ReplaceAWSTGWSiteTypeValidator().Validate
-	v.FldValidators["cloud.azure_vnet_site"] = AzureVNETSiteTypeValidator().Validate
+	v.FldValidators["cloud.azure_vnet_site"] = ReplaceAzureVNETSiteTypeValidator().Validate
 
 	return v
 }()
@@ -6302,36 +6460,37 @@ func (m *ReplaceAWSTGWSiteType) ToAWSTGWSiteTypeWithoutDeepCopy(f *AWSTGWSiteTyp
 	m.toAWSTGWSiteType(f, false)
 }
 
-func (m *ReplaceAzureVNETSiteType) fromAWSTGWSiteType(f *AWSTGWSiteType, withDeepCopy bool) {
+func (m *ReplaceAzureVNETSiteType) fromAzureVNETSiteType(f *AzureVNETSiteType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-
+	m.VnetAttachments = f.GetVnetAttachments()
 }
 
-func (m *ReplaceAzureVNETSiteType) FromAWSTGWSiteType(f *AWSTGWSiteType) {
-	m.fromAWSTGWSiteType(f, true)
+func (m *ReplaceAzureVNETSiteType) FromAzureVNETSiteType(f *AzureVNETSiteType) {
+	m.fromAzureVNETSiteType(f, true)
 }
 
-func (m *ReplaceAzureVNETSiteType) FromAWSTGWSiteTypeWithoutDeepCopy(f *AWSTGWSiteType) {
-	m.fromAWSTGWSiteType(f, false)
+func (m *ReplaceAzureVNETSiteType) FromAzureVNETSiteTypeWithoutDeepCopy(f *AzureVNETSiteType) {
+	m.fromAzureVNETSiteType(f, false)
 }
 
-func (m *ReplaceAzureVNETSiteType) toAWSTGWSiteType(f *AWSTGWSiteType, withDeepCopy bool) {
+func (m *ReplaceAzureVNETSiteType) toAzureVNETSiteType(f *AzureVNETSiteType, withDeepCopy bool) {
 	m1 := m
 	if withDeepCopy {
 		m1 = m.DeepCopy()
 	}
 	_ = m1
 
+	f.VnetAttachments = m1.VnetAttachments
 }
 
-func (m *ReplaceAzureVNETSiteType) ToAWSTGWSiteType(f *AWSTGWSiteType) {
-	m.toAWSTGWSiteType(f, true)
+func (m *ReplaceAzureVNETSiteType) ToAzureVNETSiteType(f *AzureVNETSiteType) {
+	m.toAzureVNETSiteType(f, true)
 }
 
-func (m *ReplaceAzureVNETSiteType) ToAWSTGWSiteTypeWithoutDeepCopy(f *AWSTGWSiteType) {
-	m.toAWSTGWSiteType(f, false)
+func (m *ReplaceAzureVNETSiteType) ToAzureVNETSiteTypeWithoutDeepCopy(f *AzureVNETSiteType) {
+	m.toAzureVNETSiteType(f, false)
 }
 
 // create setters in ReplaceSpecType from GlobalSpecType for oneof fields
@@ -6359,7 +6518,13 @@ func (r *ReplaceSpecType) SetCloudToGlobalSpecType(o *GlobalSpecType) error {
 		o.Cloud = &GlobalSpecType_AwsTgwSite{AwsTgwSite: f1}
 
 	case *ReplaceSpecType_AzureVnetSite:
-		o.Cloud = &GlobalSpecType_AzureVnetSite{AzureVnetSite: of.AzureVnetSite}
+
+		f1 := o.GetAzureVnetSite()
+		if f1 == nil {
+			f1 = &AzureVNETSiteType{}
+		}
+		of.AzureVnetSite.ToAzureVNETSiteTypeWithoutDeepCopy(f1)
+		o.Cloud = &GlobalSpecType_AzureVnetSite{AzureVnetSite: f1}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6385,7 +6550,10 @@ func (r *ReplaceSpecType) GetCloudFromGlobalSpecType(o *GlobalSpecType) error {
 		r.Cloud = &ReplaceSpecType_AwsTgwSite{AwsTgwSite: f1}
 
 	case *GlobalSpecType_AzureVnetSite:
-		r.Cloud = &ReplaceSpecType_AzureVnetSite{AzureVnetSite: of.AzureVnetSite}
+
+		f1 := &ReplaceAzureVNETSiteType{}
+		f1.FromAzureVNETSiteTypeWithoutDeepCopy(of.AzureVnetSite)
+		r.Cloud = &ReplaceSpecType_AzureVnetSite{AzureVnetSite: f1}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

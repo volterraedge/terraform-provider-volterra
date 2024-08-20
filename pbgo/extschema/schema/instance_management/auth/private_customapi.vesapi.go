@@ -635,7 +635,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-validateapicredential"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-validateapicredential"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.instance_management.auth.CustomPrivateAPI.ValidateAPICredential"
             },
@@ -717,7 +717,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-lookupauthconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-lookupauthconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.instance_management.auth.CustomPrivateAPI.LookupAuthConfig"
             },
@@ -801,7 +801,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-validateapicredential"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-validateapicredential"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.instance_management.auth.CustomPrivateAPI.ValidateAPICredential"
             },
@@ -883,7 +883,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-lookupauthconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-lookupauthconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.instance_management.auth.CustomPrivateAPI.LookupAuthConfig"
             },
@@ -975,7 +975,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-lookupuserstatus"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-instance_management-auth-customprivateapi-lookupuserstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.instance_management.auth.CustomPrivateAPI.LookupUserStatus"
             },

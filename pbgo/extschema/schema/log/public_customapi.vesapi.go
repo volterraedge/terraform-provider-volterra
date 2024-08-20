@@ -3460,7 +3460,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogqueryv2"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-accesslogqueryv2"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogQueryV2"
             },
@@ -3552,7 +3552,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-accesslogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogAggregationQuery"
             },
@@ -3644,7 +3644,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-accesslogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery"
             },
@@ -3731,7 +3731,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-accesslogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-accesslogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AccessLogScrollQuery"
             },
@@ -3823,7 +3823,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogqueryv2"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-auditlogqueryv2"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogQueryV2"
             },
@@ -3915,7 +3915,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-auditlogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogAggregationQuery"
             },
@@ -4007,7 +4007,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-auditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery"
             },
@@ -4094,7 +4094,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-auditlogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-auditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.AuditLogScrollQuery"
             },
@@ -4186,7 +4186,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-firewalllogquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogQuery"
             },
@@ -4278,7 +4278,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-firewalllogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogAggregationQuery"
             },
@@ -4370,7 +4370,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-firewalllogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"
             },
@@ -4457,7 +4457,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-firewalllogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-firewalllogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.FirewallLogScrollQuery"
             },
@@ -4549,7 +4549,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"
             },
@@ -4636,7 +4636,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogScrollQuery"
             },
@@ -4728,7 +4728,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8seventsscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"
             },
@@ -4815,7 +4815,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8seventsscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsScrollQuery"
             },
@@ -4915,7 +4915,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogQuery"
             },
@@ -5015,7 +5015,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8sauditlogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SAuditLogAggregationQuery"
             },
@@ -5115,7 +5115,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8seventsquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsQuery"
             },
@@ -5215,7 +5215,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-k8seventsaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-k8seventsaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.K8SEventsAggregationQuery"
             },
@@ -5307,7 +5307,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogQuery"
             },
@@ -5399,7 +5399,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogAggregationQuery"
             },
@@ -5491,7 +5491,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"
             },
@@ -5578,7 +5578,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8sauditlogscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SAuditLogScrollQuery"
             },
@@ -5670,7 +5670,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8seventsquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsQuery"
             },
@@ -5762,7 +5762,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsaggregationquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8seventsaggregationquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsAggregationQuery"
             },
@@ -5854,7 +5854,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8seventsscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"
             },
@@ -5941,7 +5941,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-log-customapi-vk8seventsscrollquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-log-customapi-vk8seventsscrollquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.log.CustomAPI.VK8SEventsScrollQuery"
             },
@@ -6931,6 +6931,11 @@ var CustomAPISwaggerJSON string = `{
                     "description": "x-displayName: \"Order by\"\nOrder by data for the metrics field aggregation bucket",
                     "title": "Order by",
                     "$ref": "#/definitions/logOrderByData"
+                },
+                "sub_aggs": {
+                    "type": "object",
+                    "description": "x-displayName: \"Sub Aggregation\"\nSub aggregation data for the multi field aggregation bucket",
+                    "title": "sub aggregation"
                 }
             }
         },
@@ -6946,6 +6951,18 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/logMultiFieldAggregationBucket"
                     }
+                }
+            }
+        },
+        "logMultiFieldSubAggregationData": {
+            "type": "object",
+            "description": "x-displayName: \"Multi Field SubAggregation\"\nField subaggregation data",
+            "title": "MultiFieldSubAggregationData",
+            "properties": {
+                "cardinality_aggregation": {
+                    "description": "cardinality aggregation data",
+                    "title": "cardinality aggregation\nx-displayName: \"Cardinality Aggregation\"",
+                    "$ref": "#/definitions/logCardinalityAggregationData"
                 }
             }
         },

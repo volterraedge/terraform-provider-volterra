@@ -387,7 +387,7 @@ var NamespaceCloudDataCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespaceclouddatacustomapi-suggestvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespaceclouddatacustomapi-suggestvalues"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceCloudDataCustomAPI.SuggestValues"
             },

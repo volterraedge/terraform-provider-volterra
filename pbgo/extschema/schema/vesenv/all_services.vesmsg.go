@@ -452,17 +452,6 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 				return err
 			}
 		}
-	case *ServiceChoice_Aipconnector:
-		if fv, exists := v.FldValidators["choice.aipconnector"]; exists {
-			val := m.GetChoice().(*ServiceChoice_Aipconnector).Aipconnector
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("aipconnector"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *ServiceChoice_AkarReadonly:
 		if fv, exists := v.FldValidators["choice.akar_readonly"]; exists {
 			val := m.GetChoice().(*ServiceChoice_AkarReadonly).AkarReadonly
@@ -997,6 +986,28 @@ func (v *ValidateServiceChoice) Validate(ctx context.Context, pm interface{}, op
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("clearview"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceChoice_Bigipconnector:
+		if fv, exists := v.FldValidators["choice.bigipconnector"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Bigipconnector).Bigipconnector
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("bigipconnector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ServiceChoice_Gia:
+		if fv, exists := v.FldValidators["choice.gia"]; exists {
+			val := m.GetChoice().(*ServiceChoice_Gia).Gia
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("gia"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

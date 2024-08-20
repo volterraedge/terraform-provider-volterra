@@ -29,12 +29,16 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_connect.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.cloud_connect.FieldData"] = FieldDataValidator()
 	vr["ves.io.schema.cloud_connect.GetMetricsRequest"] = GetMetricsRequestValidator()
 	vr["ves.io.schema.cloud_connect.GetMetricsResponse"] = GetMetricsResponseValidator()
 	vr["ves.io.schema.cloud_connect.ListMetricsRequest"] = ListMetricsRequestValidator()
 	vr["ves.io.schema.cloud_connect.ListMetricsResponse"] = ListMetricsResponseValidator()
 	vr["ves.io.schema.cloud_connect.ListSegmentMetricsRequest"] = ListSegmentMetricsRequestValidator()
 	vr["ves.io.schema.cloud_connect.ListSegmentMetricsResponse"] = ListSegmentMetricsResponseValidator()
+	vr["ves.io.schema.cloud_connect.TopCloudConnectData"] = TopCloudConnectDataValidator()
+	vr["ves.io.schema.cloud_connect.TopCloudConnectRequest"] = TopCloudConnectRequestValidator()
+	vr["ves.io.schema.cloud_connect.TopCloudConnectResponse"] = TopCloudConnectResponseValidator()
 
 	vr["ves.io.schema.cloud_connect.CredentialsRequest"] = CredentialsRequestValidator()
 	vr["ves.io.schema.cloud_connect.CredentialsResponse"] = CredentialsResponseValidator()
@@ -60,12 +64,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_connect.AWSVPCAttachmentType"] = AWSVPCAttachmentTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureAttachmentsListStatusType"] = AzureAttachmentsListStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureAttachmentsStatusType"] = AzureAttachmentsStatusTypeValidator()
+	vr["ves.io.schema.cloud_connect.AzureDefaultRoute"] = AzureDefaultRouteValidator()
 	vr["ves.io.schema.cloud_connect.AzureRouteTableWithStaticRoute"] = AzureRouteTableWithStaticRouteValidator()
 	vr["ves.io.schema.cloud_connect.AzureRouteTableWithStaticRouteListType"] = AzureRouteTableWithStaticRouteListTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureRouteTables"] = AzureRouteTablesValidator()
 	vr["ves.io.schema.cloud_connect.AzureVNETAttachmentType"] = AzureVNETAttachmentTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureVNETSiteType"] = AzureVNETSiteTypeValidator()
 	vr["ves.io.schema.cloud_connect.AzureVnetAttachmentListType"] = AzureVnetAttachmentListTypeValidator()
+	vr["ves.io.schema.cloud_connect.CloudConnectData"] = CloudConnectDataValidator()
 	vr["ves.io.schema.cloud_connect.CloudConnectStatusType"] = CloudConnectStatusTypeValidator()
 	vr["ves.io.schema.cloud_connect.CloudLinkListType"] = CloudLinkListTypeValidator()
 	vr["ves.io.schema.cloud_connect.CreateSpecType"] = CreateSpecTypeValidator()
@@ -103,49 +109,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_connect.API.Create"] = []string{
 		"spec.aws_re.peers.#",
 		"spec.aws_re.tgw",
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.azure_vnet_site",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.azure_vnet_site",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.azure_vnet_site",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.azure_vnet_site",
-			AllowedEnvironments: []string{"test"},
-		},
-		{
-			FieldPath:           "spec.azure_vnet_site",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.azure_vnet_site",
-			AllowedEnvironments: []string{"test"},
-		},
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.azure_vnet_site",
-			AllowedEnvironments: []string{"test"},
-		},
+		"spec.azure_vnet_site.cred",
 	}
 
 }

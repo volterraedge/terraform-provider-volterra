@@ -1622,7 +1622,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getapiendpointlearntschema"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-getapiendpointlearntschema"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetAPIEndpointLearntSchema"
             },
@@ -1730,7 +1730,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-apiendpointpdf"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-apiendpointpdf"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.APIEndpointPDF"
             },
@@ -1926,7 +1926,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getswaggerspec"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-getswaggerspec"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetSwaggerSpec"
             },
@@ -2026,7 +2026,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-overridepop"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-overridepop"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.OverridePop"
             },
@@ -2126,7 +2126,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-overridepush"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-overridepush"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.OverridePush"
             },
@@ -2218,7 +2218,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-overrides"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-overrides"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.Overrides"
             },
@@ -2326,7 +2326,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getserviceapiendpointpdf"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-getserviceapiendpointpdf"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpointPDF"
             },
@@ -2434,7 +2434,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-app_type-customapi-getserviceapiendpoints"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-app_type-customapi-getserviceapiendpoints"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.app_type.CustomAPI.GetServiceAPIEndpoints"
             },
@@ -2561,6 +2561,13 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Authentication Types and Locations"
                 },
+                "avg_latency": {
+                    "type": "number",
+                    "description": " Average latency observed for the API Endpoint.\n\nExample: - 2.34-",
+                    "title": "avg_latency",
+                    "format": "float",
+                    "x-displayname": "Average Latency"
+                },
                 "base_path": {
                     "type": "string",
                     "description": " The base path for this Endpoint.\n\nExample: - \"/v1\"-",
@@ -2584,6 +2591,15 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "API endpoint URL",
                     "x-ves-example": "/api/v1/user_id/DYN/vehicle_id/DYN"
                 },
+                "compliances": {
+                    "type": "array",
+                    "description": " List of compliance frameworks of the Endpoint.\n\nExample: - [\"GDPR\", \"HIPAA\", \"CCPA\"]-",
+                    "title": "compliances",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Compliances"
+                },
                 "domains": {
                     "type": "array",
                     "description": " List of Domains of the API endpoint\n\nExample: - \"[www.example1.com\", \"www.example2.com]\"-",
@@ -2604,12 +2620,28 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Expanded URL(s)",
                     "x-ves-example": "{component_identifier: api/v1/user_id/DYN,component_examples: [cmenomo007]}"
                 },
+                "engines": {
+                    "type": "array",
+                    "description": " List of engines that detected the endpoint.\n\nExample: - [\"TRAFFIC_INSPECTION\", \"CODE_ANALYSIS\", \"CRAWLER\"]-",
+                    "title": "engines",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Engines"
+                },
                 "has_learnt_schema": {
                     "type": "boolean",
                     "description": "Has Learnt Schema flag for request API endpoint.\n\nExample: - true-",
                     "title": "Has Learnt Schema",
                     "format": "boolean",
                     "x-displayname": "Has Learnt Schema"
+                },
+                "max_latency": {
+                    "type": "number",
+                    "description": " Maximum latency observed for the API Endpoint.\n\nExample: - 9.87-",
+                    "title": "max_latency",
+                    "format": "float",
+                    "x-displayname": "Max Latency"
                 },
                 "method": {
                     "type": "string",
@@ -2629,6 +2661,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "pii_level",
                     "$ref": "#/definitions/app_typeAPIEPPIILevel",
                     "x-displayname": "PII Level"
+                },
+                "req_rate": {
+                    "type": "number",
+                    "description": " Request rate for the API Endpoint.\n\nExample: - 10.5-",
+                    "title": "req_rate",
+                    "format": "float",
+                    "x-displayname": "Request Rate"
                 },
                 "request_percentage": {
                     "type": "number",
@@ -3393,6 +3432,15 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Sensitive Data",
             "x-ves-proto-message": "ves.io.schema.app_type.SensitiveData",
             "properties": {
+                "compliances": {
+                    "type": "array",
+                    "description": " Compliance frameworks.",
+                    "title": "Compliances",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Compliances"
+                },
                 "examples": {
                     "type": "array",
                     "description": " Examples of sensitive data.",

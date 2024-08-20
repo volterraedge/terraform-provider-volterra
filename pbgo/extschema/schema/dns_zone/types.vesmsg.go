@@ -4072,7 +4072,7 @@ var DefaultDNSTXTResourceRecordValidator = func() *ValidateDNSTXTResourceRecord 
 	vrhValues := v.ValuesValidationRuleHandler
 	rulesValues := map[string]string{
 		"ves.io.schema.rules.message.required":              "true",
-		"ves.io.schema.rules.repeated.items.string.max_len": "512",
+		"ves.io.schema.rules.repeated.items.string.max_len": "4000",
 		"ves.io.schema.rules.repeated.max_items":            "100",
 		"ves.io.schema.rules.repeated.min_items":            "1",
 		"ves.io.schema.rules.repeated.unique":               "true",

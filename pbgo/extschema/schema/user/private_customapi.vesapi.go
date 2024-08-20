@@ -43,6 +43,15 @@ func (c *CustomPrivateAPIGrpcClient) doRPCCascadeDelete(ctx context.Context, yam
 	return rsp, err
 }
 
+func (c *CustomPrivateAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateUserRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.CreateUserRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.Create(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomPrivateAPIGrpcClient) doRPCListByNotificationPreferences(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListByNotifPrefRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -92,6 +101,8 @@ func NewCustomPrivateAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
+
+	rpcFns["Create"] = ccl.doRPCCreate
 
 	rpcFns["ListByNotificationPreferences"] = ccl.doRPCListByNotificationPreferences
 
@@ -186,6 +197,96 @@ func (c *CustomPrivateAPIRestClient) doRPCCascadeDelete(ctx context.Context, cal
 	pbRsp := &CascadeDeleteResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.CascadeDeleteResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomPrivateAPIRestClient) doRPCCreate(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CreateUserRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.user.CreateUserRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("first_name", fmt.Sprintf("%v", req.FirstName))
+		q.Add("last_name", fmt.Sprintf("%v", req.LastName))
+		q.Add("namespace_access", fmt.Sprintf("%v", req.NamespaceAccess))
+		q.Add("tenant_id", fmt.Sprintf("%v", req.TenantId))
+		q.Add("user_email", fmt.Sprintf("%v", req.UserEmail))
+		for _, item := range req.UserGroupNames {
+			q.Add("user_group_names", fmt.Sprintf("%v", item))
+		}
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CreateUserResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.user.CreateUserResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -389,6 +490,8 @@ func NewCustomPrivateAPIRestClient(baseURL string, hc http.Client) server.Custom
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["CascadeDelete"] = ccl.doRPCCascadeDelete
 
+	rpcFns["Create"] = ccl.doRPCCreate
+
 	rpcFns["ListByNotificationPreferences"] = ccl.doRPCListByNotificationPreferences
 
 	rpcFns["UpdateLastLogin"] = ccl.doRPCUpdateLastLogin
@@ -408,6 +511,10 @@ type customPrivateAPIInprocClient struct {
 func (c *customPrivateAPIInprocClient) CascadeDelete(ctx context.Context, in *PrivateCascadeDeleteRequest, opts ...grpc.CallOption) (*CascadeDeleteResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomPrivateAPI.CascadeDelete")
 	return c.CustomPrivateAPIServer.CascadeDelete(ctx, in)
+}
+func (c *customPrivateAPIInprocClient) Create(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomPrivateAPI.Create")
+	return c.CustomPrivateAPIServer.Create(ctx, in)
 }
 func (c *customPrivateAPIInprocClient) ListByNotificationPreferences(ctx context.Context, in *ListByNotifPrefRequest, opts ...grpc.CallOption) (*ListByNotifPrefResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.user.CustomPrivateAPI.ListByNotificationPreferences")
@@ -466,6 +573,39 @@ func (s *customPrivateAPISrv) CascadeDelete(ctx context.Context, in *PrivateCasc
 	}
 
 	rsp, err = cah.CascadeDelete(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	return rsp, nil
+}
+func (s *customPrivateAPISrv) Create(ctx context.Context, in *CreateUserRequest) (*CreateUserResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.user.CustomPrivateAPI")
+	cah, ok := ah.(CustomPrivateAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomPrivateAPIServer", ah)
+	}
+
+	var (
+		rsp *CreateUserResponse
+		err error
+	)
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.user.CustomPrivateAPI.Create"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.Create(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -638,9 +778,93 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customprivateapi-listbynotificationpreferences"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customprivateapi-listbynotificationpreferences"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomPrivateAPI.ListByNotificationPreferences"
+            },
+            "x-displayname": "Custom Private API",
+            "x-ves-proto-service": "ves.io.schema.user.CustomPrivateAPI",
+            "x-ves-proto-service-type": "CUSTOM_PRIVATE"
+        },
+        "/ves.io.schema/introspect/restricted/write/namespaces/system/users": {
+            "post": {
+                "summary": "Create User",
+                "description": "Create creates a user and namespace roles binding for this user",
+                "operationId": "ves.io.schema.user.CustomPrivateAPI.Create",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/userCreateUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/userCreateUserRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomPrivateAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customprivateapi-create"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.user.CustomPrivateAPI.Create"
             },
             "x-displayname": "Custom Private API",
             "x-ves-proto-service": "ves.io.schema.user.CustomPrivateAPI",
@@ -730,7 +954,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customprivateapi-cascadedelete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customprivateapi-cascadedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomPrivateAPI.CascadeDelete"
             },
@@ -814,7 +1038,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customprivateapi-updatelastlogin"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customprivateapi-updatelastlogin"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomPrivateAPI.UpdateLastLogin"
             },
@@ -824,6 +1048,53 @@ var CustomPrivateAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "schemaNamespaceAccessType": {
+            "type": "object",
+            "description": "Access info in the namespaces for the entity",
+            "title": "Namespace Access",
+            "x-displayname": "Namespace Access",
+            "x-ves-proto-message": "ves.io.schema.NamespaceAccessType",
+            "properties": {
+                "namespace_role_map": {
+                    "type": "object",
+                    "description": " List of all the roles for the entity in the namespaces\n\nExample: - '\u003cnamespace\u003e [\u003croles\u003e]'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace Role Map",
+                    "x-displayname": "Namespace Role Map",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "256",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "schemaRoleListType": {
+            "type": "object",
+            "description": "x-displayName: \"Role List\"\nRole list",
+            "title": "List of Roles",
+            "properties": {
+                "names": {
+                    "type": "array",
+                    "description": "x-displayName: \"Roles List\"\nx-example: [\"ves-io-monitor-role\", \"ves-io-uam-admin-role\"]\nx-required\nList of all the roles",
+                    "title": "Roles List",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "schemaSyncMode": {
+            "type": "string",
+            "description": "Sync mode is to specify where the user details are being synced from.\n\n - SELF: Self\nSystem managed user.\n - SCIM: SCIM\nSCIM synced user. Full user life cycle is managed by the SCIM provider.",
+            "title": "Sync Mode",
+            "enum": [
+                "SELF",
+                "SCIM"
+            ],
+            "default": "SELF",
+            "x-displayname": "Sync Mode",
+            "x-ves-proto-enum": "ves.io.schema.SyncMode"
+        },
         "userCascadeDeleteItemType": {
             "type": "object",
             "description": "CascadeDeleteItemType contains details of object that was handled as part of cascade delete\nof user and whether it was successfully deleted",
@@ -886,6 +1157,152 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "x-displayname": "Items"
                 }
             }
+        },
+        "userCreateUserRequest": {
+            "type": "object",
+            "description": "Allows creation of a user along with their roles in namespaces.",
+            "title": "CreateUserRequest",
+            "x-displayname": "Create User Request",
+            "x-ves-proto-message": "ves.io.schema.user.CreateUserRequest",
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "description": " User's first name\n\nExample: - \"Dan\"-",
+                    "title": "first name",
+                    "x-displayname": "First Name",
+                    "x-ves-example": "Dan"
+                },
+                "last_name": {
+                    "type": "string",
+                    "description": " User's last name\n\nExample: - \"Brown\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "last name",
+                    "minLength": 1,
+                    "x-displayname": "Last Name",
+                    "x-ves-example": "Brown",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "namespace_access": {
+                    "description": " List of directly attached access type that the user has for each namespace.",
+                    "title": "Namespace Access Type roles",
+                    "$ref": "#/definitions/schemaNamespaceAccessType",
+                    "x-displayname": "Namespace Accesss Type"
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": " Id of the tenant where we need to add the user.\n\nExample: - \"volterra-kjrnplcw\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Tenant Id",
+                    "minLength": 1,
+                    "x-displayname": "Tenant Id",
+                    "x-ves-example": "volterra-kjrnplcw",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "user_email": {
+                    "type": "string",
+                    "description": " user's email\n\nExample: - \"user1@company.com\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.email: true\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "user email",
+                    "minLength": 1,
+                    "x-displayname": "Email Address",
+                    "x-ves-example": "user1@company.com",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.email": "true",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "user_group_names": {
+                    "type": "array",
+                    "description": " Group list must be associated to this user.\n\nExample: - \"[\"dev-group-1\"]\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.ves_object_name: true\n",
+                    "title": "UserGroups",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "User Groups",
+                    "x-ves-example": "[\"dev-group-1\"]",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.ves_object_name": "true"
+                    }
+                }
+            }
+        },
+        "userCreateUserResponse": {
+            "type": "object",
+            "description": "Response of the create user private api",
+            "title": "CreateUserResponse",
+            "x-displayname": "Create User Response",
+            "x-ves-proto-message": "ves.io.schema.user.CreateUserResponse",
+            "properties": {
+                "domain_owner": {
+                    "type": "boolean",
+                    "description": " By default the first user who registered or signed up the associated Tenant is the domain owner and other created users can be promoted later.\n User created via signup flow will have this value set to true.\n Few restrictions apply to this user w.r.t role update and deletion.\n\nExample: - \"true\"-",
+                    "title": "Domain Owner",
+                    "format": "boolean",
+                    "x-displayname": "Domain Owner",
+                    "x-ves-example": "true"
+                },
+                "idm_type": {
+                    "description": " Type of the identity management who is managing this user.",
+                    "title": "IDM Type",
+                    "$ref": "#/definitions/userIdmType",
+                    "x-displayname": "Identity Management Type"
+                },
+                "sync_mode": {
+                    "description": " Denotes if this is an externally managed entity imported into UAM by SCIM protocol, or self managed.\n\nExample: - \"self\"-",
+                    "title": "Sync Mode",
+                    "$ref": "#/definitions/schemaSyncMode",
+                    "x-displayname": "Sync Mode",
+                    "x-ves-example": "self"
+                },
+                "tenant_id": {
+                    "type": "string",
+                    "description": " Id of the tenant where we added the user.\n\nExample: - \"volterra-kjrnplcw\"-",
+                    "title": "Tenant Id",
+                    "x-displayname": "Tenant Id",
+                    "x-ves-example": "volterra-kjrnplcw"
+                },
+                "user_email": {
+                    "type": "string",
+                    "description": " user's email\n\nExample: - \"abc@d.com\"-",
+                    "title": "USER EMAIL",
+                    "x-displayname": "User Email",
+                    "x-ves-example": "abc@d.com"
+                },
+                "user_group_names": {
+                    "type": "array",
+                    "title": "UserGroupNames",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "User Group Names"
+                },
+                "user_type": {
+                    "description": " type of the user",
+                    "title": "UserType",
+                    "$ref": "#/definitions/userUserType",
+                    "x-displayname": "User Type"
+                }
+            }
+        },
+        "userIdmType": {
+            "type": "string",
+            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: F5XC Managed Local user\nF5XC managed local user. Full user life cycle is managed by volterra UAM and Identity.\n - UNDEFINED: Undefined\nUndefined IDM type",
+            "title": "IDM Type",
+            "enum": [
+                "SSO",
+                "VOLTERRA_MANAGED",
+                "UNDEFINED"
+            ],
+            "default": "SSO",
+            "x-displayname": "Identity Management Type",
+            "x-ves-proto-enum": "ves.io.schema.user.IdmType"
         },
         "userLastLoginUpdateRequest": {
             "type": "object",
@@ -1024,6 +1441,19 @@ var CustomPrivateAPISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "userUserType": {
+            "type": "string",
+            "description": "UserType is to identify the type of user\n\n - USER: User\nRegular User\n - SERVICE: Service User\nUser for accessing only APIs/services\n - DEBUG: Debug\nUser which was created by tenant admin for volterra-support team.",
+            "title": "UserType",
+            "enum": [
+                "USER",
+                "SERVICE",
+                "DEBUG"
+            ],
+            "default": "USER",
+            "x-displayname": "User Type",
+            "x-ves-proto-enum": "ves.io.schema.user.UserType"
         }
     },
     "x-displayname": "User custom private API",

@@ -298,17 +298,6 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *AddonServiceChoice_AipConnector:
-		if fv, exists := v.FldValidators["choice.aip_connector"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_AipConnector).AipConnector
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("aip_connector"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *AddonServiceChoice_ClientSideDefense:
 		if fv, exists := v.FldValidators["choice.client_side_defense"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_ClientSideDefense).ClientSideDefense
@@ -612,6 +601,61 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_web_app_scanning_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcAiAssistantStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_ai_assistant_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcAiAssistantStandard).F5XcAiAssistantStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_ai_assistant_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcFlowAnomalyDetectionStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_flow_anomaly_detection_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcFlowAnomalyDetectionStandard).F5XcFlowAnomalyDetectionStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_flow_anomaly_detection_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcUniversalZtnaStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_universal_ztna_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcUniversalZtnaStandard).F5XcUniversalZtnaStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_universal_ztna_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcIpv6Standard:
+		if fv, exists := v.FldValidators["choice.f5xc_ipv6_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcIpv6Standard).F5XcIpv6Standard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_ipv6_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcBotDefenseAdvancedSelfservice:
+		if fv, exists := v.FldValidators["choice.f5xc_bot_defense_advanced_selfservice"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBotDefenseAdvancedSelfservice).F5XcBotDefenseAdvancedSelfservice
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_bot_defense_advanced_selfservice"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

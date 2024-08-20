@@ -61,6 +61,15 @@ func (c *CustomAPIGrpcClient) doRPCListSegmentMetrics(ctx context.Context, yamlR
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCTopCloudConnect(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &TopCloudConnectRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.cloud_connect.TopCloudConnectRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.TopCloudConnect(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -96,6 +105,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["ListMetrics"] = ccl.doRPCListMetrics
 
 	rpcFns["ListSegmentMetrics"] = ccl.doRPCListSegmentMetrics
+
+	rpcFns["TopCloudConnect"] = ccl.doRPCTopCloudConnect
 
 	ccl.rpcFns = rpcFns
 
@@ -153,6 +164,7 @@ func (c *CustomAPIRestClient) doRPCGetMetrics(ctx context.Context, callOpts *ser
 		for _, item := range req.FieldSelector {
 			q.Add("field_selector", fmt.Sprintf("%v", item))
 		}
+		q.Add("is_trend_request", fmt.Sprintf("%v", req.IsTrendRequest))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
 		q.Add("step", fmt.Sprintf("%v", req.Step))
@@ -238,15 +250,12 @@ func (c *CustomAPIRestClient) doRPCListMetrics(ctx context.Context, callOpts *se
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
 		for _, item := range req.FieldSelector {
 			q.Add("field_selector", fmt.Sprintf("%v", item))
 		}
 		for _, item := range req.LabelFilter {
 			q.Add("label_filter", fmt.Sprintf("%v", item))
 		}
-		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
-		q.Add("step", fmt.Sprintf("%v", req.Step))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -333,6 +342,7 @@ func (c *CustomAPIRestClient) doRPCListSegmentMetrics(ctx context.Context, callO
 		for _, item := range req.FieldSelector {
 			q.Add("field_selector", fmt.Sprintf("%v", item))
 		}
+		q.Add("is_trend_request", fmt.Sprintf("%v", req.IsTrendRequest))
 		for _, item := range req.LabelFilter {
 			q.Add("label_filter", fmt.Sprintf("%v", item))
 		}
@@ -381,6 +391,95 @@ func (c *CustomAPIRestClient) doRPCListSegmentMetrics(ctx context.Context, callO
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCTopCloudConnect(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &TopCloudConnectRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.cloud_connect.TopCloudConnectRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("end_time", fmt.Sprintf("%v", req.EndTime))
+		for _, item := range req.FieldSelector {
+			q.Add("field_selector", fmt.Sprintf("%v", item))
+		}
+		q.Add("filter", fmt.Sprintf("%v", req.Filter))
+		q.Add("limit", fmt.Sprintf("%v", req.Limit))
+		q.Add("start_time", fmt.Sprintf("%v", req.StartTime))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &TopCloudConnectResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.cloud_connect.TopCloudConnectResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -411,6 +510,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["ListSegmentMetrics"] = ccl.doRPCListSegmentMetrics
 
+	rpcFns["TopCloudConnect"] = ccl.doRPCTopCloudConnect
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -434,6 +535,10 @@ func (c *customAPIInprocClient) ListMetrics(ctx context.Context, in *ListMetrics
 func (c *customAPIInprocClient) ListSegmentMetrics(ctx context.Context, in *ListSegmentMetricsRequest, opts ...grpc.CallOption) (*ListSegmentMetricsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.CustomAPI.ListSegmentMetrics")
 	return c.CustomAPIServer.ListSegmentMetrics(ctx, in)
+}
+func (c *customAPIInprocClient) TopCloudConnect(ctx context.Context, in *TopCloudConnectRequest, opts ...grpc.CallOption) (*TopCloudConnectResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.cloud_connect.CustomAPI.TopCloudConnect")
+	return c.CustomAPIServer.TopCloudConnect(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -604,6 +709,55 @@ func (s *customAPISrv) ListSegmentMetrics(ctx context.Context, in *ListSegmentMe
 
 	return rsp, nil
 }
+func (s *customAPISrv) TopCloudConnect(ctx context.Context, in *TopCloudConnectRequest) (*TopCloudConnectResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.cloud_connect.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *TopCloudConnectResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.TopCloudConnectRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.TopCloudConnect' operation on 'cloud_connect'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.cloud_connect.CustomAPI.TopCloudConnect"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.TopCloudConnect(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.cloud_connect.TopCloudConnectResponse", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 	return &customAPISrv{svc: svc}
@@ -704,7 +858,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-customapi-listmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-customapi-listmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.CustomAPI.ListMetrics"
             },
@@ -788,7 +942,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-customapi-listsegmentmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-customapi-listsegmentmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.CustomAPI.ListSegmentMetrics"
             },
@@ -799,7 +953,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/namespaces/system/cloud_connects/{name}/metrics": {
             "post": {
                 "summary": "Cloud Connect Metrics",
-                "description": "Cloud Connect Metrics quires metrics for a specified cloud connect.",
+                "description": "Cloud Connect Metrics queries metrics for a specified cloud connect.",
                 "operationId": "ves.io.schema.cloud_connect.CustomAPI.GetMetrics",
                 "responses": {
                     "200": {
@@ -880,9 +1034,93 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-customapi-getmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-customapi-getmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.CustomAPI.GetMetrics"
+            },
+            "x-displayname": "Cloud Connect",
+            "x-ves-proto-service": "ves.io.schema.cloud_connect.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/top/cloud_connects": {
+            "post": {
+                "summary": "Top Cloud Connnect",
+                "description": "Request to get top cloud connect from the AWS Cloudwatch metrics",
+                "operationId": "ves.io.schema.cloud_connect.CustomAPI.TopCloudConnect",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/cloud_connectTopCloudConnectResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/cloud_connectTopCloudConnectRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-customapi-topcloudconnect"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.cloud_connect.CustomAPI.TopCloudConnect"
             },
             "x-displayname": "Cloud Connect",
             "x-ves-proto-service": "ves.io.schema.cloud_connect.CustomAPI",
@@ -890,6 +1128,30 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "cloud_connectCloudConnectData": {
+            "type": "object",
+            "description": "CloudConnectData wraps all the response data for a cloud connect.",
+            "title": "Cloud Connect Data",
+            "x-displayname": "Cloud Connect Data",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CloudConnectData",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "description": " metric values",
+                    "title": "Data",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectMetricData"
+                    },
+                    "x-displayname": "Data"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Labels contains the name/value pair.\n \"name\" is the label defined in Labels",
+                    "title": "Labels",
+                    "x-displayname": "Labels"
+                }
+            }
+        },
         "cloud_connectCustomerEdge": {
             "type": "object",
             "description": "Customer Edge uniquely identifies customer edge i.e. site.",
@@ -930,14 +1192,39 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectFieldData": {
+            "type": "object",
+            "description": "Field Data contains key/value pairs that uniquely identifies the group_by labels specified in the request.",
+            "title": "Field Data",
+            "x-displayname": "Field Data",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.FieldData",
+            "properties": {
+                "labels": {
+                    "type": "object",
+                    "description": " Labels contains the name/value pair.\n \"name\" is the label defined in Labels",
+                    "title": "Labels",
+                    "x-displayname": "Labels"
+                },
+                "value": {
+                    "type": "array",
+                    "description": " List of metric values.",
+                    "title": "Value",
+                    "items": {
+                        "$ref": "#/definitions/schemaMetricValue"
+                    },
+                    "x-displayname": "Value"
+                }
+            }
+        },
         "cloud_connectFieldSelector": {
             "type": "string",
-            "description": "FieldSelector specifies the metrics that can be queried for cloud connect.\n\nIndicates field not being set\nx-unit: \"bytes per second (bps)\"\nThroughput of incoming traffic\nx-unit: \"bytes per second (bps)\"\nThroughput of outgoing traffic",
+            "description": "FieldSelector specifies the metrics that can be queried for cloud connect.\n\nIndicates field not being set\nx-unit: \"bytes per second (bps)\"\nThroughput of incoming traffic\nx-unit: \"bytes per second (bps)\"\nThroughput of outgoing traffic\nx-unit: \"bytes per second (bps)\"\nThroughput of outgoing traffic",
             "title": "Cloud Connect Metric Type",
             "enum": [
                 "METRIC_TYPE_NONE",
                 "METRIC_TYPE_IN_BYTES",
-                "METRIC_TYPE_OUT_BYTES"
+                "METRIC_TYPE_OUT_BYTES",
+                "METRIC_TYPE_TOTAL_BYTES"
             ],
             "default": "METRIC_TYPE_NONE",
             "x-displayname": "Cloud Connect Metric Type",
@@ -972,6 +1259,13 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "is_trend_request": {
+                    "type": "boolean",
+                    "description": " Trend value computation requested by the user\n Optional: default is false\n\nExample: - \"true\"-",
+                    "format": "boolean",
+                    "x-displayname": "Trend calculation requested by the user",
+                    "x-ves-example": "true"
                 },
                 "name": {
                     "type": "string",
@@ -1069,16 +1363,6 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "List Metrics Request",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ListMetricsRequest",
             "properties": {
-                "end_time": {
-                    "type": "string",
-                    "description": "\n end time of metric collection from which data will be considered to fetch cloud connect data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"2019-09-24T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
-                    "title": "end_time",
-                    "x-displayname": "End Time",
-                    "x-ves-example": "2019-09-24T12:30:11.733Z",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.query_time": "true"
-                    }
-                },
                 "field_selector": {
                     "type": "array",
                     "description": "\n Select fields to be returned in the response.\n field_selector is used to specify the fields to be returned in the response, thereby limiting the\n amount of data returned in the response.\n\n Note: Selecting many/all fields may impact the query latency.\n\n Optional: If not specified, only the following fields are returned in the response.\n METRIC_TYPE_IN_BYTES, METRIC_TYPE_OUT_BYTES\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -1094,31 +1378,15 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "label_filter": {
                     "type": "array",
-                    "description": "\n List of label filter expressions of the form \"label key\" QueryOp \"value\".\n Response will only contain data that matches all the conditions specified in the label_filter.\n\n Optional: If not specified, connectivity data for all sites will be returned in the response.",
+                    "description": "\n List of label filter expressions of the form \"label key\" QueryOp \"value\".\n Response will only contain data that matches all the conditions specified in the label_filter.\n\n Optional: If not specified, cloud connect data for all sites will be returned in the response.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n",
                     "title": "label_filter",
+                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/cloud_connectLabelFilter"
                     },
-                    "x-displayname": "Label Filter"
-                },
-                "start_time": {
-                    "type": "string",
-                    "description": "\n start time of metric collection from which data will be considered to fetch cloud connect data.\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"2019-09-23T12:30:11.733Z\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
-                    "title": "start_time",
-                    "x-displayname": "Start Time",
-                    "x-ves-example": "2019-09-23T12:30:11.733Z",
+                    "x-displayname": "Label Filter",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.query_time": "true"
-                    }
-                },
-                "step": {
-                    "type": "string",
-                    "description": "\n step is the resolution width, which determines the number of the data points [x-axis (time)] to be returned in the response.\n The timestamps in the response will be t1=start_time, t2=t1+step, ... tn=tn-1+step, where tn \u003c= end_time.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\n Optional: If not specified, then step size is evaluated to \u003cend_time - start_time\u003e\n\nExample: - \"5m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_step: true\n",
-                    "title": "step",
-                    "x-displayname": "Step",
-                    "x-ves-example": "5m",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.query_step": "true"
+                        "ves.io.schema.rules.repeated.max_items": "100"
                     }
                 }
             }
@@ -1130,31 +1398,14 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "List Metrics Response",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ListMetricsResponse",
             "properties": {
-                "data": {
+                "cloud_connect": {
                     "type": "array",
-                    "description": "metric data for the given metric.",
+                    "description": " Metric data specified for the cloud connect",
+                    "title": "Cloud Connect",
                     "items": {
-                        "$ref": "#/definitions/cloud_connectSegmentationData"
-                    }
-                },
-                "edges": {
-                    "type": "array",
-                    "description": " Cloud connect data for list of customer edges owned by a tenant.",
-                    "title": "Customer Edges",
-                    "items": {
-                        "$ref": "#/definitions/cloud_connectEdgeData"
+                        "$ref": "#/definitions/cloud_connectCloudConnectData"
                     },
-                    "x-displayname": "Customer Edges"
-                },
-                "step": {
-                    "type": "string",
-                    "description": " Actual step size used in the response. It could be higher than the requested step due to metric rollups and the query duration.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\nExample: - \"30m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
-                    "title": "step",
-                    "x-displayname": "Step",
-                    "x-ves-example": "30m",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.time_interval": "true"
-                    }
+                    "x-displayname": "Cloud Connect"
                 }
             }
         },
@@ -1188,14 +1439,25 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "is_trend_request": {
+                    "type": "boolean",
+                    "description": " Trend value computation requested by the user\n Optional: default is false\n\nExample: - \"true\"-",
+                    "format": "boolean",
+                    "x-displayname": "Trend calculation requested by the user",
+                    "x-ves-example": "true"
+                },
                 "label_filter": {
                     "type": "array",
-                    "description": "\n List of label filter expressions of the form \"label key\" QueryOp \"value\".\n Response will only contain data that matches all the conditions specified in the label_filter.\n\n Optional: If not specified, connectivity data for all sites will be returned in the response.",
+                    "description": "\n List of label filter expressions of the form \"label key\" QueryOp \"value\".\n Response will only contain data that matches all the conditions specified in the label_filter.\n\n Optional: If not specified, cloud connect data for all sites will be returned in the response.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n",
                     "title": "label_filter",
+                    "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/cloud_connectLabelFilter"
                     },
-                    "x-displayname": "Label Filter"
+                    "x-displayname": "Label Filter",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "100"
+                    }
                 },
                 "start_time": {
                     "type": "string",
@@ -1305,6 +1567,107 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Type",
                     "$ref": "#/definitions/cloud_connectTrafficType",
                     "x-displayname": "Type"
+                }
+            }
+        },
+        "cloud_connectTopCloudConnectData": {
+            "type": "object",
+            "description": "TopCloudConnectData wraps all the response data",
+            "title": "TopCloudConnectData",
+            "x-displayname": "TopCloudConnectData",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.TopCloudConnectData",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "description": " Flows data",
+                    "title": "Data",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectFieldData"
+                    },
+                    "x-displayname": "Data"
+                },
+                "type": {
+                    "description": " Type of data returned",
+                    "title": "Type",
+                    "$ref": "#/definitions/cloud_connectFieldSelector",
+                    "x-displayname": "Type"
+                }
+            }
+        },
+        "cloud_connectTopCloudConnectRequest": {
+            "type": "object",
+            "title": "Top Cloud Connect Request",
+            "x-displayname": "Top Cloud Connect Request",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.TopCloudConnectRequest",
+            "properties": {
+                "end_time": {
+                    "type": "string",
+                    "description": " end time of flow collection\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the end_time will be evaluated to start_time+10m\n           If start_time is not specified, then the end_time will be evaluated to \u003ccurrent time\u003e\n\nExample: - \"1570197600\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "End time",
+                    "x-displayname": "End Time",
+                    "x-ves-example": "1570197600",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                },
+                "field_selector": {
+                    "type": "array",
+                    "description": " Metric fields to be returned in the response. If no metric fields are specified in the request,\n then the response will not contain any metric data.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.enum.defined_only: true\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Metric Selector",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectFieldSelector"
+                    },
+                    "x-displayname": "Metric Selector",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.enum.defined_only": "true",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "filter": {
+                    "type": "string",
+                    "description": " x-example: \"{CUSTOMER_EDGE IN (\"\\site-1\",\\\"site-2\\\")}\"\n filter is used to specify the list of matchers\n syntax for filter := {[\u003cmatcher\u003e]}\n \u003cmatcher\u003e := \u003clabel\u003e\u003coperator\u003e\"\u003cvalue\u003e\"\n   \u003clabel\u003e := string\n     One or more labels defined in Label can be specified in the filter.\n   \u003cvalue\u003e := string\n   \u003coperator\u003e := [\"=\"|\"!=\"]\n     =  : equal to\n     != : not equal to\n\n Optional: If not specified, counter will be aggregated based on the group_by labels.\n\nExample: - \"{CUSTOMER_EDGE=\\\"site-1\\\"}\"-",
+                    "title": "Label Filter",
+                    "x-displayname": "Filter",
+                    "x-ves-example": "{CUSTOMER_EDGE=\\\"site-1\\\"}"
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": " Limits the number of results\n Default 20000\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "title": "Limit",
+                    "format": "int64",
+                    "x-displayname": "Limit",
+                    "x-ves-example": "5",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "100"
+                    }
+                },
+                "start_time": {
+                    "type": "string",
+                    "description": " start time of flow collection\n Format: unix_timestamp|rfc 3339\n\n Optional: If not specified, then the start_time will be evaluated to end_time-10m\n           If end_time is not specified, then the start_time will be evaluated to \u003ccurrent time\u003e-10m\n\nExample: - \"1570194000\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.query_time: true\n",
+                    "title": "Start time",
+                    "x-displayname": "Start Time",
+                    "x-ves-example": "1570194000",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.query_time": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectTopCloudConnectResponse": {
+            "type": "object",
+            "title": "Top Cloud Connect Response",
+            "x-displayname": "Top Cloud Connect Response",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.TopCloudConnectResponse",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "description": " CloudConnectData wraps the response for the top cloud connect request.",
+                    "title": "CloudConnectData",
+                    "items": {
+                        "$ref": "#/definitions/cloud_connectTopCloudConnectData"
+                    },
+                    "x-displayname": "CloudConnectData"
                 }
             }
         },
@@ -1454,11 +1817,12 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemacloud_connectLabel": {
             "type": "string",
-            "description": "Metrics used to construct the cloud connect dara are tagged with these labels and therefore\nthe metrics can be sliced and diced based on one or more labels.\n\nIndicates the field not being set\nIdentifies a customer edge",
+            "description": "Metrics used to construct the cloud connect dara are tagged with these labels and therefore\nthe metrics can be sliced and diced based on one or more labels.\n\nIndicates the field not being set\nIdentifies a customer edge\nIdentifies a cloud connect",
             "title": "Label",
             "enum": [
                 "LABEL_NONE",
-                "LABEL_CUSTOMER_EDGE"
+                "LABEL_CUSTOMER_EDGE",
+                "LABEL_CLOUD_CONNECT"
             ],
             "default": "LABEL_NONE",
             "x-displayname": "Label",

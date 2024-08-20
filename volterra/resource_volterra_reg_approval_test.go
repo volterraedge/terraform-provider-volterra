@@ -344,3 +344,11 @@ func (s *MauriceCustomAPI) ListRegistrationsBySite(ctx context.Context, r *schem
 	// return single list item with PENDING state
 	return &schema_registration.ListResponse{Items: []*schema_registration.ListResponseItem{ri}}, nil
 }
+
+func (c *MauriceCustomAPI) GetImageDownloadUrl(ctx context.Context, in *schema_registration.GetImageDownloadUrlReq) (*schema_registration.GetImageDownloadUrlResp, error) {
+	return &schema_registration.GetImageDownloadUrlResp{}, nil
+}
+
+func (c *MauriceCustomAPI) SuggestValues(ctx context.Context, in *schema_registration.SuggestValuesReq) (*schema_registration.SuggestValuesResp, error) {
+	return &schema_registration.SuggestValuesResp{}, nil
+}

@@ -3964,6 +3964,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["response_masking_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("response_masking_config"))
+		if err := fv(ctx, m.GetResponseMaskingConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["scheme"]; exists {
 		vOpts := append(opts, db.WithValidateField("scheme"))
 		if err := fv(ctx, m.GetScheme(), vOpts...); err != nil {
@@ -4244,6 +4253,8 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["dst_asn_matcher"] = ves_io_schema_policy.AsnMatcherTypeValidator().Validate
 
 	v.FldValidators["threat_mesh_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
+
+	v.FldValidators["response_masking_config"] = ves_io_schema_policy.MaskingConfigValidator().Validate
 
 	return v
 }()

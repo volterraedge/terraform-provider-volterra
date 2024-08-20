@@ -106,6 +106,12 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 				Optional: true,
 			},
 
+			"dns_logs": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"request_logs": {
 
 				Type:     schema.TypeBool,
@@ -4012,6 +4018,18 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 		if v.(bool) {
 			logTypeInt := &ves_io_schema_global_log_receiver.CreateSpecType_AuditLogs{}
 			logTypeInt.AuditLogs = &ves_io_schema.Empty{}
+			createSpec.LogType = logTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_logs"); ok && !logTypeTypeFound {
+
+		logTypeTypeFound = true
+
+		if v.(bool) {
+			logTypeInt := &ves_io_schema_global_log_receiver.CreateSpecType_DnsLogs{}
+			logTypeInt.DnsLogs = &ves_io_schema.Empty{}
 			createSpec.LogType = logTypeInt
 		}
 
@@ -9385,6 +9403,18 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 		if v.(bool) {
 			logTypeInt := &ves_io_schema_global_log_receiver.ReplaceSpecType_AuditLogs{}
 			logTypeInt.AuditLogs = &ves_io_schema.Empty{}
+			updateSpec.LogType = logTypeInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_logs"); ok && !logTypeTypeFound {
+
+		logTypeTypeFound = true
+
+		if v.(bool) {
+			logTypeInt := &ves_io_schema_global_log_receiver.ReplaceSpecType_DnsLogs{}
+			logTypeInt.DnsLogs = &ves_io_schema.Empty{}
 			updateSpec.LogType = logTypeInt
 		}
 

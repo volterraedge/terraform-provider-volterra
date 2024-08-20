@@ -9,6 +9,8 @@ import (
 )
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
+	vr["ves.io.schema.ai_assistant.common.GenericResponse"] = GenericResponseValidator()
+
 	vr["ves.io.schema.ai_assistant.common.DashboardLink"] = DashboardLinkValidator()
 	vr["ves.io.schema.ai_assistant.common.GenericLink"] = GenericLinkValidator()
 	vr["ves.io.schema.ai_assistant.common.Link"] = LinkValidator()

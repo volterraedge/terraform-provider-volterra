@@ -2,7 +2,6 @@ package driftdetection
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 )
@@ -32,27 +31,12 @@ func FlattenTlsTcpAutoCert(x *ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLST
 	return rslt
 }
 
-func FlattenOriginPoolsWeights(x []*ves_io_schema_views.OriginPoolWithWeight) []interface{} {
-	rslt := make([]interface{}, 0)
-	for _, val := range x {
-		test := map[string]interface{}{
-			"endpoint_subsets": FlattenEndpointSubsets(val.GetEndpointSubsets()),
-			"cluster":          FlattenCluster(val.GetCluster()),
-			"pool":             FlattenPool(val.GetPool()),
-			"priority":         val.GetPriority(),
-			"weight":           val.GetWeight(),
-		}
-		rslt = append(rslt, test)
-	}
-	return rslt
-}
-
 func FlattenActiveServicePoliciesTcp(x *ves_io_schema_views_tcp_loadbalancer.ServicePolicyList) []interface{} {
 	val := make([]interface{}, 0)
 
 	if x != nil {
 		test := map[string]interface{}{
-			"policies": FlattenCertificates(x.GetPolicies()),
+			"policies": FlattenVObjectRefTypeList(x.GetPolicies()),
 		}
 		val = append(val, test)
 	}
@@ -64,7 +48,7 @@ func DriftDetectionTcpLoadbalancer(d *schema.ResourceData, resp vesapi.GetObject
 	d.Set("advertise_custom", FlattenAdvertiseCustom(spec.GcSpec.GetAdvertiseCustom()))
 	d.Set("advertise_on_public", FlattenAdvertiseOnPublic(spec.GcSpec.GetAdvertiseOnPublic()))
 	d.Set("advertise_on_public_default_vip", isEmpty(spec.GcSpec.GetAdvertiseOnPublicDefaultVip()))
-	d.Set("do_npt_advertise", isEmpty(spec.GcSpec.GetDoNotAdvertise()))
+	d.Set("do_not_advertise", isEmpty(spec.GcSpec.GetDoNotAdvertise()))
 	d.Set("do_not_retract_cluster", isEmpty(spec.GcSpec.GetDoNotRetractCluster()))
 	d.Set("retract_cluster", isEmpty(spec.GcSpec.GetRetractCluster()))
 	d.Set("dns_volterra_managed", spec.GcSpec.GetDnsVolterraManaged())
@@ -77,7 +61,7 @@ func DriftDetectionTcpLoadbalancer(d *schema.ResourceData, resp vesapi.GetObject
 	d.Set("tcp", isEmpty(spec.GcSpec.GetTcp()))
 	d.Set("tls_tcp", FlattenTlsTcp(spec.GcSpec.GetTlsTcp()))
 	d.Set("tls_tcp_auto_cert", FlattenTlsTcpAutoCert(spec.GcSpec.GetTlsTcpAutoCert()))
-	d.Set("origin_pools_weights", FlattenOriginPoolsWeights(spec.GcSpec.GetOriginPoolsWeights()))
+	d.Set("origin_pools_weights", FlattenDefaultRoutePools(spec.GcSpec.GetOriginPoolsWeights()))
 	d.Set("listen_port", spec.GcSpec.GetListenPort())
 	d.Set("port_ranges", spec.GcSpec.GetPortRanges())
 	d.Set("active_service_policies", FlattenActiveServicePoliciesTcp(spec.GcSpec.GetActiveServicePolicies()))

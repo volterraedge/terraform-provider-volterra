@@ -138,6 +138,11 @@ func resourceVolterraNfvService() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"crl": {
 
 													Type:     schema.TypeSet,
@@ -521,6 +526,11 @@ func resourceVolterraNfvService() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
 
 												"crl": {
 
@@ -906,6 +916,11 @@ func resourceVolterraNfvService() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"crl": {
 
 													Type:     schema.TypeSet,
@@ -1289,6 +1304,11 @@ func resourceVolterraNfvService() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
 
 												"crl": {
 
@@ -3313,6 +3333,12 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
+
 							crlChoiceTypeFound := false
 
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
@@ -3811,6 +3837,12 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
 
 							crlChoiceTypeFound := false
 
@@ -4311,6 +4343,12 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
+
 							crlChoiceTypeFound := false
 
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
@@ -4809,6 +4847,12 @@ func resourceVolterraNfvServiceCreate(d *schema.ResourceData, meta interface{}) 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
 
 							crlChoiceTypeFound := false
 
@@ -7393,6 +7437,12 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
+
 							crlChoiceTypeFound := false
 
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
@@ -7891,6 +7941,12 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
 
 							crlChoiceTypeFound := false
 
@@ -8391,6 +8447,12 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
+
 							crlChoiceTypeFound := false
 
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
@@ -8889,6 +8951,12 @@ func resourceVolterraNfvServiceUpdate(d *schema.ResourceData, meta interface{}) 
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
 
 							crlChoiceTypeFound := false
 

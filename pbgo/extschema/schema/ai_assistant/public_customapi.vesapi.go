@@ -393,7 +393,7 @@ var SahayaAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ai_assistant-sahayaapi-aiassistantquery"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ai_assistant-sahayaapi-aiassistantquery"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ai_assistant.SahayaAPI.AIAssistantQuery"
             },
@@ -431,7 +431,7 @@ var SahayaAPISwaggerJSON string = `{
             "description": "AI Assistant Query Response",
             "title": "AI Assistant Query Response",
             "x-displayname": "AI Assistant Query Response",
-            "x-ves-oneof-field-response_choice": "[\"explain_log\",\"gen_dashboard_filter\"]",
+            "x-ves-oneof-field-response_choice": "[\"explain_log\",\"gen_dashboard_filter\",\"generic_response\",\"site_analysis_response\"]",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.AIAssistantQueryResponse",
             "properties": {
                 "current_query": {
@@ -442,28 +442,42 @@ var SahayaAPISwaggerJSON string = `{
                     "x-ves-example": "Explain security event 07e03bc6-81d4-4c86-a865-67b5763fe294"
                 },
                 "explain_log": {
-                    "description": "Exclusive with [gen_dashboard_filter]\n Explain log response",
+                    "description": "Exclusive with [gen_dashboard_filter generic_response site_analysis_response]\n Explain log response",
                     "title": "explain_log",
                     "$ref": "#/definitions/explain_log_recordExplainLogRecordResponse",
                     "x-displayname": "Explain log"
                 },
                 "gen_dashboard_filter": {
-                    "description": "Exclusive with [explain_log]\n Generate dashboard filter response",
+                    "description": "Exclusive with [explain_log generic_response site_analysis_response]\n Generate dashboard filter response",
                     "title": "gen_dashboard_filter",
                     "$ref": "#/definitions/gen_dashboard_filterGenDashboardFilterResponse",
                     "x-displayname": "Generate dashboard filter"
+                },
+                "generic_response": {
+                    "description": "Exclusive with [explain_log gen_dashboard_filter site_analysis_response]\n Generic Response",
+                    "title": "generic_response",
+                    "$ref": "#/definitions/commonGenericResponse",
+                    "x-displayname": "Generic Response"
+                },
+                "site_analysis_response": {
+                    "description": "Exclusive with [explain_log gen_dashboard_filter generic_response]\n Site Analysis",
+                    "title": "site_analysis",
+                    "$ref": "#/definitions/site_analysisSiteAnalysisResponse",
+                    "x-displayname": "Site analysis"
                 }
             }
         },
         "ai_assistantexplain_log_recordAction": {
             "type": "string",
-            "description": "Action taken for the request\n\n - ALLOW: Allow\n\nThe request was allowed to pass\n - BLOCK: Block\n\nThe request was blocked",
+            "description": "Action taken for the request\n\n - ACTION_NONE: None\n\nNo action\n - ALLOW: Allow\n\nThe request was allowed to pass\n - BLOCK: Block\n\nThe request was blocked\n - REDIRECT: Redirect\n\nThe request was redirected",
             "title": "Action",
             "enum": [
+                "ACTION_NONE",
                 "ALLOW",
-                "BLOCK"
+                "BLOCK",
+                "REDIRECT"
             ],
-            "default": "ALLOW",
+            "default": "ACTION_NONE",
             "x-displayname": "Action",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.explain_log_record.Action"
         },
@@ -474,6 +488,17 @@ var SahayaAPISwaggerJSON string = `{
             "x-displayname": "Dashboard Link",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.common.DashboardLink",
             "properties": {
+                "key": {
+                    "type": "string",
+                    "description": " Key will present a placeholder in a text field to insert the link.\n For example: To view these events go to the ${{link:db_link}}.\n\nExample: - \"db_link\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "db_link",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "log_filters": {
                     "type": "array",
                     "description": " Logs filter",
@@ -504,8 +529,15 @@ var SahayaAPISwaggerJSON string = `{
                     "x-displayname": "Time Range",
                     "x-ves-example": "604800"
                 },
+                "title": {
+                    "type": "string",
+                    "description": " Title for the link\n\nExample: - \"Security Analytics lb1\"-",
+                    "title": "title",
+                    "x-displayname": "Title",
+                    "x-ves-example": "Security Analytics lb1"
+                },
                 "type": {
-                    "description": " Type of the link to be presented.\n SECURITY_ANALYTICS_EVENTS --\u003e /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n REQUESTS_EVENTS --\u003e /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request\n\nExample: - \"SECURITY_ANALYTICS_EVENTS\"-",
+                    "description": " Type of the link to be presented.\n SECURITY_ANALYTICS_EVENTS --\u003e /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n REQUESTS_EVENTS --\u003e /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request\n SITES --\u003e /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard\n CLOUD_CREDENTIALS --\u003e /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/cloud_credential\n\nExample: - \"SECURITY_ANALYTICS_EVENTS\"-",
                     "title": "type",
                     "$ref": "#/definitions/commonDashboardLinkType",
                     "x-displayname": "Type",
@@ -515,11 +547,13 @@ var SahayaAPISwaggerJSON string = `{
         },
         "commonDashboardLinkType": {
             "type": "string",
-            "description": "Link Type to be presented\n\n - SECURITY_ANALYTICS_EVENTS: SECURITY_ANALYTICS_EVENTS\n\nSecurity analytics dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n - REQUESTS_EVENTS: REQUESTS_EVENTS\n\nRequests dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request",
+            "description": "Link Type to be presented\n\n - SECURITY_ANALYTICS_EVENTS: SECURITY_ANALYTICS_EVENTS\n\nSecurity analytics dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_analytics/events\n - REQUESTS_EVENTS: REQUESTS_EVENTS\n\nRequests dashboard: /web/workspaces/web-app-and-api-protection/../dashboard/security-dashboard/../security_monitoring/request\n - SITES: SITES\n\nSites dashboard: /web/workspaces/multi-cloud-network-connect/overview/sites/dashboard\n - CLOUD_CREDENTIALS: CLOUD_CREDENTIALS\n\nCLOUD_CREDENTIALS --\u003e /web/workspaces/multi-cloud-network-connect/manage/site_management/cloud_sites/cloud_credential",
             "title": "LinkType",
             "enum": [
                 "SECURITY_ANALYTICS_EVENTS",
-                "REQUESTS_EVENTS"
+                "REQUESTS_EVENTS",
+                "SITES",
+                "CLOUD_CREDENTIALS"
             ],
             "default": "SECURITY_ANALYTICS_EVENTS",
             "x-displayname": "Link Type",
@@ -544,12 +578,54 @@ var SahayaAPISwaggerJSON string = `{
             "x-displayname": "Generic Link",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.common.GenericLink",
             "properties": {
+                "key": {
+                    "type": "string",
+                    "description": " Key will present a placeholder in a text field to insert the link.\n For example: To view these events go to the ${{link:db_link}}.\n\nExample: - \"db_link\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "db_link",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "title": {
+                    "type": "string",
+                    "description": " Title for the link\n\nExample: - \"Security Analytics lb1\"-",
+                    "title": "title",
+                    "x-displayname": "Title",
+                    "x-ves-example": "Security Analytics lb1"
+                },
                 "url": {
                     "type": "string",
                     "description": " Full url\n\nExample: - \"https://datatracker.ietf.org/doc/html/rfc3986\"-",
                     "title": "url",
                     "x-displayname": "URL",
                     "x-ves-example": "https://datatracker.ietf.org/doc/html/rfc3986"
+                }
+            }
+        },
+        "commonGenericResponse": {
+            "type": "object",
+            "description": "Generic Response",
+            "title": "Generic Response",
+            "x-displayname": "Generic Response",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.common.GenericResponse",
+            "properties": {
+                "is_error": {
+                    "type": "boolean",
+                    "description": "\n\nExample: - \"true\"-",
+                    "title": "is_error",
+                    "format": "boolean",
+                    "x-displayname": "is_error",
+                    "x-ves-example": "true"
+                },
+                "summary": {
+                    "type": "string",
+                    "description": " \n\nExample: - \"Query not supported\"-",
+                    "title": "Summary",
+                    "x-displayname": "Summary",
+                    "x-ves-example": "Query not supported"
                 }
             }
         },
@@ -572,24 +648,6 @@ var SahayaAPISwaggerJSON string = `{
                     "title": "generic_link",
                     "$ref": "#/definitions/commonGenericLink",
                     "x-displayname": "Generic Link"
-                },
-                "key": {
-                    "type": "string",
-                    "description": " Key will present a placeholder in a text field to insert the link.\n For example: To view these events go to the ${{link:db_link}}.\n\nExample: - \"db_link\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "key",
-                    "x-displayname": "Key",
-                    "x-ves-example": "db_link",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "title": {
-                    "type": "string",
-                    "description": " Title for the link\n\nExample: - \"Security Analytics lb1\"-",
-                    "title": "title",
-                    "x-displayname": "Title",
-                    "x-ves-example": "Security Analytics lb1"
                 }
             }
         },
@@ -628,14 +686,15 @@ var SahayaAPISwaggerJSON string = `{
         },
         "explain_log_recordAccuracy": {
             "type": "string",
-            "description": "Specifies accuracy of the signature\n\n - LOW_ACCURACY: Low\n\nSpecifies low accuracy of the signature\n - MEDIUM_ACCURACY: Medium\n\nSpecifies medium accuracy of the signature\n - HIGH_ACCURACY: High\n\nSpecifies high accuracy of the signature",
+            "description": "Specifies accuracy of the signature\n\n - ACCURACY_NONE: None\n\nNo accuracy\n - ACCURACY_LOW: Low\n\nSpecifies low accuracy of the signature\n - ACCURACY_MEDIUM: Medium\n\nSpecifies medium accuracy of the signature\n - ACCURACY_HIGH: High\n\nSpecifies high accuracy of the signature",
             "title": "Accuracy",
             "enum": [
-                "LOW_ACCURACY",
-                "MEDIUM_ACCURACY",
-                "HIGH_ACCURACY"
+                "ACCURACY_NONE",
+                "ACCURACY_LOW",
+                "ACCURACY_MEDIUM",
+                "ACCURACY_HIGH"
             ],
-            "default": "LOW_ACCURACY",
+            "default": "ACCURACY_NONE",
             "x-displayname": "Accuracy",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.explain_log_record.Accuracy"
         },
@@ -669,15 +728,60 @@ var SahayaAPISwaggerJSON string = `{
                 }
             }
         },
+        "explain_log_recordBotDefenseEventDetails": {
+            "type": "object",
+            "description": "Bot Defense security events details",
+            "title": "BotDefenseEventDetails",
+            "x-displayname": "Bot Defense Event Details",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.explain_log_record.BotDefenseEventDetails",
+            "properties": {
+                "action": {
+                    "description": " Event action\n\nExample: - \"Block\"-",
+                    "title": "action",
+                    "$ref": "#/definitions/ai_assistantexplain_log_recordAction",
+                    "x-displayname": "Action",
+                    "x-ves-example": "Block"
+                },
+                "automation_type": {
+                    "type": "string",
+                    "description": " Bot automation type\n\nExample: - \"Token Missing\"-",
+                    "title": "automation_type",
+                    "x-displayname": "Automation type",
+                    "x-ves-example": "Token Missing"
+                },
+                "bot_type": {
+                    "type": "string",
+                    "description": " Bot type\n\nExample: - \"MALICIOUS\"-",
+                    "title": "bot_type",
+                    "x-displayname": "Bot type",
+                    "x-ves-example": "MALICIOUS"
+                },
+                "method": {
+                    "type": "string",
+                    "description": " Method of the request\n\nExample: - \"GET\"-",
+                    "title": "method",
+                    "x-displayname": "Method",
+                    "x-ves-example": "GET"
+                },
+                "request_path": {
+                    "type": "string",
+                    "description": " Request path\n\nExample: - \"/api/support/cases/case1\"-",
+                    "title": "request_path",
+                    "x-displayname": "Request Path",
+                    "x-ves-example": "/api/support/cases/case1"
+                }
+            }
+        },
         "explain_log_recordEnforcementMode": {
             "type": "string",
-            "description": "Enforcement mode of WAF\n\n - MONITORING: Monitoring\n\nMonitoring mode of waf\n - BLOCKING: Blocking\n\nBlocking mode of waf",
+            "description": "Enforcement mode of WAF\n\n - ENFORCEMENT_NONE: None\n\nNo enforcement\n - MONITORING: Monitoring\n\nMonitoring mode of waf\n - BLOCKING: Blocking\n\nBlocking mode of waf",
             "title": "EnforcementMode",
             "enum": [
+                "ENFORCEMENT_NONE",
                 "MONITORING",
                 "BLOCKING"
             ],
-            "default": "MONITORING",
+            "default": "ENFORCEMENT_NONE",
             "x-displayname": "Enforcement Mode",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.explain_log_record.EnforcementMode"
         },
@@ -686,7 +790,7 @@ var SahayaAPISwaggerJSON string = `{
             "description": "Explain log response",
             "title": "ExplainLogRecordResponse",
             "x-displayname": "Explain Log Record Response",
-            "x-ves-oneof-field-details": "[\"svc_policy_event_details\",\"waf_event_details\"]",
+            "x-ves-oneof-field-details": "[\"bot_defense_event_details\",\"request_details\",\"svc_policy_event_details\",\"waf_event_details\"]",
             "x-ves-proto-message": "ves.io.schema.ai_assistant.explain_log_record.ExplainLogRecordResponse",
             "properties": {
                 "actions": {
@@ -703,6 +807,18 @@ var SahayaAPISwaggerJSON string = `{
                     "x-displayname": "Analysis",
                     "x-ves-example": "The request was blocked because Null in request violation was detected"
                 },
+                "bot_defense_event_details": {
+                    "description": "Exclusive with [request_details svc_policy_event_details waf_event_details]\n Bot Defense event details",
+                    "title": "BotDefenseEventDetails",
+                    "$ref": "#/definitions/explain_log_recordBotDefenseEventDetails",
+                    "x-displayname": "Bot Defense event details"
+                },
+                "request_details": {
+                    "description": "Exclusive with [bot_defense_event_details svc_policy_event_details waf_event_details]\n Request details",
+                    "title": "RequestDetails",
+                    "$ref": "#/definitions/explain_log_recordRequestDetails",
+                    "x-displayname": "Requets Details"
+                },
                 "summary": {
                     "type": "string",
                     "description": " Log summary\n\nExample: - \"Request Id 12345 refers to a WAF security event for an HTTP request that was blocked\"-",
@@ -711,13 +827,13 @@ var SahayaAPISwaggerJSON string = `{
                     "x-ves-example": "Request Id 12345 refers to a WAF security event for an HTTP request that was blocked"
                 },
                 "svc_policy_event_details": {
-                    "description": "Exclusive with [waf_event_details]\n Service Policy event details",
+                    "description": "Exclusive with [bot_defense_event_details request_details waf_event_details]\n Service Policy event details",
                     "title": "SvcPolicyEventDetails",
                     "$ref": "#/definitions/explain_log_recordSvcPolicyEventDetails",
                     "x-displayname": "Service Policy event details"
                 },
                 "waf_event_details": {
-                    "description": "Exclusive with [svc_policy_event_details]\n WAF event details",
+                    "description": "Exclusive with [bot_defense_event_details request_details svc_policy_event_details]\n WAF event details",
                     "title": "WAFEventDetails",
                     "$ref": "#/definitions/explain_log_recordWAFEventDetails",
                     "x-displayname": "WAF event details"
@@ -726,15 +842,54 @@ var SahayaAPISwaggerJSON string = `{
         },
         "explain_log_recordIPReputation": {
             "type": "string",
-            "description": "Specifies IP risk/trustworthiness\n\n - LOW_REPUTATION: Low\n\nSpecifies low IP risk/trustworthiness\n - HIGH_REPUTATION: High\n\nSpecifies high IP risk/trustworthiness",
+            "description": "Specifies IP risk/trustworthiness\n\n - IP_REPUTATION_NONE: None\n\nNo IP reputation\n - IP_REPUTATION_LOW: Low\n\nSpecifies low IP risk/trustworthiness\n - IP_REPUTATION_HIGH: High\n\nSpecifies high IP risk/trustworthiness",
             "title": "IPReputation",
             "enum": [
-                "LOW_REPUTATION",
-                "HIGH_REPUTATION"
+                "IP_REPUTATION_NONE",
+                "IP_REPUTATION_LOW",
+                "IP_REPUTATION_HIGH"
             ],
-            "default": "LOW_REPUTATION",
+            "default": "IP_REPUTATION_NONE",
             "x-displayname": "IP Reputation",
             "x-ves-proto-enum": "ves.io.schema.ai_assistant.explain_log_record.IPReputation"
+        },
+        "explain_log_recordRequestDetails": {
+            "type": "object",
+            "description": "Request details",
+            "title": "RequestDetails",
+            "x-displayname": "Request Details",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.explain_log_record.RequestDetails",
+            "properties": {
+                "domain": {
+                    "type": "string",
+                    "description": " domain\n\nExample: - \"example.com\"-",
+                    "title": "domain",
+                    "x-displayname": "domain",
+                    "x-ves-example": "example.com"
+                },
+                "rsp_code": {
+                    "type": "integer",
+                    "description": " rsp_code\n\nExample: - \"200\"-",
+                    "title": "rsp_code",
+                    "format": "int64",
+                    "x-displayname": "Response Code",
+                    "x-ves-example": "200"
+                },
+                "rsp_code_details": {
+                    "type": "string",
+                    "description": " rsp_code_details\n\nExample: - \"via upstream\"-",
+                    "title": "rsp_code_details",
+                    "x-displayname": "Response Code Details",
+                    "x-ves-example": "via upstream"
+                },
+                "upstream_protocol_error_reason": {
+                    "type": "string",
+                    "description": " upstream_protocol_error_reason\n\nExample: - \"headers_count_exceeds_limit\"-",
+                    "title": "upstream_protocol_error_reason",
+                    "x-displayname": "Upstream Protocol Error Reason",
+                    "x-ves-example": "headers_count_exceeds_limit"
+                }
+            }
         },
         "explain_log_recordSignature": {
             "type": "object",
@@ -784,6 +939,13 @@ var SahayaAPISwaggerJSON string = `{
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "shell command processor"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State of the signature, can be enabled, suppressed and etc\n\nExample: - \"Enabled\"-",
+                    "title": "state",
+                    "x-displayname": "State",
+                    "x-ves-example": "Enabled"
                 }
             }
         },
@@ -912,6 +1074,13 @@ var SahayaAPISwaggerJSON string = `{
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "Illegal filetype"
+                },
+                "state": {
+                    "type": "string",
+                    "description": " State of the violation, can be enabled, suppressed and etc\n\nExample: - \"Enabled\"-",
+                    "title": "state",
+                    "x-displayname": "State",
+                    "x-ves-example": "Enabled"
                 }
             }
         },
@@ -1031,6 +1200,67 @@ var SahayaAPISwaggerJSON string = `{
             "default": "SPAM_SOURCES",
             "x-displayname": "IP Threat Category",
             "x-ves-proto-enum": "ves.io.schema.policy.IPThreatCategory"
+        },
+        "site_analysisAnalysisAndAction": {
+            "type": "object",
+            "description": "Analysis and Action",
+            "title": "Analysis and Action",
+            "x-displayname": "Analysis and Action",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.site_analysis.AnalysisAndAction",
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"Retry provisioning the site\"-",
+                    "title": "action",
+                    "x-displayname": "Action",
+                    "x-ves-example": "Retry provisioning the site"
+                },
+                "analysis": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"siteA is in provisioning state due to connectivity issues\"-",
+                    "title": "analysis",
+                    "x-displayname": "Analysis",
+                    "x-ves-example": "siteA is in provisioning state due to connectivity issues"
+                }
+            }
+        },
+        "site_analysisSiteAnalysisResponse": {
+            "type": "object",
+            "description": "Site analysis response",
+            "title": "Site Analysis Response",
+            "x-displayname": "Site Analysis Response",
+            "x-ves-proto-message": "ves.io.schema.ai_assistant.site_analysis.SiteAnalysisResponse",
+            "properties": {
+                "analysis_and_actions": {
+                    "type": "array",
+                    "description": " Site Status Analysis and Actions list\n\nExample: - \"The site failed because it was stuck in provisioning state. Retry provisioning the site\"-",
+                    "title": "analysis and action list",
+                    "items": {
+                        "$ref": "#/definitions/site_analysisAnalysisAndAction"
+                    },
+                    "x-displayname": "Analysis and Action list",
+                    "x-ves-example": "The site failed because it was stuck in provisioning state. Retry provisioning the site"
+                },
+                "external_link": {
+                    "description": " External doc link, that will be presented to the user",
+                    "title": "external doc link",
+                    "$ref": "#/definitions/commonLink",
+                    "x-displayname": "External Link"
+                },
+                "internal_link": {
+                    "description": " Internal Link like dashboard link, that will be presented to the user",
+                    "title": "internal link",
+                    "$ref": "#/definitions/commonLink",
+                    "x-displayname": "Internal Link"
+                },
+                "summary": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"This site analysis response provides status of sites.\"-",
+                    "title": "summary",
+                    "x-displayname": "Summary",
+                    "x-ves-example": "This site analysis response provides status of sites."
+                }
+            }
         }
     },
     "x-displayname": "AI Assistant APIs",

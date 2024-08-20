@@ -542,7 +542,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-nginx-nms-agent_certs-customapi-generateagentcert"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-nginx-nms-agent_certs-customapi-generateagentcert"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.nginx.nms.agent_certs.CustomAPI.GenerateAgentCert"
             },
@@ -626,7 +626,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-nginx-nms-agent_certs-customapi-revokeagentcert"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-nginx-nms-agent_certs-customapi-revokeagentcert"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.nginx.nms.agent_certs.CustomAPI.RevokeAgentCert"
             },
