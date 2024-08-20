@@ -14,8 +14,6 @@ import (
 
 func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tenant.AssignDomainOwnerRequest"] = AssignDomainOwnerRequestValidator()
-	vr["ves.io.schema.tenant.CreateDebugUserRequest"] = CreateDebugUserRequestValidator()
-	vr["ves.io.schema.tenant.DebugUser"] = DebugUserValidator()
 	vr["ves.io.schema.tenant.DeleteTenantRequest"] = DeleteTenantRequestValidator()
 	vr["ves.io.schema.tenant.DisableTenantResponse"] = DisableTenantResponseValidator()
 	vr["ves.io.schema.tenant.EscalationDocResp"] = EscalationDocRespValidator()
@@ -46,6 +44,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.tenant.CA"] = CAValidator()
 	vr["ves.io.schema.tenant.CredentialsExpiry"] = CredentialsExpiryValidator()
+	vr["ves.io.schema.tenant.DeactivateTenantRequest"] = DeactivateTenantRequestValidator()
+	vr["ves.io.schema.tenant.DeactivateTenantResponse"] = DeactivateTenantResponseValidator()
 	vr["ves.io.schema.tenant.Empty"] = EmptyValidator()
 	vr["ves.io.schema.tenant.EncryptedPassword"] = EncryptedPasswordValidator()
 	vr["ves.io.schema.tenant.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -104,6 +104,25 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.tenant.CustomAPI"] = RegisterGwCustomAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.tenant.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PvtCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = CustomPrivateAPIEywaprimeSwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = NewCustomPrivateAPIEywaprimeGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = NewCustomPrivateAPIEywaprimeRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = RegisterCustomPrivateAPIEywaprimeServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = RegisterGwCustomPrivateAPIEywaprimeHandler
+		customCSR.ServerRegistry["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomPrivateAPIEywaprimeServer(svc)
 		}
 
 	}()

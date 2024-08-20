@@ -81,6 +81,44 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"advertise_on_public": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"public_ip": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"cloud_edge_segment": {
 
 										Type:     schema.TypeSet,
@@ -515,6 +553,59 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 										},
 									},
 
+									"virtual_site_with_vip": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"network": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"virtual_site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"vk8s_service": {
 
 										Type:     schema.TypeSet,
@@ -584,6 +675,12 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 									"port": {
 
 										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"port_ranges": {
+
+										Type:     schema.TypeString,
 										Optional: true,
 									},
 
@@ -766,6 +863,11 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"crl": {
 
 													Type:     schema.TypeSet,
@@ -943,6 +1045,11 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
 
 												"crl": {
 
@@ -1330,6 +1437,11 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"client_certificate_optional": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
 
 									"crl": {
 
@@ -1727,6 +1839,45 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 					choiceTypeFound := false
 
+					if v, ok := advertiseWhereMapStrToI["advertise_on_public"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_AdvertiseOnPublic{}
+						choiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								publicIp := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.AdvertiseOnPublic.PublicIp = publicIp
+								for _, set := range sl {
+									publicIpMapStrToI := set.(map[string]interface{})
+
+									if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
+										publicIp.Name = w.(string)
+									}
+
+									if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										publicIp.Namespace = w.(string)
+									}
+
+									if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										publicIp.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
@@ -1993,6 +2144,63 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 					}
 
+					if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_VirtualSiteWithVip{}
+						choiceInt.VirtualSiteWithVip = &ves_io_schema_views.WhereVirtualSiteSpecifiedVIP{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.VirtualSiteWithVip.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+								choiceInt.VirtualSiteWithVip.Ipv6 = v.(string)
+
+							}
+
+							if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+								choiceInt.VirtualSiteWithVip.Network = ves_io_schema_views.SiteNetworkSpecifiedVIP(ves_io_schema_views.SiteNetworkSpecifiedVIP_value[v.(string)])
+
+							}
+
+							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualSite := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VirtualSiteWithVip.VirtualSite = virtualSite
+								for _, set := range sl {
+									virtualSiteMapStrToI := set.(map[string]interface{})
+
+									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+										virtualSite.Name = w.(string)
+									}
+
+									if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										virtualSite.Namespace = w.(string)
+									}
+
+									if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										virtualSite.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := advertiseWhereMapStrToI["vk8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
@@ -2086,6 +2294,17 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 						advertiseWhere[i].PortChoice = portChoiceInt
 
 						portChoiceInt.Port = uint32(v.(int))
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+						portChoiceInt := &ves_io_schema_views.WhereType_PortRanges{}
+
+						advertiseWhere[i].PortChoice = portChoiceInt
+
+						portChoiceInt.PortRanges = v.(string)
 
 					}
 
@@ -2370,6 +2589,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
+
 							crlChoiceTypeFound := false
 
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
@@ -2632,6 +2857,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
 
 							crlChoiceTypeFound := false
 
@@ -3135,6 +3366,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+					}
 
 					crlChoiceTypeFound := false
 
@@ -3724,6 +3961,45 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 					choiceTypeFound := false
 
+					if v, ok := advertiseWhereMapStrToI["advertise_on_public"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_AdvertiseOnPublic{}
+						choiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								publicIp := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.AdvertiseOnPublic.PublicIp = publicIp
+								for _, set := range sl {
+									publicIpMapStrToI := set.(map[string]interface{})
+
+									if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
+										publicIp.Name = w.(string)
+									}
+
+									if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										publicIp.Namespace = w.(string)
+									}
+
+									if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										publicIp.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := advertiseWhereMapStrToI["site"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
@@ -3990,6 +4266,63 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 					}
 
+					if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+						choiceTypeFound = true
+						choiceInt := &ves_io_schema_views.WhereType_VirtualSiteWithVip{}
+						choiceInt.VirtualSiteWithVip = &ves_io_schema_views.WhereVirtualSiteSpecifiedVIP{}
+						advertiseWhere[i].Choice = choiceInt
+
+						sl := v.(*schema.Set).List()
+						for _, set := range sl {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+								choiceInt.VirtualSiteWithVip.Ip = v.(string)
+
+							}
+
+							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+								choiceInt.VirtualSiteWithVip.Ipv6 = v.(string)
+
+							}
+
+							if v, ok := cs["network"]; ok && !isIntfNil(v) {
+
+								choiceInt.VirtualSiteWithVip.Network = ves_io_schema_views.SiteNetworkSpecifiedVIP(ves_io_schema_views.SiteNetworkSpecifiedVIP_value[v.(string)])
+
+							}
+
+							if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+								sl := v.(*schema.Set).List()
+								virtualSite := &ves_io_schema_views.ObjectRefType{}
+								choiceInt.VirtualSiteWithVip.VirtualSite = virtualSite
+								for _, set := range sl {
+									virtualSiteMapStrToI := set.(map[string]interface{})
+
+									if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+										virtualSite.Name = w.(string)
+									}
+
+									if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+										virtualSite.Namespace = w.(string)
+									}
+
+									if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+										virtualSite.Tenant = w.(string)
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
 					if v, ok := advertiseWhereMapStrToI["vk8s_service"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 						choiceTypeFound = true
@@ -4083,6 +4416,17 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 						advertiseWhere[i].PortChoice = portChoiceInt
 
 						portChoiceInt.Port = uint32(v.(int))
+
+					}
+
+					if v, ok := advertiseWhereMapStrToI["port_ranges"]; ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+						portChoiceTypeFound = true
+						portChoiceInt := &ves_io_schema_views.WhereType_PortRanges{}
+
+						advertiseWhere[i].PortChoice = portChoiceInt
+
+						portChoiceInt.PortRanges = v.(string)
 
 					}
 
@@ -4358,6 +4702,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
 
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
+
 							crlChoiceTypeFound := false
 
 							if v, ok := cs["crl"]; ok && !isIntfNil(v) && !crlChoiceTypeFound {
@@ -4620,6 +4970,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 						sl := v.(*schema.Set).List()
 						for _, set := range sl {
 							cs := set.(map[string]interface{})
+
+							if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+								mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+							}
 
 							crlChoiceTypeFound := false
 
@@ -5123,6 +5479,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
+
+					if v, ok := cs["client_certificate_optional"]; ok && !isIntfNil(v) {
+
+						mtlsChoiceInt.UseMtls.ClientCertificateOptional = v.(bool)
+
+					}
 
 					crlChoiceTypeFound := false
 

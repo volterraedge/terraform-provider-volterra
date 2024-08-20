@@ -2809,7 +2809,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-configmaplist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-configmaplist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"
             },
@@ -2901,7 +2901,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-endpointslist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-endpointslist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList"
             },
@@ -2985,7 +2985,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-namespacelist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-namespacelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.NamespaceList"
             },
@@ -3077,7 +3077,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-configmaplist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-configmaplist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ConfigMapList"
             },
@@ -3169,7 +3169,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-endpointslist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-endpointslist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.EndpointsList"
             },
@@ -3261,7 +3261,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumeclaimlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumeclaimlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
             },
@@ -3353,7 +3353,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-podlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodList"
             },
@@ -3445,7 +3445,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-secretlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-secretlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.SecretList"
             },
@@ -3537,7 +3537,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-servicelist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-servicelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ServiceList"
             },
@@ -3621,7 +3621,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-nodelist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-nodelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.NodeList"
             },
@@ -3713,7 +3713,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumeclaimlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumeclaimlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeClaimList"
             },
@@ -3797,7 +3797,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumelist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-persistentvolumelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PersistentVolumeList"
             },
@@ -3889,7 +3889,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-podlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodList"
             },
@@ -3981,7 +3981,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-secretlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-secretlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.SecretList"
             },
@@ -4073,7 +4073,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-servicelist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-servicelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ServiceList"
             },
@@ -4165,7 +4165,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-daemonsetlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-daemonsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"
             },
@@ -4257,7 +4257,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-deploymentlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-deploymentlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList"
             },
@@ -4349,7 +4349,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-daemonsetlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-daemonsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DaemonSetList"
             },
@@ -4441,7 +4441,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-deploymentlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-deploymentlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.DeploymentList"
             },
@@ -4533,7 +4533,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-replicasetlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-replicasetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"
             },
@@ -4625,7 +4625,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-statefulsetlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-statefulsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"
             },
@@ -4717,7 +4717,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-replicasetlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-replicasetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.ReplicaSetList"
             },
@@ -4809,7 +4809,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-statefulsetlist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-statefulsetlist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.StatefulSetList"
             },
@@ -4901,7 +4901,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-joblist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-joblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.JobList"
             },
@@ -4993,7 +4993,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-joblist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-joblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.JobList"
             },
@@ -5085,7 +5085,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-cronjoblist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-cronjoblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.CronJobList"
             },
@@ -5177,7 +5177,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-cronjoblist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-cronjoblist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.CronJobList"
             },
@@ -5277,7 +5277,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podsmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-podsmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics"
             },
@@ -5377,7 +5377,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-virtualmachineinstancesmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-virtualmachineinstancesmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.VirtualMachineInstancesMetrics"
             },
@@ -5469,7 +5469,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-podsmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-podsmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.PodsMetrics"
             },
@@ -5561,7 +5561,7 @@ var CustomDataK8SAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-customdatak8sapi-virtualmachineinstancesmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-customdatak8sapi-virtualmachineinstancesmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.CustomDataK8SAPI.VirtualMachineInstancesMetrics"
             },

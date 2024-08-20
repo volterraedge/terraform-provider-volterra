@@ -401,7 +401,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-enhanced_firewall_policy-customdataapi-enhancedfirewallpolicyhits"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-enhanced_firewall_policy-customdataapi-enhancedfirewallpolicyhits"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.enhanced_firewall_policy.CustomDataAPI.EnhancedFirewallPolicyHits"
             },

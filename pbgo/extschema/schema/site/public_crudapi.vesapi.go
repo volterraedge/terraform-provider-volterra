@@ -1358,7 +1358,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.API.Replace"
             },
@@ -1474,7 +1474,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.API.List"
             },
@@ -1583,7 +1583,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.API.Get"
             },
@@ -2115,7 +2115,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
-            "description": "Tunnel encapsulation to be used between sites\n\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\nSite to site tunnel is of type ipsec\nSite to site tunnel is of type ssl",
+            "description": "Tunnel encapsulation to be used between sites\n\nTunnel can operate in both IPsec and SSL, with IPsec being prefered over SSL.\nTunnel is of type IPsec\nTunnel is of type SSL",
             "title": "Site to site tunnel type",
             "enum": [
                 "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",
@@ -2379,7 +2379,7 @@ var APISwaggerJSON string = `{
         },
         "schemaVipVrrpType": {
             "type": "string",
-            "description": "VRRP advertisement mode for VIP\n\nInvalid VRRP mode\nVRRP advertisement enabled for virtual-ip\nVRRP advertisement disabled for virtual-ip",
+            "description": "VRRP advertisement mode for VIP\n\nInvalid VRRP mode",
             "title": "VipVrrpType",
             "enum": [
                 "VIP_VRRP_INVALID",
@@ -3569,6 +3569,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPrivateConnectivityType",
                     "x-displayname": "Private Connectivity Information"
                 },
+                "re_select": {
+                    "description": " Selection criteria for Regional Edge connectivity",
+                    "$ref": "#/definitions/viewsRegionalEdgeSelection",
+                    "x-displayname": "Regional Edge Selection"
+                },
                 "region": {
                     "type": "string",
                     "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
@@ -4230,6 +4235,17 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/siteNetworkDevice"
                     },
                     "x-displayname": "Network"
+                },
+                "numa_nodes": {
+                    "type": "integer",
+                    "description": " Non-uniform memory access (NUMA) nodes count\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: 0\n",
+                    "title": "NUMA Nodes Count",
+                    "format": "int32",
+                    "x-displayname": "NUMA nodes count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "0"
+                    }
                 },
                 "os": {
                     "description": " os holds all general OS information",
@@ -5933,6 +5949,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsRegionalEdgeSelection": {
+            "type": "object",
+            "description": "Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",
+            "title": "Regional Edge Selection",
+            "x-displayname": "Regional Edge Selection",
+            "x-ves-oneof-field-re_selection_choice": "[\"geo_proximity\",\"specific_re\"]",
+            "x-ves-proto-message": "ves.io.schema.views.RegionalEdgeSelection",
+            "properties": {
+                "geo_proximity": {
+                    "description": "Exclusive with [specific_re]\n Select REs in closest proximity to the site based on the public IP address of the control nodes of the site.",
+                    "title": "Based on Geo-proximity",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Based on Geo-proximity"
+                },
+                "specific_re": {
+                    "description": "Exclusive with [geo_proximity]\n Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs.",
+                    "title": "Specific Geography",
+                    "$ref": "#/definitions/viewsSpecificRE",
+                    "x-displayname": "Specific Geography"
+                }
+            }
+        },
         "viewsSiteCloudLinkType": {
             "type": "object",
             "description": "Information related to cloud link used by the site",
@@ -5952,6 +5990,27 @@ var APISwaggerJSON string = `{
                     "title": "CloudLink State",
                     "$ref": "#/definitions/schemaCloudLinkState",
                     "x-displayname": "CloudLink State"
+                }
+            }
+        },
+        "viewsSpecificRE": {
+            "type": "object",
+            "description": "Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs.",
+            "title": "Specific RE",
+            "x-displayname": "Specific RE",
+            "x-ves-proto-message": "ves.io.schema.views.SpecificRE",
+            "properties": {
+                "primary_re": {
+                    "type": "string",
+                    "description": " Select primary RE for this site.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Primary RE Geography",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Primary RE Geography",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
                 }
             }
         }

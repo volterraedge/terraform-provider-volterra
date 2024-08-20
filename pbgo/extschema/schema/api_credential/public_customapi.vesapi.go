@@ -2352,7 +2352,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-activate"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-activate"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Activate"
             },
@@ -2444,7 +2444,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-activateservicecredentials"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-activateservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials"
             },
@@ -2528,7 +2528,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.List"
             },
@@ -2615,7 +2615,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Create"
             },
@@ -2707,7 +2707,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Get"
             },
@@ -2799,7 +2799,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-renew"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-renew"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Renew"
             },
@@ -2891,7 +2891,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-renewservicecredentials"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-renewservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RenewServiceCredentials"
             },
@@ -2983,7 +2983,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-revoke"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-revoke"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.Revoke"
             },
@@ -3075,7 +3075,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-revokescimtoken"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-revokescimtoken"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RevokeScimToken"
             },
@@ -3167,7 +3167,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-revokeservicecredentials"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-revokeservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RevokeServiceCredentials"
             },
@@ -3251,7 +3251,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-getscimtoken"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-getscimtoken"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.GetScimToken"
             },
@@ -3338,7 +3338,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-recreatescimtoken"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-recreatescimtoken"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.RecreateScimToken"
             },
@@ -3422,7 +3422,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-listservicecredentials"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-listservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials"
             },
@@ -3509,7 +3509,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_credential-customapi-createservicecredentials"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-createservicecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.CreateServiceCredentials"
             },

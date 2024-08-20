@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_group_element-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.api_group_element.crudapi.API.Create"
             },
@@ -3045,7 +3045,8 @@ var APISwaggerJSON string = `{
                 "CONNECT",
                 "OPTIONS",
                 "TRACE",
-                "PATCH"
+                "PATCH",
+                "COPY"
             ],
             "default": "ANY",
             "x-displayname": "HTTP Method",

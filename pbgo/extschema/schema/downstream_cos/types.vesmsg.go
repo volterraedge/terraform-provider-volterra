@@ -88,6 +88,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["http_limit_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_limit_options"))
+		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["listener_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("listener_limit"))
+		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -107,6 +125,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
 
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
+
+	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
+
+	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
 
 	return v
 }()
@@ -179,6 +201,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["http_limit_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_limit_options"))
+		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["listener_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("listener_limit"))
+		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -198,6 +238,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
 
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
+
+	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
+
+	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
 
 	return v
 }()
@@ -270,6 +314,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["http_limit_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_limit_options"))
+		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["listener_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("listener_limit"))
+		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -290,11 +352,236 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
 
+	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
+
+	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
+
 	return v
 }()
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HttpLimitOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HttpLimitOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *HttpLimitOptions) DeepCopy() *HttpLimitOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HttpLimitOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HttpLimitOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HttpLimitOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HttpLimitOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHttpLimitOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHttpLimitOptions) MaxConcurrentStreamsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_concurrent_streams")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpLimitOptions) DelayedCloseTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for delayed_close_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpLimitOptions) DrainTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for drain_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHttpLimitOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HttpLimitOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HttpLimitOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["delayed_close_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("delayed_close_timeout"))
+		if err := fv(ctx, m.GetDelayedCloseTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["drain_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("drain_timeout"))
+		if err := fv(ctx, m.GetDrainTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("idle_timeout"))
+		if err := fv(ctx, m.GetIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_concurrent_streams"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_concurrent_streams"))
+		if err := fv(ctx, m.GetMaxConcurrentStreams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_connection_duration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_connection_duration"))
+		if err := fv(ctx, m.GetMaxConnectionDuration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_requests_per_connection"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_requests_per_connection"))
+		if err := fv(ctx, m.GetMaxRequestsPerConnection(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_headers_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_headers_timeout"))
+		if err := fv(ctx, m.GetRequestHeadersTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_timeout"))
+		if err := fv(ctx, m.GetRequestTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["stream_idle_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("stream_idle_timeout"))
+		if err := fv(ctx, m.GetStreamIdleTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHttpLimitOptionsValidator = func() *ValidateHttpLimitOptions {
+	v := &ValidateHttpLimitOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMaxConcurrentStreams := v.MaxConcurrentStreamsValidationRuleHandler
+	rulesMaxConcurrentStreams := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "100",
+	}
+	vFn, err = vrhMaxConcurrentStreams(rulesMaxConcurrentStreams)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpLimitOptions.max_concurrent_streams: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_concurrent_streams"] = vFn
+
+	vrhDelayedCloseTimeout := v.DelayedCloseTimeoutValidationRuleHandler
+	rulesDelayedCloseTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "10000",
+	}
+	vFn, err = vrhDelayedCloseTimeout(rulesDelayedCloseTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpLimitOptions.delayed_close_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["delayed_close_timeout"] = vFn
+
+	vrhDrainTimeout := v.DrainTimeoutValidationRuleHandler
+	rulesDrainTimeout := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "10000",
+	}
+	vFn, err = vrhDrainTimeout(rulesDrainTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpLimitOptions.drain_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["drain_timeout"] = vFn
+
+	return v
+}()
+
+func HttpLimitOptionsValidator() db.Validator {
+	return DefaultHttpLimitOptionsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -370,6 +657,24 @@ func (v *ValidatePerCpuUtilizationLimit) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["http_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_limit"))
+		if err := fv(ctx, m.GetHttpLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_priority_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_priority_limit"))
+		if err := fv(ctx, m.GetRoutePriorityLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["soft_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("soft_limit"))
@@ -391,6 +696,10 @@ var DefaultPerCpuUtilizationLimitValidator = func() *ValidatePerCpuUtilizationLi
 	v.FldValidators["hard_limit"] = ves_io_schema.FractionalPercentValidator().Validate
 
 	v.FldValidators["close_limit"] = ves_io_schema.FractionalPercentValidator().Validate
+
+	v.FldValidators["http_limit"] = ves_io_schema.FractionalPercentValidator().Validate
+
+	v.FldValidators["route_priority_limit"] = ves_io_schema.FractionalPercentValidator().Validate
 
 	return v
 }()
@@ -463,6 +772,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["http_limit_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_limit_options"))
+		if err := fv(ctx, m.GetHttpLimitOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["listener_limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("listener_limit"))
+		if err := fv(ctx, m.GetListenerLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -483,6 +810,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
 
+	v.FldValidators["listener_limit"] = PerCpuUtilizationLimitValidator().Validate
+
+	v.FldValidators["http_limit_options"] = HttpLimitOptionsValidator().Validate
+
 	return v
 }()
 
@@ -495,6 +826,8 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 		return
 	}
 	m.CosLimit = f.GetCosLimit()
+	m.HttpLimitOptions = f.GetHttpLimitOptions()
+	m.ListenerLimit = f.GetListenerLimit()
 	m.TenantLimit = f.GetTenantLimit()
 }
 
@@ -514,6 +847,8 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	_ = m1
 
 	f.CosLimit = m1.CosLimit
+	f.HttpLimitOptions = m1.HttpLimitOptions
+	f.ListenerLimit = m1.ListenerLimit
 	f.TenantLimit = m1.TenantLimit
 }
 
@@ -530,6 +865,8 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.CosLimit = f.GetCosLimit()
+	m.HttpLimitOptions = f.GetHttpLimitOptions()
+	m.ListenerLimit = f.GetListenerLimit()
 	m.TenantLimit = f.GetTenantLimit()
 }
 
@@ -549,6 +886,8 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.CosLimit = m1.CosLimit
+	f.HttpLimitOptions = m1.HttpLimitOptions
+	f.ListenerLimit = m1.ListenerLimit
 	f.TenantLimit = m1.TenantLimit
 }
 
@@ -565,6 +904,8 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 		return
 	}
 	m.CosLimit = f.GetCosLimit()
+	m.HttpLimitOptions = f.GetHttpLimitOptions()
+	m.ListenerLimit = f.GetListenerLimit()
 	m.TenantLimit = f.GetTenantLimit()
 }
 
@@ -584,6 +925,8 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	_ = m1
 
 	f.CosLimit = m1.CosLimit
+	f.HttpLimitOptions = m1.HttpLimitOptions
+	f.ListenerLimit = m1.ListenerLimit
 	f.TenantLimit = m1.TenantLimit
 }
 

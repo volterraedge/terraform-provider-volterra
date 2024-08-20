@@ -1641,7 +1641,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.API.List"
             },
@@ -1720,7 +1720,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.API.Create"
             },
@@ -1812,7 +1812,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.API.Replace"
             },
@@ -1922,7 +1922,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.API.Get"
             },

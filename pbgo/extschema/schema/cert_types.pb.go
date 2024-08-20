@@ -200,6 +200,17 @@ type CertificateParamsType struct {
 	// If true, F5XC will reject connections without a valid client
 	// certificate.
 	RequireClientCertificate bool `protobuf:"varint,6,opt,name=require_client_certificate,json=requireClientCertificate,proto3" json:"require_client_certificate,omitempty"`
+	// Client certificate verification
+	//
+	// x-displayName: "Client certificate verification"
+	// x-required
+	// Configuration to indicate whether client certificate verification is required
+	//
+	// Types that are valid to be assigned to ClientCertificateVerifyChoice:
+	//	*CertificateParamsType_NoClientCertificate
+	//	*CertificateParamsType_ClientCertificateRequired
+	//	*CertificateParamsType_ClientCertificateOptional
+	ClientCertificateVerifyChoice isCertificateParamsType_ClientCertificateVerifyChoice `protobuf_oneof:"client_certificate_verify_choice"`
 	// Certificate Revocation list
 	//
 	// x-displayName: "CRL"
@@ -241,6 +252,37 @@ func (m *CertificateParamsType) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_CertificateParamsType proto.InternalMessageInfo
+
+type isCertificateParamsType_ClientCertificateVerifyChoice interface {
+	isCertificateParamsType_ClientCertificateVerifyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CertificateParamsType_NoClientCertificate struct {
+	NoClientCertificate *Empty `protobuf:"bytes,10,opt,name=no_client_certificate,json=noClientCertificate,proto3,oneof" json:"no_client_certificate,omitempty"`
+}
+type CertificateParamsType_ClientCertificateRequired struct {
+	ClientCertificateRequired *Empty `protobuf:"bytes,11,opt,name=client_certificate_required,json=clientCertificateRequired,proto3,oneof" json:"client_certificate_required,omitempty"`
+}
+type CertificateParamsType_ClientCertificateOptional struct {
+	ClientCertificateOptional *Empty `protobuf:"bytes,12,opt,name=client_certificate_optional,json=clientCertificateOptional,proto3,oneof" json:"client_certificate_optional,omitempty"`
+}
+
+func (*CertificateParamsType_NoClientCertificate) isCertificateParamsType_ClientCertificateVerifyChoice() {
+}
+func (*CertificateParamsType_ClientCertificateRequired) isCertificateParamsType_ClientCertificateVerifyChoice() {
+}
+func (*CertificateParamsType_ClientCertificateOptional) isCertificateParamsType_ClientCertificateVerifyChoice() {
+}
+
+func (m *CertificateParamsType) GetClientCertificateVerifyChoice() isCertificateParamsType_ClientCertificateVerifyChoice {
+	if m != nil {
+		return m.ClientCertificateVerifyChoice
+	}
+	return nil
+}
 
 func (m *CertificateParamsType) GetCertificates() []*ObjectRefType {
 	if m != nil {
@@ -284,6 +326,27 @@ func (m *CertificateParamsType) GetRequireClientCertificate() bool {
 	return false
 }
 
+func (m *CertificateParamsType) GetNoClientCertificate() *Empty {
+	if x, ok := m.GetClientCertificateVerifyChoice().(*CertificateParamsType_NoClientCertificate); ok {
+		return x.NoClientCertificate
+	}
+	return nil
+}
+
+func (m *CertificateParamsType) GetClientCertificateRequired() *Empty {
+	if x, ok := m.GetClientCertificateVerifyChoice().(*CertificateParamsType_ClientCertificateRequired); ok {
+		return x.ClientCertificateRequired
+	}
+	return nil
+}
+
+func (m *CertificateParamsType) GetClientCertificateOptional() *Empty {
+	if x, ok := m.GetClientCertificateVerifyChoice().(*CertificateParamsType_ClientCertificateOptional); ok {
+		return x.ClientCertificateOptional
+	}
+	return nil
+}
+
 func (m *CertificateParamsType) GetCrl() []*ObjectRefType {
 	if m != nil {
 		return m.Crl
@@ -296,6 +359,15 @@ func (m *CertificateParamsType) GetXfccHeaderElements() []XfccElement {
 		return m.XfccHeaderElements
 	}
 	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CertificateParamsType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CertificateParamsType_NoClientCertificate)(nil),
+		(*CertificateParamsType_ClientCertificateRequired)(nil),
+		(*CertificateParamsType_ClientCertificateOptional)(nil),
+	}
 }
 
 // UpstreamCertificateParamsType
@@ -448,6 +520,18 @@ type UpstreamTlsParamsType struct {
 	//	*UpstreamTlsParamsType_UseHostHeaderAsSni
 	//	*UpstreamTlsParamsType_DisableSni
 	SniChoice isUpstreamTlsParamsType_SniChoice `protobuf_oneof:"sni_choice"`
+	// Max Session Keys
+	//
+	// x-displayName: "Max Session Keys"
+	// x-required
+	// Maximum number of session keys (Pre-Shared Keys for TLSv1.3+, Session IDs and Session Tickets
+	// for TLSv1.2 and older) to store for the purpose of session resumption.
+	//
+	// Types that are valid to be assigned to MaxSessionKeysType:
+	//	*UpstreamTlsParamsType_DefaultSessionKeyCaching
+	//	*UpstreamTlsParamsType_DisableSessionKeyCaching
+	//	*UpstreamTlsParamsType_MaxSessionKeys
+	MaxSessionKeysType isUpstreamTlsParamsType_MaxSessionKeysType `protobuf_oneof:"max_session_keys_type"`
 }
 
 func (m *UpstreamTlsParamsType) Reset()      { *m = UpstreamTlsParamsType{} }
@@ -490,6 +574,12 @@ type isUpstreamTlsParamsType_SniChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isUpstreamTlsParamsType_MaxSessionKeysType interface {
+	isUpstreamTlsParamsType_MaxSessionKeysType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type UpstreamTlsParamsType_CommonParams struct {
 	CommonParams *TlsParamsType `protobuf:"bytes,1,opt,name=common_params,json=commonParams,proto3,oneof" json:"common_params,omitempty"`
@@ -506,12 +596,24 @@ type UpstreamTlsParamsType_UseHostHeaderAsSni struct {
 type UpstreamTlsParamsType_DisableSni struct {
 	DisableSni *Empty `protobuf:"bytes,4,opt,name=disable_sni,json=disableSni,proto3,oneof" json:"disable_sni,omitempty"`
 }
+type UpstreamTlsParamsType_DefaultSessionKeyCaching struct {
+	DefaultSessionKeyCaching *Empty `protobuf:"bytes,9,opt,name=default_session_key_caching,json=defaultSessionKeyCaching,proto3,oneof" json:"default_session_key_caching,omitempty"`
+}
+type UpstreamTlsParamsType_DisableSessionKeyCaching struct {
+	DisableSessionKeyCaching *Empty `protobuf:"bytes,10,opt,name=disable_session_key_caching,json=disableSessionKeyCaching,proto3,oneof" json:"disable_session_key_caching,omitempty"`
+}
+type UpstreamTlsParamsType_MaxSessionKeys struct {
+	MaxSessionKeys uint32 `protobuf:"varint,11,opt,name=max_session_keys,json=maxSessionKeys,proto3,oneof" json:"max_session_keys,omitempty"`
+}
 
-func (*UpstreamTlsParamsType_CommonParams) isUpstreamTlsParamsType_TlsParamsChoice() {}
-func (*UpstreamTlsParamsType_CertParams) isUpstreamTlsParamsType_TlsParamsChoice()   {}
-func (*UpstreamTlsParamsType_Sni) isUpstreamTlsParamsType_SniChoice()                {}
-func (*UpstreamTlsParamsType_UseHostHeaderAsSni) isUpstreamTlsParamsType_SniChoice() {}
-func (*UpstreamTlsParamsType_DisableSni) isUpstreamTlsParamsType_SniChoice()         {}
+func (*UpstreamTlsParamsType_CommonParams) isUpstreamTlsParamsType_TlsParamsChoice()                {}
+func (*UpstreamTlsParamsType_CertParams) isUpstreamTlsParamsType_TlsParamsChoice()                  {}
+func (*UpstreamTlsParamsType_Sni) isUpstreamTlsParamsType_SniChoice()                               {}
+func (*UpstreamTlsParamsType_UseHostHeaderAsSni) isUpstreamTlsParamsType_SniChoice()                {}
+func (*UpstreamTlsParamsType_DisableSni) isUpstreamTlsParamsType_SniChoice()                        {}
+func (*UpstreamTlsParamsType_DefaultSessionKeyCaching) isUpstreamTlsParamsType_MaxSessionKeysType() {}
+func (*UpstreamTlsParamsType_DisableSessionKeyCaching) isUpstreamTlsParamsType_MaxSessionKeysType() {}
+func (*UpstreamTlsParamsType_MaxSessionKeys) isUpstreamTlsParamsType_MaxSessionKeysType()           {}
 
 func (m *UpstreamTlsParamsType) GetTlsParamsChoice() isUpstreamTlsParamsType_TlsParamsChoice {
 	if m != nil {
@@ -522,6 +624,12 @@ func (m *UpstreamTlsParamsType) GetTlsParamsChoice() isUpstreamTlsParamsType_Tls
 func (m *UpstreamTlsParamsType) GetSniChoice() isUpstreamTlsParamsType_SniChoice {
 	if m != nil {
 		return m.SniChoice
+	}
+	return nil
+}
+func (m *UpstreamTlsParamsType) GetMaxSessionKeysType() isUpstreamTlsParamsType_MaxSessionKeysType {
+	if m != nil {
+		return m.MaxSessionKeysType
 	}
 	return nil
 }
@@ -561,6 +669,27 @@ func (m *UpstreamTlsParamsType) GetDisableSni() *Empty {
 	return nil
 }
 
+func (m *UpstreamTlsParamsType) GetDefaultSessionKeyCaching() *Empty {
+	if x, ok := m.GetMaxSessionKeysType().(*UpstreamTlsParamsType_DefaultSessionKeyCaching); ok {
+		return x.DefaultSessionKeyCaching
+	}
+	return nil
+}
+
+func (m *UpstreamTlsParamsType) GetDisableSessionKeyCaching() *Empty {
+	if x, ok := m.GetMaxSessionKeysType().(*UpstreamTlsParamsType_DisableSessionKeyCaching); ok {
+		return x.DisableSessionKeyCaching
+	}
+	return nil
+}
+
+func (m *UpstreamTlsParamsType) GetMaxSessionKeys() uint32 {
+	if x, ok := m.GetMaxSessionKeysType().(*UpstreamTlsParamsType_MaxSessionKeys); ok {
+		return x.MaxSessionKeys
+	}
+	return 0
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*UpstreamTlsParamsType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -569,6 +698,9 @@ func (*UpstreamTlsParamsType) XXX_OneofWrappers() []interface{} {
 		(*UpstreamTlsParamsType_Sni)(nil),
 		(*UpstreamTlsParamsType_UseHostHeaderAsSni)(nil),
 		(*UpstreamTlsParamsType_DisableSni)(nil),
+		(*UpstreamTlsParamsType_DefaultSessionKeyCaching)(nil),
+		(*UpstreamTlsParamsType_DisableSessionKeyCaching)(nil),
+		(*UpstreamTlsParamsType_MaxSessionKeys)(nil),
 	}
 }
 
@@ -727,6 +859,17 @@ type DownstreamTlsParamsType struct {
 	// If true, F5XC will reject connections without a valid client
 	// certificate.
 	RequireClientCertificate bool `protobuf:"varint,4,opt,name=require_client_certificate,json=requireClientCertificate,proto3" json:"require_client_certificate,omitempty"`
+	// Client certificate verification
+	//
+	// x-displayName: "Client certificate verification"
+	// x-required
+	// Configuration to indicate whether client certificate verification is required
+	//
+	// Types that are valid to be assigned to ClientCertificateVerifyChoice:
+	//	*DownstreamTlsParamsType_NoClientCertificate
+	//	*DownstreamTlsParamsType_ClientCertificateRequired
+	//	*DownstreamTlsParamsType_ClientCertificateOptional
+	ClientCertificateVerifyChoice isDownstreamTlsParamsType_ClientCertificateVerifyChoice `protobuf_oneof:"client_certificate_verify_choice"`
 	// Certificate Revocation list
 	//
 	// x-displayName: "CRL"
@@ -769,6 +912,37 @@ func (m *DownstreamTlsParamsType) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DownstreamTlsParamsType proto.InternalMessageInfo
 
+type isDownstreamTlsParamsType_ClientCertificateVerifyChoice interface {
+	isDownstreamTlsParamsType_ClientCertificateVerifyChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DownstreamTlsParamsType_NoClientCertificate struct {
+	NoClientCertificate *Empty `protobuf:"bytes,8,opt,name=no_client_certificate,json=noClientCertificate,proto3,oneof" json:"no_client_certificate,omitempty"`
+}
+type DownstreamTlsParamsType_ClientCertificateRequired struct {
+	ClientCertificateRequired *Empty `protobuf:"bytes,9,opt,name=client_certificate_required,json=clientCertificateRequired,proto3,oneof" json:"client_certificate_required,omitempty"`
+}
+type DownstreamTlsParamsType_ClientCertificateOptional struct {
+	ClientCertificateOptional *Empty `protobuf:"bytes,10,opt,name=client_certificate_optional,json=clientCertificateOptional,proto3,oneof" json:"client_certificate_optional,omitempty"`
+}
+
+func (*DownstreamTlsParamsType_NoClientCertificate) isDownstreamTlsParamsType_ClientCertificateVerifyChoice() {
+}
+func (*DownstreamTlsParamsType_ClientCertificateRequired) isDownstreamTlsParamsType_ClientCertificateVerifyChoice() {
+}
+func (*DownstreamTlsParamsType_ClientCertificateOptional) isDownstreamTlsParamsType_ClientCertificateVerifyChoice() {
+}
+
+func (m *DownstreamTlsParamsType) GetClientCertificateVerifyChoice() isDownstreamTlsParamsType_ClientCertificateVerifyChoice {
+	if m != nil {
+		return m.ClientCertificateVerifyChoice
+	}
+	return nil
+}
+
 func (m *DownstreamTlsParamsType) GetCommonParams() *TlsParamsType {
 	if m != nil {
 		return m.CommonParams
@@ -783,6 +957,27 @@ func (m *DownstreamTlsParamsType) GetRequireClientCertificate() bool {
 	return false
 }
 
+func (m *DownstreamTlsParamsType) GetNoClientCertificate() *Empty {
+	if x, ok := m.GetClientCertificateVerifyChoice().(*DownstreamTlsParamsType_NoClientCertificate); ok {
+		return x.NoClientCertificate
+	}
+	return nil
+}
+
+func (m *DownstreamTlsParamsType) GetClientCertificateRequired() *Empty {
+	if x, ok := m.GetClientCertificateVerifyChoice().(*DownstreamTlsParamsType_ClientCertificateRequired); ok {
+		return x.ClientCertificateRequired
+	}
+	return nil
+}
+
+func (m *DownstreamTlsParamsType) GetClientCertificateOptional() *Empty {
+	if x, ok := m.GetClientCertificateVerifyChoice().(*DownstreamTlsParamsType_ClientCertificateOptional); ok {
+		return x.ClientCertificateOptional
+	}
+	return nil
+}
+
 func (m *DownstreamTlsParamsType) GetCrl() []*ObjectRefType {
 	if m != nil {
 		return m.Crl
@@ -795,6 +990,15 @@ func (m *DownstreamTlsParamsType) GetXfccHeaderElements() []XfccElement {
 		return m.XfccHeaderElements
 	}
 	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DownstreamTlsParamsType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DownstreamTlsParamsType_NoClientCertificate)(nil),
+		(*DownstreamTlsParamsType_ClientCertificateRequired)(nil),
+		(*DownstreamTlsParamsType_ClientCertificateOptional)(nil),
+	}
 }
 
 // HostAccessInfoType
@@ -950,108 +1154,124 @@ func init() {
 }
 
 var fileDescriptor_f024b829e526b1d4 = []byte{
-	// 1614 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0x1b, 0xc7,
-	0x15, 0xe6, 0x70, 0x97, 0x14, 0x35, 0x94, 0x64, 0x7a, 0xeb, 0x48, 0x1b, 0x56, 0x59, 0x6d, 0x89,
-	0xa4, 0x15, 0x1a, 0x9a, 0xb4, 0x69, 0xcb, 0x4e, 0x8d, 0x22, 0x00, 0xc9, 0x08, 0xa6, 0x1c, 0x35,
-	0x36, 0x96, 0xb2, 0xdb, 0xf4, 0xb2, 0x58, 0xae, 0x86, 0xe4, 0x34, 0xfb, 0x83, 0x9d, 0x99, 0x65,
-	0xa4, 0x02, 0x2e, 0xdc, 0xa2, 0x7f, 0x40, 0xe1, 0x73, 0x0f, 0x3d, 0x16, 0xfe, 0x03, 0x5a, 0xa0,
-	0xcc, 0x41, 0xed, 0xa1, 0x08, 0x7a, 0xd2, 0xa9, 0xd0, 0xa1, 0x40, 0x6b, 0x0a, 0x28, 0x9c, 0x5b,
-	0x90, 0x43, 0xd1, 0x63, 0x31, 0xb3, 0xbb, 0xe6, 0x0f, 0x53, 0xac, 0x51, 0xc4, 0x45, 0x03, 0xe8,
-	0x22, 0x91, 0xf3, 0xbe, 0xf7, 0xbd, 0x79, 0x33, 0x6f, 0xbe, 0xf7, 0x40, 0xa8, 0xf5, 0x11, 0x2d,
-	0x61, 0xbf, 0x4c, 0xed, 0x2e, 0x72, 0xad, 0xb2, 0x8d, 0x08, 0x33, 0xd9, 0x61, 0x0f, 0xd1, 0x52,
-	0x8f, 0xf8, 0xcc, 0x57, 0x96, 0x43, 0x7b, 0x29, 0xb4, 0xe7, 0x2f, 0x77, 0x30, 0xeb, 0x06, 0xad,
-	0x92, 0xed, 0xbb, 0xe5, 0x8e, 0xdf, 0xf1, 0xcb, 0x02, 0xd5, 0x0a, 0xda, 0xe2, 0x9b, 0xf8, 0x22,
-	0x3e, 0x85, 0xde, 0xf9, 0x8d, 0x8e, 0xef, 0x77, 0x1c, 0x34, 0x42, 0x31, 0xec, 0x22, 0xca, 0x2c,
-	0xb7, 0x17, 0x01, 0xbe, 0x3e, 0x19, 0xde, 0xef, 0x31, 0xec, 0x7b, 0x51, 0xec, 0xfc, 0xeb, 0x93,
-	0xc6, 0xb1, 0x6d, 0xe5, 0xd7, 0x27, 0x4d, 0x7d, 0xcb, 0xc1, 0xfb, 0x16, 0x43, 0x91, 0x55, 0x9f,
-	0xb2, 0x62, 0xf4, 0xb1, 0x39, 0x41, 0x5d, 0xf8, 0x8b, 0x04, 0x97, 0xea, 0x88, 0xb0, 0x1d, 0xaf,
-	0xed, 0xef, 0x1d, 0xf6, 0x90, 0xb2, 0x01, 0xb3, 0xb6, 0xef, 0xba, 0xbe, 0x67, 0x7a, 0x96, 0x8b,
-	0x54, 0xa0, 0x83, 0xcd, 0x45, 0x03, 0x86, 0x4b, 0x1f, 0x58, 0x2e, 0x52, 0x6e, 0xc1, 0xd7, 0x69,
-	0xd0, 0xfa, 0x11, 0xb2, 0x99, 0x69, 0x39, 0x0c, 0x11, 0xcf, 0x62, 0xb8, 0x8f, 0x04, 0x9a, 0xaa,
-	0x49, 0x5d, 0xda, 0x5c, 0x34, 0xd6, 0x22, 0x40, 0x75, 0x64, 0xe7, 0xae, 0x54, 0x29, 0xc0, 0x25,
-	0x9f, 0x74, 0x2c, 0x0f, 0xff, 0xc4, 0xe2, 0x9b, 0x50, 0x25, 0xc1, 0x3e, 0xb1, 0xa6, 0x54, 0x60,
-	0x1a, 0x1d, 0xf4, 0x30, 0x39, 0x54, 0x65, 0x1d, 0x6c, 0x66, 0x2b, 0xf9, 0x52, 0x78, 0x76, 0xa5,
-	0xf8, 0xec, 0x4a, 0x7b, 0xf1, 0xd9, 0x19, 0x11, 0x52, 0x59, 0x85, 0x69, 0x4c, 0x69, 0x80, 0x88,
-	0x9a, 0x12, 0x8c, 0xd1, 0x37, 0xe5, 0x0a, 0xbc, 0xd4, 0x0b, 0x5a, 0x0e, 0xb6, 0xcd, 0x8f, 0xd0,
-	0xa1, 0x69, 0x39, 0x1d, 0x9f, 0x60, 0xd6, 0x75, 0xd5, 0xb4, 0x40, 0x29, 0xa1, 0xed, 0x7d, 0x74,
-	0x58, 0x8d, 0x2d, 0xb7, 0xfe, 0x04, 0xfe, 0x3c, 0x00, 0x7f, 0x00, 0x70, 0x1d, 0x66, 0xeb, 0x22,
-	0x67, 0x9d, 0xef, 0x3c, 0xbf, 0x3c, 0x71, 0x2a, 0xf0, 0x2d, 0x28, 0x37, 0xab, 0x1f, 0xd0, 0xda,
-	0x1b, 0x73, 0xce, 0x22, 0x27, 0x41, 0x0d, 0x2e, 0xdd, 0x1d, 0x4b, 0x2d, 0xbf, 0x32, 0x99, 0x3e,
-	0x5c, 0x85, 0x70, 0x9b, 0x27, 0x10, 0x5a, 0x33, 0x71, 0xe2, 0x50, 0x81, 0xe9, 0x1d, 0x91, 0x00,
-	0x5f, 0x0b, 0x53, 0x81, 0x25, 0x78, 0xe9, 0x9e, 0xd8, 0xae, 0xfe, 0x3e, 0x3a, 0xd4, 0x9f, 0x6f,
-	0x38, 0xbf, 0x3a, 0x3b, 0xc5, 0xc2, 0x6f, 0x21, 0x7c, 0x8d, 0x5f, 0x2c, 0x6e, 0x63, 0xdb, 0x62,
-	0xe8, 0x9e, 0x45, 0x2c, 0x97, 0x8a, 0x1b, 0x6e, 0xc1, 0x25, 0x7b, 0x64, 0xa0, 0x2a, 0xd0, 0xa5,
-	0xcd, 0x6c, 0x65, 0xbd, 0x34, 0x51, 0xe0, 0xa5, 0xbb, 0x22, 0x2d, 0x03, 0xb5, 0xb9, 0x4f, 0x4d,
-	0x7f, 0xf2, 0x30, 0x3b, 0xe6, 0xf4, 0xfb, 0xcf, 0x8e, 0x24, 0x99, 0x24, 0x55, 0x3d, 0xfa, 0x90,
-	0x03, 0xc6, 0x04, 0xa7, 0xf2, 0x21, 0xbc, 0x18, 0x95, 0x22, 0xf6, 0x3d, 0xb3, 0x27, 0x82, 0xab,
-	0x49, 0x71, 0x9f, 0xdf, 0x9c, 0x0a, 0xb4, 0xe7, 0xd0, 0x07, 0xcf, 0xa1, 0xa3, 0x6d, 0xd6, 0xe4,
-	0xe3, 0x01, 0x00, 0x46, 0xae, 0x3f, 0x65, 0x53, 0xf6, 0xa0, 0xea, 0x62, 0x0f, 0xbb, 0x81, 0x6b,
-	0x8a, 0x8a, 0xb0, 0x7d, 0xc7, 0xec, 0x23, 0x42, 0xe3, 0x7a, 0x5a, 0xa9, 0xe4, 0x5f, 0x8c, 0x70,
-	0x2f, 0x42, 0x1a, 0xab, 0x91, 0x6f, 0xbc, 0xf0, 0x20, 0xf4, 0x14, 0xac, 0xd6, 0xc1, 0x6c, 0x56,
-	0xf9, 0x25, 0x58, 0x43, 0xdf, 0x69, 0xd6, 0x5f, 0xa5, 0xe0, 0xb2, 0x8d, 0x7b, 0x5d, 0x44, 0x4c,
-	0x1a, 0x60, 0x7e, 0xd8, 0x29, 0xfe, 0x40, 0x6a, 0xff, 0x94, 0xf9, 0xc1, 0xfd, 0x43, 0x7e, 0x0c,
-	0x86, 0x72, 0xe1, 0x6f, 0x32, 0xf9, 0xab, 0x6c, 0xac, 0xee, 0xed, 0x36, 0xcd, 0xea, 0x76, 0xd3,
-	0xbc, 0x5a, 0x79, 0xc7, 0xbc, 0x5d, 0xff, 0x9e, 0xd9, 0x6c, 0x54, 0x2b, 0x5b, 0x37, 0x46, 0xeb,
-	0x95, 0xad, 0x1b, 0xf1, 0xfa, 0xb5, 0x77, 0xae, 0x1b, 0xeb, 0x7c, 0xbd, 0xde, 0xa8, 0xd6, 0x1b,
-	0xd5, 0xca, 0x15, 0xf3, 0xde, 0xdd, 0xdd, 0x0f, 0xaf, 0x5e, 0xbb, 0xb2, 0x15, 0x7b, 0x7d, 0x8b,
-	0x5b, 0xb7, 0xeb, 0xef, 0x35, 0xb6, 0xf9, 0xdf, 0x66, 0xd5, 0xfc, 0xfe, 0xce, 0x5e, 0x63, 0x16,
-	0xfd, 0xd9, 0xc0, 0xa9, 0x78, 0x97, 0x67, 0x02, 0xcf, 0xdc, 0xc0, 0x5b, 0x23, 0xb8, 0x31, 0x27,
-	0xfc, 0x59, 0xb0, 0xa9, 0xe0, 0x6f, 0xcf, 0x80, 0x9d, 0x19, 0xfa, 0xcd, 0xb9, 0xb9, 0xd7, 0x6b,
-	0x75, 0x0e, 0x9c, 0x83, 0xe2, 0xb1, 0x63, 0x54, 0x61, 0x4e, 0x1a, 0xff, 0x09, 0x33, 0xce, 0x23,
-	0x6e, 0xeb, 0x4c, 0x86, 0x8d, 0x99, 0xd6, 0xb1, 0x63, 0x7a, 0xd1, 0x7d, 0x9c, 0x7c, 0x63, 0xa6,
-	0x75, 0x74, 0x7c, 0xbc, 0xd6, 0x52, 0x8f, 0x41, 0x52, 0xe5, 0xaf, 0x54, 0x54, 0x63, 0x53, 0x14,
-	0xa3, 0xf2, 0x5d, 0x98, 0x27, 0xe8, 0xc7, 0x01, 0x26, 0xc8, 0xb4, 0x1d, 0x8c, 0x3c, 0x66, 0x8e,
-	0x3d, 0x62, 0x21, 0x92, 0x19, 0x43, 0x8d, 0x10, 0x75, 0x01, 0x18, 0x53, 0x14, 0xe5, 0x36, 0x94,
-	0x6c, 0xe2, 0xa8, 0x0b, 0x2f, 0x21, 0x1f, 0x6b, 0x4f, 0x1e, 0x72, 0xec, 0xc9, 0x43, 0xf0, 0x6c,
-	0x00, 0x40, 0xbc, 0x9f, 0x1c, 0x30, 0xf8, 0xaa, 0xf2, 0x53, 0x78, 0xe9, 0xa0, 0x6d, 0xdb, 0x66,
-	0x17, 0x59, 0xfb, 0x88, 0x98, 0xc8, 0x41, 0x2e, 0xf2, 0x18, 0x55, 0x33, 0xba, 0x34, 0xe3, 0xdd,
-	0xfd, 0xa0, 0x6d, 0xdb, 0xdb, 0x21, 0xa4, 0x76, 0xe5, 0xc9, 0x27, 0x20, 0x07, 0x97, 0xfa, 0x98,
-	0xb0, 0xc0, 0x72, 0xcc, 0xae, 0x4f, 0x99, 0x2e, 0xe8, 0x97, 0x1f, 0x03, 0x58, 0xc8, 0xfc, 0x1c,
-	0xa4, 0x72, 0xa0, 0x00, 0x12, 0x63, 0x07, 0xa0, 0xf0, 0x48, 0x0d, 0x11, 0x28, 0x22, 0xa1, 0xb7,
-	0x96, 0xbe, 0x78, 0x77, 0xf1, 0x6a, 0xb1, 0x52, 0xbc, 0x56, 0xbc, 0x5e, 0xdc, 0x2a, 0xfc, 0x2e,
-	0x03, 0xdf, 0xb8, 0xdf, 0xa3, 0x8c, 0x20, 0xcb, 0x7d, 0xe5, 0x02, 0x0a, 0xce, 0x05, 0xf4, 0x5c,
-	0x40, 0xcf, 0x05, 0xf4, 0x2b, 0x2a, 0xa0, 0x53, 0xca, 0xf1, 0x4c, 0x82, 0xaf, 0xc5, 0xca, 0xc1,
-	0x8b, 0x7b, 0xa4, 0x18, 0x3b, 0x70, 0x39, 0x1a, 0x1f, 0xa3, 0x97, 0x0c, 0xc4, 0x4b, 0x5e, 0x9f,
-	0xf1, 0x22, 0xa6, 0xde, 0x6f, 0x23, 0x61, 0x2c, 0x85, 0xae, 0xd1, 0xeb, 0xbd, 0x0b, 0x85, 0x8e,
-	0xc4, 0x44, 0x0b, 0x82, 0xa8, 0x38, 0x45, 0x34, 0x57, 0xbf, 0x1a, 0x09, 0x03, 0x72, 0x8a, 0x88,
-	0xf0, 0x6d, 0x28, 0x51, 0x0f, 0x0b, 0x6d, 0x59, 0xac, 0xad, 0xfd, 0x6b, 0x10, 0xca, 0xa5, 0x4c,
-	0x92, 0xdd, 0x50, 0xa8, 0x89, 0xa4, 0x3e, 0x4a, 0x36, 0x80, 0xc1, 0x51, 0xca, 0x1d, 0xb8, 0x1a,
-	0x50, 0x24, 0x84, 0x36, 0x96, 0x6b, 0x8b, 0x9a, 0xdc, 0x5f, 0x12, 0x1b, 0xb9, 0x34, 0xb5, 0x91,
-	0x6d, 0xb7, 0xc7, 0x0e, 0x1b, 0xc0, 0x50, 0x02, 0x8a, 0x1a, 0x3e, 0x65, 0xa1, 0xf2, 0x56, 0x69,
-	0xd3, 0xc3, 0xca, 0x4d, 0x98, 0xdd, 0xc7, 0xd4, 0x6a, 0x39, 0x48, 0x10, 0xc8, 0x73, 0x09, 0x60,
-	0x04, 0x6d, 0x7a, 0xf8, 0xd6, 0xb7, 0xbf, 0x78, 0x57, 0xda, 0x2a, 0xde, 0xf8, 0xe3, 0x00, 0xe8,
-	0x50, 0x83, 0x6b, 0x71, 0xb2, 0xfa, 0xde, 0x6e, 0x53, 0x17, 0x49, 0x21, 0x86, 0x08, 0x55, 0x38,
-	0xa6, 0xb6, 0x09, 0x2f, 0x32, 0x87, 0x46, 0xa7, 0x65, 0xda, 0x5d, 0x1f, 0xdb, 0x48, 0xf9, 0xda,
-	0xd1, 0x00, 0x2c, 0x1c, 0x0f, 0x40, 0x7a, 0x38, 0x00, 0xd2, 0xcd, 0xe2, 0xd5, 0x5f, 0x7f, 0x02,
-	0x40, 0x6d, 0x03, 0x42, 0xea, 0xe1, 0x18, 0x72, 0xf1, 0x68, 0x00, 0x92, 0xc7, 0x03, 0x90, 0x1a,
-	0x0e, 0x40, 0x4a, 0x5c, 0xf0, 0x1d, 0x39, 0x93, 0xce, 0x2d, 0xdc, 0x91, 0x33, 0xa9, 0x5c, 0xba,
-	0xf0, 0x69, 0x06, 0x2e, 0x4f, 0x5e, 0xf1, 0x3c, 0x55, 0x05, 0xaf, 0x44, 0x55, 0x93, 0x5f, 0xa2,
-	0xaa, 0x4a, 0xe7, 0xaa, 0x7a, 0xae, 0xaa, 0xff, 0x2f, 0x63, 0xe9, 0x2e, 0xcc, 0xf1, 0x37, 0x3b,
-	0x31, 0x63, 0xc9, 0x62, 0xc6, 0xfa, 0xc6, 0x8b, 0xc5, 0x3e, 0x26, 0x71, 0xfc, 0x1d, 0x1a, 0x17,
-	0xd8, 0xc4, 0x1a, 0x55, 0xca, 0x70, 0x85, 0x91, 0x80, 0x32, 0xb4, 0x6f, 0xda, 0x96, 0x19, 0x10,
-	0x27, 0xfc, 0x8d, 0xa0, 0xb6, 0x18, 0x4d, 0xa3, 0x3c, 0x7c, 0x04, 0xa8, 0x5b, 0xf7, 0x89, 0x33,
-	0x7b, 0xf4, 0x5a, 0xf8, 0x32, 0x46, 0x2f, 0xd1, 0x2f, 0xae, 0x17, 0x6f, 0x16, 0x45, 0xcf, 0x08,
-	0x05, 0xa5, 0xf0, 0x59, 0x12, 0xae, 0xbd, 0xe7, 0x7f, 0xec, 0xcd, 0xea, 0x1b, 0xb7, 0xff, 0xeb,
-	0xbe, 0x31, 0xd5, 0x35, 0xe6, 0x4f, 0xfa, 0xf2, 0xcb, 0x4d, 0xfa, 0xa9, 0x57, 0x36, 0xe9, 0xa7,
-	0xff, 0x37, 0x93, 0x7e, 0xe1, 0x17, 0x12, 0x54, 0x78, 0x1b, 0xaa, 0xda, 0x36, 0xa2, 0xf4, 0xf9,
-	0x6f, 0x5e, 0xd7, 0x61, 0x5a, 0x84, 0x44, 0x91, 0x52, 0x4f, 0xa7, 0x78, 0xdf, 0xd8, 0x6d, 0x0a,
-	0xbb, 0xa8, 0xb0, 0x08, 0xab, 0x7c, 0x07, 0x5e, 0xa0, 0x88, 0xf4, 0x79, 0x1e, 0xde, 0x7e, 0xcf,
-	0xc7, 0x1e, 0x8b, 0x9a, 0x68, 0x2e, 0x6e, 0xa2, 0x0b, 0x24, 0x95, 0x03, 0xea, 0xa3, 0xa4, 0xb1,
-	0x12, 0x02, 0xb7, 0x23, 0x9c, 0xb2, 0x03, 0xa1, 0xa8, 0x70, 0xdf, 0x6b, 0xe3, 0x4e, 0xd4, 0xf9,
-	0xde, 0x3c, 0xa3, 0x87, 0xcf, 0xba, 0xdc, 0x45, 0x5e, 0xe4, 0xc2, 0x59, 0xb9, 0x0d, 0x57, 0x08,
-	0xa2, 0xcc, 0xb4, 0x02, 0xd6, 0x35, 0xb1, 0xd7, 0xf6, 0x45, 0x79, 0x67, 0x2b, 0x1b, 0x53, 0x74,
-	0x06, 0xa2, 0xac, 0x1a, 0xb0, 0x6e, 0x9c, 0x34, 0x1f, 0x2c, 0xc8, 0xd8, 0x9a, 0x72, 0x07, 0x5e,
-	0xe8, 0x5b, 0x81, 0x33, 0xce, 0x94, 0x16, 0x4c, 0xfa, 0x14, 0xd3, 0x03, 0x8e, 0x9a, 0xa2, 0x5a,
-	0xee, 0x8f, 0x2f, 0xd6, 0xd6, 0x60, 0x56, 0xb0, 0x84, 0x55, 0xab, 0x64, 0x8e, 0x06, 0x20, 0x75,
-	0x3c, 0x00, 0xbc, 0x7b, 0x2e, 0xe4, 0x32, 0xb5, 0x9f, 0x81, 0xe3, 0xa7, 0x5a, 0xe2, 0xe4, 0xa9,
-	0x96, 0xf8, 0xfc, 0xa9, 0x06, 0x1e, 0x0d, 0x35, 0xf0, 0x9b, 0xa1, 0x06, 0x3e, 0x1d, 0x6a, 0xe0,
-	0x78, 0xa8, 0x81, 0x93, 0xa1, 0x06, 0xfe, 0x3e, 0xd4, 0xc0, 0xb3, 0xa1, 0x96, 0xf8, 0x7c, 0xa8,
-	0x81, 0x5f, 0x9e, 0x6a, 0x89, 0xa3, 0x53, 0x0d, 0x1c, 0x9f, 0x6a, 0x89, 0x93, 0x53, 0x2d, 0xf1,
-	0xc3, 0x7a, 0xc7, 0xef, 0x7d, 0xd4, 0x29, 0xf5, 0x7d, 0x87, 0x21, 0x42, 0xac, 0x52, 0x40, 0xcb,
-	0xe2, 0x43, 0xdb, 0x27, 0xee, 0xe5, 0x1e, 0xf1, 0xfb, 0x78, 0x1f, 0x91, 0xcb, 0xb1, 0xb9, 0xdc,
-	0x6b, 0x75, 0xfc, 0x32, 0x3a, 0x60, 0xd1, 0x8f, 0xa0, 0xe1, 0xbf, 0x56, 0x5a, 0xf4, 0xd3, 0x6b,
-	0xff, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x65, 0x16, 0x5e, 0x7c, 0xf8, 0x15, 0x00, 0x00,
+	// 1867 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0xcf, 0x6f, 0x1b, 0xc7,
+	0xf5, 0xe7, 0x90, 0x4b, 0x72, 0xf9, 0x48, 0xc9, 0xf4, 0x46, 0x96, 0xd6, 0xb4, 0x42, 0xf1, 0x4b,
+	0x24, 0xdf, 0x0a, 0x0d, 0x4d, 0x49, 0xb4, 0x65, 0x2b, 0x46, 0x11, 0x94, 0x64, 0x04, 0x53, 0xb2,
+	0x1a, 0x19, 0x4b, 0xd9, 0x6d, 0x7a, 0x59, 0xac, 0x56, 0x43, 0x72, 0x9b, 0xfd, 0xc1, 0xee, 0x2c,
+	0x19, 0xb1, 0x80, 0x0b, 0xb7, 0xe8, 0x1f, 0x10, 0xf8, 0xdc, 0x43, 0x8f, 0x85, 0xd1, 0x7b, 0x81,
+	0x6e, 0x0e, 0x6a, 0x0f, 0x85, 0xd1, 0x13, 0x4f, 0x85, 0x51, 0x14, 0x68, 0x4d, 0x03, 0x45, 0x7a,
+	0x0b, 0x72, 0x28, 0x0a, 0xf4, 0x52, 0xcc, 0xec, 0xae, 0xf9, 0x43, 0x14, 0xe3, 0x36, 0x76, 0xd1,
+	0x02, 0xba, 0xd8, 0xe4, 0xbc, 0xcf, 0xfb, 0xbc, 0x99, 0x37, 0xef, 0xd7, 0x50, 0x90, 0xed, 0x62,
+	0x52, 0xd4, 0xac, 0x35, 0xa2, 0xb6, 0xb0, 0xa1, 0xac, 0xa9, 0xd8, 0x76, 0x64, 0xa7, 0xd7, 0xc6,
+	0xa4, 0xd8, 0xb6, 0x2d, 0xc7, 0x12, 0xe6, 0x3c, 0x79, 0xd1, 0x93, 0x67, 0xae, 0x36, 0x35, 0xa7,
+	0xd5, 0x39, 0x2c, 0xaa, 0x96, 0xb1, 0xd6, 0xb4, 0x9a, 0xd6, 0x1a, 0x43, 0x1d, 0x76, 0x1a, 0xec,
+	0x1b, 0xfb, 0xc2, 0x3e, 0x79, 0xda, 0x99, 0x95, 0xa6, 0x65, 0x35, 0x75, 0x3c, 0x44, 0x39, 0x9a,
+	0x81, 0x89, 0xa3, 0x18, 0x6d, 0x1f, 0x70, 0x65, 0xdc, 0xbc, 0xd5, 0x76, 0x34, 0xcb, 0xf4, 0x6d,
+	0x67, 0x2e, 0x8f, 0x0b, 0x47, 0xb6, 0x95, 0x59, 0x1e, 0x17, 0x75, 0x15, 0x5d, 0x3b, 0x52, 0x1c,
+	0xec, 0x4b, 0x73, 0x13, 0x52, 0x0d, 0x7f, 0x2c, 0x8f, 0x51, 0xe7, 0x7f, 0x1f, 0x81, 0x54, 0x15,
+	0xdb, 0xce, 0x8e, 0xd9, 0xb0, 0x0e, 0x7a, 0x6d, 0x2c, 0xac, 0x40, 0x52, 0xb5, 0x0c, 0xc3, 0x32,
+	0x65, 0x53, 0x31, 0xb0, 0x88, 0x72, 0x68, 0x35, 0x21, 0x81, 0xb7, 0xf4, 0x81, 0x62, 0x60, 0xe1,
+	0x16, 0x5c, 0x26, 0x9d, 0xc3, 0xef, 0x61, 0xd5, 0x91, 0x15, 0xdd, 0xc1, 0xb6, 0xa9, 0x38, 0x5a,
+	0x17, 0x33, 0x34, 0x11, 0xc3, 0xb9, 0xc8, 0x6a, 0x42, 0x5a, 0xf2, 0x01, 0xe5, 0xa1, 0x9c, 0xaa,
+	0x12, 0x21, 0x0f, 0x29, 0xcb, 0x6e, 0x2a, 0xa6, 0xf6, 0x03, 0x85, 0x6e, 0x42, 0x8c, 0x30, 0xf6,
+	0xb1, 0x35, 0xa1, 0x04, 0x31, 0x7c, 0xdc, 0xd6, 0xec, 0x9e, 0xc8, 0xe5, 0xd0, 0x6a, 0xb2, 0x94,
+	0x29, 0x7a, 0xbe, 0x2b, 0x06, 0xbe, 0x2b, 0x1e, 0x04, 0xbe, 0x93, 0x7c, 0xa4, 0xb0, 0x08, 0x31,
+	0x8d, 0x90, 0x0e, 0xb6, 0xc5, 0x28, 0x63, 0xf4, 0xbf, 0x09, 0xeb, 0xb0, 0xd0, 0xee, 0x1c, 0xea,
+	0x9a, 0x2a, 0x7f, 0x84, 0x7b, 0xb2, 0xa2, 0x37, 0x2d, 0x5b, 0x73, 0x5a, 0x86, 0x18, 0x63, 0x28,
+	0xc1, 0x93, 0xdd, 0xc1, 0xbd, 0x72, 0x20, 0xb9, 0xf5, 0x5b, 0xf4, 0x3b, 0x17, 0xfd, 0x1a, 0xc1,
+	0x32, 0x24, 0xab, 0xec, 0xcc, 0x39, 0xba, 0xf3, 0xcc, 0xdc, 0x98, 0x57, 0xe0, 0x6d, 0xe0, 0xea,
+	0xe5, 0x0f, 0x48, 0xe5, 0xcd, 0x19, 0xbe, 0x48, 0x47, 0x20, 0x0b, 0xa9, 0xfd, 0x91, 0xa3, 0x65,
+	0xe6, 0xc7, 0x8f, 0x0f, 0x8b, 0x00, 0xdb, 0xf4, 0x00, 0x9e, 0x94, 0x0f, 0x0e, 0x0e, 0x02, 0xc4,
+	0x76, 0xd8, 0x01, 0xe8, 0x9a, 0x77, 0x14, 0x28, 0xc2, 0xc2, 0x5d, 0xb6, 0xdd, 0xdc, 0x1d, 0xdc,
+	0xcb, 0xbd, 0xd8, 0x70, 0x66, 0x71, 0xfa, 0x11, 0xf3, 0xff, 0x48, 0xc1, 0x25, 0x7a, 0xb1, 0x5a,
+	0x43, 0x53, 0x15, 0x07, 0xdf, 0x55, 0x6c, 0xc5, 0x20, 0xec, 0x86, 0x0f, 0x21, 0xa5, 0x0e, 0x05,
+	0x44, 0x44, 0xb9, 0xc8, 0x6a, 0xb2, 0xb4, 0x5c, 0x1c, 0x0b, 0xf0, 0xe2, 0x3e, 0x3b, 0x96, 0x84,
+	0x1b, 0x54, 0xa7, 0x92, 0x7b, 0xfc, 0x20, 0x39, 0xa2, 0xf4, 0xab, 0xbf, 0x9e, 0x44, 0x38, 0x3b,
+	0x2c, 0xe6, 0xfc, 0x0f, 0x69, 0x24, 0x8d, 0x71, 0x0a, 0x1f, 0xc2, 0x45, 0x3f, 0x14, 0x35, 0xcb,
+	0x94, 0xdb, 0xcc, 0xb8, 0x18, 0x66, 0xf7, 0xf9, 0xff, 0x13, 0x86, 0x0e, 0x74, 0x72, 0xff, 0x05,
+	0x74, 0xb8, 0xcd, 0x0a, 0xd7, 0x77, 0x11, 0x92, 0xd2, 0xdd, 0x09, 0x99, 0x70, 0x00, 0xa2, 0xa1,
+	0x99, 0x9a, 0xd1, 0x31, 0x64, 0x16, 0x11, 0xaa, 0xa5, 0xcb, 0x5d, 0x6c, 0x93, 0x20, 0x9e, 0xe6,
+	0x4b, 0x99, 0xd3, 0x16, 0xee, 0xfa, 0x48, 0x69, 0xd1, 0xd7, 0x0d, 0x16, 0xee, 0x7b, 0x9a, 0x8c,
+	0x55, 0x39, 0x9e, 0xce, 0xca, 0xbd, 0x04, 0xab, 0xa7, 0x3b, 0xc9, 0xfa, 0xd3, 0x28, 0xcc, 0xa9,
+	0x5a, 0xbb, 0x85, 0x6d, 0x99, 0x74, 0x34, 0xea, 0xec, 0x28, 0x4d, 0x90, 0xca, 0xdf, 0x38, 0xea,
+	0xb8, 0xbf, 0x70, 0x8f, 0xd0, 0x80, 0xcb, 0xff, 0x89, 0xb3, 0xff, 0xc8, 0x49, 0x8b, 0x07, 0x7b,
+	0x75, 0xb9, 0xbc, 0x5d, 0x97, 0x37, 0x4a, 0x5b, 0xf2, 0xed, 0xea, 0xb7, 0xe4, 0x7a, 0xad, 0x5c,
+	0xda, 0xbc, 0x31, 0x5c, 0x2f, 0x6d, 0xde, 0x08, 0xd6, 0xaf, 0x6d, 0x5d, 0x97, 0x96, 0xe9, 0x7a,
+	0xb5, 0x56, 0xae, 0xd6, 0xca, 0xa5, 0x75, 0xf9, 0xee, 0xfe, 0xde, 0x87, 0x1b, 0xd7, 0xd6, 0x37,
+	0x03, 0xad, 0xaf, 0x51, 0xe9, 0x76, 0xf5, 0xfd, 0xda, 0x36, 0xfd, 0xb7, 0x5e, 0x96, 0xbf, 0xbd,
+	0x73, 0x50, 0x9b, 0x46, 0x7f, 0x36, 0x70, 0xc2, 0xde, 0xd5, 0xa9, 0xc0, 0x33, 0x37, 0xf0, 0xf6,
+	0x10, 0x2e, 0xcd, 0x30, 0x7f, 0x16, 0x6c, 0xc2, 0xf8, 0x3b, 0x53, 0x60, 0x67, 0x9a, 0x7e, 0x6b,
+	0xe6, 0xd9, 0xab, 0x95, 0x2a, 0x05, 0xce, 0x40, 0x51, 0xdb, 0x01, 0x2a, 0x3f, 0xe3, 0x18, 0x5f,
+	0x86, 0x19, 0xe5, 0x61, 0xb7, 0x75, 0x26, 0xc3, 0xca, 0x54, 0xe9, 0x88, 0x9b, 0x4e, 0xab, 0x8f,
+	0x92, 0xaf, 0x4c, 0x95, 0x0e, 0xdd, 0x47, 0x63, 0x2d, 0xfa, 0x08, 0x85, 0x45, 0x9a, 0xa5, 0x2c,
+	0x1a, 0xeb, 0x2c, 0x18, 0x85, 0x6d, 0xc8, 0xd8, 0xf8, 0xfb, 0x1d, 0xcd, 0xc6, 0xb2, 0xaa, 0x6b,
+	0xd8, 0x74, 0xe4, 0x91, 0x24, 0x66, 0x45, 0x92, 0xaf, 0xc4, 0x9f, 0x3e, 0x40, 0x9f, 0xd1, 0x4c,
+	0x14, 0x7d, 0x68, 0x95, 0x21, 0x47, 0x4a, 0x8b, 0xb0, 0x0b, 0x97, 0x4c, 0x6b, 0x1a, 0x03, 0xb0,
+	0x84, 0x5f, 0x98, 0x48, 0x9c, 0x6d, 0xa3, 0xed, 0xf4, 0x6a, 0x21, 0xe9, 0x0d, 0xd3, 0x3a, 0xcd,
+	0x75, 0x1f, 0xae, 0x9c, 0x26, 0x92, 0x7d, 0xd3, 0x47, 0x62, 0x72, 0x26, 0xe3, 0x65, 0x75, 0x92,
+	0x4f, 0xf2, 0x15, 0xcf, 0xe0, 0xf5, 0x7a, 0xa1, 0xa2, 0x8b, 0xa9, 0x7f, 0x91, 0x77, 0xdf, 0x57,
+	0x14, 0x6e, 0x43, 0x44, 0xb5, 0x75, 0x31, 0xfe, 0x12, 0x35, 0x74, 0xe9, 0xf1, 0x03, 0x8a, 0xf5,
+	0xfd, 0x19, 0x5c, 0x4a, 0x1a, 0x49, 0x74, 0x55, 0xf8, 0x21, 0x2c, 0x1c, 0x37, 0x54, 0x55, 0x6e,
+	0x61, 0xe5, 0x08, 0xdb, 0x32, 0xd6, 0xb1, 0x81, 0x4d, 0x87, 0x88, 0x7c, 0x2e, 0x32, 0xa5, 0xf8,
+	0x7c, 0xa7, 0xa1, 0xaa, 0xdb, 0x1e, 0xa4, 0xb2, 0xfe, 0xf8, 0x53, 0x94, 0x86, 0x54, 0x57, 0xb3,
+	0x9d, 0x8e, 0xa2, 0xcb, 0x2d, 0x8b, 0x38, 0x39, 0x46, 0x3f, 0xf7, 0x08, 0x41, 0x9e, 0xff, 0x31,
+	0x8a, 0xa6, 0x51, 0x1e, 0x85, 0x46, 0xa2, 0x40, 0xa0, 0x96, 0x6a, 0xcc, 0x90, 0x4f, 0x42, 0x6e,
+	0xa5, 0xbe, 0x78, 0x2f, 0xb1, 0x51, 0x28, 0x15, 0xae, 0x15, 0xae, 0x17, 0x36, 0x2b, 0x5b, 0x90,
+	0x9b, 0xe2, 0xae, 0x2e, 0xb6, 0xb5, 0x46, 0x4f, 0x56, 0x5b, 0x96, 0xa6, 0x62, 0x61, 0xe1, 0xc4,
+	0x45, 0xd0, 0x77, 0x51, 0x62, 0xe0, 0x22, 0x7e, 0x63, 0xbd, 0xb0, 0xb1, 0x51, 0xd8, 0x28, 0xed,
+	0x72, 0x7c, 0x22, 0x0d, 0xf9, 0x5f, 0xf2, 0xf0, 0xe6, 0xbd, 0x36, 0x71, 0x6c, 0xac, 0x18, 0xaf,
+	0xbd, 0x0b, 0xa1, 0xf3, 0x2e, 0x74, 0xde, 0x85, 0xce, 0xbb, 0xd0, 0xff, 0x68, 0x17, 0x1a, 0xaf,
+	0x3c, 0xf9, 0x4f, 0x62, 0x70, 0x29, 0xa8, 0x1c, 0x34, 0xb8, 0x87, 0x15, 0x63, 0x07, 0xe6, 0xfc,
+	0x19, 0xdc, 0xcf, 0x64, 0xc4, 0x32, 0x79, 0x79, 0x4a, 0x46, 0x4c, 0xe4, 0x6f, 0x2d, 0x24, 0xa5,
+	0x3c, 0x55, 0x3f, 0x7b, 0xf7, 0x81, 0xd5, 0x91, 0x80, 0x28, 0xce, 0x88, 0x0a, 0x13, 0x44, 0x33,
+	0xeb, 0x57, 0x2d, 0x24, 0x01, 0xa5, 0xf0, 0x09, 0xdf, 0x81, 0x08, 0x31, 0x35, 0x56, 0x5b, 0x12,
+	0x95, 0xa5, 0xbf, 0xbb, 0x5e, 0xb9, 0xe5, 0xec, 0x70, 0xcb, 0x2b, 0xf4, 0x76, 0x44, 0x7c, 0x18,
+	0xae, 0x21, 0x89, 0xa2, 0x84, 0x5d, 0x58, 0xec, 0x10, 0xcc, 0x0a, 0x75, 0x50, 0xee, 0x15, 0x22,
+	0x53, 0xfd, 0xc8, 0x8c, 0x36, 0x84, 0x24, 0xa1, 0x43, 0x70, 0xcd, 0x22, 0x8e, 0x57, 0xb9, 0xcb,
+	0xa4, 0x6e, 0x6a, 0xc2, 0x4d, 0x48, 0x1e, 0x69, 0x44, 0x39, 0xd4, 0x31, 0x23, 0xe0, 0x66, 0x12,
+	0x80, 0x0f, 0xa5, 0x8a, 0xf7, 0xe0, 0xca, 0x11, 0x6e, 0x28, 0x1d, 0xdd, 0x91, 0x09, 0x26, 0xb4,
+	0x4e, 0xb0, 0x07, 0x84, 0xaa, 0xa8, 0x2d, 0xcd, 0x6c, 0x8a, 0x89, 0x19, 0x44, 0x61, 0x49, 0xf4,
+	0x55, 0xeb, 0x9e, 0xe6, 0x1d, 0xdc, 0xab, 0x7a, 0x7a, 0x8c, 0x36, 0xd8, 0xcf, 0x14, 0x5a, 0xf8,
+	0x12, 0x5a, 0x7f, 0x7f, 0xa7, 0x68, 0xbf, 0x01, 0x69, 0x43, 0x39, 0x1e, 0xa5, 0x24, 0x6c, 0x16,
+	0x98, 0xab, 0xa4, 0xff, 0xe0, 0x22, 0x54, 0xa2, 0x4e, 0x8e, 0x7d, 0x9d, 0x13, 0xbf, 0xb9, 0x1a,
+	0xae, 0x85, 0xa5, 0x79, 0x43, 0x39, 0x1e, 0x72, 0x90, 0x5b, 0xc5, 0x2f, 0xde, 0x8b, 0x6e, 0x16,
+	0x6e, 0x14, 0xb6, 0x7e, 0xe3, 0xa2, 0x3c, 0xe4, 0x60, 0x29, 0xb8, 0xda, 0xdc, 0xc1, 0x5e, 0x3d,
+	0xc7, 0xae, 0x10, 0x3b, 0xd8, 0x26, 0x82, 0x87, 0xaa, 0xac, 0xc2, 0x45, 0x47, 0x27, 0x7e, 0x74,
+	0x04, 0xed, 0xee, 0x8d, 0x13, 0x17, 0xc5, 0xfb, 0x2e, 0x8a, 0x0d, 0x5c, 0x14, 0xb9, 0x59, 0xd8,
+	0xf8, 0xd9, 0xa7, 0x08, 0x55, 0x56, 0x00, 0x88, 0xa9, 0x05, 0x90, 0x8b, 0x27, 0x2e, 0x0a, 0xf7,
+	0x5d, 0x14, 0x1d, 0xb8, 0x28, 0xca, 0x02, 0xba, 0xb2, 0x0e, 0x97, 0x26, 0x37, 0xce, 0x7e, 0x56,
+	0x10, 0x96, 0x4e, 0x5c, 0x94, 0x78, 0xe2, 0x22, 0xd4, 0x77, 0x11, 0x3f, 0x70, 0x51, 0xfc, 0xdd,
+	0x02, 0xeb, 0xa1, 0xbb, 0x1c, 0x1f, 0x4b, 0xc7, 0x77, 0x39, 0x3e, 0x9a, 0x8e, 0xed, 0x72, 0x3c,
+	0x9f, 0x4e, 0xe4, 0x9f, 0xf0, 0x30, 0x37, 0x9e, 0x0a, 0xb3, 0xba, 0x0f, 0x7a, 0x2d, 0xdd, 0x27,
+	0xfc, 0x0a, 0xbb, 0x4f, 0xe4, 0xbc, 0xfb, 0x9c, 0x77, 0x9f, 0xff, 0x96, 0x37, 0xd0, 0x1e, 0xa4,
+	0x69, 0xae, 0x8f, 0xcd, 0xa2, 0x1c, 0x9b, 0x45, 0xff, 0xef, 0x74, 0xb0, 0x8f, 0xb4, 0x02, 0x9a,
+	0x87, 0xd2, 0x05, 0x67, 0x6c, 0x8d, 0x08, 0x6b, 0x30, 0xef, 0xd8, 0x1d, 0xe2, 0xe0, 0x23, 0x59,
+	0x55, 0xe4, 0x8e, 0xad, 0x7b, 0x3f, 0x48, 0x55, 0x12, 0xfe, 0xd4, 0x4f, 0xcd, 0xfb, 0x80, 0xaa,
+	0x72, 0xcf, 0xd6, 0xa7, 0x8f, 0xa8, 0xf1, 0x57, 0x31, 0xa2, 0xb2, 0xbe, 0x7a, 0xbd, 0x70, 0xb3,
+	0xc0, 0x7a, 0xab, 0x57, 0x56, 0xf2, 0xbf, 0x88, 0xc2, 0xd2, 0xfb, 0xd6, 0xc7, 0xe6, 0xb4, 0xfe,
+	0x7a, 0xfb, 0xdf, 0xee, 0xaf, 0x13, 0xdd, 0x75, 0xf6, 0xb3, 0x92, 0xfb, 0xca, 0xcf, 0x4a, 0xfe,
+	0x95, 0x3f, 0x2b, 0x13, 0xaf, 0xe9, 0x59, 0x09, 0x5f, 0xf1, 0x59, 0x19, 0x7d, 0x6d, 0xcf, 0xca,
+	0xd8, 0x7f, 0xe6, 0x59, 0x59, 0xb9, 0xf1, 0x12, 0x0f, 0x49, 0xe1, 0xc4, 0x45, 0x7c, 0xdf, 0x45,
+	0xf1, 0x81, 0x8b, 0x62, 0x5b, 0x05, 0xda, 0x08, 0x77, 0x39, 0x3e, 0x9e, 0xe6, 0xf3, 0x3f, 0x89,
+	0x80, 0x40, 0x27, 0x9e, 0xb2, 0xaa, 0x62, 0x42, 0x5e, 0xfc, 0x46, 0x7d, 0x1d, 0x62, 0x6c, 0xc3,
+	0xd8, 0x6f, 0x76, 0x93, 0x0e, 0xba, 0x27, 0xed, 0xd5, 0x99, 0x9c, 0x25, 0xa9, 0x8f, 0x15, 0xde,
+	0x85, 0x0b, 0x04, 0xdb, 0x5d, 0xea, 0x05, 0xf3, 0xa8, 0x6d, 0x69, 0xa6, 0xe3, 0xcf, 0x6b, 0xe9,
+	0x60, 0x5e, 0x8b, 0xdb, 0xd1, 0x34, 0x12, 0x1f, 0x86, 0xa5, 0x79, 0x0f, 0xb8, 0xed, 0xe3, 0x84,
+	0x1d, 0x00, 0x56, 0x24, 0x2c, 0xb3, 0xa1, 0x35, 0xfd, 0x21, 0xeb, 0xad, 0x33, 0xc6, 0xc5, 0x69,
+	0xf9, 0x91, 0xa0, 0x75, 0x82, 0x29, 0x0b, 0xb7, 0x61, 0xde, 0xc6, 0xc4, 0x91, 0x95, 0x8e, 0xd3,
+	0x92, 0x35, 0xb3, 0x61, 0xb1, 0x0a, 0x91, 0x2c, 0xad, 0x4c, 0xd0, 0x49, 0x98, 0x38, 0xe5, 0x8e,
+	0xd3, 0x0a, 0x0e, 0x4d, 0x67, 0x58, 0x7b, 0x64, 0x4d, 0xd8, 0x85, 0x0b, 0x5d, 0x36, 0xbe, 0x0d,
+	0x99, 0x62, 0x8c, 0x29, 0x37, 0xc1, 0x74, 0x9f, 0xa2, 0x26, 0xa8, 0xe6, 0xba, 0xa3, 0x8b, 0x95,
+	0x25, 0x48, 0x32, 0x16, 0x2f, 0xf1, 0x05, 0xfe, 0xc4, 0x45, 0x51, 0x7a, 0x21, 0xde, 0x35, 0x54,
+	0x7e, 0x84, 0xfa, 0xcf, 0xb2, 0xa1, 0xa7, 0xcf, 0xb2, 0xa1, 0xcf, 0x9f, 0x65, 0xd1, 0xc3, 0x41,
+	0x16, 0xfd, 0x7c, 0x90, 0x45, 0x4f, 0x06, 0x59, 0xd4, 0x1f, 0x64, 0xd1, 0xd3, 0x41, 0x16, 0xfd,
+	0x79, 0x90, 0x45, 0x9f, 0x0d, 0xb2, 0xa1, 0xcf, 0x07, 0x59, 0xf4, 0xc9, 0xf3, 0x6c, 0xe8, 0xe4,
+	0x79, 0x16, 0xf5, 0x9f, 0x67, 0x43, 0x4f, 0x9f, 0x67, 0x43, 0xdf, 0xad, 0x36, 0xad, 0xf6, 0x47,
+	0xcd, 0x62, 0xd7, 0xd2, 0x1d, 0x6c, 0xdb, 0x4a, 0xb1, 0x43, 0xd6, 0xd8, 0x87, 0x86, 0x65, 0x1b,
+	0x57, 0xdb, 0xb6, 0xd5, 0xd5, 0x8e, 0xb0, 0x7d, 0x35, 0x10, 0xaf, 0xb5, 0x0f, 0x9b, 0xd6, 0x1a,
+	0x3e, 0x76, 0xfc, 0x3f, 0x5a, 0x78, 0xff, 0x1d, 0xc6, 0xd8, 0x48, 0x72, 0xed, 0x9f, 0x01, 0x00,
+	0x00, 0xff, 0xff, 0xde, 0x53, 0xce, 0x50, 0xa8, 0x19, 0x00, 0x00,
 }
 
 func (this *CertInfoType) Equal(that interface{}) bool {
@@ -1145,6 +1365,15 @@ func (this *CertificateParamsType) Equal(that interface{}) bool {
 	if this.RequireClientCertificate != that1.RequireClientCertificate {
 		return false
 	}
+	if that1.ClientCertificateVerifyChoice == nil {
+		if this.ClientCertificateVerifyChoice != nil {
+			return false
+		}
+	} else if this.ClientCertificateVerifyChoice == nil {
+		return false
+	} else if !this.ClientCertificateVerifyChoice.Equal(that1.ClientCertificateVerifyChoice) {
+		return false
+	}
 	if len(this.Crl) != len(that1.Crl) {
 		return false
 	}
@@ -1160,6 +1389,78 @@ func (this *CertificateParamsType) Equal(that interface{}) bool {
 		if this.XfccHeaderElements[i] != that1.XfccHeaderElements[i] {
 			return false
 		}
+	}
+	return true
+}
+func (this *CertificateParamsType_NoClientCertificate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CertificateParamsType_NoClientCertificate)
+	if !ok {
+		that2, ok := that.(CertificateParamsType_NoClientCertificate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoClientCertificate.Equal(that1.NoClientCertificate) {
+		return false
+	}
+	return true
+}
+func (this *CertificateParamsType_ClientCertificateRequired) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CertificateParamsType_ClientCertificateRequired)
+	if !ok {
+		that2, ok := that.(CertificateParamsType_ClientCertificateRequired)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientCertificateRequired.Equal(that1.ClientCertificateRequired) {
+		return false
+	}
+	return true
+}
+func (this *CertificateParamsType_ClientCertificateOptional) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CertificateParamsType_ClientCertificateOptional)
+	if !ok {
+		that2, ok := that.(CertificateParamsType_ClientCertificateOptional)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientCertificateOptional.Equal(that1.ClientCertificateOptional) {
+		return false
 	}
 	return true
 }
@@ -1244,6 +1545,15 @@ func (this *UpstreamTlsParamsType) Equal(that interface{}) bool {
 	} else if this.SniChoice == nil {
 		return false
 	} else if !this.SniChoice.Equal(that1.SniChoice) {
+		return false
+	}
+	if that1.MaxSessionKeysType == nil {
+		if this.MaxSessionKeysType != nil {
+			return false
+		}
+	} else if this.MaxSessionKeysType == nil {
+		return false
+	} else if !this.MaxSessionKeysType.Equal(that1.MaxSessionKeysType) {
 		return false
 	}
 	return true
@@ -1368,6 +1678,78 @@ func (this *UpstreamTlsParamsType_DisableSni) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *UpstreamTlsParamsType_DefaultSessionKeyCaching) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpstreamTlsParamsType_DefaultSessionKeyCaching)
+	if !ok {
+		that2, ok := that.(UpstreamTlsParamsType_DefaultSessionKeyCaching)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultSessionKeyCaching.Equal(that1.DefaultSessionKeyCaching) {
+		return false
+	}
+	return true
+}
+func (this *UpstreamTlsParamsType_DisableSessionKeyCaching) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpstreamTlsParamsType_DisableSessionKeyCaching)
+	if !ok {
+		that2, ok := that.(UpstreamTlsParamsType_DisableSessionKeyCaching)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableSessionKeyCaching.Equal(that1.DisableSessionKeyCaching) {
+		return false
+	}
+	return true
+}
+func (this *UpstreamTlsParamsType_MaxSessionKeys) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*UpstreamTlsParamsType_MaxSessionKeys)
+	if !ok {
+		that2, ok := that.(UpstreamTlsParamsType_MaxSessionKeys)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaxSessionKeys != that1.MaxSessionKeys {
+		return false
+	}
+	return true
+}
 func (this *TlsParamsType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1442,6 +1824,15 @@ func (this *DownstreamTlsParamsType) Equal(that interface{}) bool {
 	if this.RequireClientCertificate != that1.RequireClientCertificate {
 		return false
 	}
+	if that1.ClientCertificateVerifyChoice == nil {
+		if this.ClientCertificateVerifyChoice != nil {
+			return false
+		}
+	} else if this.ClientCertificateVerifyChoice == nil {
+		return false
+	} else if !this.ClientCertificateVerifyChoice.Equal(that1.ClientCertificateVerifyChoice) {
+		return false
+	}
 	if len(this.Crl) != len(that1.Crl) {
 		return false
 	}
@@ -1457,6 +1848,78 @@ func (this *DownstreamTlsParamsType) Equal(that interface{}) bool {
 		if this.XfccHeaderElements[i] != that1.XfccHeaderElements[i] {
 			return false
 		}
+	}
+	return true
+}
+func (this *DownstreamTlsParamsType_NoClientCertificate) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DownstreamTlsParamsType_NoClientCertificate)
+	if !ok {
+		that2, ok := that.(DownstreamTlsParamsType_NoClientCertificate)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoClientCertificate.Equal(that1.NoClientCertificate) {
+		return false
+	}
+	return true
+}
+func (this *DownstreamTlsParamsType_ClientCertificateRequired) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DownstreamTlsParamsType_ClientCertificateRequired)
+	if !ok {
+		that2, ok := that.(DownstreamTlsParamsType_ClientCertificateRequired)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientCertificateRequired.Equal(that1.ClientCertificateRequired) {
+		return false
+	}
+	return true
+}
+func (this *DownstreamTlsParamsType_ClientCertificateOptional) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DownstreamTlsParamsType_ClientCertificateOptional)
+	if !ok {
+		that2, ok := that.(DownstreamTlsParamsType_ClientCertificateOptional)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientCertificateOptional.Equal(that1.ClientCertificateOptional) {
+		return false
 	}
 	return true
 }
@@ -1568,7 +2031,7 @@ func (this *CertificateParamsType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 12)
+	s := make([]string, 0, 15)
 	s = append(s, "&schema.CertificateParamsType{")
 	if this.Certificates != nil {
 		s = append(s, "Certificates: "+fmt.Sprintf("%#v", this.Certificates)+",\n")
@@ -1580,12 +2043,39 @@ func (this *CertificateParamsType) GoString() string {
 	s = append(s, "MaximumProtocolVersion: "+fmt.Sprintf("%#v", this.MaximumProtocolVersion)+",\n")
 	s = append(s, "CipherSuites: "+fmt.Sprintf("%#v", this.CipherSuites)+",\n")
 	s = append(s, "RequireClientCertificate: "+fmt.Sprintf("%#v", this.RequireClientCertificate)+",\n")
+	if this.ClientCertificateVerifyChoice != nil {
+		s = append(s, "ClientCertificateVerifyChoice: "+fmt.Sprintf("%#v", this.ClientCertificateVerifyChoice)+",\n")
+	}
 	if this.Crl != nil {
 		s = append(s, "Crl: "+fmt.Sprintf("%#v", this.Crl)+",\n")
 	}
 	s = append(s, "XfccHeaderElements: "+fmt.Sprintf("%#v", this.XfccHeaderElements)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *CertificateParamsType_NoClientCertificate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.CertificateParamsType_NoClientCertificate{` +
+		`NoClientCertificate:` + fmt.Sprintf("%#v", this.NoClientCertificate) + `}`}, ", ")
+	return s
+}
+func (this *CertificateParamsType_ClientCertificateRequired) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.CertificateParamsType_ClientCertificateRequired{` +
+		`ClientCertificateRequired:` + fmt.Sprintf("%#v", this.ClientCertificateRequired) + `}`}, ", ")
+	return s
+}
+func (this *CertificateParamsType_ClientCertificateOptional) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.CertificateParamsType_ClientCertificateOptional{` +
+		`ClientCertificateOptional:` + fmt.Sprintf("%#v", this.ClientCertificateOptional) + `}`}, ", ")
+	return s
 }
 func (this *UpstreamCertificateParamsType) GoString() string {
 	if this == nil {
@@ -1609,13 +2099,16 @@ func (this *UpstreamTlsParamsType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 12)
 	s = append(s, "&schema.UpstreamTlsParamsType{")
 	if this.TlsParamsChoice != nil {
 		s = append(s, "TlsParamsChoice: "+fmt.Sprintf("%#v", this.TlsParamsChoice)+",\n")
 	}
 	if this.SniChoice != nil {
 		s = append(s, "SniChoice: "+fmt.Sprintf("%#v", this.SniChoice)+",\n")
+	}
+	if this.MaxSessionKeysType != nil {
+		s = append(s, "MaxSessionKeysType: "+fmt.Sprintf("%#v", this.MaxSessionKeysType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1660,6 +2153,30 @@ func (this *UpstreamTlsParamsType_DisableSni) GoString() string {
 		`DisableSni:` + fmt.Sprintf("%#v", this.DisableSni) + `}`}, ", ")
 	return s
 }
+func (this *UpstreamTlsParamsType_DefaultSessionKeyCaching) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.UpstreamTlsParamsType_DefaultSessionKeyCaching{` +
+		`DefaultSessionKeyCaching:` + fmt.Sprintf("%#v", this.DefaultSessionKeyCaching) + `}`}, ", ")
+	return s
+}
+func (this *UpstreamTlsParamsType_DisableSessionKeyCaching) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.UpstreamTlsParamsType_DisableSessionKeyCaching{` +
+		`DisableSessionKeyCaching:` + fmt.Sprintf("%#v", this.DisableSessionKeyCaching) + `}`}, ", ")
+	return s
+}
+func (this *UpstreamTlsParamsType_MaxSessionKeys) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.UpstreamTlsParamsType_MaxSessionKeys{` +
+		`MaxSessionKeys:` + fmt.Sprintf("%#v", this.MaxSessionKeys) + `}`}, ", ")
+	return s
+}
 func (this *TlsParamsType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1683,18 +2200,45 @@ func (this *DownstreamTlsParamsType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 11)
 	s = append(s, "&schema.DownstreamTlsParamsType{")
 	if this.CommonParams != nil {
 		s = append(s, "CommonParams: "+fmt.Sprintf("%#v", this.CommonParams)+",\n")
 	}
 	s = append(s, "RequireClientCertificate: "+fmt.Sprintf("%#v", this.RequireClientCertificate)+",\n")
+	if this.ClientCertificateVerifyChoice != nil {
+		s = append(s, "ClientCertificateVerifyChoice: "+fmt.Sprintf("%#v", this.ClientCertificateVerifyChoice)+",\n")
+	}
 	if this.Crl != nil {
 		s = append(s, "Crl: "+fmt.Sprintf("%#v", this.Crl)+",\n")
 	}
 	s = append(s, "XfccHeaderElements: "+fmt.Sprintf("%#v", this.XfccHeaderElements)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *DownstreamTlsParamsType_NoClientCertificate) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.DownstreamTlsParamsType_NoClientCertificate{` +
+		`NoClientCertificate:` + fmt.Sprintf("%#v", this.NoClientCertificate) + `}`}, ", ")
+	return s
+}
+func (this *DownstreamTlsParamsType_ClientCertificateRequired) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.DownstreamTlsParamsType_ClientCertificateRequired{` +
+		`ClientCertificateRequired:` + fmt.Sprintf("%#v", this.ClientCertificateRequired) + `}`}, ", ")
+	return s
+}
+func (this *DownstreamTlsParamsType_ClientCertificateOptional) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&schema.DownstreamTlsParamsType_ClientCertificateOptional{` +
+		`ClientCertificateOptional:` + fmt.Sprintf("%#v", this.ClientCertificateOptional) + `}`}, ", ")
+	return s
 }
 func (this *HostAccessInfoType) GoString() string {
 	if this == nil {
@@ -1829,6 +2373,15 @@ func (m *CertificateParamsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ClientCertificateVerifyChoice != nil {
+		{
+			size := m.ClientCertificateVerifyChoice.Size()
+			i -= size
+			if _, err := m.ClientCertificateVerifyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.XfccHeaderElements) > 0 {
 		dAtA3 := make([]byte, len(m.XfccHeaderElements)*10)
 		var j2 int
@@ -1919,6 +2472,69 @@ func (m *CertificateParamsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *CertificateParamsType_NoClientCertificate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CertificateParamsType_NoClientCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoClientCertificate != nil {
+		{
+			size, err := m.NoClientCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CertificateParamsType_ClientCertificateRequired) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CertificateParamsType_ClientCertificateRequired) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClientCertificateRequired != nil {
+		{
+			size, err := m.ClientCertificateRequired.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CertificateParamsType_ClientCertificateOptional) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CertificateParamsType_ClientCertificateOptional) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClientCertificateOptional != nil {
+		{
+			size, err := m.ClientCertificateOptional.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
 func (m *UpstreamCertificateParamsType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2007,6 +2623,15 @@ func (m *UpstreamTlsParamsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.MaxSessionKeysType != nil {
+		{
+			size := m.MaxSessionKeysType.Size()
+			i -= size
+			if _, err := m.MaxSessionKeysType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.TlsParamsChoice != nil {
 		{
 			size := m.TlsParamsChoice.Size()
@@ -2126,6 +2751,60 @@ func (m *UpstreamTlsParamsType_CertParams) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *UpstreamTlsParamsType_DefaultSessionKeyCaching) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpstreamTlsParamsType_DefaultSessionKeyCaching) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultSessionKeyCaching != nil {
+		{
+			size, err := m.DefaultSessionKeyCaching.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *UpstreamTlsParamsType_DisableSessionKeyCaching) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpstreamTlsParamsType_DisableSessionKeyCaching) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableSessionKeyCaching != nil {
+		{
+			size, err := m.DisableSessionKeyCaching.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *UpstreamTlsParamsType_MaxSessionKeys) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *UpstreamTlsParamsType_MaxSessionKeys) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintCertTypes(dAtA, i, uint64(m.MaxSessionKeys))
+	i--
+	dAtA[i] = 0x58
+	return len(dAtA) - i, nil
+}
 func (m *TlsParamsType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2221,21 +2900,30 @@ func (m *DownstreamTlsParamsType) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
+	if m.ClientCertificateVerifyChoice != nil {
+		{
+			size := m.ClientCertificateVerifyChoice.Size()
+			i -= size
+			if _, err := m.ClientCertificateVerifyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if len(m.XfccHeaderElements) > 0 {
-		dAtA12 := make([]byte, len(m.XfccHeaderElements)*10)
-		var j11 int
+		dAtA17 := make([]byte, len(m.XfccHeaderElements)*10)
+		var j16 int
 		for _, num := range m.XfccHeaderElements {
 			for num >= 1<<7 {
-				dAtA12[j11] = uint8(uint64(num)&0x7f | 0x80)
+				dAtA17[j16] = uint8(uint64(num)&0x7f | 0x80)
 				num >>= 7
-				j11++
+				j16++
 			}
-			dAtA12[j11] = uint8(num)
-			j11++
+			dAtA17[j16] = uint8(num)
+			j16++
 		}
-		i -= j11
-		copy(dAtA[i:], dAtA12[:j11])
-		i = encodeVarintCertTypes(dAtA, i, uint64(j11))
+		i -= j16
+		copy(dAtA[i:], dAtA17[:j16])
+		i = encodeVarintCertTypes(dAtA, i, uint64(j16))
 		i--
 		dAtA[i] = 0x32
 	}
@@ -2278,6 +2966,69 @@ func (m *DownstreamTlsParamsType) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	return len(dAtA) - i, nil
 }
 
+func (m *DownstreamTlsParamsType_NoClientCertificate) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DownstreamTlsParamsType_NoClientCertificate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoClientCertificate != nil {
+		{
+			size, err := m.NoClientCertificate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DownstreamTlsParamsType_ClientCertificateRequired) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DownstreamTlsParamsType_ClientCertificateRequired) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClientCertificateRequired != nil {
+		{
+			size, err := m.ClientCertificateRequired.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DownstreamTlsParamsType_ClientCertificateOptional) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DownstreamTlsParamsType_ClientCertificateOptional) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ClientCertificateOptional != nil {
+		{
+			size, err := m.ClientCertificateOptional.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintCertTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
 func (m *HostAccessInfoType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2466,9 +3217,48 @@ func (m *CertificateParamsType) Size() (n int) {
 		}
 		n += 1 + sovCertTypes(uint64(l)) + l
 	}
+	if m.ClientCertificateVerifyChoice != nil {
+		n += m.ClientCertificateVerifyChoice.Size()
+	}
 	return n
 }
 
+func (m *CertificateParamsType_NoClientCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoClientCertificate != nil {
+		l = m.NoClientCertificate.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
+func (m *CertificateParamsType_ClientCertificateRequired) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClientCertificateRequired != nil {
+		l = m.ClientCertificateRequired.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
+func (m *CertificateParamsType_ClientCertificateOptional) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClientCertificateOptional != nil {
+		l = m.ClientCertificateOptional.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
 func (m *UpstreamCertificateParamsType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2511,6 +3301,9 @@ func (m *UpstreamTlsParamsType) Size() (n int) {
 	}
 	if m.SniChoice != nil {
 		n += m.SniChoice.Size()
+	}
+	if m.MaxSessionKeysType != nil {
+		n += m.MaxSessionKeysType.Size()
 	}
 	return n
 }
@@ -2571,6 +3364,39 @@ func (m *UpstreamTlsParamsType_CertParams) Size() (n int) {
 		l = m.CertParams.Size()
 		n += 1 + l + sovCertTypes(uint64(l))
 	}
+	return n
+}
+func (m *UpstreamTlsParamsType_DefaultSessionKeyCaching) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultSessionKeyCaching != nil {
+		l = m.DefaultSessionKeyCaching.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
+func (m *UpstreamTlsParamsType_DisableSessionKeyCaching) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableSessionKeyCaching != nil {
+		l = m.DisableSessionKeyCaching.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
+func (m *UpstreamTlsParamsType_MaxSessionKeys) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 1 + sovCertTypes(uint64(m.MaxSessionKeys))
 	return n
 }
 func (m *TlsParamsType) Size() (n int) {
@@ -2634,9 +3460,48 @@ func (m *DownstreamTlsParamsType) Size() (n int) {
 		}
 		n += 1 + sovCertTypes(uint64(l)) + l
 	}
+	if m.ClientCertificateVerifyChoice != nil {
+		n += m.ClientCertificateVerifyChoice.Size()
+	}
 	return n
 }
 
+func (m *DownstreamTlsParamsType_NoClientCertificate) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoClientCertificate != nil {
+		l = m.NoClientCertificate.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
+func (m *DownstreamTlsParamsType_ClientCertificateRequired) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClientCertificateRequired != nil {
+		l = m.ClientCertificateRequired.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
+func (m *DownstreamTlsParamsType_ClientCertificateOptional) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClientCertificateOptional != nil {
+		l = m.ClientCertificateOptional.Size()
+		n += 1 + l + sovCertTypes(uint64(l))
+	}
+	return n
+}
 func (m *HostAccessInfoType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2729,6 +3594,37 @@ func (this *CertificateParamsType) String() string {
 		`RequireClientCertificate:` + fmt.Sprintf("%v", this.RequireClientCertificate) + `,`,
 		`Crl:` + repeatedStringForCrl + `,`,
 		`XfccHeaderElements:` + fmt.Sprintf("%v", this.XfccHeaderElements) + `,`,
+		`ClientCertificateVerifyChoice:` + fmt.Sprintf("%v", this.ClientCertificateVerifyChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CertificateParamsType_NoClientCertificate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CertificateParamsType_NoClientCertificate{`,
+		`NoClientCertificate:` + strings.Replace(fmt.Sprintf("%v", this.NoClientCertificate), "Empty", "Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CertificateParamsType_ClientCertificateRequired) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CertificateParamsType_ClientCertificateRequired{`,
+		`ClientCertificateRequired:` + strings.Replace(fmt.Sprintf("%v", this.ClientCertificateRequired), "Empty", "Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CertificateParamsType_ClientCertificateOptional) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CertificateParamsType_ClientCertificateOptional{`,
+		`ClientCertificateOptional:` + strings.Replace(fmt.Sprintf("%v", this.ClientCertificateOptional), "Empty", "Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2759,6 +3655,7 @@ func (this *UpstreamTlsParamsType) String() string {
 	s := strings.Join([]string{`&UpstreamTlsParamsType{`,
 		`TlsParamsChoice:` + fmt.Sprintf("%v", this.TlsParamsChoice) + `,`,
 		`SniChoice:` + fmt.Sprintf("%v", this.SniChoice) + `,`,
+		`MaxSessionKeysType:` + fmt.Sprintf("%v", this.MaxSessionKeysType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2813,6 +3710,36 @@ func (this *UpstreamTlsParamsType_CertParams) String() string {
 	}, "")
 	return s
 }
+func (this *UpstreamTlsParamsType_DefaultSessionKeyCaching) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UpstreamTlsParamsType_DefaultSessionKeyCaching{`,
+		`DefaultSessionKeyCaching:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSessionKeyCaching), "Empty", "Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpstreamTlsParamsType_DisableSessionKeyCaching) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UpstreamTlsParamsType_DisableSessionKeyCaching{`,
+		`DisableSessionKeyCaching:` + strings.Replace(fmt.Sprintf("%v", this.DisableSessionKeyCaching), "Empty", "Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *UpstreamTlsParamsType_MaxSessionKeys) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&UpstreamTlsParamsType_MaxSessionKeys{`,
+		`MaxSessionKeys:` + fmt.Sprintf("%v", this.MaxSessionKeys) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *TlsParamsType) String() string {
 	if this == nil {
 		return "nil"
@@ -2847,6 +3774,37 @@ func (this *DownstreamTlsParamsType) String() string {
 		`RequireClientCertificate:` + fmt.Sprintf("%v", this.RequireClientCertificate) + `,`,
 		`Crl:` + repeatedStringForCrl + `,`,
 		`XfccHeaderElements:` + fmt.Sprintf("%v", this.XfccHeaderElements) + `,`,
+		`ClientCertificateVerifyChoice:` + fmt.Sprintf("%v", this.ClientCertificateVerifyChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DownstreamTlsParamsType_NoClientCertificate) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DownstreamTlsParamsType_NoClientCertificate{`,
+		`NoClientCertificate:` + strings.Replace(fmt.Sprintf("%v", this.NoClientCertificate), "Empty", "Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DownstreamTlsParamsType_ClientCertificateRequired) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DownstreamTlsParamsType_ClientCertificateRequired{`,
+		`ClientCertificateRequired:` + strings.Replace(fmt.Sprintf("%v", this.ClientCertificateRequired), "Empty", "Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DownstreamTlsParamsType_ClientCertificateOptional) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DownstreamTlsParamsType_ClientCertificateOptional{`,
+		`ClientCertificateOptional:` + strings.Replace(fmt.Sprintf("%v", this.ClientCertificateOptional), "Empty", "Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3433,6 +4391,111 @@ func (m *CertificateParamsType) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field XfccHeaderElements", wireType)
 			}
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoClientCertificate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientCertificateVerifyChoice = &CertificateParamsType_NoClientCertificate{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientCertificateRequired", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientCertificateVerifyChoice = &CertificateParamsType_ClientCertificateRequired{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientCertificateOptional", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientCertificateVerifyChoice = &CertificateParamsType_ClientCertificateOptional{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCertTypes(dAtA[iNdEx:])
@@ -3851,6 +4914,96 @@ func (m *UpstreamTlsParamsType) Unmarshal(dAtA []byte) error {
 			}
 			m.TlsParamsChoice = &UpstreamTlsParamsType_CertParams{v}
 			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultSessionKeyCaching", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaxSessionKeysType = &UpstreamTlsParamsType_DefaultSessionKeyCaching{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableSessionKeyCaching", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaxSessionKeysType = &UpstreamTlsParamsType_DisableSessionKeyCaching{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxSessionKeys", wireType)
+			}
+			var v uint32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.MaxSessionKeysType = &UpstreamTlsParamsType_MaxSessionKeys{v}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCertTypes(dAtA[iNdEx:])
@@ -4288,6 +5441,111 @@ func (m *DownstreamTlsParamsType) Unmarshal(dAtA []byte) error {
 			} else {
 				return fmt.Errorf("proto: wrong wireType = %d for field XfccHeaderElements", wireType)
 			}
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoClientCertificate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientCertificateVerifyChoice = &DownstreamTlsParamsType_NoClientCertificate{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientCertificateRequired", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientCertificateVerifyChoice = &DownstreamTlsParamsType_ClientCertificateRequired{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientCertificateOptional", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowCertTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthCertTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ClientCertificateVerifyChoice = &DownstreamTlsParamsType_ClientCertificateOptional{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipCertTypes(dAtA[iNdEx:])

@@ -86,6 +86,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.HttpRedirectOptions"] = HttpRedirectOptionsValidator()
 	vr["ves.io.schema.virtual_host.JavaScriptConfigType"] = JavaScriptConfigTypeValidator()
 	vr["ves.io.schema.virtual_host.JavascriptChallengeType"] = JavascriptChallengeTypeValidator()
+	vr["ves.io.schema.virtual_host.MaskingConfiguration"] = MaskingConfigurationValidator()
 	vr["ves.io.schema.virtual_host.OpenApiValidationSettings"] = OpenApiValidationSettingsValidator()
 	vr["ves.io.schema.virtual_host.PolicyBasedChallenge"] = PolicyBasedChallengeValidator()
 	vr["ves.io.schema.virtual_host.ReplaceSpecType"] = ReplaceSpecTypeValidator()
@@ -122,6 +123,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:     "ves.io.schema.virtual_host.CreateRequest.spec.api_spec.open_api_validation_choice.enable_open_api_validation",
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
+		{
+			FieldPath:     "ves.io.schema.virtual_host.CreateRequest.spec.masking_config.masking_choice.enable_masking",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
@@ -139,6 +144,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cors_policy.max_age",
 		"spec.dns_proxy_configuration",
 		"spec.domain_cert_map",
+		"spec.masking_config",
+		"spec.max_direct_response_body_size",
 		"spec.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.request_headers_to_add.#.secret_value.vault_secret_info",
@@ -150,6 +157,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.retry_policy.retry_on",
 		"spec.temporary_user_blocking",
 		"spec.tls_cert_params.crl.#",
+		"spec.tls_cert_params.require_client_certificate",
 		"spec.tls_cert_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.common_params.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.tls_parameters.common_params.tls_certificates.#.private_key.secret_encoding_type",
@@ -158,6 +166,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
+		"spec.tls_parameters.require_client_certificate",
 		"spec.ztna_proxy_configurations",
 	}
 
@@ -166,6 +175,10 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []svcfw.SubscriptionField{
 		{
 			FieldPath:     "ves.io.schema.virtual_host.ReplaceRequest.spec.api_spec.open_api_validation_choice.enable_open_api_validation",
+			AddonServices: []string{"f5xc-waap-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.virtual_host.ReplaceRequest.spec.masking_config.masking_choice.enable_masking",
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 	}
@@ -185,6 +198,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.cors_policy.max_age",
 		"spec.dns_proxy_configuration",
 		"spec.domain_cert_map",
+		"spec.masking_config",
+		"spec.max_direct_response_body_size",
 		"spec.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.request_headers_to_add.#.secret_value.vault_secret_info",
@@ -196,6 +211,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.retry_policy.retry_on",
 		"spec.temporary_user_blocking",
 		"spec.tls_cert_params.crl.#",
+		"spec.tls_cert_params.require_client_certificate",
 		"spec.tls_cert_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.common_params.tls_certificates.#.private_key.blindfold_secret_info_internal",
 		"spec.tls_parameters.common_params.tls_certificates.#.private_key.secret_encoding_type",
@@ -204,6 +220,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
+		"spec.tls_parameters.require_client_certificate",
 		"spec.ztna_proxy_configurations",
 	}
 

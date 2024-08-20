@@ -372,7 +372,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-central_manager-customapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-central_manager-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.central_manager.CustomAPI.List"
             },

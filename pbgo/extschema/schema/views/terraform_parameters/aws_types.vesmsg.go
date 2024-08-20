@@ -515,12 +515,29 @@ func (m *AWSTGWType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *AWSTGWType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *AWSTGWType) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
 // Redact squashes sensitive info in m (in-place)
 func (m *AWSTGWType) Redact(ctx context.Context) error {
 	// clear fields with confidential option set (at message or field level)
 	if m == nil {
 		return nil
 	}
+
+	m.AdminPasswordBlindfolded = ""
 
 	for idx, e := range m.GetTunnelInformation() {
 		if err := e.Redact(ctx); err != nil {
@@ -622,6 +639,33 @@ func (v *ValidateAWSTGWType) Validate(ctx context.Context, pm interface{}, opts 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
+		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
+		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["assume_role"]; exists {
@@ -1030,6 +1074,33 @@ func (m *AWSVPCType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *AWSVPCType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *AWSVPCType) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *AWSVPCType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.AdminPasswordBlindfolded = ""
+
+	return nil
+}
+
 func (m *AWSVPCType) DeepCopy() *AWSVPCType {
 	if m == nil {
 		return nil
@@ -1073,6 +1144,33 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
+		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
+		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["assume_role"]; exists {

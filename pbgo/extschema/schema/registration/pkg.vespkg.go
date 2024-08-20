@@ -27,6 +27,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.registration.ConfigReq"] = ConfigReqValidator()
 	vr["ves.io.schema.registration.ConfigResp"] = ConfigRespValidator()
 	vr["ves.io.schema.registration.DeleteRequest"] = DeleteRequestValidator()
+	vr["ves.io.schema.registration.GetImageDownloadUrlReq"] = GetImageDownloadUrlReqValidator()
+	vr["ves.io.schema.registration.GetImageDownloadUrlResp"] = GetImageDownloadUrlRespValidator()
 	vr["ves.io.schema.registration.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.registration.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.registration.ListBySiteReq"] = ListBySiteReqValidator()
@@ -36,6 +38,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.registration.ListStateReq"] = ListStateReqValidator()
 	vr["ves.io.schema.registration.ObjectChangeResp"] = ObjectChangeRespValidator()
 	vr["ves.io.schema.registration.RegistrationCreateRequest"] = RegistrationCreateRequestValidator()
+	vr["ves.io.schema.registration.SuggestValuesReq"] = SuggestValuesReqValidator()
+	vr["ves.io.schema.registration.SuggestValuesResp"] = SuggestValuesRespValidator()
+	vr["ves.io.schema.registration.SuggestedItem"] = SuggestedItemValidator()
 
 	vr["ves.io.schema.registration.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.registration.GetSpecType"] = GetSpecTypeValidator()

@@ -1470,12 +1470,6 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetRateLimiterAllowedPrefixesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterAllowedPrefixesDRefInfo() FAILED")
 	} else {
@@ -1641,51 +1635,6 @@ func (m *CreateSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error)
 	}
 	return drInfos, err
 
-}
-
-func (m *CreateSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetRateLimiter()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("CreateSpecType.rate_limiter[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "rate_limiter.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "rate_limiter",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *CreateSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "rate_limiter.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: rate_limiter")
-	}
-	for _, ref := range m.GetRateLimiter() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
 }
 
 func (m *CreateSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, error) {
@@ -2311,54 +2260,6 @@ func (v *ValidateCreateSpecType) UserIdentificationValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) RateLimiterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiter")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiter")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated rate_limiter")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items rate_limiter")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) RateLimiterAllowedPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -2460,6 +2361,16 @@ func (v *ValidateCreateSpecType) ConnectionIdleTimeoutValidationRuleHandler(rule
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) MaxDirectResponseBodySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_direct_response_body_size")
 	}
 
 	return validatorFn, nil
@@ -2752,6 +2663,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["masking_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("masking_config"))
+		if err := fv(ctx, m.GetMaskingConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_direct_response_body_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_direct_response_body_size"))
+		if err := fv(ctx, m.GetMaxDirectResponseBodySize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["max_request_header_size"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("max_request_header_size"))
@@ -2791,14 +2720,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
 		if err := fv(ctx, m.GetProxy(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rate_limiter"]; exists {
-		vOpts := append(opts, db.WithValidateField("rate_limiter"))
-		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3173,17 +3094,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["user_identification"] = vFn
 
-	vrhRateLimiter := v.RateLimiterValidationRuleHandler
-	rulesRateLimiter := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhRateLimiter(rulesRateLimiter)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.rate_limiter: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rate_limiter"] = vFn
-
 	vrhRateLimiterAllowedPrefixes := v.RateLimiterAllowedPrefixesValidationRuleHandler
 	rulesRateLimiterAllowedPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "4",
@@ -3219,6 +3129,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_idle_timeout"] = vFn
+
+	vrhMaxDirectResponseBodySize := v.MaxDirectResponseBodySizeValidationRuleHandler
+	rulesMaxDirectResponseBodySize := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65536",
+	}
+	vFn, err = vrhMaxDirectResponseBodySize(rulesMaxDirectResponseBodySize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.max_direct_response_body_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_direct_response_body_size"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -4560,12 +4481,6 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetRateLimiterAllowedPrefixesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterAllowedPrefixesDRefInfo() FAILED")
 	} else {
@@ -4731,51 +4646,6 @@ func (m *GetSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error) {
 	}
 	return drInfos, err
 
-}
-
-func (m *GetSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetRateLimiter()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("GetSpecType.rate_limiter[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "rate_limiter.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "rate_limiter",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "rate_limiter.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: rate_limiter")
-	}
-	for _, ref := range m.GetRateLimiter() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
 }
 
 func (m *GetSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, error) {
@@ -5385,54 +5255,6 @@ func (v *ValidateGetSpecType) UserIdentificationValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) RateLimiterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiter")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiter")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated rate_limiter")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items rate_limiter")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) RateLimiterAllowedPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -5534,6 +5356,16 @@ func (v *ValidateGetSpecType) ConnectionIdleTimeoutValidationRuleHandler(rules m
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) MaxDirectResponseBodySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_direct_response_body_size")
 	}
 
 	return validatorFn, nil
@@ -5900,6 +5732,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["masking_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("masking_config"))
+		if err := fv(ctx, m.GetMaskingConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_direct_response_body_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_direct_response_body_size"))
+		if err := fv(ctx, m.GetMaxDirectResponseBodySize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["max_request_header_size"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("max_request_header_size"))
@@ -5939,14 +5789,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
 		if err := fv(ctx, m.GetProxy(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rate_limiter"]; exists {
-		vOpts := append(opts, db.WithValidateField("rate_limiter"))
-		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6328,17 +6170,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["user_identification"] = vFn
 
-	vrhRateLimiter := v.RateLimiterValidationRuleHandler
-	rulesRateLimiter := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhRateLimiter(rulesRateLimiter)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.rate_limiter: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rate_limiter"] = vFn
-
 	vrhRateLimiterAllowedPrefixes := v.RateLimiterAllowedPrefixesValidationRuleHandler
 	rulesRateLimiterAllowedPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "4",
@@ -6374,6 +6205,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_idle_timeout"] = vFn
+
+	vrhMaxDirectResponseBodySize := v.MaxDirectResponseBodySizeValidationRuleHandler
+	rulesMaxDirectResponseBodySize := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65536",
+	}
+	vFn, err = vrhMaxDirectResponseBodySize(rulesMaxDirectResponseBodySize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.max_direct_response_body_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_direct_response_body_size"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -6551,6 +6393,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetDnsZonesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetDnsZonesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetDownstreamCosDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDownstreamCosDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -6888,6 +6736,51 @@ func (m *GlobalSpecType) GetDnsZonesDBEntries(ctx context.Context, d db.Interfac
 		return nil, errors.Wrap(err, "Cannot find type for kind: dns_zone")
 	}
 	for _, ref := range m.GetDnsZones() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetDownstreamCosDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetDownstreamCos()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.downstream_cos[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "downstream_cos.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "downstream_cos",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetDownstreamCosDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetDownstreamCosDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "downstream_cos.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: downstream_cos")
+	}
+	for _, ref := range m.GetDownstreamCos() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -8005,6 +7898,54 @@ func (v *ValidateGlobalSpecType) ConnectionIdleTimeoutValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) DownstreamCosValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for downstream_cos")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for downstream_cos")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated downstream_cos")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items downstream_cos")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) DnsDomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -8282,6 +8223,16 @@ func (v *ValidateGlobalSpecType) DnsZonesValidationRuleHandler(rules map[string]
 			return errors.Wrap(err, "items dns_zones")
 		}
 		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) MaxDirectResponseBodySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_direct_response_body_size")
 	}
 
 	return validatorFn, nil
@@ -8758,6 +8709,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["downstream_cos"]; exists {
+		vOpts := append(opts, db.WithValidateField("downstream_cos"))
+		if err := fv(ctx, m.GetDownstreamCos(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["dynamic_reverse_proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("dynamic_reverse_proxy"))
@@ -8861,6 +8820,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["malicious_user_mitigation"]; exists {
 		vOpts := append(opts, db.WithValidateField("malicious_user_mitigation"))
 		if err := fv(ctx, m.GetMaliciousUserMitigation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["masking_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("masking_config"))
+		if err := fv(ctx, m.GetMaskingConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_direct_response_body_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_direct_response_body_size"))
+		if err := fv(ctx, m.GetMaxDirectResponseBodySize(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9442,6 +9419,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["connection_idle_timeout"] = vFn
 
+	vrhDownstreamCos := v.DownstreamCosValidationRuleHandler
+	rulesDownstreamCos := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhDownstreamCos(rulesDownstreamCos)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.downstream_cos: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["downstream_cos"] = vFn
+
 	vrhDnsDomains := v.DnsDomainsValidationRuleHandler
 	rulesDnsDomains := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "256",
@@ -9509,6 +9497,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["dns_zones"] = vFn
+
+	vrhMaxDirectResponseBodySize := v.MaxDirectResponseBodySizeValidationRuleHandler
+	rulesMaxDirectResponseBodySize := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65536",
+	}
+	vFn, err = vrhMaxDirectResponseBodySize(rulesMaxDirectResponseBodySize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.max_direct_response_body_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_direct_response_body_size"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -10132,6 +10131,101 @@ func JavascriptChallengeTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *MaskingConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MaskingConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MaskingConfiguration) DeepCopy() *MaskingConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MaskingConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MaskingConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MaskingConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MaskingConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMaskingConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMaskingConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MaskingConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MaskingConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetMaskingChoice().(type) {
+	case *MaskingConfiguration_DisableMasking:
+		if fv, exists := v.FldValidators["masking_choice.disable_masking"]; exists {
+			val := m.GetMaskingChoice().(*MaskingConfiguration_DisableMasking).DisableMasking
+			vOpts := append(opts,
+				db.WithValidateField("masking_choice"),
+				db.WithValidateField("disable_masking"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MaskingConfiguration_EnableMasking:
+		if fv, exists := v.FldValidators["masking_choice.enable_masking"]; exists {
+			val := m.GetMaskingChoice().(*MaskingConfiguration_EnableMasking).EnableMasking
+			vOpts := append(opts,
+				db.WithValidateField("masking_choice"),
+				db.WithValidateField("enable_masking"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMaskingConfigurationValidator = func() *ValidateMaskingConfiguration {
+	v := &ValidateMaskingConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MaskingConfigurationValidator() db.Validator {
+	return DefaultMaskingConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *OpenApiValidationSettings) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -10198,6 +10292,15 @@ func (v *ValidateOpenApiValidationSettings) Validate(ctx context.Context, pm int
 
 		vOpts := append(opts, db.WithValidateField("allow_only_specified_query_params"))
 		if err := fv(ctx, m.GetAllowOnlySpecifiedQueryParams(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["fail_close"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("fail_close"))
+		if err := fv(ctx, m.GetFailClose(), vOpts...); err != nil {
 			return err
 		}
 
@@ -10626,12 +10729,6 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetRateLimiterDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetRateLimiterDRefInfo() FAILED")
-	} else {
-		drInfos = append(drInfos, fdrInfos...)
-	}
-
 	if fdrInfos, err := m.GetRateLimiterAllowedPrefixesDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRateLimiterAllowedPrefixesDRefInfo() FAILED")
 	} else {
@@ -10797,51 +10894,6 @@ func (m *ReplaceSpecType) GetDynamicReverseProxyDRefInfo() ([]db.DRefInfo, error
 	}
 	return drInfos, err
 
-}
-
-func (m *ReplaceSpecType) GetRateLimiterDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetRateLimiter()
-	if len(refs) == 0 {
-		return nil, nil
-	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("ReplaceSpecType.rate_limiter[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "rate_limiter.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "rate_limiter",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
-
-}
-
-// GetRateLimiterDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *ReplaceSpecType) GetRateLimiterDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "rate_limiter.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: rate_limiter")
-	}
-	for _, ref := range m.GetRateLimiter() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-	}
-
-	return entries, nil
 }
 
 func (m *ReplaceSpecType) GetRateLimiterAllowedPrefixesDRefInfo() ([]db.DRefInfo, error) {
@@ -11467,54 +11519,6 @@ func (v *ValidateReplaceSpecType) UserIdentificationValidationRuleHandler(rules 
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) RateLimiterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiter")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiter")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated rate_limiter")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items rate_limiter")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) RateLimiterAllowedPrefixesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
@@ -11616,6 +11620,16 @@ func (v *ValidateReplaceSpecType) ConnectionIdleTimeoutValidationRuleHandler(rul
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for connection_idle_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) MaxDirectResponseBodySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_direct_response_body_size")
 	}
 
 	return validatorFn, nil
@@ -11908,6 +11922,24 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["masking_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("masking_config"))
+		if err := fv(ctx, m.GetMaskingConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["max_direct_response_body_size"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("max_direct_response_body_size"))
+		if err := fv(ctx, m.GetMaxDirectResponseBodySize(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["max_request_header_size"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("max_request_header_size"))
@@ -11947,14 +11979,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("proxy"))
 		if err := fv(ctx, m.GetProxy(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["rate_limiter"]; exists {
-		vOpts := append(opts, db.WithValidateField("rate_limiter"))
-		if err := fv(ctx, m.GetRateLimiter(), vOpts...); err != nil {
 			return err
 		}
 
@@ -12329,17 +12353,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["user_identification"] = vFn
 
-	vrhRateLimiter := v.RateLimiterValidationRuleHandler
-	rulesRateLimiter := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhRateLimiter(rulesRateLimiter)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.rate_limiter: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rate_limiter"] = vFn
-
 	vrhRateLimiterAllowedPrefixes := v.RateLimiterAllowedPrefixesValidationRuleHandler
 	rulesRateLimiterAllowedPrefixes := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "4",
@@ -12375,6 +12388,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_idle_timeout"] = vFn
+
+	vrhMaxDirectResponseBodySize := v.MaxDirectResponseBodySizeValidationRuleHandler
+	rulesMaxDirectResponseBodySize := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "65536",
+	}
+	vFn, err = vrhMaxDirectResponseBodySize(rulesMaxDirectResponseBodySize)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.max_direct_response_body_size: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_direct_response_body_size"] = vFn
 
 	v.FldValidators["authentication_choice.authentication"] = AuthenticationDetailsValidator().Validate
 
@@ -14193,10 +14217,11 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HttpProtocolOptions = f.GetHttpProtocolOptions()
 	m.IdleTimeout = f.GetIdleTimeout()
+	m.MaskingConfig = f.GetMaskingConfig()
+	m.MaxDirectResponseBodySize = f.GetMaxDirectResponseBodySize()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
-	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
 	m.RequestHeadersToAdd = f.GetRequestHeadersToAdd()
 	m.RequestHeadersToRemove = f.GetRequestHeadersToRemove()
@@ -14251,10 +14276,11 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HttpProtocolOptions = m1.HttpProtocolOptions
 	f.IdleTimeout = m1.IdleTimeout
+	f.MaskingConfig = m1.MaskingConfig
+	f.MaxDirectResponseBodySize = m1.MaxDirectResponseBodySize
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
-	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
 	f.RequestHeadersToAdd = m1.RequestHeadersToAdd
 	f.RequestHeadersToRemove = m1.RequestHeadersToRemove
@@ -14610,10 +14636,11 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HostName = f.GetHostName()
 	m.HttpProtocolOptions = f.GetHttpProtocolOptions()
 	m.IdleTimeout = f.GetIdleTimeout()
+	m.MaskingConfig = f.GetMaskingConfig()
+	m.MaxDirectResponseBodySize = f.GetMaxDirectResponseBodySize()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
-	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
 	m.RequestHeadersToAdd = f.GetRequestHeadersToAdd()
 	m.RequestHeadersToRemove = f.GetRequestHeadersToRemove()
@@ -14676,10 +14703,11 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HostName = m1.HostName
 	f.HttpProtocolOptions = m1.HttpProtocolOptions
 	f.IdleTimeout = m1.IdleTimeout
+	f.MaskingConfig = m1.MaskingConfig
+	f.MaxDirectResponseBodySize = m1.MaxDirectResponseBodySize
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
-	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
 	f.RequestHeadersToAdd = m1.RequestHeadersToAdd
 	f.RequestHeadersToRemove = m1.RequestHeadersToRemove
@@ -14996,10 +15024,11 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.HeaderTransformationType = f.GetHeaderTransformationType()
 	m.HttpProtocolOptions = f.GetHttpProtocolOptions()
 	m.IdleTimeout = f.GetIdleTimeout()
+	m.MaskingConfig = f.GetMaskingConfig()
+	m.MaxDirectResponseBodySize = f.GetMaxDirectResponseBodySize()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
-	m.RateLimiter = f.GetRateLimiter()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
 	m.RequestHeadersToAdd = f.GetRequestHeadersToAdd()
 	m.RequestHeadersToRemove = f.GetRequestHeadersToRemove()
@@ -15054,10 +15083,11 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.HeaderTransformationType = m1.HeaderTransformationType
 	f.HttpProtocolOptions = m1.HttpProtocolOptions
 	f.IdleTimeout = m1.IdleTimeout
+	f.MaskingConfig = m1.MaskingConfig
+	f.MaxDirectResponseBodySize = m1.MaxDirectResponseBodySize
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
-	f.RateLimiter = m1.RateLimiter
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
 	f.RequestHeadersToAdd = m1.RequestHeadersToAdd
 	f.RequestHeadersToRemove = m1.RequestHeadersToRemove

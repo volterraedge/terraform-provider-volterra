@@ -685,7 +685,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbhealthstatuslist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbhealthstatuslist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBHealthStatusList"
             },
@@ -785,7 +785,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbpoolhealthstatus"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbpoolhealthstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBPoolHealthStatus"
             },
@@ -877,7 +877,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbhealthstatus"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-dns_load_balancer-customdataapi-dnslbhealthstatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.dns_load_balancer.CustomDataAPI.DNSLBHealthStatus"
             },

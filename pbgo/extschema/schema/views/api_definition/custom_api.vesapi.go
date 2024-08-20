@@ -659,7 +659,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-customapi-getmethodssuggestions"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-customapi-getmethodssuggestions"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.CustomAPI.GetMethodsSuggestions"
             },
@@ -759,7 +759,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-customapi-getapiendpointpathssuggestions"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-customapi-getapiendpointpathssuggestions"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.CustomAPI.GetApiEndpointPathsSuggestions"
             },
@@ -859,7 +859,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-api_definition-customapi-getbasepathsuggestions"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-api_definition-customapi-getbasepathsuggestions"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.api_definition.CustomAPI.GetBasePathSuggestions"
             },

@@ -77,6 +77,24 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["site_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_name"))
+		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -162,10 +180,37 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["content"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content"))
+		if err := fv(ctx, m.GetContent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_name"))
+		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -275,10 +320,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["content"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("content"))
+		if err := fv(ctx, m.GetContent(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_name"))
+		if err := fv(ctx, m.GetSiteName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))
 		if err := fv(ctx, m.GetState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -390,6 +462,8 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	if f == nil {
 		return
 	}
+	m.SiteName = f.GetSiteName()
+	m.Type = f.GetType()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -407,6 +481,8 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	}
 	_ = m1
 
+	f.SiteName = m1.SiteName
+	f.Type = m1.Type
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -421,7 +497,10 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
+	m.Content = f.GetContent()
+	m.SiteName = f.GetSiteName()
 	m.State = f.GetState()
+	m.Type = f.GetType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -439,7 +518,10 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
+	f.Content = m1.Content
+	f.SiteName = m1.SiteName
 	f.State = m1.State
+	f.Type = m1.Type
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {

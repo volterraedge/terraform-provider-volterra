@@ -46,24 +46,6 @@ func (c *CustomAPIGrpcClient) doRPCAssignDomainOwner(ctx context.Context, yamlRe
 	return rsp, err
 }
 
-func (c *CustomAPIGrpcClient) doRPCCreateDebugUser(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &CreateDebugUserRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.CreateDebugUserRequest", yamlReq)
-	}
-	rsp, err := c.grpcClient.CreateDebugUser(ctx, req, opts...)
-	return rsp, err
-}
-
-func (c *CustomAPIGrpcClient) doRPCDeleteDebugUser(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &Empty{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty", yamlReq)
-	}
-	rsp, err := c.grpcClient.DeleteDebugUser(ctx, req, opts...)
-	return rsp, err
-}
-
 func (c *CustomAPIGrpcClient) doRPCDeleteImage(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &Empty{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -97,15 +79,6 @@ func (c *CustomAPIGrpcClient) doRPCEnableTenantLevelOTP(ctx context.Context, yam
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty", yamlReq)
 	}
 	rsp, err := c.grpcClient.EnableTenantLevelOTP(ctx, req, opts...)
-	return rsp, err
-}
-
-func (c *CustomAPIGrpcClient) doRPCGetDebugUser(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &Empty{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty", yamlReq)
-	}
-	rsp, err := c.grpcClient.GetDebugUser(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -294,10 +267,6 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
 	rpcFns["AssignDomainOwner"] = ccl.doRPCAssignDomainOwner
 
-	rpcFns["CreateDebugUser"] = ccl.doRPCCreateDebugUser
-
-	rpcFns["DeleteDebugUser"] = ccl.doRPCDeleteDebugUser
-
 	rpcFns["DeleteImage"] = ccl.doRPCDeleteImage
 
 	rpcFns["DeleteTenant"] = ccl.doRPCDeleteTenant
@@ -305,8 +274,6 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["DisableTenantLevelOTP"] = ccl.doRPCDisableTenantLevelOTP
 
 	rpcFns["EnableTenantLevelOTP"] = ccl.doRPCEnableTenantLevelOTP
-
-	rpcFns["GetDebugUser"] = ccl.doRPCGetDebugUser
 
 	rpcFns["GetFavIcon"] = ccl.doRPCGetFavIcon
 
@@ -395,173 +362,6 @@ func (c *CustomAPIRestClient) doRPCAssignDomainOwner(ctx context.Context, callOp
 		q := hReq.URL.Query()
 		_ = q
 		q.Add("email", fmt.Sprintf("%v", req.Email))
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &Empty{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
-func (c *CustomAPIRestClient) doRPCCreateDebugUser(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &CreateDebugUserRequest{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.CreateDebugUserRequest: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-		for _, item := range req.NsRoles {
-			q.Add("ns_roles", fmt.Sprintf("%v", item))
-		}
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &Empty{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
-func (c *CustomAPIRestClient) doRPCDeleteDebugUser(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &Empty{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -928,88 +728,6 @@ func (c *CustomAPIRestClient) doRPCEnableTenantLevelOTP(ctx context.Context, cal
 	pbRsp := &Empty{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.Empty", body)
-
-	}
-	if callOpts.OutCallResponse != nil {
-		callOpts.OutCallResponse.ProtoMsg = pbRsp
-		callOpts.OutCallResponse.JSON = string(body)
-	}
-	return pbRsp, nil
-}
-
-func (c *CustomAPIRestClient) doRPCGetDebugUser(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
-	if callOpts.URI == "" {
-		return nil, fmt.Errorf("Error, URI should be specified, got empty")
-	}
-	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
-
-	yamlReq := callOpts.YAMLReq
-	req := &Empty{}
-	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.tenant.Empty: %s", yamlReq, err)
-	}
-
-	var hReq *http.Request
-	hm := strings.ToLower(callOpts.HTTPMethod)
-	switch hm {
-	case "post", "put":
-		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
-		if err != nil {
-			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
-		}
-		var op string
-		if hm == "post" {
-			op = http.MethodPost
-		} else {
-			op = http.MethodPut
-		}
-		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
-		if err != nil {
-			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
-		}
-		hReq = newReq
-	case "get":
-		newReq, err := http.NewRequest(http.MethodGet, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
-		}
-		hReq = newReq
-		q := hReq.URL.Query()
-		_ = q
-
-		hReq.URL.RawQuery += q.Encode()
-	case "delete":
-		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
-		if err != nil {
-			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
-		}
-		hReq = newReq
-	default:
-		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
-	}
-	hReq = hReq.WithContext(ctx)
-	hReq.Header.Set("Content-Type", "application/json")
-	client.AddHdrsToReq(callOpts.Headers, hReq)
-
-	rsp, err := c.client.Do(hReq)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient")
-	}
-	defer rsp.Body.Close()
-
-	// checking whether the status code is a successful status code (2xx series)
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		body, err := io.ReadAll(rsp.Body)
-		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
-	}
-
-	body, err := io.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, errors.Wrap(err, "Custom API RestClient read body")
-	}
-	pbRsp := &DebugUser{}
-	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.tenant.DebugUser", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -2464,10 +2182,6 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
 	rpcFns["AssignDomainOwner"] = ccl.doRPCAssignDomainOwner
 
-	rpcFns["CreateDebugUser"] = ccl.doRPCCreateDebugUser
-
-	rpcFns["DeleteDebugUser"] = ccl.doRPCDeleteDebugUser
-
 	rpcFns["DeleteImage"] = ccl.doRPCDeleteImage
 
 	rpcFns["DeleteTenant"] = ccl.doRPCDeleteTenant
@@ -2475,8 +2189,6 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	rpcFns["DisableTenantLevelOTP"] = ccl.doRPCDisableTenantLevelOTP
 
 	rpcFns["EnableTenantLevelOTP"] = ccl.doRPCEnableTenantLevelOTP
-
-	rpcFns["GetDebugUser"] = ccl.doRPCGetDebugUser
 
 	rpcFns["GetFavIcon"] = ccl.doRPCGetFavIcon
 
@@ -2528,14 +2240,6 @@ func (c *customAPIInprocClient) AssignDomainOwner(ctx context.Context, in *Assig
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.AssignDomainOwner")
 	return c.CustomAPIServer.AssignDomainOwner(ctx, in)
 }
-func (c *customAPIInprocClient) CreateDebugUser(ctx context.Context, in *CreateDebugUserRequest, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.CreateDebugUser")
-	return c.CustomAPIServer.CreateDebugUser(ctx, in)
-}
-func (c *customAPIInprocClient) DeleteDebugUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.DeleteDebugUser")
-	return c.CustomAPIServer.DeleteDebugUser(ctx, in)
-}
 func (c *customAPIInprocClient) DeleteImage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.DeleteImage")
 	return c.CustomAPIServer.DeleteImage(ctx, in)
@@ -2551,10 +2255,6 @@ func (c *customAPIInprocClient) DisableTenantLevelOTP(ctx context.Context, in *E
 func (c *customAPIInprocClient) EnableTenantLevelOTP(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.EnableTenantLevelOTP")
 	return c.CustomAPIServer.EnableTenantLevelOTP(ctx, in)
-}
-func (c *customAPIInprocClient) GetDebugUser(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*DebugUser, error) {
-	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetDebugUser")
-	return c.CustomAPIServer.GetDebugUser(ctx, in)
 }
 func (c *customAPIInprocClient) GetFavIcon(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*google_api.HttpBody, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.tenant.CustomAPI.GetFavIcon")
@@ -2687,104 +2387,6 @@ func (s *customAPISrv) AssignDomainOwner(ctx context.Context, in *AssignDomainOw
 	}
 
 	rsp, err = cah.AssignDomainOwner(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
-
-	return rsp, nil
-}
-func (s *customAPISrv) CreateDebugUser(ctx context.Context, in *CreateDebugUserRequest) (*Empty, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *Empty
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant.CreateDebugUserRequest", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.CreateDebugUser' operation on 'tenant'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant.CustomAPI.CreateDebugUser"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.CreateDebugUser(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
-
-	return rsp, nil
-}
-func (s *customAPISrv) DeleteDebugUser(ctx context.Context, in *Empty) (*Empty, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *Empty
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.DeleteDebugUser' operation on 'tenant'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant.CustomAPI.DeleteDebugUser"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.DeleteDebugUser(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
@@ -2986,55 +2588,6 @@ func (s *customAPISrv) EnableTenantLevelOTP(ctx context.Context, in *Empty) (*Em
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", rsp)...)
-
-	return rsp, nil
-}
-func (s *customAPISrv) GetDebugUser(ctx context.Context, in *Empty) (*DebugUser, error) {
-	ah := s.svc.GetAPIHandler("ves.io.schema.tenant.CustomAPI")
-	cah, ok := ah.(CustomAPIServer)
-	if !ok {
-		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
-	}
-
-	var (
-		rsp *DebugUser
-		err error
-	)
-
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.tenant.Empty", in)
-	defer func() {
-		if len(bodyFields) > 0 {
-			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
-		}
-		userMsg := "The 'CustomAPI.GetDebugUser' operation on 'tenant'"
-		if err == nil {
-			userMsg += " was successfully performed."
-		} else {
-			userMsg += " failed to be performed."
-		}
-		server.AddUserMsgToAPIAudit(ctx, userMsg)
-	}()
-
-	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
-		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
-		return nil, server.GRPCStatusFromError(err).Err()
-	}
-
-	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.tenant.CustomAPI.GetDebugUser"); rvFn != nil {
-			if verr := rvFn(ctx, in); verr != nil {
-				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
-				return nil, server.GRPCStatusFromError(err).Err()
-			}
-		}
-	}
-
-	rsp, err = cah.GetDebugUser(ctx, in)
-	if err != nil {
-		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
-	}
-
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.tenant.DebugUser", rsp)...)
 
 	return rsp, nil
 }
@@ -3979,7 +3532,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-lookupcname"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-lookupcname"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.LookupCname"
             },
@@ -4063,231 +3616,9 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getpasswordpolicy"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getpasswordpolicy"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetPasswordPolicy"
-            },
-            "x-displayname": "Tenant Custom API",
-            "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
-            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
-        },
-        "/public/namespaces/system/tenant/debug/user": {
-            "get": {
-                "summary": "GetDebugUser",
-                "description": "GetDebugUser returns information about tenant's debug user\nDeprecated: this and other debugUser RPCs are deprecated",
-                "operationId": "ves.io.schema.tenant.CustomAPI.GetDebugUser",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/tenantDebugUser"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "tags": [
-                    "CustomAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getdebuguser"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetDebugUser"
-            },
-            "delete": {
-                "summary": "DeleteDebugUser",
-                "description": "DeleteDebugUser deletes tenant's debug user.\nDeprecated: this and other debugUser RPCs are deprecated",
-                "operationId": "ves.io.schema.tenant.CustomAPI.DeleteDebugUser",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/schematenantEmpty"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "tags": [
-                    "CustomAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-deletedebuguser"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.DeleteDebugUser"
-            },
-            "post": {
-                "summary": "CreateDebugUser",
-                "description": "CreateDebugUser creates tenant's debug user. Debug user can be disabled or deleter later.\nDeprecated: this and other debugUser RPCs are deprecated",
-                "operationId": "ves.io.schema.tenant.CustomAPI.CreateDebugUser",
-                "responses": {
-                    "200": {
-                        "description": "A successful response.",
-                        "schema": {
-                            "$ref": "#/definitions/schematenantEmpty"
-                        }
-                    },
-                    "401": {
-                        "description": "Returned when operation is not authorized",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "403": {
-                        "description": "Returned when there is no permission to access resource",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "Returned when resource is not found",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "409": {
-                        "description": "Returned when operation on resource is conflicting with current value",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "429": {
-                        "description": "Returned when operation has been rejected as it is happening too frequently",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Returned when server encountered an error in processing API",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "503": {
-                        "description": "Returned when service is unavailable temporarily",
-                        "schema": {
-                            "format": "string"
-                        }
-                    },
-                    "504": {
-                        "description": "Returned when server timed out processing request",
-                        "schema": {
-                            "format": "string"
-                        }
-                    }
-                },
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/tenantCreateDebugUserRequest"
-                        }
-                    }
-                ],
-                "tags": [
-                    "CustomAPI"
-                ],
-                "externalDocs": {
-                    "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-createdebuguser"
-                },
-                "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.CreateDebugUser"
             },
             "x-displayname": "Tenant Custom API",
             "x-ves-proto-service": "ves.io.schema.tenant.CustomAPI",
@@ -4369,7 +3700,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-assigndomainowner"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-assigndomainowner"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.AssignDomainOwner"
             },
@@ -4453,7 +3784,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-unassigndomainowner"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-unassigndomainowner"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.UnassignDomainOwner"
             },
@@ -4527,7 +3858,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getlastloginmap"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getlastloginmap"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetLastLoginMap"
             },
@@ -4621,7 +3952,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getloginevents"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getloginevents"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetLoginEvents"
             },
@@ -4705,7 +4036,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getlogineventsintimeframe"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getlogineventsintimeframe"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetLoginEventsInTimeFrame"
             },
@@ -4779,7 +4110,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getidmsettings"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getidmsettings"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetIDMSettings"
             },
@@ -4858,7 +4189,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-updateidmsettings"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-updateidmsettings"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.UpdateIDMSettings"
             },
@@ -4932,7 +4263,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-listinactiveusers"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-listinactiveusers"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.ListInactiveUsers"
             },
@@ -5024,7 +4355,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-lookupcname"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-lookupcname"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.LookupCname"
             },
@@ -5108,7 +4439,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-deletetenant"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-deletetenant"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.DeleteTenant"
             },
@@ -5182,7 +4513,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-gettenantsettings"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-gettenantsettings"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetTenantSettings"
             },
@@ -5261,7 +4592,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-updatetenantsettings"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-updatetenantsettings"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.UpdateTenantSettings"
             },
@@ -5345,7 +4676,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-disabletenantlevelotp"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-disabletenantlevelotp"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.DisableTenantLevelOTP"
             },
@@ -5429,7 +4760,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-enabletenantlevelotp"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-enabletenantlevelotp"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.EnableTenantLevelOTP"
             },
@@ -5503,7 +4834,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getfavicon"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getfavicon"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetFavIcon"
             },
@@ -5577,7 +4908,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getimage"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetImage"
             },
@@ -5646,7 +4977,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-deleteimage"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-deleteimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.DeleteImage"
             },
@@ -5725,7 +5056,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-updateimage"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-updateimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.UpdateImage"
             },
@@ -5799,7 +5130,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getlogo"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getlogo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetLogo"
             },
@@ -5873,7 +5204,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getsupportinfo"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getsupportinfo"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetSupportInfo"
             },
@@ -5947,7 +5278,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-gettenantescalationdoc"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-gettenantescalationdoc"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetTenantEscalationDoc"
             },
@@ -6021,7 +5352,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getfavicon"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getfavicon"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetFavIcon"
             },
@@ -6095,7 +5426,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-tenant-customapi-getimage"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-tenant-customapi-getimage"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.tenant.CustomAPI.GetImage"
             },
@@ -6142,42 +5473,6 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "schemaNamespaceRoleType": {
-            "type": "object",
-            "description": "Allows linking namespaces and roles",
-            "title": "Namespace role",
-            "x-displayname": "Namespace Role",
-            "x-ves-proto-message": "ves.io.schema.NamespaceRoleType",
-            "properties": {
-                "namespace": {
-                    "type": "string",
-                    "description": " Namespace the role applies to\n '*' value implies all namespaces\n\nExample: - \"ns1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "Namespace",
-                    "maxLength": 256,
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "role": {
-                    "type": "string",
-                    "description": " Users role for this namespace\n\nExample: - \"ves-io-monitor-role\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.ves_object_name: true\n",
-                    "title": "Role",
-                    "maxLength": 256,
-                    "x-displayname": "Role",
-                    "x-ves-example": "ves-io-monitor-role",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.ves_object_name": "true"
-                    }
-                }
-            }
-        },
         "schematenantEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -6220,24 +5515,6 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "tenantCreateDebugUserRequest": {
-            "type": "object",
-            "description": "Request to create a debug user. Such user can help debugging issues.",
-            "title": "CreateDebugUserRequest",
-            "x-displayname": "CreateDebugUserRequest",
-            "x-ves-proto-message": "ves.io.schema.tenant.CreateDebugUserRequest",
-            "properties": {
-                "ns_roles": {
-                    "type": "array",
-                    "description": " Namespace roles contains set of roles, with which debug user will be created.",
-                    "title": "Namespace roles",
-                    "items": {
-                        "$ref": "#/definitions/schemaNamespaceRoleType"
-                    },
-                    "x-displayname": "Namespace roles"
-                }
-            }
-        },
         "tenantCredentialsExpiry": {
             "type": "object",
             "description": "CredentialsExpiry is a struct that holds max expiration days setting for the different credentials.",
@@ -6268,40 +5545,6 @@ var CustomAPISwaggerJSON string = `{
                     "format": "int32",
                     "x-displayname": "Kubeconfig expiry period",
                     "x-ves-example": "90"
-                }
-            }
-        },
-        "tenantDebugUser": {
-            "type": "object",
-            "x-ves-proto-message": "ves.io.schema.tenant.DebugUser",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "description": " user's email\n\nExample: - \"joe.doe@acme.com\"-",
-                    "title": "email",
-                    "x-displayname": "Email",
-                    "x-ves-example": "joe.doe@acme.com"
-                },
-                "enabled": {
-                    "type": "boolean",
-                    "description": " if set to true means that user enabled in IDM.",
-                    "title": "Enabled",
-                    "format": "boolean",
-                    "x-displayname": "Enabled"
-                },
-                "first_name": {
-                    "type": "string",
-                    "description": " user's first name\n\nExample: - \"Joe\"-",
-                    "title": "first_name",
-                    "x-displayname": "First Name",
-                    "x-ves-example": "Joe"
-                },
-                "last_name": {
-                    "type": "string",
-                    "description": " user's last name\n\nExample: - \"Doe\"-",
-                    "title": "last_name",
-                    "x-displayname": "Last Name",
-                    "x-ves-example": "Doe"
                 }
             }
         },

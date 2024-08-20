@@ -6455,6 +6455,22 @@ type ValidateUpstreamTlsParameters struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateUpstreamTlsParameters) MaxSessionKeysTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_session_keys_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamTlsParameters) MaxSessionKeysTypeMaxSessionKeysValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxSessionKeys, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_session_keys")
+	}
+	return oValidatorFn_MaxSessionKeys, nil
+}
+
 func (v *ValidateUpstreamTlsParameters) MtlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -6520,6 +6536,53 @@ func (v *ValidateUpstreamTlsParameters) Validate(ctx context.Context, pm interfa
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["max_session_keys_type"]; exists {
+		val := m.GetMaxSessionKeysType()
+		vOpts := append(opts,
+			db.WithValidateField("max_session_keys_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMaxSessionKeysType().(type) {
+	case *UpstreamTlsParameters_DefaultSessionKeyCaching:
+		if fv, exists := v.FldValidators["max_session_keys_type.default_session_key_caching"]; exists {
+			val := m.GetMaxSessionKeysType().(*UpstreamTlsParameters_DefaultSessionKeyCaching).DefaultSessionKeyCaching
+			vOpts := append(opts,
+				db.WithValidateField("max_session_keys_type"),
+				db.WithValidateField("default_session_key_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParameters_DisableSessionKeyCaching:
+		if fv, exists := v.FldValidators["max_session_keys_type.disable_session_key_caching"]; exists {
+			val := m.GetMaxSessionKeysType().(*UpstreamTlsParameters_DisableSessionKeyCaching).DisableSessionKeyCaching
+			vOpts := append(opts,
+				db.WithValidateField("max_session_keys_type"),
+				db.WithValidateField("disable_session_key_caching"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamTlsParameters_MaxSessionKeys:
+		if fv, exists := v.FldValidators["max_session_keys_type.max_session_keys"]; exists {
+			val := m.GetMaxSessionKeysType().(*UpstreamTlsParameters_MaxSessionKeys).MaxSessionKeys
+			vOpts := append(opts,
+				db.WithValidateField("max_session_keys_type"),
+				db.WithValidateField("max_session_keys"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["mtls_choice"]; exists {
@@ -6686,6 +6749,30 @@ var DefaultUpstreamTlsParametersValidator = func() *ValidateUpstreamTlsParameter
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhMaxSessionKeysType := v.MaxSessionKeysTypeValidationRuleHandler
+	rulesMaxSessionKeysType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMaxSessionKeysType(rulesMaxSessionKeysType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamTlsParameters.max_session_keys_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["max_session_keys_type"] = vFn
+
+	vrhMaxSessionKeysTypeMaxSessionKeys := v.MaxSessionKeysTypeMaxSessionKeysValidationRuleHandler
+	rulesMaxSessionKeysTypeMaxSessionKeys := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "2",
+		"ves.io.schema.rules.uint32.lte": "64",
+	}
+	vFnMap["max_session_keys_type.max_session_keys"], err = vrhMaxSessionKeysTypeMaxSessionKeys(rulesMaxSessionKeysTypeMaxSessionKeys)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UpstreamTlsParameters.max_session_keys_type_max_session_keys: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_session_keys_type.max_session_keys"] = vFnMap["max_session_keys_type.max_session_keys"]
 
 	vrhMtlsChoice := v.MtlsChoiceValidationRuleHandler
 	rulesMtlsChoice := map[string]string{

@@ -24,6 +24,151 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *AWSNetworkMetaData) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AWSNetworkMetaData) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AWSNetworkMetaData) DeepCopy() *AWSNetworkMetaData {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AWSNetworkMetaData{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AWSNetworkMetaData) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AWSNetworkMetaData) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AWSNetworkMetaDataValidator().Validate(ctx, m, opts...)
+}
+
+func (m *AWSNetworkMetaData) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetMetadataDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetMetadataDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetTransitGatewayDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTransitGatewayDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSNetworkMetaData) GetMetadataDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetMetadata() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetMetadata().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetMetadata().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "metadata." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *AWSNetworkMetaData) GetTransitGatewayDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetTransitGateway() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetTransitGateway().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetTransitGateway().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "transit_gateway." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateAWSNetworkMetaData struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAWSNetworkMetaData) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AWSNetworkMetaData)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AWSNetworkMetaData got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("metadata"))
+		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["transit_gateway"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("transit_gateway"))
+		if err := fv(ctx, m.GetTransitGateway(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAWSNetworkMetaDataValidator = func() *ValidateAWSNetworkMetaData {
+	v := &ValidateAWSNetworkMetaData{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AWSNetworkMetaDataValidator() db.Validator {
+	return DefaultAWSNetworkMetaDataValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DCClusterGroupSummaryInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1586,6 +1731,15 @@ func (v *ValidateNetworkRouteTablesRequest) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["subnet_cidrs"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("subnet_cidrs"))
@@ -1931,11 +2085,50 @@ func (v *ValidateNetworkRoutesMetaData) Validate(ctx context.Context, pm interfa
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["network_id"]; exists {
+	if fv, exists := v.FldValidators["cloud_resource_id"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("network_id"))
-		if err := fv(ctx, m.GetNetworkId(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("cloud_resource_id"))
+		if err := fv(ctx, m.GetCloudResourceId(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("network_type"))
+		if err := fv(ctx, m.GetNetworkType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["regions"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("regions"))
+		for idx, item := range m.GetRegions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4123,6 +4316,39 @@ func (m *SiteNetworksResponse) Validate(ctx context.Context, opts ...db.Validate
 	return SiteNetworksResponseValidator().Validate(ctx, m, opts...)
 }
 
+func (m *SiteNetworksResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCloudNetworkMetaDataDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SiteNetworksResponse) GetCloudNetworkMetaDataDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCloudNetworkMetaData() == nil {
+		return nil, nil
+	}
+	switch m.GetCloudNetworkMetaData().(type) {
+	case *SiteNetworksResponse_Aws:
+
+		drInfos, err := m.GetAws().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAws().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "aws." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateSiteNetworksResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -4139,6 +4365,21 @@ func (v *ValidateSiteNetworksResponse) Validate(ctx context.Context, pm interfac
 	}
 	if m == nil {
 		return nil
+	}
+
+	switch m.GetCloudNetworkMetaData().(type) {
+	case *SiteNetworksResponse_Aws:
+		if fv, exists := v.FldValidators["cloud_network_meta_data.aws"]; exists {
+			val := m.GetCloudNetworkMetaData().(*SiteNetworksResponse_Aws).Aws
+			vOpts := append(opts,
+				db.WithValidateField("cloud_network_meta_data"),
+				db.WithValidateField("aws"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["routes_metadata"]; exists {
@@ -4563,6 +4804,30 @@ func (v *ValidateSubnetMetaData) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cidr_v4"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cidr_v4"))
+		for idx, item := range m.GetCidrV4() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cidr_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cidr_v6"))
+		for idx, item := range m.GetCidrV6() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cloud_resource_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("cloud_resource_id"))
@@ -4674,6 +4939,249 @@ var DefaultSubnetSummaryInfoValidator = func() *ValidateSubnetSummaryInfo {
 
 func SubnetSummaryInfoValidator() db.Validator {
 	return DefaultSubnetSummaryInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TGWRouteTablesRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TGWRouteTablesRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TGWRouteTablesRequest) DeepCopy() *TGWRouteTablesRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TGWRouteTablesRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TGWRouteTablesRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TGWRouteTablesRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TGWRouteTablesRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTGWRouteTablesRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTGWRouteTablesRequest) IdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTGWRouteTablesRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TGWRouteTablesRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TGWRouteTablesRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["attachment_ids"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("attachment_ids"))
+		for idx, item := range m.GetAttachmentIds() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["route_table_ids"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("route_table_ids"))
+		for idx, item := range m.GetRouteTableIds() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTGWRouteTablesRequestValidator = func() *ValidateTGWRouteTablesRequest {
+	v := &ValidateTGWRouteTablesRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhId := v.IdValidationRuleHandler
+	rulesId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhId(rulesId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWRouteTablesRequest.id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["id"] = vFn
+
+	return v
+}()
+
+func TGWRouteTablesRequestValidator() db.Validator {
+	return DefaultTGWRouteTablesRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TGWRouteTablesResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TGWRouteTablesResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TGWRouteTablesResponse) DeepCopy() *TGWRouteTablesResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TGWRouteTablesResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TGWRouteTablesResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TGWRouteTablesResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TGWRouteTablesResponseValidator().Validate(ctx, m, opts...)
+}
+
+func (m *TGWRouteTablesResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutesDataDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *TGWRouteTablesResponse) GetRoutesDataDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRoutesData() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutesData() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutesData() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("routes_data[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateTGWRouteTablesResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTGWRouteTablesResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TGWRouteTablesResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TGWRouteTablesResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["routes_data"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("routes_data"))
+		for idx, item := range m.GetRoutesData() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTGWRouteTablesResponseValidator = func() *ValidateTGWRouteTablesResponse {
+	v := &ValidateTGWRouteTablesResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TGWRouteTablesResponseValidator() db.Validator {
+	return DefaultTGWRouteTablesResponseValidator
 }
 
 // augmented methods on protoc/std generated struct

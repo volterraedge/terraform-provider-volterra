@@ -58,6 +58,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
+		"spec.tls_parameters.require_client_certificate",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
@@ -72,6 +73,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.tls_parameters.common_params.trusted_ca_url",
 		"spec.tls_parameters.common_params.validation_params.use_volterra_trusted_ca_url",
 		"spec.tls_parameters.crl.#",
+		"spec.tls_parameters.require_client_certificate",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}

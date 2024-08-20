@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-k8s_cluster_role_binding-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.k8s_cluster_role_binding.API.Delete"
             },

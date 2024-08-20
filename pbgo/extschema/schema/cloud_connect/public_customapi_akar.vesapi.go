@@ -456,8 +456,8 @@ var ConfigCustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/system/edge_credentials/{provider}": {
-            "get": {
+        "/public/namespaces/system/edge_credentials": {
+            "post": {
                 "summary": "Cloud Credential",
                 "description": "Returns the cloud credential for the matching edge type",
                 "operationId": "ves.io.schema.cloud_connect.ConfigCustomAPI.EdgeCredentials",
@@ -519,17 +519,12 @@ var ConfigCustomAPISwaggerJSON string = `{
                 },
                 "parameters": [
                     {
-                        "name": "provider",
-                        "description": "Provider\n\nEdge site provider",
-                        "in": "path",
+                        "name": "body",
+                        "in": "body",
                         "required": true,
-                        "type": "string",
-                        "enum": [
-                            "AWS",
-                            "AZURE",
-                            "GCP"
-                        ],
-                        "x-displayname": "Provider"
+                        "schema": {
+                            "$ref": "#/definitions/cloud_connectCredentialsRequest"
+                        }
                     }
                 ],
                 "tags": [
@@ -537,7 +532,7 @@ var ConfigCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-configcustomapi-edgecredentials"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-configcustomapi-edgecredentials"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.ConfigCustomAPI.EdgeCredentials"
             },
@@ -611,7 +606,7 @@ var ConfigCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-configcustomapi-edgelist"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-configcustomapi-edgelist"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.ConfigCustomAPI.EdgeList"
             },
@@ -633,6 +628,21 @@ var ConfigCustomAPISwaggerJSON string = `{
             "default": "AWS",
             "x-displayname": "Cloud Connect Provider",
             "x-ves-proto-enum": "ves.io.schema.cloud_connect.CloudConnectProviderType"
+        },
+        "cloud_connectCredentialsRequest": {
+            "type": "object",
+            "description": "Request to return all the credentials for the matching cloud site type.",
+            "title": "CredentialsRequest",
+            "x-displayname": "Edge Credentials Request",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.CredentialsRequest",
+            "properties": {
+                "provider": {
+                    "description": " Edge site provider",
+                    "title": "Provider",
+                    "$ref": "#/definitions/cloud_connectCloudConnectProviderType",
+                    "x-displayname": "Provider"
+                }
+            }
         },
         "cloud_connectCredentialsResponse": {
             "type": "object",

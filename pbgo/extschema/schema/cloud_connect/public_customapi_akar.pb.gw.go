@@ -50,26 +50,13 @@ func request_ConfigCustomAPI_EdgeCredentials_0(ctx context.Context, marshaler ru
 	var protoReq CredentialsRequest
 	var metadata runtime.ServerMetadata
 
-	var (
-		val string
-		e   int32
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["provider"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "provider")
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-
-	e, err = runtime.Enum(val, CloudConnectProviderType_value)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "provider", err)
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
-	protoReq.Provider = CloudConnectProviderType(e)
 
 	msg, err := client.EdgeCredentials(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
@@ -80,26 +67,13 @@ func local_request_ConfigCustomAPI_EdgeCredentials_0(ctx context.Context, marsha
 	var protoReq CredentialsRequest
 	var metadata runtime.ServerMetadata
 
-	var (
-		val string
-		e   int32
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["provider"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "provider")
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-
-	e, err = runtime.Enum(val, CloudConnectProviderType_value)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "provider", err)
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-
-	protoReq.Provider = CloudConnectProviderType(e)
 
 	msg, err := server.EdgeCredentials(ctx, &protoReq)
 	return msg, metadata, err
@@ -131,7 +105,7 @@ func RegisterConfigCustomAPIHandlerServer(ctx context.Context, mux *runtime.Serv
 
 	})
 
-	mux.Handle("GET", pattern_ConfigCustomAPI_EdgeCredentials_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ConfigCustomAPI_EdgeCredentials_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -212,7 +186,7 @@ func RegisterConfigCustomAPIHandlerClient(ctx context.Context, mux *runtime.Serv
 
 	})
 
-	mux.Handle("GET", pattern_ConfigCustomAPI_EdgeCredentials_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_ConfigCustomAPI_EdgeCredentials_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -238,7 +212,7 @@ func RegisterConfigCustomAPIHandlerClient(ctx context.Context, mux *runtime.Serv
 var (
 	pattern_ConfigCustomAPI_EdgeList_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"public", "namespaces", "system", "edge_list"}, "", runtime.AssumeColonVerbOpt(false)))
 
-	pattern_ConfigCustomAPI_EdgeCredentials_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"public", "namespaces", "system", "edge_credentials", "provider"}, "", runtime.AssumeColonVerbOpt(false)))
+	pattern_ConfigCustomAPI_EdgeCredentials_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"public", "namespaces", "system", "edge_credentials"}, "", runtime.AssumeColonVerbOpt(false)))
 )
 
 var (

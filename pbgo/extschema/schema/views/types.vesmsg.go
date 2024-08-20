@@ -2143,6 +2143,15 @@ func (v *ValidateDownstreamTlsValidationContext) Validate(ctx context.Context, p
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["client_certificate_optional"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_certificate_optional"))
+		if err := fv(ctx, m.GetClientCertificateOptional(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetCrlChoice().(type) {
 	case *DownstreamTlsValidationContext_NoCrl:
 		if fv, exists := v.FldValidators["crl_choice.no_crl"]; exists {
@@ -4921,6 +4930,114 @@ func PrefixStringListTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RegionalEdgeSelection) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RegionalEdgeSelection) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RegionalEdgeSelection) DeepCopy() *RegionalEdgeSelection {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RegionalEdgeSelection{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RegionalEdgeSelection) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RegionalEdgeSelection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RegionalEdgeSelectionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRegionalEdgeSelection struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRegionalEdgeSelection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RegionalEdgeSelection)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RegionalEdgeSelection got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetReSelectionChoice().(type) {
+	case *RegionalEdgeSelection_GeoProximity:
+		if fv, exists := v.FldValidators["re_selection_choice.geo_proximity"]; exists {
+			val := m.GetReSelectionChoice().(*RegionalEdgeSelection_GeoProximity).GeoProximity
+			vOpts := append(opts,
+				db.WithValidateField("re_selection_choice"),
+				db.WithValidateField("geo_proximity"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RegionalEdgeSelection_SpecificGeography:
+		if fv, exists := v.FldValidators["re_selection_choice.specific_geography"]; exists {
+			val := m.GetReSelectionChoice().(*RegionalEdgeSelection_SpecificGeography).SpecificGeography
+			vOpts := append(opts,
+				db.WithValidateField("re_selection_choice"),
+				db.WithValidateField("specific_geography"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RegionalEdgeSelection_SpecificRe:
+		if fv, exists := v.FldValidators["re_selection_choice.specific_re"]; exists {
+			val := m.GetReSelectionChoice().(*RegionalEdgeSelection_SpecificRe).SpecificRe
+			vOpts := append(opts,
+				db.WithValidateField("re_selection_choice"),
+				db.WithValidateField("specific_re"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRegionalEdgeSelectionValidator = func() *ValidateRegionalEdgeSelection {
+	v := &ValidateRegionalEdgeSelection{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["re_selection_choice.specific_re"] = SpecificREValidator().Validate
+
+	return v
+}()
+
+func RegionalEdgeSelectionValidator() db.Validator {
+	return DefaultRegionalEdgeSelectionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SegmentRefList) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5877,6 +5994,123 @@ var DefaultSiteRegionLocatorValidator = func() *ValidateSiteRegionLocator {
 
 func SiteRegionLocatorValidator() db.Validator {
 	return DefaultSiteRegionLocatorValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SpecificRE) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SpecificRE) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SpecificRE) DeepCopy() *SpecificRE {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SpecificRE{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SpecificRE) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SpecificRE) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SpecificREValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSpecificRE struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSpecificRE) PrimaryReValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for primary_re")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSpecificRE) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SpecificRE)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SpecificRE got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["backup_re"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("backup_re"))
+		if err := fv(ctx, m.GetBackupRe(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["primary_re"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("primary_re"))
+		if err := fv(ctx, m.GetPrimaryRe(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSpecificREValidator = func() *ValidateSpecificRE {
+	v := &ValidateSpecificRE{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPrimaryRe := v.PrimaryReValidationRuleHandler
+	rulesPrimaryRe := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.min_len": "1",
+	}
+	vFn, err = vrhPrimaryRe(rulesPrimaryRe)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SpecificRE.primary_re: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["primary_re"] = vFn
+
+	return v
+}()
+
+func SpecificREValidator() db.Validator {
+	return DefaultSpecificREValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -7524,6 +7758,30 @@ func (m *WhereType) GetChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *WhereType_VirtualSiteWithVip:
+
+		drInfos, err := m.GetVirtualSiteWithVip().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualSiteWithVip().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "virtual_site_with_vip." + dri.DRField
+		}
+		return drInfos, err
+
+	case *WhereType_AdvertiseOnPublic:
+
+		drInfos, err := m.GetAdvertiseOnPublic().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetAdvertiseOnPublic().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "advertise_on_public." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -7556,6 +7814,13 @@ func (v *ValidateWhereType) PortChoicePortValidationRuleHandler(rules map[string
 		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
 	}
 	return oValidatorFn_Port, nil
+}
+func (v *ValidateWhereType) PortChoicePortRangesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_PortRanges, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port_ranges")
+	}
+	return oValidatorFn_PortRanges, nil
 }
 
 func (v *ValidateWhereType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -7671,6 +7936,28 @@ func (v *ValidateWhereType) Validate(ctx context.Context, pm interface{}, opts .
 				return err
 			}
 		}
+	case *WhereType_VirtualSiteWithVip:
+		if fv, exists := v.FldValidators["choice.virtual_site_with_vip"]; exists {
+			val := m.GetChoice().(*WhereType_VirtualSiteWithVip).VirtualSiteWithVip
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("virtual_site_with_vip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WhereType_AdvertiseOnPublic:
+		if fv, exists := v.FldValidators["choice.advertise_on_public"]; exists {
+			val := m.GetChoice().(*WhereType_AdvertiseOnPublic).AdvertiseOnPublic
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("advertise_on_public"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -7702,6 +7989,17 @@ func (v *ValidateWhereType) Validate(ctx context.Context, pm interface{}, opts .
 			vOpts := append(opts,
 				db.WithValidateField("port_choice"),
 				db.WithValidateField("port"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WhereType_PortRanges:
+		if fv, exists := v.FldValidators["port_choice.port_ranges"]; exists {
+			val := m.GetPortChoice().(*WhereType_PortRanges).PortRanges
+			vOpts := append(opts,
+				db.WithValidateField("port_choice"),
+				db.WithValidateField("port_ranges"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -7757,8 +8055,21 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereType.port_choice_port: %s", err)
 		panic(errMsg)
 	}
+	vrhPortChoicePortRanges := v.PortChoicePortRangesValidationRuleHandler
+	rulesPortChoicePortRanges := map[string]string{
+		"ves.io.schema.rules.string.max_len":                "512",
+		"ves.io.schema.rules.string.max_ports":              "64",
+		"ves.io.schema.rules.string.min_len":                "1",
+		"ves.io.schema.rules.string.unique_port_range_list": "true",
+	}
+	vFnMap["port_choice.port_ranges"], err = vrhPortChoicePortRanges(rulesPortChoicePortRanges)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WhereType.port_choice_port_ranges: %s", err)
+		panic(errMsg)
+	}
 
 	v.FldValidators["port_choice.port"] = vFnMap["port_choice.port"]
+	v.FldValidators["port_choice.port_ranges"] = vFnMap["port_choice.port_ranges"]
 
 	v.FldValidators["choice.site"] = WhereSiteValidator().Validate
 	v.FldValidators["choice.virtual_site"] = WhereVirtualSiteValidator().Validate
@@ -7768,6 +8079,8 @@ var DefaultWhereTypeValidator = func() *ValidateWhereType {
 	v.FldValidators["choice.virtual_site_segment"] = WhereVirtualSiteSegmentValidator().Validate
 	v.FldValidators["choice.segment"] = WhereSegmentValidator().Validate
 	v.FldValidators["choice.cloud_edge_segment"] = WhereCloudEdgeSegmentValidator().Validate
+	v.FldValidators["choice.virtual_site_with_vip"] = WhereVirtualSiteSpecifiedVIPValidator().Validate
+	v.FldValidators["choice.advertise_on_public"] = AdvertisePublicValidator().Validate
 
 	return v
 }()
@@ -9066,6 +9379,278 @@ var DefaultWhereVirtualSiteSegmentValidator = func() *ValidateWhereVirtualSiteSe
 
 func WhereVirtualSiteSegmentValidator() db.Validator {
 	return DefaultWhereVirtualSiteSegmentValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WhereVirtualSiteSpecifiedVIP) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WhereVirtualSiteSpecifiedVIP) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WhereVirtualSiteSpecifiedVIP) DeepCopy() *WhereVirtualSiteSpecifiedVIP {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WhereVirtualSiteSpecifiedVIP{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WhereVirtualSiteSpecifiedVIP) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WhereVirtualSiteSpecifiedVIP) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WhereVirtualSiteSpecifiedVIPValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WhereVirtualSiteSpecifiedVIP) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualSiteDRefInfo()
+
+}
+
+func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("virtual_site.Object")
+	dri := db.DRefInfo{
+		RefdType:   "virtual_site.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "virtual_site",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetVirtualSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WhereVirtualSiteSpecifiedVIP) GetVirtualSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_site.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_site")
+	}
+
+	vref := m.GetVirtualSite()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "virtual_site.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateWhereVirtualSiteSpecifiedVIP struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWhereVirtualSiteSpecifiedVIP) NetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(SiteNetworkSpecifiedVIP)
+		return int32(i)
+	}
+	// SiteNetworkSpecifiedVIP_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, SiteNetworkSpecifiedVIP_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for network")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSpecifiedVIP) VirtualSiteValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for virtual_site")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSpecifiedVIP) IpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSpecifiedVIP) Ipv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWhereVirtualSiteSpecifiedVIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WhereVirtualSiteSpecifiedVIP)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WhereVirtualSiteSpecifiedVIP got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ip"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ip"))
+		if err := fv(ctx, m.GetIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6"))
+		if err := fv(ctx, m.GetIpv6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("network"))
+		if err := fv(ctx, m.GetNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_site"))
+		if err := fv(ctx, m.GetVirtualSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWhereVirtualSiteSpecifiedVIPValidator = func() *ValidateWhereVirtualSiteSpecifiedVIP {
+	v := &ValidateWhereVirtualSiteSpecifiedVIP{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNetwork := v.NetworkValidationRuleHandler
+	rulesNetwork := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNetwork(rulesNetwork)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSpecifiedVIP.network: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["network"] = vFn
+
+	vrhVirtualSite := v.VirtualSiteValidationRuleHandler
+	rulesVirtualSite := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVirtualSite(rulesVirtualSite)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSpecifiedVIP.virtual_site: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_site"] = vFn
+
+	vrhIp := v.IpValidationRuleHandler
+	rulesIp := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhIp(rulesIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSpecifiedVIP.ip: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ip"] = vFn
+
+	vrhIpv6 := v.Ipv6ValidationRuleHandler
+	rulesIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhIpv6(rulesIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WhereVirtualSiteSpecifiedVIP.ipv6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6"] = vFn
+
+	return v
+}()
+
+func WhereVirtualSiteSpecifiedVIPValidator() db.Validator {
+	return DefaultWhereVirtualSiteSpecifiedVIPValidator
 }
 
 // augmented methods on protoc/std generated struct

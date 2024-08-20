@@ -1280,8 +1280,128 @@ func resourceVolterraZtnaCreate(d *schema.ResourceData, meta interface{}) error 
 
 							resourcesStaticMap := intVal.(map[string]interface{})
 
-							if w, ok := resourcesStaticMap["resource_type"]; ok && !isIntfNil(w) {
-								resources[key.(string)].ResourceType = nil
+							resourceTypeTypeFound := false
+
+							if v, ok := resourcesStaticMap["acl"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+								resourceTypeTypeFound = true
+								resourceTypeInt := &ves_io_schema_ztna.Resource_Acl{}
+								resourceTypeInt.Acl = &ves_io_schema_ztna.AclResourceEntry{}
+								resources[key.(string)].ResourceType = resourceTypeInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["entries"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										entries := make([]*ves_io_schema_ztna.Entry, len(sl))
+										resourceTypeInt.Acl.Entries = entries
+										for i, set := range sl {
+											entries[i] = &ves_io_schema_ztna.Entry{}
+											entriesMapStrToI := set.(map[string]interface{})
+
+											if v, ok := entriesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+												entries[i].Action = ves_io_schema_ztna.Action(ves_io_schema_ztna.Action_value[v.(string)])
+
+											}
+
+											if w, ok := entriesMapStrToI["destination_end_port"]; ok && !isIntfNil(w) {
+												entries[i].DestinationEndPort = uint32(w.(int))
+											}
+
+											if v, ok := entriesMapStrToI["destination_ip"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												destinationIp := &ves_io_schema.IpAddressType{}
+												entries[i].DestinationIp = destinationIp
+												for _, set := range sl {
+													destinationIpMapStrToI := set.(map[string]interface{})
+
+													verTypeFound := false
+
+													if v, ok := destinationIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv4{}
+														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+														destinationIp.Ver = verInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																verInt.Ipv4.Addr = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := destinationIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv6{}
+														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+														destinationIp.Ver = verInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																verInt.Ipv6.Addr = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if w, ok := entriesMapStrToI["destination_start_port"]; ok && !isIntfNil(w) {
+												entries[i].DestinationStartPort = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := resourcesStaticMap["connectivity"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+								resourceTypeTypeFound = true
+
+								if v.(bool) {
+									resourceTypeInt := &ves_io_schema_ztna.Resource_Connectivity{}
+									resourceTypeInt.Connectivity = &ves_io_schema.Empty{}
+									resources[key.(string)].ResourceType = resourceTypeInt
+								}
+
+							}
+
+							if v, ok := resourcesStaticMap["web"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+								resourceTypeTypeFound = true
+
+								if v.(bool) {
+									resourceTypeInt := &ves_io_schema_ztna.Resource_Web{}
+									resourceTypeInt.Web = &ves_io_schema.Empty{}
+									resources[key.(string)].ResourceType = resourceTypeInt
+								}
+
 							}
 
 							// break after one loop
@@ -2176,8 +2296,128 @@ func resourceVolterraZtnaUpdate(d *schema.ResourceData, meta interface{}) error 
 
 							resourcesStaticMap := intVal.(map[string]interface{})
 
-							if w, ok := resourcesStaticMap["resource_type"]; ok && !isIntfNil(w) {
-								resources[key.(string)].ResourceType = nil
+							resourceTypeTypeFound := false
+
+							if v, ok := resourcesStaticMap["acl"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+								resourceTypeTypeFound = true
+								resourceTypeInt := &ves_io_schema_ztna.Resource_Acl{}
+								resourceTypeInt.Acl = &ves_io_schema_ztna.AclResourceEntry{}
+								resources[key.(string)].ResourceType = resourceTypeInt
+
+								sl := v.(*schema.Set).List()
+								for _, set := range sl {
+									cs := set.(map[string]interface{})
+
+									if v, ok := cs["entries"]; ok && !isIntfNil(v) {
+
+										sl := v.([]interface{})
+										entries := make([]*ves_io_schema_ztna.Entry, len(sl))
+										resourceTypeInt.Acl.Entries = entries
+										for i, set := range sl {
+											entries[i] = &ves_io_schema_ztna.Entry{}
+											entriesMapStrToI := set.(map[string]interface{})
+
+											if v, ok := entriesMapStrToI["action"]; ok && !isIntfNil(v) {
+
+												entries[i].Action = ves_io_schema_ztna.Action(ves_io_schema_ztna.Action_value[v.(string)])
+
+											}
+
+											if w, ok := entriesMapStrToI["destination_end_port"]; ok && !isIntfNil(w) {
+												entries[i].DestinationEndPort = uint32(w.(int))
+											}
+
+											if v, ok := entriesMapStrToI["destination_ip"]; ok && !isIntfNil(v) {
+
+												sl := v.(*schema.Set).List()
+												destinationIp := &ves_io_schema.IpAddressType{}
+												entries[i].DestinationIp = destinationIp
+												for _, set := range sl {
+													destinationIpMapStrToI := set.(map[string]interface{})
+
+													verTypeFound := false
+
+													if v, ok := destinationIpMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv4{}
+														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+														destinationIp.Ver = verInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																verInt.Ipv4.Addr = v.(string)
+
+															}
+
+														}
+
+													}
+
+													if v, ok := destinationIpMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv6{}
+														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+														destinationIp.Ver = verInt
+
+														sl := v.(*schema.Set).List()
+														for _, set := range sl {
+															cs := set.(map[string]interface{})
+
+															if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																verInt.Ipv6.Addr = v.(string)
+
+															}
+
+														}
+
+													}
+
+												}
+
+											}
+
+											if w, ok := entriesMapStrToI["destination_start_port"]; ok && !isIntfNil(w) {
+												entries[i].DestinationStartPort = uint32(w.(int))
+											}
+
+										}
+
+									}
+
+								}
+
+							}
+
+							if v, ok := resourcesStaticMap["connectivity"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+								resourceTypeTypeFound = true
+
+								if v.(bool) {
+									resourceTypeInt := &ves_io_schema_ztna.Resource_Connectivity{}
+									resourceTypeInt.Connectivity = &ves_io_schema.Empty{}
+									resources[key.(string)].ResourceType = resourceTypeInt
+								}
+
+							}
+
+							if v, ok := resourcesStaticMap["web"]; ok && !isIntfNil(v) && !resourceTypeTypeFound {
+
+								resourceTypeTypeFound = true
+
+								if v.(bool) {
+									resourceTypeInt := &ves_io_schema_ztna.Resource_Web{}
+									resourceTypeInt.Web = &ves_io_schema.Empty{}
+									resources[key.(string)].ResourceType = resourceTypeInt
+								}
+
 							}
 
 							// break after one loop

@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-aws_vpc_site-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.aws_vpc_site.API.Delete"
             },
@@ -3295,56 +3295,56 @@ var APISwaggerJSON string = `{
         },
         "fleetBlockedServices": {
             "type": "object",
-            "description": "Blocked Services configured explicitly\nBy default all services are allowed and get blocked when config is updated",
-            "title": "BlockedServices specifies the ports of platform services blocked explicitly",
-            "x-displayname": "Blocked Services",
+            "description": "Disable a node local service on this site.",
+            "title": "Disable Node Local Service",
+            "x-displayname": "Disable Node Local Service",
             "x-ves-oneof-field-blocked_services_value_type_choice": "[\"dns\",\"ssh\",\"web_user_interface\"]",
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServices",
             "properties": {
                 "dns": {
                     "description": "Exclusive with [ssh web_user_interface]\n Matches DNS port 53",
-                    "title": "DNS port",
+                    "title": "DNS",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "DNS port"
+                    "x-displayname": "DNS"
                 },
                 "network_type": {
-                    "description": " Network type in which these ports get blocked\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "description": " Site Local VRF on which this service will be disabled\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
                     "title": "network_type",
                     "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Network Type",
+                    "x-displayname": "Site Local VRF",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.enum.in": "[0,1]"
                     }
                 },
                 "ssh": {
-                    "description": "Exclusive with [dns web_user_interface]\n Matches ssh port 22",
-                    "title": "SSH port",
+                    "description": "Exclusive with [dns web_user_interface]\n",
+                    "title": "SSH",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "SSH port"
+                    "x-displayname": "SSH"
                 },
                 "web_user_interface": {
-                    "description": "Exclusive with [dns ssh]\n Matches the web user interface port",
-                    "title": "Web UI port",
+                    "description": "Exclusive with [dns ssh]\n",
+                    "title": "Web UI",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Web UI port"
+                    "x-displayname": "Web UI"
                 }
             }
         },
         "fleetBlockedServicesListType": {
             "type": "object",
-            "description": "List of all custom blocked services configuration",
-            "title": "Custom Blocked Services Configuration List",
-            "x-displayname": "Custom Blocked Services Configuration List",
+            "description": "Disable node local services on this site. Note: The chosen services will get disabled on all nodes in the site.",
+            "title": "Disable Node Local Services",
+            "x-displayname": "Disable Node Local Services",
             "x-ves-proto-message": "ves.io.schema.fleet.BlockedServicesListType",
             "properties": {
                 "blocked_sevice": {
                     "type": "array",
-                    "description": " Use custom blocked services configuration\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Custom Blocked Services Configuration",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Disable Node Local Services",
                     "items": {
                         "$ref": "#/definitions/fleetBlockedServices"
                     },
-                    "x-displayname": "Custom Blocked Services Configuration",
+                    "x-displayname": "Disable Node Local Services",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4103,7 +4103,7 @@ var APISwaggerJSON string = `{
         },
         "schemaRouteAttrType": {
             "type": "string",
-            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the\nvirtual network. Host OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
+            "description": "Defines attributes associated with route\n\nIgnore attribute\nAdvertise route in all supported routing protocols\nAdd route into host OS - route in host OS will point to interface corresponding to the virtual network.\nHost OS must have an interface in the virtual network.\nUse the route for forwarding decision - adds route into data plane\nmodules with configured next-hop\nMerge Route if they already exist",
             "title": "Route Attribute",
             "enum": [
                 "ROUTE_ATTR_NO_OP",
@@ -4639,7 +4639,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "enhanced_firewall_policies": {
                     "type": "array",
-                    "description": " Ordered List of Enhaned Firewall Policy active for this network firewall\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Ordered List of Enhanced Firewall Policies active\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Enhanced Firewall Policy",
                     "minItems": 1,
                     "maxItems": 128,
@@ -4658,14 +4658,14 @@ var APISwaggerJSON string = `{
         },
         "schemanetwork_firewallActiveForwardProxyPoliciesType": {
             "type": "object",
-            "description": "List of Forward Proxy Policies",
+            "description": "Ordered List of Forward Proxy Policies active",
             "title": "Active Forward Proxy Policies Type",
             "x-displayname": "Active Forward Proxy Policies Type",
             "x-ves-proto-message": "ves.io.schema.network_firewall.ActiveForwardProxyPoliciesType",
             "properties": {
                 "forward_proxy_policies": {
                     "type": "array",
-                    "description": " List of Forward Proxy Policies\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
+                    "description": " Ordered List of Forward Proxy Policies active\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Forward Proxy Policies",
                     "minItems": 1,
                     "maxItems": 128,
@@ -5772,7 +5772,7 @@ var APISwaggerJSON string = `{
         },
         "viewsKubernetesUpgradeDrain": {
             "type": "object",
-            "description": "Node by Node Upgrade during Software or OS version upgrade",
+            "description": "Specify how worker nodes within a site will be upgraded.",
             "title": "Node by Node Upgrade",
             "x-displayname": "Node by Node Upgrade [BETA]",
             "x-ves-displayorder": "1",
@@ -5780,13 +5780,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
             "properties": {
                 "disable_upgrade_drain": {
-                    "description": "Exclusive with [enable_upgrade_drain]\n Disable  Node by Node Upgrade during Software or OS version upgrade",
+                    "description": "Exclusive with [enable_upgrade_drain]\n",
                     "title": "Disable upgrade drain",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Node by Node Upgrade"
                 },
                 "enable_upgrade_drain": {
-                    "description": "Exclusive with [disable_upgrade_drain]\n Enable Node by Node Upgrade during Software or OS version upgrade",
+                    "description": "Exclusive with [disable_upgrade_drain]\n",
                     "title": "Enable Node by Node Upgrade",
                     "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
                     "x-displayname": "Enable Node by Node Upgrade"
@@ -5795,9 +5795,9 @@ var APISwaggerJSON string = `{
         },
         "viewsKubernetesUpgradeDrainConfig": {
             "type": "object",
-            "description": "Node by Node upgrade config during Software or OS version upgrade",
-            "title": "Node by Node Upgrade",
-            "x-displayname": "Node by Node Upgrade Config",
+            "description": "Specify batch upgrade settings for worker nodes within a site.",
+            "title": "Enable Node by Node Upgrade",
+            "x-displayname": "Enable Node by Node Upgrade",
             "x-ves-oneof-field-drain_max_unavailable_choice": "[\"drain_max_unavailable_node_count\"]",
             "x-ves-oneof-field-vega_upgrade_mode_toggle_choice": "[\"disable_vega_upgrade_mode\",\"enable_vega_upgrade_mode\"]",
             "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrainConfig",
@@ -5810,10 +5810,10 @@ var APISwaggerJSON string = `{
                 },
                 "drain_max_unavailable_node_count": {
                     "type": "integer",
-                    "description": "Exclusive with []\n Max unavailable worker node count during Software or OS version upgrade\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
-                    "title": "Max Unavailable Node Count",
+                    "description": "Exclusive with []\n\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
+                    "title": "Node Batch Size Count",
                     "format": "int64",
-                    "x-displayname": "Max Unavailable Worker Node Count",
+                    "x-displayname": "Node Batch Size Count",
                     "x-ves-example": "1",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
@@ -5822,10 +5822,10 @@ var APISwaggerJSON string = `{
                 },
                 "drain_node_timeout": {
                     "type": "integer",
-                    "description": " Second to wait before skipping a pod eviction, equivalent to -skip-wait-for-delete-timeout- option in node drain. 0 to not skipping any pods eviction (Warning: It may block the upgrade if set to 0 and a pod fails to evict).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
-                    "title": "Pod Eviction Timeout",
+                    "description": " Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes.\n (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
+                    "title": "Upgrade Wait Time",
                     "format": "int64",
-                    "x-displayname": "Pod Eviction Timeout",
+                    "x-displayname": "Upgrade Wait Time",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
@@ -5851,44 +5851,44 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.L3PerformanceEnhancementType",
             "properties": {
                 "jumbo": {
-                    "description": "Exclusive with [no_jumbo]\n L3 performance mode enhancement to use jumbo frame",
+                    "description": "Exclusive with [no_jumbo]\n",
                     "title": "L3 Mode Enhanced Performance with jumbo frame support(9000)",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "L3 Mode Enhanced Performance with jumbo frame"
+                    "x-displayname": "Enabled"
                 },
                 "no_jumbo": {
-                    "description": "Exclusive with [jumbo]\n L3 performance mode enhancement without jumbo frame",
+                    "description": "Exclusive with [jumbo]\n",
                     "title": "L3 Mode Enhanced Performance with no jumbo frame support",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "L3 Mode Enhanced Performance without jumbo frame"
+                    "x-displayname": "Disabled"
                 }
             }
         },
         "viewsOfflineSurvivabilityModeType": {
             "type": "object",
-            "description": "Offline Survivability Mode",
+            "description": "Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\nWhen this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\nThe certificates needed to keep the services running on this site are signed using a local CA.\nSecrets would also be cached locally to handle the connectivity loss.\nWhen the mode is toggled, services will restart and traffic disruption will be seen.",
             "title": "Offline Survivability Mode",
             "x-displayname": "Offline Survivability Mode",
             "x-ves-oneof-field-offline_survivability_mode_choice": "[\"enable_offline_survivability_mode\",\"no_offline_survivability_mode\"]",
             "x-ves-proto-message": "ves.io.schema.views.OfflineSurvivabilityModeType",
             "properties": {
                 "enable_offline_survivability_mode": {
-                    "description": "Exclusive with [no_offline_survivability_mode]\n Enable Offline Survivability Mode.\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle the connectivity loss.\n When this feature is enabled on an existing site, the pods/services on this site will be restarted.",
+                    "description": "Exclusive with [no_offline_survivability_mode]\n",
                     "title": "Enable Offline Survivability Mode",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable Offline Survivability Mode"
+                    "x-displayname": "Enabled"
                 },
                 "no_offline_survivability_mode": {
-                    "description": "Exclusive with [enable_offline_survivability_mode]\n Disable Offline Survivability Mode.\n When this feature is disabled on an existing site, the pods/services on this site will be restarted.",
+                    "description": "Exclusive with [enable_offline_survivability_mode]\n",
                     "title": "Disable Offline Survivability Mode",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable Offline Survivability Mode"
+                    "x-displayname": "Disabled"
                 }
             }
         },
         "viewsOperatingSystemType": {
             "type": "object",
-            "description": "This is to specify volterra operating version choice",
+            "description": "Select the F5XC Operating System Version for the site. By default, latest available OS Version will be used.\nRefer to release notes to find required released OS versions.",
             "title": "Operating System Version",
             "x-displayname": "Operating System Version",
             "x-ves-displayorder": "1",
@@ -5903,11 +5903,11 @@ var APISwaggerJSON string = `{
                 },
                 "operating_system_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_os_version]\n Operating System Version is optional parameter, which allows to specify target OS version for particular site e.g. 7.2009.10.\n\nExample: - \"7.2009.10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "description": "Exclusive with [default_os_version]\n Specify a OS version to be used e.g. 9.2024.6.\n\nExample: - \"9.2024.6\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
                     "title": "Operating System Version",
                     "maxLength": 20,
                     "x-displayname": "Operating System Version",
-                    "x-ves-example": "7.2009.10",
+                    "x-ves-example": "9.2024.6",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "20"
                     }
@@ -5916,7 +5916,7 @@ var APISwaggerJSON string = `{
         },
         "viewsPerformanceEnhancementModeType": {
             "type": "object",
-            "description": "x-required\nPerformance Enhancement Mode to optimize for L3 or L7 networking",
+            "description": "x-required\nOptimize the site for L3 or L7 traffic processing. L7 optimized is the default.",
             "title": "Performance Enhancement Choice",
             "x-displayname": "Performance Enhancement Mode",
             "x-ves-displayorder": "1",
@@ -5924,13 +5924,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.PerformanceEnhancementModeType",
             "properties": {
                 "perf_mode_l3_enhanced": {
-                    "description": "Exclusive with [perf_mode_l7_enhanced]\n Site optimized for L3 traffic processing\n When the mode is toggled to l3 enhanced, traffic disruption will be seen",
+                    "description": "Exclusive with [perf_mode_l7_enhanced]\n Site optimized for L3 traffic processing",
                     "title": "L3 Mode Enhanced Performance",
                     "$ref": "#/definitions/viewsL3PerformanceEnhancementType",
-                    "x-displayname": "L3 Mode Enhanced Performance"
+                    "x-displayname": "L3 Enhanced"
                 },
                 "perf_mode_l7_enhanced": {
-                    "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing\n When the mode is toggled to l7 enhanced, traffic disruption will be seen",
+                    "description": "Exclusive with [perf_mode_l3_enhanced]\n Site optimized for L7 traffic processing",
                     "title": "Default Performance Mode",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "L7 Enhanced"
@@ -6169,7 +6169,7 @@ var APISwaggerJSON string = `{
         },
         "viewsVolterraSoftwareType": {
             "type": "object",
-            "description": "This is to specify volterra software version choice",
+            "description": "Select the F5XC Software Version for the site. By default, latest available F5XC Software Version will be used.\nRefer to release notes to find required released SW versions.",
             "title": "F5XC Software Version",
             "x-displayname": "F5XC Software Version",
             "x-ves-displayorder": "1",
@@ -6177,14 +6177,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.VolterraSoftwareType",
             "properties": {
                 "default_sw_version": {
-                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available SW version",
+                    "description": "Exclusive with [volterra_software_version]\n Will assign latest available F5XC Software Version",
                     "title": "Default SW Version",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Latest SW Version"
                 },
                 "volterra_software_version": {
                     "type": "string",
-                    "description": "Exclusive with [default_sw_version]\n F5XC Software Version is optional parameter, which allows to specify target SW version for particular site e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
+                    "description": "Exclusive with [default_sw_version]\n Specify a F5XC Software Version to be used e.g. crt-20210329-1002.\n\nExample: - \"crt-20210329-1002\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 20\n",
                     "title": "F5XC Software Version",
                     "maxLength": 20,
                     "x-displayname": "F5XC Software Version",

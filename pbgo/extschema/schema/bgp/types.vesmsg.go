@@ -304,7 +304,7 @@ func (m *BgpPeer) Redact(ctx context.Context) error {
 	switch x := m.AuthChoice.(type) {
 
 	case *BgpPeer_Md5AuthKey:
-		x.Md5AuthKey = "REDACTED"
+		x.Md5AuthKey = "Redacted"
 
 	}
 
@@ -3820,7 +3820,7 @@ func (m *PeerExternal) Redact(ctx context.Context) error {
 	switch x := m.AuthChoice.(type) {
 
 	case *PeerExternal_Md5AuthKey:
-		x.Md5AuthKey = "REDACTED"
+		x.Md5AuthKey = "Redacted"
 
 	}
 

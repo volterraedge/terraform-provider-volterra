@@ -807,10 +807,10 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 										Optional: true,
 									},
 
-									"Optional": {
+									"segment": {
 
 										Type:     schema.TypeSet,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1067,6 +1067,24 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
+
+						"default_session_key_caching": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"disable_session_key_caching": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"max_session_keys": {
+
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
 
 						"no_mtls": {
 
@@ -1459,7 +1477,7 @@ func ResourceOriginPoolInstanceStateUpgradeV1(ctx context.Context, rawState map[
 		}
 
 		value, ok := aa["http1_config"]
-		if ok && reflect.TypeOf(value).Kind() == reflect.Bool {
+		if ok && value != nil && reflect.TypeOf(value).Kind() == reflect.Bool {
 			aa["http1_config"] = []interface{}{map[string]interface{}{
 				"header_transformation": []interface{}{map[string]interface{}{
 					"legacy_header_transformation": true,

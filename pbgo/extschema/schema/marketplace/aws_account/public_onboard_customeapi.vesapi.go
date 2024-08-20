@@ -537,7 +537,7 @@ var OnboardCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-onboardcustomapi-registernewawsaccount"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-onboardcustomapi-registernewawsaccount"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.OnboardCustomAPI.RegisterNewAWSAccount"
             },
@@ -621,7 +621,7 @@ var OnboardCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-marketplace-aws_account-onboardcustomapi-signupawsaccount"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-marketplace-aws_account-onboardcustomapi-signupawsaccount"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.marketplace.aws_account.OnboardCustomAPI.SignupAWSAccount"
             },
@@ -758,30 +758,21 @@ var OnboardCustomAPISwaggerJSON string = `{
                 },
                 "tos_accepted_at": {
                     "type": "string",
-                    "description": " terms of services accepted timestamp\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.timestamp.lt_now: true\n",
+                    "description": " terms of services accepted timestamp\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-",
                     "title": "TOS Accepted Timestamp",
                     "format": "date-time",
                     "x-displayname": "TOS Accepted Timestamp",
-                    "x-ves-example": "2020-04-20T12:32:51.341959216Z",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.timestamp.lt_now": "true"
-                    }
+                    "x-ves-example": "2020-04-20T12:32:51.341959216Z"
                 },
                 "tos_version": {
                     "type": "string",
-                    "description": " terms of services version\n\nExample: - \"v2022.3.14\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 12\n  ves.io.schema.rules.string.min_len: 2\n",
+                    "description": " terms of services version\n\nExample: - \"v2022.3.14\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 12\n",
                     "title": "TOS Version",
-                    "minLength": 2,
                     "maxLength": 12,
                     "x-displayname": "TOS Version",
                     "x-ves-example": "v2022.3.14",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "12",
-                        "ves.io.schema.rules.string.min_len": "2"
+                        "ves.io.schema.rules.string.max_len": "12"
                     }
                 }
             }

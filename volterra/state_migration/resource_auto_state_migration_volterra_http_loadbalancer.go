@@ -67,6 +67,44 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"advertise_on_public": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"public_ip": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"cloud_edge_segment": {
 
 										Type:     schema.TypeSet,
@@ -501,6 +539,59 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 										},
 									},
 
+									"virtual_site_with_vip": {
+
+										Type:     schema.TypeSet,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"network": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"virtual_site": {
+
+													Type:     schema.TypeSet,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"vk8s_service": {
 
 										Type:     schema.TypeSet,
@@ -570,6 +661,12 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 									"port": {
 
 										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"port_ranges": {
+
+										Type:     schema.TypeString,
 										Optional: true,
 									},
 
@@ -874,6 +971,20 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"fail_close": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"fail_open": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
 
 												"oversized_body_fail_validation": {
 
@@ -1358,6 +1469,20 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"fail_close": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"fail_open": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"oversized_body_fail_validation": {
 
 													Type:     schema.TypeBool,
@@ -1496,28 +1621,32 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 						"sensitive_data_detection_rules": {
 
-							Type:     schema.TypeSet,
-							Optional: true,
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
 									"custom_sensitive_data_detection_rules": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"metadata": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"description": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"disable": {
@@ -1527,8 +1656,9 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 															},
 
 															"name": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1536,8 +1666,9 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"sensitive_data_detection_config": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
@@ -1557,21 +1688,24 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"key_pattern": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1579,28 +1713,32 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"key_value_pattern": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"key_pattern": {
 
-																			Type:     schema.TypeSet,
-																			Required: true,
+																			Type:       schema.TypeSet,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_value": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"regex_value": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -1608,21 +1746,24 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																		"value_pattern": {
 
-																			Type:     schema.TypeSet,
-																			Required: true,
+																			Type:       schema.TypeSet,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
 																					"exact_value": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"regex_value": {
 
-																						Type:     schema.TypeString,
-																						Optional: true,
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -1633,21 +1774,24 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"value_pattern": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"exact_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"regex_value": {
 
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1655,26 +1799,30 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"all_request_sections": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"all_response_sections": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"all_sections": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"custom_sections": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
@@ -1682,7 +1830,8 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 																			Type: schema.TypeList,
 
-																			Required: true,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -1693,27 +1842,31 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 															"any_target": {
 
-																Type:     schema.TypeBool,
-																Optional: true,
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"api_endpoint_target": {
 
-																Type:     schema.TypeSet,
-																Optional: true,
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"api_endpoint_path": {
-																			Type:     schema.TypeString,
-																			Required: true,
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"methods": {
 
 																			Type: schema.TypeList,
 
-																			Required: true,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -1741,14 +1894,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 												"sensitive_data_type": {
 
-													Type:     schema.TypeSet,
-													Required: true,
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"type": {
-																Type:     schema.TypeString,
-																Required: true,
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1759,14 +1914,16 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 
 									"disabled_built_in_rules": {
 
-										Type:     schema.TypeList,
-										Optional: true,
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
 												"name": {
-													Type:     schema.TypeString,
-													Required: true,
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -3055,6 +3212,2337 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 																			Type: schema.TypeList,
 
 																			Optional: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"api_rate_limit_legacy": {
+
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"api_endpoint_rules": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"api_endpoint_method": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"invert_matcher": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"methods": {
+
+													Type: schema.TypeList,
+
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"api_endpoint_path": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"base_path": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"client_matcher": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_client": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"client_selector": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"expressions": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"ip_threat_category_list": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ip_threat_categories": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"any_ip": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"asn_list": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"as_numbers": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeInt,
+																},
+															},
+														},
+													},
+												},
+
+												"asn_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"asn_sets": {
+
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"prefix_sets": {
+
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_prefix_list": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_match": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"tls_fingerprint_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"classes": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"exact_values": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"excluded_values": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"any_domain": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"specific_domain": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"inline_rate_limiter": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ref_user_id": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"use_http_lb_user_id": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"threshold": {
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"unit": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"ref_rate_limiter": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"request_matcher": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cookie_matchers": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"headers": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"query_params": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"key": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"bypass_rate_limiting_rules": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"bypass_rate_limiting_rules": {
+
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"client_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"any_client": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"client_selector": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"expressions": {
+
+																			Type: schema.TypeList,
+
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"ip_threat_category_list": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"ip_threat_categories": {
+
+																			Type: schema.TypeList,
+
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"any_ip": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"asn_list": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"as_numbers": {
+
+																			Type: schema.TypeList,
+
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeInt,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"asn_matcher": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"asn_sets": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"kind": {
+																						Type:       schema.TypeString,
+																						Computed:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"name": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																					"namespace": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																					"tenant": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"ip_matcher": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_matcher": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"prefix_sets": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"kind": {
+																						Type:       schema.TypeString,
+																						Computed:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"name": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																					"namespace": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																					"tenant": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"ip_prefix_list": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_match": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"ip_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"ipv6_prefixes": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"tls_fingerprint_matcher": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"classes": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"excluded_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"any_url": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"api_endpoint": {
+
+													Type:       schema.TypeSet,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"methods": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"path": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"api_groups": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"api_groups": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"base_path": {
+
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"any_domain": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"specific_domain": {
+
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"request_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"cookie_matchers": {
+
+																Type:       schema.TypeList,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_matcher": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_not_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"item": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"presence": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"headers": {
+
+																Type:       schema.TypeList,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_matcher": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_not_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"item": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"presence": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"jwt_claims": {
+
+																Type:       schema.TypeList,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_matcher": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_not_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"item": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"query_params": {
+
+																Type:       schema.TypeList,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"invert_matcher": {
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_not_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"check_present": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"item": {
+
+																			Type:       schema.TypeSet,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"exact_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"regex_values": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+
+																					"transformers": {
+
+																						Type: schema.TypeList,
+
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Schema{
+																							Type: schema.TypeString,
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"presence": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"custom_ip_allowed_list": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"rate_limiter_allowed_prefixes": {
+
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"ip_allowed_list": {
+
+							Type:       schema.TypeSet,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ipv6_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"no_ip_allowed_list": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"server_url_rules": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"api_group": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"base_path": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"client_matcher": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"any_client": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"client_selector": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"expressions": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"ip_threat_category_list": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ip_threat_categories": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"any_ip": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"asn_list": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"as_numbers": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeInt,
+																},
+															},
+														},
+													},
+												},
+
+												"asn_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"asn_sets": {
+
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"prefix_sets": {
+
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ip_prefix_list": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_match": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+
+												"tls_fingerprint_matcher": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"classes": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"exact_values": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"excluded_values": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"any_domain": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"specific_domain": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"inline_rate_limiter": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ref_user_id": {
+
+													Type:       schema.TypeSet,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"use_http_lb_user_id": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"threshold": {
+													Type:       schema.TypeInt,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"unit": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"ref_rate_limiter": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"request_matcher": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cookie_matchers": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"headers": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"presence": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"jwt_claims": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+																	},
+																},
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"query_params": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"invert_matcher": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"key": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_not_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"check_present": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"item": {
+
+																Type:       schema.TypeSet,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"exact_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"regex_values": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"transformers": {
+
+																			Type: schema.TypeList,
+
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																			Elem: &schema.Schema{
 																				Type: schema.TypeString,
 																			},
@@ -8211,6 +10699,11 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
 												"crl": {
 
 													Type:     schema.TypeSet,
@@ -8388,6 +10881,11 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
+
+												"client_certificate_optional": {
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
 
 												"crl": {
 
@@ -8907,6 +11405,11 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"client_certificate_optional": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
 
 									"crl": {
 
@@ -11390,6 +13893,27 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
+
+									"default_session_key_caching": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"disable_session_key_caching": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"max_session_keys": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
 
 									"no_mtls": {
 
@@ -16084,6 +18608,174 @@ func ResourceHttpLoadbalancerInstanceResourceV1() *schema.Resource {
 												},
 											},
 										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"sensitive_data_disclosure_rules": {
+
+				Type:       schema.TypeSet,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"sensitive_data_types_in_response": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"body": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"fields": {
+
+													Type: schema.TypeList,
+
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
+									"mask": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"report": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"metadata": {
+
+										Type:       schema.TypeSet,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"description": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"api_endpoint": {
+
+										Type:       schema.TypeSet,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"methods": {
+
+													Type: schema.TypeList,
+
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+
+												"path": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"api_group": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"base_path": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"default_sensitive_data_policy": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"sensitive_data_policy": {
+
+				Type:     schema.TypeSet,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"sensitive_data_policy_ref": {
+
+							Type:     schema.TypeSet,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 								},
 							},

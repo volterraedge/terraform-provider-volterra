@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-cloud_connect-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-cloud_connect-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.cloud_connect.API.Delete"
             },
@@ -2245,6 +2245,12 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/cloud_connectSubnetStatusType"
                     },
                     "x-displayname": "Network Interfaces"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
                 },
                 "tgw_attachment_id": {
                     "type": "string",
@@ -2479,13 +2485,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSVPCAttachmentType",
             "properties": {
                 "custom_routing": {
-                    "description": "Exclusive with [default_route manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
+                    "description": "Exclusive with [default_route manual_routing]\n Routes for user specified CIDRs towards the transit gateway will be installed for this subnet",
                     "title": "Advertise Custom CIDRs",
                     "$ref": "#/definitions/cloud_connectAWSRouteTableListType",
                     "x-displayname": "Advertise Custom CIDRs"
                 },
                 "default_route": {
-                    "description": "Exclusive with [custom_routing manual_routing]\n default route towards the CE will be add to the route table",
+                    "description": "Exclusive with [custom_routing manual_routing]\n Default route towards the transit gateway will be added to the route table",
                     "title": "Override Default Route",
                     "$ref": "#/definitions/cloud_connectDefaultRoute",
                     "x-displayname": "Override Default Route"
@@ -2537,13 +2543,6 @@ var APISwaggerJSON string = `{
             "x-displayname": "Azure Attachment Status Type",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureAttachmentsStatusType",
             "properties": {
-                "creation_time": {
-                    "type": "string",
-                    "description": " Attachment Creation Time",
-                    "title": "Attachment Creation Time",
-                    "format": "date-time",
-                    "x-displayname": "Attachment Creation Time"
-                },
                 "deployment_status": {
                     "type": "string",
                     "description": " Attachment Deployment Status",
@@ -2561,6 +2560,12 @@ var APISwaggerJSON string = `{
                     "description": " Hub VNET Name",
                     "title": "Hub VNET Name",
                     "x-displayname": "Hub VNET Name"
+                },
+                "hub_vnet_resource_group": {
+                    "type": "string",
+                    "description": " Hub VNET Resource Group",
+                    "title": "Hub VNET Resource Group",
+                    "x-displayname": "Hub VNET Resource Group"
                 },
                 "installed_routes": {
                     "title": "x-displayName: \"Installed Routes\"\nRoutes",
@@ -2584,6 +2589,12 @@ var APISwaggerJSON string = `{
                     "title": "Hub VNET Provisioning state",
                     "x-displayname": "Hub VNET Provisioning state"
                 },
+                "spoke_subscription_id": {
+                    "type": "string",
+                    "description": " VNET Subscription",
+                    "title": "VNET subscription",
+                    "x-displayname": "VNET Subscription"
+                },
                 "spoke_vnet_id": {
                     "type": "string",
                     "description": " Spoke VNET ID",
@@ -2599,11 +2610,40 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "Network Interfaces"
                 },
+                "tags": {
+                    "type": "object",
+                    "description": " Attachment Tags",
+                    "title": "Attachment Tags",
+                    "x-displayname": "Attachment Tags"
+                },
                 "vnet_attachment_id": {
                     "type": "string",
                     "description": " VNET Attachment ID",
                     "title": "VNET Attachment ID",
                     "x-displayname": "VNET Attachment ID"
+                },
+                "vnet_cidr": {
+                    "type": "string",
+                    "description": " VNET CIDR",
+                    "title": "VNET CIDR",
+                    "x-displayname": "VNET CIDR"
+                }
+            }
+        },
+        "cloud_connectAzureDefaultRoute": {
+            "type": "object",
+            "description": "x-displayName: \"Override Default Route Choice\"\nSelect Override Default Route Choice",
+            "title": "Default Route Override Choice",
+            "properties": {
+                "all_route_tables": {
+                    "description": "x-displayName: \"All RouteTables\"\nOverride default route for all route tables",
+                    "title": "Override for all route tables",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "selective_route_tables": {
+                    "description": "x-displayName: \"Selective RouteTables for Azure Site\"\nOverride default route for selective route tables for Azure Site",
+                    "title": "Override for selective route tables for Azure Site",
+                    "$ref": "#/definitions/cloud_connectAzureRouteTables"
                 }
             }
         },
@@ -2616,14 +2656,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "route_table_id": {
                     "type": "string",
-                    "description": " Route table ID\n\nExample: - \"rt-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(rt-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$\n",
                     "title": "Route table ID",
-                    "maxLength": 64,
+                    "maxLength": 256,
                     "x-displayname": "Route table ID",
-                    "x-ves-example": "rt-12345678901234567",
+                    "x-ves-example": "/rg-1/rtb-12345678901234567",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "64",
-                        "ves.io.schema.rules.string.pattern": "^(rt-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/(rtb-)[a-zA-Z0-9-]{0,76}[a-zA-Z0-9]$"
                     }
                 },
                 "static_routes": {
@@ -2675,21 +2715,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "cloud_connectAzureRouteTables": {
+            "type": "object",
+            "description": "x-displayName: \"Azure Route Table\"\nAzure Route Table",
+            "title": "Azure Route Table",
+            "properties": {
+                "route_table_id": {
+                    "type": "array",
+                    "description": "x-displayName: \"Route table ID\"\nx-example: \"/rg-1/rtb-12345678901234567\"\nRoute table ID in the format /\u003cresource-group-name\u003e/\u003croute-name\u003e",
+                    "title": "Route table ID",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "cloud_connectAzureVNETAttachmentType": {
             "type": "object",
             "title": "Azure VNET attachment",
             "x-displayname": "Azure VNET Attachment",
-            "x-ves-oneof-field-routing_choice": "[\"custom_routing\",\"manual_routing\"]",
+            "x-ves-oneof-field-routing_choice": "[\"manual_routing\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.AzureVNETAttachmentType",
             "properties": {
-                "custom_routing": {
-                    "description": "Exclusive with [manual_routing]\n Routes for user specified CIDRs towards the CE will be installed for this subnet",
-                    "title": "Advertise Custom CIDRs",
-                    "$ref": "#/definitions/cloud_connectAzureRouteTableWithStaticRouteListType",
-                    "x-displayname": "Advertise Custom CIDRs"
-                },
                 "manual_routing": {
-                    "description": "Exclusive with [custom_routing]\n No route tables will be programmed by F5. User will manage routing",
+                    "description": "Exclusive with []\n No route tables will be programmed by F5. User will manage routing",
                     "title": "Manual Routing",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Manual"
@@ -2708,14 +2757,15 @@ var APISwaggerJSON string = `{
                 },
                 "vnet_id": {
                     "type": "string",
-                    "description": " Enter the vnet ID of the VNET to be attached\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Enter the vnet ID of the VNET to be attached in format /\u003cresource-group-name\u003e/\u003cvnet-name\u003e\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z][a-zA-Z0-9-]{0,78}[a-zA-Z0-9]$\n",
                     "title": "VNET ID",
-                    "maxLength": 64,
+                    "maxLength": 256,
                     "x-displayname": "VNET ID",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "64"
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z][a-zA-Z0-9-]{0,78}[a-zA-Z0-9]$"
                     }
                 }
             }
@@ -2801,7 +2851,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [cloud_connect_aws_site]\n Cloud Connect to Azure VNET Sites",
                     "title": "Cloud Connect Attached to Azure VNET Site",
                     "$ref": "#/definitions/cloud_connectAzureAttachmentsListStatusType",
-                    "x-displayname": "Cloud Connect to AAzure VNET Site"
+                    "x-displayname": "Cloud Connect to Azure VNET Site"
                 }
             }
         },
@@ -3196,6 +3246,24 @@ var APISwaggerJSON string = `{
                     "title": "Spoke VPCs",
                     "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
                     "x-displayname": "Spoke VPCs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "cloud_connectReplaceAzureVNETSiteType": {
+            "type": "object",
+            "description": "Cloud Connect Azure Vnet Site Type",
+            "title": "Replace Cloud Connect Azure Vnet Site Type",
+            "x-displayname": "Azure Vnet Site Type",
+            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceAzureVNETSiteType",
+            "properties": {
+                "vnet_attachments": {
+                    "description": " Spoke VNETs to be attached to the Azure Hub VNET Site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Spoke VNETs",
+                    "$ref": "#/definitions/cloud_connectAzureVnetAttachmentListType",
+                    "x-displayname": "Spoke VNETs",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
@@ -4016,15 +4084,16 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Create Cloud Connect",
             "x-displayname": "Create Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
             "properties": {
                 "aws_tgw_site": {
-                    "description": "Exclusive with []\n",
+                    "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
                     "x-displayname": "AWS TGW Site"
                 },
                 "azure_vnet_site": {
+                    "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
                     "x-displayname": "Azure VNET  Site"
                 },
@@ -4044,15 +4113,16 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Get Cloud Connect",
             "x-displayname": "Get Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
             "properties": {
                 "aws_tgw_site": {
-                    "description": "Exclusive with []\n",
+                    "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
                     "x-displayname": "AWS TGW Site"
                 },
                 "azure_vnet_site": {
+                    "description": "Exclusive with [aws_tgw_site]\n",
                     "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
                     "x-displayname": "Azure VNET  Site"
                 },
@@ -4077,16 +4147,17 @@ var APISwaggerJSON string = `{
             "description": "Shape of the Cloud Connect specification",
             "title": "Replace Cloud Connect",
             "x-displayname": "Replace Cloud Connect",
-            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\"]",
+            "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
             "properties": {
                 "aws_tgw_site": {
-                    "description": "Exclusive with []\n",
+                    "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType",
                     "x-displayname": "AWS TGW Site"
                 },
                 "azure_vnet_site": {
-                    "$ref": "#/definitions/cloud_connectAzureVNETSiteType",
+                    "description": "Exclusive with [aws_tgw_site]\n",
+                    "$ref": "#/definitions/cloud_connectReplaceAzureVNETSiteType",
                     "x-displayname": "Azure VNET  Site"
                 },
                 "segment": {

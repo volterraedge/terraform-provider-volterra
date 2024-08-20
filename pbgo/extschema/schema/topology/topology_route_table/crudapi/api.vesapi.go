@@ -1603,7 +1603,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Get"
             },
@@ -1678,7 +1678,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Delete"
             },
@@ -1761,7 +1761,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Replace"
             },
@@ -1908,7 +1908,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.List"
             },
@@ -1985,7 +1985,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Create"
             },
@@ -2132,7 +2132,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.ListStream"
             },
@@ -2239,7 +2239,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Get"
             },
@@ -2386,7 +2386,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.List"
             },
@@ -2468,7 +2468,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Delete"
             },
@@ -2551,7 +2551,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Replace"
             },
@@ -2635,7 +2635,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-topology-topology_route_table-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.topology.topology_route_table.crudapi.API.Create"
             },
@@ -3241,6 +3241,76 @@ var APISwaggerJSON string = `{
                     "title": "Propagated",
                     "format": "boolean",
                     "x-displayname": "Propagated"
+                },
+                "tgw": {
+                    "description": "TGW Route Attribues\n\nExample: - tgw-",
+                    "title": "TGW",
+                    "$ref": "#/definitions/topologyAWSTgwRouteAttributes",
+                    "x-displayname": "TGW"
+                }
+            }
+        },
+        "topologyAWSTGWAttachmentMetaData": {
+            "type": "object",
+            "description": "AWS TGW AWSTGWAttachment MetaData",
+            "title": "AWSTGWAttachmentMetaData",
+            "x-displayname": "AWS TGW AWSTGWAttachment MetaData",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSTGWAttachmentMetaData",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "TGW Attachment ID",
+                    "title": "Attachment ID",
+                    "x-displayname": "Attachment ID"
+                },
+                "resource_id": {
+                    "type": "string",
+                    "description": "Resource ID",
+                    "title": "Resource ID",
+                    "x-displayname": "Resource ID"
+                },
+                "resource_name": {
+                    "type": "string",
+                    "description": "Resource Name",
+                    "title": "Resource Name",
+                    "x-displayname": "Resource Name"
+                },
+                "resource_type": {
+                    "type": "string",
+                    "description": "Resource Type",
+                    "title": "Resource Type",
+                    "x-displayname": "Resource Type"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "Association/Propagation State",
+                    "title": "Association/Propagation State",
+                    "x-displayname": "Association/Propagation State"
+                }
+            }
+        },
+        "topologyAWSTgwRouteAttributes": {
+            "type": "object",
+            "description": "Route attributes specific to AWS TGW.",
+            "title": "AWSTgwRouteAttributes",
+            "x-displayname": "AWS TGW Route Attributes",
+            "x-ves-proto-message": "ves.io.schema.topology.AWSTgwRouteAttributes",
+            "properties": {
+                "next_hop_attachment": {
+                    "type": "array",
+                    "description": " Next Hop Attachment\n\nExample: - next_hop_attachment-",
+                    "title": "Next Hop Attachment",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachmentMetaData"
+                    },
+                    "x-displayname": "Next Hop Attachment"
+                },
+                "route_type": {
+                    "type": "string",
+                    "description": " Route Type\n\nExample: - \"propagated\"-",
+                    "title": "Route Type",
+                    "x-displayname": "Route Type",
+                    "x-ves-example": "propagated"
                 }
             }
         },
@@ -3265,6 +3335,19 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Priority"
                 },
+                "route_name": {
+                    "type": "string",
+                    "description": " GCP Route Name\n\nExample: - \"default-route\"-",
+                    "title": "GCP Route Name",
+                    "x-displayname": "GCP Route Name",
+                    "x-ves-example": "default-route"
+                },
+                "route_type": {
+                    "description": " GCP Route Type\n\nExample: - GCP_ROUTE_TYPE_STATIC-",
+                    "title": "GCP Route Type",
+                    "$ref": "#/definitions/topologyGCPRouteType",
+                    "x-displayname": "GCP Route Type"
+                },
                 "scope_limits": {
                     "type": "array",
                     "description": " Limits on the scope of route like network tag\n\nExample: - \"tag-1, tag-2\"-",
@@ -3276,6 +3359,21 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "tag-1, tag-2"
                 }
             }
+        },
+        "topologyGCPRouteType": {
+            "type": "string",
+            "description": "x-displayName: GCP Route type\nGCP Route Type\n\n - GCP_ROUTE_TYPE_NONE: GCP Route Type None\n\nx-displayName: GCP Route Type None\nGCP Route Type None\n - GCP_ROUTE_TYPE_TRANSIT: GCP Route Type Transit\n\nx-displayName: GCP Route Type Transit\nGCP Route Type Transit\n - GCP_ROUTE_TYPE_SUBNET: GCP Route Type Subnet\n\nx-displayName: GCP Route Type Subnet\nGCP Route Type Subnet\n - GCP_ROUTE_TYPE_STATIC: GCP Route Type Static\n\nx-displayName: GCP Route Type Static\nGCP Route Type Static\n - GCP_ROUTE_TYPE_BGP: GCP Route Type BGP\n\nx-displayName: GCP Route Type BGP\nGCP Route Type BGP",
+            "title": "GCPRouteType",
+            "enum": [
+                "GCP_ROUTE_TYPE_NONE",
+                "GCP_ROUTE_TYPE_TRANSIT",
+                "GCP_ROUTE_TYPE_SUBNET",
+                "GCP_ROUTE_TYPE_STATIC",
+                "GCP_ROUTE_TYPE_BGP"
+            ],
+            "default": "GCP_ROUTE_TYPE_NONE",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.topology.GCPRouteType"
         },
         "topologyMetaType": {
             "type": "object",
@@ -3355,7 +3453,7 @@ var APISwaggerJSON string = `{
         },
         "topologyRouteNextHopTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nx-displayName: LOAD BALANCER\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nx-displayName: VPC NETWORK\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nx-displayName: VPC PEERING\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nx-displayName: INTERNAL LOAD BALANCER\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nx-displayName: INSTANCE\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nx-displayName: INTERCONNECT\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nx-displayName: INTERNET GATEWAY\nINTERNET GATEWAY\n - IP: IP\n\nx-displayName: IP\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nx-displayName: VPN TUNNEL\nVPN TUNNEL",
+            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nx-displayName: LOAD BALANCER\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nx-displayName: VPC NETWORK\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nx-displayName: VPC PEERING\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nx-displayName: INTERNAL LOAD BALANCER\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nx-displayName: INSTANCE\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nx-displayName: INTERCONNECT\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nx-displayName: INTERNET GATEWAY\nINTERNET GATEWAY\n - IP: IP\n\nx-displayName: IP\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nx-displayName: VPN TUNNEL\nVPN TUNNEL\n - TGW_ATTACHMENT: TGW ATTACHMENT\n\nx-displayName: TGW ATTACHMENT\nTGW ATTACHMENT",
             "title": "RouteNextHopTypeEnum",
             "enum": [
                 "VIRTUAL_NETWORK_GATEWAY",
@@ -3374,7 +3472,8 @@ var APISwaggerJSON string = `{
                 "INTERCONNECT",
                 "INTERNET_GATEWAY",
                 "IP",
-                "VPN_TUNNEL"
+                "VPN_TUNNEL",
+                "TGW_ATTACHMENT"
             ],
             "default": "VIRTUAL_NETWORK_GATEWAY",
             "x-displayname": "",
@@ -3398,16 +3497,36 @@ var APISwaggerJSON string = `{
         },
         "topologyRouteStateTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteStateTypeEnum\nRouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nx-displayName: ACTIVE_STATE\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nx-displayName: INVALID_STATE\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nx-displayName: STATE_NOT_APPLICABLE\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this",
+            "description": "x-displayName: RouteStateTypeEnum\nRouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nx-displayName: ACTIVE_STATE\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nx-displayName: INVALID_STATE\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nx-displayName: STATE_NOT_APPLICABLE\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this\n - STATE_BLACKHOLE: STATE_BLACKHOLE\n\nx-displayName: STATE_BLACKHOLE\nSTATE_BLACKHOLE\n - STATE_UNAVAILABLE: STATE_UNAVAILABLE\n\nx-displayName: STATE_UNAVAILABLE\nSTATE_UNAVAILABLE\n - STATE_PENDING: STATE_PENDING\n\nx-displayName: STATE_PENDING\nSTATE_PENDING\n - STATE_DELETING: STATE_DELETING\n\nx-displayName: STATE_DELETING\nSTATE_DELETING\n - STATE_DELETED: STATE_DELETING\n\nx-displayName: STATE_DELETED\nSTATE_DELETED",
             "title": "RouteStateTypeEnum",
             "enum": [
                 "ACTIVE_STATE",
                 "INVALID_STATE",
-                "STATE_NOT_APPLICABLE"
+                "STATE_NOT_APPLICABLE",
+                "STATE_BLACKHOLE",
+                "STATE_UNAVAILABLE",
+                "STATE_PENDING",
+                "STATE_DELETING",
+                "STATE_DELETED"
             ],
             "default": "ACTIVE_STATE",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.topology.RouteStateTypeEnum"
+        },
+        "topologyRouteTableStateEnum": {
+            "type": "string",
+            "description": "Route table state\n\nRoute table state None\nRoute table state Pending\nRoute table state Availble\nRoute table state Deleting\nRoute table state Deleted",
+            "title": "RouteTableStateEnum",
+            "enum": [
+                "ROUTE_TABLE_STATE_NONE",
+                "ROUTE_TABLE_STATE_PENDING",
+                "ROUTE_TABLE_STATE_AVAILABLE",
+                "ROUTE_TABLE_STATE_DELETING",
+                "ROUTE_TABLE_STATE_DELETED"
+            ],
+            "default": "ROUTE_TABLE_STATE_NONE",
+            "x-displayname": "Route Table State",
+            "x-ves-proto-enum": "ves.io.schema.topology.RouteTableStateEnum"
         },
         "topologyRouteTableType": {
             "type": "object",
@@ -3416,6 +3535,15 @@ var APISwaggerJSON string = `{
             "x-displayname": "Route Table",
             "x-ves-proto-message": "ves.io.schema.topology.RouteTableType",
             "properties": {
+                "associations": {
+                    "type": "array",
+                    "description": " list of associations",
+                    "title": "Associations",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachmentMetaData"
+                    },
+                    "x-displayname": "Associations"
+                },
                 "explicit_subnet": {
                     "type": "array",
                     "description": " Reference to the subnet explicitly accociated.",
@@ -3442,6 +3570,21 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Network"
+                },
+                "propagations": {
+                    "type": "array",
+                    "description": " list of propagations",
+                    "title": "Propagations",
+                    "items": {
+                        "$ref": "#/definitions/topologyAWSTGWAttachmentMetaData"
+                    },
+                    "x-displayname": "Propagations"
+                },
+                "route_table_state": {
+                    "description": " state of the route table.",
+                    "title": "Route Table State",
+                    "$ref": "#/definitions/topologyRouteTableStateEnum",
+                    "x-displayname": "Route Table State"
                 },
                 "route_table_type": {
                     "description": " type of this route table.",

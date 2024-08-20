@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site_mesh_group-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site_mesh_group-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site_mesh_group-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site_mesh_group-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site_mesh_group-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site_mesh_group-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site_mesh_group.API.Delete"
             },
@@ -2660,7 +2660,7 @@ var APISwaggerJSON string = `{
         },
         "schemaSiteToSiteTunnelType": {
             "type": "string",
-            "description": "x-displayName: \"Tunnel type\"\nTunnel encapsulation to be used between sites\n\n - SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL: x-displayName: \"IPSEC or SSL\"\nSite to site tunnel can operate in both ipsec and ssl\nipsec takes precedence over ssl\n - SITE_TO_SITE_TUNNEL_IPSEC: x-displayName: \"IPSEC\"\nSite to site tunnel is of type ipsec\n - SITE_TO_SITE_TUNNEL_SSL: x-displayName: \"SSL\"\nSite to site tunnel is of type ssl",
+            "description": "x-displayName: \"Tunnel type\"\nTunnel encapsulation to be used between sites\n\n - SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL: x-displayName: \"IPSEC and SSL\"\nTunnel can operate in both IPsec and SSL, with IPsec being prefered over SSL.\n - SITE_TO_SITE_TUNNEL_IPSEC: x-displayName: \"IPSEC\"\nTunnel is of type IPsec\n - SITE_TO_SITE_TUNNEL_SSL: x-displayName: \"SSL\"\nTunnel is of type SSL",
             "title": "Site to site tunnel type",
             "enum": [
                 "SITE_TO_SITE_TUNNEL_IPSEC_OR_SSL",

@@ -1612,7 +1612,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Get"
             },
@@ -1687,7 +1687,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Delete"
             },
@@ -1770,7 +1770,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Replace"
             },
@@ -1917,7 +1917,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.List"
             },
@@ -1994,7 +1994,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Create"
             },
@@ -2141,7 +2141,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-liststream"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-liststream"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.ListStream"
             },
@@ -2248,7 +2248,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Get"
             },
@@ -2395,7 +2395,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.List"
             },
@@ -2477,7 +2477,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Delete"
             },
@@ -2560,7 +2560,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Replace"
             },
@@ -2644,7 +2644,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ztna_application-crudapi-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.ztna_application.crudapi.API.Create"
             },
@@ -3555,6 +3555,18 @@ var APISwaggerJSON string = `{
             "x-displayname": "Site Network",
             "x-ves-proto-enum": "ves.io.schema.views.SiteNetwork"
         },
+        "viewsSiteNetworkSpecifiedVIP": {
+            "type": "string",
+            "description": "This defines network types to be used on virtual-site with specified VIP\n\nAll outside networks.\nAll inside networks.",
+            "title": "SiteNetworkSpecifiedVIP",
+            "enum": [
+                "SITE_NETWORK_SPECIFIED_VIP_OUTSIDE",
+                "SITE_NETWORK_SPECIFIED_VIP_INSIDE"
+            ],
+            "default": "SITE_NETWORK_SPECIFIED_VIP_OUTSIDE",
+            "x-displayname": "Site Network",
+            "x-ves-proto-enum": "ves.io.schema.views.SiteNetworkSpecifiedVIP"
+        },
         "viewsWhereCloudEdgeSegment": {
             "type": "object",
             "description": "This defines a reference to a Segment on a Cloud Edge and an optional ip address where a load balancer could be advertised",
@@ -3755,19 +3767,25 @@ var APISwaggerJSON string = `{
             "title": "WhereType",
             "x-displayname": "Select Where to Advertise",
             "x-ves-displayorder": "4,5",
-            "x-ves-oneof-field-choice": "[\"cloud_edge_segment\",\"segment\",\"site\",\"site_segment\",\"virtual_network\",\"virtual_site\",\"virtual_site_segment\",\"vk8s_service\"]",
-            "x-ves-oneof-field-port_choice": "[\"port\",\"use_default_port\"]",
+            "x-ves-oneof-field-choice": "[\"advertise_on_public\",\"cloud_edge_segment\",\"segment\",\"site\",\"site_segment\",\"virtual_network\",\"virtual_site\",\"virtual_site_segment\",\"virtual_site_with_vip\",\"vk8s_service\"]",
+            "x-ves-oneof-field-port_choice": "[\"port\",\"port_ranges\",\"use_default_port\"]",
             "x-ves-proto-message": "ves.io.schema.views.WhereType",
             "properties": {
+                "advertise_on_public": {
+                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_network virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise this load balancer on public network",
+                    "title": "Advertise On Public",
+                    "$ref": "#/definitions/viewsAdvertisePublic",
+                    "x-displayname": "Internet (Specified VIP)"
+                },
                 "cloud_edge_segment": {
-                    "description": "Exclusive with [segment site site_segment virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a segment on a Cloud Edge",
+                    "description": "Exclusive with [advertise_on_public segment site site_segment virtual_network virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a segment on a Cloud Edge",
                     "title": "Segment on Cloud Edge",
                     "$ref": "#/definitions/viewsWhereCloudEdgeSegment",
                     "x-displayname": "Segment on Cloud Edge"
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [use_default_port]\n TCP port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges use_default_port]\n TCP port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "TCP port to listen",
                     "format": "int64",
                     "x-displayname": "TCP Listen Port",
@@ -3776,50 +3794,71 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [port use_default_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "title": "TCP port ranges to listen",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "TCP Listen Port Ranges",
+                    "x-ves-example": "80,443,8080-8191,9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
+                    }
+                },
                 "segment": {
-                    "description": "Exclusive with [cloud_edge_segment site site_segment virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a segment",
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment site site_segment virtual_network virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a segment",
                     "title": "Segment",
                     "$ref": "#/definitions/viewsWhereSegment",
                     "x-displayname": "Segment"
                 },
                 "site": {
-                    "description": "Exclusive with [cloud_edge_segment segment site_segment virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a customer site and a given network.",
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site_segment virtual_network virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a customer site and a given network.",
                     "title": "Site",
                     "$ref": "#/definitions/viewsWhereSite",
                     "x-displayname": "Site"
                 },
                 "site_segment": {
-                    "description": "Exclusive with [cloud_edge_segment segment site virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a segment on a site",
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site virtual_network virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a segment on a site",
                     "title": "Segment on Site",
                     "$ref": "#/definitions/viewsWhereSiteSegment",
                     "x-displayname": "Segment on Site"
                 },
                 "use_default_port": {
-                    "description": "Exclusive with [port]\n For HTTP, default is 80. For HTTPS/SNI, default is 443.",
+                    "description": "Exclusive with [port port_ranges]\n For HTTP, default is 80. For HTTPS/SNI, default is 443.",
                     "title": "Use Default port",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Use Default TCP Listen Port"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_site virtual_site_segment vk8s_service]\n Advertise on a virtual network",
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a virtual network",
                     "title": "Virtual Network",
                     "$ref": "#/definitions/viewsWhereVirtualNetwork",
                     "x-displayname": "Virtual Network"
                 },
                 "virtual_site": {
-                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_network virtual_site_segment vk8s_service]\n Advertise on a customer virtual site and a given network.",
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_network virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a customer virtual site and a given network.",
                     "title": "Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSite",
                     "x-displayname": "Virtual Site"
                 },
                 "virtual_site_segment": {
-                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_network virtual_site vk8s_service]\n Advertise on a segment on a virtual site",
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_network virtual_site virtual_site_with_vip vk8s_service]\n Advertise on a segment on a virtual site",
                     "title": "Segment on Virtual Site",
                     "$ref": "#/definitions/viewsWhereVirtualSiteSegment",
                     "x-displayname": "Segment on Virtual Site"
                 },
+                "virtual_site_with_vip": {
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_network virtual_site virtual_site_segment vk8s_service]\n Advertise on a customer virtual site and a given network and IP.",
+                    "title": "Virtual Site With Specified VIP",
+                    "$ref": "#/definitions/viewsWhereVirtualSiteSpecifiedVIP",
+                    "x-displayname": "Virtual Site (Specified VIP)"
+                },
                 "vk8s_service": {
-                    "description": "Exclusive with [cloud_edge_segment segment site site_segment virtual_network virtual_site virtual_site_segment]\n Advertise on vK8s Service Network on RE.",
+                    "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_network virtual_site virtual_site_segment virtual_site_with_vip]\n Advertise on vK8s Service Network on RE.",
                     "title": "vK8s services network",
                     "$ref": "#/definitions/viewsWhereVK8SService",
                     "x-displayname": "vK8s Service Network on RE"
@@ -3966,6 +4005,55 @@ var APISwaggerJSON string = `{
                     "title": "Segment",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Segment",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "virtual_site": {
+                    "description": " Reference to virtual site object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Virtual Site",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Virtual Site Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "viewsWhereVirtualSiteSpecifiedVIP": {
+            "type": "object",
+            "description": "This defines a reference to a customer site virtual site along with network type and IP where a load balancer could be advertised",
+            "title": "WhereVirtualSiteSpecifiedVIP",
+            "x-displayname": "Virtual Site with Specified VIP",
+            "x-ves-proto-message": "ves.io.schema.views.WhereVirtualSiteSpecifiedVIP",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": " Use given IP address as VIP on the site\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "title": "IP address on the site",
+                    "x-displayname": "IP Address",
+                    "x-ves-example": "8.8.8.8",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv4": "true"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " Use given IPv6 address as VIP on the site\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "title": "IPv6 address on the site",
+                    "x-displayname": "IPv6 Address",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "network": {
+                    "description": " Select network types to be used on site.\n IP address of primary network interface in the network\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Network",
+                    "$ref": "#/definitions/viewsSiteNetworkSpecifiedVIP",
+                    "x-displayname": "Network",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"

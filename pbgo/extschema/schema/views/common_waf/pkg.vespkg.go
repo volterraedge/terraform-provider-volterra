@@ -15,6 +15,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.common_waf.APIProtectionRuleAction"] = APIProtectionRuleActionValidator()
 	vr["ves.io.schema.views.common_waf.APIProtectionRules"] = APIProtectionRulesValidator()
 	vr["ves.io.schema.views.common_waf.APIRateLimit"] = APIRateLimitValidator()
+	vr["ves.io.schema.views.common_waf.APIRateLimitLegacy"] = APIRateLimitLegacyValidator()
 	vr["ves.io.schema.views.common_waf.APISpecificationSettings"] = APISpecificationSettingsValidator()
 	vr["ves.io.schema.views.common_waf.ApiDefinitionList"] = ApiDefinitionListValidator()
 	vr["ves.io.schema.views.common_waf.ApiDiscoverySetting"] = ApiDiscoverySettingValidator()

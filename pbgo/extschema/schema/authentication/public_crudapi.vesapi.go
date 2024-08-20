@@ -1763,7 +1763,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-authentication-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Create"
             },
@@ -1862,7 +1862,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-authentication-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Replace"
             },
@@ -1978,7 +1978,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-authentication-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.List"
             },
@@ -2087,7 +2087,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-authentication-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Get"
             },
@@ -2180,7 +2180,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-authentication-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-authentication-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.authentication.API.Delete"
             },

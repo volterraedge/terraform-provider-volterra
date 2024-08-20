@@ -403,7 +403,7 @@ var CustomDataAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-virtual_k8s-customdataapi-pvcmetrics"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_k8s-customdataapi-pvcmetrics"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_k8s.CustomDataAPI.PVCMetrics"
             },

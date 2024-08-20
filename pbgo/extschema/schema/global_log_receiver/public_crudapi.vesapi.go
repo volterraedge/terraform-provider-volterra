@@ -1764,7 +1764,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-api-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-api-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.API.Create"
             },
@@ -1864,7 +1864,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-api-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-api-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.API.Replace"
             },
@@ -1980,7 +1980,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-api-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-api-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.API.List"
             },
@@ -2090,7 +2090,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-api-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-api-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.API.Get"
             },
@@ -2183,7 +2183,7 @@ var APISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-global_log_receiver-api-delete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-global_log_receiver-api-delete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.global_log_receiver.API.Delete"
             },
@@ -2522,12 +2522,12 @@ var APISwaggerJSON string = `{
             "title": "Create Global Log Receiver",
             "x-displayname": "Create Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
-            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
+            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"dns_logs\",\"request_logs\",\"security_events\"]",
             "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.CreateSpecType",
             "properties": {
                 "audit_logs": {
-                    "description": "Exclusive with [request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
+                    "description": "Exclusive with [dns_logs request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Audit Logs"
                 },
@@ -2550,6 +2550,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
+                },
+                "dns_logs": {
+                    "description": "Exclusive with [audit_logs request_logs security_events]\n Send DNS Requests Logs (corresponding to DNS requests received)",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DNS Request Logs"
                 },
                 "gcp_bucket_receiver": {
                     "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
@@ -2592,7 +2597,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IBM QRadar Receiver"
                 },
                 "request_logs": {
-                    "description": "Exclusive with [audit_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
+                    "description": "Exclusive with [audit_logs dns_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Request Logs"
                 },
@@ -2602,7 +2607,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "S3 Receiver"
                 },
                 "security_events": {
-                    "description": "Exclusive with [audit_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
+                    "description": "Exclusive with [audit_logs dns_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Security Events"
                 },
@@ -2900,12 +2905,12 @@ var APISwaggerJSON string = `{
             "title": "Get Global Log Receiver",
             "x-displayname": "Get Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
-            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
+            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"dns_logs\",\"request_logs\",\"security_events\"]",
             "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.GetSpecType",
             "properties": {
                 "audit_logs": {
-                    "description": "Exclusive with [request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
+                    "description": "Exclusive with [dns_logs request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Audit Logs"
                 },
@@ -2928,6 +2933,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
+                },
+                "dns_logs": {
+                    "description": "Exclusive with [audit_logs request_logs security_events]\n Send DNS Requests Logs (corresponding to DNS requests received)",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DNS Request Logs"
                 },
                 "gcp_bucket_receiver": {
                     "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
@@ -2970,7 +2980,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IBM QRadar Receiver"
                 },
                 "request_logs": {
-                    "description": "Exclusive with [audit_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
+                    "description": "Exclusive with [audit_logs dns_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Request Logs"
                 },
@@ -2980,7 +2990,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "S3 Receiver"
                 },
                 "security_events": {
-                    "description": "Exclusive with [audit_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
+                    "description": "Exclusive with [audit_logs dns_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Security Events"
                 },
@@ -3415,12 +3425,12 @@ var APISwaggerJSON string = `{
             "title": "Replace Log Receiver",
             "x-displayname": "Replace Global Log Receiver",
             "x-ves-oneof-field-filter_choice": "[\"ns_all\",\"ns_current\",\"ns_list\"]",
-            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"request_logs\",\"security_events\"]",
+            "x-ves-oneof-field-log_type": "[\"audit_logs\",\"dns_logs\",\"request_logs\",\"security_events\"]",
             "x-ves-oneof-field-receiver": "[\"aws_cloud_watch_receiver\",\"azure_event_hubs_receiver\",\"azure_receiver\",\"datadog_receiver\",\"gcp_bucket_receiver\",\"http_receiver\",\"kafka_receiver\",\"new_relic_receiver\",\"qradar_receiver\",\"s3_receiver\",\"splunk_receiver\",\"sumo_logic_receiver\"]",
             "x-ves-proto-message": "ves.io.schema.global_log_receiver.ReplaceSpecType",
             "properties": {
                 "audit_logs": {
-                    "description": "Exclusive with [request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
+                    "description": "Exclusive with [dns_logs request_logs security_events]\n Send Audit Logs (corresponding to Public Audit and Authentication)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Audit Logs"
                 },
@@ -3443,6 +3453,11 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver gcp_bucket_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a Datadog service",
                     "$ref": "#/definitions/global_log_receiverDatadogConfig",
                     "x-displayname": "Datadog Receiver"
+                },
+                "dns_logs": {
+                    "description": "Exclusive with [audit_logs request_logs security_events]\n Send DNS Requests Logs (corresponding to DNS requests received)",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "DNS Request Logs"
                 },
                 "gcp_bucket_receiver": {
                     "description": "Exclusive with [aws_cloud_watch_receiver azure_event_hubs_receiver azure_receiver datadog_receiver http_receiver kafka_receiver new_relic_receiver qradar_receiver s3_receiver splunk_receiver sumo_logic_receiver]\n Send logs to a GCP Bucket",
@@ -3485,7 +3500,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "IBM QRadar Receiver"
                 },
                 "request_logs": {
-                    "description": "Exclusive with [audit_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
+                    "description": "Exclusive with [audit_logs dns_logs security_events]\n Send Request Logs (corresponding to Load Balancer access logs)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Request Logs"
                 },
@@ -3495,7 +3510,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "S3 Receiver"
                 },
                 "security_events": {
-                    "description": "Exclusive with [audit_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
+                    "description": "Exclusive with [audit_logs dns_logs request_logs]\n Send Security Events (corresponding to e.g. WAF blocked events or malicious requests)",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Security Events"
                 },

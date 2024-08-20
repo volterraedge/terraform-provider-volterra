@@ -2358,7 +2358,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-syncuser"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-syncuser"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.SyncUser"
             },
@@ -2442,7 +2442,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-addusertogroup"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-addusertogroup"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AddUserToGroup"
             },
@@ -2526,7 +2526,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-removeuserfromgroup"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-removeuserfromgroup"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.RemoveUserFromGroup"
             },
@@ -2618,7 +2618,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-accepttos"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-accepttos"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AcceptTOS"
             },
@@ -2710,7 +2710,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-assignrole"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-assignrole"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.AssignRole"
             },
@@ -2802,7 +2802,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-sendpasswordemail"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-sendpasswordemail"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.SendPasswordEmail"
             },
@@ -2886,7 +2886,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-gettos"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-gettos"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.GetTOS"
             },
@@ -2970,7 +2970,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-list"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-list"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.List"
             },
@@ -3057,7 +3057,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-create"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-create"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Create"
             },
@@ -3144,7 +3144,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Replace"
             },
@@ -3244,7 +3244,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-replace"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-replace"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Replace"
             },
@@ -3336,7 +3336,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-cascadedelete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-cascadedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.CascadeDelete"
             },
@@ -3420,7 +3420,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-get"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-get"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.Get"
             },
@@ -3504,7 +3504,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-resetpasswordbyadmin"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-resetpasswordbyadmin"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.ResetPasswordByAdmin"
             },
@@ -3588,7 +3588,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-user-customapi-resetpassword"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-user-customapi-resetpassword"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.user.CustomAPI.ResetPassword"
             },
@@ -3622,14 +3622,15 @@ var CustomAPISwaggerJSON string = `{
         },
         "schemaAddonServiceAccess": {
             "type": "string",
-            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nPlan based access control denied. This means current plan doesnt allow this addon service.\nWhen the user clicks on such addon, he will be shown billing plan upgrade page\n - AS_AC_PBAC_DENY_UPGRADE_PLAN: x-displayName: \"PBAC Deny - Upgrade plan\"\nPlan based access control denied. This means current plan doesnt allow this addon service.\nWhen the user clicks on such addon, he will be shown billing plan upgrade page\n - AS_AC_PBAC_DENY_REQUEST_SERVICE: x-displayName: \"PBAC Deny - Request service\"\nPlan based access control denied. This means current plan doesnt allow this addon service.\nWhen the user clicks on such addon, he will be shown request service button which creates a support ticket requesting enablement of the addon.\nSince the addon is not part of the plan, the customer would be advised accordingly by the support team depending on his current plan",
+            "description": "x-displayName: \"Addon Service Access\"\nState of access into service\n\n - AS_AC_NONE: x-displayName: \"None\"\ndefault state\nThis can mean that addon service is not subscribed or is in pending subscription.\n - AS_AC_ALLOWED: x-displayName: \"Allow\"\naccess is allowed\n - AS_AC_PBAC_DENY: x-displayName: \"PBAC Deny\"\nAddon service is not allowed as part of current plan\n - AS_AC_PBAC_DENY_UPGRADE_PLAN: x-displayName: \"PBAC Deny - Upgrade plan\"\nAddon service is not allowed as part of current plan. To enable it, user is requested to uprade the plan\n - AS_AC_PBAC_DENY_CONTACT_SALES: x-displayName: \"PBAC Deny - Contact Sales\"\nAddon service is not allowed as part of current plan. To enable or to find out more, user is requested to contact sales\n - AS_AC_PBAC_DENY_AS_AC_EOL: x-displayName: \"PBAC Deny - End of  Life\"\nAddon service is not allowed as part of current plan as it is discontinued. User is requested to contact sales discuss alternatives",
             "title": "AddonServiceAccess",
             "enum": [
                 "AS_AC_NONE",
                 "AS_AC_ALLOWED",
                 "AS_AC_PBAC_DENY",
                 "AS_AC_PBAC_DENY_UPGRADE_PLAN",
-                "AS_AC_PBAC_DENY_REQUEST_SERVICE"
+                "AS_AC_PBAC_DENY_CONTACT_SALES",
+                "AS_AC_PBAC_DENY_AS_AC_EOL"
             ],
             "default": "AS_AC_NONE"
         },
@@ -3740,13 +3741,12 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "namespace_role_map": {
                     "type": "object",
-                    "description": " List of all the roles for the entity in the namespaces\n\nExample: - '\u003cnamespace\u003e [\u003croles\u003e]'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.ves_object_name: true\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " List of all the roles for the entity in the namespaces\n\nExample: - '\u003cnamespace\u003e [\u003croles\u003e]'-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Namespace Role Map",
                     "x-displayname": "Namespace Role Map",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.map.keys.string.max_len": "256",
-                        "ves.io.schema.rules.map.keys.string.ves_object_name": "true",
                         "ves.io.schema.rules.message.required": "true"
                     }
                 }
@@ -3934,6 +3934,19 @@ var CustomAPISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "schemaSignupOrigin": {
+            "type": "string",
+            "description": "x-required\nSignupOrigin indicates, from which platform signup is originated, example f5xc, aws..etc\n\n - ORIGIN_UNKNOWN: ORIGIN_UNKNOWN\n\nIndicates, the origin of the signup is unknown\n - ORIGIN_F5XC: ORIGIN_F5XC\n\nORIGIN_F5XC as an origin indicates, signup is initiated from console or by internal scaling/testing/support teams using private API\n - ORIGIN_AWS: ORIGIN_AWS\n\nORIGIN_AWS as an origin indicates, signup is initiated from AWS marketplace \u0026 it comes to eywaprime via tsahik",
+            "title": "SignupOrigin",
+            "enum": [
+                "ORIGIN_UNKNOWN",
+                "ORIGIN_F5XC",
+                "ORIGIN_AWS"
+            ],
+            "default": "ORIGIN_UNKNOWN",
+            "x-displayname": "Signup Origin",
+            "x-ves-proto-enum": "ves.io.schema.SignupOrigin"
         },
         "schemaStatusType": {
             "type": "object",
@@ -4713,6 +4726,16 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Self managed tenant",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Self managed tenant"
+                },
+                "signup_origin": {
+                    "description": " Platform from which the tenant signup is originated, example f5xc, aws, etc\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Signup origin",
+                    "$ref": "#/definitions/schemaSignupOrigin",
+                    "x-displayname": "Signup origin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "state": {
                     "description": " Contains information about current user state.",

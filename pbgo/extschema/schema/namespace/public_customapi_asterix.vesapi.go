@@ -688,7 +688,7 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-getapiendpointsstatsallnamespaces"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-getapiendpointsstatsallnamespaces"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStatsAllNamespaces"
             },
@@ -780,7 +780,7 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-getapiendpointsstats"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-getapiendpointsstats"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceMLCustomAPI.GetApiEndpointsStats"
             },
@@ -872,7 +872,7 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-suggestvalues"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-namespace-namespacemlcustomapi-suggestvalues"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.namespace.NamespaceMLCustomAPI.SuggestValues"
             },

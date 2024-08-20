@@ -17,6 +17,7 @@ import (
 	route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	common_security "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
 	common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
@@ -26,7 +27,6 @@ import (
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
-	strconv "strconv"
 	strings "strings"
 )
 
@@ -41,153 +41,6 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
-
-// MobileIdentifier
-//
-// x-displayName: "Mobile Identifier"
-// Mobile identifier type
-type MobileIdentifier int32
-
-const (
-	// Headers
-	//
-	// x-displayName: "Headers"
-	// Headers
-	HEADERS MobileIdentifier = 0
-)
-
-var MobileIdentifier_name = map[int32]string{
-	0: "HEADERS",
-}
-
-var MobileIdentifier_value = map[string]int32{
-	"HEADERS": 0,
-}
-
-func (MobileIdentifier) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{0}
-}
-
-// URLSchemeType
-//
-// x-displayName: "URL Scheme"
-// SchemeType is used to indicate URL scheme.
-type URLScheme int32
-
-const (
-	// BOTH
-	//
-	// x-displayName: "BOTH"
-	// URL scheme for https:// or http://.
-	BOTH URLScheme = 0
-	// HTTP
-	//
-	// x-displayName: "HTTP"
-	// URL scheme http:// only.
-	HTTP URLScheme = 1
-	// HTTPS
-	//
-	// x-displayName: "HTTPS"
-	// URL scheme https:// only.
-	HTTPS URLScheme = 2
-)
-
-var URLScheme_name = map[int32]string{
-	0: "BOTH",
-	1: "HTTP",
-	2: "HTTPS",
-}
-
-var URLScheme_value = map[string]int32{
-	"BOTH":  0,
-	"HTTP":  1,
-	"HTTPS": 2,
-}
-
-func (URLScheme) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{1}
-}
-
-// ShapeBotDefenseRegion
-//
-// x-displayName: "Bot Defense Region"
-// Defines a selection for Bot Defense region
-type ShapeBotDefenseRegion int32
-
-const (
-	// AUTO
-	//
-	// x-displayName: "Auto"
-	// Automatic selection based on client IP address
-	AUTO ShapeBotDefenseRegion = 0
-	// US
-	//
-	// x-displayName: "US"
-	// US region
-	US ShapeBotDefenseRegion = 1
-	// EU
-	//
-	// x-displayName: "EU"
-	// European Union region
-	EU ShapeBotDefenseRegion = 2
-	// ASIA
-	//
-	// x-displayName: "Asia"
-	// Asia region
-	ASIA ShapeBotDefenseRegion = 3
-)
-
-var ShapeBotDefenseRegion_name = map[int32]string{
-	0: "AUTO",
-	1: "US",
-	2: "EU",
-	3: "ASIA",
-}
-
-var ShapeBotDefenseRegion_value = map[string]int32{
-	"AUTO": 0,
-	"US":   1,
-	"EU":   2,
-	"ASIA": 3,
-}
-
-func (ShapeBotDefenseRegion) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{2}
-}
-
-// JavaScriptLocation
-//
-// x-displayName: "JavaScript Location"
-// All inside networks.
-type JavaScriptLocation int32
-
-const (
-	// x-displayName: "After <head> tag"
-	// Insert JavaScript after <head> tag
-	AFTER_HEAD JavaScriptLocation = 0
-	// x-displayName: "After </title> tag"
-	// Insert JavaScript after </title> tag.
-	AFTER_TITLE_END JavaScriptLocation = 1
-	// x-displayName: "Before <script> tag"
-	// Insert JavaScript before first <script> tag
-	BEFORE_SCRIPT JavaScriptLocation = 2
-)
-
-var JavaScriptLocation_name = map[int32]string{
-	0: "AFTER_HEAD",
-	1: "AFTER_TITLE_END",
-	2: "BEFORE_SCRIPT",
-}
-
-var JavaScriptLocation_value = map[string]int32{
-	"AFTER_HEAD":      0,
-	"AFTER_TITLE_END": 1,
-	"BEFORE_SCRIPT":   2,
-}
-
-func (JavaScriptLocation) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{3}
-}
 
 // BYOC HTTPS Choice
 //
@@ -2855,230 +2708,6 @@ func (*AdvancedOptionsType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// DDoSClientSource
-//
-// x-displayName: "DDoS Client Source Choice"
-// DDoS Mitigation sources to be blocked
-type DDoSClientSource struct {
-	// asn_list
-	//
-	// x-displayName: "ASN List"
-	// Addresses that belong to the ASNs in the given list
-	// The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.
-	AsnList *policy.AsnMatchList `protobuf:"bytes,1,opt,name=asn_list,json=asnList,proto3" json:"asn_list,omitempty"`
-	// country_list
-	//
-	// x-displayName: "Country List"
-	// Sources that are located in one of the countries in the given list
-	CountryList []policy.CountryCode `protobuf:"varint,3,rep,packed,name=country_list,json=countryList,proto3,enum=ves.io.schema.policy.CountryCode" json:"country_list,omitempty"`
-	// TLS JA3 fingerprint matcher
-	//
-	// x-displayName: "TLS Fingerprint Matcher"
-	// TLS JA3 fingerprints to be matched.
-	// The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.
-	TlsFingerprintMatcher *policy.TlsFingerprintMatcherType `protobuf:"bytes,5,opt,name=tls_fingerprint_matcher,json=tlsFingerprintMatcher,proto3" json:"tls_fingerprint_matcher,omitempty"`
-}
-
-func (m *DDoSClientSource) Reset()      { *m = DDoSClientSource{} }
-func (*DDoSClientSource) ProtoMessage() {}
-func (*DDoSClientSource) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{13}
-}
-func (m *DDoSClientSource) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DDoSClientSource) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *DDoSClientSource) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DDoSClientSource.Merge(m, src)
-}
-func (m *DDoSClientSource) XXX_Size() int {
-	return m.Size()
-}
-func (m *DDoSClientSource) XXX_DiscardUnknown() {
-	xxx_messageInfo_DDoSClientSource.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DDoSClientSource proto.InternalMessageInfo
-
-func (m *DDoSClientSource) GetAsnList() *policy.AsnMatchList {
-	if m != nil {
-		return m.AsnList
-	}
-	return nil
-}
-
-func (m *DDoSClientSource) GetCountryList() []policy.CountryCode {
-	if m != nil {
-		return m.CountryList
-	}
-	return nil
-}
-
-func (m *DDoSClientSource) GetTlsFingerprintMatcher() *policy.TlsFingerprintMatcherType {
-	if m != nil {
-		return m.TlsFingerprintMatcher
-	}
-	return nil
-}
-
-// DDoSMitigationRule
-//
-// x-displayName: "DDoS Mitigation Rule"
-// DDoS Mitigation Rule specifies the sources to be blocked
-type DDoSMitigationRule struct {
-	// metadata
-	//
-	// x-displayName: "Metadata"
-	// x-required
-	// Common attributes for the rule including name and description.
-	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// mitigation action
-	//
-	// x-displayName: "Mitigation Action"
-	// x-required
-	// The action to be taken for a specified mitigation choice
-	//
-	// Types that are valid to be assigned to MitigationAction:
-	//	*DDoSMitigationRule_Block
-	MitigationAction isDDoSMitigationRule_MitigationAction `protobuf_oneof:"mitigation_action"`
-	// Mitigation Choice
-	//
-	// x-displayName: "Mitigation Choice"
-	// x-required
-	// Mitigation source to be matched
-	//
-	// Types that are valid to be assigned to MitigationChoice:
-	//	*DDoSMitigationRule_DdosClientSource
-	//	*DDoSMitigationRule_IpPrefixList
-	MitigationChoice isDDoSMitigationRule_MitigationChoice `protobuf_oneof:"mitigation_choice"`
-	// expiration timestamp
-	//
-	// x-displayName: "Expiration Timestamp"
-	// x-example: "2019-12-31:44:34.171543432Z"
-	// The expiration_timestamp is the RFC 3339 format timestamp at which the containing rule is considered to be logically expired. The rule continues to exist in
-	// the configuration but is not applied anymore.
-	ExpirationTimestamp *types.Timestamp `protobuf:"bytes,10,opt,name=expiration_timestamp,json=expirationTimestamp,proto3" json:"expiration_timestamp,omitempty"`
-}
-
-func (m *DDoSMitigationRule) Reset()      { *m = DDoSMitigationRule{} }
-func (*DDoSMitigationRule) ProtoMessage() {}
-func (*DDoSMitigationRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{14}
-}
-func (m *DDoSMitigationRule) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DDoSMitigationRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *DDoSMitigationRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DDoSMitigationRule.Merge(m, src)
-}
-func (m *DDoSMitigationRule) XXX_Size() int {
-	return m.Size()
-}
-func (m *DDoSMitigationRule) XXX_DiscardUnknown() {
-	xxx_messageInfo_DDoSMitigationRule.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DDoSMitigationRule proto.InternalMessageInfo
-
-type isDDoSMitigationRule_MitigationAction interface {
-	isDDoSMitigationRule_MitigationAction()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isDDoSMitigationRule_MitigationChoice interface {
-	isDDoSMitigationRule_MitigationChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type DDoSMitigationRule_Block struct {
-	Block *schema.Empty `protobuf:"bytes,3,opt,name=block,proto3,oneof" json:"block,omitempty"`
-}
-type DDoSMitigationRule_DdosClientSource struct {
-	DdosClientSource *DDoSClientSource `protobuf:"bytes,8,opt,name=ddos_client_source,json=ddosClientSource,proto3,oneof" json:"ddos_client_source,omitempty"`
-}
-type DDoSMitigationRule_IpPrefixList struct {
-	IpPrefixList *policy.PrefixMatchList `protobuf:"bytes,9,opt,name=ip_prefix_list,json=ipPrefixList,proto3,oneof" json:"ip_prefix_list,omitempty"`
-}
-
-func (*DDoSMitigationRule_Block) isDDoSMitigationRule_MitigationAction()            {}
-func (*DDoSMitigationRule_DdosClientSource) isDDoSMitigationRule_MitigationChoice() {}
-func (*DDoSMitigationRule_IpPrefixList) isDDoSMitigationRule_MitigationChoice()     {}
-
-func (m *DDoSMitigationRule) GetMitigationAction() isDDoSMitigationRule_MitigationAction {
-	if m != nil {
-		return m.MitigationAction
-	}
-	return nil
-}
-func (m *DDoSMitigationRule) GetMitigationChoice() isDDoSMitigationRule_MitigationChoice {
-	if m != nil {
-		return m.MitigationChoice
-	}
-	return nil
-}
-
-func (m *DDoSMitigationRule) GetMetadata() *schema.MessageMetaType {
-	if m != nil {
-		return m.Metadata
-	}
-	return nil
-}
-
-func (m *DDoSMitigationRule) GetBlock() *schema.Empty {
-	if x, ok := m.GetMitigationAction().(*DDoSMitigationRule_Block); ok {
-		return x.Block
-	}
-	return nil
-}
-
-func (m *DDoSMitigationRule) GetDdosClientSource() *DDoSClientSource {
-	if x, ok := m.GetMitigationChoice().(*DDoSMitigationRule_DdosClientSource); ok {
-		return x.DdosClientSource
-	}
-	return nil
-}
-
-func (m *DDoSMitigationRule) GetIpPrefixList() *policy.PrefixMatchList {
-	if x, ok := m.GetMitigationChoice().(*DDoSMitigationRule_IpPrefixList); ok {
-		return x.IpPrefixList
-	}
-	return nil
-}
-
-func (m *DDoSMitigationRule) GetExpirationTimestamp() *types.Timestamp {
-	if m != nil {
-		return m.ExpirationTimestamp
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*DDoSMitigationRule) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*DDoSMitigationRule_Block)(nil),
-		(*DDoSMitigationRule_DdosClientSource)(nil),
-		(*DDoSMitigationRule_IpPrefixList)(nil),
-	}
-}
-
 // Single load balancer app setting
 //
 // x-displayName: "Single Load Balancer App Setting"
@@ -3115,7 +2744,7 @@ type SingleLoadBalancerAppSetting struct {
 func (m *SingleLoadBalancerAppSetting) Reset()      { *m = SingleLoadBalancerAppSetting{} }
 func (*SingleLoadBalancerAppSetting) ProtoMessage() {}
 func (*SingleLoadBalancerAppSetting) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{15}
+	return fileDescriptor_6478b2bb990a4a3e, []int{13}
 }
 func (m *SingleLoadBalancerAppSetting) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3244,7 +2873,7 @@ type OriginServerSubsetRuleListType struct {
 func (m *OriginServerSubsetRuleListType) Reset()      { *m = OriginServerSubsetRuleListType{} }
 func (*OriginServerSubsetRuleListType) ProtoMessage() {}
 func (*OriginServerSubsetRuleListType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{16}
+	return fileDescriptor_6478b2bb990a4a3e, []int{14}
 }
 func (m *OriginServerSubsetRuleListType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3274,2362 +2903,6 @@ func (m *OriginServerSubsetRuleListType) GetOriginServerSubsetRules() []*policy.
 		return m.OriginServerSubsetRules
 	}
 	return nil
-}
-
-// ClientSideDefenseType
-//
-// x-displayName: "Client-Side Defense"
-// This defines various configuration options for Client-Side Defense Policy.
-type ClientSideDefenseType struct {
-	// ClientSideDefensePolicyType
-	//
-	// x-displayName: "Client-Side Defense Policy"
-	// x-required
-	// Configure the pages where you want Client-Side Defense Protection.
-	// Please ensure that the same domains are configured in the Client-Side Defense configuration.
-	Policy *ClientSideDefensePolicyType `protobuf:"bytes,1,opt,name=policy,proto3" json:"policy,omitempty"`
-}
-
-func (m *ClientSideDefenseType) Reset()      { *m = ClientSideDefenseType{} }
-func (*ClientSideDefenseType) ProtoMessage() {}
-func (*ClientSideDefenseType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{17}
-}
-func (m *ClientSideDefenseType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ClientSideDefenseType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ClientSideDefenseType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClientSideDefenseType.Merge(m, src)
-}
-func (m *ClientSideDefenseType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ClientSideDefenseType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClientSideDefenseType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ClientSideDefenseType proto.InternalMessageInfo
-
-func (m *ClientSideDefenseType) GetPolicy() *ClientSideDefensePolicyType {
-	if m != nil {
-		return m.Policy
-	}
-	return nil
-}
-
-// ClientSideDefensePolicyType
-//
-// x-displayName: "Client-Side Defense Policy"
-// This defines various configuration options for Client-Side Defense policy.
-type ClientSideDefensePolicyType struct {
-	// JavaScript Choice
-	//
-	// x-displayName: "JavaScript Insertion Settings"
-	// x-required
-	// This defines a JavaScript insertion rule.
-	//
-	// Types that are valid to be assigned to JavaScriptChoice:
-	//	*ClientSideDefensePolicyType_DisableJsInsert
-	//	*ClientSideDefensePolicyType_JsInsertAllPages
-	//	*ClientSideDefensePolicyType_JsInsertAllPagesExcept
-	//	*ClientSideDefensePolicyType_JsInsertionRules
-	JavaScriptChoice isClientSideDefensePolicyType_JavaScriptChoice `protobuf_oneof:"java_script_choice"`
-}
-
-func (m *ClientSideDefensePolicyType) Reset()      { *m = ClientSideDefensePolicyType{} }
-func (*ClientSideDefensePolicyType) ProtoMessage() {}
-func (*ClientSideDefensePolicyType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{18}
-}
-func (m *ClientSideDefensePolicyType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ClientSideDefensePolicyType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ClientSideDefensePolicyType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ClientSideDefensePolicyType.Merge(m, src)
-}
-func (m *ClientSideDefensePolicyType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ClientSideDefensePolicyType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ClientSideDefensePolicyType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ClientSideDefensePolicyType proto.InternalMessageInfo
-
-type isClientSideDefensePolicyType_JavaScriptChoice interface {
-	isClientSideDefensePolicyType_JavaScriptChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type ClientSideDefensePolicyType_DisableJsInsert struct {
-	DisableJsInsert *schema.Empty `protobuf:"bytes,2,opt,name=disable_js_insert,json=disableJsInsert,proto3,oneof" json:"disable_js_insert,omitempty"`
-}
-type ClientSideDefensePolicyType_JsInsertAllPages struct {
-	JsInsertAllPages *schema.Empty `protobuf:"bytes,3,opt,name=js_insert_all_pages,json=jsInsertAllPages,proto3,oneof" json:"js_insert_all_pages,omitempty"`
-}
-type ClientSideDefensePolicyType_JsInsertAllPagesExcept struct {
-	JsInsertAllPagesExcept *CSDJavaScriptInsertAllWithExceptionsType `protobuf:"bytes,4,opt,name=js_insert_all_pages_except,json=jsInsertAllPagesExcept,proto3,oneof" json:"js_insert_all_pages_except,omitempty"`
-}
-type ClientSideDefensePolicyType_JsInsertionRules struct {
-	JsInsertionRules *CSDJavaScriptInsertType `protobuf:"bytes,5,opt,name=js_insertion_rules,json=jsInsertionRules,proto3,oneof" json:"js_insertion_rules,omitempty"`
-}
-
-func (*ClientSideDefensePolicyType_DisableJsInsert) isClientSideDefensePolicyType_JavaScriptChoice() {
-}
-func (*ClientSideDefensePolicyType_JsInsertAllPages) isClientSideDefensePolicyType_JavaScriptChoice() {
-}
-func (*ClientSideDefensePolicyType_JsInsertAllPagesExcept) isClientSideDefensePolicyType_JavaScriptChoice() {
-}
-func (*ClientSideDefensePolicyType_JsInsertionRules) isClientSideDefensePolicyType_JavaScriptChoice() {
-}
-
-func (m *ClientSideDefensePolicyType) GetJavaScriptChoice() isClientSideDefensePolicyType_JavaScriptChoice {
-	if m != nil {
-		return m.JavaScriptChoice
-	}
-	return nil
-}
-
-func (m *ClientSideDefensePolicyType) GetDisableJsInsert() *schema.Empty {
-	if x, ok := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_DisableJsInsert); ok {
-		return x.DisableJsInsert
-	}
-	return nil
-}
-
-func (m *ClientSideDefensePolicyType) GetJsInsertAllPages() *schema.Empty {
-	if x, ok := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_JsInsertAllPages); ok {
-		return x.JsInsertAllPages
-	}
-	return nil
-}
-
-func (m *ClientSideDefensePolicyType) GetJsInsertAllPagesExcept() *CSDJavaScriptInsertAllWithExceptionsType {
-	if x, ok := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_JsInsertAllPagesExcept); ok {
-		return x.JsInsertAllPagesExcept
-	}
-	return nil
-}
-
-func (m *ClientSideDefensePolicyType) GetJsInsertionRules() *CSDJavaScriptInsertType {
-	if x, ok := m.GetJavaScriptChoice().(*ClientSideDefensePolicyType_JsInsertionRules); ok {
-		return x.JsInsertionRules
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*ClientSideDefensePolicyType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*ClientSideDefensePolicyType_DisableJsInsert)(nil),
-		(*ClientSideDefensePolicyType_JsInsertAllPages)(nil),
-		(*ClientSideDefensePolicyType_JsInsertAllPagesExcept)(nil),
-		(*ClientSideDefensePolicyType_JsInsertionRules)(nil),
-	}
-}
-
-// CSDJavaScriptInsertAllWithExceptionsType
-//
-// x-displayName: "Insert JavaScript in All Pages with the Exceptions"
-// Insert Client-Side Defense JavaScript in all pages  with the exceptions
-type CSDJavaScriptInsertAllWithExceptionsType struct {
-	// exclude_list
-	//
-	// x-displayName: "Exclude Pages"
-	// Optional JavaScript insertions exclude list of domain and path matchers.
-	ExcludeList []*ShapeJavaScriptExclusionRule `protobuf:"bytes,1,rep,name=exclude_list,json=excludeList,proto3" json:"exclude_list,omitempty"`
-}
-
-func (m *CSDJavaScriptInsertAllWithExceptionsType) Reset() {
-	*m = CSDJavaScriptInsertAllWithExceptionsType{}
-}
-func (*CSDJavaScriptInsertAllWithExceptionsType) ProtoMessage() {}
-func (*CSDJavaScriptInsertAllWithExceptionsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{19}
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CSDJavaScriptInsertAllWithExceptionsType.Merge(m, src)
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) XXX_Size() int {
-	return m.Size()
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) XXX_DiscardUnknown() {
-	xxx_messageInfo_CSDJavaScriptInsertAllWithExceptionsType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CSDJavaScriptInsertAllWithExceptionsType proto.InternalMessageInfo
-
-func (m *CSDJavaScriptInsertAllWithExceptionsType) GetExcludeList() []*ShapeJavaScriptExclusionRule {
-	if m != nil {
-		return m.ExcludeList
-	}
-	return nil
-}
-
-// CSDJavaScriptInsertType
-//
-// x-displayName: "JavaScript Custom Insertion Rules"
-// This defines custom JavaScript insertion rules for Client-Side Defense Policy.
-type CSDJavaScriptInsertType struct {
-	// rules
-	//
-	// x-displayName: "JavaScript Insertions"
-	// x-required
-	// Required list of pages to insert Client-Side Defense client JavaScript.
-	Rules []*CSDJavaScriptInsertionRule `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
-	// exclude_list
-	//
-	// x-displayName: "Exclude Paths"
-	// Optional JavaScript insertions exclude list of domain and path matchers.
-	ExcludeList []*ShapeJavaScriptExclusionRule `protobuf:"bytes,2,rep,name=exclude_list,json=excludeList,proto3" json:"exclude_list,omitempty"`
-}
-
-func (m *CSDJavaScriptInsertType) Reset()      { *m = CSDJavaScriptInsertType{} }
-func (*CSDJavaScriptInsertType) ProtoMessage() {}
-func (*CSDJavaScriptInsertType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{20}
-}
-func (m *CSDJavaScriptInsertType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CSDJavaScriptInsertType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *CSDJavaScriptInsertType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CSDJavaScriptInsertType.Merge(m, src)
-}
-func (m *CSDJavaScriptInsertType) XXX_Size() int {
-	return m.Size()
-}
-func (m *CSDJavaScriptInsertType) XXX_DiscardUnknown() {
-	xxx_messageInfo_CSDJavaScriptInsertType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CSDJavaScriptInsertType proto.InternalMessageInfo
-
-func (m *CSDJavaScriptInsertType) GetRules() []*CSDJavaScriptInsertionRule {
-	if m != nil {
-		return m.Rules
-	}
-	return nil
-}
-
-func (m *CSDJavaScriptInsertType) GetExcludeList() []*ShapeJavaScriptExclusionRule {
-	if m != nil {
-		return m.ExcludeList
-	}
-	return nil
-}
-
-// CSDJavaScriptInsertionRule
-//
-// x-displayName: "JavaScript Insertion Rule"
-// This defines a rule for Client-Side Defense JavaScript insertion.
-type CSDJavaScriptInsertionRule struct {
-	// metadata
-	//
-	// x-displayName: "Metadata"
-	// x-required
-	// Common attributes for the rule including name and description.
-	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// Domain Matcher
-	//
-	// x-displayName: "Domain Matcher"
-	// x-required
-	// This defines domain matcher.
-	//
-	// Types that are valid to be assigned to DomainMatcherChoice:
-	//	*CSDJavaScriptInsertionRule_AnyDomain
-	//	*CSDJavaScriptInsertionRule_Domain
-	DomainMatcherChoice isCSDJavaScriptInsertionRule_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
-	// Path
-	//
-	// x-displayName: "Path"
-	// x-required
-	// URI path matcher.
-	Path *schema.PathMatcherType `protobuf:"bytes,5,opt,name=path,proto3" json:"path,omitempty"`
-}
-
-func (m *CSDJavaScriptInsertionRule) Reset()      { *m = CSDJavaScriptInsertionRule{} }
-func (*CSDJavaScriptInsertionRule) ProtoMessage() {}
-func (*CSDJavaScriptInsertionRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{21}
-}
-func (m *CSDJavaScriptInsertionRule) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CSDJavaScriptInsertionRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *CSDJavaScriptInsertionRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CSDJavaScriptInsertionRule.Merge(m, src)
-}
-func (m *CSDJavaScriptInsertionRule) XXX_Size() int {
-	return m.Size()
-}
-func (m *CSDJavaScriptInsertionRule) XXX_DiscardUnknown() {
-	xxx_messageInfo_CSDJavaScriptInsertionRule.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CSDJavaScriptInsertionRule proto.InternalMessageInfo
-
-type isCSDJavaScriptInsertionRule_DomainMatcherChoice interface {
-	isCSDJavaScriptInsertionRule_DomainMatcherChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type CSDJavaScriptInsertionRule_AnyDomain struct {
-	AnyDomain *schema.Empty `protobuf:"bytes,3,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
-}
-type CSDJavaScriptInsertionRule_Domain struct {
-	Domain *schema.DomainType `protobuf:"bytes,4,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
-}
-
-func (*CSDJavaScriptInsertionRule_AnyDomain) isCSDJavaScriptInsertionRule_DomainMatcherChoice() {}
-func (*CSDJavaScriptInsertionRule_Domain) isCSDJavaScriptInsertionRule_DomainMatcherChoice()    {}
-
-func (m *CSDJavaScriptInsertionRule) GetDomainMatcherChoice() isCSDJavaScriptInsertionRule_DomainMatcherChoice {
-	if m != nil {
-		return m.DomainMatcherChoice
-	}
-	return nil
-}
-
-func (m *CSDJavaScriptInsertionRule) GetMetadata() *schema.MessageMetaType {
-	if m != nil {
-		return m.Metadata
-	}
-	return nil
-}
-
-func (m *CSDJavaScriptInsertionRule) GetAnyDomain() *schema.Empty {
-	if x, ok := m.GetDomainMatcherChoice().(*CSDJavaScriptInsertionRule_AnyDomain); ok {
-		return x.AnyDomain
-	}
-	return nil
-}
-
-func (m *CSDJavaScriptInsertionRule) GetDomain() *schema.DomainType {
-	if x, ok := m.GetDomainMatcherChoice().(*CSDJavaScriptInsertionRule_Domain); ok {
-		return x.Domain
-	}
-	return nil
-}
-
-func (m *CSDJavaScriptInsertionRule) GetPath() *schema.PathMatcherType {
-	if m != nil {
-		return m.Path
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*CSDJavaScriptInsertionRule) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*CSDJavaScriptInsertionRule_AnyDomain)(nil),
-		(*CSDJavaScriptInsertionRule_Domain)(nil),
-	}
-}
-
-// BotDefenseAdvancedPolicyType
-//
-// x-displayName: "Bot Defense Advanced Policy"
-// This defines various configuration options for Bot Defense Advanced Policy.
-type BotDefenseAdvancedPolicyType struct {
-	// ProtectedAppEndpointType
-	//
-	// x-displayName: "Protected App Endpoints"
-	// x-required
-	// List of protected endpoints (max 128 items)
-	ProtectedAppEndpoints []*ProtectedAppEndpointType `protobuf:"bytes,1,rep,name=protected_app_endpoints,json=protectedAppEndpoints,proto3" json:"protected_app_endpoints,omitempty"`
-	// js_download_path
-	//
-	// x-displayName: "Web Client JavaScript Download Path"
-	// x-example: "/common.js"
-	// x-required
-	// Customize Bot Defense Web Client JavaScript path
-	JsDownloadPath string `protobuf:"bytes,2,opt,name=js_download_path,json=jsDownloadPath,proto3" json:"js_download_path,omitempty"`
-	// Mobile SDK Choice
-	//
-	// x-displayName: "Activate Mobile SDK"
-	// x-required
-	// Configure Mobile SDK parameters to protect native mobile app endpoints. If you have selected client type as
-	// 'Mobile' or 'Web And Mobile' please Enable Mobile SDK. In the event that there is at least one protected
-	// endpoint marked with a client type of 'Web And Mobile', then also define Mobile Request Identifier(s) in
-	// advanced setting.
-	//
-	// Types that are valid to be assigned to MobileSdkChoice:
-	//	*BotDefenseAdvancedPolicyType_DisableMobileSdk
-	//	*BotDefenseAdvancedPolicyType_MobileSdkConfig
-	MobileSdkChoice isBotDefenseAdvancedPolicyType_MobileSdkChoice `protobuf_oneof:"mobile_sdk_choice"`
-}
-
-func (m *BotDefenseAdvancedPolicyType) Reset()      { *m = BotDefenseAdvancedPolicyType{} }
-func (*BotDefenseAdvancedPolicyType) ProtoMessage() {}
-func (*BotDefenseAdvancedPolicyType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{22}
-}
-func (m *BotDefenseAdvancedPolicyType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *BotDefenseAdvancedPolicyType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *BotDefenseAdvancedPolicyType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BotDefenseAdvancedPolicyType.Merge(m, src)
-}
-func (m *BotDefenseAdvancedPolicyType) XXX_Size() int {
-	return m.Size()
-}
-func (m *BotDefenseAdvancedPolicyType) XXX_DiscardUnknown() {
-	xxx_messageInfo_BotDefenseAdvancedPolicyType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BotDefenseAdvancedPolicyType proto.InternalMessageInfo
-
-type isBotDefenseAdvancedPolicyType_MobileSdkChoice interface {
-	isBotDefenseAdvancedPolicyType_MobileSdkChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type BotDefenseAdvancedPolicyType_DisableMobileSdk struct {
-	DisableMobileSdk *schema.Empty `protobuf:"bytes,4,opt,name=disable_mobile_sdk,json=disableMobileSdk,proto3,oneof" json:"disable_mobile_sdk,omitempty"`
-}
-type BotDefenseAdvancedPolicyType_MobileSdkConfig struct {
-	MobileSdkConfig *BotAdvancedMobileSDKConfigType `protobuf:"bytes,5,opt,name=mobile_sdk_config,json=mobileSdkConfig,proto3,oneof" json:"mobile_sdk_config,omitempty"`
-}
-
-func (*BotDefenseAdvancedPolicyType_DisableMobileSdk) isBotDefenseAdvancedPolicyType_MobileSdkChoice() {
-}
-func (*BotDefenseAdvancedPolicyType_MobileSdkConfig) isBotDefenseAdvancedPolicyType_MobileSdkChoice() {
-}
-
-func (m *BotDefenseAdvancedPolicyType) GetMobileSdkChoice() isBotDefenseAdvancedPolicyType_MobileSdkChoice {
-	if m != nil {
-		return m.MobileSdkChoice
-	}
-	return nil
-}
-
-func (m *BotDefenseAdvancedPolicyType) GetProtectedAppEndpoints() []*ProtectedAppEndpointType {
-	if m != nil {
-		return m.ProtectedAppEndpoints
-	}
-	return nil
-}
-
-func (m *BotDefenseAdvancedPolicyType) GetJsDownloadPath() string {
-	if m != nil {
-		return m.JsDownloadPath
-	}
-	return ""
-}
-
-func (m *BotDefenseAdvancedPolicyType) GetDisableMobileSdk() *schema.Empty {
-	if x, ok := m.GetMobileSdkChoice().(*BotDefenseAdvancedPolicyType_DisableMobileSdk); ok {
-		return x.DisableMobileSdk
-	}
-	return nil
-}
-
-func (m *BotDefenseAdvancedPolicyType) GetMobileSdkConfig() *BotAdvancedMobileSDKConfigType {
-	if x, ok := m.GetMobileSdkChoice().(*BotDefenseAdvancedPolicyType_MobileSdkConfig); ok {
-		return x.MobileSdkConfig
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*BotDefenseAdvancedPolicyType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*BotDefenseAdvancedPolicyType_DisableMobileSdk)(nil),
-		(*BotDefenseAdvancedPolicyType_MobileSdkConfig)(nil),
-	}
-}
-
-// BotAdvancedMobileSDKConfigType
-//
-// x-displayName: "Mobile Request Identifier Headers"
-// Mobile Request Identifier Headers.
-type BotAdvancedMobileSDKConfigType struct {
-	// MobileTrafficIdentifierType
-	//
-	// x-displayName: "Mobile Request Identifier Headers"
-	// Mobile Request Identifier Headers Type.
-	MobileIdentifier *MobileTrafficIdentifierType `protobuf:"bytes,1,opt,name=mobile_identifier,json=mobileIdentifier,proto3" json:"mobile_identifier,omitempty"`
-}
-
-func (m *BotAdvancedMobileSDKConfigType) Reset()      { *m = BotAdvancedMobileSDKConfigType{} }
-func (*BotAdvancedMobileSDKConfigType) ProtoMessage() {}
-func (*BotAdvancedMobileSDKConfigType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{23}
-}
-func (m *BotAdvancedMobileSDKConfigType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *BotAdvancedMobileSDKConfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *BotAdvancedMobileSDKConfigType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BotAdvancedMobileSDKConfigType.Merge(m, src)
-}
-func (m *BotAdvancedMobileSDKConfigType) XXX_Size() int {
-	return m.Size()
-}
-func (m *BotAdvancedMobileSDKConfigType) XXX_DiscardUnknown() {
-	xxx_messageInfo_BotAdvancedMobileSDKConfigType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BotAdvancedMobileSDKConfigType proto.InternalMessageInfo
-
-func (m *BotAdvancedMobileSDKConfigType) GetMobileIdentifier() *MobileTrafficIdentifierType {
-	if m != nil {
-		return m.MobileIdentifier
-	}
-	return nil
-}
-
-// ProtectedAppEndpointType
-//
-// x-displayName: "Protected App Endpoint"
-// Protected Application Endpoint.
-type ProtectedAppEndpointType struct {
-	// metadata
-	//
-	// x-displayName: "Metadata"
-	// x-required
-	// Common attributes for the rule including name and description.
-	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// Domain Matcher
-	//
-	// x-displayName: "Domain Matcher"
-	// This defines domain matcher.
-	//
-	// Types that are valid to be assigned to DomainMatcherChoice:
-	//	*ProtectedAppEndpointType_AnyDomain
-	//	*ProtectedAppEndpointType_Domain
-	DomainMatcherChoice isProtectedAppEndpointType_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
-	// Path
-	//
-	// x-displayName: "Path"
-	// x-required
-	// x-example: "/id/1"
-	// x-example: "/id/*"
-	// x-example: "*login"
-	// Accepts wildcards * to match multiple characters or ? to match a single character
-	Path *schema.PathMatcherType `protobuf:"bytes,5,opt,name=path,proto3" json:"path,omitempty"`
-	// Query
-	//
-	// x-displayName: "Query"
-	// x-example: "(^|[^\\w])action=login([^\\w]|$)"
-	// Enter a regular expression or exact value to match your query parameters of interest
-	Query []*Query `protobuf:"bytes,6,rep,name=query,proto3" json:"query,omitempty"`
-	// Request Body
-	//
-	// x-displayName: "Request Body"
-	// Request Body
-	RequestBody []*RequestBody `protobuf:"bytes,7,rep,name=request_body,json=requestBody,proto3" json:"request_body,omitempty"`
-	// HTTP Methods
-	//
-	// x-displayName: "HTTP Methods"
-	// x-required
-	// List of HTTP methods.
-	HttpMethods []schema.BotHttpMethod `protobuf:"varint,8,rep,packed,name=http_methods,json=httpMethods,proto3,enum=ves.io.schema.BotHttpMethod" json:"http_methods,omitempty"`
-	// Traffic channel
-	//
-	// x-displayName: "Traffic Channel"
-	// x-required
-	// Select traffic channel.
-	//
-	// Types that are valid to be assigned to AppTrafficTypeChoice:
-	//	*ProtectedAppEndpointType_WebClient
-	//	*ProtectedAppEndpointType_MobileClient
-	//	*ProtectedAppEndpointType_WebMobileClient
-	AppTrafficTypeChoice isProtectedAppEndpointType_AppTrafficTypeChoice `protobuf_oneof:"app_traffic_type_choice"`
-	// Endpoint category
-	//
-	// x-displayName: "Endpoint category"
-	// Endpoint label category
-	//
-	// Types that are valid to be assigned to FlowLabelChoice:
-	//	*ProtectedAppEndpointType_UndefinedFlowLabel
-	//	*ProtectedAppEndpointType_FlowLabel
-	FlowLabelChoice isProtectedAppEndpointType_FlowLabelChoice `protobuf_oneof:"flow_label_choice"`
-}
-
-func (m *ProtectedAppEndpointType) Reset()      { *m = ProtectedAppEndpointType{} }
-func (*ProtectedAppEndpointType) ProtoMessage() {}
-func (*ProtectedAppEndpointType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{24}
-}
-func (m *ProtectedAppEndpointType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ProtectedAppEndpointType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ProtectedAppEndpointType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProtectedAppEndpointType.Merge(m, src)
-}
-func (m *ProtectedAppEndpointType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ProtectedAppEndpointType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ProtectedAppEndpointType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ProtectedAppEndpointType proto.InternalMessageInfo
-
-type isProtectedAppEndpointType_DomainMatcherChoice interface {
-	isProtectedAppEndpointType_DomainMatcherChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isProtectedAppEndpointType_AppTrafficTypeChoice interface {
-	isProtectedAppEndpointType_AppTrafficTypeChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isProtectedAppEndpointType_FlowLabelChoice interface {
-	isProtectedAppEndpointType_FlowLabelChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type ProtectedAppEndpointType_AnyDomain struct {
-	AnyDomain *schema.Empty `protobuf:"bytes,3,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
-}
-type ProtectedAppEndpointType_Domain struct {
-	Domain *schema.DomainType `protobuf:"bytes,4,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
-}
-type ProtectedAppEndpointType_WebClient struct {
-	WebClient *schema.Empty `protobuf:"bytes,10,opt,name=web_client,json=webClient,proto3,oneof" json:"web_client,omitempty"`
-}
-type ProtectedAppEndpointType_MobileClient struct {
-	MobileClient *schema.Empty `protobuf:"bytes,11,opt,name=mobile_client,json=mobileClient,proto3,oneof" json:"mobile_client,omitempty"`
-}
-type ProtectedAppEndpointType_WebMobileClient struct {
-	WebMobileClient *WebMobileTrafficType `protobuf:"bytes,12,opt,name=web_mobile_client,json=webMobileClient,proto3,oneof" json:"web_mobile_client,omitempty"`
-}
-type ProtectedAppEndpointType_UndefinedFlowLabel struct {
-	UndefinedFlowLabel *schema.Empty `protobuf:"bytes,14,opt,name=undefined_flow_label,json=undefinedFlowLabel,proto3,oneof" json:"undefined_flow_label,omitempty"`
-}
-type ProtectedAppEndpointType_FlowLabel struct {
-	FlowLabel *schema.BotDefenseFlowLabelCategoriesChoiceType `protobuf:"bytes,15,opt,name=flow_label,json=flowLabel,proto3,oneof" json:"flow_label,omitempty"`
-}
-
-func (*ProtectedAppEndpointType_AnyDomain) isProtectedAppEndpointType_DomainMatcherChoice()        {}
-func (*ProtectedAppEndpointType_Domain) isProtectedAppEndpointType_DomainMatcherChoice()           {}
-func (*ProtectedAppEndpointType_WebClient) isProtectedAppEndpointType_AppTrafficTypeChoice()       {}
-func (*ProtectedAppEndpointType_MobileClient) isProtectedAppEndpointType_AppTrafficTypeChoice()    {}
-func (*ProtectedAppEndpointType_WebMobileClient) isProtectedAppEndpointType_AppTrafficTypeChoice() {}
-func (*ProtectedAppEndpointType_UndefinedFlowLabel) isProtectedAppEndpointType_FlowLabelChoice()   {}
-func (*ProtectedAppEndpointType_FlowLabel) isProtectedAppEndpointType_FlowLabelChoice()            {}
-
-func (m *ProtectedAppEndpointType) GetDomainMatcherChoice() isProtectedAppEndpointType_DomainMatcherChoice {
-	if m != nil {
-		return m.DomainMatcherChoice
-	}
-	return nil
-}
-func (m *ProtectedAppEndpointType) GetAppTrafficTypeChoice() isProtectedAppEndpointType_AppTrafficTypeChoice {
-	if m != nil {
-		return m.AppTrafficTypeChoice
-	}
-	return nil
-}
-func (m *ProtectedAppEndpointType) GetFlowLabelChoice() isProtectedAppEndpointType_FlowLabelChoice {
-	if m != nil {
-		return m.FlowLabelChoice
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetMetadata() *schema.MessageMetaType {
-	if m != nil {
-		return m.Metadata
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetAnyDomain() *schema.Empty {
-	if x, ok := m.GetDomainMatcherChoice().(*ProtectedAppEndpointType_AnyDomain); ok {
-		return x.AnyDomain
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetDomain() *schema.DomainType {
-	if x, ok := m.GetDomainMatcherChoice().(*ProtectedAppEndpointType_Domain); ok {
-		return x.Domain
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetPath() *schema.PathMatcherType {
-	if m != nil {
-		return m.Path
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetQuery() []*Query {
-	if m != nil {
-		return m.Query
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetRequestBody() []*RequestBody {
-	if m != nil {
-		return m.RequestBody
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetHttpMethods() []schema.BotHttpMethod {
-	if m != nil {
-		return m.HttpMethods
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetWebClient() *schema.Empty {
-	if x, ok := m.GetAppTrafficTypeChoice().(*ProtectedAppEndpointType_WebClient); ok {
-		return x.WebClient
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetMobileClient() *schema.Empty {
-	if x, ok := m.GetAppTrafficTypeChoice().(*ProtectedAppEndpointType_MobileClient); ok {
-		return x.MobileClient
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetWebMobileClient() *WebMobileTrafficType {
-	if x, ok := m.GetAppTrafficTypeChoice().(*ProtectedAppEndpointType_WebMobileClient); ok {
-		return x.WebMobileClient
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetUndefinedFlowLabel() *schema.Empty {
-	if x, ok := m.GetFlowLabelChoice().(*ProtectedAppEndpointType_UndefinedFlowLabel); ok {
-		return x.UndefinedFlowLabel
-	}
-	return nil
-}
-
-func (m *ProtectedAppEndpointType) GetFlowLabel() *schema.BotDefenseFlowLabelCategoriesChoiceType {
-	if x, ok := m.GetFlowLabelChoice().(*ProtectedAppEndpointType_FlowLabel); ok {
-		return x.FlowLabel
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*ProtectedAppEndpointType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*ProtectedAppEndpointType_AnyDomain)(nil),
-		(*ProtectedAppEndpointType_Domain)(nil),
-		(*ProtectedAppEndpointType_WebClient)(nil),
-		(*ProtectedAppEndpointType_MobileClient)(nil),
-		(*ProtectedAppEndpointType_WebMobileClient)(nil),
-		(*ProtectedAppEndpointType_UndefinedFlowLabel)(nil),
-		(*ProtectedAppEndpointType_FlowLabel)(nil),
-	}
-}
-
-// RequestBody
-//
-// x-displayName: "Request Body Parameter Matcher"
-// Request Body Parameter Matcher
-type RequestBody struct {
-	// Name
-	//
-	// x-displayName: "Request Body Parameter Name"
-	// x-example: "id"
-	// Enter request body parameter name
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	//  Value Type
-	//
-	// x-displayName: "Value Type"
-	// x-required
-	// Request body value type
-	//
-	// Types that are valid to be assigned to ValueType:
-	//	*RequestBody_ExactValue
-	//	*RequestBody_RegexValue
-	ValueType isRequestBody_ValueType `protobuf_oneof:"value_type"`
-}
-
-func (m *RequestBody) Reset()      { *m = RequestBody{} }
-func (*RequestBody) ProtoMessage() {}
-func (*RequestBody) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{25}
-}
-func (m *RequestBody) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *RequestBody) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *RequestBody) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_RequestBody.Merge(m, src)
-}
-func (m *RequestBody) XXX_Size() int {
-	return m.Size()
-}
-func (m *RequestBody) XXX_DiscardUnknown() {
-	xxx_messageInfo_RequestBody.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_RequestBody proto.InternalMessageInfo
-
-type isRequestBody_ValueType interface {
-	isRequestBody_ValueType()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type RequestBody_ExactValue struct {
-	ExactValue string `protobuf:"bytes,2,opt,name=exact_value,json=exactValue,proto3,oneof" json:"exact_value,omitempty"`
-}
-type RequestBody_RegexValue struct {
-	RegexValue string `protobuf:"bytes,3,opt,name=regex_value,json=regexValue,proto3,oneof" json:"regex_value,omitempty"`
-}
-
-func (*RequestBody_ExactValue) isRequestBody_ValueType() {}
-func (*RequestBody_RegexValue) isRequestBody_ValueType() {}
-
-func (m *RequestBody) GetValueType() isRequestBody_ValueType {
-	if m != nil {
-		return m.ValueType
-	}
-	return nil
-}
-
-func (m *RequestBody) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *RequestBody) GetExactValue() string {
-	if x, ok := m.GetValueType().(*RequestBody_ExactValue); ok {
-		return x.ExactValue
-	}
-	return ""
-}
-
-func (m *RequestBody) GetRegexValue() string {
-	if x, ok := m.GetValueType().(*RequestBody_RegexValue); ok {
-		return x.RegexValue
-	}
-	return ""
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*RequestBody) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*RequestBody_ExactValue)(nil),
-		(*RequestBody_RegexValue)(nil),
-	}
-}
-
-// Query
-//
-// x-displayName: "Query Parameter Matcher"
-// Query Parameter Matcher
-type Query struct {
-	// Name
-	//
-	// x-displayName: "Query Parameter Name"
-	// x-example: "id"
-	// Enter query parameter name
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	//  Value Type
-	//
-	// x-displayName: "Value Type"
-	// x-required
-	// Query parameter value type
-	//
-	// Types that are valid to be assigned to ValueType:
-	//	*Query_ExactValue
-	//	*Query_RegexValue
-	//	*Query_CheckPresence
-	ValueType isQuery_ValueType `protobuf_oneof:"value_type"`
-}
-
-func (m *Query) Reset()      { *m = Query{} }
-func (*Query) ProtoMessage() {}
-func (*Query) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{26}
-}
-func (m *Query) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *Query) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *Query) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Query.Merge(m, src)
-}
-func (m *Query) XXX_Size() int {
-	return m.Size()
-}
-func (m *Query) XXX_DiscardUnknown() {
-	xxx_messageInfo_Query.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Query proto.InternalMessageInfo
-
-type isQuery_ValueType interface {
-	isQuery_ValueType()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type Query_ExactValue struct {
-	ExactValue string `protobuf:"bytes,2,opt,name=exact_value,json=exactValue,proto3,oneof" json:"exact_value,omitempty"`
-}
-type Query_RegexValue struct {
-	RegexValue string `protobuf:"bytes,3,opt,name=regex_value,json=regexValue,proto3,oneof" json:"regex_value,omitempty"`
-}
-type Query_CheckPresence struct {
-	CheckPresence *schema.Empty `protobuf:"bytes,4,opt,name=check_presence,json=checkPresence,proto3,oneof" json:"check_presence,omitempty"`
-}
-
-func (*Query_ExactValue) isQuery_ValueType()    {}
-func (*Query_RegexValue) isQuery_ValueType()    {}
-func (*Query_CheckPresence) isQuery_ValueType() {}
-
-func (m *Query) GetValueType() isQuery_ValueType {
-	if m != nil {
-		return m.ValueType
-	}
-	return nil
-}
-
-func (m *Query) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
-
-func (m *Query) GetExactValue() string {
-	if x, ok := m.GetValueType().(*Query_ExactValue); ok {
-		return x.ExactValue
-	}
-	return ""
-}
-
-func (m *Query) GetRegexValue() string {
-	if x, ok := m.GetValueType().(*Query_RegexValue); ok {
-		return x.RegexValue
-	}
-	return ""
-}
-
-func (m *Query) GetCheckPresence() *schema.Empty {
-	if x, ok := m.GetValueType().(*Query_CheckPresence); ok {
-		return x.CheckPresence
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*Query) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*Query_ExactValue)(nil),
-		(*Query_RegexValue)(nil),
-		(*Query_CheckPresence)(nil),
-	}
-}
-
-// ShapeBotDefenseType
-//
-// x-displayName: "Bot Defense"
-// This defines various configuration options for Bot Defense Policy.
-type ShapeBotDefenseType struct {
-	// Bot Defense Region
-	//
-	// x-displayName: "Bot Defense Region"
-	// Specify Bot Defense region to use
-	// x-required
-	RegionalEndpoint ShapeBotDefenseRegion `protobuf:"varint,1,opt,name=regional_endpoint,json=regionalEndpoint,proto3,enum=ves.io.schema.views.http_loadbalancer.ShapeBotDefenseRegion" json:"regional_endpoint,omitempty"`
-	// ShapeBotDefensePolicyType
-	//
-	// x-displayName: "Bot Defense Policy"
-	// x-required
-	// Bot Defense Policy.
-	Policy *ShapeBotDefensePolicyType `protobuf:"bytes,2,opt,name=policy,proto3" json:"policy,omitempty"`
-	// timeout
-	//
-	// x-displayName: "Timeout"
-	// x-example: "300"
-	// The timeout for the inference check, in milliseconds.
-	Timeout uint32 `protobuf:"varint,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
-	// Cors Support Choice
-	//
-	// x-displayName: "CORS Policy Support"
-	// x-required
-	// Enables Cross-Origin Resource Sharing (CORS) Policy Support to allow
-	// Bot Defense to work with CORS on the origin server. If you use CORS
-	// on your application, disabling this setting significantly limits the
-	// ability of Bot Defense to protect against bot attacks.
-	//
-	// Types that are valid to be assigned to CorsSupportChoice:
-	//	*ShapeBotDefenseType_EnableCorsSupport
-	//	*ShapeBotDefenseType_DisableCorsSupport
-	CorsSupportChoice isShapeBotDefenseType_CorsSupportChoice `protobuf_oneof:"cors_support_choice"`
-}
-
-func (m *ShapeBotDefenseType) Reset()      { *m = ShapeBotDefenseType{} }
-func (*ShapeBotDefenseType) ProtoMessage() {}
-func (*ShapeBotDefenseType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{27}
-}
-func (m *ShapeBotDefenseType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ShapeBotDefenseType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ShapeBotDefenseType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ShapeBotDefenseType.Merge(m, src)
-}
-func (m *ShapeBotDefenseType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ShapeBotDefenseType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ShapeBotDefenseType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ShapeBotDefenseType proto.InternalMessageInfo
-
-type isShapeBotDefenseType_CorsSupportChoice interface {
-	isShapeBotDefenseType_CorsSupportChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type ShapeBotDefenseType_EnableCorsSupport struct {
-	EnableCorsSupport *schema.Empty `protobuf:"bytes,5,opt,name=enable_cors_support,json=enableCorsSupport,proto3,oneof" json:"enable_cors_support,omitempty"`
-}
-type ShapeBotDefenseType_DisableCorsSupport struct {
-	DisableCorsSupport *schema.Empty `protobuf:"bytes,6,opt,name=disable_cors_support,json=disableCorsSupport,proto3,oneof" json:"disable_cors_support,omitempty"`
-}
-
-func (*ShapeBotDefenseType_EnableCorsSupport) isShapeBotDefenseType_CorsSupportChoice()  {}
-func (*ShapeBotDefenseType_DisableCorsSupport) isShapeBotDefenseType_CorsSupportChoice() {}
-
-func (m *ShapeBotDefenseType) GetCorsSupportChoice() isShapeBotDefenseType_CorsSupportChoice {
-	if m != nil {
-		return m.CorsSupportChoice
-	}
-	return nil
-}
-
-func (m *ShapeBotDefenseType) GetRegionalEndpoint() ShapeBotDefenseRegion {
-	if m != nil {
-		return m.RegionalEndpoint
-	}
-	return AUTO
-}
-
-func (m *ShapeBotDefenseType) GetPolicy() *ShapeBotDefensePolicyType {
-	if m != nil {
-		return m.Policy
-	}
-	return nil
-}
-
-func (m *ShapeBotDefenseType) GetTimeout() uint32 {
-	if m != nil {
-		return m.Timeout
-	}
-	return 0
-}
-
-func (m *ShapeBotDefenseType) GetEnableCorsSupport() *schema.Empty {
-	if x, ok := m.GetCorsSupportChoice().(*ShapeBotDefenseType_EnableCorsSupport); ok {
-		return x.EnableCorsSupport
-	}
-	return nil
-}
-
-func (m *ShapeBotDefenseType) GetDisableCorsSupport() *schema.Empty {
-	if x, ok := m.GetCorsSupportChoice().(*ShapeBotDefenseType_DisableCorsSupport); ok {
-		return x.DisableCorsSupport
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*ShapeBotDefenseType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*ShapeBotDefenseType_EnableCorsSupport)(nil),
-		(*ShapeBotDefenseType_DisableCorsSupport)(nil),
-	}
-}
-
-// BotDefenseAdvancedType
-//
-// x-displayName: "Bot Defense Advanced"
-// Bot Defense Advanced
-type BotDefenseAdvancedType struct {
-	// Web
-	//
-	// x-displayName: "Infrastructure For Web"
-	// Select infrastructure for web.
-	Web *views.ObjectRefType `protobuf:"bytes,1,opt,name=web,proto3" json:"web,omitempty"`
-	// Mobile
-	//
-	// x-displayName: "Infrastructure For Mobile"
-	// Select infrastructure for mobile.
-	Mobile *views.ObjectRefType `protobuf:"bytes,2,opt,name=mobile,proto3" json:"mobile,omitempty"`
-	// BotDefenseAdvancedPolicyType
-	//
-	// x-displayName: "Bot Defense Advanced Policy"
-	// x-required
-	// Bot Defense Advanced Policy.
-	Policy *BotDefenseAdvancedPolicyType `protobuf:"bytes,3,opt,name=policy,proto3" json:"policy,omitempty"`
-}
-
-func (m *BotDefenseAdvancedType) Reset()      { *m = BotDefenseAdvancedType{} }
-func (*BotDefenseAdvancedType) ProtoMessage() {}
-func (*BotDefenseAdvancedType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{28}
-}
-func (m *BotDefenseAdvancedType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *BotDefenseAdvancedType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *BotDefenseAdvancedType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BotDefenseAdvancedType.Merge(m, src)
-}
-func (m *BotDefenseAdvancedType) XXX_Size() int {
-	return m.Size()
-}
-func (m *BotDefenseAdvancedType) XXX_DiscardUnknown() {
-	xxx_messageInfo_BotDefenseAdvancedType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BotDefenseAdvancedType proto.InternalMessageInfo
-
-func (m *BotDefenseAdvancedType) GetWeb() *views.ObjectRefType {
-	if m != nil {
-		return m.Web
-	}
-	return nil
-}
-
-func (m *BotDefenseAdvancedType) GetMobile() *views.ObjectRefType {
-	if m != nil {
-		return m.Mobile
-	}
-	return nil
-}
-
-func (m *BotDefenseAdvancedType) GetPolicy() *BotDefenseAdvancedPolicyType {
-	if m != nil {
-		return m.Policy
-	}
-	return nil
-}
-
-// ShapeShapeBotDefensePolicyType
-//
-// x-displayName: "Bot Defense Policy"
-// This defines various configuration options for Bot Defense policy.
-type ShapeBotDefensePolicyType struct {
-	// AppEndpointType
-	//
-	// x-displayName: "App Endpoint Type"
-	// x-required
-	// List of protected application endpoints (max 128 items).
-	ProtectedAppEndpoints []*AppEndpointType `protobuf:"bytes,1,rep,name=protected_app_endpoints,json=protectedAppEndpoints,proto3" json:"protected_app_endpoints,omitempty"`
-	// JavaScript Choice
-	//
-	// x-displayName: "JavaScript Insertion Settings"
-	// x-required
-	// This defines a JavaScript insertion rule.
-	//
-	// Types that are valid to be assigned to JavaScriptChoice:
-	//	*ShapeBotDefensePolicyType_DisableJsInsert
-	//	*ShapeBotDefensePolicyType_JsInsertAllPages
-	//	*ShapeBotDefensePolicyType_JsInsertAllPagesExcept
-	//	*ShapeBotDefensePolicyType_JsInsertionRules
-	JavaScriptChoice isShapeBotDefensePolicyType_JavaScriptChoice `protobuf_oneof:"java_script_choice"`
-	// js_download_path
-	//
-	// x-displayName: "JavaScript Download Path"
-	// x-example: "value"
-	// Customize Bot Defense Client JavaScript path. If not specified, default `/common.js`
-	JsDownloadPath string `protobuf:"bytes,2,opt,name=js_download_path,json=jsDownloadPath,proto3" json:"js_download_path,omitempty"`
-	// javascript_mode
-	//
-	// x-displayName: "Web Client JavaScript Mode"
-	// x-required
-	// Determine the mode in which the JavaScript is loaded into the entry page.
-	// The JavaScript is split into 2 chunks.
-	// The larger chunk can be loaded asynchronously or synchronously. It can also be cacheable or non-cacheable on the browser.
-	JavascriptMode schema.JavaScriptMode `protobuf:"varint,11,opt,name=javascript_mode,json=javascriptMode,proto3,enum=ves.io.schema.JavaScriptMode" json:"javascript_mode,omitempty"`
-	// Mobile SDK Choice
-	//
-	// x-displayName: "Mobile SDK Settings"
-	// x-required
-	// This defines mobile SDK configuration.
-	//
-	// Types that are valid to be assigned to MobileSdkChoice:
-	//	*ShapeBotDefensePolicyType_DisableMobileSdk
-	//	*ShapeBotDefensePolicyType_MobileSdkConfig
-	MobileSdkChoice isShapeBotDefensePolicyType_MobileSdkChoice `protobuf_oneof:"mobile_sdk_choice"`
-}
-
-func (m *ShapeBotDefensePolicyType) Reset()      { *m = ShapeBotDefensePolicyType{} }
-func (*ShapeBotDefensePolicyType) ProtoMessage() {}
-func (*ShapeBotDefensePolicyType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{29}
-}
-func (m *ShapeBotDefensePolicyType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ShapeBotDefensePolicyType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ShapeBotDefensePolicyType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ShapeBotDefensePolicyType.Merge(m, src)
-}
-func (m *ShapeBotDefensePolicyType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ShapeBotDefensePolicyType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ShapeBotDefensePolicyType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ShapeBotDefensePolicyType proto.InternalMessageInfo
-
-type isShapeBotDefensePolicyType_JavaScriptChoice interface {
-	isShapeBotDefensePolicyType_JavaScriptChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isShapeBotDefensePolicyType_MobileSdkChoice interface {
-	isShapeBotDefensePolicyType_MobileSdkChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type ShapeBotDefensePolicyType_DisableJsInsert struct {
-	DisableJsInsert *schema.Empty `protobuf:"bytes,4,opt,name=disable_js_insert,json=disableJsInsert,proto3,oneof" json:"disable_js_insert,omitempty"`
-}
-type ShapeBotDefensePolicyType_JsInsertAllPages struct {
-	JsInsertAllPages *ShapeJavaScriptInsertAllType `protobuf:"bytes,5,opt,name=js_insert_all_pages,json=jsInsertAllPages,proto3,oneof" json:"js_insert_all_pages,omitempty"`
-}
-type ShapeBotDefensePolicyType_JsInsertAllPagesExcept struct {
-	JsInsertAllPagesExcept *ShapeJavaScriptInsertAllWithExceptionsType `protobuf:"bytes,6,opt,name=js_insert_all_pages_except,json=jsInsertAllPagesExcept,proto3,oneof" json:"js_insert_all_pages_except,omitempty"`
-}
-type ShapeBotDefensePolicyType_JsInsertionRules struct {
-	JsInsertionRules *ShapeJavaScriptInsertType `protobuf:"bytes,7,opt,name=js_insertion_rules,json=jsInsertionRules,proto3,oneof" json:"js_insertion_rules,omitempty"`
-}
-type ShapeBotDefensePolicyType_DisableMobileSdk struct {
-	DisableMobileSdk *schema.Empty `protobuf:"bytes,9,opt,name=disable_mobile_sdk,json=disableMobileSdk,proto3,oneof" json:"disable_mobile_sdk,omitempty"`
-}
-type ShapeBotDefensePolicyType_MobileSdkConfig struct {
-	MobileSdkConfig *MobileSDKConfigType `protobuf:"bytes,10,opt,name=mobile_sdk_config,json=mobileSdkConfig,proto3,oneof" json:"mobile_sdk_config,omitempty"`
-}
-
-func (*ShapeBotDefensePolicyType_DisableJsInsert) isShapeBotDefensePolicyType_JavaScriptChoice()  {}
-func (*ShapeBotDefensePolicyType_JsInsertAllPages) isShapeBotDefensePolicyType_JavaScriptChoice() {}
-func (*ShapeBotDefensePolicyType_JsInsertAllPagesExcept) isShapeBotDefensePolicyType_JavaScriptChoice() {
-}
-func (*ShapeBotDefensePolicyType_JsInsertionRules) isShapeBotDefensePolicyType_JavaScriptChoice() {}
-func (*ShapeBotDefensePolicyType_DisableMobileSdk) isShapeBotDefensePolicyType_MobileSdkChoice()  {}
-func (*ShapeBotDefensePolicyType_MobileSdkConfig) isShapeBotDefensePolicyType_MobileSdkChoice()   {}
-
-func (m *ShapeBotDefensePolicyType) GetJavaScriptChoice() isShapeBotDefensePolicyType_JavaScriptChoice {
-	if m != nil {
-		return m.JavaScriptChoice
-	}
-	return nil
-}
-func (m *ShapeBotDefensePolicyType) GetMobileSdkChoice() isShapeBotDefensePolicyType_MobileSdkChoice {
-	if m != nil {
-		return m.MobileSdkChoice
-	}
-	return nil
-}
-
-func (m *ShapeBotDefensePolicyType) GetProtectedAppEndpoints() []*AppEndpointType {
-	if m != nil {
-		return m.ProtectedAppEndpoints
-	}
-	return nil
-}
-
-func (m *ShapeBotDefensePolicyType) GetDisableJsInsert() *schema.Empty {
-	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_DisableJsInsert); ok {
-		return x.DisableJsInsert
-	}
-	return nil
-}
-
-func (m *ShapeBotDefensePolicyType) GetJsInsertAllPages() *ShapeJavaScriptInsertAllType {
-	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_JsInsertAllPages); ok {
-		return x.JsInsertAllPages
-	}
-	return nil
-}
-
-func (m *ShapeBotDefensePolicyType) GetJsInsertAllPagesExcept() *ShapeJavaScriptInsertAllWithExceptionsType {
-	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_JsInsertAllPagesExcept); ok {
-		return x.JsInsertAllPagesExcept
-	}
-	return nil
-}
-
-func (m *ShapeBotDefensePolicyType) GetJsInsertionRules() *ShapeJavaScriptInsertType {
-	if x, ok := m.GetJavaScriptChoice().(*ShapeBotDefensePolicyType_JsInsertionRules); ok {
-		return x.JsInsertionRules
-	}
-	return nil
-}
-
-func (m *ShapeBotDefensePolicyType) GetJsDownloadPath() string {
-	if m != nil {
-		return m.JsDownloadPath
-	}
-	return ""
-}
-
-func (m *ShapeBotDefensePolicyType) GetJavascriptMode() schema.JavaScriptMode {
-	if m != nil {
-		return m.JavascriptMode
-	}
-	return schema.ASYNC_JS_NO_CACHING
-}
-
-func (m *ShapeBotDefensePolicyType) GetDisableMobileSdk() *schema.Empty {
-	if x, ok := m.GetMobileSdkChoice().(*ShapeBotDefensePolicyType_DisableMobileSdk); ok {
-		return x.DisableMobileSdk
-	}
-	return nil
-}
-
-func (m *ShapeBotDefensePolicyType) GetMobileSdkConfig() *MobileSDKConfigType {
-	if x, ok := m.GetMobileSdkChoice().(*ShapeBotDefensePolicyType_MobileSdkConfig); ok {
-		return x.MobileSdkConfig
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*ShapeBotDefensePolicyType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*ShapeBotDefensePolicyType_DisableJsInsert)(nil),
-		(*ShapeBotDefensePolicyType_JsInsertAllPages)(nil),
-		(*ShapeBotDefensePolicyType_JsInsertAllPagesExcept)(nil),
-		(*ShapeBotDefensePolicyType_JsInsertionRules)(nil),
-		(*ShapeBotDefensePolicyType_DisableMobileSdk)(nil),
-		(*ShapeBotDefensePolicyType_MobileSdkConfig)(nil),
-	}
-}
-
-// MobileTrafficIdentifierType
-//
-// x-displayName: "Mobile Traffic Identifier"
-// Mobile traffic identifier type.
-type MobileTrafficIdentifierType struct {
-	// Mobile headers
-	//
-	// x-displayName: "Headers"
-	// Headers that can be used to identify mobile traffic.
-	Headers []*policy.HeaderMatcherTypeBasic `protobuf:"bytes,1,rep,name=headers,proto3" json:"headers,omitempty"`
-}
-
-func (m *MobileTrafficIdentifierType) Reset()      { *m = MobileTrafficIdentifierType{} }
-func (*MobileTrafficIdentifierType) ProtoMessage() {}
-func (*MobileTrafficIdentifierType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{30}
-}
-func (m *MobileTrafficIdentifierType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MobileTrafficIdentifierType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *MobileTrafficIdentifierType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MobileTrafficIdentifierType.Merge(m, src)
-}
-func (m *MobileTrafficIdentifierType) XXX_Size() int {
-	return m.Size()
-}
-func (m *MobileTrafficIdentifierType) XXX_DiscardUnknown() {
-	xxx_messageInfo_MobileTrafficIdentifierType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MobileTrafficIdentifierType proto.InternalMessageInfo
-
-func (m *MobileTrafficIdentifierType) GetHeaders() []*policy.HeaderMatcherTypeBasic {
-	if m != nil {
-		return m.Headers
-	}
-	return nil
-}
-
-// MobileSDKConfigType
-//
-// x-displayName: "Mobile SDK Configuration"
-// Mobile SDK configuration.
-type MobileSDKConfigType struct {
-	// Reload header name
-	//
-	// x-displayName: "Reload Header Name"
-	// x-example: "x-oomZEZlK"
-	// Header that is used for SDK configuration sync.
-	ReloadHeaderName string `protobuf:"bytes,1,opt,name=reload_header_name,json=reloadHeaderName,proto3" json:"reload_header_name,omitempty"`
-	// Mobile Traffic Identifier Type
-	//
-	// x-displayName: "Mobile Traffic Identifier"
-	// Mobile traffic identifier type.
-	MobileIdentifier *MobileTrafficIdentifierType `protobuf:"bytes,2,opt,name=mobile_identifier,json=mobileIdentifier,proto3" json:"mobile_identifier,omitempty"`
-}
-
-func (m *MobileSDKConfigType) Reset()      { *m = MobileSDKConfigType{} }
-func (*MobileSDKConfigType) ProtoMessage() {}
-func (*MobileSDKConfigType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{31}
-}
-func (m *MobileSDKConfigType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MobileSDKConfigType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *MobileSDKConfigType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MobileSDKConfigType.Merge(m, src)
-}
-func (m *MobileSDKConfigType) XXX_Size() int {
-	return m.Size()
-}
-func (m *MobileSDKConfigType) XXX_DiscardUnknown() {
-	xxx_messageInfo_MobileSDKConfigType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MobileSDKConfigType proto.InternalMessageInfo
-
-func (m *MobileSDKConfigType) GetReloadHeaderName() string {
-	if m != nil {
-		return m.ReloadHeaderName
-	}
-	return ""
-}
-
-func (m *MobileSDKConfigType) GetMobileIdentifier() *MobileTrafficIdentifierType {
-	if m != nil {
-		return m.MobileIdentifier
-	}
-	return nil
-}
-
-// AppEndpointType
-//
-// x-displayName: "Application Endpoint"
-// Application Endpoint.
-type AppEndpointType struct {
-	// metadata
-	//
-	// x-displayName: "Metadata"
-	// x-required
-	// Common attributes for the rule including name and description.
-	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// HTTP Methods
-	//
-	// x-displayName: "HTTP Methods"
-	// x-required
-	// List of HTTP methods.
-	HttpMethods []schema.BotHttpMethod `protobuf:"varint,2,rep,packed,name=http_methods,json=httpMethods,proto3,enum=ves.io.schema.BotHttpMethod" json:"http_methods,omitempty"`
-	// Protocol
-	//
-	// x-displayName: "Protocol"
-	// Protocol.
-	Protocol URLScheme `protobuf:"varint,3,opt,name=protocol,proto3,enum=ves.io.schema.views.http_loadbalancer.URLScheme" json:"protocol,omitempty"`
-	// Path
-	//
-	// x-displayName: "Path"
-	// x-required
-	// Matching URI path of the route.
-	Path *schema.PathMatcherType `protobuf:"bytes,4,opt,name=path,proto3" json:"path,omitempty"`
-	// Domain Matcher
-	//
-	// x-displayName: "Domain Matcher"
-	// This defines domain matcher.
-	//
-	// Types that are valid to be assigned to DomainMatcherChoice:
-	//	*AppEndpointType_AnyDomain
-	//	*AppEndpointType_Domain
-	DomainMatcherChoice isAppEndpointType_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
-	// Traffic channel
-	//
-	// x-displayName: "Traffic Channel"
-	// x-required
-	// Select traffic channel.
-	//
-	// Types that are valid to be assigned to AppTrafficTypeChoice:
-	//	*AppEndpointType_Web
-	//	*AppEndpointType_Mobile
-	//	*AppEndpointType_WebMobile
-	AppTrafficTypeChoice isAppEndpointType_AppTrafficTypeChoice `protobuf_oneof:"app_traffic_type_choice"`
-	// Mitigation
-	//
-	// x-displayName: "Bot Traffic Mitigation"
-	// x-required
-	// Mitigation action.
-	Mitigation *policy.ShapeBotMitigationAction `protobuf:"bytes,12,opt,name=mitigation,proto3" json:"mitigation,omitempty"`
-	// Flow label
-	//
-	// x-displayName: "Endpoint Label"
-	// Endpoint label category
-	//
-	// Types that are valid to be assigned to FlowLabelChoice:
-	//	*AppEndpointType_UndefinedFlowLabel
-	//	*AppEndpointType_FlowLabel
-	FlowLabelChoice isAppEndpointType_FlowLabelChoice `protobuf_oneof:"flow_label_choice"`
-	// Good Bot
-	//
-	// x-displayName: "Good Bot Detection Settings"
-	// x-required
-	// The system will distinguish between good bot traffic and malicious automation. Select if you want to allow good bots to continue to the origin or receive the same mitigation handling as defined for all automated traffic.
-	//
-	// Types that are valid to be assigned to GoodbotChoice:
-	//	*AppEndpointType_AllowGoodBots
-	//	*AppEndpointType_MitigateGoodBots
-	GoodbotChoice isAppEndpointType_GoodbotChoice `protobuf_oneof:"goodbot_choice"`
-}
-
-func (m *AppEndpointType) Reset()      { *m = AppEndpointType{} }
-func (*AppEndpointType) ProtoMessage() {}
-func (*AppEndpointType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{32}
-}
-func (m *AppEndpointType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AppEndpointType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AppEndpointType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AppEndpointType.Merge(m, src)
-}
-func (m *AppEndpointType) XXX_Size() int {
-	return m.Size()
-}
-func (m *AppEndpointType) XXX_DiscardUnknown() {
-	xxx_messageInfo_AppEndpointType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AppEndpointType proto.InternalMessageInfo
-
-type isAppEndpointType_DomainMatcherChoice interface {
-	isAppEndpointType_DomainMatcherChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isAppEndpointType_AppTrafficTypeChoice interface {
-	isAppEndpointType_AppTrafficTypeChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isAppEndpointType_FlowLabelChoice interface {
-	isAppEndpointType_FlowLabelChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isAppEndpointType_GoodbotChoice interface {
-	isAppEndpointType_GoodbotChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type AppEndpointType_AnyDomain struct {
-	AnyDomain *schema.Empty `protobuf:"bytes,6,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
-}
-type AppEndpointType_Domain struct {
-	Domain *schema.DomainType `protobuf:"bytes,7,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
-}
-type AppEndpointType_Web struct {
-	Web *schema.Empty `protobuf:"bytes,9,opt,name=web,proto3,oneof" json:"web,omitempty"`
-}
-type AppEndpointType_Mobile struct {
-	Mobile *schema.Empty `protobuf:"bytes,10,opt,name=mobile,proto3,oneof" json:"mobile,omitempty"`
-}
-type AppEndpointType_WebMobile struct {
-	WebMobile *WebMobileTrafficType `protobuf:"bytes,11,opt,name=web_mobile,json=webMobile,proto3,oneof" json:"web_mobile,omitempty"`
-}
-type AppEndpointType_UndefinedFlowLabel struct {
-	UndefinedFlowLabel *schema.Empty `protobuf:"bytes,14,opt,name=undefined_flow_label,json=undefinedFlowLabel,proto3,oneof" json:"undefined_flow_label,omitempty"`
-}
-type AppEndpointType_FlowLabel struct {
-	FlowLabel *schema.BotDefenseFlowLabelCategoriesChoiceType `protobuf:"bytes,15,opt,name=flow_label,json=flowLabel,proto3,oneof" json:"flow_label,omitempty"`
-}
-type AppEndpointType_AllowGoodBots struct {
-	AllowGoodBots *schema.Empty `protobuf:"bytes,19,opt,name=allow_good_bots,json=allowGoodBots,proto3,oneof" json:"allow_good_bots,omitempty"`
-}
-type AppEndpointType_MitigateGoodBots struct {
-	MitigateGoodBots *schema.Empty `protobuf:"bytes,17,opt,name=mitigate_good_bots,json=mitigateGoodBots,proto3,oneof" json:"mitigate_good_bots,omitempty"`
-}
-
-func (*AppEndpointType_AnyDomain) isAppEndpointType_DomainMatcherChoice()      {}
-func (*AppEndpointType_Domain) isAppEndpointType_DomainMatcherChoice()         {}
-func (*AppEndpointType_Web) isAppEndpointType_AppTrafficTypeChoice()           {}
-func (*AppEndpointType_Mobile) isAppEndpointType_AppTrafficTypeChoice()        {}
-func (*AppEndpointType_WebMobile) isAppEndpointType_AppTrafficTypeChoice()     {}
-func (*AppEndpointType_UndefinedFlowLabel) isAppEndpointType_FlowLabelChoice() {}
-func (*AppEndpointType_FlowLabel) isAppEndpointType_FlowLabelChoice()          {}
-func (*AppEndpointType_AllowGoodBots) isAppEndpointType_GoodbotChoice()        {}
-func (*AppEndpointType_MitigateGoodBots) isAppEndpointType_GoodbotChoice()     {}
-
-func (m *AppEndpointType) GetDomainMatcherChoice() isAppEndpointType_DomainMatcherChoice {
-	if m != nil {
-		return m.DomainMatcherChoice
-	}
-	return nil
-}
-func (m *AppEndpointType) GetAppTrafficTypeChoice() isAppEndpointType_AppTrafficTypeChoice {
-	if m != nil {
-		return m.AppTrafficTypeChoice
-	}
-	return nil
-}
-func (m *AppEndpointType) GetFlowLabelChoice() isAppEndpointType_FlowLabelChoice {
-	if m != nil {
-		return m.FlowLabelChoice
-	}
-	return nil
-}
-func (m *AppEndpointType) GetGoodbotChoice() isAppEndpointType_GoodbotChoice {
-	if m != nil {
-		return m.GoodbotChoice
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetMetadata() *schema.MessageMetaType {
-	if m != nil {
-		return m.Metadata
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetHttpMethods() []schema.BotHttpMethod {
-	if m != nil {
-		return m.HttpMethods
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetProtocol() URLScheme {
-	if m != nil {
-		return m.Protocol
-	}
-	return BOTH
-}
-
-func (m *AppEndpointType) GetPath() *schema.PathMatcherType {
-	if m != nil {
-		return m.Path
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetAnyDomain() *schema.Empty {
-	if x, ok := m.GetDomainMatcherChoice().(*AppEndpointType_AnyDomain); ok {
-		return x.AnyDomain
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetDomain() *schema.DomainType {
-	if x, ok := m.GetDomainMatcherChoice().(*AppEndpointType_Domain); ok {
-		return x.Domain
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetWeb() *schema.Empty {
-	if x, ok := m.GetAppTrafficTypeChoice().(*AppEndpointType_Web); ok {
-		return x.Web
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetMobile() *schema.Empty {
-	if x, ok := m.GetAppTrafficTypeChoice().(*AppEndpointType_Mobile); ok {
-		return x.Mobile
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetWebMobile() *WebMobileTrafficType {
-	if x, ok := m.GetAppTrafficTypeChoice().(*AppEndpointType_WebMobile); ok {
-		return x.WebMobile
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetMitigation() *policy.ShapeBotMitigationAction {
-	if m != nil {
-		return m.Mitigation
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetUndefinedFlowLabel() *schema.Empty {
-	if x, ok := m.GetFlowLabelChoice().(*AppEndpointType_UndefinedFlowLabel); ok {
-		return x.UndefinedFlowLabel
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetFlowLabel() *schema.BotDefenseFlowLabelCategoriesChoiceType {
-	if x, ok := m.GetFlowLabelChoice().(*AppEndpointType_FlowLabel); ok {
-		return x.FlowLabel
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetAllowGoodBots() *schema.Empty {
-	if x, ok := m.GetGoodbotChoice().(*AppEndpointType_AllowGoodBots); ok {
-		return x.AllowGoodBots
-	}
-	return nil
-}
-
-func (m *AppEndpointType) GetMitigateGoodBots() *schema.Empty {
-	if x, ok := m.GetGoodbotChoice().(*AppEndpointType_MitigateGoodBots); ok {
-		return x.MitigateGoodBots
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*AppEndpointType) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*AppEndpointType_AnyDomain)(nil),
-		(*AppEndpointType_Domain)(nil),
-		(*AppEndpointType_Web)(nil),
-		(*AppEndpointType_Mobile)(nil),
-		(*AppEndpointType_WebMobile)(nil),
-		(*AppEndpointType_UndefinedFlowLabel)(nil),
-		(*AppEndpointType_FlowLabel)(nil),
-		(*AppEndpointType_AllowGoodBots)(nil),
-		(*AppEndpointType_MitigateGoodBots)(nil),
-	}
-}
-
-// WebMobileTrafficType
-//
-// x-displayName: "Web and Mobile traffic type"
-// Web and Mobile traffic type
-type WebMobileTrafficType struct {
-	// Mobile header
-	//
-	// x-displayName: "Header"
-	// Header that is used by mobile traffic.
-	Header *policy.HeaderMatcherTypeBasic `protobuf:"bytes,1,opt,name=header,proto3" json:"header,omitempty"` // Deprecated: Do not use.
-	// Mobile headers
-	//
-	// x-displayName: "Headers"
-	// Headers that can be used to identify mobile traffic.
-	Headers []*policy.HeaderMatcherTypeBasic `protobuf:"bytes,2,rep,name=headers,proto3" json:"headers,omitempty"` // Deprecated: Do not use.
-	// Mobile Identifier
-	//
-	// x-displayName: "Mobile Identifier"
-	// Mobile identifier type
-	MobileIdentifier MobileIdentifier `protobuf:"varint,3,opt,name=mobile_identifier,json=mobileIdentifier,proto3,enum=ves.io.schema.views.http_loadbalancer.MobileIdentifier" json:"mobile_identifier,omitempty"`
-}
-
-func (m *WebMobileTrafficType) Reset()      { *m = WebMobileTrafficType{} }
-func (*WebMobileTrafficType) ProtoMessage() {}
-func (*WebMobileTrafficType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{33}
-}
-func (m *WebMobileTrafficType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *WebMobileTrafficType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *WebMobileTrafficType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WebMobileTrafficType.Merge(m, src)
-}
-func (m *WebMobileTrafficType) XXX_Size() int {
-	return m.Size()
-}
-func (m *WebMobileTrafficType) XXX_DiscardUnknown() {
-	xxx_messageInfo_WebMobileTrafficType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_WebMobileTrafficType proto.InternalMessageInfo
-
-// Deprecated: Do not use.
-func (m *WebMobileTrafficType) GetHeader() *policy.HeaderMatcherTypeBasic {
-	if m != nil {
-		return m.Header
-	}
-	return nil
-}
-
-// Deprecated: Do not use.
-func (m *WebMobileTrafficType) GetHeaders() []*policy.HeaderMatcherTypeBasic {
-	if m != nil {
-		return m.Headers
-	}
-	return nil
-}
-
-func (m *WebMobileTrafficType) GetMobileIdentifier() MobileIdentifier {
-	if m != nil {
-		return m.MobileIdentifier
-	}
-	return HEADERS
-}
-
-// ShapeJavaScriptInsertType
-//
-// x-displayName: "JavaScript Custom Insertion Rules"
-// This defines custom JavaScript insertion rules for Bot Defense Policy.
-type ShapeJavaScriptInsertType struct {
-	// rules
-	//
-	// x-displayName: "JavaScript Insertions"
-	// x-required
-	// Required list of pages to insert Bot Defense client JavaScript.
-	Rules []*ShapeJavaScriptInsertionRule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
-	// exclude_list
-	//
-	// x-displayName: "Exclude Paths"
-	// Optional JavaScript insertions exclude list of domain and path matchers.
-	ExcludeList []*ShapeJavaScriptExclusionRule `protobuf:"bytes,3,rep,name=exclude_list,json=excludeList,proto3" json:"exclude_list,omitempty"`
-}
-
-func (m *ShapeJavaScriptInsertType) Reset()      { *m = ShapeJavaScriptInsertType{} }
-func (*ShapeJavaScriptInsertType) ProtoMessage() {}
-func (*ShapeJavaScriptInsertType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{34}
-}
-func (m *ShapeJavaScriptInsertType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ShapeJavaScriptInsertType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ShapeJavaScriptInsertType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ShapeJavaScriptInsertType.Merge(m, src)
-}
-func (m *ShapeJavaScriptInsertType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ShapeJavaScriptInsertType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ShapeJavaScriptInsertType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ShapeJavaScriptInsertType proto.InternalMessageInfo
-
-func (m *ShapeJavaScriptInsertType) GetRules() []*ShapeJavaScriptInsertionRule {
-	if m != nil {
-		return m.Rules
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptInsertType) GetExcludeList() []*ShapeJavaScriptExclusionRule {
-	if m != nil {
-		return m.ExcludeList
-	}
-	return nil
-}
-
-// ShapeJavaScriptInsertAllWithExceptionsType
-//
-// x-displayName: "Insert JavaScript in All Pages with the Exceptions"
-// Insert Bot Defense JavaScript in all pages  with the exceptions
-type ShapeJavaScriptInsertAllWithExceptionsType struct {
-	// javascript_location
-	//
-	// x-displayName: "JavaScript Location"
-	// Defines where to insert Bot Defense JavaScript in HTML page.
-	JavascriptLocation JavaScriptLocation `protobuf:"varint,1,opt,name=javascript_location,json=javascriptLocation,proto3,enum=ves.io.schema.views.http_loadbalancer.JavaScriptLocation" json:"javascript_location,omitempty"`
-	// exclude_list
-	//
-	// x-displayName: "Exclude Pages"
-	// Optional JavaScript insertions exclude list of domain and path matchers.
-	ExcludeList []*ShapeJavaScriptExclusionRule `protobuf:"bytes,2,rep,name=exclude_list,json=excludeList,proto3" json:"exclude_list,omitempty"`
-}
-
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) Reset() {
-	*m = ShapeJavaScriptInsertAllWithExceptionsType{}
-}
-func (*ShapeJavaScriptInsertAllWithExceptionsType) ProtoMessage() {}
-func (*ShapeJavaScriptInsertAllWithExceptionsType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{35}
-}
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ShapeJavaScriptInsertAllWithExceptionsType.Merge(m, src)
-}
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ShapeJavaScriptInsertAllWithExceptionsType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ShapeJavaScriptInsertAllWithExceptionsType proto.InternalMessageInfo
-
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) GetJavascriptLocation() JavaScriptLocation {
-	if m != nil {
-		return m.JavascriptLocation
-	}
-	return AFTER_HEAD
-}
-
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) GetExcludeList() []*ShapeJavaScriptExclusionRule {
-	if m != nil {
-		return m.ExcludeList
-	}
-	return nil
-}
-
-// ShapeJavaScriptInsertAllType
-//
-// x-displayName: "Insert Bot Defense JavaScript in All Pages"
-// Insert Bot Defense JavaScript in all pages
-type ShapeJavaScriptInsertAllType struct {
-	// javascript_location
-	//
-	// x-displayName: "JavaScript Location"
-	// Defines where to insert Bot Defense JavaScript in HTML page.
-	JavascriptLocation JavaScriptLocation `protobuf:"varint,1,opt,name=javascript_location,json=javascriptLocation,proto3,enum=ves.io.schema.views.http_loadbalancer.JavaScriptLocation" json:"javascript_location,omitempty"`
-}
-
-func (m *ShapeJavaScriptInsertAllType) Reset()      { *m = ShapeJavaScriptInsertAllType{} }
-func (*ShapeJavaScriptInsertAllType) ProtoMessage() {}
-func (*ShapeJavaScriptInsertAllType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{36}
-}
-func (m *ShapeJavaScriptInsertAllType) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ShapeJavaScriptInsertAllType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ShapeJavaScriptInsertAllType) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ShapeJavaScriptInsertAllType.Merge(m, src)
-}
-func (m *ShapeJavaScriptInsertAllType) XXX_Size() int {
-	return m.Size()
-}
-func (m *ShapeJavaScriptInsertAllType) XXX_DiscardUnknown() {
-	xxx_messageInfo_ShapeJavaScriptInsertAllType.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ShapeJavaScriptInsertAllType proto.InternalMessageInfo
-
-func (m *ShapeJavaScriptInsertAllType) GetJavascriptLocation() JavaScriptLocation {
-	if m != nil {
-		return m.JavascriptLocation
-	}
-	return AFTER_HEAD
-}
-
-// ShapeJavaScriptInsertionRule
-//
-// x-displayName: "JavaScript Insertion Rule"
-// This defines a rule for Bot Defense JavaScript insertion.
-type ShapeJavaScriptInsertionRule struct {
-	// metadata
-	//
-	// x-displayName: "Metadata"
-	// x-required
-	// Common attributes for the rule including name and description.
-	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// Domain Matcher
-	//
-	// x-displayName: "Domain Matcher"
-	// x-required
-	// This defines domain matcher.
-	//
-	// Types that are valid to be assigned to DomainMatcherChoice:
-	//	*ShapeJavaScriptInsertionRule_AnyDomain
-	//	*ShapeJavaScriptInsertionRule_Domain
-	DomainMatcherChoice isShapeJavaScriptInsertionRule_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
-	// Path
-	//
-	// x-displayName: "Path"
-	// x-required
-	// URI path matcher.
-	Path *schema.PathMatcherType `protobuf:"bytes,5,opt,name=path,proto3" json:"path,omitempty"`
-	// javascript_location
-	//
-	// x-displayName: "JavaScript Location"
-	// Defines where to insert Bot Defense JavaScript in HTML page.
-	JavascriptLocation JavaScriptLocation `protobuf:"varint,6,opt,name=javascript_location,json=javascriptLocation,proto3,enum=ves.io.schema.views.http_loadbalancer.JavaScriptLocation" json:"javascript_location,omitempty"`
-}
-
-func (m *ShapeJavaScriptInsertionRule) Reset()      { *m = ShapeJavaScriptInsertionRule{} }
-func (*ShapeJavaScriptInsertionRule) ProtoMessage() {}
-func (*ShapeJavaScriptInsertionRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{37}
-}
-func (m *ShapeJavaScriptInsertionRule) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ShapeJavaScriptInsertionRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ShapeJavaScriptInsertionRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ShapeJavaScriptInsertionRule.Merge(m, src)
-}
-func (m *ShapeJavaScriptInsertionRule) XXX_Size() int {
-	return m.Size()
-}
-func (m *ShapeJavaScriptInsertionRule) XXX_DiscardUnknown() {
-	xxx_messageInfo_ShapeJavaScriptInsertionRule.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ShapeJavaScriptInsertionRule proto.InternalMessageInfo
-
-type isShapeJavaScriptInsertionRule_DomainMatcherChoice interface {
-	isShapeJavaScriptInsertionRule_DomainMatcherChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type ShapeJavaScriptInsertionRule_AnyDomain struct {
-	AnyDomain *schema.Empty `protobuf:"bytes,3,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
-}
-type ShapeJavaScriptInsertionRule_Domain struct {
-	Domain *schema.DomainType `protobuf:"bytes,4,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
-}
-
-func (*ShapeJavaScriptInsertionRule_AnyDomain) isShapeJavaScriptInsertionRule_DomainMatcherChoice() {}
-func (*ShapeJavaScriptInsertionRule_Domain) isShapeJavaScriptInsertionRule_DomainMatcherChoice()    {}
-
-func (m *ShapeJavaScriptInsertionRule) GetDomainMatcherChoice() isShapeJavaScriptInsertionRule_DomainMatcherChoice {
-	if m != nil {
-		return m.DomainMatcherChoice
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptInsertionRule) GetMetadata() *schema.MessageMetaType {
-	if m != nil {
-		return m.Metadata
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptInsertionRule) GetAnyDomain() *schema.Empty {
-	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptInsertionRule_AnyDomain); ok {
-		return x.AnyDomain
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptInsertionRule) GetDomain() *schema.DomainType {
-	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptInsertionRule_Domain); ok {
-		return x.Domain
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptInsertionRule) GetPath() *schema.PathMatcherType {
-	if m != nil {
-		return m.Path
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptInsertionRule) GetJavascriptLocation() JavaScriptLocation {
-	if m != nil {
-		return m.JavascriptLocation
-	}
-	return AFTER_HEAD
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*ShapeJavaScriptInsertionRule) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*ShapeJavaScriptInsertionRule_AnyDomain)(nil),
-		(*ShapeJavaScriptInsertionRule_Domain)(nil),
-	}
-}
-
-// ShapeJavaScriptExclusionRule
-//
-// x-displayName: "JavaScript Insertion Exclusion Rule"
-// Define JavaScript insertion exclusion rule
-type ShapeJavaScriptExclusionRule struct {
-	// metadata
-	//
-	// x-displayName: "Metadata"
-	// x-required
-	// Common attributes for the rule including name and description.
-	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// Domain Matcher
-	//
-	// x-displayName: "Domain Matcher"
-	// x-required
-	// This defines domain matcher.
-	//
-	// Types that are valid to be assigned to DomainMatcherChoice:
-	//	*ShapeJavaScriptExclusionRule_AnyDomain
-	//	*ShapeJavaScriptExclusionRule_Domain
-	DomainMatcherChoice isShapeJavaScriptExclusionRule_DomainMatcherChoice `protobuf_oneof:"domain_matcher_choice"`
-	// Path
-	//
-	// x-displayName: "Path"
-	// x-required
-	// URI path matcher.
-	Path *schema.PathMatcherType `protobuf:"bytes,5,opt,name=path,proto3" json:"path,omitempty"`
-}
-
-func (m *ShapeJavaScriptExclusionRule) Reset()      { *m = ShapeJavaScriptExclusionRule{} }
-func (*ShapeJavaScriptExclusionRule) ProtoMessage() {}
-func (*ShapeJavaScriptExclusionRule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{38}
-}
-func (m *ShapeJavaScriptExclusionRule) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ShapeJavaScriptExclusionRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ShapeJavaScriptExclusionRule) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ShapeJavaScriptExclusionRule.Merge(m, src)
-}
-func (m *ShapeJavaScriptExclusionRule) XXX_Size() int {
-	return m.Size()
-}
-func (m *ShapeJavaScriptExclusionRule) XXX_DiscardUnknown() {
-	xxx_messageInfo_ShapeJavaScriptExclusionRule.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ShapeJavaScriptExclusionRule proto.InternalMessageInfo
-
-type isShapeJavaScriptExclusionRule_DomainMatcherChoice interface {
-	isShapeJavaScriptExclusionRule_DomainMatcherChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type ShapeJavaScriptExclusionRule_AnyDomain struct {
-	AnyDomain *schema.Empty `protobuf:"bytes,3,opt,name=any_domain,json=anyDomain,proto3,oneof" json:"any_domain,omitempty"`
-}
-type ShapeJavaScriptExclusionRule_Domain struct {
-	Domain *schema.DomainType `protobuf:"bytes,4,opt,name=domain,proto3,oneof" json:"domain,omitempty"`
-}
-
-func (*ShapeJavaScriptExclusionRule_AnyDomain) isShapeJavaScriptExclusionRule_DomainMatcherChoice() {}
-func (*ShapeJavaScriptExclusionRule_Domain) isShapeJavaScriptExclusionRule_DomainMatcherChoice()    {}
-
-func (m *ShapeJavaScriptExclusionRule) GetDomainMatcherChoice() isShapeJavaScriptExclusionRule_DomainMatcherChoice {
-	if m != nil {
-		return m.DomainMatcherChoice
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptExclusionRule) GetMetadata() *schema.MessageMetaType {
-	if m != nil {
-		return m.Metadata
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptExclusionRule) GetAnyDomain() *schema.Empty {
-	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptExclusionRule_AnyDomain); ok {
-		return x.AnyDomain
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptExclusionRule) GetDomain() *schema.DomainType {
-	if x, ok := m.GetDomainMatcherChoice().(*ShapeJavaScriptExclusionRule_Domain); ok {
-		return x.Domain
-	}
-	return nil
-}
-
-func (m *ShapeJavaScriptExclusionRule) GetPath() *schema.PathMatcherType {
-	if m != nil {
-		return m.Path
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*ShapeJavaScriptExclusionRule) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*ShapeJavaScriptExclusionRule_AnyDomain)(nil),
-		(*ShapeJavaScriptExclusionRule_Domain)(nil),
-	}
 }
 
 // GlobalSpecType
@@ -5791,6 +3064,11 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_UserIdClientIp
 	//	*GlobalSpecType_UserIdentification
 	UserIdChoice isGlobalSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
+	// Rate Limiting Parameters (Legacy)
+	//
+	// x-displayName: "API Rate Limit Legacy"
+	// Legacy value only temporary pre-migration. This value will be copied over to api_rate_limit and removed later.
+	ApiRateLimitLegacy *common_waf.APIRateLimitLegacy `protobuf:"bytes,68,opt,name=api_rate_limit_legacy,json=apiRateLimitLegacy,proto3" json:"api_rate_limit_legacy,omitempty"`
 	// Enable Rate Limiting
 	//
 	// x-displayName: "Rate Limiting"
@@ -5849,7 +3127,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "DDoS Mitigation Rules"
 	// Define manual mitigation rules to block L7 DDoS attacks.
-	DdosMitigationRules []*DDoSMitigationRule `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
+	DdosMitigationRules []*common_security.DDoSMitigationRule `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
 	// Service Policies
 	//
 	// x-displayName: "Service Policies"
@@ -5963,6 +3241,16 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_ApiSpecification
 	//	*GlobalSpecType_ApiDefinitions
 	ApiDefinitionChoice isGlobalSpecType_ApiDefinitionChoice `protobuf_oneof:"api_definition_choice"`
+	// Sensitive Data Discovery
+	//
+	// x-displayName: "Sensitive Data Discovery"
+	// x-required
+	// Sensitive data discovery provide the ability to configure the policy for sensitive data detection
+	//
+	// Types that are valid to be assigned to SensitiveDataPolicyChoice:
+	//	*GlobalSpecType_DefaultSensitiveDataPolicy
+	//	*GlobalSpecType_SensitiveDataPolicy
+	SensitiveDataPolicyChoice isGlobalSpecType_SensitiveDataPolicyChoice `protobuf_oneof:"sensitive_data_policy_choice"`
 	// ip_reputation
 	//
 	// x-displayName: "IP Reputation"
@@ -6087,12 +3375,17 @@ type GlobalSpecType struct {
 	// x-displayName: "Cert State"
 	// State of Custom certificate or Auto certificate generation.
 	CertState virtual_host.CertificationState `protobuf:"varint,115,opt,name=cert_state,json=certState,proto3,enum=ves.io.schema.virtual_host.CertificationState" json:"cert_state,omitempty"`
+	// Sensitive Data Disclosure Rules
+	//
+	// x-displayName: "Sensitive Data Disclosure Rules"
+	// Sensitive Data Disclosure Rules are setting to mask sensitive data in the request/response to prevent data exposure in XC portal
+	SensitiveDataDisclosureRules *SensitiveDataDisclosureRules `protobuf:"bytes,116,opt,name=sensitive_data_disclosure_rules,json=sensitiveDataDisclosureRules,proto3" json:"sensitive_data_disclosure_rules,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{39}
+	return fileDescriptor_6478b2bb990a4a3e, []int{15}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -6215,6 +3508,12 @@ type isGlobalSpecType_ClientSideDefenseChoice interface {
 }
 type isGlobalSpecType_ApiDefinitionChoice interface {
 	isGlobalSpecType_ApiDefinitionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGlobalSpecType_SensitiveDataPolicyChoice interface {
+	isGlobalSpecType_SensitiveDataPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -6371,16 +3670,16 @@ type GlobalSpecType_DisableBotDefense struct {
 	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
 }
 type GlobalSpecType_BotDefense struct {
-	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+	BotDefense *common_security.ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
 }
 type GlobalSpecType_BotDefenseAdvanced struct {
-	BotDefenseAdvanced *BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
+	BotDefenseAdvanced *common_security.BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
 }
 type GlobalSpecType_DisableClientSideDefense struct {
 	DisableClientSideDefense *schema.Empty `protobuf:"bytes,86,opt,name=disable_client_side_defense,json=disableClientSideDefense,proto3,oneof" json:"disable_client_side_defense,omitempty"`
 }
 type GlobalSpecType_ClientSideDefense struct {
-	ClientSideDefense *ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
+	ClientSideDefense *common_security.ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
 }
 type GlobalSpecType_DisableApiDefinition struct {
 	DisableApiDefinition *schema.Empty `protobuf:"bytes,70,opt,name=disable_api_definition,json=disableApiDefinition,proto3,oneof" json:"disable_api_definition,omitempty"`
@@ -6393,6 +3692,12 @@ type GlobalSpecType_ApiSpecification struct {
 }
 type GlobalSpecType_ApiDefinitions struct {
 	ApiDefinitions *common_waf.ApiDefinitionList `protobuf:"bytes,61,opt,name=api_definitions,json=apiDefinitions,proto3,oneof" json:"api_definitions,omitempty"`
+}
+type GlobalSpecType_DefaultSensitiveDataPolicy struct {
+	DefaultSensitiveDataPolicy *schema.Empty `protobuf:"bytes,131,opt,name=default_sensitive_data_policy,json=defaultSensitiveDataPolicy,proto3,oneof" json:"default_sensitive_data_policy,omitempty"`
+}
+type GlobalSpecType_SensitiveDataPolicy struct {
+	SensitiveDataPolicy *common_security.SensitiveDataPolicySettings `protobuf:"bytes,132,opt,name=sensitive_data_policy,json=sensitiveDataPolicy,proto3,oneof" json:"sensitive_data_policy,omitempty"`
 }
 type GlobalSpecType_DisableIpReputation struct {
 	DisableIpReputation *schema.Empty `protobuf:"bytes,65,opt,name=disable_ip_reputation,json=disableIpReputation,proto3,oneof" json:"disable_ip_reputation,omitempty"`
@@ -6465,27 +3770,29 @@ func (*GlobalSpecType_MultiLbApp) isGlobalSpecType_MlConfigChoice()             
 func (*GlobalSpecType_EnableMaliciousUserDetection) isGlobalSpecType_MaliciousUserDetectionChoice() {}
 func (*GlobalSpecType_DisableMaliciousUserDetection) isGlobalSpecType_MaliciousUserDetectionChoice() {
 }
-func (*GlobalSpecType_EnableApiDiscovery) isGlobalSpecType_ApiDiscoveryChoice()              {}
-func (*GlobalSpecType_DisableApiDiscovery) isGlobalSpecType_ApiDiscoveryChoice()             {}
-func (*GlobalSpecType_DisableBotDefense) isGlobalSpecType_BotDefenseChoice()                 {}
-func (*GlobalSpecType_BotDefense) isGlobalSpecType_BotDefenseChoice()                        {}
-func (*GlobalSpecType_BotDefenseAdvanced) isGlobalSpecType_BotDefenseChoice()                {}
-func (*GlobalSpecType_DisableClientSideDefense) isGlobalSpecType_ClientSideDefenseChoice()   {}
-func (*GlobalSpecType_ClientSideDefense) isGlobalSpecType_ClientSideDefenseChoice()          {}
-func (*GlobalSpecType_DisableApiDefinition) isGlobalSpecType_ApiDefinitionChoice()           {}
-func (*GlobalSpecType_ApiDefinition) isGlobalSpecType_ApiDefinitionChoice()                  {}
-func (*GlobalSpecType_ApiSpecification) isGlobalSpecType_ApiDefinitionChoice()               {}
-func (*GlobalSpecType_ApiDefinitions) isGlobalSpecType_ApiDefinitionChoice()                 {}
-func (*GlobalSpecType_DisableIpReputation) isGlobalSpecType_IpReputationChoice()             {}
-func (*GlobalSpecType_EnableIpReputation) isGlobalSpecType_IpReputationChoice()              {}
-func (*GlobalSpecType_DisableThreatMesh) isGlobalSpecType_ThreatMeshChoice()                 {}
-func (*GlobalSpecType_EnableThreatMesh) isGlobalSpecType_ThreatMeshChoice()                  {}
-func (*GlobalSpecType_SystemDefaultTimeouts) isGlobalSpecType_SlowDdosMitigationChoice()     {}
-func (*GlobalSpecType_SlowDdosMitigation) isGlobalSpecType_SlowDdosMitigationChoice()        {}
-func (*GlobalSpecType_L7DdosActionDefault) isGlobalSpecType_L7DdosAutoMitigationAction()     {}
-func (*GlobalSpecType_L7DdosActionBlock) isGlobalSpecType_L7DdosAutoMitigationAction()       {}
-func (*GlobalSpecType_L7DdosActionJsChallenge) isGlobalSpecType_L7DdosAutoMitigationAction() {}
-func (*GlobalSpecType_L7DdosActionNone) isGlobalSpecType_L7DdosAutoMitigationAction()        {}
+func (*GlobalSpecType_EnableApiDiscovery) isGlobalSpecType_ApiDiscoveryChoice()                {}
+func (*GlobalSpecType_DisableApiDiscovery) isGlobalSpecType_ApiDiscoveryChoice()               {}
+func (*GlobalSpecType_DisableBotDefense) isGlobalSpecType_BotDefenseChoice()                   {}
+func (*GlobalSpecType_BotDefense) isGlobalSpecType_BotDefenseChoice()                          {}
+func (*GlobalSpecType_BotDefenseAdvanced) isGlobalSpecType_BotDefenseChoice()                  {}
+func (*GlobalSpecType_DisableClientSideDefense) isGlobalSpecType_ClientSideDefenseChoice()     {}
+func (*GlobalSpecType_ClientSideDefense) isGlobalSpecType_ClientSideDefenseChoice()            {}
+func (*GlobalSpecType_DisableApiDefinition) isGlobalSpecType_ApiDefinitionChoice()             {}
+func (*GlobalSpecType_ApiDefinition) isGlobalSpecType_ApiDefinitionChoice()                    {}
+func (*GlobalSpecType_ApiSpecification) isGlobalSpecType_ApiDefinitionChoice()                 {}
+func (*GlobalSpecType_ApiDefinitions) isGlobalSpecType_ApiDefinitionChoice()                   {}
+func (*GlobalSpecType_DefaultSensitiveDataPolicy) isGlobalSpecType_SensitiveDataPolicyChoice() {}
+func (*GlobalSpecType_SensitiveDataPolicy) isGlobalSpecType_SensitiveDataPolicyChoice()        {}
+func (*GlobalSpecType_DisableIpReputation) isGlobalSpecType_IpReputationChoice()               {}
+func (*GlobalSpecType_EnableIpReputation) isGlobalSpecType_IpReputationChoice()                {}
+func (*GlobalSpecType_DisableThreatMesh) isGlobalSpecType_ThreatMeshChoice()                   {}
+func (*GlobalSpecType_EnableThreatMesh) isGlobalSpecType_ThreatMeshChoice()                    {}
+func (*GlobalSpecType_SystemDefaultTimeouts) isGlobalSpecType_SlowDdosMitigationChoice()       {}
+func (*GlobalSpecType_SlowDdosMitigation) isGlobalSpecType_SlowDdosMitigationChoice()          {}
+func (*GlobalSpecType_L7DdosActionDefault) isGlobalSpecType_L7DdosAutoMitigationAction()       {}
+func (*GlobalSpecType_L7DdosActionBlock) isGlobalSpecType_L7DdosAutoMitigationAction()         {}
+func (*GlobalSpecType_L7DdosActionJsChallenge) isGlobalSpecType_L7DdosAutoMitigationAction()   {}
+func (*GlobalSpecType_L7DdosActionNone) isGlobalSpecType_L7DdosAutoMitigationAction()          {}
 
 func (m *GlobalSpecType) GetLoadbalancerType() isGlobalSpecType_LoadbalancerType {
 	if m != nil {
@@ -6586,6 +3893,12 @@ func (m *GlobalSpecType) GetClientSideDefenseChoice() isGlobalSpecType_ClientSid
 func (m *GlobalSpecType) GetApiDefinitionChoice() isGlobalSpecType_ApiDefinitionChoice {
 	if m != nil {
 		return m.ApiDefinitionChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetSensitiveDataPolicyChoice() isGlobalSpecType_SensitiveDataPolicyChoice {
+	if m != nil {
+		return m.SensitiveDataPolicyChoice
 	}
 	return nil
 }
@@ -6817,6 +4130,13 @@ func (m *GlobalSpecType) GetUserIdentification() *views.ObjectRefType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetApiRateLimitLegacy() *common_waf.APIRateLimitLegacy {
+	if m != nil {
+		return m.ApiRateLimitLegacy
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetDisableRateLimit() *schema.Empty {
 	if x, ok := m.GetRateLimitChoice().(*GlobalSpecType_DisableRateLimit); ok {
 		return x.DisableRateLimit
@@ -6881,7 +4201,7 @@ func (m *GlobalSpecType) GetApiProtectionRules() *common_waf.APIProtectionRules 
 	return nil
 }
 
-func (m *GlobalSpecType) GetDdosMitigationRules() []*DDoSMitigationRule {
+func (m *GlobalSpecType) GetDdosMitigationRules() []*common_security.DDoSMitigationRule {
 	if m != nil {
 		return m.DdosMitigationRules
 	}
@@ -7014,14 +4334,14 @@ func (m *GlobalSpecType) GetDisableBotDefense() *schema.Empty {
 	return nil
 }
 
-func (m *GlobalSpecType) GetBotDefense() *ShapeBotDefenseType {
+func (m *GlobalSpecType) GetBotDefense() *common_security.ShapeBotDefenseType {
 	if x, ok := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefense); ok {
 		return x.BotDefense
 	}
 	return nil
 }
 
-func (m *GlobalSpecType) GetBotDefenseAdvanced() *BotDefenseAdvancedType {
+func (m *GlobalSpecType) GetBotDefenseAdvanced() *common_security.BotDefenseAdvancedType {
 	if x, ok := m.GetBotDefenseChoice().(*GlobalSpecType_BotDefenseAdvanced); ok {
 		return x.BotDefenseAdvanced
 	}
@@ -7035,7 +4355,7 @@ func (m *GlobalSpecType) GetDisableClientSideDefense() *schema.Empty {
 	return nil
 }
 
-func (m *GlobalSpecType) GetClientSideDefense() *ClientSideDefenseType {
+func (m *GlobalSpecType) GetClientSideDefense() *common_security.ClientSideDefenseType {
 	if x, ok := m.GetClientSideDefenseChoice().(*GlobalSpecType_ClientSideDefense); ok {
 		return x.ClientSideDefense
 	}
@@ -7066,6 +4386,20 @@ func (m *GlobalSpecType) GetApiSpecification() *common_waf.APISpecificationSetti
 func (m *GlobalSpecType) GetApiDefinitions() *common_waf.ApiDefinitionList {
 	if x, ok := m.GetApiDefinitionChoice().(*GlobalSpecType_ApiDefinitions); ok {
 		return x.ApiDefinitions
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDefaultSensitiveDataPolicy() *schema.Empty {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*GlobalSpecType_DefaultSensitiveDataPolicy); ok {
+		return x.DefaultSensitiveDataPolicy
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetSensitiveDataPolicy() *common_security.SensitiveDataPolicySettings {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*GlobalSpecType_SensitiveDataPolicy); ok {
+		return x.SensitiveDataPolicy
 	}
 	return nil
 }
@@ -7225,6 +4559,13 @@ func (m *GlobalSpecType) GetCertState() virtual_host.CertificationState {
 	return virtual_host.AutoCertDisabled
 }
 
+func (m *GlobalSpecType) GetSensitiveDataDisclosureRules() *SensitiveDataDisclosureRules {
+	if m != nil {
+		return m.SensitiveDataDisclosureRules
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -7278,6 +4619,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_ApiDefinition)(nil),
 		(*GlobalSpecType_ApiSpecification)(nil),
 		(*GlobalSpecType_ApiDefinitions)(nil),
+		(*GlobalSpecType_DefaultSensitiveDataPolicy)(nil),
+		(*GlobalSpecType_SensitiveDataPolicy)(nil),
 		(*GlobalSpecType_DisableIpReputation)(nil),
 		(*GlobalSpecType_EnableIpReputation)(nil),
 		(*GlobalSpecType_DisableThreatMesh)(nil),
@@ -7291,6 +4634,276 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// Sensitive Data Disclosure Rules
+//
+// x-displayName: "Sensitive Data Disclosure Rules"
+// Sensitive Data Disclosure Rules are setting to mask sensitive data in the request/response to prevent data exposure in XC portal
+type SensitiveDataDisclosureRules struct {
+	// Sensitive Data Types in Responses
+	//
+	// x-displayName: "Sensitive Data Types in Responses"
+	// Settings to mask sensitive data in response body
+	SensitiveDataTypesInResponse []*SensitiveDataTypes `protobuf:"bytes,1,rep,name=sensitive_data_types_in_response,json=sensitiveDataTypesInResponse,proto3" json:"sensitive_data_types_in_response,omitempty"`
+}
+
+func (m *SensitiveDataDisclosureRules) Reset()      { *m = SensitiveDataDisclosureRules{} }
+func (*SensitiveDataDisclosureRules) ProtoMessage() {}
+func (*SensitiveDataDisclosureRules) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{16}
+}
+func (m *SensitiveDataDisclosureRules) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SensitiveDataDisclosureRules) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SensitiveDataDisclosureRules) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SensitiveDataDisclosureRules.Merge(m, src)
+}
+func (m *SensitiveDataDisclosureRules) XXX_Size() int {
+	return m.Size()
+}
+func (m *SensitiveDataDisclosureRules) XXX_DiscardUnknown() {
+	xxx_messageInfo_SensitiveDataDisclosureRules.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SensitiveDataDisclosureRules proto.InternalMessageInfo
+
+func (m *SensitiveDataDisclosureRules) GetSensitiveDataTypesInResponse() []*SensitiveDataTypes {
+	if m != nil {
+		return m.SensitiveDataTypesInResponse
+	}
+	return nil
+}
+
+// Sensitive Data Types
+//
+// x-displayName: "Sensitive Data Types"
+// Settings to mask sensitive data in request/response payload
+type SensitiveDataTypes struct {
+	// metadata
+	//
+	// x-displayName: "Metadata"
+	// x-required
+	// Common attributes for the rule including name and description.
+	Metadata *schema.MessageMetaType `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Masking Mode Action
+	//
+	// x-displayName: "Action"
+	// x-required
+	// Choose the masking mode or report mode
+	//
+	// Types that are valid to be assigned to MaskingModeChoice:
+	//	*SensitiveDataTypes_Mask
+	//	*SensitiveDataTypes_Report
+	MaskingModeChoice isSensitiveDataTypes_MaskingModeChoice `protobuf_oneof:"masking_mode_choice"`
+	// condition type choices
+	//
+	// x-displayName: "Type"
+	// x-required
+	// Choose type of granularity this rule applies to
+	//
+	// Types that are valid to be assigned to TypeConditionTypeChoice:
+	//	*SensitiveDataTypes_ApiEndpoint
+	//	*SensitiveDataTypes_BasePath
+	//	*SensitiveDataTypes_ApiGroup
+	TypeConditionTypeChoice isSensitiveDataTypes_TypeConditionTypeChoice `protobuf_oneof:"type_condition_type_choice"`
+	// Body Section Masking Options
+	//
+	// x-displayName: "Json fields"
+	Body *BodySectionMaskingOptions `protobuf:"bytes,9,opt,name=body,proto3" json:"body,omitempty"`
+}
+
+func (m *SensitiveDataTypes) Reset()      { *m = SensitiveDataTypes{} }
+func (*SensitiveDataTypes) ProtoMessage() {}
+func (*SensitiveDataTypes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{17}
+}
+func (m *SensitiveDataTypes) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SensitiveDataTypes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SensitiveDataTypes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SensitiveDataTypes.Merge(m, src)
+}
+func (m *SensitiveDataTypes) XXX_Size() int {
+	return m.Size()
+}
+func (m *SensitiveDataTypes) XXX_DiscardUnknown() {
+	xxx_messageInfo_SensitiveDataTypes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SensitiveDataTypes proto.InternalMessageInfo
+
+type isSensitiveDataTypes_MaskingModeChoice interface {
+	isSensitiveDataTypes_MaskingModeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isSensitiveDataTypes_TypeConditionTypeChoice interface {
+	isSensitiveDataTypes_TypeConditionTypeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type SensitiveDataTypes_Mask struct {
+	Mask *schema.Empty `protobuf:"bytes,3,opt,name=mask,proto3,oneof" json:"mask,omitempty"`
+}
+type SensitiveDataTypes_Report struct {
+	Report *schema.Empty `protobuf:"bytes,4,opt,name=report,proto3,oneof" json:"report,omitempty"`
+}
+type SensitiveDataTypes_ApiEndpoint struct {
+	ApiEndpoint *common_waf.ApiEndpointDetails `protobuf:"bytes,6,opt,name=api_endpoint,json=apiEndpoint,proto3,oneof" json:"api_endpoint,omitempty"`
+}
+type SensitiveDataTypes_BasePath struct {
+	BasePath string `protobuf:"bytes,7,opt,name=base_path,json=basePath,proto3,oneof" json:"base_path,omitempty"`
+}
+type SensitiveDataTypes_ApiGroup struct {
+	ApiGroup string `protobuf:"bytes,8,opt,name=api_group,json=apiGroup,proto3,oneof" json:"api_group,omitempty"`
+}
+
+func (*SensitiveDataTypes_Mask) isSensitiveDataTypes_MaskingModeChoice()              {}
+func (*SensitiveDataTypes_Report) isSensitiveDataTypes_MaskingModeChoice()            {}
+func (*SensitiveDataTypes_ApiEndpoint) isSensitiveDataTypes_TypeConditionTypeChoice() {}
+func (*SensitiveDataTypes_BasePath) isSensitiveDataTypes_TypeConditionTypeChoice()    {}
+func (*SensitiveDataTypes_ApiGroup) isSensitiveDataTypes_TypeConditionTypeChoice()    {}
+
+func (m *SensitiveDataTypes) GetMaskingModeChoice() isSensitiveDataTypes_MaskingModeChoice {
+	if m != nil {
+		return m.MaskingModeChoice
+	}
+	return nil
+}
+func (m *SensitiveDataTypes) GetTypeConditionTypeChoice() isSensitiveDataTypes_TypeConditionTypeChoice {
+	if m != nil {
+		return m.TypeConditionTypeChoice
+	}
+	return nil
+}
+
+func (m *SensitiveDataTypes) GetMetadata() *schema.MessageMetaType {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *SensitiveDataTypes) GetMask() *schema.Empty {
+	if x, ok := m.GetMaskingModeChoice().(*SensitiveDataTypes_Mask); ok {
+		return x.Mask
+	}
+	return nil
+}
+
+func (m *SensitiveDataTypes) GetReport() *schema.Empty {
+	if x, ok := m.GetMaskingModeChoice().(*SensitiveDataTypes_Report); ok {
+		return x.Report
+	}
+	return nil
+}
+
+func (m *SensitiveDataTypes) GetApiEndpoint() *common_waf.ApiEndpointDetails {
+	if x, ok := m.GetTypeConditionTypeChoice().(*SensitiveDataTypes_ApiEndpoint); ok {
+		return x.ApiEndpoint
+	}
+	return nil
+}
+
+func (m *SensitiveDataTypes) GetBasePath() string {
+	if x, ok := m.GetTypeConditionTypeChoice().(*SensitiveDataTypes_BasePath); ok {
+		return x.BasePath
+	}
+	return ""
+}
+
+func (m *SensitiveDataTypes) GetApiGroup() string {
+	if x, ok := m.GetTypeConditionTypeChoice().(*SensitiveDataTypes_ApiGroup); ok {
+		return x.ApiGroup
+	}
+	return ""
+}
+
+func (m *SensitiveDataTypes) GetBody() *BodySectionMaskingOptions {
+	if m != nil {
+		return m.Body
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SensitiveDataTypes) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*SensitiveDataTypes_Mask)(nil),
+		(*SensitiveDataTypes_Report)(nil),
+		(*SensitiveDataTypes_ApiEndpoint)(nil),
+		(*SensitiveDataTypes_BasePath)(nil),
+		(*SensitiveDataTypes_ApiGroup)(nil),
+	}
+}
+
+// Body Section Masking Options
+//
+// x-displayName: "Body Section Masking Options"
+// Options for HTTP Body Masking
+type BodySectionMaskingOptions struct {
+	// Field Values
+	//
+	// x-displayName: "Values"
+	// x-required
+	// x-example: "['user.email', 'credit_card']"
+	// List of JSONPath field values
+	Fields []string `protobuf:"bytes,1,rep,name=fields,proto3" json:"fields,omitempty"`
+}
+
+func (m *BodySectionMaskingOptions) Reset()      { *m = BodySectionMaskingOptions{} }
+func (*BodySectionMaskingOptions) ProtoMessage() {}
+func (*BodySectionMaskingOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6478b2bb990a4a3e, []int{18}
+}
+func (m *BodySectionMaskingOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BodySectionMaskingOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BodySectionMaskingOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BodySectionMaskingOptions.Merge(m, src)
+}
+func (m *BodySectionMaskingOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *BodySectionMaskingOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_BodySectionMaskingOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BodySectionMaskingOptions proto.InternalMessageInfo
+
+func (m *BodySectionMaskingOptions) GetFields() []string {
+	if m != nil {
+		return m.Fields
+	}
+	return nil
+}
+
 // CreateSpecType
 //
 // x-displayName: "Create HTTP Load Balancer"
@@ -7298,13 +4911,11 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 type CreateSpecType struct {
 	Domains []string `protobuf:"bytes,1,rep,name=domains,proto3" json:"domains,omitempty"`
 	// Types that are valid to be assigned to LoadbalancerType:
-	//
 	//	*CreateSpecType_Http
 	//	*CreateSpecType_HttpsAutoCert
 	//	*CreateSpecType_Https
 	LoadbalancerType isCreateSpecType_LoadbalancerType `protobuf_oneof:"loadbalancer_type"`
 	// Types that are valid to be assigned to AdvertiseChoice:
-	//
 	//	*CreateSpecType_DoNotAdvertise
 	//	*CreateSpecType_AdvertiseOnPublicDefaultVip
 	//	*CreateSpecType_AdvertiseOnPublic
@@ -7312,7 +4923,6 @@ type CreateSpecType struct {
 	AdvertiseChoice   isCreateSpecType_AdvertiseChoice `protobuf_oneof:"advertise_choice"`
 	DefaultRoutePools []*views.OriginPoolWithWeight    `protobuf:"bytes,6,rep,name=default_route_pools,json=defaultRoutePools,proto3" json:"default_route_pools,omitempty"`
 	// Types that are valid to be assigned to OriginPoolChoice:
-	//
 	//	*CreateSpecType_DefaultPool
 	//	*CreateSpecType_DefaultPoolList
 	OriginPoolChoice           isCreateSpecType_OriginPoolChoice `protobuf_oneof:"origin_pool_choice"`
@@ -7320,13 +4930,11 @@ type CreateSpecType struct {
 	Routes                     []*RouteType                      `protobuf:"bytes,7,rep,name=routes,proto3" json:"routes,omitempty"`
 	CorsPolicy                 *schema.CorsPolicy                `protobuf:"bytes,8,opt,name=cors_policy,json=corsPolicy,proto3" json:"cors_policy,omitempty"`
 	// Types that are valid to be assigned to WafChoice:
-	//
 	//	*CreateSpecType_DisableWaf
 	//	*CreateSpecType_AppFirewall
 	WafChoice   isCreateSpecType_WafChoice `protobuf_oneof:"waf_choice"`
 	AddLocation bool                       `protobuf:"varint,17,opt,name=add_location,json=addLocation,proto3" json:"add_location,omitempty"`
 	// Types that are valid to be assigned to ChallengeType:
-	//
 	//	*CreateSpecType_NoChallenge
 	//	*CreateSpecType_EnableChallenge
 	//	*CreateSpecType_JsChallenge
@@ -7335,31 +4943,28 @@ type CreateSpecType struct {
 	ChallengeType isCreateSpecType_ChallengeType `protobuf_oneof:"challenge_type"`
 	MoreOption    *AdvancedOptionsType           `protobuf:"bytes,19,opt,name=more_option,json=moreOption,proto3" json:"more_option,omitempty"`
 	// Types that are valid to be assigned to UserIdChoice:
-	//
 	//	*CreateSpecType_UserIdClientIp
 	//	*CreateSpecType_UserIdentification
-	UserIdChoice isCreateSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
+	UserIdChoice       isCreateSpecType_UserIdChoice  `protobuf_oneof:"user_id_choice"`
+	ApiRateLimitLegacy *common_waf.APIRateLimitLegacy `protobuf:"bytes,68,opt,name=api_rate_limit_legacy,json=apiRateLimitLegacy,proto3" json:"api_rate_limit_legacy,omitempty"`
 	// Types that are valid to be assigned to RateLimitChoice:
-	//
 	//	*CreateSpecType_DisableRateLimit
 	//	*CreateSpecType_ApiRateLimit
 	//	*CreateSpecType_RateLimit
-	RateLimitChoice         isCreateSpecType_RateLimitChoice  `protobuf_oneof:"rate_limit_choice"`
-	MaliciousUserMitigation *views.ObjectRefType              `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation,proto3" json:"malicious_user_mitigation,omitempty"`
-	WafExclusionRules       []*policy.SimpleWafExclusionRule  `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
-	DataGuardRules          []*policy.SimpleDataGuardRule     `protobuf:"bytes,63,rep,name=data_guard_rules,json=dataGuardRules,proto3" json:"data_guard_rules,omitempty"`
-	BlockedClients          []*common_waf.SimpleClientSrcRule `protobuf:"bytes,34,rep,name=blocked_clients,json=blockedClients,proto3" json:"blocked_clients,omitempty"`
-	TrustedClients          []*common_waf.SimpleClientSrcRule `protobuf:"bytes,35,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
-	ApiProtectionRules      *common_waf.APIProtectionRules    `protobuf:"bytes,72,opt,name=api_protection_rules,json=apiProtectionRules,proto3" json:"api_protection_rules,omitempty"`
-	DdosMitigationRules     []*DDoSMitigationRule             `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
+	RateLimitChoice         isCreateSpecType_RateLimitChoice      `protobuf_oneof:"rate_limit_choice"`
+	MaliciousUserMitigation *views.ObjectRefType                  `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation,proto3" json:"malicious_user_mitigation,omitempty"`
+	WafExclusionRules       []*policy.SimpleWafExclusionRule      `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
+	DataGuardRules          []*policy.SimpleDataGuardRule         `protobuf:"bytes,63,rep,name=data_guard_rules,json=dataGuardRules,proto3" json:"data_guard_rules,omitempty"`
+	BlockedClients          []*common_waf.SimpleClientSrcRule     `protobuf:"bytes,34,rep,name=blocked_clients,json=blockedClients,proto3" json:"blocked_clients,omitempty"`
+	TrustedClients          []*common_waf.SimpleClientSrcRule     `protobuf:"bytes,35,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
+	ApiProtectionRules      *common_waf.APIProtectionRules        `protobuf:"bytes,72,opt,name=api_protection_rules,json=apiProtectionRules,proto3" json:"api_protection_rules,omitempty"`
+	DdosMitigationRules     []*common_security.DDoSMitigationRule `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
 	// Types that are valid to be assigned to ServicePolicyChoice:
-	//
 	//	*CreateSpecType_ServicePoliciesFromNamespace
 	//	*CreateSpecType_NoServicePolicies
 	//	*CreateSpecType_ActiveServicePolicies
 	ServicePolicyChoice isCreateSpecType_ServicePolicyChoice `protobuf_oneof:"service_policy_choice"`
 	// Types that are valid to be assigned to HashPolicyChoice:
-	//
 	//	*CreateSpecType_RoundRobin
 	//	*CreateSpecType_LeastActive
 	//	*CreateSpecType_Random
@@ -7368,45 +4973,41 @@ type CreateSpecType struct {
 	//	*CreateSpecType_RingHash
 	HashPolicyChoice isCreateSpecType_HashPolicyChoice `protobuf_oneof:"hash_policy_choice"`
 	// Types that are valid to be assigned to TrustClientIpHeadersChoice:
-	//
 	//	*CreateSpecType_DisableTrustClientIpHeaders
 	//	*CreateSpecType_EnableTrustClientIpHeaders
 	TrustClientIpHeadersChoice isCreateSpecType_TrustClientIpHeadersChoice `protobuf_oneof:"trust_client_ip_headers_choice"`
 	// Types that are valid to be assigned to MlConfigChoice:
-	//
 	//	*CreateSpecType_SingleLbApp
 	//	*CreateSpecType_MultiLbApp
 	MlConfigChoice isCreateSpecType_MlConfigChoice `protobuf_oneof:"ml_config_choice"`
 	// Types that are valid to be assigned to MaliciousUserDetectionChoice:
-	//
 	//	*CreateSpecType_EnableMaliciousUserDetection
 	//	*CreateSpecType_DisableMaliciousUserDetection
 	MaliciousUserDetectionChoice isCreateSpecType_MaliciousUserDetectionChoice `protobuf_oneof:"malicious_user_detection_choice"`
 	// Types that are valid to be assigned to ApiDiscoveryChoice:
-	//
 	//	*CreateSpecType_EnableApiDiscovery
 	//	*CreateSpecType_DisableApiDiscovery
 	ApiDiscoveryChoice isCreateSpecType_ApiDiscoveryChoice `protobuf_oneof:"api_discovery_choice"`
 	// Types that are valid to be assigned to BotDefenseChoice:
-	//
 	//	*CreateSpecType_DisableBotDefense
 	//	*CreateSpecType_BotDefense
 	//	*CreateSpecType_BotDefenseAdvanced
 	BotDefenseChoice isCreateSpecType_BotDefenseChoice `protobuf_oneof:"bot_defense_choice"`
+	// Types that are valid to be assigned to SensitiveDataPolicyChoice:
+	//	*CreateSpecType_DefaultSensitiveDataPolicy
+	//	*CreateSpecType_SensitiveDataPolicy
+	SensitiveDataPolicyChoice isCreateSpecType_SensitiveDataPolicyChoice `protobuf_oneof:"sensitive_data_policy_choice"`
 	// Types that are valid to be assigned to ApiDefinitionChoice:
-	//
 	//	*CreateSpecType_DisableApiDefinition
 	//	*CreateSpecType_ApiDefinition
 	//	*CreateSpecType_ApiSpecification
 	//	*CreateSpecType_ApiDefinitions
 	ApiDefinitionChoice isCreateSpecType_ApiDefinitionChoice `protobuf_oneof:"api_definition_choice"`
 	// Types that are valid to be assigned to IpReputationChoice:
-	//
 	//	*CreateSpecType_DisableIpReputation
 	//	*CreateSpecType_EnableIpReputation
 	IpReputationChoice isCreateSpecType_IpReputationChoice `protobuf_oneof:"ip_reputation_choice"`
 	// Types that are valid to be assigned to ClientSideDefenseChoice:
-	//
 	//	*CreateSpecType_DisableClientSideDefense
 	//	*CreateSpecType_ClientSideDefense
 	ClientSideDefenseChoice isCreateSpecType_ClientSideDefenseChoice `protobuf_oneof:"client_side_defense_choice"`
@@ -7414,29 +5015,27 @@ type CreateSpecType struct {
 	GraphqlRules            []*policy.GraphQLRule                    `protobuf:"bytes,92,rep,name=graphql_rules,json=graphqlRules,proto3" json:"graphql_rules,omitempty"`
 	ProtectedCookies        []*schema.CookieManipulationOptionType   `protobuf:"bytes,93,rep,name=protected_cookies,json=protectedCookies,proto3" json:"protected_cookies,omitempty"`
 	// Types that are valid to be assigned to SlowDdosMitigationChoice:
-	//
 	//	*CreateSpecType_SystemDefaultTimeouts
 	//	*CreateSpecType_SlowDdosMitigation
 	SlowDdosMitigationChoice isCreateSpecType_SlowDdosMitigationChoice `protobuf_oneof:"slow_ddos_mitigation_choice"`
 	JwtValidation            *common_waf.JWTValidation                 `protobuf:"bytes,98,opt,name=jwt_validation,json=jwtValidation,proto3" json:"jwt_validation,omitempty"`
 	// Types that are valid to be assigned to ThreatMeshChoice:
-	//
 	//	*CreateSpecType_DisableThreatMesh
 	//	*CreateSpecType_EnableThreatMesh
 	ThreatMeshChoice isCreateSpecType_ThreatMeshChoice `protobuf_oneof:"threat_mesh_choice"`
 	// Types that are valid to be assigned to L7DdosAutoMitigationAction:
-	//
 	//	*CreateSpecType_L7DdosActionDefault
 	//	*CreateSpecType_L7DdosActionBlock
 	//	*CreateSpecType_L7DdosActionJsChallenge
 	//	*CreateSpecType_L7DdosActionNone
-	L7DdosAutoMitigationAction isCreateSpecType_L7DdosAutoMitigationAction `protobuf_oneof:"l7_ddos_auto_mitigation_action"`
+	L7DdosAutoMitigationAction   isCreateSpecType_L7DdosAutoMitigationAction `protobuf_oneof:"l7_ddos_auto_mitigation_action"`
+	SensitiveDataDisclosureRules *SensitiveDataDisclosureRules               `protobuf:"bytes,116,opt,name=sensitive_data_disclosure_rules,json=sensitiveDataDisclosureRules,proto3" json:"sensitive_data_disclosure_rules,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{40}
+	return fileDescriptor_6478b2bb990a4a3e, []int{19}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -7541,6 +5140,12 @@ type isCreateSpecType_ApiDiscoveryChoice interface {
 }
 type isCreateSpecType_BotDefenseChoice interface {
 	isCreateSpecType_BotDefenseChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isCreateSpecType_SensitiveDataPolicyChoice interface {
+	isCreateSpecType_SensitiveDataPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -7700,10 +5305,16 @@ type CreateSpecType_DisableBotDefense struct {
 	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
 }
 type CreateSpecType_BotDefense struct {
-	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+	BotDefense *common_security.ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
 }
 type CreateSpecType_BotDefenseAdvanced struct {
-	BotDefenseAdvanced *BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
+	BotDefenseAdvanced *common_security.BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
+}
+type CreateSpecType_DefaultSensitiveDataPolicy struct {
+	DefaultSensitiveDataPolicy *schema.Empty `protobuf:"bytes,131,opt,name=default_sensitive_data_policy,json=defaultSensitiveDataPolicy,proto3,oneof" json:"default_sensitive_data_policy,omitempty"`
+}
+type CreateSpecType_SensitiveDataPolicy struct {
+	SensitiveDataPolicy *common_security.SensitiveDataPolicySettings `protobuf:"bytes,132,opt,name=sensitive_data_policy,json=sensitiveDataPolicy,proto3,oneof" json:"sensitive_data_policy,omitempty"`
 }
 type CreateSpecType_DisableApiDefinition struct {
 	DisableApiDefinition *schema.Empty `protobuf:"bytes,70,opt,name=disable_api_definition,json=disableApiDefinition,proto3,oneof" json:"disable_api_definition,omitempty"`
@@ -7727,7 +5338,7 @@ type CreateSpecType_DisableClientSideDefense struct {
 	DisableClientSideDefense *schema.Empty `protobuf:"bytes,86,opt,name=disable_client_side_defense,json=disableClientSideDefense,proto3,oneof" json:"disable_client_side_defense,omitempty"`
 }
 type CreateSpecType_ClientSideDefense struct {
-	ClientSideDefense *ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
+	ClientSideDefense *common_security.ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
 }
 type CreateSpecType_SystemDefaultTimeouts struct {
 	SystemDefaultTimeouts *schema.Empty `protobuf:"bytes,97,opt,name=system_default_timeouts,json=systemDefaultTimeouts,proto3,oneof" json:"system_default_timeouts,omitempty"`
@@ -7791,27 +5402,29 @@ func (*CreateSpecType_MultiLbApp) isCreateSpecType_MlConfigChoice()             
 func (*CreateSpecType_EnableMaliciousUserDetection) isCreateSpecType_MaliciousUserDetectionChoice() {}
 func (*CreateSpecType_DisableMaliciousUserDetection) isCreateSpecType_MaliciousUserDetectionChoice() {
 }
-func (*CreateSpecType_EnableApiDiscovery) isCreateSpecType_ApiDiscoveryChoice()              {}
-func (*CreateSpecType_DisableApiDiscovery) isCreateSpecType_ApiDiscoveryChoice()             {}
-func (*CreateSpecType_DisableBotDefense) isCreateSpecType_BotDefenseChoice()                 {}
-func (*CreateSpecType_BotDefense) isCreateSpecType_BotDefenseChoice()                        {}
-func (*CreateSpecType_BotDefenseAdvanced) isCreateSpecType_BotDefenseChoice()                {}
-func (*CreateSpecType_DisableApiDefinition) isCreateSpecType_ApiDefinitionChoice()           {}
-func (*CreateSpecType_ApiDefinition) isCreateSpecType_ApiDefinitionChoice()                  {}
-func (*CreateSpecType_ApiSpecification) isCreateSpecType_ApiDefinitionChoice()               {}
-func (*CreateSpecType_ApiDefinitions) isCreateSpecType_ApiDefinitionChoice()                 {}
-func (*CreateSpecType_DisableIpReputation) isCreateSpecType_IpReputationChoice()             {}
-func (*CreateSpecType_EnableIpReputation) isCreateSpecType_IpReputationChoice()              {}
-func (*CreateSpecType_DisableClientSideDefense) isCreateSpecType_ClientSideDefenseChoice()   {}
-func (*CreateSpecType_ClientSideDefense) isCreateSpecType_ClientSideDefenseChoice()          {}
-func (*CreateSpecType_SystemDefaultTimeouts) isCreateSpecType_SlowDdosMitigationChoice()     {}
-func (*CreateSpecType_SlowDdosMitigation) isCreateSpecType_SlowDdosMitigationChoice()        {}
-func (*CreateSpecType_DisableThreatMesh) isCreateSpecType_ThreatMeshChoice()                 {}
-func (*CreateSpecType_EnableThreatMesh) isCreateSpecType_ThreatMeshChoice()                  {}
-func (*CreateSpecType_L7DdosActionDefault) isCreateSpecType_L7DdosAutoMitigationAction()     {}
-func (*CreateSpecType_L7DdosActionBlock) isCreateSpecType_L7DdosAutoMitigationAction()       {}
-func (*CreateSpecType_L7DdosActionJsChallenge) isCreateSpecType_L7DdosAutoMitigationAction() {}
-func (*CreateSpecType_L7DdosActionNone) isCreateSpecType_L7DdosAutoMitigationAction()        {}
+func (*CreateSpecType_EnableApiDiscovery) isCreateSpecType_ApiDiscoveryChoice()                {}
+func (*CreateSpecType_DisableApiDiscovery) isCreateSpecType_ApiDiscoveryChoice()               {}
+func (*CreateSpecType_DisableBotDefense) isCreateSpecType_BotDefenseChoice()                   {}
+func (*CreateSpecType_BotDefense) isCreateSpecType_BotDefenseChoice()                          {}
+func (*CreateSpecType_BotDefenseAdvanced) isCreateSpecType_BotDefenseChoice()                  {}
+func (*CreateSpecType_DefaultSensitiveDataPolicy) isCreateSpecType_SensitiveDataPolicyChoice() {}
+func (*CreateSpecType_SensitiveDataPolicy) isCreateSpecType_SensitiveDataPolicyChoice()        {}
+func (*CreateSpecType_DisableApiDefinition) isCreateSpecType_ApiDefinitionChoice()             {}
+func (*CreateSpecType_ApiDefinition) isCreateSpecType_ApiDefinitionChoice()                    {}
+func (*CreateSpecType_ApiSpecification) isCreateSpecType_ApiDefinitionChoice()                 {}
+func (*CreateSpecType_ApiDefinitions) isCreateSpecType_ApiDefinitionChoice()                   {}
+func (*CreateSpecType_DisableIpReputation) isCreateSpecType_IpReputationChoice()               {}
+func (*CreateSpecType_EnableIpReputation) isCreateSpecType_IpReputationChoice()                {}
+func (*CreateSpecType_DisableClientSideDefense) isCreateSpecType_ClientSideDefenseChoice()     {}
+func (*CreateSpecType_ClientSideDefense) isCreateSpecType_ClientSideDefenseChoice()            {}
+func (*CreateSpecType_SystemDefaultTimeouts) isCreateSpecType_SlowDdosMitigationChoice()       {}
+func (*CreateSpecType_SlowDdosMitigation) isCreateSpecType_SlowDdosMitigationChoice()          {}
+func (*CreateSpecType_DisableThreatMesh) isCreateSpecType_ThreatMeshChoice()                   {}
+func (*CreateSpecType_EnableThreatMesh) isCreateSpecType_ThreatMeshChoice()                    {}
+func (*CreateSpecType_L7DdosActionDefault) isCreateSpecType_L7DdosAutoMitigationAction()       {}
+func (*CreateSpecType_L7DdosActionBlock) isCreateSpecType_L7DdosAutoMitigationAction()         {}
+func (*CreateSpecType_L7DdosActionJsChallenge) isCreateSpecType_L7DdosAutoMitigationAction()   {}
+func (*CreateSpecType_L7DdosActionNone) isCreateSpecType_L7DdosAutoMitigationAction()          {}
 
 func (m *CreateSpecType) GetLoadbalancerType() isCreateSpecType_LoadbalancerType {
 	if m != nil {
@@ -7894,6 +5507,12 @@ func (m *CreateSpecType) GetApiDiscoveryChoice() isCreateSpecType_ApiDiscoveryCh
 func (m *CreateSpecType) GetBotDefenseChoice() isCreateSpecType_BotDefenseChoice {
 	if m != nil {
 		return m.BotDefenseChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetSensitiveDataPolicyChoice() isCreateSpecType_SensitiveDataPolicyChoice {
+	if m != nil {
+		return m.SensitiveDataPolicyChoice
 	}
 	return nil
 }
@@ -8109,6 +5728,13 @@ func (m *CreateSpecType) GetUserIdentification() *views.ObjectRefType {
 	return nil
 }
 
+func (m *CreateSpecType) GetApiRateLimitLegacy() *common_waf.APIRateLimitLegacy {
+	if m != nil {
+		return m.ApiRateLimitLegacy
+	}
+	return nil
+}
+
 func (m *CreateSpecType) GetDisableRateLimit() *schema.Empty {
 	if x, ok := m.GetRateLimitChoice().(*CreateSpecType_DisableRateLimit); ok {
 		return x.DisableRateLimit
@@ -8172,7 +5798,7 @@ func (m *CreateSpecType) GetApiProtectionRules() *common_waf.APIProtectionRules 
 	return nil
 }
 
-func (m *CreateSpecType) GetDdosMitigationRules() []*DDoSMitigationRule {
+func (m *CreateSpecType) GetDdosMitigationRules() []*common_security.DDoSMitigationRule {
 	if m != nil {
 		return m.DdosMitigationRules
 	}
@@ -8305,16 +5931,30 @@ func (m *CreateSpecType) GetDisableBotDefense() *schema.Empty {
 	return nil
 }
 
-func (m *CreateSpecType) GetBotDefense() *ShapeBotDefenseType {
+func (m *CreateSpecType) GetBotDefense() *common_security.ShapeBotDefenseType {
 	if x, ok := m.GetBotDefenseChoice().(*CreateSpecType_BotDefense); ok {
 		return x.BotDefense
 	}
 	return nil
 }
 
-func (m *CreateSpecType) GetBotDefenseAdvanced() *BotDefenseAdvancedType {
+func (m *CreateSpecType) GetBotDefenseAdvanced() *common_security.BotDefenseAdvancedType {
 	if x, ok := m.GetBotDefenseChoice().(*CreateSpecType_BotDefenseAdvanced); ok {
 		return x.BotDefenseAdvanced
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDefaultSensitiveDataPolicy() *schema.Empty {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*CreateSpecType_DefaultSensitiveDataPolicy); ok {
+		return x.DefaultSensitiveDataPolicy
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetSensitiveDataPolicy() *common_security.SensitiveDataPolicySettings {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*CreateSpecType_SensitiveDataPolicy); ok {
+		return x.SensitiveDataPolicy
 	}
 	return nil
 }
@@ -8368,7 +6008,7 @@ func (m *CreateSpecType) GetDisableClientSideDefense() *schema.Empty {
 	return nil
 }
 
-func (m *CreateSpecType) GetClientSideDefense() *ClientSideDefenseType {
+func (m *CreateSpecType) GetClientSideDefense() *common_security.ClientSideDefenseType {
 	if x, ok := m.GetClientSideDefenseChoice().(*CreateSpecType_ClientSideDefense); ok {
 		return x.ClientSideDefense
 	}
@@ -8459,6 +6099,13 @@ func (m *CreateSpecType) GetL7DdosActionNone() *schema.Empty {
 	return nil
 }
 
+func (m *CreateSpecType) GetSensitiveDataDisclosureRules() *SensitiveDataDisclosureRules {
+	if m != nil {
+		return m.SensitiveDataDisclosureRules
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -8503,6 +6150,8 @@ func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 		(*CreateSpecType_DisableBotDefense)(nil),
 		(*CreateSpecType_BotDefense)(nil),
 		(*CreateSpecType_BotDefenseAdvanced)(nil),
+		(*CreateSpecType_DefaultSensitiveDataPolicy)(nil),
+		(*CreateSpecType_SensitiveDataPolicy)(nil),
 		(*CreateSpecType_DisableApiDefinition)(nil),
 		(*CreateSpecType_ApiDefinition)(nil),
 		(*CreateSpecType_ApiSpecification)(nil),
@@ -8569,20 +6218,21 @@ type ReplaceSpecType struct {
 	//
 	//	*ReplaceSpecType_UserIdClientIp
 	//	*ReplaceSpecType_UserIdentification
-	UserIdChoice isReplaceSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
+	UserIdChoice       isReplaceSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
+	ApiRateLimitLegacy *common_waf.APIRateLimitLegacy `protobuf:"bytes,68,opt,name=api_rate_limit_legacy,json=apiRateLimitLegacy,proto3" json:"api_rate_limit_legacy,omitempty"`
 	// Types that are valid to be assigned to RateLimitChoice:
 	//
 	//	*ReplaceSpecType_DisableRateLimit
 	//	*ReplaceSpecType_ApiRateLimit
 	//	*ReplaceSpecType_RateLimit
-	RateLimitChoice         isReplaceSpecType_RateLimitChoice `protobuf_oneof:"rate_limit_choice"`
-	MaliciousUserMitigation *views.ObjectRefType              `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation,proto3" json:"malicious_user_mitigation,omitempty"`
-	WafExclusionRules       []*policy.SimpleWafExclusionRule  `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
-	DataGuardRules          []*policy.SimpleDataGuardRule     `protobuf:"bytes,63,rep,name=data_guard_rules,json=dataGuardRules,proto3" json:"data_guard_rules,omitempty"`
-	BlockedClients          []*common_waf.SimpleClientSrcRule `protobuf:"bytes,34,rep,name=blocked_clients,json=blockedClients,proto3" json:"blocked_clients,omitempty"`
-	TrustedClients          []*common_waf.SimpleClientSrcRule `protobuf:"bytes,35,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
-	ApiProtectionRules      *common_waf.APIProtectionRules    `protobuf:"bytes,72,opt,name=api_protection_rules,json=apiProtectionRules,proto3" json:"api_protection_rules,omitempty"`
-	DdosMitigationRules     []*DDoSMitigationRule             `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
+	RateLimitChoice         isReplaceSpecType_RateLimitChoice     `protobuf_oneof:"rate_limit_choice"`
+	MaliciousUserMitigation *views.ObjectRefType                  `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation,proto3" json:"malicious_user_mitigation,omitempty"`
+	WafExclusionRules       []*policy.SimpleWafExclusionRule      `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
+	DataGuardRules          []*policy.SimpleDataGuardRule         `protobuf:"bytes,63,rep,name=data_guard_rules,json=dataGuardRules,proto3" json:"data_guard_rules,omitempty"`
+	BlockedClients          []*common_waf.SimpleClientSrcRule     `protobuf:"bytes,34,rep,name=blocked_clients,json=blockedClients,proto3" json:"blocked_clients,omitempty"`
+	TrustedClients          []*common_waf.SimpleClientSrcRule     `protobuf:"bytes,35,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
+	ApiProtectionRules      *common_waf.APIProtectionRules        `protobuf:"bytes,72,opt,name=api_protection_rules,json=apiProtectionRules,proto3" json:"api_protection_rules,omitempty"`
+	DdosMitigationRules     []*common_security.DDoSMitigationRule `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
 	// Types that are valid to be assigned to ServicePolicyChoice:
 	//
 	//	*ReplaceSpecType_ServicePoliciesFromNamespace
@@ -8624,6 +6274,11 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_BotDefense
 	//	*ReplaceSpecType_BotDefenseAdvanced
 	BotDefenseChoice isReplaceSpecType_BotDefenseChoice `protobuf_oneof:"bot_defense_choice"`
+	// Types that are valid to be assigned to SensitiveDataPolicyChoice:
+	//
+	//	*ReplaceSpecType_DefaultSensitiveDataPolicy
+	//	*ReplaceSpecType_SensitiveDataPolicy
+	SensitiveDataPolicyChoice isReplaceSpecType_SensitiveDataPolicyChoice `protobuf_oneof:"sensitive_data_policy_choice"`
 	// Types that are valid to be assigned to ApiDefinitionChoice:
 	//
 	//	*ReplaceSpecType_DisableApiDefinition
@@ -8661,13 +6316,14 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_L7DdosActionBlock
 	//	*ReplaceSpecType_L7DdosActionJsChallenge
 	//	*ReplaceSpecType_L7DdosActionNone
-	L7DdosAutoMitigationAction isReplaceSpecType_L7DdosAutoMitigationAction `protobuf_oneof:"l7_ddos_auto_mitigation_action"`
+	L7DdosAutoMitigationAction   isReplaceSpecType_L7DdosAutoMitigationAction `protobuf_oneof:"l7_ddos_auto_mitigation_action"`
+	SensitiveDataDisclosureRules *SensitiveDataDisclosureRules                `protobuf:"bytes,116,opt,name=sensitive_data_disclosure_rules,json=sensitiveDataDisclosureRules,proto3" json:"sensitive_data_disclosure_rules,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{41}
+	return fileDescriptor_6478b2bb990a4a3e, []int{20}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -8772,6 +6428,12 @@ type isReplaceSpecType_ApiDiscoveryChoice interface {
 }
 type isReplaceSpecType_BotDefenseChoice interface {
 	isReplaceSpecType_BotDefenseChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isReplaceSpecType_SensitiveDataPolicyChoice interface {
+	isReplaceSpecType_SensitiveDataPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -8931,10 +6593,16 @@ type ReplaceSpecType_DisableBotDefense struct {
 	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
 }
 type ReplaceSpecType_BotDefense struct {
-	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+	BotDefense *common_security.ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
 }
 type ReplaceSpecType_BotDefenseAdvanced struct {
-	BotDefenseAdvanced *BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
+	BotDefenseAdvanced *common_security.BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
+}
+type ReplaceSpecType_DefaultSensitiveDataPolicy struct {
+	DefaultSensitiveDataPolicy *schema.Empty `protobuf:"bytes,131,opt,name=default_sensitive_data_policy,json=defaultSensitiveDataPolicy,proto3,oneof" json:"default_sensitive_data_policy,omitempty"`
+}
+type ReplaceSpecType_SensitiveDataPolicy struct {
+	SensitiveDataPolicy *common_security.SensitiveDataPolicySettings `protobuf:"bytes,132,opt,name=sensitive_data_policy,json=sensitiveDataPolicy,proto3,oneof" json:"sensitive_data_policy,omitempty"`
 }
 type ReplaceSpecType_DisableApiDefinition struct {
 	DisableApiDefinition *schema.Empty `protobuf:"bytes,70,opt,name=disable_api_definition,json=disableApiDefinition,proto3,oneof" json:"disable_api_definition,omitempty"`
@@ -8958,7 +6626,7 @@ type ReplaceSpecType_DisableClientSideDefense struct {
 	DisableClientSideDefense *schema.Empty `protobuf:"bytes,86,opt,name=disable_client_side_defense,json=disableClientSideDefense,proto3,oneof" json:"disable_client_side_defense,omitempty"`
 }
 type ReplaceSpecType_ClientSideDefense struct {
-	ClientSideDefense *ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
+	ClientSideDefense *common_security.ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
 }
 type ReplaceSpecType_SystemDefaultTimeouts struct {
 	SystemDefaultTimeouts *schema.Empty `protobuf:"bytes,97,opt,name=system_default_timeouts,json=systemDefaultTimeouts,proto3,oneof" json:"system_default_timeouts,omitempty"`
@@ -9023,27 +6691,29 @@ func (*ReplaceSpecType_EnableMaliciousUserDetection) isReplaceSpecType_Malicious
 }
 func (*ReplaceSpecType_DisableMaliciousUserDetection) isReplaceSpecType_MaliciousUserDetectionChoice() {
 }
-func (*ReplaceSpecType_EnableApiDiscovery) isReplaceSpecType_ApiDiscoveryChoice()              {}
-func (*ReplaceSpecType_DisableApiDiscovery) isReplaceSpecType_ApiDiscoveryChoice()             {}
-func (*ReplaceSpecType_DisableBotDefense) isReplaceSpecType_BotDefenseChoice()                 {}
-func (*ReplaceSpecType_BotDefense) isReplaceSpecType_BotDefenseChoice()                        {}
-func (*ReplaceSpecType_BotDefenseAdvanced) isReplaceSpecType_BotDefenseChoice()                {}
-func (*ReplaceSpecType_DisableApiDefinition) isReplaceSpecType_ApiDefinitionChoice()           {}
-func (*ReplaceSpecType_ApiDefinition) isReplaceSpecType_ApiDefinitionChoice()                  {}
-func (*ReplaceSpecType_ApiSpecification) isReplaceSpecType_ApiDefinitionChoice()               {}
-func (*ReplaceSpecType_ApiDefinitions) isReplaceSpecType_ApiDefinitionChoice()                 {}
-func (*ReplaceSpecType_DisableIpReputation) isReplaceSpecType_IpReputationChoice()             {}
-func (*ReplaceSpecType_EnableIpReputation) isReplaceSpecType_IpReputationChoice()              {}
-func (*ReplaceSpecType_DisableClientSideDefense) isReplaceSpecType_ClientSideDefenseChoice()   {}
-func (*ReplaceSpecType_ClientSideDefense) isReplaceSpecType_ClientSideDefenseChoice()          {}
-func (*ReplaceSpecType_SystemDefaultTimeouts) isReplaceSpecType_SlowDdosMitigationChoice()     {}
-func (*ReplaceSpecType_SlowDdosMitigation) isReplaceSpecType_SlowDdosMitigationChoice()        {}
-func (*ReplaceSpecType_DisableThreatMesh) isReplaceSpecType_ThreatMeshChoice()                 {}
-func (*ReplaceSpecType_EnableThreatMesh) isReplaceSpecType_ThreatMeshChoice()                  {}
-func (*ReplaceSpecType_L7DdosActionDefault) isReplaceSpecType_L7DdosAutoMitigationAction()     {}
-func (*ReplaceSpecType_L7DdosActionBlock) isReplaceSpecType_L7DdosAutoMitigationAction()       {}
-func (*ReplaceSpecType_L7DdosActionJsChallenge) isReplaceSpecType_L7DdosAutoMitigationAction() {}
-func (*ReplaceSpecType_L7DdosActionNone) isReplaceSpecType_L7DdosAutoMitigationAction()        {}
+func (*ReplaceSpecType_EnableApiDiscovery) isReplaceSpecType_ApiDiscoveryChoice()                {}
+func (*ReplaceSpecType_DisableApiDiscovery) isReplaceSpecType_ApiDiscoveryChoice()               {}
+func (*ReplaceSpecType_DisableBotDefense) isReplaceSpecType_BotDefenseChoice()                   {}
+func (*ReplaceSpecType_BotDefense) isReplaceSpecType_BotDefenseChoice()                          {}
+func (*ReplaceSpecType_BotDefenseAdvanced) isReplaceSpecType_BotDefenseChoice()                  {}
+func (*ReplaceSpecType_DefaultSensitiveDataPolicy) isReplaceSpecType_SensitiveDataPolicyChoice() {}
+func (*ReplaceSpecType_SensitiveDataPolicy) isReplaceSpecType_SensitiveDataPolicyChoice()        {}
+func (*ReplaceSpecType_DisableApiDefinition) isReplaceSpecType_ApiDefinitionChoice()             {}
+func (*ReplaceSpecType_ApiDefinition) isReplaceSpecType_ApiDefinitionChoice()                    {}
+func (*ReplaceSpecType_ApiSpecification) isReplaceSpecType_ApiDefinitionChoice()                 {}
+func (*ReplaceSpecType_ApiDefinitions) isReplaceSpecType_ApiDefinitionChoice()                   {}
+func (*ReplaceSpecType_DisableIpReputation) isReplaceSpecType_IpReputationChoice()               {}
+func (*ReplaceSpecType_EnableIpReputation) isReplaceSpecType_IpReputationChoice()                {}
+func (*ReplaceSpecType_DisableClientSideDefense) isReplaceSpecType_ClientSideDefenseChoice()     {}
+func (*ReplaceSpecType_ClientSideDefense) isReplaceSpecType_ClientSideDefenseChoice()            {}
+func (*ReplaceSpecType_SystemDefaultTimeouts) isReplaceSpecType_SlowDdosMitigationChoice()       {}
+func (*ReplaceSpecType_SlowDdosMitigation) isReplaceSpecType_SlowDdosMitigationChoice()          {}
+func (*ReplaceSpecType_DisableThreatMesh) isReplaceSpecType_ThreatMeshChoice()                   {}
+func (*ReplaceSpecType_EnableThreatMesh) isReplaceSpecType_ThreatMeshChoice()                    {}
+func (*ReplaceSpecType_L7DdosActionDefault) isReplaceSpecType_L7DdosAutoMitigationAction()       {}
+func (*ReplaceSpecType_L7DdosActionBlock) isReplaceSpecType_L7DdosAutoMitigationAction()         {}
+func (*ReplaceSpecType_L7DdosActionJsChallenge) isReplaceSpecType_L7DdosAutoMitigationAction()   {}
+func (*ReplaceSpecType_L7DdosActionNone) isReplaceSpecType_L7DdosAutoMitigationAction()          {}
 
 func (m *ReplaceSpecType) GetLoadbalancerType() isReplaceSpecType_LoadbalancerType {
 	if m != nil {
@@ -9126,6 +6796,12 @@ func (m *ReplaceSpecType) GetApiDiscoveryChoice() isReplaceSpecType_ApiDiscovery
 func (m *ReplaceSpecType) GetBotDefenseChoice() isReplaceSpecType_BotDefenseChoice {
 	if m != nil {
 		return m.BotDefenseChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetSensitiveDataPolicyChoice() isReplaceSpecType_SensitiveDataPolicyChoice {
+	if m != nil {
+		return m.SensitiveDataPolicyChoice
 	}
 	return nil
 }
@@ -9341,6 +7017,13 @@ func (m *ReplaceSpecType) GetUserIdentification() *views.ObjectRefType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetApiRateLimitLegacy() *common_waf.APIRateLimitLegacy {
+	if m != nil {
+		return m.ApiRateLimitLegacy
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) GetDisableRateLimit() *schema.Empty {
 	if x, ok := m.GetRateLimitChoice().(*ReplaceSpecType_DisableRateLimit); ok {
 		return x.DisableRateLimit
@@ -9404,7 +7087,7 @@ func (m *ReplaceSpecType) GetApiProtectionRules() *common_waf.APIProtectionRules
 	return nil
 }
 
-func (m *ReplaceSpecType) GetDdosMitigationRules() []*DDoSMitigationRule {
+func (m *ReplaceSpecType) GetDdosMitigationRules() []*common_security.DDoSMitigationRule {
 	if m != nil {
 		return m.DdosMitigationRules
 	}
@@ -9537,16 +7220,30 @@ func (m *ReplaceSpecType) GetDisableBotDefense() *schema.Empty {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetBotDefense() *ShapeBotDefenseType {
+func (m *ReplaceSpecType) GetBotDefense() *common_security.ShapeBotDefenseType {
 	if x, ok := m.GetBotDefenseChoice().(*ReplaceSpecType_BotDefense); ok {
 		return x.BotDefense
 	}
 	return nil
 }
 
-func (m *ReplaceSpecType) GetBotDefenseAdvanced() *BotDefenseAdvancedType {
+func (m *ReplaceSpecType) GetBotDefenseAdvanced() *common_security.BotDefenseAdvancedType {
 	if x, ok := m.GetBotDefenseChoice().(*ReplaceSpecType_BotDefenseAdvanced); ok {
 		return x.BotDefenseAdvanced
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDefaultSensitiveDataPolicy() *schema.Empty {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*ReplaceSpecType_DefaultSensitiveDataPolicy); ok {
+		return x.DefaultSensitiveDataPolicy
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetSensitiveDataPolicy() *common_security.SensitiveDataPolicySettings {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*ReplaceSpecType_SensitiveDataPolicy); ok {
+		return x.SensitiveDataPolicy
 	}
 	return nil
 }
@@ -9600,7 +7297,7 @@ func (m *ReplaceSpecType) GetDisableClientSideDefense() *schema.Empty {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetClientSideDefense() *ClientSideDefenseType {
+func (m *ReplaceSpecType) GetClientSideDefense() *common_security.ClientSideDefenseType {
 	if x, ok := m.GetClientSideDefenseChoice().(*ReplaceSpecType_ClientSideDefense); ok {
 		return x.ClientSideDefense
 	}
@@ -9691,6 +7388,13 @@ func (m *ReplaceSpecType) GetL7DdosActionNone() *schema.Empty {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetSensitiveDataDisclosureRules() *SensitiveDataDisclosureRules {
+	if m != nil {
+		return m.SensitiveDataDisclosureRules
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -9735,6 +7439,8 @@ func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 		(*ReplaceSpecType_DisableBotDefense)(nil),
 		(*ReplaceSpecType_BotDefense)(nil),
 		(*ReplaceSpecType_BotDefenseAdvanced)(nil),
+		(*ReplaceSpecType_DefaultSensitiveDataPolicy)(nil),
+		(*ReplaceSpecType_SensitiveDataPolicy)(nil),
 		(*ReplaceSpecType_DisableApiDefinition)(nil),
 		(*ReplaceSpecType_ApiDefinition)(nil),
 		(*ReplaceSpecType_ApiSpecification)(nil),
@@ -9802,20 +7508,21 @@ type GetSpecType struct {
 	//
 	//	*GetSpecType_UserIdClientIp
 	//	*GetSpecType_UserIdentification
-	UserIdChoice isGetSpecType_UserIdChoice `protobuf_oneof:"user_id_choice"`
+	UserIdChoice       isGetSpecType_UserIdChoice     `protobuf_oneof:"user_id_choice"`
+	ApiRateLimitLegacy *common_waf.APIRateLimitLegacy `protobuf:"bytes,68,opt,name=api_rate_limit_legacy,json=apiRateLimitLegacy,proto3" json:"api_rate_limit_legacy,omitempty"`
 	// Types that are valid to be assigned to RateLimitChoice:
 	//
 	//	*GetSpecType_DisableRateLimit
 	//	*GetSpecType_ApiRateLimit
 	//	*GetSpecType_RateLimit
-	RateLimitChoice         isGetSpecType_RateLimitChoice     `protobuf_oneof:"rate_limit_choice"`
-	MaliciousUserMitigation *views.ObjectRefType              `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation,proto3" json:"malicious_user_mitigation,omitempty"`
-	WafExclusionRules       []*policy.SimpleWafExclusionRule  `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
-	DataGuardRules          []*policy.SimpleDataGuardRule     `protobuf:"bytes,63,rep,name=data_guard_rules,json=dataGuardRules,proto3" json:"data_guard_rules,omitempty"`
-	BlockedClients          []*common_waf.SimpleClientSrcRule `protobuf:"bytes,34,rep,name=blocked_clients,json=blockedClients,proto3" json:"blocked_clients,omitempty"`
-	TrustedClients          []*common_waf.SimpleClientSrcRule `protobuf:"bytes,35,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
-	ApiProtectionRules      *common_waf.APIProtectionRules    `protobuf:"bytes,72,opt,name=api_protection_rules,json=apiProtectionRules,proto3" json:"api_protection_rules,omitempty"`
-	DdosMitigationRules     []*DDoSMitigationRule             `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
+	RateLimitChoice         isGetSpecType_RateLimitChoice         `protobuf_oneof:"rate_limit_choice"`
+	MaliciousUserMitigation *views.ObjectRefType                  `protobuf:"bytes,32,opt,name=malicious_user_mitigation,json=maliciousUserMitigation,proto3" json:"malicious_user_mitigation,omitempty"`
+	WafExclusionRules       []*policy.SimpleWafExclusionRule      `protobuf:"bytes,33,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
+	DataGuardRules          []*policy.SimpleDataGuardRule         `protobuf:"bytes,63,rep,name=data_guard_rules,json=dataGuardRules,proto3" json:"data_guard_rules,omitempty"`
+	BlockedClients          []*common_waf.SimpleClientSrcRule     `protobuf:"bytes,34,rep,name=blocked_clients,json=blockedClients,proto3" json:"blocked_clients,omitempty"`
+	TrustedClients          []*common_waf.SimpleClientSrcRule     `protobuf:"bytes,35,rep,name=trusted_clients,json=trustedClients,proto3" json:"trusted_clients,omitempty"`
+	ApiProtectionRules      *common_waf.APIProtectionRules        `protobuf:"bytes,72,opt,name=api_protection_rules,json=apiProtectionRules,proto3" json:"api_protection_rules,omitempty"`
+	DdosMitigationRules     []*common_security.DDoSMitigationRule `protobuf:"bytes,37,rep,name=ddos_mitigation_rules,json=ddosMitigationRules,proto3" json:"ddos_mitigation_rules,omitempty"`
 	// Types that are valid to be assigned to ServicePolicyChoice:
 	//
 	//	*GetSpecType_ServicePoliciesFromNamespace
@@ -9857,6 +7564,11 @@ type GetSpecType struct {
 	//	*GetSpecType_BotDefense
 	//	*GetSpecType_BotDefenseAdvanced
 	BotDefenseChoice isGetSpecType_BotDefenseChoice `protobuf_oneof:"bot_defense_choice"`
+	// Types that are valid to be assigned to SensitiveDataPolicyChoice:
+	//
+	//	*GetSpecType_DefaultSensitiveDataPolicy
+	//	*GetSpecType_SensitiveDataPolicy
+	SensitiveDataPolicyChoice isGetSpecType_SensitiveDataPolicyChoice `protobuf_oneof:"sensitive_data_policy_choice"`
 	// Types that are valid to be assigned to ApiDefinitionChoice:
 	//
 	//	*GetSpecType_DisableApiDefinition
@@ -9899,14 +7611,15 @@ type GetSpecType struct {
 	//	*GetSpecType_L7DdosActionBlock
 	//	*GetSpecType_L7DdosActionJsChallenge
 	//	*GetSpecType_L7DdosActionNone
-	L7DdosAutoMitigationAction isGetSpecType_L7DdosAutoMitigationAction `protobuf_oneof:"l7_ddos_auto_mitigation_action"`
-	CertState                  virtual_host.CertificationState          `protobuf:"varint,115,opt,name=cert_state,json=certState,proto3,enum=ves.io.schema.virtual_host.CertificationState" json:"cert_state,omitempty"`
+	L7DdosAutoMitigationAction   isGetSpecType_L7DdosAutoMitigationAction `protobuf_oneof:"l7_ddos_auto_mitigation_action"`
+	CertState                    virtual_host.CertificationState          `protobuf:"varint,115,opt,name=cert_state,json=certState,proto3,enum=ves.io.schema.virtual_host.CertificationState" json:"cert_state,omitempty"`
+	SensitiveDataDisclosureRules *SensitiveDataDisclosureRules            `protobuf:"bytes,116,opt,name=sensitive_data_disclosure_rules,json=sensitiveDataDisclosureRules,proto3" json:"sensitive_data_disclosure_rules,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6478b2bb990a4a3e, []int{42}
+	return fileDescriptor_6478b2bb990a4a3e, []int{21}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -10011,6 +7724,12 @@ type isGetSpecType_ApiDiscoveryChoice interface {
 }
 type isGetSpecType_BotDefenseChoice interface {
 	isGetSpecType_BotDefenseChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isGetSpecType_SensitiveDataPolicyChoice interface {
+	isGetSpecType_SensitiveDataPolicyChoice()
 	Equal(interface{}) bool
 	MarshalTo([]byte) (int, error)
 	Size() int
@@ -10170,10 +7889,16 @@ type GetSpecType_DisableBotDefense struct {
 	DisableBotDefense *schema.Empty `protobuf:"bytes,57,opt,name=disable_bot_defense,json=disableBotDefense,proto3,oneof" json:"disable_bot_defense,omitempty"`
 }
 type GetSpecType_BotDefense struct {
-	BotDefense *ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
+	BotDefense *common_security.ShapeBotDefenseType `protobuf:"bytes,58,opt,name=bot_defense,json=botDefense,proto3,oneof" json:"bot_defense,omitempty"`
 }
 type GetSpecType_BotDefenseAdvanced struct {
-	BotDefenseAdvanced *BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
+	BotDefenseAdvanced *common_security.BotDefenseAdvancedType `protobuf:"bytes,1011,opt,name=bot_defense_advanced,json=botDefenseAdvanced,proto3,oneof" json:"bot_defense_advanced,omitempty"`
+}
+type GetSpecType_DefaultSensitiveDataPolicy struct {
+	DefaultSensitiveDataPolicy *schema.Empty `protobuf:"bytes,131,opt,name=default_sensitive_data_policy,json=defaultSensitiveDataPolicy,proto3,oneof" json:"default_sensitive_data_policy,omitempty"`
+}
+type GetSpecType_SensitiveDataPolicy struct {
+	SensitiveDataPolicy *common_security.SensitiveDataPolicySettings `protobuf:"bytes,132,opt,name=sensitive_data_policy,json=sensitiveDataPolicy,proto3,oneof" json:"sensitive_data_policy,omitempty"`
 }
 type GetSpecType_DisableApiDefinition struct {
 	DisableApiDefinition *schema.Empty `protobuf:"bytes,70,opt,name=disable_api_definition,json=disableApiDefinition,proto3,oneof" json:"disable_api_definition,omitempty"`
@@ -10197,7 +7922,7 @@ type GetSpecType_DisableClientSideDefense struct {
 	DisableClientSideDefense *schema.Empty `protobuf:"bytes,86,opt,name=disable_client_side_defense,json=disableClientSideDefense,proto3,oneof" json:"disable_client_side_defense,omitempty"`
 }
 type GetSpecType_ClientSideDefense struct {
-	ClientSideDefense *ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
+	ClientSideDefense *common_security.ClientSideDefenseType `protobuf:"bytes,87,opt,name=client_side_defense,json=clientSideDefense,proto3,oneof" json:"client_side_defense,omitempty"`
 }
 type GetSpecType_SystemDefaultTimeouts struct {
 	SystemDefaultTimeouts *schema.Empty `protobuf:"bytes,97,opt,name=system_default_timeouts,json=systemDefaultTimeouts,proto3,oneof" json:"system_default_timeouts,omitempty"`
@@ -10265,6 +7990,8 @@ func (*GetSpecType_DisableApiDiscovery) isGetSpecType_ApiDiscoveryChoice()      
 func (*GetSpecType_DisableBotDefense) isGetSpecType_BotDefenseChoice()                         {}
 func (*GetSpecType_BotDefense) isGetSpecType_BotDefenseChoice()                                {}
 func (*GetSpecType_BotDefenseAdvanced) isGetSpecType_BotDefenseChoice()                        {}
+func (*GetSpecType_DefaultSensitiveDataPolicy) isGetSpecType_SensitiveDataPolicyChoice()       {}
+func (*GetSpecType_SensitiveDataPolicy) isGetSpecType_SensitiveDataPolicyChoice()              {}
 func (*GetSpecType_DisableApiDefinition) isGetSpecType_ApiDefinitionChoice()                   {}
 func (*GetSpecType_ApiDefinition) isGetSpecType_ApiDefinitionChoice()                          {}
 func (*GetSpecType_ApiSpecification) isGetSpecType_ApiDefinitionChoice()                       {}
@@ -10363,6 +8090,12 @@ func (m *GetSpecType) GetApiDiscoveryChoice() isGetSpecType_ApiDiscoveryChoice {
 func (m *GetSpecType) GetBotDefenseChoice() isGetSpecType_BotDefenseChoice {
 	if m != nil {
 		return m.BotDefenseChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetSensitiveDataPolicyChoice() isGetSpecType_SensitiveDataPolicyChoice {
+	if m != nil {
+		return m.SensitiveDataPolicyChoice
 	}
 	return nil
 }
@@ -10585,6 +8318,13 @@ func (m *GetSpecType) GetUserIdentification() *views.ObjectRefType {
 	return nil
 }
 
+func (m *GetSpecType) GetApiRateLimitLegacy() *common_waf.APIRateLimitLegacy {
+	if m != nil {
+		return m.ApiRateLimitLegacy
+	}
+	return nil
+}
+
 func (m *GetSpecType) GetDisableRateLimit() *schema.Empty {
 	if x, ok := m.GetRateLimitChoice().(*GetSpecType_DisableRateLimit); ok {
 		return x.DisableRateLimit
@@ -10648,7 +8388,7 @@ func (m *GetSpecType) GetApiProtectionRules() *common_waf.APIProtectionRules {
 	return nil
 }
 
-func (m *GetSpecType) GetDdosMitigationRules() []*DDoSMitigationRule {
+func (m *GetSpecType) GetDdosMitigationRules() []*common_security.DDoSMitigationRule {
 	if m != nil {
 		return m.DdosMitigationRules
 	}
@@ -10781,16 +8521,30 @@ func (m *GetSpecType) GetDisableBotDefense() *schema.Empty {
 	return nil
 }
 
-func (m *GetSpecType) GetBotDefense() *ShapeBotDefenseType {
+func (m *GetSpecType) GetBotDefense() *common_security.ShapeBotDefenseType {
 	if x, ok := m.GetBotDefenseChoice().(*GetSpecType_BotDefense); ok {
 		return x.BotDefense
 	}
 	return nil
 }
 
-func (m *GetSpecType) GetBotDefenseAdvanced() *BotDefenseAdvancedType {
+func (m *GetSpecType) GetBotDefenseAdvanced() *common_security.BotDefenseAdvancedType {
 	if x, ok := m.GetBotDefenseChoice().(*GetSpecType_BotDefenseAdvanced); ok {
 		return x.BotDefenseAdvanced
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDefaultSensitiveDataPolicy() *schema.Empty {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*GetSpecType_DefaultSensitiveDataPolicy); ok {
+		return x.DefaultSensitiveDataPolicy
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetSensitiveDataPolicy() *common_security.SensitiveDataPolicySettings {
+	if x, ok := m.GetSensitiveDataPolicyChoice().(*GetSpecType_SensitiveDataPolicy); ok {
+		return x.SensitiveDataPolicy
 	}
 	return nil
 }
@@ -10844,7 +8598,7 @@ func (m *GetSpecType) GetDisableClientSideDefense() *schema.Empty {
 	return nil
 }
 
-func (m *GetSpecType) GetClientSideDefense() *ClientSideDefenseType {
+func (m *GetSpecType) GetClientSideDefense() *common_security.ClientSideDefenseType {
 	if x, ok := m.GetClientSideDefenseChoice().(*GetSpecType_ClientSideDefense); ok {
 		return x.ClientSideDefense
 	}
@@ -10977,6 +8731,13 @@ func (m *GetSpecType) GetCertState() virtual_host.CertificationState {
 	return virtual_host.AutoCertDisabled
 }
 
+func (m *GetSpecType) GetSensitiveDataDisclosureRules() *SensitiveDataDisclosureRules {
+	if m != nil {
+		return m.SensitiveDataDisclosureRules
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -11021,6 +8782,8 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_DisableBotDefense)(nil),
 		(*GetSpecType_BotDefense)(nil),
 		(*GetSpecType_BotDefenseAdvanced)(nil),
+		(*GetSpecType_DefaultSensitiveDataPolicy)(nil),
+		(*GetSpecType_SensitiveDataPolicy)(nil),
 		(*GetSpecType_DisableApiDefinition)(nil),
 		(*GetSpecType_ApiDefinition)(nil),
 		(*GetSpecType_ApiSpecification)(nil),
@@ -11041,14 +8804,6 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 }
 
 func init() {
-	proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.MobileIdentifier", MobileIdentifier_name, MobileIdentifier_value)
-	golang_proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.MobileIdentifier", MobileIdentifier_name, MobileIdentifier_value)
-	proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.URLScheme", URLScheme_name, URLScheme_value)
-	golang_proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.URLScheme", URLScheme_name, URLScheme_value)
-	proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.ShapeBotDefenseRegion", ShapeBotDefenseRegion_name, ShapeBotDefenseRegion_value)
-	golang_proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.ShapeBotDefenseRegion", ShapeBotDefenseRegion_name, ShapeBotDefenseRegion_value)
-	proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.JavaScriptLocation", JavaScriptLocation_name, JavaScriptLocation_value)
-	golang_proto.RegisterEnum("ves.io.schema.views.http_loadbalancer.JavaScriptLocation", JavaScriptLocation_name, JavaScriptLocation_value)
 	proto.RegisterType((*ProxyTypeHttps)(nil), "ves.io.schema.views.http_loadbalancer.ProxyTypeHttps")
 	golang_proto.RegisterType((*ProxyTypeHttps)(nil), "ves.io.schema.views.http_loadbalancer.ProxyTypeHttps")
 	proto.RegisterType((*ProxyTypeHttp)(nil), "ves.io.schema.views.http_loadbalancer.ProxyTypeHttp")
@@ -11079,60 +8834,18 @@ func init() {
 	golang_proto.RegisterType((*AdvancedOptionsType)(nil), "ves.io.schema.views.http_loadbalancer.AdvancedOptionsType")
 	proto.RegisterMapType((map[uint32]string)(nil), "ves.io.schema.views.http_loadbalancer.AdvancedOptionsType.CustomErrorsEntry")
 	golang_proto.RegisterMapType((map[uint32]string)(nil), "ves.io.schema.views.http_loadbalancer.AdvancedOptionsType.CustomErrorsEntry")
-	proto.RegisterType((*DDoSClientSource)(nil), "ves.io.schema.views.http_loadbalancer.DDoSClientSource")
-	golang_proto.RegisterType((*DDoSClientSource)(nil), "ves.io.schema.views.http_loadbalancer.DDoSClientSource")
-	proto.RegisterType((*DDoSMitigationRule)(nil), "ves.io.schema.views.http_loadbalancer.DDoSMitigationRule")
-	golang_proto.RegisterType((*DDoSMitigationRule)(nil), "ves.io.schema.views.http_loadbalancer.DDoSMitigationRule")
 	proto.RegisterType((*SingleLoadBalancerAppSetting)(nil), "ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting")
 	golang_proto.RegisterType((*SingleLoadBalancerAppSetting)(nil), "ves.io.schema.views.http_loadbalancer.SingleLoadBalancerAppSetting")
 	proto.RegisterType((*OriginServerSubsetRuleListType)(nil), "ves.io.schema.views.http_loadbalancer.OriginServerSubsetRuleListType")
 	golang_proto.RegisterType((*OriginServerSubsetRuleListType)(nil), "ves.io.schema.views.http_loadbalancer.OriginServerSubsetRuleListType")
-	proto.RegisterType((*ClientSideDefenseType)(nil), "ves.io.schema.views.http_loadbalancer.ClientSideDefenseType")
-	golang_proto.RegisterType((*ClientSideDefenseType)(nil), "ves.io.schema.views.http_loadbalancer.ClientSideDefenseType")
-	proto.RegisterType((*ClientSideDefensePolicyType)(nil), "ves.io.schema.views.http_loadbalancer.ClientSideDefensePolicyType")
-	golang_proto.RegisterType((*ClientSideDefensePolicyType)(nil), "ves.io.schema.views.http_loadbalancer.ClientSideDefensePolicyType")
-	proto.RegisterType((*CSDJavaScriptInsertAllWithExceptionsType)(nil), "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType")
-	golang_proto.RegisterType((*CSDJavaScriptInsertAllWithExceptionsType)(nil), "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType")
-	proto.RegisterType((*CSDJavaScriptInsertType)(nil), "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertType")
-	golang_proto.RegisterType((*CSDJavaScriptInsertType)(nil), "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertType")
-	proto.RegisterType((*CSDJavaScriptInsertionRule)(nil), "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertionRule")
-	golang_proto.RegisterType((*CSDJavaScriptInsertionRule)(nil), "ves.io.schema.views.http_loadbalancer.CSDJavaScriptInsertionRule")
-	proto.RegisterType((*BotDefenseAdvancedPolicyType)(nil), "ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedPolicyType")
-	golang_proto.RegisterType((*BotDefenseAdvancedPolicyType)(nil), "ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedPolicyType")
-	proto.RegisterType((*BotAdvancedMobileSDKConfigType)(nil), "ves.io.schema.views.http_loadbalancer.BotAdvancedMobileSDKConfigType")
-	golang_proto.RegisterType((*BotAdvancedMobileSDKConfigType)(nil), "ves.io.schema.views.http_loadbalancer.BotAdvancedMobileSDKConfigType")
-	proto.RegisterType((*ProtectedAppEndpointType)(nil), "ves.io.schema.views.http_loadbalancer.ProtectedAppEndpointType")
-	golang_proto.RegisterType((*ProtectedAppEndpointType)(nil), "ves.io.schema.views.http_loadbalancer.ProtectedAppEndpointType")
-	proto.RegisterType((*RequestBody)(nil), "ves.io.schema.views.http_loadbalancer.RequestBody")
-	golang_proto.RegisterType((*RequestBody)(nil), "ves.io.schema.views.http_loadbalancer.RequestBody")
-	proto.RegisterType((*Query)(nil), "ves.io.schema.views.http_loadbalancer.Query")
-	golang_proto.RegisterType((*Query)(nil), "ves.io.schema.views.http_loadbalancer.Query")
-	proto.RegisterType((*ShapeBotDefenseType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefenseType")
-	golang_proto.RegisterType((*ShapeBotDefenseType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefenseType")
-	proto.RegisterType((*BotDefenseAdvancedType)(nil), "ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedType")
-	golang_proto.RegisterType((*BotDefenseAdvancedType)(nil), "ves.io.schema.views.http_loadbalancer.BotDefenseAdvancedType")
-	proto.RegisterType((*ShapeBotDefensePolicyType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefensePolicyType")
-	golang_proto.RegisterType((*ShapeBotDefensePolicyType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeBotDefensePolicyType")
-	proto.RegisterType((*MobileTrafficIdentifierType)(nil), "ves.io.schema.views.http_loadbalancer.MobileTrafficIdentifierType")
-	golang_proto.RegisterType((*MobileTrafficIdentifierType)(nil), "ves.io.schema.views.http_loadbalancer.MobileTrafficIdentifierType")
-	proto.RegisterType((*MobileSDKConfigType)(nil), "ves.io.schema.views.http_loadbalancer.MobileSDKConfigType")
-	golang_proto.RegisterType((*MobileSDKConfigType)(nil), "ves.io.schema.views.http_loadbalancer.MobileSDKConfigType")
-	proto.RegisterType((*AppEndpointType)(nil), "ves.io.schema.views.http_loadbalancer.AppEndpointType")
-	golang_proto.RegisterType((*AppEndpointType)(nil), "ves.io.schema.views.http_loadbalancer.AppEndpointType")
-	proto.RegisterType((*WebMobileTrafficType)(nil), "ves.io.schema.views.http_loadbalancer.WebMobileTrafficType")
-	golang_proto.RegisterType((*WebMobileTrafficType)(nil), "ves.io.schema.views.http_loadbalancer.WebMobileTrafficType")
-	proto.RegisterType((*ShapeJavaScriptInsertType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertType")
-	golang_proto.RegisterType((*ShapeJavaScriptInsertType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertType")
-	proto.RegisterType((*ShapeJavaScriptInsertAllWithExceptionsType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType")
-	golang_proto.RegisterType((*ShapeJavaScriptInsertAllWithExceptionsType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType")
-	proto.RegisterType((*ShapeJavaScriptInsertAllType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllType")
-	golang_proto.RegisterType((*ShapeJavaScriptInsertAllType)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertAllType")
-	proto.RegisterType((*ShapeJavaScriptInsertionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertionRule")
-	golang_proto.RegisterType((*ShapeJavaScriptInsertionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptInsertionRule")
-	proto.RegisterType((*ShapeJavaScriptExclusionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptExclusionRule")
-	golang_proto.RegisterType((*ShapeJavaScriptExclusionRule)(nil), "ves.io.schema.views.http_loadbalancer.ShapeJavaScriptExclusionRule")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.http_loadbalancer.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.views.http_loadbalancer.GlobalSpecType")
+	proto.RegisterType((*SensitiveDataDisclosureRules)(nil), "ves.io.schema.views.http_loadbalancer.SensitiveDataDisclosureRules")
+	golang_proto.RegisterType((*SensitiveDataDisclosureRules)(nil), "ves.io.schema.views.http_loadbalancer.SensitiveDataDisclosureRules")
+	proto.RegisterType((*SensitiveDataTypes)(nil), "ves.io.schema.views.http_loadbalancer.SensitiveDataTypes")
+	golang_proto.RegisterType((*SensitiveDataTypes)(nil), "ves.io.schema.views.http_loadbalancer.SensitiveDataTypes")
+	proto.RegisterType((*BodySectionMaskingOptions)(nil), "ves.io.schema.views.http_loadbalancer.BodySectionMaskingOptions")
+	golang_proto.RegisterType((*BodySectionMaskingOptions)(nil), "ves.io.schema.views.http_loadbalancer.BodySectionMaskingOptions")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.http_loadbalancer.CreateSpecType")
 	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.views.http_loadbalancer.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.views.http_loadbalancer.ReplaceSpecType")
@@ -11149,799 +8862,631 @@ func init() {
 }
 
 var fileDescriptor_6478b2bb990a4a3e = []byte{
-	// 12192 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0xbd, 0x5b, 0x70, 0x1b, 0x69,
-	0x76, 0x1f, 0xce, 0x0f, 0x04, 0x40, 0xf0, 0x80, 0x04, 0x1b, 0x1f, 0x49, 0x11, 0xa2, 0x24, 0x0a,
-	0x43, 0x8d, 0x46, 0x1a, 0x4d, 0x8b, 0x22, 0xc0, 0x3b, 0x67, 0x46, 0x33, 0x6c, 0x4a, 0x1a, 0x08,
-	0xab, 0x0b, 0xa7, 0x49, 0x49, 0x73, 0xc7, 0x34, 0x81, 0x26, 0xd9, 0x12, 0x80, 0xc6, 0x74, 0x37,
-	0x75, 0xb1, 0xff, 0x53, 0xd6, 0x5f, 0x7f, 0xff, 0x9d, 0xb5, 0x7c, 0x59, 0x7b, 0xf2, 0x10, 0xef,
-	0x3e, 0xb8, 0x52, 0x76, 0xaa, 0xe2, 0x9a, 0x97, 0x24, 0xae, 0x72, 0x2a, 0x15, 0x68, 0x53, 0xcc,
-	0x54, 0x39, 0xb5, 0x35, 0x49, 0x95, 0x59, 0xa9, 0x3c, 0x6c, 0x26, 0x89, 0xcb, 0xe6, 0x26, 0xe5,
-	0xf5, 0xda, 0xa9, 0xda, 0x1a, 0xbf, 0xb8, 0xe6, 0xc1, 0x4e, 0x7d, 0x97, 0x6e, 0x74, 0x83, 0x0d,
-	0xf0, 0x22, 0x6a, 0x26, 0xeb, 0xc5, 0x13, 0x89, 0xee, 0x73, 0xce, 0x77, 0xff, 0xce, 0x77, 0xce,
-	0xf9, 0x7d, 0xa7, 0x21, 0x75, 0x57, 0x35, 0x47, 0x34, 0xfd, 0x9c, 0x99, 0x5f, 0x53, 0x4b, 0xca,
-	0xb9, 0xbb, 0x9a, 0x7a, 0xcf, 0x3c, 0xb7, 0x66, 0x59, 0x95, 0x5c, 0x51, 0x57, 0x0a, 0xcb, 0x4a,
-	0x51, 0x29, 0xe7, 0x55, 0xe3, 0x9c, 0xf5, 0xa0, 0xa2, 0x9a, 0x23, 0x15, 0x43, 0xb7, 0x74, 0x7c,
-	0x92, 0xb1, 0x8c, 0x30, 0x96, 0x11, 0xca, 0x32, 0xb2, 0x8d, 0x65, 0xf0, 0xec, 0xaa, 0x66, 0xad,
-	0xad, 0x2f, 0x8f, 0xe4, 0xf5, 0xd2, 0xb9, 0x55, 0x7d, 0x55, 0x3f, 0x47, 0xb9, 0x97, 0xd7, 0x57,
-	0xe8, 0x2f, 0xfa, 0x83, 0xfe, 0xc7, 0xa4, 0x0e, 0x1e, 0x5f, 0xd5, 0xf5, 0xd5, 0xa2, 0x5a, 0xa3,
-	0xb2, 0xb4, 0x92, 0x6a, 0x5a, 0x4a, 0xa9, 0xc2, 0x09, 0x86, 0xbd, 0x35, 0x55, 0x2a, 0x95, 0x1c,
-	0xa9, 0x95, 0xbb, 0x6a, 0x83, 0x47, 0xbc, 0x34, 0x7a, 0xc5, 0xd2, 0xf4, 0xb2, 0xfd, 0x32, 0xe9,
-	0x7d, 0x59, 0xd1, 0x8b, 0x5a, 0xfe, 0x81, 0x87, 0xfd, 0x05, 0x2f, 0x85, 0xa1, 0x58, 0x6a, 0xae,
-	0xa8, 0x95, 0x34, 0xcb, 0xdb, 0x03, 0x83, 0xc7, 0xeb, 0xe8, 0xf4, 0x75, 0xcb, 0x5b, 0x8f, 0xb3,
-	0x5e, 0x02, 0x53, 0x35, 0xee, 0x6a, 0x79, 0x35, 0xc7, 0x8a, 0xcc, 0x19, 0xeb, 0x45, 0x2f, 0xf9,
-	0x61, 0x2f, 0xb9, 0xfb, 0xd5, 0xd1, 0xba, 0xf1, 0x51, 0x8a, 0x5a, 0x41, 0xb1, 0x54, 0xff, 0x26,
-	0x91, 0xa1, 0xc8, 0x79, 0x1b, 0x3d, 0xe1, 0x37, 0xbe, 0x79, 0xbd, 0x54, 0xd2, 0xcb, 0xb9, 0x7b,
-	0xca, 0x8a, 0xeb, 0xdf, 0x9c, 0xbb, 0xd8, 0x97, 0xfc, 0xd8, 0x74, 0x43, 0x5b, 0xd5, 0xca, 0xb9,
-	0x8a, 0xae, 0x17, 0x3d, 0x75, 0x1c, 0xf3, 0x23, 0x76, 0x77, 0x5e, 0xce, 0xa7, 0xaf, 0x8f, 0xfb,
-	0x31, 0x35, 0x19, 0x8c, 0xbb, 0x9a, 0x61, 0xad, 0x2b, 0xc5, 0xdc, 0x9a, 0x6e, 0x5a, 0x1e, 0xba,
-	0xd1, 0xc6, 0x74, 0xb9, 0x42, 0xd9, 0xcc, 0x69, 0xe5, 0x15, 0xfd, 0x9c, 0xbe, 0x7c, 0x5b, 0xcd,
-	0x5b, 0x8c, 0x63, 0xf8, 0x8f, 0xba, 0x20, 0xb6, 0x60, 0xe8, 0xf7, 0x1f, 0x2c, 0x3d, 0xa8, 0xa8,
-	0x19, 0xcb, 0xaa, 0x98, 0xf8, 0x45, 0xe8, 0xa6, 0x33, 0xd8, 0x50, 0x0b, 0x9a, 0xa1, 0xe6, 0xad,
-	0x04, 0x4a, 0xa2, 0xd3, 0x11, 0x29, 0xf8, 0xb7, 0x55, 0xd4, 0x26, 0x77, 0x91, 0x57, 0x32, 0x7f,
-	0x83, 0x8f, 0x43, 0x44, 0x29, 0x14, 0x72, 0x6b, 0xa6, 0x65, 0x26, 0x02, 0x2e, 0xaa, 0x0e, 0xa5,
-	0x50, 0xc8, 0x98, 0x96, 0x89, 0xdf, 0x85, 0x98, 0x55, 0x34, 0x73, 0x15, 0xc5, 0x50, 0x4a, 0xaa,
-	0xa5, 0x1a, 0x66, 0xa2, 0x3d, 0x89, 0x4e, 0x47, 0xd3, 0xe2, 0x88, 0xdf, 0xc2, 0xb9, 0xa0, 0xdf,
-	0x2b, 0x9b, 0x96, 0xa1, 0x2a, 0xa5, 0xa5, 0xa2, 0xb9, 0x40, 0x78, 0x4c, 0x52, 0x2d, 0x29, 0xb8,
-	0x59, 0x45, 0x28, 0xd3, 0x26, 0x77, 0x5b, 0xfc, 0x31, 0x15, 0x85, 0xdf, 0x87, 0x1e, 0x22, 0x3c,
-	0xaf, 0x1a, 0x16, 0x2b, 0xc1, 0x4c, 0x1c, 0xa2, 0xd2, 0xcf, 0xee, 0x24, 0xfd, 0xca, 0xe2, 0xbc,
-	0x6a, 0x58, 0xbc, 0x08, 0x8f, 0x78, 0xf2, 0x9c, 0x3d, 0xc6, 0xf3, 0x10, 0x2b, 0xa8, 0x2b, 0xca,
-	0x7a, 0xd1, 0xca, 0xad, 0xa9, 0x4a, 0x41, 0x35, 0x12, 0x21, 0x2a, 0xbd, 0xaf, 0x4e, 0xfa, 0xc5,
-	0x52, 0xc5, 0x7a, 0x20, 0x05, 0x37, 0x88, 0x10, 0x24, 0x77, 0x73, 0x9e, 0x0c, 0x65, 0xc1, 0x29,
-	0x88, 0x92, 0x19, 0xaf, 0x1a, 0xb9, 0xb2, 0x52, 0x52, 0x13, 0xe1, 0x24, 0x3a, 0xdd, 0x29, 0xc5,
-	0x08, 0xed, 0xbf, 0xfd, 0xcb, 0x8d, 0xf6, 0x90, 0xd1, 0x9e, 0xf8, 0xa7, 0xaf, 0x65, 0x90, 0x0c,
-	0x8c, 0xe8, 0x9a, 0x52, 0x52, 0xf1, 0x79, 0xc0, 0x4a, 0xa5, 0xa2, 0x96, 0x0b, 0x39, 0x37, 0x67,
-	0x47, 0x03, 0x4e, 0x81, 0xd1, 0x2e, 0xd6, 0xf8, 0x5f, 0x83, 0xae, 0x8a, 0x62, 0x9a, 0x39, 0x6b,
-	0xcd, 0xd0, 0xd7, 0x57, 0xd7, 0x12, 0x91, 0x5d, 0xd4, 0x3a, 0x4a, 0x38, 0x96, 0x18, 0x03, 0x5e,
-	0x80, 0x7e, 0xb5, 0xac, 0x2c, 0x17, 0xd5, 0x5c, 0x45, 0xb1, 0xd6, 0x72, 0x65, 0xdd, 0x28, 0x29,
-	0x45, 0xed, 0x17, 0xd4, 0x04, 0xec, 0x28, 0x29, 0x20, 0xf7, 0x32, 0xd6, 0x05, 0xc5, 0x5a, 0xbb,
-	0x66, 0x33, 0x62, 0x19, 0x0e, 0x15, 0x34, 0xd3, 0x4f, 0x64, 0x74, 0x17, 0x22, 0xfb, 0x38, 0xaf,
-	0x57, 0xe6, 0x69, 0x08, 0x56, 0x74, 0xc3, 0x4a, 0xf4, 0x24, 0xd1, 0xe9, 0x6e, 0x09, 0x7f, 0x51,
-	0x45, 0xed, 0xe3, 0xe3, 0x63, 0xa4, 0x6f, 0xc2, 0x67, 0x82, 0x89, 0xbf, 0xff, 0xfb, 0xf6, 0x4c,
-	0xbb, 0x4c, 0x29, 0x70, 0x16, 0xa2, 0xe4, 0x6f, 0xce, 0x50, 0xca, 0xab, 0xaa, 0x99, 0x38, 0x4c,
-	0x7b, 0xf2, 0x94, 0xdd, 0x8b, 0x0f, 0x83, 0xfc, 0xbf, 0xcd, 0xe0, 0xeb, 0xe4, 0xbf, 0xa0, 0x11,
-	0x10, 0xec, 0x2e, 0xfe, 0x61, 0x10, 0x65, 0xda, 0x65, 0x20, 0xdc, 0x32, 0x65, 0xc6, 0x37, 0x21,
-	0x51, 0xd6, 0xcb, 0x39, 0x7b, 0x62, 0xb8, 0x77, 0xf9, 0x44, 0x7c, 0xc7, 0xb6, 0x04, 0xe5, 0x43,
-	0x65, 0xbd, 0x7c, 0x81, 0x31, 0x5f, 0x71, 0xf1, 0xe2, 0xeb, 0xd0, 0xe7, 0x2b, 0x13, 0xef, 0x42,
-	0x66, 0x6f, 0xc1, 0x47, 0xe0, 0x47, 0x30, 0xc8, 0x66, 0x6d, 0xce, 0x32, 0x94, 0xb2, 0xb9, 0x42,
-	0xfa, 0x8d, 0x6c, 0x86, 0x74, 0x6b, 0x4b, 0xf4, 0x52, 0xb1, 0xa7, 0xea, 0xc4, 0xb2, 0x39, 0xbb,
-	0xe4, 0xa1, 0xa7, 0x0b, 0x10, 0x48, 0x49, 0x3f, 0xae, 0x22, 0x94, 0x40, 0x72, 0x62, 0xad, 0x01,
-	0x15, 0x7e, 0x1b, 0x06, 0xf2, 0x7a, 0xb9, 0xac, 0xe6, 0x69, 0x39, 0x5a, 0xa1, 0xa8, 0xe6, 0x88,
-	0xe2, 0xd2, 0xd7, 0xad, 0x44, 0x1f, 0x1d, 0xa4, 0xe7, 0x88, 0x98, 0x2f, 0xaa, 0x28, 0x9c, 0x4a,
-	0x8f, 0x8e, 0x8e, 0x8e, 0x92, 0xad, 0xe2, 0xdb, 0x4f, 0x50, 0x9b, 0x3d, 0x66, 0x1b, 0x7f, 0xf2,
-	0xbc, 0xdc, 0x5f, 0x93, 0x70, 0xb9, 0x50, 0x54, 0x97, 0x18, 0x3f, 0xd6, 0xa0, 0x9f, 0xee, 0x49,
-	0x74, 0xd3, 0xca, 0xeb, 0x45, 0x7b, 0x67, 0x4f, 0x0c, 0xd0, 0x86, 0x9c, 0xdb, 0xb6, 0xe0, 0x6b,
-	0x1b, 0xdf, 0x08, 0xd9, 0xd5, 0x16, 0x38, 0xdf, 0x75, 0xc6, 0x26, 0x05, 0xff, 0xe5, 0x13, 0x84,
-	0xe4, 0xde, 0xb5, 0xed, 0xaf, 0x66, 0x13, 0x5f, 0x9e, 0xef, 0x4f, 0x89, 0x69, 0x31, 0x3d, 0x2e,
-	0x8e, 0x89, 0xe3, 0xe2, 0x8c, 0x98, 0x9a, 0x14, 0x53, 0x33, 0x62, 0x7a, 0x54, 0x7a, 0x09, 0x06,
-	0xec, 0xfd, 0x46, 0x5b, 0xd1, 0xf2, 0x8a, 0xa5, 0x9a, 0xb9, 0xfc, 0x9a, 0xae, 0xe5, 0x55, 0x2c,
-	0x6c, 0x54, 0xd1, 0xa1, 0xcd, 0x2a, 0xea, 0xdf, 0xaa, 0xa2, 0x60, 0x3a, 0x2d, 0x8e, 0x49, 0xe7,
-	0xa0, 0x8f, 0x2f, 0x5f, 0x3e, 0x0c, 0x9c, 0x72, 0x60, 0xa3, 0x8a, 0x42, 0x3f, 0xa8, 0x22, 0xb4,
-	0x59, 0x45, 0xc1, 0xad, 0x2a, 0xea, 0x98, 0x10, 0x27, 0xc5, 0x29, 0x71, 0x5a, 0x1a, 0x81, 0x7e,
-	0xef, 0xda, 0xb0, 0x39, 0xfa, 0x37, 0xaa, 0x08, 0x38, 0x47, 0xe7, 0x56, 0x15, 0x85, 0x52, 0xa3,
-	0x62, 0x2a, 0x25, 0x25, 0xf9, 0xac, 0xe6, 0x54, 0xf1, 0x8d, 0x2a, 0xea, 0xd9, 0xac, 0xa2, 0x04,
-	0xa5, 0x98, 0x10, 0xd3, 0x13, 0xd2, 0x19, 0x88, 0x3b, 0x73, 0x6a, 0xd9, 0x2d, 0x2d, 0xce, 0xa5,
-	0x09, 0x94, 0x76, 0x4a, 0x4c, 0x4d, 0x67, 0x83, 0x91, 0x7e, 0xe1, 0x50, 0x36, 0x18, 0x09, 0x0a,
-	0xa1, 0x6c, 0x30, 0xd2, 0x29, 0x40, 0x36, 0x18, 0xe9, 0x12, 0xba, 0xb3, 0xc1, 0x48, 0xb7, 0x10,
-	0xcb, 0x06, 0x23, 0x31, 0xa1, 0x27, 0x1b, 0x8c, 0x24, 0x84, 0xc3, 0xd9, 0x60, 0x44, 0x10, 0xe2,
-	0xc3, 0x0f, 0x03, 0xd0, 0xed, 0xd1, 0x1b, 0x78, 0x12, 0xfa, 0x88, 0x8a, 0xb9, 0xab, 0x17, 0x2d,
-	0xd5, 0x30, 0x94, 0x5c, 0x49, 0x29, 0x2b, 0xab, 0x6a, 0xc1, 0xa3, 0x3d, 0x70, 0xa1, 0x6c, 0xde,
-	0xe4, 0x04, 0x57, 0xd9, 0x7b, 0x7c, 0x8a, 0xaf, 0xe3, 0x00, 0x9d, 0x22, 0xf1, 0x2f, 0xaa, 0x28,
-	0x30, 0x3d, 0xea, 0x5e, 0xc6, 0x6d, 0xfe, 0xcb, 0x38, 0xb8, 0xb7, 0x65, 0xdc, 0xe6, 0x5e, 0xc6,
-	0xb3, 0xe1, 0x2f, 0xcf, 0xb7, 0xa7, 0xc4, 0x31, 0x69, 0xdc, 0xdb, 0x89, 0x27, 0x37, 0xaa, 0x28,
-	0xb0, 0x59, 0x45, 0xed, 0x5b, 0x55, 0xd4, 0x9e, 0x16, 0xc7, 0x1f, 0x3f, 0x41, 0x18, 0x84, 0x7c,
-	0xa1, 0xec, 0x59, 0x94, 0xd9, 0x60, 0xa4, 0x5d, 0x08, 0x0e, 0x7f, 0xd1, 0x05, 0x03, 0x5e, 0xd5,
-	0x39, 0xb7, 0x6e, 0xe9, 0x54, 0xb1, 0x1c, 0xa8, 0x0e, 0x9d, 0x07, 0xa0, 0xd3, 0x4e, 0x2f, 0xaf,
-	0x68, 0xab, 0x5c, 0x7f, 0x0e, 0xf9, 0x6a, 0xb8, 0xa5, 0xa2, 0x39, 0x4f, 0xa9, 0xa4, 0xe0, 0x4f,
-	0xab, 0x08, 0xc9, 0x9d, 0x96, 0xfd, 0x00, 0x4f, 0x40, 0x47, 0x59, 0xcf, 0x95, 0xac, 0xa2, 0xb9,
-	0x0b, 0x2d, 0xd6, 0x26, 0x87, 0xcb, 0xfa, 0x55, 0xab, 0x48, 0xb6, 0xbb, 0xc8, 0xba, 0xa9, 0x32,
-	0xbe, 0x30, 0xe5, 0x1b, 0xdb, 0x59, 0x73, 0xdf, 0x64, 0x07, 0x33, 0x4d, 0x2f, 0xcf, 0xeb, 0x65,
-	0x4b, 0xbd, 0x6f, 0x39, 0x62, 0x3b, 0xd6, 0x4d, 0x95, 0xca, 0xdd, 0xae, 0x5b, 0x23, 0x4f, 0xad,
-	0x5b, 0x3b, 0xf7, 0xad, 0x5b, 0x61, 0xdf, 0xba, 0x35, 0x7a, 0x60, 0xba, 0xb5, 0xfb, 0xe0, 0x75,
-	0x6b, 0x6c, 0xdf, 0xba, 0x55, 0xe4, 0x6b, 0x12, 0xd3, 0x35, 0x79, 0x88, 0xeb, 0x56, 0x32, 0x2d,
-	0x77, 0xa1, 0x5f, 0x07, 0x9f, 0x95, 0x7e, 0xed, 0x7b, 0x06, 0xfa, 0xb5, 0x7f, 0xbf, 0xfa, 0x75,
-	0xbd, 0xa9, 0x7e, 0x3d, 0xb4, 0x37, 0xfd, 0x1a, 0xb3, 0xf5, 0x2b, 0x51, 0x4b, 0xfb, 0xd5, 0xb1,
-	0x03, 0xcf, 0x4a, 0xc7, 0x26, 0x0e, 0x5c, 0xc7, 0x1e, 0xf9, 0xf2, 0x7c, 0x82, 0xea, 0xd8, 0x09,
-	0xaa, 0x63, 0xa7, 0xc4, 0x54, 0x9a, 0xea, 0xd8, 0xb4, 0x98, 0x1e, 0x93, 0x86, 0x21, 0x5a, 0xa2,
-	0x1b, 0x1e, 0xdb, 0x93, 0x7b, 0xeb, 0x14, 0x66, 0xfb, 0x84, 0x38, 0x29, 0xa5, 0x1a, 0x68, 0xd7,
-	0xc3, 0x1b, 0x55, 0x14, 0xe1, 0xc4, 0x1d, 0x5b, 0x55, 0xd4, 0x39, 0x4d, 0x14, 0x38, 0xd5, 0x97,
-	0x4d, 0xf5, 0x6b, 0x37, 0xe7, 0xe9, 0xa2, 0x1a, 0x71, 0x4c, 0x4c, 0x8d, 0xfb, 0xe9, 0x57, 0xbc,
-	0x59, 0x45, 0x87, 0x29, 0xc5, 0xb4, 0x98, 0x9e, 0x6c, 0xac, 0x5f, 0xfb, 0xb8, 0xb4, 0x5e, 0x42,
-	0x9b, 0x1e, 0x15, 0xd3, 0x29, 0x47, 0xb3, 0x76, 0x08, 0x11, 0x47, 0xb3, 0xf6, 0x08, 0x02, 0xd3,
-	0xa6, 0xd9, 0x60, 0x24, 0x2e, 0xe0, 0x6c, 0x30, 0x72, 0x58, 0x18, 0xcc, 0x06, 0x23, 0xbd, 0x42,
-	0xdf, 0xf0, 0x2f, 0x01, 0xce, 0x28, 0xe6, 0xda, 0x02, 0x35, 0x16, 0xaf, 0x68, 0xa6, 0x45, 0x47,
-	0x5f, 0x83, 0xe8, 0x9a, 0x62, 0xae, 0x71, 0x1b, 0x32, 0x21, 0x24, 0xdb, 0x4f, 0x47, 0xd3, 0x27,
-	0xea, 0x06, 0x86, 0x9a, 0xe0, 0x23, 0x35, 0x6e, 0x3a, 0xc3, 0x4e, 0x6c, 0xda, 0x9b, 0xdb, 0x27,
-	0x28, 0x20, 0x44, 0xec, 0xff, 0x12, 0x68, 0xeb, 0xcf, 0xfe, 0xb8, 0x3d, 0xfc, 0xc9, 0x13, 0x14,
-	0x10, 0x90, 0x0c, 0x6b, 0x0e, 0xd3, 0xf0, 0xef, 0x23, 0x10, 0xae, 0x6a, 0x86, 0xa1, 0x1b, 0x35,
-	0x29, 0x78, 0x11, 0xa2, 0x2e, 0xc3, 0x97, 0x2a, 0xb5, 0x68, 0x7a, 0xd8, 0x57, 0x23, 0x5c, 0xa7,
-	0x56, 0xa6, 0xac, 0xae, 0xb0, 0x09, 0xfe, 0xe9, 0xc7, 0x6e, 0x4e, 0x19, 0xd8, 0x8f, 0x05, 0x5d,
-	0x2f, 0xe2, 0x59, 0xe8, 0xa8, 0xa8, 0x46, 0x5e, 0x2d, 0xb3, 0x33, 0x40, 0x34, 0x9d, 0xac, 0x13,
-	0x78, 0xc9, 0x50, 0xe8, 0x64, 0x55, 0x8a, 0x0b, 0x8c, 0x4e, 0xb6, 0x19, 0x86, 0xff, 0xf8, 0x08,
-	0x0c, 0xca, 0xa4, 0xbd, 0x8b, 0x5a, 0xa9, 0x52, 0x54, 0xe7, 0x0a, 0x77, 0xc9, 0xea, 0x2c, 0xf0,
-	0x79, 0x86, 0x2f, 0x00, 0xe6, 0x46, 0xbd, 0xbb, 0xdb, 0x02, 0x8d, 0xd7, 0x7c, 0xa6, 0x4d, 0x16,
-	0x18, 0x47, 0xad, 0xff, 0x70, 0x09, 0xfa, 0xcc, 0x8a, 0x9a, 0x27, 0x67, 0x3e, 0x8f, 0x1c, 0xa6,
-	0x8a, 0x67, 0x46, 0x76, 0xe5, 0x03, 0x1a, 0xd9, 0x3e, 0x9c, 0x99, 0x36, 0x19, 0xdb, 0x82, 0x5d,
-	0xc5, 0xcd, 0x42, 0xa4, 0x62, 0x68, 0xba, 0xa1, 0x59, 0x0f, 0xe8, 0x21, 0x27, 0xb6, 0x4d, 0xdb,
-	0x93, 0x16, 0x6b, 0xe5, 0xd5, 0x05, 0x4e, 0x25, 0x3b, 0xf4, 0xf8, 0x9f, 0x21, 0x10, 0xd4, 0x72,
-	0xa1, 0xa2, 0x6b, 0x65, 0x2b, 0x67, 0xae, 0x2f, 0x9b, 0xaa, 0x45, 0x14, 0x3e, 0x99, 0x26, 0x37,
-	0x77, 0x59, 0xcf, 0xc6, 0xdd, 0x39, 0x72, 0x91, 0x4b, 0x5e, 0x64, 0x82, 0x2f, 0x96, 0x2d, 0xe3,
-	0x81, 0xf4, 0x1c, 0x99, 0x59, 0xdf, 0x7b, 0x82, 0x82, 0x10, 0x68, 0x63, 0x33, 0xec, 0x7b, 0x28,
-	0x20, 0x08, 0x74, 0x5e, 0x3d, 0x7e, 0x82, 0x02, 0x91, 0x36, 0xb9, 0x47, 0xf5, 0x32, 0xe2, 0x2b,
-	0x2e, 0x9d, 0x65, 0xa8, 0x2b, 0xda, 0xfd, 0x9c, 0xa1, 0xde, 0x33, 0x34, 0x8b, 0x99, 0xb9, 0x8d,
-	0xc6, 0x06, 0xd5, 0xb4, 0x15, 0x65, 0x92, 0x19, 0x0f, 0x9e, 0x82, 0x58, 0x9d, 0x94, 0x08, 0x53,
-	0xe8, 0xb6, 0xc2, 0xa2, 0x6a, 0x28, 0x40, 0x0e, 0x10, 0x15, 0x0f, 0xe3, 0x1b, 0xd0, 0x6d, 0xa8,
-	0xab, 0x6a, 0x8d, 0x4f, 0xf4, 0x9d, 0x7f, 0x32, 0xa1, 0xb9, 0xaa, 0x58, 0xf9, 0x35, 0xce, 0x98,
-	0x41, 0x72, 0x17, 0x65, 0xb4, 0x05, 0xdd, 0x85, 0x43, 0x86, 0xfa, 0xd1, 0xba, 0x6a, 0xda, 0xc7,
-	0x19, 0x33, 0x67, 0xe9, 0x39, 0xa5, 0x50, 0x48, 0x74, 0xd2, 0xbe, 0x7f, 0xc9, 0x57, 0x11, 0x5c,
-	0x55, 0xca, 0x5a, 0x65, 0xbd, 0x48, 0x37, 0x77, 0xd6, 0xc5, 0x74, 0xad, 0xf4, 0x39, 0xcb, 0x34,
-	0x59, 0x5b, 0xa6, 0x72, 0x2f, 0x2f, 0x80, 0xb1, 0x9a, 0x4b, 0xfa, 0x5c, 0xa1, 0x80, 0x3f, 0x84,
-	0xc3, 0x3e, 0xe5, 0x1a, 0x6a, 0x49, 0xbf, 0x4b, 0x4e, 0x35, 0xed, 0xa7, 0x3b, 0xa5, 0x93, 0x44,
-	0x46, 0xd7, 0x27, 0xa8, 0x73, 0xb8, 0xc3, 0x20, 0x27, 0xbf, 0x87, 0x01, 0x5f, 0xf1, 0x87, 0xea,
-	0xc5, 0xcb, 0x54, 0x08, 0xbe, 0x0f, 0x03, 0x86, 0x6a, 0x56, 0xf4, 0xb2, 0xa9, 0xd6, 0x37, 0x2d,
-	0x7a, 0x50, 0x4d, 0xeb, 0xb3, 0x4b, 0xf0, 0xb4, 0x6d, 0x19, 0x06, 0xfd, 0x4a, 0xe6, 0x8d, 0xeb,
-	0xda, 0x4b, 0xe3, 0x06, 0xb6, 0x15, 0xc0, 0x5b, 0x47, 0x6c, 0x16, 0x3e, 0x0f, 0x8b, 0x7a, 0x9e,
-	0xe9, 0x6f, 0xd2, 0xb4, 0x6e, 0x8f, 0xcd, 0xc2, 0x28, 0xae, 0x70, 0x02, 0x52, 0xb7, 0x97, 0xa1,
-	0x5b, 0x2b, 0xaf, 0xa9, 0x64, 0xec, 0x0b, 0xb9, 0x7b, 0xca, 0x0a, 0x75, 0x42, 0x34, 0x9a, 0xb6,
-	0x01, 0xb9, 0xcb, 0x21, 0xbe, 0xa5, 0xac, 0xe0, 0xb7, 0xa0, 0x4b, 0xa9, 0x54, 0x72, 0x2b, 0x9a,
-	0xa1, 0xde, 0x53, 0x8a, 0xc5, 0xc4, 0xf8, 0xae, 0x77, 0xd1, 0x9e, 0x4f, 0x3f, 0xf6, 0xb0, 0x66,
-	0x02, 0x72, 0x54, 0xa9, 0x54, 0x2e, 0xf1, 0x9f, 0x78, 0x0a, 0xa2, 0x76, 0x73, 0x48, 0xa5, 0x5e,
-	0x6c, 0x5a, 0x29, 0xe0, 0xa4, 0xa4, 0x4a, 0xaf, 0x43, 0x34, 0xaf, 0x1b, 0xa6, 0xbd, 0xb1, 0x31,
-	0xa7, 0xc3, 0xe1, 0x3a, 0xc6, 0x79, 0xdd, 0x30, 0xd9, 0x16, 0xc5, 0x3c, 0x66, 0x32, 0xe4, 0x9d,
-	0x27, 0x54, 0x82, 0x69, 0xac, 0xd8, 0x12, 0x5e, 0xf2, 0x97, 0x60, 0x1a, 0x2b, 0x75, 0x12, 0x9c,
-	0x27, 0x78, 0x06, 0xba, 0xec, 0xca, 0x9b, 0x95, 0xc2, 0x83, 0x66, 0xa7, 0xbd, 0x4c, 0xbb, 0x6c,
-	0x37, 0x74, 0xb1, 0x52, 0x78, 0x40, 0xda, 0xcd, 0x0f, 0xd5, 0x94, 0xb3, 0xbf, 0x29, 0x27, 0x30,
-	0x52, 0xca, 0xf8, 0x26, 0x1c, 0x76, 0x3a, 0x4c, 0x5d, 0xce, 0x99, 0x7a, 0xfe, 0x8e, 0x6a, 0xd9,
-	0x96, 0xd6, 0x40, 0x13, 0x31, 0x41, 0xd9, 0xde, 0xc0, 0x6e, 0xa9, 0xcb, 0x8b, 0x94, 0x8d, 0x1b,
-	0x5a, 0x37, 0x21, 0xbe, 0x5d, 0x14, 0x3b, 0x41, 0x9d, 0xf6, 0x55, 0xd4, 0xb7, 0xd4, 0x65, 0xd3,
-	0x25, 0x80, 0x2a, 0x86, 0xa0, 0xdc, 0x73, 0xaf, 0x4e, 0x6e, 0xa6, 0x76, 0x80, 0x35, 0x54, 0xcb,
-	0x78, 0x60, 0xf7, 0xf4, 0x60, 0x93, 0x5a, 0x86, 0x64, 0xcc, 0x79, 0x64, 0xc2, 0xc2, 0x3b, 0xfa,
-	0x3c, 0xf4, 0x94, 0x75, 0xaf, 0x90, 0x33, 0x4d, 0x85, 0x74, 0x97, 0x75, 0x37, 0xff, 0x65, 0xe8,
-	0xf2, 0x30, 0x1f, 0xf1, 0xb5, 0x48, 0x5d, 0x1c, 0x2e, 0x1f, 0x6e, 0x48, 0x8e, 0x1a, 0x2e, 0x51,
-	0x93, 0xd0, 0x61, 0x9f, 0x5e, 0x8f, 0xd2, 0xd3, 0xeb, 0xd1, 0x2f, 0xaa, 0x28, 0x34, 0xd6, 0xe8,
-	0xe0, 0x6a, 0x13, 0xe3, 0x39, 0xe0, 0x5a, 0x3a, 0xb7, 0xbc, 0xbe, 0xb2, 0xa2, 0x1a, 0x5a, 0x79,
-	0x35, 0x31, 0xd4, 0xa4, 0x0d, 0x61, 0xb9, 0x87, 0xd1, 0x4b, 0x36, 0x39, 0xbe, 0x04, 0xdd, 0x8c,
-	0xd7, 0x6e, 0xc6, 0x71, 0xca, 0x7f, 0xbc, 0x8e, 0x9f, 0x31, 0xb8, 0x86, 0x26, 0x2c, 0x77, 0x31,
-	0x3e, 0xde, 0x84, 0x79, 0x88, 0xdb, 0x53, 0xa8, 0x44, 0x8f, 0x4b, 0xa4, 0x2e, 0xcf, 0x35, 0xa9,
-	0x4b, 0x87, 0x2c, 0x70, 0x86, 0xab, 0x36, 0x3d, 0xfe, 0x00, 0xba, 0x19, 0xb3, 0x5d, 0x99, 0x61,
-	0x2a, 0x60, 0x6a, 0x97, 0x2a, 0xbb, 0xfe, 0x9c, 0x96, 0xe9, 0x90, 0xbb, 0x4a, 0xae, 0x67, 0xf8,
-	0x35, 0xe8, 0x21, 0xdd, 0xae, 0xe4, 0xad, 0x5c, 0xbe, 0xb8, 0x6e, 0x5a, 0xaa, 0x91, 0x78, 0xbe,
-	0x49, 0x15, 0x23, 0x72, 0x8c, 0x93, 0xcf, 0x33, 0x6a, 0xfc, 0x2d, 0x38, 0x54, 0xd0, 0x73, 0x65,
-	0x9d, 0x4d, 0x3e, 0xb7, 0x9c, 0x93, 0x4d, 0xe5, 0xf4, 0x16, 0xf4, 0x6b, 0x3a, 0x9d, 0x7d, 0x2e,
-	0x61, 0x06, 0x9c, 0xa9, 0xed, 0x9e, 0xcb, 0xba, 0x45, 0xac, 0x3d, 0x95, 0x6c, 0xf3, 0xb7, 0x95,
-	0xbb, 0x8a, 0x99, 0x37, 0xb4, 0x8a, 0x95, 0xd3, 0xca, 0xb7, 0x99, 0x85, 0x92, 0x38, 0xd5, 0xa4,
-	0x80, 0x4e, 0xf9, 0x05, 0x47, 0x92, 0xa4, 0x5b, 0x17, 0x98, 0x9c, 0xac, 0x23, 0xe6, 0xb2, 0x2d,
-	0x05, 0xff, 0xbf, 0x08, 0x92, 0x3b, 0x16, 0x75, 0x9a, 0x16, 0x35, 0xe9, 0xbb, 0x4c, 0x9b, 0x8a,
-	0xa7, 0x9d, 0xde, 0x29, 0x1f, 0x5b, 0x6e, 0x46, 0x34, 0x28, 0x41, 0x9f, 0xdf, 0x09, 0x0a, 0x0b,
-	0xd0, 0x7e, 0x47, 0x7d, 0x40, 0x4f, 0xd3, 0x9d, 0x32, 0xf9, 0x17, 0xf7, 0x41, 0xe8, 0xae, 0x52,
-	0x5c, 0x57, 0xe9, 0x51, 0xb5, 0x53, 0x66, 0x3f, 0x66, 0x03, 0xd3, 0x68, 0xf6, 0x27, 0xe8, 0xb3,
-	0x2a, 0xfa, 0x5f, 0x08, 0x8e, 0xc3, 0x21, 0x62, 0x8e, 0x26, 0x25, 0x3a, 0x07, 0xb4, 0xf2, 0x6a,
-	0x72, 0x5e, 0x2f, 0x5b, 0x86, 0x5e, 0xc4, 0xa1, 0x94, 0x38, 0x2e, 0x4e, 0xc0, 0x28, 0x1c, 0x93,
-	0x99, 0x4a, 0x3f, 0x27, 0x73, 0xed, 0x97, 0x74, 0x6b, 0x65, 0xdc, 0x33, 0x69, 0x9b, 0x46, 0xd4,
-	0xfa, 0x1a, 0x83, 0x3e, 0x88, 0x2c, 0xaa, 0xf9, 0x75, 0x7a, 0x8e, 0x8c, 0xa4, 0xc6, 0xc5, 0xd4,
-	0xb4, 0x38, 0x3e, 0x06, 0x83, 0x10, 0xb7, 0xad, 0xb7, 0xe4, 0x8d, 0xca, 0xaa, 0xa1, 0x14, 0x54,
-	0x13, 0x87, 0xa8, 0xb1, 0x06, 0xcf, 0x43, 0xff, 0x55, 0xcd, 0xcc, 0xab, 0xc5, 0xa2, 0x52, 0x56,
-	0xf5, 0x75, 0x33, 0x69, 0x9f, 0xbb, 0xa3, 0xe9, 0x09, 0x31, 0x3d, 0x2d, 0xa6, 0x67, 0xc4, 0xb1,
-	0x34, 0x4c, 0x43, 0x5a, 0xd2, 0xad, 0x24, 0xef, 0x98, 0xe4, 0x0b, 0x49, 0x59, 0x33, 0xef, 0x24,
-	0x99, 0xfb, 0xaf, 0xa4, 0x96, 0xad, 0x64, 0xad, 0xaf, 0x92, 0xb5, 0x01, 0x0b, 0x8c, 0x4d, 0x4b,
-	0x27, 0x01, 0xbb, 0xce, 0xdb, 0xb6, 0x85, 0xd5, 0xc3, 0x9d, 0x74, 0x88, 0x39, 0xe9, 0xc6, 0xa4,
-	0xe7, 0x21, 0xc6, 0x0f, 0x70, 0x36, 0x09, 0xde, 0xa8, 0xa2, 0x8e, 0xcd, 0x2a, 0x0a, 0x6f, 0x55,
-	0x51, 0x78, 0x4a, 0x9c, 0x16, 0xc7, 0xc7, 0xa5, 0x17, 0x00, 0xee, 0x29, 0x2b, 0x36, 0x45, 0x82,
-	0xbb, 0x4b, 0x63, 0x5b, 0x55, 0x14, 0x49, 0x4d, 0x88, 0x13, 0x69, 0x71, 0x3c, 0xf5, 0xd3, 0x2a,
-	0x6a, 0x23, 0x76, 0x1f, 0xd1, 0x22, 0x6e, 0xbb, 0xaf, 0xcf, 0x63, 0xcb, 0x49, 0x27, 0x41, 0xb8,
-	0x67, 0x6f, 0xda, 0x6e, 0xb2, 0x81, 0xcd, 0x2a, 0x3a, 0x44, 0xc9, 0xc6, 0xc4, 0xf4, 0xb8, 0xf4,
-	0x12, 0xf4, 0xba, 0xf7, 0x49, 0x9b, 0xb2, 0x6f, 0xa3, 0x8a, 0x06, 0xb9, 0x21, 0x19, 0x49, 0x4f,
-	0x8a, 0xe3, 0x69, 0x31, 0x3d, 0x25, 0x0d, 0x3b, 0xdb, 0x91, 0x4b, 0xe0, 0xd0, 0x66, 0x15, 0x1d,
-	0xdb, 0xa2, 0x3b, 0xa2, 0x38, 0x46, 0xcb, 0x75, 0xb6, 0x18, 0x37, 0x19, 0x39, 0x81, 0x27, 0x29,
-	0xd9, 0x98, 0x38, 0x36, 0x2e, 0x89, 0x70, 0x88, 0x2f, 0xce, 0xda, 0x62, 0xad, 0x75, 0xcb, 0xf3,
-	0x9b, 0x55, 0x74, 0x82, 0x74, 0xcb, 0xd8, 0xa4, 0x98, 0x1c, 0x9b, 0x92, 0x5e, 0x81, 0x53, 0x3b,
-	0xad, 0x0b, 0x77, 0x59, 0xa7, 0x36, 0xab, 0xe8, 0x05, 0x5a, 0xd6, 0x8c, 0x38, 0x3e, 0x9a, 0x0d,
-	0x46, 0x90, 0x10, 0xc8, 0x06, 0x23, 0x61, 0xa1, 0xc3, 0x71, 0x12, 0xbb, 0x0d, 0xda, 0x5e, 0xa1,
-	0x2f, 0x1b, 0x8c, 0x1c, 0x12, 0x06, 0x1c, 0xe3, 0xf6, 0x98, 0x30, 0x94, 0x0d, 0x46, 0x92, 0xc2,
-	0x73, 0xd9, 0x60, 0xe4, 0x84, 0xf0, 0x7c, 0x36, 0x18, 0x79, 0x41, 0x38, 0x35, 0xfc, 0x3b, 0xed,
-	0xf0, 0x3c, 0x35, 0x3c, 0xc8, 0x4a, 0x62, 0xc6, 0xc7, 0x2d, 0xcd, 0x5a, 0xe3, 0x9e, 0x9c, 0xeb,
-	0x6e, 0x63, 0x31, 0x4a, 0xf7, 0xbf, 0x92, 0x6a, 0xad, 0xe9, 0xcc, 0xb9, 0x1c, 0xdb, 0x76, 0xce,
-	0xc8, 0x58, 0x56, 0xe5, 0x2a, 0x25, 0x90, 0x61, 0xcd, 0xf9, 0x1f, 0x4f, 0x43, 0xb0, 0xa2, 0x58,
-	0x6b, 0xdc, 0xfe, 0xab, 0x57, 0x58, 0x0b, 0x8a, 0xb5, 0x46, 0x0f, 0xf9, 0xaa, 0xc1, 0x14, 0x16,
-	0x75, 0xa1, 0x52, 0x0e, 0x2c, 0x41, 0x5c, 0x59, 0xb7, 0x74, 0x16, 0x48, 0xb5, 0x8d, 0x85, 0x60,
-	0x53, 0x33, 0xb2, 0x87, 0x30, 0x64, 0x74, 0xd3, 0xb2, 0x6d, 0x84, 0x34, 0x74, 0x79, 0xd8, 0x43,
-	0xd4, 0x46, 0xe9, 0xb6, 0x6d, 0x94, 0xa0, 0x11, 0x58, 0x43, 0x99, 0x36, 0x39, 0xba, 0xe6, 0xe2,
-	0xc9, 0xd4, 0xce, 0xa7, 0x1e, 0xde, 0x70, 0xd3, 0xa2, 0xed, 0x13, 0xab, 0xab, 0xf4, 0xd9, 0xc8,
-	0x97, 0xe7, 0x43, 0x29, 0x91, 0xac, 0x96, 0xd3, 0xd0, 0xeb, 0x96, 0xc5, 0x23, 0xa7, 0x74, 0x70,
-	0x83, 0xdc, 0xf5, 0x1d, 0x1a, 0x17, 0x27, 0xc4, 0x49, 0xee, 0xe6, 0xfe, 0xb5, 0x30, 0xf4, 0xd4,
-	0x0d, 0x8d, 0xd3, 0x93, 0x68, 0xcf, 0x3d, 0x59, 0x37, 0x7e, 0x81, 0xbd, 0x8c, 0x5f, 0x11, 0xba,
-	0x5c, 0x3e, 0x04, 0x33, 0xd1, 0x4e, 0x0d, 0x90, 0x17, 0xfd, 0x0f, 0xce, 0xce, 0x94, 0x21, 0xf3,
-	0xe8, 0x96, 0xaa, 0xad, 0xae, 0x59, 0xd2, 0x90, 0x63, 0x1d, 0x08, 0xf6, 0x7f, 0x11, 0xe4, 0xb2,
-	0x13, 0xa2, 0x35, 0xaf, 0x84, 0xe9, 0x3f, 0xe6, 0xa1, 0xa7, 0x1b, 0xf3, 0xf0, 0x53, 0x8c, 0x79,
-	0xc7, 0x5e, 0xc7, 0x1c, 0x2f, 0x40, 0x07, 0x37, 0x9c, 0xb8, 0x19, 0x9a, 0x6c, 0x60, 0xab, 0xd5,
-	0x86, 0xaa, 0x6f, 0x7b, 0x0f, 0x25, 0x90, 0x6c, 0x8b, 0xc1, 0x97, 0x89, 0xdd, 0x93, 0xd7, 0x4b,
-	0x64, 0x03, 0xa2, 0x0e, 0x62, 0xf0, 0x9f, 0x00, 0xba, 0x61, 0x6d, 0x9f, 0x00, 0x5d, 0x36, 0x2b,
-	0x79, 0x8d, 0x0d, 0x10, 0x14, 0xee, 0x5e, 0x70, 0x1c, 0x8d, 0x2c, 0x06, 0x30, 0xf7, 0xd4, 0x8e,
-	0x0a, 0x6e, 0x5d, 0xf4, 0x28, 0xde, 0xc7, 0xb3, 0xf1, 0x2f, 0xcf, 0xc7, 0xd2, 0x62, 0x8a, 0xe9,
-	0xbd, 0x31, 0x71, 0x5c, 0x9c, 0x6e, 0xb6, 0x1a, 0x42, 0xdc, 0xe1, 0x18, 0xa2, 0x11, 0x3a, 0xe6,
-	0xc1, 0x1b, 0xfe, 0xfb, 0x00, 0xc4, 0x9d, 0xd5, 0xe0, 0xc4, 0x70, 0xbe, 0x99, 0xf5, 0x70, 0x19,
-	0x62, 0xf4, 0x6c, 0x52, 0x8b, 0x32, 0xb5, 0xfb, 0x9a, 0x92, 0xec, 0x00, 0x43, 0x6b, 0x6d, 0xd7,
-	0x58, 0xee, 0x36, 0xdc, 0x3f, 0xdd, 0x53, 0x25, 0xf8, 0x8c, 0xa6, 0x4a, 0x68, 0xbf, 0x53, 0x65,
-	0xb6, 0xeb, 0xcb, 0xf3, 0x9d, 0x64, 0xd8, 0xc8, 0xae, 0x34, 0x36, 0xfc, 0xbb, 0xed, 0x30, 0xe0,
-	0x8c, 0xc0, 0x05, 0xd6, 0x1a, 0x7e, 0xc0, 0xf9, 0x86, 0xc6, 0x61, 0x19, 0xfa, 0xd9, 0x38, 0xb0,
-	0xce, 0xcc, 0xd9, 0xde, 0x06, 0x3e, 0x1c, 0xa7, 0x1b, 0x0f, 0x87, 0xb7, 0xfa, 0x7c, 0xda, 0xf6,
-	0x1a, 0xdb, 0x5f, 0xfd, 0x2c, 0x0d, 0x90, 0x0a, 0x7d, 0xce, 0xf8, 0xcc, 0xaf, 0x9b, 0x96, 0x5e,
-	0xa2, 0x3f, 0xf1, 0x55, 0xe8, 0xb4, 0xa7, 0xeb, 0xca, 0x1e, 0x5c, 0xc7, 0x5d, 0x9f, 0x7e, 0x1c,
-	0xa2, 0x7c, 0x0f, 0x9f, 0x20, 0x24, 0x47, 0xf8, 0xbc, 0x5d, 0x19, 0xfe, 0x8d, 0x18, 0x74, 0x3a,
-	0xe5, 0xe0, 0x77, 0xa1, 0xcb, 0xa4, 0x5b, 0x41, 0x8e, 0x12, 0x70, 0xf9, 0x93, 0x7b, 0xd9, 0x4a,
-	0x6a, 0xfa, 0x8d, 0x6c, 0xc9, 0x4c, 0x1a, 0xab, 0xb9, 0x42, 0x0e, 0x98, 0xf6, 0xe0, 0x52, 0xf1,
-	0xec, 0x08, 0x31, 0xbd, 0x57, 0xf1, 0xf6, 0x7a, 0xcb, 0xb4, 0xc9, 0xdd, 0xb6, 0x44, 0x56, 0x84,
-	0x05, 0xfd, 0x75, 0xb3, 0x87, 0x97, 0xc4, 0xe6, 0xd0, 0xf9, 0xbd, 0x96, 0xe4, 0x9d, 0x3e, 0x99,
-	0x36, 0xb9, 0xb7, 0xe0, 0x79, 0xc2, 0x4a, 0x2d, 0x41, 0x6f, 0x9e, 0x8e, 0x10, 0x2b, 0x2c, 0xc7,
-	0xa0, 0x61, 0xfc, 0x64, 0xf3, 0xf2, 0x5e, 0xcb, 0x74, 0x0d, 0x76, 0xa6, 0x4d, 0x8e, 0xe7, 0x6b,
-	0x3f, 0xd9, 0x88, 0xce, 0xfe, 0x11, 0x7c, 0x56, 0x45, 0xbd, 0x10, 0x07, 0xa0, 0x4f, 0x93, 0x74,
-	0xe4, 0xd0, 0xc4, 0x69, 0xf4, 0x79, 0x15, 0x7d, 0x17, 0xe0, 0xb7, 0x11, 0x04, 0xc9, 0xa3, 0x33,
-	0xdf, 0x46, 0xf0, 0x31, 0x1c, 0xf2, 0x8e, 0x68, 0x3a, 0xcc, 0xc6, 0x06, 0x06, 0xeb, 0x07, 0x23,
-	0x1d, 0xb1, 0xbb, 0x15, 0x4e, 0x37, 0xe8, 0xc5, 0x74, 0x0f, 0xeb, 0x8f, 0xa4, 0xdd, 0x7c, 0x38,
-	0xe6, 0xdb, 0xf2, 0x74, 0x98, 0xb5, 0x01, 0x77, 0xdc, 0x28, 0xdf, 0x29, 0xeb, 0xf7, 0xca, 0xf0,
-	0xa8, 0x13, 0xa0, 0x06, 0x39, 0x93, 0xff, 0x26, 0x02, 0x2f, 0xe1, 0x84, 0xbb, 0x5e, 0x23, 0xae,
-	0x6d, 0x63, 0x30, 0x9a, 0x59, 0x5a, 0x5a, 0x48, 0xb2, 0x6d, 0x21, 0x1d, 0x48, 0x22, 0x38, 0x55,
-	0x47, 0x4c, 0xf6, 0x9a, 0x11, 0xe6, 0x84, 0x1e, 0x8c, 0x92, 0xfd, 0x28, 0xc9, 0x5c, 0xd9, 0x30,
-	0x84, 0x0f, 0xf9, 0x10, 0x2a, 0xd6, 0xda, 0x60, 0x90, 0x90, 0xc1, 0x49, 0x3c, 0xb0, 0xfd, 0x3d,
-	0xf5, 0x41, 0x0f, 0x02, 0x95, 0x43, 0x9d, 0xd4, 0x70, 0x1d, 0x8e, 0xc1, 0x61, 0x0f, 0xa1, 0xfb,
-	0xc4, 0x24, 0x20, 0xfc, 0x5c, 0xc3, 0x97, 0xef, 0x8e, 0xbe, 0x3f, 0x42, 0xfe, 0x19, 0x8c, 0xb2,
-	0xb3, 0x53, 0x92, 0x1c, 0x83, 0xe0, 0xda, 0x4e, 0x02, 0x9f, 0x6f, 0x2a, 0x90, 0x1b, 0x22, 0x83,
-	0x1d, 0xdc, 0xf6, 0x87, 0x2b, 0x4d, 0xe5, 0x25, 0x10, 0x6e, 0xfc, 0x72, 0xb0, 0xcb, 0x55, 0x31,
-	0x73, 0x38, 0x90, 0x40, 0x70, 0x16, 0x0f, 0x7a, 0xe7, 0x42, 0xf3, 0xd1, 0x78, 0x71, 0x1b, 0x79,
-	0xc3, 0xf1, 0x48, 0xe2, 0x84, 0x2f, 0x69, 0x6d, 0x44, 0x4e, 0xe1, 0xc3, 0x7e, 0x14, 0xdb, 0xc7,
-	0xe4, 0x15, 0xfc, 0x52, 0x1d, 0xa1, 0x57, 0x6b, 0x8f, 0xf0, 0x03, 0x08, 0xfb, 0x35, 0xd8, 0x6d,
-	0xcf, 0xe6, 0x24, 0x39, 0xcb, 0xed, 0xcc, 0x4d, 0x83, 0x9a, 0x3e, 0xdc, 0xb4, 0x92, 0x17, 0xb1,
-	0xb8, 0x03, 0xb7, 0x27, 0x70, 0x32, 0xd8, 0xef, 0x61, 0x4f, 0xf2, 0xc7, 0x30, 0xb7, 0xb3, 0x18,
-	0x9d, 0xfa, 0xe6, 0x79, 0x2d, 0xe2, 0x35, 0x31, 0xdc, 0x77, 0x00, 0xe3, 0xf8, 0x39, 0xdf, 0xa5,
-	0xd9, 0x7c, 0xc4, 0x46, 0x1b, 0x71, 0x35, 0x1c, 0xb8, 0x53, 0xf8, 0x78, 0x33, 0x8e, 0xda, 0xf8,
-	0x8d, 0xe0, 0x64, 0x13, 0xc2, 0xed, 0xc3, 0x98, 0xc5, 0x33, 0xfe, 0xf4, 0xbe, 0xba, 0x7f, 0xc4,
-	0x21, 0xca, 0xeb, 0x05, 0x95, 0x0c, 0x0b, 0xf7, 0xc1, 0xcc, 0xeb, 0x05, 0x15, 0xce, 0xe2, 0x63,
-	0x3e, 0xbb, 0x8f, 0xd3, 0xa9, 0x2b, 0x83, 0x5d, 0x6c, 0x83, 0x64, 0xfb, 0xa6, 0x74, 0x0c, 0xc2,
-	0xae, 0x60, 0x38, 0xda, 0xac, 0xa2, 0xd0, 0x56, 0x15, 0x75, 0x50, 0x7b, 0x4e, 0x1c, 0xcf, 0x06,
-	0x23, 0x21, 0x21, 0x3c, 0xfc, 0xb8, 0x17, 0x7a, 0xeb, 0xce, 0xc1, 0x74, 0x7f, 0x6d, 0x1c, 0x9b,
-	0x42, 0xdf, 0x5c, 0x6c, 0x2a, 0xf0, 0x8c, 0x63, 0x53, 0xed, 0xdf, 0x64, 0x6c, 0x2a, 0x78, 0x20,
-	0xb1, 0xa9, 0x6b, 0x30, 0x50, 0x52, 0xc8, 0xca, 0x74, 0xf7, 0x61, 0xce, 0xd4, 0x7e, 0x81, 0x59,
-	0xa1, 0xdd, 0xd2, 0xc0, 0x17, 0x55, 0x14, 0x98, 0xb4, 0x1d, 0xe5, 0x51, 0x6a, 0x50, 0x9e, 0x09,
-	0x24, 0x3e, 0x94, 0xfb, 0x4a, 0xca, 0x7d, 0xd9, 0xdd, 0x65, 0x8b, 0xda, 0x2f, 0xa8, 0x38, 0x5b,
-	0xef, 0xf0, 0x0e, 0xef, 0xca, 0xe1, 0xcd, 0x0f, 0xa5, 0x5e, 0xa7, 0xf7, 0x87, 0x34, 0xae, 0x5e,
-	0x31, 0x54, 0xd3, 0xd4, 0xf4, 0xb2, 0x0d, 0xbe, 0x66, 0x16, 0xea, 0x4b, 0xcd, 0x70, 0x22, 0xf3,
-	0x35, 0x2e, 0x97, 0xf0, 0xb8, 0x4b, 0x18, 0x07, 0x5f, 0x6f, 0x06, 0xa1, 0x9b, 0x2f, 0x11, 0xd5,
-	0x30, 0x74, 0x83, 0x18, 0x87, 0x64, 0x48, 0xaf, 0xec, 0xf2, 0x50, 0xe2, 0xb3, 0x12, 0x46, 0x98,
-	0x6e, 0xbf, 0x48, 0xc5, 0xb1, 0xd8, 0xf5, 0x7f, 0x6f, 0xb7, 0x61, 0x11, 0x87, 0xbe, 0x87, 0x7a,
-	0x87, 0xe3, 0x67, 0x7a, 0xa4, 0xee, 0x31, 0x76, 0x8c, 0x1d, 0x1d, 0x3d, 0x3b, 0x31, 0x33, 0x53,
-	0x8b, 0x67, 0x93, 0xff, 0x62, 0xdf, 0x43, 0xd1, 0x33, 0x9d, 0x46, 0x47, 0xe2, 0xe1, 0xc3, 0xe0,
-	0x6f, 0x21, 0x0a, 0x9d, 0xf8, 0x63, 0xf4, 0xf8, 0x09, 0xda, 0x40, 0xf8, 0xfb, 0xe8, 0x27, 0x55,
-	0xf4, 0x6f, 0x10, 0xdd, 0xbf, 0x68, 0x09, 0x49, 0xb2, 0xee, 0x93, 0xd4, 0x71, 0x9b, 0xa4, 0x22,
-	0x93, 0xba, 0x91, 0x5c, 0x56, 0xad, 0x7b, 0xaa, 0x5a, 0x4e, 0x8e, 0x8d, 0x8e, 0x26, 0x95, 0x72,
-	0x21, 0x39, 0x31, 0x33, 0x33, 0x92, 0xbc, 0xb8, 0x3a, 0x92, 0xbc, 0x49, 0xe9, 0xc6, 0x93, 0xaf,
-	0x26, 0xc7, 0xef, 0xdf, 0x27, 0x94, 0x4a, 0xb1, 0x98, 0x1c, 0x1f, 0x1d, 0x3d, 0x3b, 0x3e, 0x33,
-	0x93, 0x54, 0x1d, 0x79, 0xa6, 0x98, 0x9c, 0x48, 0xbe, 0x9a, 0x9c, 0xa8, 0xd1, 0x4c, 0xb0, 0x7a,
-	0xba, 0x69, 0x46, 0x92, 0x6f, 0xeb, 0xeb, 0xc9, 0xbc, 0x52, 0x4e, 0x2a, 0x45, 0x53, 0x4f, 0x32,
-	0x84, 0xc1, 0x83, 0xa4, 0x52, 0x4e, 0xaa, 0xf7, 0x95, 0xbc, 0xe5, 0x22, 0x4d, 0x16, 0xb5, 0x3b,
-	0x6a, 0x72, 0x7c, 0x74, 0x7c, 0x84, 0x34, 0xa5, 0xef, 0xf1, 0x13, 0x24, 0xe0, 0xd8, 0x56, 0x15,
-	0x01, 0x6b, 0x01, 0xd9, 0xaa, 0xc8, 0x0b, 0x78, 0xfc, 0x04, 0x85, 0x71, 0xf0, 0x07, 0x55, 0xd4,
-	0x56, 0x8b, 0xea, 0xd3, 0xd6, 0xcf, 0x3d, 0x7e, 0x82, 0x5e, 0x1d, 0x7c, 0xf9, 0x27, 0x55, 0x34,
-	0xb5, 0x68, 0x19, 0x5a, 0x79, 0x35, 0x69, 0xa8, 0x64, 0x20, 0xd5, 0xb2, 0x45, 0x7e, 0xb0, 0x92,
-	0xec, 0x09, 0x2e, 0x26, 0xd7, 0xcd, 0x75, 0xa5, 0x58, 0x7c, 0x90, 0x54, 0x92, 0x6b, 0x56, 0xa9,
-	0x48, 0xab, 0x40, 0xa4, 0x1c, 0x7b, 0xfc, 0x04, 0x1d, 0x1e, 0x1c, 0xd8, 0xaa, 0xa2, 0x5e, 0x56,
-	0xb0, 0xb3, 0x59, 0x4a, 0x7a, 0xe1, 0x01, 0xa1, 0x18, 0x78, 0xfc, 0x04, 0xf5, 0x0e, 0xc6, 0x7f,
-	0xef, 0x09, 0xea, 0x56, 0xcc, 0xbc, 0xa6, 0x89, 0xc9, 0x65, 0xc5, 0x54, 0x27, 0xc7, 0x9d, 0xda,
-	0x0d, 0x92, 0xda, 0x05, 0x5d, 0x3f, 0x37, 0xe8, 0xa4, 0xcd, 0xbb, 0x46, 0x1c, 0xaf, 0x40, 0x8f,
-	0xc7, 0xbb, 0xb9, 0xa2, 0x53, 0xc8, 0x60, 0x34, 0x3d, 0xda, 0x6c, 0xc6, 0x66, 0x95, 0xbb, 0xca,
-	0x22, 0x65, 0x71, 0xad, 0x89, 0xe8, 0x0f, 0x3f, 0x26, 0xbb, 0x30, 0x85, 0x6c, 0xc9, 0xb1, 0xdb,
-	0x2e, 0x5f, 0xff, 0x8a, 0x8e, 0x6f, 0x41, 0xfb, 0xed, 0x7b, 0x16, 0x0d, 0xbf, 0xef, 0xce, 0xc2,
-	0x79, 0xee, 0xd3, 0x8f, 0x09, 0xc7, 0x0f, 0x3f, 0xa6, 0xf2, 0x9c, 0x5d, 0xc2, 0xed, 0x99, 0x22,
-	0xef, 0xf1, 0xeb, 0xd0, 0xe5, 0x01, 0x7c, 0x45, 0xe9, 0x36, 0x70, 0xcc, 0x37, 0x64, 0xd6, 0x71,
-	0x26, 0x94, 0x78, 0xf8, 0x3f, 0xfe, 0x1b, 0x92, 0xa3, 0x9a, 0x0b, 0xe2, 0xf5, 0x2a, 0x1c, 0xb1,
-	0x7d, 0x4b, 0x76, 0x30, 0x51, 0x65, 0x61, 0x27, 0x65, 0x55, 0x35, 0x59, 0xd8, 0x5b, 0x4e, 0x70,
-	0x12, 0xee, 0x7c, 0xa5, 0xbd, 0xb7, 0x40, 0xde, 0xe3, 0x6b, 0x8d, 0xc0, 0x8b, 0x4d, 0xc2, 0xdf,
-	0x52, 0x20, 0x81, 0x88, 0xf9, 0xe1, 0x07, 0x5d, 0x5c, 0x68, 0x08, 0x5d, 0x14, 0x76, 0x14, 0xe8,
-	0x0f, 0x5c, 0x2c, 0xc1, 0x09, 0x3b, 0x12, 0x6c, 0x19, 0x5a, 0xde, 0xca, 0x99, 0x65, 0x8d, 0xb9,
-	0xd1, 0x1c, 0x9c, 0x98, 0x9a, 0xbf, 0xd3, 0x14, 0x55, 0x1f, 0xb1, 0xb1, 0x78, 0x19, 0x24, 0x0f,
-	0xf1, 0x58, 0x31, 0x95, 0xb5, 0x58, 0xd6, 0xc8, 0x89, 0x8c, 0x6d, 0xa9, 0xf3, 0x44, 0x0e, 0x7e,
-	0x0b, 0xb0, 0x52, 0x28, 0x68, 0x0c, 0x9c, 0x94, 0x2b, 0xe8, 0x25, 0x45, 0x2b, 0x9b, 0x1c, 0x5c,
-	0x7f, 0xac, 0x4e, 0xfa, 0x05, 0xfa, 0xf6, 0x9a, 0x52, 0x52, 0xaf, 0x68, 0xa6, 0xe5, 0x29, 0x26,
-	0x5e, 0x13, 0xc2, 0xa8, 0x4c, 0xfc, 0x5b, 0x08, 0xe2, 0x79, 0x5d, 0xbf, 0xa3, 0xa9, 0x54, 0xb3,
-	0x94, 0xf4, 0x82, 0xb6, 0xf2, 0x20, 0xd1, 0xe7, 0xab, 0xd6, 0xe6, 0x29, 0x5d, 0x03, 0xb5, 0x36,
-	0xc5, 0xa7, 0xd5, 0xa7, 0x4f, 0x50, 0x07, 0x84, 0x2a, 0x86, 0x7e, 0xff, 0xc1, 0xee, 0x14, 0x53,
-	0x0f, 0x2f, 0x7e, 0x49, 0xbf, 0x4a, 0x0b, 0x1f, 0x7c, 0x0d, 0xe2, 0xdb, 0x76, 0x50, 0x77, 0xec,
-	0xaa, 0x7b, 0xa7, 0xd8, 0x95, 0xfe, 0x59, 0x15, 0xdd, 0x81, 0x21, 0x88, 0xb1, 0x2e, 0x74, 0xa2,
-	0x45, 0x5d, 0xfc, 0x20, 0x23, 0xa6, 0x47, 0xc5, 0x09, 0x38, 0x0d, 0x49, 0xb6, 0xd2, 0xd6, 0x0d,
-	0x35, 0x59, 0xb7, 0x1f, 0xd8, 0x1c, 0xc1, 0x69, 0x31, 0x35, 0x06, 0xc7, 0x1b, 0x85, 0x9f, 0xc2,
-	0x93, 0xe2, 0x94, 0x98, 0x4a, 0x49, 0x67, 0x1a, 0x41, 0xfe, 0xe2, 0x3c, 0xf2, 0x13, 0x4a, 0x4d,
-	0x88, 0xa9, 0xc9, 0x9f, 0x56, 0x11, 0x92, 0x5e, 0x87, 0x13, 0xcd, 0xa6, 0x8c, 0x1b, 0x60, 0x88,
-	0x39, 0xbc, 0x2f, 0xce, 0xa1, 0x80, 0xa9, 0x19, 0x22, 0xc1, 0x89, 0x7f, 0xc4, 0x05, 0x3c, 0xfc,
-	0x3f, 0x03, 0x20, 0x5c, 0xb8, 0xa0, 0x2f, 0xce, 0x17, 0x35, 0xb5, 0x6c, 0x2d, 0xea, 0xeb, 0x46,
-	0x5e, 0xc5, 0xf3, 0x10, 0x51, 0xcc, 0x72, 0xae, 0xa8, 0x99, 0x56, 0x03, 0xff, 0x07, 0xd3, 0xcc,
-	0x23, 0x73, 0x66, 0x99, 0xba, 0x5c, 0xe8, 0x44, 0x61, 0x2a, 0xb2, 0x43, 0x31, 0xcb, 0xe4, 0x27,
-	0x2e, 0x42, 0x57, 0x5e, 0x5f, 0x27, 0x7d, 0xcf, 0x04, 0x91, 0x93, 0x4e, 0x2c, 0xfd, 0x9c, 0xbf,
-	0xa0, 0x79, 0x46, 0x49, 0x36, 0x72, 0xe9, 0x05, 0x32, 0xb6, 0xdd, 0x9f, 0x20, 0x18, 0x8e, 0x3c,
-	0x42, 0x21, 0x01, 0x0d, 0x73, 0x6c, 0x14, 0x19, 0xf7, 0xd7, 0xdd, 0x4e, 0x70, 0x2e, 0x9e, 0x96,
-	0xf6, 0x2b, 0x88, 0xdd, 0x79, 0x58, 0xd1, 0xca, 0xab, 0xaa, 0x51, 0x31, 0xb4, 0xb2, 0x95, 0x2b,
-	0x31, 0x6f, 0x10, 0xf7, 0x17, 0x9d, 0xf3, 0x2f, 0x79, 0xa9, 0x68, 0x5e, 0xaa, 0xf1, 0xb8, 0x1d,
-	0x48, 0xc7, 0xf8, 0x11, 0x96, 0x2a, 0x10, 0xe1, 0x7b, 0x4f, 0x50, 0x97, 0xb9, 0xa6, 0x18, 0x6a,
-	0x81, 0xa8, 0x07, 0xd5, 0x90, 0xfb, 0x2d, 0x3f, 0x4e, 0x1e, 0xbf, 0x18, 0x13, 0x27, 0xb2, 0xc1,
-	0x48, 0x40, 0x68, 0xe7, 0xde, 0xd8, 0xef, 0x86, 0x01, 0x93, 0x6e, 0xbe, 0xaa, 0x59, 0xda, 0x2a,
-	0x9d, 0xf9, 0xf2, 0x7a, 0x51, 0xc5, 0xb3, 0x10, 0x29, 0xa9, 0x96, 0x52, 0x50, 0x2c, 0xa5, 0x81,
-	0x2b, 0xf0, 0xaa, 0x6a, 0x9a, 0xca, 0xaa, 0x7a, 0x55, 0xb5, 0x14, 0xea, 0x97, 0x71, 0xe8, 0xb1,
-	0x08, 0xa1, 0xe5, 0xa2, 0x9e, 0xbf, 0xc3, 0x1d, 0x2f, 0x8d, 0xfc, 0xed, 0x8c, 0x08, 0x9b, 0x80,
-	0x0b, 0x05, 0xdd, 0xcc, 0xe5, 0xe9, 0x38, 0xe7, 0x4c, 0x3a, 0xd0, 0xdc, 0x8f, 0xbd, 0xdb, 0xe8,
-	0x7d, 0xfd, 0x3c, 0x91, 0x80, 0x8e, 0xc6, 0x63, 0x14, 0x48, 0x92, 0xcd, 0x41, 0x20, 0x05, 0x78,
-	0xe6, 0xd1, 0x55, 0x88, 0x69, 0x15, 0x1b, 0x38, 0x47, 0x27, 0x01, 0xd3, 0x63, 0x27, 0xfd, 0x87,
-	0x82, 0x19, 0x46, 0xce, 0x84, 0xca, 0x20, 0xb9, 0x4b, 0xab, 0xb0, 0x87, 0x74, 0x8c, 0x3f, 0x80,
-	0x3e, 0xf5, 0x7e, 0x45, 0x33, 0x38, 0x7c, 0xd9, 0xbe, 0x6a, 0xca, 0x7d, 0xfb, 0x83, 0x23, 0xec,
-	0x32, 0xea, 0x88, 0x7d, 0x19, 0x75, 0x64, 0xc9, 0xa6, 0x90, 0x7a, 0x48, 0x45, 0xe1, 0x0f, 0x51,
-	0x47, 0x36, 0x14, 0x79, 0xf8, 0x17, 0xbf, 0xdc, 0x23, 0xf7, 0xd6, 0x04, 0x39, 0x54, 0xb3, 0xbf,
-	0x1b, 0xf8, 0xf2, 0x7c, 0x84, 0x2c, 0xf1, 0x29, 0x31, 0x35, 0xfa, 0x79, 0x15, 0xfd, 0x66, 0x00,
-	0x06, 0x20, 0x48, 0x36, 0xc2, 0xc1, 0x1e, 0xe8, 0xb6, 0x3b, 0x7e, 0xa4, 0xac, 0x94, 0x54, 0x38,
-	0x0b, 0xd1, 0xcb, 0x0b, 0xdc, 0x94, 0x53, 0x4d, 0x69, 0x08, 0x06, 0xbd, 0x2d, 0x1d, 0x71, 0x7e,
-	0xaa, 0xa6, 0x10, 0x80, 0x34, 0x04, 0xe7, 0x16, 0xaf, 0x99, 0xd2, 0x19, 0x78, 0x61, 0xfb, 0x30,
-	0x8c, 0xd8, 0x8b, 0x6d, 0x44, 0x31, 0x73, 0xe5, 0xf5, 0xd2, 0xb2, 0x6a, 0x98, 0x42, 0x3b, 0xa4,
-	0xa1, 0x93, 0x2d, 0x0b, 0x4d, 0x35, 0xa5, 0x93, 0x70, 0xdc, 0x87, 0xd1, 0xbd, 0xc0, 0x84, 0xd0,
-	0x28, 0x82, 0xf7, 0x40, 0x58, 0xba, 0xb2, 0x98, 0x74, 0xcd, 0x4b, 0x73, 0x38, 0x03, 0x67, 0x7c,
-	0x58, 0x1b, 0x2c, 0x16, 0x0c, 0xce, 0x9e, 0x56, 0x18, 0x8c, 0x5d, 0xd3, 0xad, 0xda, 0x1e, 0x57,
-	0x90, 0x86, 0x21, 0x5e, 0x72, 0x26, 0x70, 0x8e, 0x61, 0x5d, 0x71, 0xf7, 0x46, 0x15, 0x91, 0xd3,
-	0x69, 0x60, 0xab, 0x8a, 0xd0, 0x98, 0xf4, 0xbc, 0x87, 0xc6, 0x15, 0x09, 0xef, 0xe4, 0x48, 0xe7,
-	0xf6, 0x69, 0x71, 0xc6, 0x59, 0x1b, 0x1d, 0x42, 0x64, 0xf8, 0x61, 0x10, 0x8e, 0x2e, 0x6a, 0xe5,
-	0xd5, 0xa2, 0x7a, 0x45, 0x57, 0x0a, 0x12, 0x9f, 0x6d, 0x73, 0x95, 0xca, 0xa2, 0x6a, 0x91, 0xd3,
-	0x19, 0xfe, 0x10, 0x04, 0xae, 0x2b, 0x0b, 0x9a, 0x99, 0xd7, 0xef, 0xaa, 0x86, 0x0d, 0x8d, 0xf5,
-	0xbf, 0xe3, 0x51, 0xbb, 0x1e, 0x3b, 0x32, 0x57, 0xd1, 0x2e, 0xd8, 0x3c, 0x5c, 0x5c, 0x86, 0xc2,
-	0x3c, 0xe9, 0xb9, 0xc1, 0x7e, 0xe3, 0xc6, 0xc6, 0xd4, 0x8a, 0x68, 0xbe, 0xae, 0x6c, 0x6c, 0x4c,
-	0x4d, 0xc8, 0xfb, 0x70, 0x9c, 0x57, 0x93, 0xec, 0xe1, 0x79, 0x4d, 0x5f, 0x37, 0x73, 0x64, 0xa7,
-	0xc8, 0x15, 0x54, 0x8b, 0xe3, 0x36, 0x22, 0x4d, 0x41, 0xa3, 0x47, 0x19, 0xfb, 0x55, 0x9b, 0xfb,
-	0x86, 0xa9, 0x1a, 0x17, 0x6c, 0x5e, 0x9c, 0x83, 0xa4, 0x83, 0xdf, 0x69, 0x24, 0xbf, 0xb3, 0xa9,
-	0xfc, 0x63, 0x36, 0x9c, 0xc7, 0xb7, 0x00, 0xe9, 0x14, 0xf4, 0x29, 0x15, 0xad, 0xd6, 0x01, 0x0d,
-	0x61, 0x0c, 0x69, 0x38, 0xde, 0xa8, 0x06, 0x6e, 0x9e, 0x88, 0x77, 0xc0, 0x59, 0xfc, 0x9d, 0x81,
-	0xcb, 0x43, 0x42, 0xd8, 0x89, 0xc5, 0x93, 0x29, 0xf0, 0xaf, 0x10, 0x0c, 0x31, 0x9f, 0x19, 0xbb,
-	0xc2, 0xc2, 0x50, 0x27, 0x64, 0x8b, 0x74, 0x10, 0xe5, 0xbf, 0x89, 0x60, 0x90, 0x3b, 0xd9, 0x38,
-	0xa0, 0x9e, 0xa1, 0x86, 0xe9, 0xc5, 0x6c, 0x93, 0xbb, 0x08, 0x44, 0xff, 0x8d, 0xc5, 0x5f, 0x74,
-	0x1d, 0xd4, 0xdc, 0x51, 0x2d, 0xa3, 0x1e, 0xa8, 0xf9, 0x80, 0xee, 0xcb, 0x6c, 0x0e, 0x3f, 0x80,
-	0x7e, 0xbe, 0xd9, 0x69, 0x05, 0x95, 0x63, 0x46, 0x68, 0x4d, 0x3f, 0x84, 0x30, 0x37, 0x5c, 0xd9,
-	0x96, 0x2e, 0xed, 0x72, 0x7b, 0xdd, 0x26, 0xad, 0x1e, 0x94, 0x26, 0x73, 0xb9, 0xc3, 0xbf, 0x12,
-	0x84, 0x23, 0x4d, 0xa8, 0x71, 0xa6, 0x36, 0x9d, 0x6f, 0x9b, 0x39, 0xad, 0x6c, 0xaa, 0x86, 0xd5,
-	0x0c, 0x4c, 0xee, 0x5c, 0x7b, 0xea, 0xe1, 0x6c, 0x59, 0xf3, 0x32, 0x65, 0xc2, 0x17, 0xa1, 0xd7,
-	0x91, 0x90, 0x53, 0x8a, 0x45, 0x7e, 0xfe, 0xde, 0x61, 0x69, 0xdc, 0xe6, 0xec, 0x73, 0xc5, 0x22,
-	0x3b, 0x8f, 0xff, 0x06, 0x82, 0x41, 0x1f, 0x39, 0x39, 0xf5, 0x7e, 0x5e, 0xad, 0xd8, 0x6e, 0xfc,
-	0xeb, 0xbb, 0xed, 0xa7, 0xc5, 0x0b, 0x35, 0x5b, 0xc7, 0x29, 0xe8, 0x96, 0x66, 0xad, 0x5d, 0xa4,
-	0xe2, 0x6c, 0x33, 0x3a, 0xd3, 0x26, 0x1f, 0xaa, 0xaf, 0x09, 0xa3, 0xc0, 0x16, 0x60, 0xa7, 0x3a,
-	0x64, 0xd6, 0xb2, 0x39, 0x14, 0xda, 0x53, 0x04, 0xc3, 0xa7, 0x1a, 0x6c, 0xa8, 0x78, 0x5f, 0x3a,
-	0xbd, 0xc0, 0x95, 0xbd, 0x39, 0x7b, 0xfc, 0xb3, 0x2a, 0x3a, 0x02, 0x87, 0xa1, 0xaf, 0xc6, 0x97,
-	0x74, 0x48, 0x30, 0x4a, 0x49, 0x2f, 0x02, 0x26, 0x26, 0x5a, 0x8e, 0x5b, 0x7e, 0x2e, 0x57, 0x5a,
-	0x3b, 0x5f, 0x7f, 0x1d, 0xcc, 0xe8, 0x4f, 0xb3, 0xf5, 0x34, 0xfc, 0x47, 0x08, 0x4e, 0xef, 0xb6,
-	0x3b, 0xf0, 0xb7, 0x11, 0x74, 0xa9, 0xf7, 0xf3, 0xc5, 0xf5, 0x82, 0x6a, 0x1f, 0xed, 0xc8, 0x9a,
-	0x99, 0xdf, 0x65, 0x7b, 0x17, 0xd7, 0x94, 0x8a, 0x5a, 0x2b, 0xe9, 0x22, 0x91, 0x64, 0xf2, 0xb6,
-	0x49, 0xf4, 0x3c, 0x1e, 0xfe, 0x04, 0xb5, 0x0b, 0x0f, 0x91, 0xff, 0x95, 0x8d, 0x28, 0x2f, 0x9a,
-	0x2c, 0xe8, 0xe1, 0x3f, 0x0c, 0xc0, 0x40, 0x83, 0xfe, 0xc3, 0xff, 0x08, 0x41, 0xc8, 0xbd, 0xa6,
-	0xe7, 0xf6, 0x3f, 0x1e, 0x76, 0xed, 0x46, 0xec, 0x85, 0x5e, 0x57, 0xc3, 0x48, 0x83, 0xba, 0xb2,
-	0xf2, 0xf1, 0xaf, 0xd7, 0x77, 0x58, 0xe0, 0xe0, 0x3a, 0xec, 0xf9, 0x06, 0x55, 0x6a, 0xd2, 0x69,
-	0xdf, 0x09, 0xc2, 0x60, 0xe3, 0x46, 0x3e, 0xd5, 0x59, 0x72, 0x02, 0x40, 0x29, 0x3f, 0xe0, 0x76,
-	0xe1, 0x0e, 0xab, 0xbb, 0x53, 0x29, 0x3f, 0x60, 0xc6, 0x1f, 0x9e, 0x81, 0x30, 0x67, 0x09, 0xfa,
-	0xc2, 0xa8, 0x19, 0x59, 0x2d, 0x1a, 0x9b, 0x69, 0x93, 0x39, 0x03, 0x4e, 0xf3, 0x00, 0x78, 0x68,
-	0x37, 0x01, 0x70, 0x16, 0xfa, 0x9e, 0xfd, 0x53, 0xf4, 0x79, 0x15, 0xfd, 0x57, 0xd4, 0xf8, 0x50,
-	0xb6, 0x0e, 0x61, 0x56, 0xe4, 0x99, 0x3b, 0xa0, 0x41, 0xdc, 0xdd, 0xa8, 0x74, 0xfb, 0x5c, 0xf9,
-	0x01, 0xf4, 0x01, 0x66, 0x3f, 0x47, 0xa8, 0x87, 0x29, 0x47, 0x4d, 0x3e, 0x38, 0x0e, 0xbd, 0xfc,
-	0xa9, 0xb9, 0xbe, 0x42, 0x0e, 0x70, 0xf4, 0x31, 0x8e, 0x0c, 0x86, 0x17, 0xe9, 0x6f, 0x38, 0xe6,
-	0xb0, 0xb1, 0x5b, 0x18, 0xec, 0x7d, 0xc7, 0x60, 0x88, 0x39, 0xdc, 0xdf, 0x00, 0xea, 0xa8, 0x3f,
-	0xf3, 0x1a, 0xbc, 0x0a, 0x03, 0x10, 0x75, 0x79, 0xfc, 0x89, 0x0c, 0xee, 0xee, 0x8f, 0x42, 0xa7,
-	0xe3, 0xd8, 0x87, 0x7e, 0x80, 0x9a, 0xf3, 0xde, 0x11, 0x24, 0x9d, 0x86, 0x7e, 0x56, 0x8e, 0x7d,
-	0x1a, 0x73, 0xab, 0x53, 0xfb, 0x8c, 0xd5, 0xce, 0x3c, 0xe9, 0x01, 0xa1, 0x7d, 0xf8, 0x3f, 0x07,
-	0xe1, 0x68, 0x0d, 0xee, 0x69, 0x7b, 0x12, 0x5d, 0x8a, 0xe0, 0x9f, 0x23, 0x18, 0x20, 0xc7, 0x61,
-	0x35, 0x6f, 0xa9, 0x85, 0x9c, 0x52, 0xa9, 0xe4, 0xec, 0x0b, 0x2e, 0xf6, 0xea, 0x7a, 0x6d, 0x97,
-	0x93, 0x79, 0xc1, 0x96, 0x32, 0x57, 0xa9, 0xd8, 0xd8, 0x50, 0x3a, 0xb0, 0x7b, 0x5d, 0x5b, 0xfd,
-	0x15, 0x1f, 0x49, 0x26, 0x96, 0x40, 0xb8, 0x6d, 0xe6, 0x0a, 0xfa, 0xbd, 0x32, 0x29, 0x36, 0xe7,
-	0xc0, 0xdf, 0x3a, 0xa5, 0xc4, 0x17, 0x55, 0x04, 0x3c, 0xe5, 0xc9, 0xc8, 0x6d, 0x93, 0x5f, 0x93,
-	0xf9, 0x71, 0x00, 0xc9, 0xb1, 0xdb, 0xe6, 0x05, 0xce, 0x40, 0xfa, 0x1f, 0x5f, 0x00, 0xec, 0x9c,
-	0x90, 0xf4, 0x65, 0xad, 0xa8, 0xe6, 0xcc, 0xc2, 0x9d, 0x1d, 0xd0, 0x6f, 0x0e, 0xc4, 0x99, 0x32,
-	0x2c, 0x16, 0x88, 0xa5, 0x14, 0xaf, 0x71, 0xdb, 0xb8, 0x78, 0x36, 0x4d, 0x2f, 0xee, 0xb2, 0xb3,
-	0x24, 0xdd, 0xb2, 0x07, 0x83, 0xcb, 0xbd, 0xf0, 0x2d, 0x17, 0x32, 0xbb, 0x4d, 0xee, 0x29, 0xd9,
-	0xc5, 0xb1, 0xc7, 0xb3, 0xef, 0x7f, 0x56, 0x45, 0x6f, 0xc3, 0x51, 0x7a, 0x4f, 0x9b, 0xf5, 0x4e,
-	0x72, 0xae, 0x52, 0x49, 0xd6, 0xfa, 0x07, 0xa5, 0xe0, 0x04, 0x0c, 0xdd, 0x52, 0x97, 0x93, 0x4c,
-	0xf1, 0x27, 0x5d, 0x3a, 0x84, 0x1f, 0x6c, 0x4d, 0x8c, 0xd2, 0xd0, 0x07, 0x3d, 0xac, 0x48, 0xd7,
-	0x53, 0x76, 0x28, 0x77, 0xb5, 0xa9, 0x36, 0xa9, 0x6c, 0x20, 0x5d, 0xfb, 0x38, 0x35, 0x58, 0xdb,
-	0x85, 0xe0, 0xf0, 0x3f, 0x41, 0x30, 0xd4, 0xbc, 0x01, 0x78, 0xdd, 0x11, 0xa7, 0x15, 0xd4, 0xb2,
-	0xa5, 0xad, 0x68, 0xaa, 0xb1, 0xc7, 0xc3, 0x0e, 0x13, 0xbb, 0x64, 0x28, 0x2b, 0x2b, 0x5a, 0xfe,
-	0xb2, 0x23, 0xa5, 0xa6, 0x41, 0x65, 0x81, 0x15, 0x51, 0x7b, 0x37, 0xfc, 0x6b, 0x51, 0x48, 0x34,
-	0x9a, 0x87, 0xff, 0xf0, 0xb7, 0x3f, 0x2c, 0x41, 0xe8, 0xa3, 0x75, 0x62, 0x98, 0x84, 0x7d, 0xcf,
-	0xba, 0x8d, 0x7a, 0xfa, 0x4d, 0xc2, 0x23, 0x33, 0x56, 0x7c, 0x03, 0xba, 0xec, 0x38, 0xcd, 0xb2,
-	0x5e, 0x78, 0x90, 0xe8, 0xa0, 0xa2, 0xd2, 0xbb, 0x05, 0x50, 0x30, 0x56, 0x49, 0x2f, 0x3c, 0x90,
-	0xa3, 0x46, 0xed, 0x07, 0xbe, 0x0b, 0x5d, 0xae, 0xe8, 0x28, 0x0b, 0x81, 0xc4, 0xd2, 0x47, 0xeb,
-	0x23, 0x36, 0xba, 0x55, 0x03, 0x26, 0x49, 0x13, 0x64, 0x25, 0xe3, 0x4f, 0x50, 0xcf, 0x70, 0xf7,
-	0x23, 0x04, 0x02, 0x1a, 0x0c, 0xb7, 0xa1, 0xf6, 0x60, 0x28, 0xec, 0x1c, 0xc8, 0xc3, 0xfe, 0xd0,
-	0xc7, 0x1a, 0x9e, 0xc9, 0x24, 0x03, 0x77, 0x4f, 0x5d, 0xe6, 0x96, 0x6d, 0xb3, 0xac, 0x2f, 0x19,
-	0x24, 0x77, 0xde, 0x53, 0x97, 0xd9, 0xda, 0xc1, 0x2f, 0x43, 0x37, 0x9f, 0xbf, 0x9c, 0x33, 0xda,
-	0x94, 0xb3, 0x8b, 0x11, 0x73, 0x66, 0x8d, 0xdd, 0x9b, 0xf1, 0x0a, 0xe8, 0xda, 0x13, 0x10, 0xe5,
-	0x96, 0xba, 0xec, 0x99, 0xff, 0x74, 0x57, 0x40, 0xf4, 0x2a, 0xcd, 0x55, 0x77, 0x51, 0x19, 0xe8,
-	0x5b, 0x2f, 0x17, 0xd4, 0x15, 0xad, 0xac, 0x16, 0x72, 0x2b, 0x45, 0xfd, 0x5e, 0xae, 0xa8, 0x2c,
-	0xab, 0xc5, 0x66, 0xf7, 0xe5, 0x33, 0x01, 0x19, 0x3b, 0x3c, 0x97, 0x8a, 0xfa, 0xbd, 0x2b, 0x84,
-	0x03, 0xdf, 0x02, 0x70, 0xf1, 0xf7, 0xf8, 0x62, 0x8e, 0x6a, 0x9a, 0xc4, 0xe1, 0x9b, 0x57, 0x2c,
-	0x75, 0x55, 0x37, 0x34, 0xd5, 0x9c, 0xa7, 0x7b, 0x06, 0xad, 0x68, 0x40, 0xee, 0x5c, 0xb1, 0x09,
-	0x66, 0xff, 0x2a, 0xf0, 0xe5, 0xf9, 0x3e, 0xdb, 0x2d, 0xca, 0x33, 0x84, 0x88, 0xa9, 0x31, 0x71,
-	0xe6, 0xf3, 0x2a, 0xfa, 0x93, 0x26, 0xfe, 0x93, 0x25, 0x47, 0x55, 0x67, 0x21, 0xb3, 0x7b, 0x55,
-	0xbd, 0x83, 0x26, 0x3e, 0xcc, 0x35, 0x71, 0x1c, 0x7a, 0xa0, 0x9b, 0x2d, 0xb1, 0x74, 0x88, 0x3c,
-	0x31, 0x21, 0x01, 0x21, 0xba, 0x12, 0xa4, 0x1e, 0xbe, 0x8c, 0x84, 0xd0, 0x70, 0x90, 0x56, 0xe5,
-	0x05, 0xe8, 0xe2, 0x13, 0x9b, 0x86, 0x71, 0xa4, 0x43, 0xde, 0x35, 0xe2, 0xd0, 0x2d, 0x43, 0x94,
-	0xef, 0xbd, 0x14, 0xfb, 0xb3, 0x08, 0x6f, 0x92, 0x7a, 0xd7, 0xe6, 0x5f, 0xba, 0xfd, 0x96, 0xba,
-	0x0c, 0x03, 0x75, 0x73, 0x2b, 0x1d, 0x66, 0x43, 0x0a, 0x27, 0x7c, 0xe6, 0x4d, 0x3a, 0x46, 0x76,
-	0x74, 0xa5, 0x5c, 0x48, 0x72, 0xa2, 0x63, 0xd0, 0xc1, 0xe7, 0xb6, 0x84, 0xbd, 0x6b, 0x4a, 0x80,
-	0x51, 0xb4, 0xfb, 0x03, 0x82, 0x74, 0x0e, 0x06, 0x68, 0xb2, 0x35, 0x36, 0xc1, 0xe8, 0x5d, 0x7f,
-	0x37, 0xae, 0x1f, 0x78, 0x8a, 0x96, 0x88, 0x7d, 0xaf, 0x42, 0x3a, 0x06, 0xf1, 0xda, 0x0c, 0xb1,
-	0x49, 0x23, 0x1b, 0x55, 0x14, 0xdb, 0xac, 0xa2, 0x6e, 0xc7, 0x61, 0xc3, 0x12, 0xae, 0x74, 0x0b,
-	0xb1, 0xe1, 0x3f, 0x0d, 0x40, 0xd4, 0xb5, 0x21, 0x60, 0x0c, 0xb4, 0x9b, 0xf8, 0xed, 0x10, 0xfa,
-	0x3f, 0x1e, 0x83, 0xa8, 0x6b, 0xf4, 0xb8, 0x42, 0x17, 0xfe, 0xb6, 0x8a, 0xda, 0x69, 0xe8, 0xc7,
-	0x08, 0x09, 0x28, 0xf1, 0x30, 0x90, 0x69, 0x93, 0x81, 0x92, 0xd1, 0xe0, 0x22, 0x9e, 0x84, 0xa8,
-	0x6b, 0x70, 0xe9, 0x76, 0xdc, 0x29, 0xf5, 0xda, 0x4c, 0x60, 0x44, 0x28, 0xd3, 0x06, 0xdd, 0x4f,
-	0x81, 0x52, 0x52, 0xbe, 0xd9, 0x3f, 0x40, 0x34, 0x57, 0xca, 0xf8, 0x67, 0x55, 0x74, 0x0a, 0x4e,
-	0xc2, 0x90, 0x7b, 0x50, 0x93, 0x0e, 0x34, 0x2a, 0xc9, 0x37, 0x56, 0x4c, 0x48, 0x3f, 0xaf, 0x22,
-	0x13, 0x62, 0x7c, 0x8e, 0x86, 0x59, 0x03, 0xe0, 0x15, 0x00, 0x16, 0xe5, 0xa4, 0xc3, 0x3c, 0x02,
-	0x22, 0xf4, 0x79, 0x9a, 0x91, 0x0e, 0x5d, 0x24, 0x3f, 0xc8, 0x53, 0x57, 0x3d, 0xd3, 0x7c, 0x0a,
-	0x9e, 0x80, 0x10, 0xe5, 0x4e, 0x0f, 0x7a, 0x98, 0x3c, 0xb4, 0xd2, 0x31, 0x00, 0xfa, 0x0f, 0x1d,
-	0x17, 0xc7, 0xc1, 0x12, 0xe4, 0x0e, 0x16, 0xee, 0x33, 0xfe, 0x17, 0xed, 0x7c, 0xca, 0xee, 0xad,
-	0x6b, 0xdb, 0xf6, 0xd3, 0xb5, 0x6d, 0x4d, 0xbb, 0x16, 0xbf, 0x0a, 0x31, 0x16, 0x5c, 0x60, 0x31,
-	0xd3, 0xfc, 0x4e, 0x77, 0x0a, 0xba, 0x29, 0xf5, 0x02, 0x27, 0x9e, 0xfd, 0x77, 0x6c, 0x64, 0x26,
-	0x3e, 0xab, 0xa2, 0x24, 0x0c, 0xc1, 0x00, 0x6d, 0x95, 0xff, 0x90, 0x4c, 0x7c, 0x5e, 0x45, 0xdf,
-	0x41, 0xdb, 0xc6, 0xe4, 0x2d, 0xcf, 0x98, 0x90, 0x2d, 0x63, 0x2f, 0x63, 0x32, 0x58, 0x5f, 0xfd,
-	0x74, 0xc4, 0xae, 0xdb, 0xee, 0xc6, 0xeb, 0xb8, 0x67, 0xbc, 0xe2, 0x7c, 0xbc, 0x42, 0xf4, 0x0a,
-	0x8d, 0x0b, 0xd9, 0xf2, 0xe3, 0x76, 0xe8, 0xa5, 0x56, 0x5f, 0x6d, 0x2b, 0xb5, 0xcf, 0x4b, 0x86,
-	0xba, 0xca, 0x62, 0x6f, 0xf6, 0x01, 0x9c, 0xdf, 0x08, 0x79, 0x65, 0x2f, 0xc6, 0x64, 0x4d, 0xac,
-	0x4c, 0xc5, 0x71, 0x07, 0xfc, 0x23, 0x7a, 0xb0, 0x16, 0xec, 0x22, 0xec, 0x63, 0x11, 0xfe, 0xc0,
-	0x71, 0x44, 0x31, 0xdf, 0xcf, 0xeb, 0xfb, 0x2b, 0xab, 0x91, 0x1b, 0x0a, 0xcf, 0xd4, 0x2e, 0x45,
-	0xb6, 0xd3, 0x08, 0xef, 0x71, 0x9e, 0xd2, 0x23, 0x98, 0xf2, 0xb9, 0x17, 0xf9, 0x67, 0xff, 0xa5,
-	0xbd, 0x76, 0x2f, 0xf2, 0x12, 0xf0, 0x38, 0x6b, 0x8e, 0x5e, 0xe7, 0x35, 0xd7, 0x2b, 0x2e, 0x64,
-	0x6f, 0xa3, 0x59, 0x15, 0x67, 0x2c, 0xf3, 0xba, 0x61, 0x2e, 0x32, 0x06, 0xf7, 0x1d, 0x04, 0x8f,
-	0xa0, 0xdd, 0xdd, 0x3b, 0x71, 0x49, 0x92, 0x4e, 0x41, 0xaf, 0x5b, 0x82, 0x3b, 0x5f, 0x56, 0xd8,
-	0x4e, 0xea, 0xc1, 0xa3, 0x67, 0x64, 0x71, 0x56, 0x03, 0x70, 0x68, 0xbb, 0xe9, 0xc5, 0x11, 0xbe,
-	0xed, 0xf7, 0xd4, 0xe5, 0x3d, 0x00, 0x87, 0x4f, 0x7e, 0xfa, 0xf1, 0x90, 0xfb, 0x6a, 0x13, 0xd9,
-	0xb8, 0xb5, 0xf2, 0x8a, 0xa1, 0x98, 0x96, 0xb1, 0x9e, 0xb7, 0xd6, 0x0d, 0x86, 0x28, 0x26, 0x52,
-	0xb1, 0x02, 0x61, 0xa6, 0x41, 0xf8, 0x98, 0x1e, 0xa0, 0x7c, 0x2e, 0x98, 0x14, 0xe1, 0xc9, 0x1b,
-	0x31, 0xbf, 0x7b, 0xab, 0xa7, 0xa1, 0x25, 0x5a, 0xe7, 0xc0, 0xfc, 0xbb, 0x08, 0x1c, 0x6e, 0x38,
-	0xcb, 0xf0, 0xef, 0xee, 0x68, 0xb5, 0xee, 0x16, 0x2e, 0xfd, 0x8c, 0x8c, 0x55, 0x5f, 0xff, 0x6a,
-	0x70, 0x3f, 0xfe, 0x55, 0xcb, 0xdf, 0xbf, 0x1a, 0xda, 0x53, 0xc7, 0xd7, 0x39, 0x9a, 0x1c, 0x1f,
-	0x20, 0x37, 0x36, 0xb7, 0xbb, 0x63, 0xbf, 0xd3, 0xdc, 0x1d, 0xcb, 0x16, 0xcf, 0x9b, 0x4f, 0x59,
-	0xfa, 0x9e, 0x1c, 0xb2, 0x77, 0x7d, 0x1d, 0xb2, 0x1d, 0x7b, 0xdf, 0xb6, 0xf6, 0xe6, 0x92, 0x3d,
-	0x10, 0xb7, 0xc3, 0x25, 0x0f, 0x5c, 0xa7, 0xa4, 0x17, 0x58, 0xb2, 0xc8, 0xd8, 0x36, 0x60, 0x45,
-	0xad, 0x6e, 0x57, 0xf5, 0x82, 0xea, 0x86, 0xe3, 0x90, 0xdf, 0x0d, 0xdc, 0x17, 0xcd, 0x43, 0x3a,
-	0xdb, 0xdd, 0x17, 0x6b, 0x7e, 0xee, 0x0b, 0x66, 0x19, 0xcd, 0xee, 0xc9, 0x36, 0xf7, 0xfa, 0x2c,
-	0xd0, 0x76, 0x9f, 0xc5, 0x7b, 0x9f, 0x55, 0xd1, 0x5b, 0x3b, 0xf8, 0x2c, 0x86, 0x1a, 0x38, 0xbb,
-	0xc3, 0x69, 0x72, 0xec, 0x1c, 0x83, 0x04, 0xf4, 0xda, 0xee, 0x8a, 0x0b, 0xdf, 0x72, 0xb9, 0x2c,
-	0xa6, 0x9b, 0xf8, 0xc2, 0x43, 0xdc, 0x67, 0xc1, 0x13, 0x12, 0x8e, 0x4b, 0x27, 0xfd, 0xbc, 0x1b,
-	0x02, 0x0f, 0x39, 0x46, 0xb6, 0xaa, 0x28, 0x38, 0x23, 0xa6, 0x46, 0x99, 0x7b, 0x23, 0x1b, 0x8c,
-	0x44, 0x84, 0xce, 0xe1, 0x5f, 0x84, 0x23, 0x4d, 0x3c, 0x10, 0xf8, 0xbd, 0xda, 0x25, 0x96, 0xa6,
-	0x81, 0xa5, 0xed, 0x77, 0x59, 0x14, 0x53, 0xcb, 0x37, 0x40, 0x68, 0xda, 0x22, 0x87, 0xb7, 0x90,
-	0xdd, 0x6a, 0xaf, 0x5b, 0x65, 0x09, 0xb0, 0xa1, 0xd2, 0x79, 0xc8, 0x01, 0x1d, 0xb5, 0x43, 0x9f,
-	0xf4, 0x02, 0x99, 0x8e, 0xf7, 0xcf, 0xea, 0x7a, 0xe9, 0x9d, 0x8b, 0xef, 0x14, 0xbf, 0xf5, 0xe3,
-	0x5a, 0x06, 0xb8, 0x1f, 0x38, 0xff, 0x9d, 0x7e, 0x18, 0x20, 0xa7, 0x00, 0x22, 0x81, 0x55, 0x8c,
-	0x66, 0x82, 0xf3, 0x75, 0xd6, 0x04, 0x9e, 0xb9, 0xb3, 0xe6, 0x3b, 0xdd, 0xd0, 0x73, 0x90, 0x3e,
-	0x9a, 0xf5, 0x3a, 0x17, 0x43, 0x60, 0x17, 0x2e, 0x86, 0x71, 0xd2, 0x31, 0xf1, 0x4f, 0x50, 0x6c,
-	0xb8, 0xeb, 0x11, 0xea, 0x14, 0xd0, 0x60, 0xa8, 0x0d, 0xb5, 0x07, 0xc1, 0x19, 0x9d, 0xd0, 0xce,
-	0x1e, 0x86, 0x2b, 0x10, 0xb1, 0xd3, 0x8c, 0x51, 0x75, 0x18, 0xf3, 0x01, 0xe1, 0xf9, 0x77, 0xda,
-	0x0d, 0xf9, 0xca, 0x22, 0xa1, 0x50, 0x65, 0x47, 0x82, 0xe3, 0xf6, 0x09, 0xee, 0xc1, 0xed, 0xe3,
-	0x75, 0x4e, 0x85, 0xf7, 0xee, 0x9c, 0xea, 0xd8, 0xab, 0x73, 0xea, 0x34, 0x3b, 0xc0, 0x34, 0xdf,
-	0x79, 0xe8, 0x69, 0x64, 0xc4, 0x39, 0x8d, 0x34, 0xf7, 0xbd, 0xd8, 0x47, 0x8b, 0xf7, 0x98, 0xbd,
-	0xcc, 0x79, 0xa2, 0x07, 0xe1, 0x34, 0xe9, 0x74, 0x9c, 0x26, 0xf8, 0x1a, 0x40, 0x0d, 0x7a, 0xc0,
-	0x5d, 0x32, 0x23, 0xfe, 0x0b, 0xd7, 0x3e, 0x7c, 0xd4, 0xf0, 0x38, 0x73, 0x34, 0x7e, 0x2d, 0xbb,
-	0x24, 0xfc, 0x0c, 0xb8, 0x5f, 0xf0, 0x79, 0xe8, 0x51, 0x8a, 0x44, 0xf2, 0xaa, 0xae, 0xd3, 0x14,
-	0x15, 0x36, 0xa8, 0xaf, 0x51, 0x52, 0x99, 0x6e, 0x4a, 0xfe, 0x86, 0xae, 0x17, 0x24, 0xdd, 0xa2,
-	0x79, 0xc7, 0x78, 0x83, 0x55, 0x97, 0x88, 0x78, 0x53, 0x11, 0x82, 0xcd, 0x61, 0x4b, 0x99, 0xfd,
-	0x8b, 0x76, 0xee, 0x04, 0x4a, 0x8d, 0x89, 0x63, 0xe2, 0x84, 0x38, 0x2e, 0x4e, 0xd3, 0x54, 0x0d,
-	0x93, 0x9f, 0x57, 0xd1, 0x7f, 0x6c, 0x6f, 0xec, 0x04, 0x6a, 0xe2, 0xed, 0x08, 0x8e, 0x22, 0x48,
-	0x40, 0xc4, 0xbe, 0x95, 0x31, 0xd8, 0x55, 0x5b, 0x87, 0x49, 0xf4, 0xb3, 0x1e, 0xe8, 0x81, 0x22,
-	0xc4, 0x6b, 0x33, 0x2f, 0xc9, 0xa6, 0xde, 0x99, 0x5b, 0x70, 0x03, 0x06, 0xa0, 0xa7, 0x36, 0x01,
-	0x47, 0x56, 0x8a, 0xca, 0x6a, 0x3a, 0x78, 0xa9, 0xa8, 0xac, 0xc2, 0x61, 0x10, 0x5c, 0x2f, 0x28,
-	0xa6, 0x2b, 0x1d, 0x92, 0xc8, 0x1f, 0xd2, 0x2a, 0xd7, 0x2b, 0xfb, 0x6a, 0x8b, 0xeb, 0xb2, 0xd9,
-	0x65, 0xe8, 0x98, 0x5f, 0x53, 0xca, 0x65, 0xb5, 0x78, 0xe6, 0x3c, 0xbc, 0x02, 0x40, 0x97, 0x37,
-	0xf3, 0x56, 0x09, 0xf6, 0x02, 0x76, 0xdc, 0x54, 0x47, 0xdd, 0x4b, 0xb4, 0xde, 0x3f, 0xd5, 0xdc,
-	0x01, 0x15, 0xe6, 0x36, 0x71, 0xfb, 0xa4, 0x38, 0x25, 0x8d, 0x34, 0x76, 0x40, 0xf5, 0xba, 0x54,
-	0x73, 0x87, 0x9d, 0xf5, 0xb0, 0xb9, 0xff, 0x49, 0x3a, 0x01, 0x31, 0x32, 0x3f, 0x89, 0x19, 0xe3,
-	0x4a, 0xf2, 0x10, 0xdf, 0xac, 0x22, 0x4c, 0xc1, 0x8d, 0x33, 0x62, 0x6a, 0xca, 0x01, 0x96, 0x44,
-	0x84, 0x4e, 0x27, 0x1f, 0x30, 0x16, 0x7a, 0x79, 0x26, 0xe0, 0xef, 0x05, 0xa0, 0xcf, 0x6f, 0x13,
-	0xc1, 0x57, 0x20, 0xcc, 0x73, 0xbb, 0x22, 0xdf, 0x9c, 0xef, 0xcd, 0x95, 0x7d, 0x98, 0xa7, 0x9b,
-	0xe6, 0x32, 0xf0, 0xb5, 0xda, 0xd9, 0x21, 0xb0, 0x8f, 0xb3, 0x83, 0x2d, 0xce, 0xb9, 0xfe, 0x5a,
-	0xf0, 0xd3, 0xdf, 0x4c, 0x15, 0x4d, 0xed, 0x49, 0x7f, 0xd7, 0x94, 0xb3, 0x8f, 0xba, 0xfe, 0xd7,
-	0x01, 0x6e, 0x91, 0xf9, 0xc6, 0xe4, 0x7f, 0xd5, 0x89, 0xc9, 0x3f, 0x55, 0x08, 0xfc, 0xd9, 0x44,
-	0xe5, 0xdb, 0xbf, 0xd1, 0xa8, 0xfc, 0xef, 0x07, 0xe0, 0xcc, 0xee, 0x4d, 0x20, 0x7c, 0x1b, 0x7a,
-	0x5d, 0xc6, 0x82, 0x9d, 0xcb, 0x8d, 0x3b, 0x83, 0x76, 0x9b, 0xa1, 0xb1, 0x56, 0x94, 0x9d, 0xeb,
-	0x4d, 0xc6, 0x35, 0xa9, 0xf6, 0xb3, 0xed, 0x80, 0x8f, 0xc0, 0x37, 0x06, 0xf8, 0x78, 0x8c, 0xe0,
-	0x68, 0x33, 0x33, 0xf5, 0xeb, 0xec, 0x97, 0xe1, 0xdf, 0x0b, 0x35, 0xa8, 0xcc, 0xcf, 0x0d, 0x94,
-	0xa2, 0x51, 0x77, 0x87, 0x9f, 0x41, 0x77, 0xcf, 0xfe, 0x7f, 0x81, 0xcf, 0xab, 0xe8, 0xef, 0xfe,
-	0xe1, 0xc2, 0x36, 0xe0, 0x04, 0x44, 0xec, 0xc6, 0x0e, 0x0e, 0xf8, 0x76, 0x6c, 0x12, 0xed, 0x19,
-	0xdb, 0xf1, 0xdb, 0xc1, 0x6d, 0x93, 0xd4, 0xb3, 0x02, 0x5b, 0x78, 0x9f, 0x9f, 0x3f, 0xbc, 0xcf,
-	0xaf, 0x5f, 0x85, 0xd8, 0x1b, 0x45, 0x7d, 0x59, 0x29, 0x2e, 0x56, 0x54, 0x76, 0x76, 0x29, 0x40,
-	0x87, 0x7d, 0x9b, 0x07, 0xd1, 0xdb, 0x9c, 0x59, 0x1a, 0xc9, 0xf9, 0x04, 0x75, 0x0c, 0xb3, 0x64,
-	0xb2, 0xe4, 0x67, 0xe7, 0x27, 0x28, 0x3c, 0xec, 0xa4, 0x33, 0xb7, 0x5f, 0x7e, 0x3b, 0x80, 0xb6,
-	0xfb, 0x29, 0x3c, 0x96, 0xb0, 0x2d, 0x1a, 0x67, 0x21, 0x48, 0x96, 0x3f, 0x77, 0x1b, 0x8c, 0xef,
-	0x1e, 0x33, 0x54, 0xfb, 0xe6, 0x40, 0xa6, 0x4d, 0xa6, 0x32, 0xf0, 0x1a, 0xf4, 0x90, 0xbf, 0x66,
-	0x8e, 0x26, 0x2d, 0xca, 0xab, 0x86, 0xc5, 0x13, 0x33, 0x9e, 0xdf, 0x8f, 0xd8, 0xda, 0xa7, 0x0c,
-	0x32, 0x6d, 0x32, 0xfd, 0x94, 0x81, 0xf3, 0x04, 0x5f, 0x85, 0x10, 0x7d, 0xc0, 0x27, 0xf8, 0xc4,
-	0xbe, 0xe4, 0x67, 0xda, 0x64, 0x26, 0x05, 0xff, 0x1a, 0x82, 0xd1, 0x82, 0xf3, 0xf9, 0x80, 0x5c,
-	0xdd, 0x17, 0x36, 0x72, 0x7e, 0x57, 0x13, 0xcc, 0xc4, 0x79, 0xaa, 0x72, 0x9b, 0xdd, 0x4d, 0xe8,
-	0xe0, 0xf7, 0x9e, 0x64, 0xb1, 0xe0, 0xfe, 0x36, 0xc1, 0x7c, 0x4d, 0xf4, 0xc5, 0xed, 0x77, 0x15,
-	0x4c, 0xfc, 0x3a, 0x08, 0x3c, 0xd1, 0xa1, 0x52, 0xb8, 0x4b, 0x68, 0x4d, 0x95, 0x9b, 0xbc, 0x8d,
-	0x8c, 0xf0, 0x18, 0x4d, 0x71, 0x38, 0x67, 0x53, 0xe3, 0xf7, 0xe0, 0xb8, 0xc3, 0x9a, 0xd3, 0xcb,
-	0xb9, 0xca, 0xfa, 0x72, 0x51, 0xcb, 0x3b, 0xf7, 0xed, 0xee, 0x6a, 0x95, 0x66, 0xb9, 0xfe, 0x33,
-	0x48, 0x3e, 0xe2, 0xb0, 0x5f, 0x2f, 0x2f, 0x50, 0x66, 0x7e, 0x13, 0xef, 0xa6, 0x56, 0xc1, 0x37,
-	0xa1, 0xd7, 0x47, 0x3a, 0xdf, 0x38, 0x9e, 0xf7, 0x1d, 0x0a, 0xa7, 0x6a, 0x4c, 0x18, 0xbb, 0x6f,
-	0x56, 0x57, 0x02, 0xbe, 0x45, 0xd3, 0x31, 0x71, 0xb9, 0xec, 0xda, 0x24, 0xdf, 0x54, 0x76, 0x10,
-	0xca, 0xae, 0x84, 0xf1, 0xf4, 0x9e, 0x2c, 0xe7, 0x92, 0xfb, 0x05, 0xd6, 0xa1, 0xd7, 0xc9, 0x5b,
-	0x4a, 0xaf, 0xb7, 0xb3, 0x44, 0x0f, 0xe1, 0xbd, 0xe6, 0xee, 0xea, 0xf3, 0x4b, 0x5e, 0x2e, 0xdb,
-	0x09, 0xd8, 0xe9, 0x75, 0x79, 0x96, 0xb7, 0xeb, 0x1d, 0xe8, 0xb2, 0x0b, 0xa4, 0x49, 0xca, 0xdf,
-	0x6e, 0x90, 0xbd, 0x9e, 0x94, 0xe4, 0x4a, 0x2f, 0x31, 0xe2, 0xdd, 0x01, 0x78, 0x83, 0x02, 0x72,
-	0x94, 0x0b, 0xa3, 0xd9, 0xe7, 0x6e, 0xd4, 0x32, 0xbe, 0x13, 0x1e, 0x76, 0xfc, 0x7b, 0xc7, 0x37,
-	0xd7, 0x7f, 0x7d, 0x53, 0x9c, 0xa4, 0xdf, 0x01, 0xb9, 0xc7, 0x25, 0x92, 0xde, 0xc0, 0xf1, 0x4d,
-	0x35, 0x76, 0xb4, 0xa9, 0xb7, 0x60, 0xc7, 0x54, 0x63, 0xc7, 0xfc, 0x52, 0x8d, 0xb5, 0xef, 0x2e,
-	0xd5, 0xd8, 0x50, 0xd3, 0xa2, 0xfd, 0x52, 0x8d, 0x95, 0x21, 0x4c, 0x47, 0xd7, 0xe4, 0xd0, 0xa7,
-	0xd1, 0xbd, 0xe6, 0x8e, 0xa9, 0xb7, 0x11, 0x02, 0xfe, 0xa7, 0x5f, 0x5e, 0x0a, 0xfe, 0xc7, 0x08,
-	0x86, 0x1a, 0x5e, 0x5b, 0x60, 0xc3, 0xa2, 0xee, 0x09, 0x5b, 0xd8, 0xfc, 0x9a, 0x04, 0xbb, 0xad,
-	0x49, 0x33, 0x1f, 0x0d, 0xea, 0x0d, 0x29, 0xeb, 0xd3, 0x28, 0x47, 0xf6, 0x9e, 0x46, 0xb9, 0x2e,
-	0x83, 0x73, 0xb4, 0x69, 0x0a, 0x62, 0x77, 0x06, 0xe7, 0xf2, 0xbe, 0x93, 0x4a, 0x9f, 0xac, 0x4b,
-	0x2a, 0xfd, 0xf8, 0xfb, 0x08, 0xaf, 0x4c, 0xdc, 0xcf, 0x9f, 0xbd, 0xa7, 0x28, 0x95, 0xb3, 0xa6,
-	0xa5, 0x94, 0x0b, 0x8a, 0x51, 0xc8, 0x04, 0xbd, 0xa9, 0xa6, 0x5f, 0x82, 0x2e, 0xa5, 0x50, 0xa8,
-	0x1d, 0x71, 0xe3, 0x34, 0x63, 0x76, 0xe4, 0x8b, 0x2a, 0x0a, 0x5a, 0xc6, 0xba, 0x2a, 0x47, 0x95,
-	0x42, 0xc1, 0xb1, 0x98, 0x66, 0xa0, 0xab, 0xac, 0xe7, 0xf2, 0x6b, 0x4a, 0xb1, 0xa8, 0x96, 0x57,
-	0xd5, 0x1d, 0x72, 0x16, 0x47, 0xcb, 0xfa, 0xbc, 0x4d, 0x8a, 0xdf, 0x73, 0x2e, 0x29, 0xd5, 0xd8,
-	0x73, 0x4d, 0x56, 0xb4, 0xeb, 0x92, 0xd2, 0x45, 0x16, 0xd6, 0xb6, 0xd9, 0x32, 0x21, 0xfb, 0x82,
-	0x52, 0x4d, 0xfa, 0x07, 0xd0, 0x75, 0xdb, 0x74, 0x49, 0xc6, 0x0d, 0xae, 0x3f, 0xd5, 0xdd, 0x07,
-	0x67, 0xc7, 0x50, 0x47, 0x8c, 0x37, 0xbf, 0xf1, 0x6d, 0xb3, 0x26, 0x5f, 0x83, 0x78, 0x5e, 0xa9,
-	0x58, 0xf9, 0x35, 0xc5, 0x55, 0x48, 0x62, 0xe7, 0x4b, 0xe7, 0xf3, 0x8c, 0xc9, 0x5b, 0x42, 0xc4,
-	0xbe, 0x38, 0x99, 0x09, 0xc9, 0x42, 0xbe, 0x8e, 0x02, 0xdf, 0x85, 0x43, 0x3c, 0xcf, 0xe8, 0xb2,
-	0x62, 0xaa, 0x05, 0x57, 0x79, 0x63, 0x4d, 0x4e, 0x17, 0xae, 0xee, 0xe2, 0x73, 0x92, 0x30, 0x3b,
-	0x52, 0x3d, 0x65, 0xf6, 0x55, 0x7c, 0x28, 0xb0, 0x02, 0xd1, 0x92, 0x6e, 0xa8, 0x3c, 0x87, 0x1f,
-	0x77, 0x93, 0xce, 0xee, 0x3f, 0x4b, 0x83, 0xbd, 0x28, 0x88, 0x50, 0xf6, 0x18, 0xcf, 0x41, 0x9c,
-	0x5e, 0x87, 0xd2, 0x0a, 0xf6, 0x65, 0x3b, 0xad, 0x92, 0x78, 0xa5, 0x69, 0xba, 0xe7, 0x18, 0x61,
-	0xb8, 0x5c, 0x60, 0xc0, 0xb2, 0xcb, 0x15, 0x5c, 0x82, 0x5e, 0x2e, 0x82, 0xb9, 0x66, 0xf8, 0xac,
-	0xed, 0xdb, 0xf5, 0x2a, 0x39, 0xf4, 0xe9, 0xc7, 0x7e, 0x12, 0x32, 0x61, 0x19, 0xb3, 0xa2, 0xdc,
-	0x4f, 0xdd, 0x31, 0xc7, 0xda, 0xb7, 0x1f, 0xf9, 0x47, 0x61, 0x76, 0xca, 0x0a, 0x2d, 0x2b, 0x96,
-	0x7a, 0x85, 0xd0, 0xe3, 0x0f, 0x20, 0xa6, 0x54, 0x34, 0xb7, 0x84, 0xfb, 0x4d, 0x3e, 0x9e, 0xe8,
-	0xbe, 0x9e, 0xb7, 0x70, 0xd9, 0x91, 0x22, 0x45, 0x36, 0xf9, 0xd6, 0x95, 0xe9, 0x90, 0xbb, 0x94,
-	0x8a, 0x56, 0x93, 0xff, 0x0e, 0x80, 0x4b, 0xf6, 0xc0, 0xee, 0xae, 0xfe, 0x39, 0xec, 0xf5, 0x29,
-	0x42, 0x32, 0x1d, 0x72, 0xa7, 0xe1, 0xc8, 0xfe, 0xff, 0x11, 0x1c, 0xae, 0xbb, 0xcd, 0xe6, 0x0a,
-	0x22, 0x24, 0xf7, 0xb2, 0x3b, 0x35, 0x96, 0xc3, 0x8f, 0x78, 0x09, 0x24, 0x0f, 0x94, 0xdc, 0x97,
-	0xef, 0x6a, 0x4e, 0x60, 0xfc, 0x08, 0x41, 0xef, 0x3d, 0x65, 0x25, 0xa7, 0xda, 0x46, 0x1e, 0x8f,
-	0x81, 0x3f, 0xd7, 0xcc, 0x87, 0xc8, 0x13, 0xd0, 0x2a, 0x2b, 0x4d, 0xdd, 0x58, 0x01, 0xff, 0x9b,
-	0x6d, 0xf1, 0x7b, 0x75, 0x7c, 0x26, 0xbe, 0x0f, 0x02, 0xb1, 0xae, 0x72, 0xab, 0xeb, 0x8a, 0x51,
-	0xe0, 0x15, 0x78, 0xcd, 0xf7, 0x00, 0xe4, 0xa9, 0xc0, 0x05, 0xc5, 0x52, 0xde, 0x20, 0x2c, 0xbb,
-	0xbf, 0x56, 0x17, 0x2b, 0xb8, 0x79, 0x4c, 0xd2, 0xfc, 0x1e, 0xea, 0xd5, 0x56, 0xed, 0xb5, 0x63,
-	0x26, 0x86, 0x69, 0xc9, 0x3b, 0x0e, 0x34, 0xab, 0x03, 0xbf, 0x0f, 0x67, 0xe4, 0xf7, 0xd0, 0x03,
-	0x31, 0x5e, 0x22, 0xe3, 0x65, 0x95, 0xb0, 0x8c, 0x75, 0xd3, 0x72, 0x55, 0xe2, 0xc4, 0x33, 0xaf,
-	0x04, 0x2f, 0xd1, 0xae, 0xc4, 0x6d, 0x76, 0x0d, 0x93, 0x23, 0x4f, 0x6a, 0x13, 0x21, 0x43, 0xa7,
-	0x62, 0x7a, 0x17, 0x4b, 0x6a, 0xc1, 0x61, 0xa5, 0x7d, 0xcb, 0x37, 0x2a, 0xac, 0x54, 0xb4, 0xba,
-	0x37, 0xe4, 0x74, 0xd2, 0x4f, 0xef, 0x06, 0xbb, 0xae, 0xec, 0xb2, 0xd2, 0x4e, 0xd2, 0x66, 0xcf,
-	0xec, 0xe1, 0x66, 0xb8, 0xf7, 0x6a, 0xfb, 0x2e, 0x1b, 0xdf, 0x4b, 0x4a, 0xf7, 0x72, 0x9a, 0xf8,
-	0x7d, 0x38, 0xee, 0xf9, 0xf8, 0xae, 0xa6, 0x9a, 0xb9, 0x15, 0x43, 0x2f, 0xd1, 0x78, 0xb8, 0x59,
-	0x51, 0xf2, 0x6a, 0xd3, 0x2f, 0x46, 0x44, 0xe4, 0xa3, 0x9c, 0x7d, 0x81, 0x73, 0x5f, 0x32, 0xf4,
-	0xd2, 0x35, 0x9b, 0x17, 0x5f, 0x82, 0xde, 0xb2, 0x9e, 0xab, 0x2f, 0xa1, 0xe9, 0xa7, 0x05, 0x22,
-	0x72, 0xbc, 0xac, 0x2f, 0x7a, 0x85, 0xe2, 0x3b, 0x30, 0xa0, 0xe4, 0x2d, 0xed, 0xae, 0xba, 0x5d,
-	0x16, 0xfb, 0xaa, 0x44, 0x6a, 0xc7, 0x49, 0xe3, 0x92, 0x48, 0xd3, 0x18, 0x64, 0x22, 0x72, 0x3f,
-	0x93, 0x59, 0x5f, 0xd8, 0x14, 0x44, 0x0d, 0x7d, 0xbd, 0x5c, 0xc8, 0x19, 0xfa, 0xb2, 0x56, 0x4e,
-	0x9c, 0x6d, 0x9a, 0x6b, 0x1e, 0x28, 0xa9, 0x4c, 0x28, 0xc9, 0x91, 0xa6, 0xa8, 0x2a, 0xa6, 0x95,
-	0x63, 0x72, 0x13, 0x23, 0x4d, 0x39, 0xa3, 0x94, 0x76, 0x8e, 0x92, 0xe2, 0x11, 0x08, 0x1b, 0x4a,
-	0xb9, 0xa0, 0x97, 0x12, 0xe7, 0x9a, 0x32, 0x71, 0x2a, 0x72, 0x4a, 0x67, 0x97, 0xcb, 0x73, 0x5a,
-	0x25, 0x67, 0x5a, 0x5a, 0xfe, 0x8e, 0x56, 0x56, 0x4d, 0x33, 0x31, 0xda, 0x94, 0x1b, 0x33, 0x9e,
-	0xcb, 0x95, 0x45, 0x87, 0x03, 0x2f, 0xd9, 0x39, 0x45, 0xdc, 0x62, 0x52, 0xbe, 0xb9, 0x03, 0x58,
-	0x6a, 0x33, 0x96, 0x59, 0xe4, 0x92, 0x6e, 0x64, 0x14, 0x73, 0x4d, 0x2b, 0xaf, 0x66, 0x3a, 0x65,
-	0x81, 0x49, 0x70, 0x49, 0x7d, 0x0b, 0x3a, 0x69, 0x46, 0xf2, 0x35, 0xc5, 0x5c, 0x4b, 0xa4, 0x9f,
-	0xf6, 0x9b, 0x48, 0x9d, 0x72, 0x84, 0x48, 0x23, 0x6f, 0x88, 0x29, 0x6d, 0xab, 0x51, 0xba, 0x9a,
-	0x6b, 0xea, 0xdf, 0xce, 0xba, 0x95, 0xc8, 0x36, 0xe9, 0x04, 0x90, 0xed, 0x6c, 0x37, 0x4b, 0x84,
-	0xdb, 0x3e, 0x0c, 0xf0, 0x44, 0x5b, 0xf8, 0x23, 0xe0, 0xe9, 0x5d, 0x1a, 0x0a, 0xff, 0xd6, 0x2e,
-	0x12, 0x5a, 0x31, 0xa1, 0x0b, 0x5c, 0x68, 0x06, 0xe4, 0x41, 0x26, 0xd4, 0xb7, 0x48, 0x1d, 0xba,
-	0x4d, 0x7a, 0x25, 0x3f, 0x57, 0x5c, 0xce, 0x29, 0x95, 0x4a, 0x62, 0x72, 0x6f, 0x88, 0xb4, 0x26,
-	0xd7, 0xf9, 0x39, 0x1a, 0x2b, 0x2a, 0x47, 0x59, 0x09, 0x57, 0x96, 0xe7, 0x2a, 0x15, 0x7c, 0x1e,
-	0xba, 0x4a, 0xeb, 0x45, 0x4b, 0xb3, 0xcb, 0x9b, 0xda, 0x11, 0x4d, 0x17, 0x95, 0x81, 0x72, 0x30,
-	0xfe, 0xf5, 0x9d, 0x2f, 0xdf, 0x2f, 0x34, 0x11, 0x79, 0xc8, 0x6b, 0x4c, 0xd8, 0xf9, 0x98, 0x33,
-	0x5d, 0x07, 0x70, 0x29, 0xff, 0xcd, 0x26, 0x23, 0xdf, 0xb5, 0xc3, 0xa5, 0x7c, 0xfc, 0x4b, 0xd0,
-	0xc7, 0xdb, 0xe5, 0xb9, 0x9b, 0x9f, 0x58, 0xdc, 0x77, 0xfe, 0x83, 0x86, 0x6d, 0xed, 0x96, 0x31,
-	0x2b, 0xca, 0xcd, 0x84, 0xb3, 0xd0, 0x6f, 0xb7, 0xd0, 0x5b, 0x83, 0xa5, 0x26, 0xcd, 0xea, 0x96,
-	0x7b, 0x39, 0x93, 0x47, 0xd6, 0x75, 0xb0, 0x1f, 0xbb, 0xbf, 0xa6, 0x91, 0x98, 0x69, 0x32, 0x30,
-	0xdc, 0x3b, 0xd6, 0x96, 0x89, 0xc9, 0x36, 0xe6, 0xb2, 0x06, 0x94, 0xc0, 0xbf, 0x81, 0x20, 0xea,
-	0x96, 0x34, 0xbb, 0xa7, 0x43, 0xbd, 0x0f, 0x54, 0x5b, 0x1a, 0xe1, 0xe5, 0x3d, 0xfe, 0x3e, 0x3a,
-	0x61, 0x92, 0xf7, 0x67, 0x97, 0x75, 0x4b, 0xa4, 0xbd, 0xb5, 0xac, 0x5b, 0x67, 0x79, 0x41, 0x35,
-	0x6b, 0x33, 0x26, 0x43, 0xed, 0x5b, 0x1a, 0xf8, 0x77, 0x10, 0xf4, 0x79, 0x90, 0xb6, 0xbc, 0x6f,
-	0x13, 0x7f, 0xc3, 0x40, 0x38, 0xaf, 0xee, 0x1b, 0x4a, 0xcb, 0x5c, 0x0f, 0xfc, 0x1c, 0xf9, 0xf8,
-	0xfb, 0xe8, 0xf0, 0xb6, 0x2a, 0x39, 0xe3, 0x18, 0x93, 0xf1, 0xf2, 0x36, 0x7e, 0x7c, 0xa3, 0x96,
-	0x51, 0xcb, 0x4e, 0x04, 0xa2, 0x15, 0x54, 0xa7, 0xe7, 0x6e, 0x36, 0x19, 0xcd, 0x1e, 0x27, 0xd3,
-	0xd6, 0xb6, 0xa4, 0x03, 0xb8, 0x0c, 0xbd, 0x7e, 0xe2, 0x6e, 0x51, 0x71, 0xaf, 0xec, 0x37, 0xf3,
-	0x01, 0xdd, 0x60, 0x7b, 0xe4, 0x78, 0x7e, 0x5b, 0x79, 0xae, 0x0f, 0xb2, 0xd1, 0xe9, 0xa8, 0xae,
-	0x68, 0x65, 0x9a, 0x91, 0x2a, 0x71, 0xa9, 0x49, 0x0b, 0x04, 0x27, 0x0b, 0x17, 0x99, 0x8f, 0x0e,
-	0x0f, 0xfe, 0x45, 0x66, 0xb8, 0xb8, 0xa4, 0xbc, 0xb1, 0xeb, 0x03, 0xff, 0xc8, 0xa7, 0x1f, 0xd7,
-	0x31, 0xd7, 0x46, 0xc7, 0x6f, 0x79, 0x09, 0x72, 0xb7, 0xe2, 0x29, 0x7c, 0x15, 0xe2, 0x84, 0xdf,
-	0xfe, 0xb0, 0x1e, 0x33, 0x38, 0xe6, 0x9b, 0xe4, 0x6b, 0xf6, 0x9e, 0xf2, 0x16, 0xdd, 0x7c, 0x36,
-	0x72, 0x32, 0x23, 0xc8, 0x82, 0x52, 0xd1, 0x3c, 0xef, 0xb0, 0x0a, 0x3d, 0xde, 0x8a, 0x9a, 0x89,
-	0x57, 0x77, 0x77, 0x40, 0xf1, 0xf4, 0x16, 0x4d, 0xf2, 0x64, 0x7b, 0xab, 0x33, 0x82, 0x1c, 0xf3,
-	0x34, 0xc7, 0x74, 0xef, 0x14, 0x5a, 0x25, 0x67, 0xa8, 0x95, 0x75, 0x8b, 0xb5, 0x69, 0xae, 0xc9,
-	0xc8, 0xc4, 0x9d, 0x9d, 0xe2, 0x72, 0x45, 0x76, 0x58, 0xf0, 0x2f, 0x23, 0x67, 0xdf, 0xf3, 0xca,
-	0x92, 0x76, 0xd7, 0x3f, 0x97, 0x17, 0x96, 0xd6, 0x0c, 0x55, 0xb1, 0x38, 0x82, 0xca, 0xd1, 0xda,
-	0xf5, 0x9b, 0x9f, 0xb3, 0x8e, 0xe3, 0xf6, 0xe6, 0xe7, 0xa9, 0xc6, 0xa5, 0xda, 0x86, 0x65, 0x51,
-	0x79, 0xb9, 0x92, 0x6a, 0xae, 0x25, 0x56, 0x9b, 0x34, 0x08, 0x3b, 0xfb, 0x14, 0xab, 0xc1, 0x55,
-	0xd5, 0xa4, 0x37, 0x93, 0x6d, 0x0d, 0xee, 0x12, 0xa3, 0x35, 0x15, 0xc3, 0xdd, 0x49, 0x2e, 0x29,
-	0x1f, 0x40, 0x37, 0x69, 0x68, 0x4e, 0x2b, 0x5b, 0xaa, 0x51, 0x56, 0x8a, 0x89, 0x1f, 0x77, 0xec,
-	0x7a, 0xb6, 0xf6, 0x7d, 0xfa, 0xb1, 0x97, 0x99, 0x86, 0x1c, 0xba, 0xc8, 0xa3, 0xcb, 0xfc, 0x09,
-	0x3e, 0x0a, 0x9d, 0xd4, 0xbb, 0x4a, 0x61, 0xa7, 0x7f, 0x49, 0xbf, 0xe3, 0x2f, 0x47, 0xc8, 0x13,
-	0x8a, 0x23, 0xcd, 0x40, 0xa4, 0x50, 0x36, 0x59, 0x3a, 0xc2, 0x9f, 0x74, 0x34, 0xb8, 0x82, 0x5a,
-	0x3b, 0x70, 0xe4, 0x6c, 0xe2, 0x91, 0x0b, 0x65, 0xf3, 0x72, 0x79, 0x45, 0x97, 0x3b, 0x0a, 0xec,
-	0x1f, 0x3c, 0x0f, 0x21, 0xd3, 0x52, 0x2c, 0x35, 0xf1, 0x57, 0x1d, 0x34, 0xde, 0xdc, 0x4c, 0xcc,
-	0xc8, 0x4d, 0xf6, 0x23, 0xa3, 0x9b, 0xd6, 0x22, 0x61, 0x92, 0x19, 0x2f, 0x5e, 0x86, 0x1e, 0x27,
-	0x80, 0x94, 0x63, 0xe2, 0xfe, 0x9a, 0x89, 0x1b, 0x69, 0x7a, 0x0c, 0x72, 0xc2, 0x2a, 0x64, 0xd5,
-	0x10, 0x36, 0xa9, 0xb3, 0x66, 0x9d, 0x77, 0x2b, 0x3c, 0x76, 0x44, 0xdf, 0xe0, 0x45, 0x88, 0xd5,
-	0xca, 0xa0, 0x0d, 0xff, 0xb2, 0xa3, 0x81, 0x63, 0xc3, 0x55, 0x84, 0x1d, 0x7f, 0x22, 0x6d, 0xa5,
-	0xd1, 0xcc, 0x2e, 0xc5, 0xf5, 0x04, 0xbf, 0x09, 0x71, 0x36, 0x06, 0x2a, 0x8d, 0xb1, 0x30, 0xb9,
-	0xff, 0x89, 0x25, 0x0d, 0xf5, 0x0f, 0x61, 0x5c, 0xe6, 0xe4, 0x37, 0x2f, 0x2f, 0xd0, 0x8e, 0xec,
-	0xb1, 0xf9, 0x6f, 0x6a, 0x15, 0x2a, 0xb2, 0xee, 0x9b, 0x76, 0xef, 0xee, 0xfd, 0x9b, 0x76, 0x77,
-	0xa0, 0x7b, 0xd5, 0x50, 0x2a, 0x6b, 0x1f, 0x15, 0xb9, 0xfd, 0xf7, 0x1e, 0xad, 0x4f, 0x83, 0x6c,
-	0x6d, 0x6f, 0x10, 0xd2, 0x37, 0xaf, 0xec, 0xde, 0xda, 0xef, 0xe2, 0xc2, 0x99, 0x7d, 0xf7, 0x31,
-	0xc4, 0x6b, 0xd7, 0x3b, 0x78, 0xf2, 0xbe, 0xc4, 0xfb, 0x7b, 0xcf, 0x18, 0xe8, 0x2d, 0x5a, 0xf0,
-	0x77, 0xc4, 0x0b, 0x4e, 0x51, 0x4c, 0x96, 0x89, 0xaf, 0xc1, 0x80, 0xf9, 0xc0, 0xb4, 0xd4, 0x92,
-	0x13, 0xea, 0xe2, 0xb7, 0x92, 0xcc, 0x84, 0xd2, 0x64, 0x45, 0xf6, 0xca, 0xfd, 0x8c, 0x8d, 0x07,
-	0xb9, 0x78, 0xaa, 0x4a, 0x13, 0x2f, 0x43, 0x9f, 0x59, 0xd4, 0xef, 0xe5, 0xea, 0x0c, 0xe9, 0xc4,
-	0x07, 0xbe, 0x00, 0x54, 0xcf, 0x54, 0x59, 0x2c, 0xea, 0xf7, 0xbc, 0xb6, 0x73, 0xa6, 0x57, 0xc6,
-	0x44, 0xda, 0x05, 0x8f, 0x5d, 0x8c, 0xdf, 0x81, 0xd8, 0xed, 0x7b, 0x34, 0x7e, 0xcd, 0x3f, 0x58,
-	0x9e, 0x58, 0xa6, 0xd2, 0xcf, 0xee, 0xb4, 0x11, 0x66, 0x6f, 0x2d, 0xd5, 0xbe, 0x72, 0xce, 0x07,
-	0xbe, 0xfb, 0xf6, 0x3d, 0xab, 0xf6, 0x10, 0x7f, 0x0b, 0x0e, 0x15, 0xa7, 0x58, 0xed, 0x59, 0x4a,
-	0x2f, 0xbb, 0x5f, 0x12, 0x7a, 0x93, 0xee, 0xe8, 0x93, 0x7b, 0x8b, 0x53, 0xa4, 0x96, 0x0c, 0xbd,
-	0xc8, 0x3b, 0x05, 0xbf, 0x01, 0x7d, 0x75, 0xc2, 0x58, 0x92, 0xba, 0x4a, 0x53, 0x51, 0x71, 0xb7,
-	0x28, 0x8a, 0x6a, 0xc4, 0x0f, 0xe0, 0x48, 0x9d, 0x20, 0x8f, 0x03, 0xfc, 0xa3, 0xa7, 0x75, 0x80,
-	0xf7, 0xc9, 0x03, 0xee, 0x42, 0xb3, 0x2e, 0x67, 0xf8, 0x35, 0xe8, 0xad, 0x2b, 0xba, 0xac, 0x97,
-	0xd5, 0x84, 0xb1, 0xf3, 0x31, 0x95, 0x88, 0x15, 0xdc, 0x62, 0xaf, 0xe9, 0x65, 0x15, 0x5f, 0x05,
-	0x70, 0xed, 0x52, 0xe6, 0x7e, 0x36, 0x29, 0xb9, 0x33, 0x6f, 0xef, 0x4a, 0xb3, 0xff, 0x3e, 0xf0,
-	0x59, 0x15, 0x3d, 0x09, 0xc0, 0x11, 0xe8, 0xe5, 0x49, 0x38, 0x29, 0x42, 0xf3, 0x8a, 0xc4, 0x3e,
-	0x53, 0x10, 0x4c, 0x89, 0xa9, 0x71, 0xe8, 0x85, 0x0e, 0x16, 0x29, 0x32, 0x71, 0x64, 0x52, 0x1c,
-	0x4b, 0x89, 0xa9, 0xd1, 0x14, 0x74, 0x43, 0x58, 0x66, 0x61, 0x29, 0x34, 0x75, 0x1a, 0xc1, 0x59,
-	0x48, 0xdc, 0x52, 0x97, 0x93, 0x73, 0x95, 0x4a, 0x91, 0x97, 0x95, 0x74, 0xc2, 0x26, 0xf1, 0xd4,
-	0xa4, 0x38, 0x36, 0x26, 0x4e, 0x8e, 0x89, 0x33, 0x29, 0x71, 0x26, 0x2d, 0xce, 0x8c, 0x41, 0x1f,
-	0xc4, 0x24, 0x9d, 0x25, 0x4a, 0xb7, 0x3f, 0x7d, 0x36, 0x31, 0x09, 0xc7, 0x20, 0x36, 0xb7, 0x70,
-	0xd9, 0xfd, 0x34, 0x3a, 0x39, 0x23, 0x4e, 0xa5, 0xc5, 0x99, 0x69, 0x71, 0x3a, 0x0d, 0x47, 0x20,
-	0x76, 0x41, 0x5f, 0x74, 0xbf, 0xee, 0x4c, 0xa5, 0x46, 0xc5, 0xb1, 0x29, 0x71, 0x66, 0x92, 0xb4,
-	0x80, 0x1d, 0xfd, 0xce, 0x92, 0x23, 0x9e, 0xfd, 0xe1, 0x35, 0x1c, 0x98, 0x9e, 0x38, 0x8d, 0x60,
-	0x06, 0x12, 0xf3, 0x74, 0x1e, 0x27, 0xed, 0x8f, 0xbd, 0xd9, 0x5f, 0x8e, 0x33, 0xf1, 0xb1, 0xf1,
-	0x51, 0x71, 0x72, 0x5c, 0x4c, 0x8d, 0xa6, 0xc5, 0x89, 0x19, 0x71, 0x6a, 0x46, 0x4c, 0x4f, 0x88,
-	0xe9, 0x94, 0x38, 0x36, 0x21, 0x8e, 0x8d, 0x8b, 0xd3, 0x90, 0x84, 0xd8, 0x75, 0x6b, 0x4d, 0x35,
-	0x6a, 0x17, 0x4a, 0x62, 0xa9, 0x09, 0x71, 0x7c, 0x5c, 0x9c, 0x1a, 0x13, 0x53, 0x53, 0x62, 0x6a,
-	0x46, 0x3a, 0x05, 0x71, 0xf7, 0x09, 0x94, 0xdd, 0xeb, 0xc4, 0x1b, 0x55, 0x74, 0x84, 0x27, 0xdc,
-	0x0c, 0xa7, 0xa7, 0xc4, 0x31, 0x31, 0x2d, 0xbd, 0xe8, 0x09, 0x37, 0xbb, 0xbe, 0xc3, 0xbd, 0x59,
-	0x45, 0x3d, 0x5b, 0x55, 0xd4, 0x99, 0x62, 0x17, 0xdf, 0x53, 0x69, 0xe9, 0x25, 0xc0, 0xae, 0x30,
-	0xad, 0x9b, 0xf8, 0xed, 0xcd, 0x2a, 0x7a, 0x6b, 0xab, 0x8a, 0x42, 0xd3, 0x33, 0xe2, 0xcc, 0x28,
-	0xcd, 0xe2, 0x79, 0xce, 0xff, 0x73, 0x3e, 0x89, 0x8d, 0x2a, 0x3a, 0xca, 0xaf, 0x1b, 0x1e, 0xa7,
-	0xdf, 0x5d, 0x63, 0x1f, 0xa7, 0x1b, 0x95, 0x26, 0x3c, 0x5f, 0x85, 0x3b, 0xb5, 0x51, 0x45, 0xd1,
-	0xcd, 0x2a, 0x12, 0x28, 0xf8, 0x35, 0x25, 0x4e, 0xa4, 0x3f, 0x79, 0xe2, 0x77, 0xae, 0x91, 0x44,
-	0x88, 0x39, 0x8b, 0x86, 0xb5, 0x72, 0xd0, 0xf5, 0x59, 0xb7, 0x58, 0x7a, 0x52, 0x9c, 0x99, 0x10,
-	0x53, 0xd3, 0x62, 0x7a, 0x5c, 0x9c, 0x48, 0x49, 0x27, 0x20, 0xe6, 0x04, 0x30, 0x6a, 0x28, 0xdb,
-	0x57, 0x36, 0xab, 0xe8, 0x65, 0x52, 0xd0, 0xe4, 0xa8, 0x98, 0x1e, 0x95, 0xce, 0x40, 0xbc, 0xe6,
-	0x8d, 0x77, 0x37, 0xf3, 0xd0, 0x66, 0x15, 0xf5, 0x93, 0x3e, 0x49, 0xa7, 0xc5, 0x54, 0x7a, 0x54,
-	0x4c, 0x8f, 0x49, 0x67, 0xa1, 0xdf, 0xe3, 0x1c, 0xf3, 0x7c, 0x5c, 0xee, 0xc5, 0xcd, 0x2a, 0x3a,
-	0x4d, 0x1a, 0x39, 0x9e, 0x12, 0xc7, 0xd3, 0xe2, 0xf8, 0x98, 0x34, 0xe6, 0xfb, 0x1d, 0xbd, 0x63,
-	0x1b, 0x55, 0x74, 0x76, 0xb3, 0x8a, 0xc4, 0xad, 0x2a, 0x8a, 0x8f, 0x4f, 0x88, 0xe3, 0x93, 0xe2,
-	0xf8, 0x94, 0x38, 0x3e, 0x2d, 0x8e, 0xcf, 0x88, 0x13, 0xa3, 0xd2, 0x18, 0x0c, 0x35, 0xf0, 0x8b,
-	0xb8, 0x1b, 0x91, 0xdd, 0xac, 0xa2, 0xcb, 0xa4, 0x11, 0x53, 0xe3, 0xe2, 0xd4, 0x04, 0x19, 0xd7,
-	0x52, 0x91, 0x5f, 0x8f, 0x72, 0xda, 0xc0, 0x3b, 0x7e, 0x82, 0x7e, 0x4b, 0x69, 0x5c, 0x9c, 0x98,
-	0xa0, 0x43, 0x35, 0xb7, 0x73, 0xba, 0xbb, 0xa1, 0x8d, 0x2a, 0x7a, 0x73, 0xb3, 0x8a, 0xae, 0x7b,
-	0x47, 0xc1, 0x3e, 0xfb, 0x4b, 0x93, 0x0d, 0x52, 0xeb, 0x11, 0xbe, 0xa5, 0xcd, 0x2a, 0x92, 0x1b,
-	0xf0, 0x7d, 0x04, 0xd8, 0x6d, 0x4e, 0x72, 0xae, 0x77, 0x37, 0xaa, 0x68, 0x66, 0xb3, 0x8a, 0xa6,
-	0xb7, 0xaa, 0x08, 0x26, 0xa6, 0xc4, 0x89, 0x69, 0xb2, 0xba, 0xe9, 0x47, 0x01, 0x3f, 0x79, 0x82,
-	0x5e, 0xdd, 0x85, 0xd9, 0x2a, 0x36, 0xb4, 0x1e, 0xa5, 0x2c, 0x0c, 0xfa, 0x18, 0x74, 0x76, 0xd1,
-	0xe2, 0x46, 0x15, 0xdd, 0xdc, 0xac, 0xa2, 0x1b, 0x74, 0x36, 0x4f, 0x8a, 0xd3, 0x53, 0xbc, 0x54,
-	0x6e, 0x05, 0x9e, 0x25, 0x4c, 0xb6, 0x50, 0xe9, 0x12, 0xf4, 0x7b, 0x0d, 0x0f, 0x5b, 0xcc, 0xd9,
-	0x8d, 0x2a, 0xba, 0xb4, 0x59, 0x45, 0x17, 0xb7, 0xaa, 0x28, 0x3a, 0x35, 0x2a, 0x4e, 0xa5, 0xc4,
-	0xc9, 0x29, 0x71, 0x32, 0xd5, 0xa0, 0x1b, 0x5e, 0x83, 0x3e, 0x8f, 0x15, 0xe0, 0x5e, 0x05, 0x73,
-	0x9b, 0x55, 0xf4, 0x3a, 0x9d, 0x9c, 0x13, 0xe2, 0xe4, 0x64, 0x83, 0x55, 0xf0, 0x32, 0x60, 0xd7,
-	0xc1, 0xdb, 0x66, 0x3f, 0xb9, 0x51, 0x45, 0xab, 0x9b, 0x55, 0xb4, 0x42, 0xbf, 0x51, 0x30, 0x3a,
-	0x26, 0xa6, 0x46, 0x27, 0x1e, 0x7f, 0x85, 0x62, 0x05, 0xb5, 0xa4, 0xa7, 0x44, 0x4b, 0x35, 0x2d,
-	0x31, 0x6f, 0x58, 0xd2, 0x28, 0x1c, 0xf1, 0xd3, 0xef, 0xee, 0xc9, 0xa5, 0x6c, 0x56, 0xd1, 0x87,
-	0xa4, 0x12, 0x33, 0x53, 0xe2, 0xcc, 0xb8, 0xf4, 0x2a, 0x0c, 0x39, 0x0a, 0x84, 0x9c, 0x1f, 0xb7,
-	0x27, 0xcd, 0x3c, 0xb2, 0x51, 0x45, 0xfa, 0x66, 0x15, 0x95, 0xb7, 0xaa, 0xa8, 0x27, 0x95, 0x4a,
-	0x89, 0xa9, 0x54, 0x5a, 0x4c, 0xa5, 0xc6, 0xc4, 0x54, 0x6a, 0xdc, 0xc9, 0xcf, 0xcb, 0x3e, 0xbb,
-	0xff, 0x96, 0xf0, 0x76, 0x36, 0x18, 0x39, 0x2e, 0x24, 0x9d, 0x2f, 0x16, 0xb2, 0x1c, 0x0c, 0x20,
-	0x44, 0x9d, 0x6f, 0x15, 0xbe, 0x2c, 0xbc, 0x92, 0x0d, 0x46, 0x2e, 0x08, 0x17, 0xb3, 0xc1, 0x48,
-	0xbf, 0x70, 0x28, 0x1b, 0x8c, 0x9c, 0x16, 0x5e, 0xcc, 0x06, 0x23, 0xa2, 0x70, 0x36, 0x1b, 0x8c,
-	0x5c, 0x16, 0xb2, 0xd9, 0x60, 0x64, 0x42, 0x98, 0xcc, 0x06, 0x23, 0x57, 0x84, 0xab, 0xd9, 0x60,
-	0xe4, 0xaa, 0x70, 0x2d, 0x1b, 0x8c, 0x5c, 0x13, 0xae, 0x67, 0x83, 0x91, 0xeb, 0xc2, 0x42, 0x36,
-	0x18, 0x91, 0x85, 0xc5, 0x6c, 0x30, 0x32, 0x2d, 0xcc, 0x64, 0x83, 0x91, 0x1b, 0xc2, 0xcd, 0x6c,
-	0x30, 0x72, 0x51, 0xb8, 0x94, 0x0d, 0x46, 0x5e, 0x17, 0xe6, 0xb2, 0xc1, 0xc8, 0x8a, 0xb0, 0x9a,
-	0x0d, 0x46, 0xd6, 0x04, 0x2d, 0x1b, 0x8c, 0x7c, 0x28, 0x28, 0xd9, 0x60, 0xa4, 0x2c, 0xe8, 0xc3,
-	0xbf, 0xf3, 0x32, 0xc4, 0xe6, 0x49, 0xaf, 0xaa, 0x0e, 0x1c, 0x2d, 0x51, 0x07, 0x47, 0x6b, 0x41,
-	0xc8, 0x3c, 0x10, 0xb2, 0x9f, 0x57, 0xd0, 0xd6, 0x9b, 0x4f, 0x07, 0xda, 0xf2, 0x83, 0x6b, 0xbd,
-	0x7d, 0x30, 0x70, 0x2d, 0x3f, 0x60, 0xd6, 0xd2, 0x81, 0x00, 0xb3, 0xbe, 0x26, 0x48, 0xd6, 0xaf,
-	0x7e, 0xbd, 0x00, 0xa3, 0xa6, 0xb0, 0xa2, 0xcc, 0xd3, 0x82, 0xab, 0x1c, 0xd8, 0xd4, 0xec, 0xde,
-	0x00, 0x4a, 0xfb, 0x85, 0x26, 0xb5, 0x7b, 0xa0, 0x49, 0x6f, 0xec, 0x17, 0x9a, 0x94, 0x69, 0xf7,
-	0x62, 0x8e, 0x9e, 0xf3, 0xc3, 0x1c, 0xed, 0x1f, 0x69, 0x14, 0x7c, 0x66, 0x48, 0xa3, 0xe0, 0x76,
-	0xa4, 0xd1, 0x5b, 0x07, 0x86, 0x34, 0x22, 0xf5, 0x76, 0x63, 0x8c, 0x72, 0x07, 0x88, 0x31, 0xca,
-	0x04, 0x7d, 0x90, 0x45, 0xc5, 0x67, 0x81, 0x2c, 0xca, 0x04, 0x1b, 0xe0, 0x89, 0xde, 0x3d, 0x60,
-	0x3c, 0xd1, 0xd3, 0x21, 0x89, 0x42, 0xdb, 0x90, 0x44, 0x37, 0x9e, 0x12, 0x49, 0x94, 0x09, 0x1d,
-	0x10, 0x62, 0x28, 0xec, 0x83, 0x18, 0x5a, 0x3a, 0x08, 0xc4, 0x50, 0x26, 0x5c, 0x87, 0x13, 0x5a,
-	0x3a, 0x20, 0x9c, 0x50, 0x26, 0xec, 0x46, 0x08, 0xfd, 0x3f, 0x07, 0x03, 0x10, 0x3a, 0xda, 0x0c,
-	0x20, 0xd4, 0x18, 0x17, 0xf4, 0xde, 0x81, 0xc1, 0x82, 0xfc, 0x00, 0x3f, 0x8b, 0x07, 0x00, 0xf8,
-	0xd9, 0x86, 0xe5, 0x79, 0xef, 0x20, 0xa1, 0x3c, 0xdb, 0x40, 0x3a, 0xef, 0x1d, 0x24, 0x46, 0x67,
-	0x1b, 0xfa, 0xa6, 0x70, 0xd0, 0xe8, 0x1b, 0x5f, 0xdc, 0x4d, 0xe9, 0x59, 0xc1, 0x6e, 0x9e, 0x09,
-	0xa0, 0xa6, 0xe3, 0xe0, 0x01, 0x35, 0x1d, 0x5f, 0x17, 0xa0, 0xa6, 0xe3, 0x00, 0x00, 0x35, 0x91,
-	0x7d, 0x03, 0x6a, 0x22, 0xfb, 0x01, 0xd4, 0x44, 0x9e, 0x0a, 0x50, 0x13, 0x79, 0x46, 0x80, 0x9a,
-	0xc8, 0x33, 0x07, 0xd4, 0x44, 0x0e, 0x0e, 0x50, 0xd3, 0xf9, 0x0d, 0x00, 0x6a, 0x3a, 0x9b, 0x02,
-	0x6a, 0xb4, 0x67, 0x07, 0xa8, 0xc9, 0x80, 0x17, 0x4a, 0x33, 0xbd, 0x7b, 0x28, 0x4d, 0x06, 0x3c,
-	0x20, 0x9a, 0xf7, 0x9f, 0x0a, 0x44, 0x93, 0x89, 0x3e, 0x63, 0xb0, 0x4c, 0x74, 0x27, 0xb0, 0xcc,
-	0xea, 0x81, 0x83, 0x65, 0x32, 0x5d, 0x07, 0x07, 0x8a, 0xe9, 0xf2, 0x07, 0xc5, 0x5c, 0xda, 0x33,
-	0x28, 0x26, 0xd3, 0xed, 0x87, 0x85, 0x79, 0xff, 0x80, 0xa1, 0x30, 0x99, 0x6e, 0x0f, 0xb4, 0xc5,
-	0x78, 0x96, 0xc8, 0x96, 0x4c, 0xb7, 0x2f, 0x66, 0x65, 0x7f, 0x60, 0x8f, 0x58, 0x03, 0xb0, 0xc7,
-	0xb7, 0xf6, 0x0f, 0xf6, 0xc8, 0xc4, 0xbe, 0x16, 0xf0, 0x46, 0xcc, 0x07, 0xbc, 0xf1, 0xde, 0xc1,
-	0x81, 0x37, 0x32, 0xb1, 0x83, 0xc1, 0x6c, 0xf4, 0xf8, 0x63, 0x36, 0x8a, 0xcf, 0x06, 0xb2, 0x91,
-	0xe9, 0xf1, 0x85, 0x66, 0x3c, 0x05, 0x9e, 0x49, 0xf8, 0x66, 0xf0, 0x4c, 0x82, 0x1f, 0x9e, 0x69,
-	0x76, 0x6f, 0xa1, 0x7b, 0x4f, 0xd0, 0xfe, 0xd2, 0x7e, 0x83, 0xf6, 0x75, 0xf1, 0xf8, 0xb7, 0x0e,
-	0x26, 0x1e, 0x7f, 0x70, 0xa1, 0xf6, 0xf8, 0xd7, 0x13, 0x6a, 0x8f, 0xfb, 0x86, 0xda, 0x97, 0x0e,
-	0x24, 0xd4, 0x5e, 0x1f, 0x64, 0xff, 0xbf, 0x0b, 0x49, 0xb4, 0xbf, 0x90, 0x7f, 0xef, 0xc1, 0x85,
-	0xfc, 0x7b, 0xfd, 0x42, 0xfe, 0xe6, 0xb3, 0x0a, 0xf9, 0x67, 0x7a, 0x1b, 0x07, 0xfb, 0x2f, 0xee,
-	0x39, 0xd8, 0x9f, 0xe9, 0xdd, 0x1e, 0xe3, 0x9f, 0x8d, 0x7f, 0x7e, 0xbe, 0xee, 0x6a, 0xbe, 0x74,
-	0xc6, 0x2f, 0xc6, 0xdc, 0xff, 0xe8, 0x2b, 0xb4, 0xfd, 0xb1, 0x74, 0xda, 0x27, 0xcc, 0xdc, 0xf7,
-	0xe8, 0x2b, 0xb4, 0xed, 0xa9, 0x24, 0xfa, 0x46, 0x99, 0x0f, 0x3d, 0xfa, 0x0a, 0xf9, 0x3c, 0x97,
-	0x8e, 0x7a, 0xa2, 0xc6, 0xb1, 0x47, 0x5f, 0x21, 0xd7, 0x6f, 0xe9, 0xf9, 0x6d, 0xc1, 0x61, 0xfc,
-	0xe8, 0x2b, 0x54, 0xf7, 0x8c, 0x50, 0xd5, 0x05, 0x85, 0x29, 0x95, 0xf7, 0x59, 0x83, 0xa8, 0x30,
-	0x69, 0xed, 0xb6, 0xc7, 0x52, 0xba, 0x51, 0x54, 0xf8, 0xf0, 0xa3, 0xaf, 0x90, 0xff, 0x2b, 0xd2,
-	0x6e, 0x9f, 0xd0, 0x30, 0x6d, 0xf7, 0xf6, 0xe7, 0xd2, 0x85, 0x1d, 0x63, 0xc2, 0xc3, 0x8f, 0xbe,
-	0x42, 0x3b, 0xd0, 0x90, 0x51, 0xd9, 0x16, 0x24, 0xa6, 0xa3, 0x52, 0xff, 0x54, 0xba, 0xb4, 0x73,
-	0x8c, 0xf8, 0xc4, 0xa3, 0xaf, 0xd0, 0x4e, 0x44, 0xd2, 0x68, 0x83, 0x40, 0x71, 0xe2, 0xd1, 0x57,
-	0xc8, 0xf7, 0x0d, 0xe9, 0x17, 0x9f, 0x10, 0x31, 0xed, 0x97, 0xed, 0xcf, 0x49, 0xcf, 0xfb, 0x47,
-	0x64, 0x69, 0xcf, 0xfb, 0xbe, 0x22, 0x75, 0xf2, 0x8d, 0xbe, 0xd2, 0x3a, 0xf9, 0xbd, 0x91, 0x5e,
-	0x69, 0x1a, 0x43, 0x1e, 0x7a, 0xf4, 0x15, 0x6a, 0xf2, 0x5e, 0x3a, 0xdf, 0x3c, 0xde, 0x7a, 0xfc,
-	0xd1, 0x57, 0xa8, 0x19, 0x01, 0xe9, 0x11, 0x9f, 0x60, 0x2f, 0xed, 0x91, 0xed, 0xcf, 0xc9, 0x4c,
-	0xd9, 0x21, 0x56, 0x4b, 0x67, 0x4a, 0x73, 0x9a, 0xba, 0x90, 0x6d, 0xa3, 0x30, 0x2d, 0x0b, 0xcd,
-	0xb2, 0x30, 0xed, 0xfe, 0x42, 0xb3, 0xee, 0xa0, 0x2c, 0x0b, 0xd3, 0xb2, 0x70, 0xac, 0x3b, 0x40,
-	0x5b, 0x16, 0xf4, 0xe1, 0xef, 0xbe, 0x0c, 0x3d, 0xb2, 0x5a, 0x29, 0x2a, 0xf9, 0x56, 0x6c, 0xb6,
-	0x15, 0x9b, 0x6d, 0xc5, 0x66, 0x5b, 0xb1, 0xd9, 0x56, 0x6c, 0xb6, 0x15, 0x9b, 0x6d, 0xc5, 0x66,
-	0x5b, 0xb1, 0xd9, 0x56, 0x6c, 0xb6, 0x15, 0x9b, 0x6d, 0xc5, 0x66, 0x5b, 0xb1, 0xd9, 0x56, 0x6c,
-	0xb6, 0x15, 0x9b, 0x6d, 0xc5, 0x66, 0x5b, 0xb1, 0xd9, 0x56, 0x6c, 0xb6, 0x15, 0x9b, 0x6d, 0xc5,
-	0x66, 0x5b, 0xb1, 0xd9, 0x56, 0x6c, 0xb6, 0x15, 0x9b, 0x6d, 0xc5, 0x66, 0x5b, 0xb1, 0xd9, 0x56,
-	0x6c, 0xb6, 0x15, 0x9b, 0x6d, 0xc5, 0x66, 0x5b, 0xb1, 0xd9, 0x56, 0x6c, 0xf6, 0x59, 0xc5, 0x66,
-	0xff, 0xc3, 0x6b, 0x10, 0x7d, 0x43, 0xb5, 0x5a, 0x71, 0xd9, 0xdd, 0xc5, 0x65, 0x1f, 0x3d, 0x93,
-	0xcf, 0x2e, 0xb4, 0xbe, 0xb6, 0xd0, 0x0a, 0x0e, 0xb7, 0x82, 0xc3, 0xad, 0xe0, 0x70, 0x2b, 0x38,
-	0xdc, 0x0a, 0x0e, 0xb7, 0x82, 0xc3, 0xad, 0xe0, 0x70, 0x2b, 0x38, 0xdc, 0x0a, 0x0e, 0xb7, 0x82,
-	0xc3, 0xad, 0xe0, 0x70, 0x2b, 0x38, 0xdc, 0x0a, 0x0e, 0xb7, 0x82, 0xc3, 0xad, 0xe0, 0x70, 0x2b,
-	0x38, 0xdc, 0x0a, 0x0e, 0xb7, 0x82, 0xc3, 0xad, 0xe0, 0xf0, 0xcf, 0x69, 0x70, 0xf8, 0x67, 0x2a,
-	0x15, 0xfc, 0xcf, 0x4a, 0x9a, 0xf6, 0x56, 0xc4, 0xbd, 0x15, 0x71, 0xff, 0xb9, 0x88, 0xb8, 0x1f,
-	0x74, 0xc6, 0xf3, 0x56, 0x00, 0xbf, 0x15, 0xc0, 0x6f, 0x05, 0xf0, 0x5b, 0x01, 0xfc, 0xaf, 0x39,
-	0x80, 0x1f, 0x8e, 0xfc, 0x75, 0x87, 0xf0, 0xbf, 0x3b, 0x1a, 0x05, 0xf2, 0xcf, 0x9c, 0x04, 0xe1,
-	0xaa, 0xbe, 0xac, 0x15, 0x55, 0xdb, 0xd3, 0xae, 0x1a, 0x38, 0x0a, 0x1d, 0x99, 0x8b, 0x73, 0x17,
-	0x2e, 0xca, 0x8b, 0x42, 0xdb, 0x60, 0x70, 0xa3, 0x8a, 0xda, 0xce, 0x8c, 0x42, 0xe7, 0x0d, 0xf9,
-	0xca, 0x22, 0xd9, 0xf5, 0x54, 0x1c, 0x81, 0xa0, 0x74, 0x7d, 0x29, 0x23, 0xb4, 0x91, 0xff, 0x32,
-	0x4b, 0x4b, 0x0b, 0x02, 0xc2, 0x9d, 0x10, 0x22, 0xff, 0x2d, 0x0a, 0x01, 0xce, 0x71, 0x09, 0xfa,
-	0xeb, 0xec, 0x3a, 0x59, 0x5d, 0x25, 0xbd, 0xd5, 0x0d, 0xc1, 0xb9, 0x1b, 0x4b, 0xd7, 0x85, 0xb6,
-	0xc1, 0xf6, 0x87, 0x1f, 0x23, 0x1c, 0x86, 0xc0, 0x8d, 0x45, 0x81, 0xfe, 0xbd, 0x78, 0x43, 0x08,
-	0x10, 0x91, 0x73, 0x8b, 0x97, 0xe7, 0x84, 0x76, 0x2a, 0x07, 0x9d, 0x91, 0x01, 0x13, 0x1d, 0xb0,
-	0x48, 0x75, 0x80, 0x13, 0xc1, 0x8a, 0x01, 0xcc, 0x5d, 0x5a, 0xba, 0x28, 0xe7, 0x48, 0x45, 0x85,
-	0x36, 0xdc, 0x0b, 0x3d, 0xec, 0xf7, 0xd2, 0xe5, 0xa5, 0x2b, 0x17, 0x73, 0x17, 0xaf, 0x5d, 0x10,
-	0x10, 0x8e, 0x43, 0xb7, 0x74, 0xf1, 0xd2, 0x75, 0xf9, 0x62, 0x6e, 0x71, 0x5e, 0xbe, 0xbc, 0xb0,
-	0x64, 0xd7, 0x4d, 0xfa, 0x2e, 0xda, 0xfc, 0xf3, 0xa1, 0xb6, 0x1f, 0xfe, 0xf9, 0x50, 0xdb, 0x4f,
-	0xff, 0x7c, 0x08, 0x3d, 0xdc, 0x1a, 0x42, 0x7f, 0xb0, 0x35, 0x84, 0x7e, 0xb0, 0x35, 0x84, 0x36,
-	0xb7, 0x86, 0xd0, 0x0f, 0xb7, 0x86, 0xd0, 0x9f, 0x6d, 0x0d, 0xa1, 0x1f, 0x6f, 0x0d, 0xb5, 0xfd,
-	0x74, 0x6b, 0x08, 0xfd, 0xd6, 0x8f, 0x86, 0xda, 0x36, 0x7e, 0x34, 0x84, 0x36, 0x7f, 0x34, 0xd4,
-	0xf6, 0xc3, 0x1f, 0x0d, 0xb5, 0xbd, 0xf3, 0xee, 0xaa, 0x5e, 0xb9, 0xb3, 0x3a, 0x72, 0x57, 0x2f,
-	0x5a, 0xaa, 0x61, 0x28, 0x23, 0xeb, 0xe6, 0x39, 0xfa, 0xcf, 0x8a, 0x6e, 0x94, 0xce, 0x56, 0x0c,
-	0xfd, 0xae, 0x56, 0x50, 0x8d, 0xb3, 0xf6, 0xeb, 0x73, 0x95, 0xe5, 0x55, 0xfd, 0x9c, 0x7a, 0xdf,
-	0x62, 0x3a, 0xe3, 0x1c, 0xff, 0x43, 0x0f, 0x1b, 0xe7, 0xb6, 0x1d, 0xdf, 0x97, 0xc3, 0x34, 0xce,
-	0x3f, 0xf6, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0xb0, 0x54, 0xb6, 0x35, 0x20, 0xed, 0x00, 0x00,
+	// 9941 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7d, 0x6b, 0x68, 0x1c, 0x59,
+	0xbe, 0x9f, 0x8e, 0xd4, 0x92, 0x4a, 0xa7, 0xa5, 0x56, 0xf5, 0xd1, 0xab, 0x2d, 0xdb, 0x72, 0x5b,
+	0xb6, 0xc7, 0x1a, 0xbb, 0x24, 0xab, 0x5f, 0x7a, 0x78, 0x67, 0x3c, 0x76, 0xc9, 0xf6, 0xb4, 0x7b,
+	0x2d, 0x5b, 0x53, 0xd2, 0xd8, 0xf3, 0xee, 0x29, 0x75, 0x97, 0xa4, 0x1a, 0x77, 0x57, 0xf5, 0x54,
+	0x95, 0x6c, 0xeb, 0x26, 0xe6, 0x3a, 0xde, 0x1b, 0xd8, 0x78, 0xb9, 0x61, 0xef, 0x04, 0x92, 0xdc,
+	0x85, 0x2c, 0x21, 0xb9, 0x1f, 0xc2, 0x40, 0x20, 0xf9, 0xb0, 0x10, 0xd2, 0x5e, 0x10, 0x4b, 0x16,
+	0x36, 0x9b, 0x40, 0x04, 0x81, 0x30, 0x4c, 0x12, 0xb8, 0xab, 0x25, 0x30, 0x77, 0x73, 0x03, 0xc3,
+	0xdc, 0x2f, 0xc1, 0x5f, 0x36, 0x9c, 0x47, 0x55, 0x57, 0xb5, 0xaa, 0x4b, 0x0f, 0xcb, 0x33, 0x59,
+	0x6e, 0x7f, 0x52, 0x57, 0xd5, 0xff, 0xff, 0x3f, 0xef, 0xf3, 0x7f, 0xfd, 0xce, 0x11, 0x4c, 0xdc,
+	0x57, 0xcc, 0x09, 0x55, 0xbf, 0x60, 0x16, 0xd6, 0x94, 0xb2, 0x7c, 0xe1, 0xbe, 0xaa, 0x3c, 0x30,
+	0x2f, 0xac, 0x59, 0x56, 0x25, 0x5f, 0xd2, 0xe5, 0xe2, 0xb2, 0x5c, 0x92, 0xb5, 0x82, 0x62, 0x5c,
+	0xb0, 0x36, 0x2a, 0x8a, 0x39, 0x51, 0x31, 0x74, 0x4b, 0x47, 0x67, 0x28, 0xcb, 0x04, 0x65, 0x99,
+	0x20, 0x2c, 0x13, 0x3b, 0x58, 0x86, 0xc7, 0x57, 0x55, 0x6b, 0x6d, 0x7d, 0x79, 0xa2, 0xa0, 0x97,
+	0x2f, 0xac, 0xea, 0xab, 0xfa, 0x05, 0xc2, 0xbd, 0xbc, 0xbe, 0x42, 0x9e, 0xc8, 0x03, 0xf9, 0x45,
+	0xa5, 0x0e, 0x9f, 0x58, 0xd5, 0xf5, 0xd5, 0x92, 0x52, 0xa3, 0xb2, 0xd4, 0xb2, 0x62, 0x5a, 0x72,
+	0xb9, 0xc2, 0x08, 0x46, 0xbd, 0x35, 0x95, 0x2b, 0x95, 0x3c, 0xae, 0x95, 0xbb, 0x6a, 0xc3, 0x47,
+	0xbd, 0x34, 0x7a, 0xc5, 0x52, 0x75, 0xcd, 0xfe, 0x18, 0xf7, 0x7e, 0xac, 0xe8, 0x25, 0xb5, 0xb0,
+	0xe1, 0x61, 0x7f, 0xc5, 0x4b, 0x61, 0xc8, 0x96, 0x92, 0x2f, 0xa9, 0x65, 0xd5, 0xf2, 0xf6, 0xc0,
+	0xf0, 0x89, 0x3a, 0x3a, 0x7d, 0xdd, 0xf2, 0xd6, 0x63, 0xdc, 0x4b, 0x60, 0x2a, 0xc6, 0x7d, 0xb5,
+	0xa0, 0xe4, 0x69, 0x91, 0x79, 0x63, 0xbd, 0xe4, 0x25, 0x3f, 0xe2, 0x25, 0x77, 0x7f, 0x3a, 0x56,
+	0x37, 0x3e, 0x72, 0x49, 0x2d, 0xca, 0x96, 0xe2, 0xdf, 0x24, 0x3c, 0x14, 0x79, 0x6f, 0xa3, 0x67,
+	0xfc, 0xc6, 0xb7, 0xa0, 0x97, 0xcb, 0xba, 0x96, 0x37, 0x95, 0xc2, 0xba, 0xa1, 0x5a, 0x1b, 0x17,
+	0xec, 0x1f, 0x79, 0x77, 0xc9, 0x99, 0x00, 0xce, 0x07, 0xf2, 0x8a, 0xeb, 0xa7, 0x87, 0xed, 0xbc,
+	0x1f, 0x9b, 0x6e, 0xa8, 0xab, 0xaa, 0x96, 0xaf, 0xe8, 0x7a, 0xc9, 0xd3, 0xba, 0x94, 0x1f, 0xb1,
+	0xbb, 0xdb, 0xf3, 0x3e, 0xa3, 0x74, 0xc2, 0x8f, 0x29, 0x60, 0x18, 0xef, 0xab, 0x86, 0xb5, 0x2e,
+	0x97, 0xf2, 0x6b, 0xba, 0x69, 0x79, 0xe8, 0x26, 0x1b, 0xd3, 0xe5, 0x8b, 0x9a, 0x99, 0x57, 0xb5,
+	0x15, 0xfd, 0x82, 0xbe, 0xfc, 0x89, 0x52, 0xb0, 0x28, 0xc7, 0xe8, 0xcf, 0xba, 0x61, 0x64, 0xc1,
+	0xd0, 0x1f, 0x6e, 0x2c, 0x6d, 0x54, 0x94, 0xac, 0x65, 0x55, 0x4c, 0xf4, 0x2a, 0xec, 0x21, 0x73,
+	0xdf, 0x50, 0x8a, 0xaa, 0xa1, 0x14, 0xac, 0x18, 0x88, 0x83, 0x31, 0x4e, 0x0c, 0xfd, 0xdf, 0x2a,
+	0x68, 0x91, 0xba, 0xf1, 0x27, 0x89, 0x7d, 0x41, 0x27, 0x20, 0x27, 0x17, 0x8b, 0xf9, 0x35, 0xd3,
+	0x32, 0x63, 0xad, 0x2e, 0xaa, 0x4e, 0xb9, 0x58, 0xcc, 0x9a, 0x96, 0x89, 0xde, 0x87, 0x11, 0xab,
+	0x64, 0xe6, 0x2b, 0xb2, 0x21, 0x97, 0x15, 0x4b, 0x31, 0xcc, 0x58, 0x5b, 0x1c, 0x8c, 0x85, 0x93,
+	0xc2, 0x84, 0xdf, 0x92, 0xbb, 0xaa, 0x3f, 0xd0, 0x4c, 0xcb, 0x50, 0xe4, 0xf2, 0x52, 0xc9, 0x5c,
+	0xc0, 0x3c, 0x26, 0xae, 0x96, 0x18, 0xda, 0xaa, 0x02, 0x90, 0x6d, 0x91, 0x7a, 0x2c, 0xf6, 0x9a,
+	0x88, 0x42, 0x1f, 0xc2, 0x5e, 0x2c, 0xbc, 0xa0, 0x18, 0x16, 0x2d, 0xc1, 0x8c, 0x0d, 0x12, 0xe9,
+	0xe3, 0xbb, 0x49, 0xbf, 0xb9, 0x38, 0xa7, 0x18, 0x16, 0x2b, 0xc2, 0x23, 0x1e, 0xbf, 0xa7, 0xaf,
+	0xd1, 0x1c, 0x8c, 0x14, 0x95, 0x15, 0x79, 0xbd, 0x64, 0xe5, 0xd7, 0x14, 0xb9, 0xa8, 0x18, 0xb1,
+	0x76, 0x22, 0xbd, 0xbf, 0x4e, 0xfa, 0xb5, 0x72, 0xc5, 0xda, 0x10, 0x43, 0x9b, 0x58, 0x08, 0x90,
+	0x7a, 0x18, 0x4f, 0x96, 0xb0, 0xa0, 0x04, 0x0c, 0xe3, 0xb5, 0xa2, 0x18, 0x79, 0x4d, 0x2e, 0x2b,
+	0xb1, 0x8e, 0x38, 0x18, 0xeb, 0x12, 0x23, 0x98, 0xf6, 0xdf, 0xff, 0xd5, 0x66, 0x5b, 0xbb, 0xd1,
+	0x16, 0xfb, 0xe7, 0x6f, 0x64, 0x81, 0x04, 0x29, 0xd1, 0x2d, 0xb9, 0xac, 0xa0, 0x4b, 0x10, 0xc9,
+	0x95, 0x8a, 0xa2, 0x15, 0xf3, 0x6e, 0xce, 0xce, 0x06, 0x9c, 0x3c, 0xa5, 0x5d, 0xac, 0xf1, 0xbf,
+	0x01, 0xbb, 0x2b, 0xb2, 0x69, 0xe6, 0xad, 0x35, 0x43, 0x5f, 0x5f, 0x5d, 0x8b, 0x71, 0x7b, 0xa8,
+	0x75, 0x18, 0x73, 0x2c, 0x51, 0x06, 0xb4, 0x00, 0x07, 0x14, 0x4d, 0x5e, 0x2e, 0x29, 0xf9, 0x8a,
+	0x6c, 0xad, 0xe5, 0x35, 0xdd, 0x28, 0xcb, 0x25, 0xf5, 0x8f, 0x94, 0x18, 0xdc, 0x55, 0x52, 0xab,
+	0xd4, 0x47, 0x59, 0x17, 0x64, 0x6b, 0xed, 0x96, 0xcd, 0x88, 0x24, 0x38, 0x58, 0x54, 0x4d, 0x3f,
+	0x91, 0xe1, 0x3d, 0x88, 0xec, 0x67, 0xbc, 0x5e, 0x99, 0x63, 0x30, 0x54, 0xd1, 0x0d, 0x2b, 0xd6,
+	0x1b, 0x07, 0x63, 0x3d, 0x22, 0xfa, 0xb2, 0x0a, 0xda, 0xd2, 0xe9, 0x14, 0xee, 0x9b, 0x8e, 0x73,
+	0xa1, 0xd8, 0xef, 0x7f, 0xdf, 0x96, 0x6d, 0x93, 0x08, 0x05, 0xca, 0xc1, 0x30, 0xfe, 0x9b, 0x37,
+	0x64, 0x6d, 0x55, 0x31, 0x63, 0x47, 0x48, 0x4f, 0x9e, 0xb5, 0x7b, 0xf1, 0x71, 0x88, 0xfd, 0xda,
+	0x0a, 0x5d, 0xc6, 0xbf, 0x42, 0x46, 0x2b, 0x6f, 0x77, 0xf1, 0x17, 0x21, 0x90, 0x6d, 0x93, 0x20,
+	0xe6, 0x96, 0x08, 0x33, 0xba, 0x03, 0x63, 0x9a, 0xae, 0xe5, 0xed, 0x89, 0xe1, 0xd6, 0x0f, 0xb1,
+	0xe8, 0xae, 0x6d, 0x09, 0x49, 0x83, 0x9a, 0xae, 0x5d, 0xa5, 0xcc, 0x37, 0x5d, 0xbc, 0xe8, 0x36,
+	0xec, 0xf7, 0x95, 0x89, 0xf6, 0x20, 0xb3, 0xaf, 0xe8, 0x23, 0xf0, 0x53, 0x38, 0x4c, 0x67, 0x6d,
+	0xde, 0x32, 0x64, 0xcd, 0x5c, 0xc1, 0xfd, 0x86, 0xb7, 0x51, 0xb2, 0xb5, 0xc5, 0xfa, 0x88, 0xd8,
+	0xb3, 0x75, 0x62, 0xe9, 0x9c, 0x5d, 0xf2, 0xd0, 0x93, 0x05, 0x08, 0x71, 0x49, 0x5f, 0x55, 0x01,
+	0x88, 0x01, 0x29, 0xb6, 0xd6, 0x80, 0x0a, 0xbd, 0x0b, 0x87, 0x0a, 0xba, 0xa6, 0x29, 0x05, 0x52,
+	0x8e, 0x5a, 0x2c, 0x29, 0x79, 0xac, 0xf2, 0xf4, 0x75, 0x2b, 0xd6, 0x4f, 0x06, 0xe9, 0x24, 0x16,
+	0xf3, 0x65, 0x15, 0x74, 0x24, 0x92, 0x93, 0x93, 0x93, 0x93, 0x78, 0xab, 0xf8, 0xe1, 0x33, 0xd0,
+	0x62, 0x8f, 0xd9, 0xe6, 0x7f, 0x39, 0x2d, 0x0d, 0xd4, 0x24, 0xdc, 0x28, 0x96, 0x94, 0x25, 0xca,
+	0x8f, 0x54, 0x38, 0x40, 0xf6, 0x24, 0xb2, 0x69, 0x15, 0xf4, 0x92, 0xad, 0x13, 0x62, 0x43, 0xa4,
+	0x21, 0x17, 0x76, 0x2c, 0xf8, 0xda, 0xc6, 0x37, 0x81, 0x77, 0xb5, 0x05, 0xc6, 0x77, 0x9b, 0xb2,
+	0x89, 0xa1, 0x7f, 0xf3, 0x0c, 0x00, 0xa9, 0x6f, 0x6d, 0xe7, 0xa7, 0x8b, 0xb1, 0x6f, 0x2e, 0x0d,
+	0x24, 0x84, 0xa4, 0x90, 0x4c, 0x0b, 0x29, 0x21, 0x2d, 0xcc, 0x0a, 0x89, 0x29, 0x21, 0x31, 0x2b,
+	0x24, 0x27, 0xc5, 0xf3, 0x70, 0xc8, 0xde, 0x6f, 0xd4, 0x15, 0xb5, 0x20, 0x5b, 0x8a, 0x99, 0x2f,
+	0xac, 0xe9, 0x6a, 0x41, 0x41, 0xfc, 0x66, 0x15, 0x0c, 0x6e, 0x55, 0xc1, 0xc0, 0x76, 0x15, 0x84,
+	0x92, 0x49, 0x21, 0x25, 0x5e, 0x80, 0xfd, 0x6c, 0xf9, 0xb2, 0x61, 0x60, 0x94, 0x43, 0x9b, 0x55,
+	0xd0, 0xfe, 0xab, 0x2a, 0x00, 0x5b, 0x55, 0x10, 0xda, 0xae, 0x82, 0xce, 0x8c, 0x30, 0x25, 0x4c,
+	0x0b, 0x33, 0xe2, 0x04, 0x1c, 0xf0, 0xae, 0x0d, 0x9b, 0x63, 0x60, 0xb3, 0x0a, 0x20, 0xe3, 0xe8,
+	0xda, 0xae, 0x82, 0xf6, 0xc4, 0xa4, 0x90, 0x48, 0x88, 0x71, 0x36, 0xab, 0x19, 0x55, 0x74, 0xb3,
+	0x0a, 0x7a, 0xb7, 0xaa, 0x20, 0x46, 0x28, 0x32, 0x42, 0x32, 0x23, 0x9e, 0x83, 0x51, 0x67, 0x4e,
+	0x2d, 0xbb, 0xa5, 0x45, 0x99, 0x34, 0x9e, 0xd0, 0x4e, 0x0b, 0x89, 0x99, 0x5c, 0x88, 0x1b, 0xe0,
+	0x07, 0x73, 0x21, 0x2e, 0xc4, 0xb7, 0xe7, 0x42, 0x5c, 0x17, 0x0f, 0x73, 0x21, 0xae, 0x9b, 0xef,
+	0xc9, 0x85, 0xb8, 0x1e, 0x3e, 0x92, 0x0b, 0x71, 0x11, 0xbe, 0x37, 0x17, 0xe2, 0x62, 0xfc, 0x91,
+	0x5c, 0x88, 0xe3, 0xf9, 0xe8, 0xe8, 0xe3, 0x56, 0xd8, 0xe3, 0xd1, 0x1b, 0x68, 0x0a, 0xf6, 0x63,
+	0x15, 0x73, 0x5f, 0x2f, 0x59, 0x8a, 0x61, 0xc8, 0xf9, 0xb2, 0xac, 0xc9, 0xab, 0x4a, 0xd1, 0xa3,
+	0x3d, 0x50, 0x51, 0x33, 0xef, 0x30, 0x82, 0x79, 0xfa, 0x1d, 0x9d, 0x65, 0xeb, 0xb8, 0x95, 0x4c,
+	0x91, 0xe8, 0x97, 0x55, 0xd0, 0x3a, 0x33, 0xe9, 0x5e, 0xc6, 0x2d, 0xfe, 0xcb, 0x38, 0xb4, 0xbf,
+	0x65, 0xdc, 0xe2, 0x5e, 0xc6, 0x17, 0x3b, 0xbe, 0xb9, 0xd4, 0x96, 0x10, 0x52, 0x62, 0xda, 0xdb,
+	0x89, 0x67, 0x36, 0xab, 0xa0, 0x75, 0xab, 0x0a, 0xda, 0xb6, 0xab, 0xa0, 0x2d, 0x29, 0xa4, 0x9f,
+	0x3e, 0x03, 0x08, 0xf2, 0x85, 0xa2, 0xe6, 0x59, 0x94, 0xb9, 0x10, 0xd7, 0xc6, 0x87, 0x46, 0xbf,
+	0xec, 0x86, 0x43, 0x5e, 0xd5, 0x79, 0x65, 0xdd, 0xd2, 0x89, 0x62, 0x39, 0x54, 0x1d, 0x3a, 0x07,
+	0x21, 0x99, 0x76, 0xba, 0xb6, 0xa2, 0xae, 0x32, 0xfd, 0x39, 0xe2, 0xab, 0xe1, 0x96, 0x4a, 0xe6,
+	0x1c, 0xa1, 0x12, 0x43, 0x5f, 0x57, 0x01, 0x90, 0xba, 0x2c, 0xfb, 0x05, 0xca, 0xc0, 0x4e, 0x4d,
+	0xcf, 0x97, 0xad, 0x92, 0xb9, 0x07, 0x2d, 0xd6, 0x22, 0x75, 0x68, 0xfa, 0xbc, 0x55, 0xc2, 0xdb,
+	0x1d, 0xb7, 0x6e, 0x2a, 0x94, 0xaf, 0x83, 0xf0, 0xa5, 0x76, 0xd7, 0xdc, 0x77, 0xa8, 0x49, 0xa7,
+	0xea, 0xda, 0x9c, 0xae, 0x59, 0xca, 0x43, 0xcb, 0x11, 0xdb, 0xb9, 0x6e, 0x2a, 0x44, 0xee, 0x4e,
+	0xdd, 0xca, 0xbd, 0xb0, 0x6e, 0xed, 0x3a, 0xb0, 0x6e, 0x85, 0x07, 0xd6, 0xad, 0xe1, 0x43, 0xd3,
+	0xad, 0x3d, 0x87, 0xaf, 0x5b, 0x23, 0x07, 0xd6, 0xad, 0x02, 0x5b, 0x93, 0x88, 0xac, 0xc9, 0x41,
+	0xa6, 0x5b, 0xf1, 0xb4, 0xdc, 0x83, 0x7e, 0x1d, 0x7e, 0x59, 0xfa, 0xb5, 0xff, 0x25, 0xe8, 0xd7,
+	0x81, 0x83, 0xea, 0xd7, 0xf5, 0x40, 0xfd, 0x3a, 0xb8, 0x3f, 0xfd, 0x1a, 0xb1, 0xf5, 0x2b, 0x56,
+	0x4b, 0x07, 0xd5, 0xb1, 0x43, 0x2f, 0x4b, 0xc7, 0xc6, 0x0e, 0x5d, 0xc7, 0x1e, 0xfd, 0xe6, 0x52,
+	0x8c, 0xe8, 0xd8, 0x0c, 0xd1, 0xb1, 0xd3, 0x42, 0x22, 0x49, 0x74, 0x6c, 0x52, 0x48, 0xa6, 0xc4,
+	0x51, 0x18, 0x2e, 0x93, 0x0d, 0x8f, 0xee, 0xc9, 0x7d, 0x75, 0x0a, 0xb3, 0x2d, 0x23, 0x4c, 0x89,
+	0x89, 0x06, 0xda, 0xf5, 0xc8, 0x66, 0x15, 0x70, 0x8c, 0xb8, 0x73, 0xbb, 0x0a, 0xba, 0x66, 0xb0,
+	0x02, 0x27, 0xfa, 0x32, 0x50, 0xbf, 0xf6, 0x30, 0x9e, 0x6e, 0xa2, 0x11, 0x53, 0x42, 0x22, 0xed,
+	0xa7, 0x5f, 0xd1, 0x56, 0x15, 0x1c, 0x21, 0x14, 0x33, 0x42, 0x72, 0xaa, 0xb1, 0x7e, 0xed, 0x67,
+	0xd2, 0xfa, 0x30, 0x6d, 0x72, 0x52, 0x48, 0x26, 0x1c, 0xcd, 0xda, 0xc9, 0x73, 0x8e, 0x66, 0xed,
+	0xe5, 0x79, 0xaa, 0x4d, 0x73, 0x21, 0x2e, 0xca, 0xa3, 0x5c, 0x88, 0x3b, 0xc2, 0x0f, 0xe7, 0x42,
+	0x5c, 0x1f, 0xdf, 0x3f, 0xfa, 0xc7, 0x10, 0x65, 0x65, 0x73, 0x6d, 0x81, 0x38, 0x8b, 0x37, 0x55,
+	0xd3, 0x22, 0xa3, 0xaf, 0xc2, 0xf0, 0x9a, 0x6c, 0xae, 0x31, 0x1f, 0x32, 0xc6, 0xc7, 0xdb, 0xc6,
+	0xc2, 0xc9, 0x53, 0x75, 0x03, 0x43, 0x9c, 0xf7, 0x89, 0x1a, 0x37, 0x99, 0x61, 0xa7, 0xb6, 0xec,
+	0xcd, 0xed, 0x33, 0xd0, 0xca, 0x73, 0xf6, 0xaf, 0x18, 0xd8, 0xfe, 0xcb, 0x5f, 0xb6, 0x75, 0x7c,
+	0xf6, 0x0c, 0xb4, 0xf2, 0x40, 0x82, 0x6b, 0x0e, 0xd3, 0xe8, 0xbf, 0x04, 0x90, 0x9f, 0x57, 0x0d,
+	0x43, 0x37, 0x6a, 0x52, 0xd0, 0x22, 0x0c, 0xbb, 0x1c, 0x5f, 0xa2, 0xd4, 0xc2, 0xc9, 0x51, 0x5f,
+	0x8d, 0x70, 0x9b, 0x78, 0x99, 0x92, 0xb2, 0x42, 0x27, 0xf8, 0xe7, 0x8f, 0xdc, 0x9c, 0x12, 0xa4,
+	0x0f, 0x0b, 0xba, 0x5e, 0x42, 0x17, 0x61, 0x67, 0x45, 0x31, 0x0a, 0x8a, 0x46, 0x6d, 0x80, 0x70,
+	0x32, 0x5e, 0x27, 0xf0, 0xba, 0x21, 0x93, 0xc9, 0x2a, 0x97, 0x16, 0x28, 0x9d, 0x64, 0x33, 0x8c,
+	0xfe, 0xf2, 0x28, 0x1c, 0x96, 0x70, 0x7b, 0x17, 0xd5, 0x72, 0xa5, 0xa4, 0x5c, 0x29, 0xde, 0xc7,
+	0xab, 0xb3, 0xc8, 0xe6, 0x19, 0xba, 0x0a, 0x11, 0x73, 0xea, 0xdd, 0xdd, 0xd6, 0xda, 0x78, 0xcd,
+	0x67, 0x5b, 0x24, 0x9e, 0x72, 0xd4, 0xfa, 0x0f, 0x95, 0x61, 0xbf, 0x59, 0x51, 0x0a, 0xd8, 0xe6,
+	0xf3, 0xc8, 0xa1, 0xaa, 0x78, 0x76, 0x62, 0x4f, 0xd1, 0xa3, 0x89, 0x9d, 0xc3, 0x99, 0x6d, 0x91,
+	0x90, 0x2d, 0xd8, 0x55, 0xdc, 0x45, 0xc8, 0x55, 0x0c, 0x55, 0x37, 0x54, 0x6b, 0x83, 0x18, 0x39,
+	0x91, 0x1d, 0xda, 0x1e, 0xb7, 0x58, 0xd5, 0x56, 0x17, 0x18, 0x95, 0xe4, 0xd0, 0xa3, 0xbf, 0x00,
+	0x90, 0x57, 0xb4, 0x62, 0x45, 0x57, 0x35, 0x2b, 0x6f, 0xae, 0x2f, 0x9b, 0x8a, 0x85, 0x15, 0x3e,
+	0x9e, 0x26, 0x77, 0xf6, 0x58, 0xcf, 0xc6, 0xdd, 0x39, 0x71, 0x8d, 0x49, 0x5e, 0xa4, 0x82, 0xaf,
+	0x69, 0x96, 0xb1, 0x21, 0x9e, 0xc4, 0x33, 0xeb, 0x27, 0xcf, 0x40, 0x08, 0xb6, 0xb6, 0xd0, 0x19,
+	0xf6, 0x13, 0xd0, 0xca, 0xf3, 0x64, 0x5e, 0x3d, 0x7d, 0x06, 0x5a, 0xb9, 0x16, 0xa9, 0x57, 0xf1,
+	0x32, 0xa2, 0x9b, 0x2e, 0x9d, 0x65, 0x28, 0x2b, 0xea, 0xc3, 0xbc, 0xa1, 0x3c, 0x30, 0x54, 0x8b,
+	0xba, 0xb9, 0x8d, 0xc6, 0x06, 0xd4, 0xb4, 0x15, 0x61, 0x92, 0x28, 0x0f, 0x9a, 0x86, 0x91, 0x3a,
+	0x29, 0x1c, 0x55, 0xe8, 0xb6, 0xc2, 0x22, 0x6a, 0xa8, 0x15, 0x1b, 0x10, 0x15, 0x0f, 0xe3, 0x9b,
+	0xb0, 0xc7, 0x50, 0x56, 0x95, 0x1a, 0x9f, 0xe0, 0x3b, 0xff, 0x24, 0x4c, 0x33, 0x2f, 0x5b, 0x85,
+	0x35, 0xc6, 0x98, 0x05, 0x52, 0x37, 0x61, 0xb4, 0x05, 0xdd, 0x87, 0x83, 0x86, 0xf2, 0xe9, 0xba,
+	0x62, 0xda, 0xe6, 0x8c, 0x99, 0xb7, 0xf4, 0xbc, 0x5c, 0x2c, 0xc6, 0xba, 0x48, 0xdf, 0x9f, 0xf7,
+	0x55, 0x04, 0xf3, 0xb2, 0xa6, 0x56, 0xd6, 0x4b, 0x64, 0x73, 0xa7, 0x5d, 0x4c, 0xd6, 0x4a, 0xbf,
+	0xb3, 0x4c, 0xe3, 0xb5, 0x65, 0x2a, 0xf5, 0xb1, 0x02, 0x28, 0xab, 0xb9, 0xa4, 0x5f, 0x29, 0x16,
+	0xd1, 0xc7, 0xf0, 0x88, 0x4f, 0xb9, 0x86, 0x52, 0xd6, 0xef, 0x63, 0xab, 0xa6, 0x6d, 0xac, 0x4b,
+	0x3c, 0x83, 0x65, 0x74, 0x7f, 0x06, 0xba, 0x46, 0x3b, 0x0d, 0x6c, 0xf9, 0x3d, 0x6e, 0xf5, 0x15,
+	0x3f, 0x58, 0x2f, 0x5e, 0x22, 0x42, 0xd0, 0x43, 0x38, 0x64, 0x28, 0x66, 0x45, 0xd7, 0x4c, 0xa5,
+	0xbe, 0x69, 0xe1, 0xc3, 0x6a, 0x5a, 0xbf, 0x5d, 0x82, 0xa7, 0x6d, 0xcb, 0x70, 0xd8, 0xaf, 0x64,
+	0xd6, 0xb8, 0xee, 0xfd, 0x34, 0x6e, 0x68, 0x47, 0x01, 0xac, 0x75, 0xd8, 0x67, 0x61, 0xf3, 0xb0,
+	0xa4, 0x17, 0xa8, 0xfe, 0xc6, 0x4d, 0xeb, 0xf1, 0xf8, 0x2c, 0x94, 0xe2, 0x26, 0x23, 0xc0, 0x75,
+	0xfb, 0x1e, 0xec, 0x51, 0xb5, 0x35, 0x05, 0x8f, 0x7d, 0x31, 0xff, 0x40, 0x5e, 0x21, 0x41, 0x88,
+	0x46, 0xd3, 0xb6, 0x55, 0xea, 0x76, 0x88, 0xef, 0xca, 0x2b, 0xe8, 0x1d, 0xd8, 0x2d, 0x57, 0x2a,
+	0xf9, 0x15, 0xd5, 0x50, 0x1e, 0xc8, 0xa5, 0x52, 0x2c, 0xbd, 0xe7, 0x5d, 0xb4, 0xf7, 0xf3, 0x47,
+	0x1e, 0xd6, 0x6c, 0xab, 0x14, 0x96, 0x2b, 0x95, 0xeb, 0xec, 0x11, 0x4d, 0xc3, 0xb0, 0xdd, 0x1c,
+	0x5c, 0xa9, 0x57, 0x03, 0x2b, 0x05, 0x19, 0x29, 0xae, 0xd2, 0x65, 0x18, 0x2e, 0xe8, 0x86, 0x69,
+	0x6f, 0x6c, 0x34, 0xe8, 0x70, 0xa4, 0x8e, 0x71, 0x4e, 0x37, 0x4c, 0xba, 0x45, 0xd1, 0x88, 0x99,
+	0x04, 0x0b, 0xce, 0x1b, 0x22, 0xc1, 0x34, 0x56, 0x6c, 0x09, 0xe7, 0xfd, 0x25, 0x98, 0xc6, 0x4a,
+	0x9d, 0x04, 0xe7, 0x0d, 0x9a, 0x85, 0xdd, 0x76, 0xe5, 0xcd, 0x4a, 0x71, 0x23, 0xc8, 0xda, 0xcb,
+	0xb6, 0x49, 0x76, 0x43, 0x17, 0x2b, 0xc5, 0x0d, 0xdc, 0x6e, 0x66, 0x54, 0x13, 0xce, 0x81, 0x40,
+	0x4e, 0x48, 0x49, 0x09, 0xe3, 0x5b, 0xf0, 0x88, 0xd3, 0x61, 0xca, 0x72, 0xde, 0xd4, 0x0b, 0xf7,
+	0x14, 0xcb, 0xf6, 0xb4, 0x86, 0x02, 0xc4, 0x84, 0x24, 0x7b, 0x03, 0xbb, 0xab, 0x2c, 0x2f, 0x12,
+	0x36, 0xe6, 0x68, 0xdd, 0x81, 0xd1, 0x9d, 0xa2, 0xa8, 0x05, 0x35, 0xe6, 0xab, 0xa8, 0xef, 0x2a,
+	0xcb, 0xa6, 0x4b, 0x00, 0x51, 0x0c, 0x21, 0xa9, 0xf7, 0x41, 0x9d, 0xdc, 0x6c, 0xcd, 0x80, 0x35,
+	0x14, 0xcb, 0xd8, 0xb0, 0x7b, 0x7a, 0x38, 0xa0, 0x96, 0xed, 0x12, 0x62, 0x3c, 0x12, 0x66, 0x61,
+	0x1d, 0x7d, 0x09, 0xf6, 0x6a, 0xba, 0x57, 0xc8, 0xb9, 0x40, 0x21, 0x3d, 0x9a, 0xee, 0xe6, 0xbf,
+	0x01, 0xbb, 0x3d, 0xcc, 0x47, 0x7d, 0x3d, 0x52, 0x17, 0x87, 0x2b, 0x86, 0xdb, 0x2e, 0x85, 0x0d,
+	0x97, 0xa8, 0x29, 0xd8, 0x69, 0x5b, 0xaf, 0xc7, 0x88, 0xf5, 0x7a, 0xec, 0xcb, 0x2a, 0x68, 0x4f,
+	0x35, 0x32, 0x5c, 0x6d, 0x62, 0x74, 0x05, 0x32, 0x2d, 0x9d, 0x5f, 0x5e, 0x5f, 0x59, 0x51, 0x0c,
+	0x55, 0x5b, 0x8d, 0x8d, 0x04, 0xb4, 0xa1, 0x43, 0xea, 0xa5, 0xf4, 0xa2, 0x4d, 0x8e, 0xae, 0xc3,
+	0x1e, 0xca, 0x6b, 0x37, 0xe3, 0x04, 0xe1, 0x3f, 0x51, 0xc7, 0x4f, 0x19, 0x5c, 0x43, 0xd3, 0x21,
+	0x75, 0x53, 0x3e, 0xd6, 0x84, 0x39, 0x18, 0xb5, 0xa7, 0x50, 0x99, 0x98, 0x4b, 0xb8, 0x2e, 0x27,
+	0x03, 0xea, 0xd2, 0x29, 0xf1, 0x8c, 0x61, 0xde, 0xa6, 0x47, 0x1f, 0xc1, 0x1e, 0xca, 0x6c, 0x57,
+	0x66, 0x94, 0x08, 0x98, 0xde, 0xa3, 0xca, 0xae, 0xb7, 0xd3, 0xb2, 0x9d, 0x52, 0x77, 0xd9, 0xf5,
+	0x0e, 0xbd, 0x01, 0x7b, 0x71, 0xb7, 0xcb, 0x05, 0x2b, 0x5f, 0x28, 0xad, 0x9b, 0x96, 0x62, 0xc4,
+	0x4e, 0x07, 0x54, 0x91, 0x93, 0x22, 0x8c, 0x7c, 0x8e, 0x52, 0xa3, 0xef, 0xc3, 0xc1, 0xa2, 0x9e,
+	0xd7, 0x74, 0x3a, 0xf9, 0xdc, 0x72, 0xce, 0x04, 0xca, 0xe9, 0x2b, 0xea, 0xb7, 0x74, 0x32, 0xfb,
+	0x5c, 0xc2, 0x0c, 0x78, 0xae, 0xb6, 0x7b, 0x2e, 0xeb, 0x16, 0xf6, 0xf6, 0x14, 0xbc, 0xcd, 0x7f,
+	0x22, 0xdf, 0x97, 0xcd, 0x82, 0xa1, 0x56, 0xac, 0xbc, 0xaa, 0x7d, 0x42, 0x3d, 0x94, 0xd8, 0xd9,
+	0x80, 0x02, 0xba, 0xa4, 0x57, 0x1c, 0x49, 0xa2, 0x6e, 0x5d, 0xa5, 0x72, 0x72, 0x8e, 0x98, 0x1b,
+	0xb6, 0x14, 0xf4, 0xf7, 0x00, 0x8c, 0xef, 0x5a, 0xd4, 0x18, 0x29, 0x6a, 0xca, 0x77, 0x99, 0x06,
+	0x8a, 0x27, 0x9d, 0xde, 0x25, 0x1d, 0x5f, 0x0e, 0x22, 0x1a, 0x16, 0x61, 0xbf, 0x9f, 0x05, 0x85,
+	0x78, 0xd8, 0x76, 0x4f, 0xd9, 0x20, 0xd6, 0x74, 0x97, 0x84, 0x7f, 0xa2, 0x7e, 0xd8, 0x7e, 0x5f,
+	0x2e, 0xad, 0x2b, 0xc4, 0x54, 0xed, 0x92, 0xe8, 0xc3, 0xc5, 0xd6, 0x19, 0x70, 0xf1, 0x77, 0xe0,
+	0x17, 0x55, 0xf0, 0xbf, 0x00, 0x3c, 0x01, 0x07, 0xb1, 0x3b, 0x1a, 0x17, 0xc9, 0x1c, 0x50, 0xb5,
+	0xd5, 0xf8, 0x9c, 0xae, 0x59, 0x86, 0x5e, 0x42, 0xed, 0x09, 0x21, 0x2d, 0x64, 0xe0, 0x24, 0x3c,
+	0x2e, 0x51, 0x95, 0x7e, 0x41, 0x62, 0xda, 0x2f, 0xee, 0xd6, 0xca, 0xa8, 0x77, 0xca, 0x76, 0x8d,
+	0x88, 0xf7, 0x95, 0x82, 0xfd, 0x90, 0x5b, 0x64, 0x69, 0x33, 0xc4, 0x25, 0xd2, 0x42, 0x62, 0x46,
+	0x48, 0xa7, 0xe0, 0x30, 0x8c, 0xda, 0xde, 0x5b, 0xfc, 0xed, 0xca, 0xaa, 0x21, 0x17, 0x15, 0x13,
+	0xb5, 0x13, 0x67, 0x0d, 0x9e, 0x86, 0x03, 0xf3, 0xaa, 0x59, 0x50, 0x4a, 0x25, 0x59, 0x53, 0xf4,
+	0x75, 0x33, 0x6e, 0xdb, 0xdd, 0xe1, 0x64, 0x46, 0x48, 0xce, 0x08, 0xc9, 0x59, 0x21, 0x95, 0x84,
+	0x33, 0x30, 0x29, 0xea, 0x56, 0x9c, 0x75, 0x4c, 0xfc, 0x95, 0xb8, 0xa4, 0x9a, 0xf7, 0xe2, 0x34,
+	0xfc, 0x57, 0x56, 0x34, 0x2b, 0x5e, 0xeb, 0xab, 0x78, 0x6d, 0xc0, 0x5a, 0x53, 0x33, 0xe2, 0x19,
+	0x88, 0x5c, 0xf6, 0xb6, 0xed, 0x61, 0xf5, 0xb2, 0x20, 0x1d, 0xa0, 0x41, 0xba, 0x94, 0x78, 0x1a,
+	0x46, 0x98, 0x01, 0x67, 0x93, 0xa0, 0xcd, 0x2a, 0xe8, 0xdc, 0xaa, 0x82, 0x8e, 0xed, 0x2a, 0xe8,
+	0x98, 0x16, 0x66, 0x84, 0x74, 0x5a, 0x7c, 0x05, 0xc2, 0x07, 0xf2, 0x8a, 0x4d, 0x11, 0x63, 0xe1,
+	0xd2, 0xc8, 0x76, 0x15, 0x70, 0x89, 0x8c, 0x90, 0x49, 0x0a, 0xe9, 0xc4, 0xd7, 0x55, 0xd0, 0x82,
+	0xfd, 0x3e, 0xac, 0x45, 0xdc, 0x7e, 0x5f, 0xbf, 0xc7, 0x97, 0x13, 0xcf, 0x40, 0xfe, 0x81, 0xbd,
+	0x69, 0xbb, 0xc9, 0x86, 0xb6, 0xaa, 0x60, 0x90, 0x90, 0xa5, 0x84, 0x64, 0x5a, 0x3c, 0x0f, 0xfb,
+	0xdc, 0xfb, 0xa4, 0x4d, 0xd9, 0xbf, 0x59, 0x05, 0xc3, 0xcc, 0x91, 0xe4, 0x92, 0x53, 0x42, 0x3a,
+	0x29, 0x24, 0xa7, 0xc5, 0x51, 0x67, 0x3b, 0x72, 0x09, 0x1c, 0xd9, 0xaa, 0x82, 0xe3, 0xdb, 0x64,
+	0x47, 0x14, 0x52, 0xa4, 0x5c, 0x67, 0x8b, 0x71, 0x93, 0x61, 0x0b, 0x3c, 0x4e, 0xc8, 0x52, 0x42,
+	0x2a, 0x2d, 0x0a, 0x70, 0x90, 0x2d, 0xce, 0xda, 0x62, 0xad, 0x75, 0xcb, 0xe9, 0xad, 0x2a, 0x38,
+	0x85, 0xbb, 0x25, 0x35, 0x25, 0xc4, 0x53, 0xd3, 0xe2, 0x6b, 0xf0, 0xec, 0x6e, 0xeb, 0xc2, 0x5d,
+	0xd6, 0xd9, 0xad, 0x2a, 0x78, 0x85, 0x94, 0x35, 0x2b, 0xa4, 0x27, 0x73, 0x21, 0x0e, 0xf0, 0xad,
+	0xb9, 0x10, 0xd7, 0xc1, 0x77, 0x3a, 0x41, 0x62, 0xb7, 0x43, 0xdb, 0xc7, 0xf7, 0xe7, 0x42, 0xdc,
+	0x20, 0x3f, 0xe4, 0x38, 0xb7, 0xc7, 0xf9, 0x91, 0x5c, 0x88, 0x8b, 0xf3, 0x27, 0x73, 0x21, 0xee,
+	0x14, 0x7f, 0x3a, 0x17, 0xe2, 0x5e, 0xe1, 0xcf, 0x8e, 0xfe, 0xd3, 0x36, 0x78, 0x9a, 0x38, 0x1e,
+	0x78, 0x25, 0x51, 0xe7, 0xe3, 0xae, 0x6a, 0xad, 0xb1, 0x48, 0xce, 0x6d, 0xb7, 0xb3, 0x18, 0x26,
+	0xfb, 0x5f, 0x59, 0xb1, 0xd6, 0x74, 0x1a, 0x5c, 0x8e, 0xec, 0xb0, 0x33, 0xb2, 0x96, 0x55, 0x99,
+	0x27, 0x04, 0x12, 0x5c, 0x73, 0x7e, 0xa3, 0x19, 0x18, 0xaa, 0xc8, 0xd6, 0x1a, 0xf3, 0xff, 0xea,
+	0x15, 0xd6, 0x82, 0x6c, 0xad, 0x11, 0x23, 0x5f, 0x31, 0xa8, 0xc2, 0x22, 0x21, 0x54, 0xc2, 0x81,
+	0x44, 0x18, 0x95, 0xd7, 0x2d, 0x9d, 0x26, 0x52, 0x6d, 0x67, 0x21, 0x14, 0xe8, 0x46, 0xf6, 0x62,
+	0x86, 0xac, 0x6e, 0x5a, 0xb6, 0x8f, 0x90, 0x84, 0xdd, 0x1e, 0xf6, 0x76, 0xe2, 0xa3, 0xf4, 0xd8,
+	0x3e, 0x4a, 0xc8, 0x68, 0x5d, 0x03, 0xd9, 0x16, 0x29, 0xbc, 0xe6, 0xe2, 0xc9, 0xd6, 0xec, 0x53,
+	0x0f, 0x6f, 0x47, 0x60, 0xd1, 0xb6, 0xc5, 0xea, 0x2a, 0xfd, 0x22, 0xf7, 0xcd, 0xa5, 0xf6, 0x84,
+	0x80, 0x57, 0xcb, 0x18, 0xec, 0x73, 0xcb, 0x62, 0x99, 0x53, 0x32, 0xb8, 0x21, 0x16, 0xfa, 0x6e,
+	0x4f, 0x0b, 0x19, 0x61, 0x8a, 0x85, 0xb9, 0x7f, 0xd4, 0x01, 0x7b, 0xeb, 0x86, 0xc6, 0xe9, 0x49,
+	0xb0, 0xef, 0x9e, 0xac, 0x1b, 0xbf, 0xd6, 0xfd, 0x8c, 0x5f, 0x09, 0x76, 0xbb, 0x62, 0x08, 0x66,
+	0xac, 0x8d, 0x38, 0x20, 0xaf, 0xfa, 0x1b, 0xce, 0xce, 0x94, 0xc1, 0xf3, 0xe8, 0xae, 0xa2, 0xae,
+	0xae, 0x59, 0xe2, 0x88, 0xe3, 0x1d, 0xf0, 0xf6, 0x2f, 0x0e, 0xb8, 0xfc, 0x84, 0x70, 0x2d, 0x2a,
+	0x61, 0xfa, 0x8f, 0x79, 0xfb, 0x8b, 0x8d, 0x79, 0xc7, 0x0b, 0x8c, 0x79, 0xe7, 0x7e, 0xc7, 0x1c,
+	0x2d, 0xc0, 0x4e, 0xe6, 0x38, 0x31, 0x37, 0x34, 0xde, 0xc0, 0x57, 0xab, 0x0d, 0x55, 0xff, 0xce,
+	0x1e, 0x8a, 0x01, 0xc9, 0x16, 0x83, 0x6e, 0x60, 0xbf, 0xa7, 0xa0, 0x97, 0xf1, 0x06, 0x44, 0x02,
+	0xc4, 0xd0, 0x7f, 0x02, 0xe8, 0x86, 0xb5, 0x73, 0x02, 0x74, 0xdb, 0xac, 0xf8, 0x33, 0x32, 0x20,
+	0x2f, 0xb3, 0xf0, 0x82, 0x13, 0x68, 0xa4, 0x39, 0x80, 0x2b, 0x2f, 0x1c, 0xa8, 0x60, 0xde, 0x45,
+	0xaf, 0xec, 0x7d, 0x7d, 0x31, 0xfa, 0xcd, 0xa5, 0x48, 0x52, 0x48, 0x50, 0xbd, 0x97, 0x12, 0xd2,
+	0xc2, 0x4c, 0xd0, 0x6a, 0x68, 0x67, 0x01, 0xc7, 0x76, 0x92, 0xa1, 0xa3, 0x11, 0xbc, 0xd1, 0xdf,
+	0xb7, 0xc2, 0xa8, 0xb3, 0x1a, 0x9c, 0x1c, 0xce, 0x77, 0xb3, 0x1e, 0x6e, 0xc0, 0x08, 0xb1, 0x4d,
+	0x6a, 0x59, 0xa6, 0x36, 0x5f, 0x57, 0x92, 0x1a, 0x30, 0xa4, 0xd6, 0x76, 0x8d, 0xa5, 0x1e, 0xc3,
+	0xfd, 0xe8, 0x9e, 0x2a, 0xa1, 0x97, 0x34, 0x55, 0xda, 0x0f, 0x3a, 0x55, 0x2e, 0x76, 0x7f, 0x73,
+	0xa9, 0x0b, 0x0f, 0x1b, 0xde, 0x95, 0x52, 0xa3, 0x3f, 0x6d, 0x83, 0x43, 0xce, 0x08, 0x5c, 0xa5,
+	0xad, 0x61, 0x06, 0xce, 0x77, 0x34, 0x0e, 0xcb, 0x70, 0x80, 0x8e, 0x03, 0xed, 0xcc, 0xbc, 0x1d,
+	0x6d, 0x60, 0xc3, 0x31, 0xd6, 0x78, 0x38, 0xbc, 0xd5, 0x67, 0xd3, 0xb6, 0xcf, 0xd8, 0xf9, 0xe9,
+	0x0f, 0x69, 0x80, 0x14, 0xd8, 0xef, 0x8c, 0xcf, 0xdc, 0xba, 0x69, 0xe9, 0x65, 0xf2, 0x88, 0xe6,
+	0x61, 0x97, 0x3d, 0x5d, 0x57, 0xf6, 0x11, 0x3a, 0xee, 0xfe, 0xfc, 0x51, 0x3b, 0xe1, 0x7b, 0xfc,
+	0x0c, 0x00, 0x89, 0x63, 0xf3, 0x76, 0x65, 0xf4, 0x4f, 0x23, 0xb0, 0xcb, 0x29, 0x07, 0xbd, 0x0f,
+	0xbb, 0x4d, 0xb2, 0x15, 0xe4, 0x09, 0x01, 0x93, 0x3f, 0xb5, 0x9f, 0xad, 0xa4, 0xa6, 0xdf, 0xf0,
+	0x96, 0x4c, 0xa5, 0xd1, 0x9a, 0xcb, 0xd8, 0xc0, 0xb4, 0x07, 0x97, 0x88, 0xa7, 0x26, 0xc4, 0xcc,
+	0x7e, 0xc5, 0xdb, 0xeb, 0x2d, 0xdb, 0x22, 0xf5, 0xd8, 0x12, 0x69, 0x11, 0x16, 0x1c, 0xa8, 0x9b,
+	0x3d, 0xac, 0x24, 0x3a, 0x87, 0x2e, 0xed, 0xb7, 0x24, 0xef, 0xf4, 0xc9, 0xb6, 0x48, 0x7d, 0x45,
+	0xcf, 0x1b, 0x5a, 0x6a, 0x19, 0xf6, 0x15, 0xc8, 0x08, 0xd1, 0xc2, 0xf2, 0x14, 0x1a, 0xc6, 0x2c,
+	0x9b, 0xef, 0xed, 0xb7, 0x4c, 0xd7, 0x60, 0x67, 0x5b, 0xa4, 0x68, 0xa1, 0xf6, 0x48, 0x47, 0xf4,
+	0xe2, 0xcf, 0xe0, 0x2f, 0xaa, 0xa0, 0x0f, 0x46, 0x21, 0x24, 0x6f, 0xe3, 0x64, 0xe4, 0x40, 0x66,
+	0x0c, 0xfc, 0xba, 0x0a, 0xfe, 0x1c, 0xc2, 0x3f, 0x03, 0x30, 0x84, 0x5f, 0x9d, 0xfb, 0x21, 0x80,
+	0x8f, 0xe0, 0xa0, 0x77, 0x44, 0x93, 0x1d, 0x74, 0x6c, 0xe0, 0x70, 0xfd, 0x60, 0x24, 0x39, 0xbb,
+	0x5b, 0xe1, 0x58, 0x83, 0x5e, 0x4c, 0xf6, 0xd2, 0xfe, 0x88, 0xdb, 0xcd, 0x87, 0xc7, 0x7d, 0x5b,
+	0x9e, 0xec, 0xa0, 0x6d, 0x40, 0x9d, 0x6f, 0x6b, 0xf7, 0x34, 0xfd, 0x81, 0x06, 0x9f, 0x74, 0x41,
+	0x58, 0x83, 0x9c, 0x49, 0x7f, 0xc3, 0xc1, 0xf3, 0x28, 0xe6, 0xae, 0xd7, 0x84, 0x6b, 0xdb, 0x18,
+	0x0e, 0x67, 0x97, 0x96, 0x16, 0xe2, 0x74, 0x5b, 0x48, 0xb6, 0xc6, 0x01, 0x3c, 0x5b, 0x47, 0x8c,
+	0xf7, 0x9a, 0x09, 0x1a, 0x84, 0x1e, 0x0e, 0xe3, 0xfd, 0x28, 0x4e, 0x43, 0xd9, 0x70, 0x04, 0x0d,
+	0xfa, 0x10, 0xca, 0xd6, 0xda, 0x70, 0x08, 0x93, 0xc1, 0x33, 0x68, 0x68, 0xe7, 0x77, 0x12, 0x83,
+	0x1e, 0x86, 0x44, 0x0e, 0x09, 0x52, 0xc3, 0xdb, 0xf0, 0x38, 0x3c, 0xe2, 0x21, 0x74, 0x5b, 0x4c,
+	0x3c, 0x40, 0x27, 0x1b, 0x7e, 0x7c, 0x7f, 0xf2, 0xc3, 0x09, 0xfc, 0x63, 0x38, 0x4c, 0x6d, 0xa7,
+	0x38, 0x36, 0x83, 0xe0, 0xad, 0xdd, 0x04, 0x9e, 0x0e, 0x14, 0xc8, 0x1c, 0x91, 0xe1, 0x4e, 0xe6,
+	0xfb, 0xc3, 0x9b, 0x81, 0xf2, 0x62, 0x00, 0x35, 0xfe, 0x38, 0xdc, 0xed, 0xaa, 0x98, 0x39, 0xda,
+	0x1a, 0x03, 0x70, 0x1c, 0x0d, 0x7b, 0xe7, 0x42, 0xf0, 0x68, 0xbc, 0xba, 0x83, 0xbc, 0xe1, 0x78,
+	0xc4, 0x51, 0xcc, 0x97, 0xb4, 0x36, 0x22, 0x67, 0xd1, 0x11, 0x3f, 0x8a, 0x9d, 0x63, 0xf2, 0x1a,
+	0x3a, 0x5f, 0x47, 0xe8, 0xd5, 0xda, 0x13, 0xcc, 0x00, 0xa1, 0x4f, 0xc3, 0x3d, 0xf6, 0x6c, 0x8e,
+	0x63, 0x5b, 0x6e, 0x77, 0x6e, 0x92, 0xd4, 0xf4, 0xe1, 0x26, 0x95, 0xbc, 0x86, 0x84, 0x5d, 0xb8,
+	0x3d, 0x89, 0x93, 0xe1, 0x01, 0x0f, 0x7b, 0x9c, 0xbd, 0x86, 0x57, 0x76, 0x17, 0xa3, 0x93, 0xd8,
+	0x3c, 0xab, 0x45, 0xb4, 0x26, 0x86, 0xc5, 0x0e, 0x60, 0x1a, 0x9d, 0xf4, 0x5d, 0x9a, 0xc1, 0x23,
+	0x36, 0xd9, 0x88, 0xab, 0xe1, 0xc0, 0x9d, 0x45, 0x27, 0x82, 0x38, 0x6a, 0xe3, 0x37, 0x81, 0xe2,
+	0x01, 0x84, 0x3b, 0x87, 0x31, 0x87, 0x66, 0xfd, 0xe9, 0x7d, 0x75, 0xff, 0x84, 0x43, 0x54, 0xd0,
+	0x8b, 0x0a, 0x1e, 0x16, 0x16, 0x83, 0x99, 0xd3, 0x8b, 0x0a, 0x1c, 0x47, 0xc7, 0x7d, 0x76, 0x1f,
+	0xa7, 0x53, 0x57, 0x86, 0xbb, 0xe9, 0x06, 0x49, 0xf7, 0x4d, 0xf1, 0x38, 0xec, 0x70, 0x25, 0xc3,
+	0xc1, 0x56, 0x15, 0xb4, 0x6f, 0x57, 0x41, 0x27, 0xf1, 0xe7, 0x84, 0x74, 0x2e, 0xc4, 0xb5, 0xf3,
+	0x1d, 0xa3, 0x4f, 0xfb, 0x60, 0x5f, 0x9d, 0x1d, 0x4c, 0xf6, 0xd7, 0xc6, 0xb9, 0x29, 0xf0, 0xdd,
+	0xe5, 0xa6, 0x5a, 0x5f, 0x72, 0x6e, 0xaa, 0xed, 0xbb, 0xcc, 0x4d, 0x85, 0x0e, 0x25, 0x37, 0x75,
+	0x0b, 0x0e, 0x95, 0x65, 0xbc, 0x32, 0xdd, 0x7d, 0x98, 0x37, 0xd5, 0x3f, 0xa2, 0x5e, 0x68, 0x8f,
+	0x38, 0xf4, 0x65, 0x15, 0xb4, 0x4e, 0xd9, 0x81, 0xf2, 0x30, 0x71, 0x28, 0xcf, 0xb5, 0xc6, 0x3e,
+	0x96, 0xfa, 0xcb, 0xf2, 0x43, 0xc9, 0xdd, 0x65, 0x8b, 0xea, 0x1f, 0x29, 0x28, 0x57, 0x1f, 0xf0,
+	0xee, 0xd8, 0x53, 0xc0, 0x9b, 0x19, 0xa5, 0xde, 0xa0, 0xf7, 0xc7, 0x24, 0xaf, 0x5e, 0x31, 0x14,
+	0xd3, 0x54, 0x75, 0xcd, 0x06, 0x5f, 0x53, 0x0f, 0xf5, 0x7c, 0x10, 0x4e, 0x64, 0xae, 0xc6, 0xe5,
+	0x12, 0x1e, 0x75, 0x09, 0x63, 0xe0, 0xeb, 0xad, 0x10, 0xec, 0x61, 0x4b, 0x44, 0x31, 0x0c, 0xdd,
+	0xc0, 0xce, 0x21, 0x1e, 0xd2, 0x9b, 0x7b, 0x34, 0x4a, 0x7c, 0x56, 0xc2, 0x04, 0xd5, 0xed, 0xd7,
+	0x88, 0x38, 0x9a, 0xbb, 0xfe, 0x1f, 0x6d, 0x36, 0x2c, 0x62, 0xf0, 0x27, 0xa0, 0x6f, 0x34, 0x7a,
+	0xae, 0x57, 0xec, 0x49, 0x51, 0x33, 0x76, 0x72, 0x72, 0x3c, 0x33, 0x3b, 0x5b, 0xcb, 0x67, 0xe3,
+	0x5f, 0x91, 0x9f, 0x80, 0xf0, 0xb9, 0x2e, 0xa3, 0x33, 0xf6, 0xf8, 0x71, 0xe8, 0xc7, 0x80, 0x40,
+	0x27, 0x7e, 0x09, 0x9e, 0x3e, 0x03, 0x9b, 0x00, 0xfd, 0x1c, 0xfc, 0xae, 0x0a, 0xfe, 0x1d, 0x20,
+	0xfb, 0x17, 0x29, 0x21, 0x8e, 0xd7, 0x7d, 0x9c, 0x04, 0x6e, 0xe3, 0x44, 0x64, 0x5c, 0x37, 0xe2,
+	0xcb, 0x8a, 0xf5, 0x40, 0x51, 0xb4, 0x78, 0x6a, 0x72, 0x32, 0x2e, 0x6b, 0xc5, 0x78, 0x66, 0x76,
+	0x76, 0x22, 0x7e, 0x6d, 0x75, 0x22, 0x7e, 0x87, 0xd0, 0xa5, 0xe3, 0xaf, 0xc7, 0xd3, 0x0f, 0x1f,
+	0x62, 0x4a, 0xb9, 0x54, 0x8a, 0xa7, 0x27, 0x27, 0xc7, 0xd3, 0xb3, 0xb3, 0x71, 0xc5, 0x91, 0x67,
+	0x0a, 0xf1, 0x4c, 0xfc, 0xf5, 0x78, 0xa6, 0x46, 0x93, 0xa1, 0xf5, 0x74, 0xd3, 0x4c, 0xc4, 0xdf,
+	0xd5, 0xd7, 0xe3, 0x05, 0x59, 0x8b, 0xcb, 0x25, 0x53, 0x8f, 0x53, 0x84, 0xc1, 0x46, 0x5c, 0xd6,
+	0xe2, 0xca, 0x43, 0xb9, 0x60, 0xb9, 0x48, 0xe3, 0x25, 0xf5, 0x9e, 0x12, 0x4f, 0x4f, 0xa6, 0x27,
+	0x70, 0x53, 0xfa, 0x9f, 0x3e, 0x03, 0x3c, 0x8a, 0x6c, 0x57, 0x01, 0xa4, 0x2d, 0xc0, 0x5b, 0x15,
+	0xfe, 0x00, 0x9f, 0x3e, 0x03, 0x1d, 0x28, 0xf4, 0xab, 0x2a, 0x68, 0xa9, 0x65, 0xf5, 0x49, 0xeb,
+	0xaf, 0x3c, 0x7d, 0x06, 0x5e, 0x1f, 0xfe, 0xde, 0xef, 0xaa, 0x60, 0x7a, 0xd1, 0x32, 0x54, 0x6d,
+	0x35, 0x6e, 0x28, 0x78, 0x20, 0x15, 0xcd, 0xc2, 0x0f, 0xb4, 0x24, 0x7b, 0x82, 0x0b, 0xf1, 0x75,
+	0x73, 0x5d, 0x2e, 0x95, 0x36, 0xe2, 0x72, 0x7c, 0xcd, 0x2a, 0x97, 0x48, 0x15, 0xb0, 0x94, 0xe3,
+	0x4f, 0x9f, 0x81, 0x23, 0xc3, 0x43, 0xdb, 0x55, 0xd0, 0x47, 0x0b, 0x76, 0x36, 0x4b, 0x51, 0x2f,
+	0x6e, 0x60, 0x8a, 0xa1, 0xa7, 0xcf, 0x40, 0xdf, 0x70, 0xf4, 0x5f, 0x3c, 0x03, 0x3d, 0xb2, 0x59,
+	0x50, 0x55, 0x21, 0xbe, 0x2c, 0x9b, 0xca, 0x54, 0xda, 0xa9, 0xdd, 0x30, 0xae, 0x5d, 0xc8, 0xf5,
+	0xb8, 0x49, 0x26, 0x6d, 0xc1, 0x35, 0xe2, 0x68, 0x05, 0xf6, 0x7a, 0xa2, 0x9b, 0x2b, 0x3a, 0x81,
+	0x0c, 0x86, 0x93, 0x93, 0x41, 0x33, 0x36, 0x27, 0xdf, 0x97, 0x17, 0x09, 0x8b, 0x6b, 0x4d, 0x84,
+	0xbf, 0x78, 0x84, 0x77, 0x61, 0x02, 0xd9, 0x92, 0x22, 0x9f, 0xb8, 0x62, 0xfd, 0x2b, 0x3a, 0xba,
+	0x0b, 0xdb, 0x3e, 0x79, 0x60, 0x91, 0xf4, 0xfb, 0xde, 0x3c, 0x9c, 0x93, 0x9f, 0x3f, 0xc2, 0x1c,
+	0x5f, 0x3c, 0x22, 0xf2, 0x9c, 0x5d, 0xc2, 0x1d, 0x99, 0xc2, 0xdf, 0xd1, 0x65, 0xd8, 0xed, 0x01,
+	0x7c, 0x85, 0xc9, 0x36, 0x70, 0xdc, 0x37, 0x65, 0xd6, 0x79, 0xae, 0x3d, 0xf6, 0xf8, 0x7f, 0xfe,
+	0x77, 0x20, 0x85, 0x55, 0x17, 0xc4, 0xeb, 0x75, 0x78, 0xd4, 0x8e, 0x2d, 0xd9, 0xc9, 0x44, 0x85,
+	0xa6, 0x9d, 0xe4, 0x55, 0xc5, 0xa4, 0x69, 0x6f, 0x29, 0xc6, 0x48, 0x58, 0xf0, 0x95, 0xf4, 0xde,
+	0x02, 0xfe, 0x8e, 0x6e, 0x35, 0x02, 0x2f, 0x06, 0xa4, 0xbf, 0xc5, 0xd6, 0x18, 0xc0, 0xee, 0x87,
+	0x1f, 0x74, 0x71, 0xa1, 0x21, 0x74, 0x91, 0xdf, 0x55, 0xa0, 0x3f, 0x70, 0xb1, 0x0c, 0x4f, 0xd9,
+	0x99, 0x60, 0xcb, 0x50, 0x0b, 0x56, 0xde, 0xd4, 0x54, 0x1a, 0x46, 0x73, 0x70, 0x62, 0x4a, 0xe1,
+	0x5e, 0x20, 0xaa, 0x9e, 0xb3, 0xb1, 0x78, 0x59, 0x20, 0x8d, 0xb0, 0x5c, 0x31, 0x91, 0xb5, 0xa8,
+	0xa9, 0xd8, 0x22, 0xa3, 0x5b, 0xea, 0x1c, 0x96, 0x83, 0xde, 0x81, 0x48, 0x2e, 0x16, 0x55, 0x0a,
+	0x4e, 0xca, 0x17, 0xf5, 0xb2, 0xac, 0x6a, 0x26, 0x03, 0xd7, 0x1f, 0xaf, 0x93, 0x7e, 0x95, 0x7c,
+	0xbd, 0x25, 0x97, 0x95, 0x9b, 0xaa, 0x69, 0x79, 0x8a, 0x89, 0xd6, 0x84, 0x50, 0x2a, 0x13, 0xfd,
+	0x18, 0xc0, 0x68, 0x41, 0xd7, 0xef, 0xa9, 0x0a, 0xd1, 0x2c, 0x65, 0xbd, 0xa8, 0xae, 0x6c, 0xc4,
+	0xfa, 0x7d, 0xd5, 0xda, 0x1c, 0xa1, 0x6b, 0xa0, 0xd6, 0xa6, 0xd9, 0xb4, 0xfa, 0xfc, 0x19, 0xe8,
+	0x84, 0xed, 0x15, 0x43, 0x7f, 0xb8, 0xb1, 0x37, 0xc5, 0xd4, 0xcb, 0x8a, 0x5f, 0xd2, 0xe7, 0x49,
+	0xe1, 0xc3, 0x6f, 0xc0, 0xe8, 0x8e, 0x1d, 0xd4, 0x9d, 0xbb, 0xea, 0xd9, 0x2d, 0x77, 0xa5, 0xff,
+	0xa2, 0x0a, 0xee, 0xc1, 0x11, 0x18, 0xa1, 0x5d, 0xe8, 0x64, 0x8b, 0xba, 0x99, 0x21, 0x23, 0x24,
+	0x27, 0x85, 0x0c, 0x1c, 0x83, 0x71, 0xba, 0xd2, 0xd6, 0x0d, 0x25, 0x5e, 0xb7, 0x1f, 0xd8, 0x1c,
+	0xa1, 0x19, 0x21, 0x91, 0x82, 0x27, 0x1a, 0xa5, 0x9f, 0x3a, 0xa6, 0x84, 0x69, 0x21, 0x91, 0x10,
+	0xcf, 0x35, 0x82, 0xfc, 0x45, 0x59, 0xe6, 0xa7, 0x3d, 0x91, 0x11, 0x12, 0x53, 0x5f, 0x57, 0x01,
+	0x10, 0x2f, 0xc3, 0x53, 0x41, 0x53, 0xc6, 0x0d, 0x30, 0x44, 0x0c, 0xde, 0x17, 0x65, 0x50, 0xc0,
+	0xc4, 0x2c, 0x96, 0xe0, 0xe4, 0x3f, 0xa2, 0x3c, 0x1a, 0x7d, 0x1c, 0x82, 0xc7, 0x16, 0x55, 0x6d,
+	0xb5, 0xa4, 0xdc, 0xd4, 0xe5, 0xa2, 0xc8, 0xb4, 0xd2, 0x95, 0x4a, 0x65, 0x51, 0xb1, 0xf0, 0xd6,
+	0x88, 0x3e, 0x86, 0x3c, 0x9b, 0xa8, 0x45, 0xd5, 0x2c, 0xe8, 0xf7, 0x15, 0xc3, 0xc6, 0xa5, 0xf9,
+	0x03, 0xac, 0x6b, 0x67, 0xd3, 0x26, 0xae, 0x54, 0xd4, 0xab, 0x36, 0x0f, 0x13, 0x97, 0x25, 0x18,
+	0x2b, 0xb2, 0x68, 0xed, 0x2f, 0xee, 0xc4, 0x74, 0xad, 0x88, 0xb6, 0x60, 0xe8, 0x9b, 0xbd, 0xf2,
+	0x1d, 0x21, 0x1f, 0xc2, 0x13, 0xac, 0x9a, 0xb8, 0x03, 0x0b, 0xaa, 0xbe, 0x6e, 0xe6, 0xd7, 0x4d,
+	0xc5, 0xc8, 0x17, 0x15, 0x8b, 0x25, 0x4d, 0xb9, 0x40, 0xc4, 0xd6, 0x31, 0xca, 0x3e, 0x6f, 0x73,
+	0xbf, 0x6d, 0x2a, 0xc6, 0x55, 0x9b, 0x17, 0xe5, 0x61, 0xdc, 0x49, 0x9e, 0x37, 0x92, 0xdf, 0x15,
+	0x28, 0xff, 0xb8, 0x9d, 0x4b, 0xf7, 0x2d, 0x40, 0x3c, 0x0b, 0xfb, 0xe5, 0x8a, 0x5a, 0xeb, 0x80,
+	0x86, 0x39, 0xc4, 0x24, 0x3c, 0xd1, 0xa8, 0x06, 0x6e, 0x1e, 0x8e, 0xe1, 0x4a, 0xdb, 0x66, 0x84,
+	0x59, 0x27, 0xf9, 0x45, 0x91, 0x9d, 0xed, 0x7c, 0x87, 0x93, 0x08, 0xeb, 0xe4, 0xb9, 0xd1, 0x7f,
+	0x0b, 0xe0, 0x08, 0x75, 0x58, 0x29, 0x7e, 0x9c, 0xa6, 0x7c, 0xa5, 0xf5, 0x92, 0xe2, 0xc0, 0x39,
+	0xff, 0x21, 0x80, 0xc3, 0xcc, 0xc3, 0x65, 0x68, 0x56, 0x0a, 0xd9, 0x23, 0xe7, 0x29, 0x4d, 0x66,
+	0x9f, 0xd7, 0x1f, 0x95, 0xa3, 0xd6, 0xdb, 0x84, 0xbf, 0xe8, 0x3a, 0x9c, 0xe7, 0x65, 0xfb, 0xd7,
+	0xa4, 0x07, 0xe7, 0x39, 0xa4, 0xfb, 0x32, 0x9b, 0xa3, 0xff, 0xfa, 0x2d, 0x18, 0x79, 0xb3, 0xa4,
+	0x2f, 0xcb, 0xa5, 0xc5, 0x8a, 0x52, 0x20, 0x75, 0x2c, 0xc2, 0x4e, 0x7b, 0x5f, 0x03, 0xc4, 0xae,
+	0xcd, 0x61, 0x99, 0xf0, 0x33, 0xd0, 0x39, 0x4a, 0x61, 0x75, 0xf8, 0xb1, 0xeb, 0x33, 0xd0, 0x31,
+	0xea, 0x00, 0xbb, 0xed, 0x8f, 0x3f, 0x6c, 0x05, 0x3b, 0x77, 0x16, 0x4f, 0xc2, 0xc5, 0x16, 0x8d,
+	0x72, 0x30, 0x84, 0x6d, 0x38, 0xb6, 0x04, 0xd2, 0x7b, 0x34, 0xf2, 0x3c, 0xa7, 0x2f, 0xb2, 0x2d,
+	0x12, 0x91, 0x81, 0xd6, 0x60, 0x2f, 0xfe, 0x6b, 0xe6, 0x49, 0xfa, 0xa6, 0xa0, 0x18, 0x16, 0x83,
+	0xa8, 0x5c, 0x3a, 0x88, 0xd8, 0xda, 0xa1, 0x8e, 0x6c, 0x8b, 0x44, 0x0e, 0x75, 0x38, 0x6f, 0xd0,
+	0x3c, 0x6c, 0x27, 0x2f, 0xd8, 0xb2, 0xca, 0x1c, 0x48, 0x7e, 0xb6, 0x45, 0xa2, 0x52, 0xd0, 0x8f,
+	0x00, 0x9c, 0x2c, 0x3a, 0x07, 0x29, 0xf2, 0x75, 0x67, 0x8d, 0xf2, 0xca, 0xc3, 0x8a, 0x6a, 0x30,
+	0x8c, 0xb9, 0x7d, 0x92, 0xd8, 0x8c, 0x5d, 0x22, 0x93, 0x64, 0x78, 0x82, 0x1e, 0x36, 0x9e, 0xb0,
+	0x0f, 0x1b, 0x4f, 0x2c, 0xd9, 0x24, 0x62, 0x27, 0xd3, 0x00, 0x92, 0x50, 0x74, 0x9f, 0xd2, 0x98,
+	0xab, 0x89, 0xbe, 0xe6, 0x48, 0x76, 0xb8, 0x4c, 0x74, 0x19, 0xf2, 0x0c, 0xf2, 0x21, 0x17, 0xef,
+	0x63, 0x5a, 0x53, 0x89, 0x75, 0x07, 0xae, 0xc5, 0x08, 0x01, 0x7b, 0x5c, 0xb1, 0xa9, 0xd1, 0x07,
+	0xf0, 0x84, 0xc3, 0x9a, 0xc7, 0x6e, 0xc2, 0xfa, 0x72, 0x49, 0x2d, 0x38, 0x96, 0xc7, 0x7d, 0xb5,
+	0x12, 0x74, 0xea, 0x21, 0x0b, 0xa4, 0xa3, 0x0e, 0xfb, 0x6d, 0x6d, 0x81, 0x30, 0x33, 0x9b, 0xe4,
+	0x8e, 0x5a, 0x41, 0x77, 0x60, 0x9f, 0x8f, 0x74, 0x16, 0xbb, 0x3c, 0xed, 0x3b, 0x14, 0x4e, 0xd5,
+	0xa8, 0x30, 0xaa, 0x79, 0xeb, 0x4a, 0x40, 0x77, 0x49, 0x62, 0x8a, 0xc9, 0xa5, 0x06, 0x24, 0x0b,
+	0x8d, 0xef, 0x22, 0x94, 0x2a, 0x47, 0x06, 0x74, 0xa2, 0xd9, 0x27, 0xf7, 0x07, 0xa4, 0xc3, 0x3e,
+	0x07, 0xc1, 0x45, 0x1c, 0x7d, 0x1a, 0xf2, 0xea, 0xd8, 0x6f, 0x16, 0xb3, 0xdf, 0x0f, 0xc6, 0x2d,
+	0xd9, 0x50, 0x74, 0x12, 0x38, 0xa0, 0x19, 0xcc, 0xf7, 0x60, 0xb7, 0x5d, 0x20, 0x81, 0x6b, 0xbf,
+	0xdb, 0x00, 0xc7, 0x8f, 0x4b, 0x72, 0x05, 0xda, 0x26, 0xbc, 0x3b, 0x00, 0x6b, 0x50, 0xab, 0x14,
+	0x66, 0xc2, 0x48, 0x1e, 0xfe, 0xed, 0x1a, 0xf6, 0x1d, 0xf3, 0xe4, 0x4b, 0xaa, 0x69, 0xc5, 0xde,
+	0xf3, 0x3d, 0xf5, 0x50, 0xdf, 0x14, 0x07, 0xfe, 0xdc, 0x2a, 0xf5, 0xba, 0x44, 0xe2, 0xd7, 0xfe,
+	0x49, 0xd7, 0x63, 0x81, 0x78, 0xbe, 0x5d, 0x93, 0xae, 0xc7, 0xfd, 0x92, 0xae, 0x6d, 0x7b, 0x4b,
+	0xba, 0x8e, 0x04, 0x16, 0xed, 0x97, 0x74, 0xd5, 0x60, 0x07, 0x19, 0x5d, 0xec, 0x0e, 0xb7, 0xf9,
+	0x3a, 0x17, 0xbb, 0x44, 0xd1, 0xc5, 0xd3, 0xf6, 0x16, 0xde, 0xf1, 0x19, 0x68, 0xe3, 0x6b, 0xd6,
+	0x99, 0x17, 0xab, 0xcf, 0x4a, 0x41, 0xff, 0x08, 0xc0, 0x91, 0x86, 0x3a, 0x84, 0x0e, 0x8b, 0x42,
+	0x1a, 0x71, 0x6d, 0x8f, 0x15, 0x09, 0xd6, 0x59, 0xd4, 0x6e, 0x25, 0x39, 0xa0, 0x61, 0xbd, 0x21,
+	0x65, 0x3d, 0xa0, 0x94, 0xdb, 0x3f, 0xa0, 0xb4, 0x0e, 0xcb, 0x1a, 0x0e, 0x04, 0x63, 0xba, 0xb1,
+	0xac, 0xda, 0x81, 0xe1, 0xb5, 0x67, 0xea, 0xe0, 0xb5, 0x4f, 0x7f, 0x0e, 0xd0, 0x4a, 0xe6, 0x61,
+	0x61, 0xfc, 0x81, 0x2c, 0x57, 0xc6, 0x4d, 0x4b, 0xd6, 0x8a, 0xb2, 0x51, 0xcc, 0x86, 0xbc, 0xa0,
+	0xdb, 0xf3, 0xb0, 0x5b, 0x2e, 0x16, 0x1d, 0xfc, 0x30, 0x39, 0x05, 0xcc, 0x89, 0xdc, 0x97, 0x55,
+	0x10, 0xb2, 0x8c, 0x75, 0x45, 0x0a, 0xcb, 0xc5, 0xa2, 0x8d, 0x1d, 0x46, 0xb3, 0xb0, 0x5b, 0xd3,
+	0xf3, 0x85, 0x35, 0xb9, 0x54, 0x52, 0xb4, 0x55, 0x65, 0x17, 0xf4, 0x66, 0x58, 0xd3, 0xe7, 0x6c,
+	0x52, 0xf4, 0x81, 0x63, 0x31, 0xd6, 0xd8, 0xf3, 0x01, 0x2b, 0xda, 0x65, 0x31, 0x5e, 0x23, 0x7c,
+	0x8e, 0xa8, 0x6c, 0xbb, 0x6d, 0x2d, 0xd6, 0xa4, 0x7f, 0x04, 0xbb, 0x3f, 0x31, 0x5d, 0x92, 0x51,
+	0x03, 0x5b, 0xb4, 0xce, 0x33, 0xa6, 0x6e, 0xaf, 0x23, 0xc6, 0x8b, 0xf4, 0xfc, 0xc4, 0xac, 0xc9,
+	0x57, 0x61, 0xb4, 0x20, 0x57, 0xac, 0xc2, 0x9a, 0xec, 0x2a, 0x24, 0xb6, 0xbb, 0xfb, 0x3d, 0x47,
+	0x99, 0xbc, 0x25, 0x70, 0x2c, 0x0a, 0x8a, 0x4b, 0xe1, 0x0b, 0x75, 0x14, 0xe8, 0x3e, 0x1c, 0x64,
+	0x88, 0xab, 0x65, 0xd9, 0x54, 0x8a, 0xae, 0xf2, 0x52, 0x01, 0xd6, 0x85, 0xab, 0xbb, 0xd8, 0x9c,
+	0xc4, 0xcc, 0x8e, 0x54, 0x4f, 0x99, 0xfd, 0x15, 0x1f, 0x0a, 0x24, 0xc3, 0x70, 0x59, 0x37, 0x14,
+	0x86, 0x66, 0x60, 0x5e, 0xe0, 0xc5, 0x83, 0xc7, 0xab, 0xec, 0x45, 0x81, 0x85, 0xd2, 0xd7, 0xe8,
+	0x0a, 0x8c, 0x12, 0xdb, 0x54, 0x2d, 0xe6, 0x0b, 0x25, 0x55, 0xd1, 0xac, 0xbc, 0x5a, 0x89, 0xbd,
+	0x16, 0x08, 0x7c, 0x8d, 0x60, 0x86, 0x1b, 0xc5, 0x39, 0x42, 0x7e, 0xa3, 0x82, 0xca, 0xb0, 0x8f,
+	0x89, 0x50, 0x34, 0xa6, 0xff, 0x71, 0x6d, 0xfb, 0xf7, 0xbc, 0x4a, 0x06, 0x3f, 0x7f, 0xe4, 0x27,
+	0x21, 0xdb, 0x21, 0x21, 0x5a, 0x94, 0xfb, 0x2d, 0xfa, 0x21, 0x80, 0x03, 0xd8, 0x02, 0xaf, 0x5d,
+	0x81, 0x91, 0x2f, 0x29, 0xab, 0x72, 0x61, 0x23, 0x76, 0x95, 0x94, 0x98, 0xdc, 0xd5, 0xdb, 0x59,
+	0xb8, 0x21, 0xc9, 0x96, 0x72, 0x13, 0xb3, 0xde, 0x24, 0x9c, 0xe2, 0xc9, 0x2f, 0x1e, 0x81, 0xed,
+	0x47, 0x43, 0xf3, 0xfa, 0x7d, 0xa5, 0x18, 0xb7, 0xf4, 0xb8, 0x57, 0x3e, 0x31, 0x75, 0x90, 0x5c,
+	0x51, 0xeb, 0xd8, 0xd0, 0x55, 0x68, 0xef, 0xd7, 0x2e, 0x6a, 0x76, 0x52, 0x6f, 0x37, 0xa8, 0xae,
+	0x23, 0x0b, 0x7d, 0x04, 0x23, 0xde, 0xf2, 0x62, 0x0f, 0x03, 0x6e, 0xb4, 0x68, 0xd0, 0x10, 0x11,
+	0xfb, 0x11, 0x64, 0x17, 0xcd, 0x76, 0x4a, 0xdd, 0xee, 0xba, 0xa2, 0xf7, 0x20, 0x74, 0xc9, 0x1e,
+	0xda, 0x9b, 0x4b, 0xe8, 0xb0, 0xd7, 0xc7, 0x6d, 0xb3, 0x9d, 0x52, 0x97, 0xe1, 0xc8, 0xfe, 0xfb,
+	0x00, 0x1e, 0xa9, 0xf3, 0x72, 0xca, 0xaa, 0xa5, 0xae, 0xd2, 0x29, 0x10, 0xdf, 0xcf, 0x46, 0xd9,
+	0x58, 0x0e, 0xb3, 0x36, 0x63, 0x40, 0x1a, 0x2a, 0xbb, 0x9d, 0xb2, 0x79, 0x87, 0x02, 0x3d, 0x01,
+	0xb0, 0xef, 0x81, 0xbc, 0x92, 0x57, 0x1e, 0x16, 0x4a, 0xeb, 0x24, 0x82, 0x4c, 0x1d, 0x9e, 0x93,
+	0x41, 0x0e, 0x0f, 0x43, 0x05, 0xca, 0x2b, 0xd7, 0x6c, 0x2e, 0xe2, 0xf0, 0x34, 0xd2, 0x96, 0x5e,
+	0x8f, 0x27, 0xfa, 0xa0, 0x8e, 0xcf, 0x44, 0x0f, 0x21, 0x5f, 0x94, 0x2d, 0x39, 0xbf, 0xba, 0x2e,
+	0x1b, 0x45, 0x56, 0x81, 0x37, 0x7c, 0x6d, 0x31, 0x4f, 0x05, 0xae, 0xca, 0x96, 0xfc, 0x26, 0x66,
+	0xd9, 0xbb, 0xbb, 0x15, 0x29, 0xba, 0x79, 0x4c, 0xdc, 0xfc, 0xde, 0xe5, 0x92, 0x5e, 0xb8, 0xa7,
+	0xd8, 0xcb, 0xd8, 0x8c, 0x8d, 0x92, 0x92, 0x77, 0x1d, 0x68, 0x5a, 0x07, 0xba, 0x98, 0x17, 0x8d,
+	0xc2, 0x3e, 0x7a, 0x20, 0xc2, 0x4a, 0xa4, 0xbc, 0xb4, 0x12, 0x96, 0xb1, 0x6e, 0x5a, 0xae, 0x4a,
+	0x9c, 0x7a, 0xe9, 0x95, 0x60, 0x25, 0xda, 0x95, 0xf8, 0x84, 0xba, 0xe7, 0xd8, 0x69, 0x61, 0xbe,
+	0x36, 0x1d, 0x87, 0xec, 0x9e, 0xf7, 0x86, 0x05, 0x87, 0x95, 0xf4, 0x2d, 0xdb, 0x33, 0xf1, 0xf2,
+	0xaf, 0xfb, 0x82, 0xfe, 0x0c, 0xc0, 0x81, 0x62, 0x51, 0x37, 0x5d, 0x53, 0x95, 0x95, 0x76, 0x86,
+	0x34, 0x7b, 0x3a, 0xa8, 0x34, 0xfb, 0x3e, 0xa1, 0x89, 0xab, 0x57, 0xf5, 0xc5, 0xda, 0x4c, 0xde,
+	0x47, 0xd3, 0xfb, 0x70, 0xd9, 0x5e, 0x4e, 0x13, 0x7d, 0x08, 0x4f, 0x78, 0x6e, 0x52, 0x52, 0x15,
+	0x33, 0xbf, 0x62, 0xe8, 0x65, 0x72, 0x2c, 0xdd, 0xac, 0xc8, 0x05, 0x25, 0xf0, 0x10, 0x0f, 0x27,
+	0x1d, 0x63, 0xec, 0x0b, 0x8c, 0xfb, 0xba, 0xa1, 0x97, 0x6f, 0xd9, 0xbc, 0xe8, 0x3a, 0xec, 0xd3,
+	0xf4, 0x7c, 0x7d, 0x09, 0x81, 0xa7, 0x3d, 0x38, 0x29, 0xaa, 0xe9, 0x8b, 0x5e, 0xa1, 0xe8, 0x1e,
+	0x1c, 0x92, 0x0b, 0x96, 0x7a, 0x5f, 0xd9, 0x29, 0x8b, 0x1e, 0xf4, 0x49, 0xec, 0x3a, 0x65, 0x5c,
+	0x12, 0xc9, 0xf9, 0xc7, 0x2c, 0x27, 0x0d, 0x50, 0x99, 0xf5, 0x85, 0x4d, 0xc3, 0xb0, 0xa1, 0xaf,
+	0x6b, 0xc5, 0xbc, 0xa1, 0x2f, 0xab, 0x5a, 0x6c, 0x3c, 0x10, 0xfe, 0x0f, 0x09, 0xa9, 0x84, 0x29,
+	0xb1, 0x6d, 0x55, 0x52, 0x64, 0xd3, 0xca, 0x53, 0xb9, 0xb1, 0x89, 0x40, 0xce, 0x30, 0xa1, 0xbd,
+	0x42, 0x48, 0xd1, 0x04, 0xec, 0x30, 0x64, 0xad, 0xa8, 0x97, 0x63, 0x17, 0x02, 0x99, 0x18, 0x15,
+	0x76, 0x17, 0x4c, 0x7d, 0xdd, 0x28, 0x28, 0x79, 0xb5, 0x92, 0x37, 0x2d, 0xb5, 0x70, 0x4f, 0xd5,
+	0x14, 0xd3, 0x8c, 0x4d, 0x06, 0x72, 0x23, 0xca, 0x73, 0xa3, 0xb2, 0xe8, 0x70, 0xa0, 0x25, 0x3b,
+	0xcc, 0xeb, 0x16, 0x93, 0x20, 0x62, 0xce, 0xf8, 0xe2, 0xc6, 0x68, 0xb0, 0xf7, 0xba, 0x6e, 0x64,
+	0x65, 0x73, 0x4d, 0xd5, 0x56, 0xb3, 0x5d, 0x12, 0x4f, 0x25, 0xb8, 0xa4, 0xbe, 0x03, 0xbb, 0x08,
+	0x48, 0x7c, 0x4d, 0x36, 0xd7, 0x62, 0xc9, 0x17, 0x3d, 0xa6, 0xda, 0x25, 0x71, 0x58, 0x1a, 0xfe,
+	0x82, 0x7d, 0x7a, 0x5b, 0x89, 0x92, 0xb5, 0x5c, 0xb3, 0x43, 0xec, 0x44, 0x68, 0x2c, 0x17, 0xd0,
+	0x09, 0x50, 0xb2, 0x13, 0x10, 0x4b, 0x98, 0xdb, 0xb6, 0x4a, 0x58, 0xee, 0x13, 0x7d, 0x0a, 0x59,
+	0xc4, 0xbd, 0xa1, 0xf0, 0xef, 0xef, 0x21, 0xc7, 0x48, 0x85, 0x2e, 0x30, 0xa1, 0x59, 0x28, 0x0d,
+	0x53, 0xa1, 0xbe, 0x45, 0xea, 0xb0, 0xc7, 0x24, 0x81, 0xda, 0x7c, 0x69, 0x39, 0x2f, 0x57, 0x2a,
+	0xb1, 0x29, 0x52, 0xc2, 0xdc, 0x1e, 0xbb, 0x2b, 0x28, 0xc8, 0xcb, 0x2e, 0x10, 0x08, 0x4b, 0x61,
+	0x5a, 0xc2, 0xcd, 0xe5, 0x2b, 0x95, 0x0a, 0xba, 0x04, 0xbb, 0xcb, 0xeb, 0x25, 0x4b, 0xb5, 0xcb,
+	0x9b, 0xde, 0xf5, 0x06, 0x82, 0xb0, 0x04, 0x09, 0x07, 0xe5, 0x5f, 0xdf, 0x3d, 0x24, 0xbb, 0x10,
+	0x20, 0x72, 0xd0, 0xeb, 0xd5, 0xd8, 0x10, 0xd9, 0x6c, 0xf7, 0x21, 0x84, 0x6a, 0xdf, 0x0a, 0x18,
+	0xf9, 0xee, 0x5d, 0x42, 0xb5, 0xe8, 0x8f, 0x61, 0x3f, 0x6b, 0x97, 0x27, 0x62, 0x1b, 0x5b, 0x3c,
+	0x70, 0x54, 0xbc, 0x61, 0x5b, 0x7b, 0x24, 0x44, 0x8b, 0x72, 0x33, 0xa1, 0x1c, 0x1c, 0xb0, 0x5b,
+	0xe8, 0xad, 0xc1, 0x52, 0x40, 0xb3, 0x7a, 0xa4, 0x3e, 0xc6, 0xe4, 0x91, 0x75, 0x1b, 0xda, 0xaf,
+	0xdd, 0x07, 0x9c, 0x62, 0xb3, 0x01, 0x03, 0xc3, 0xc2, 0x74, 0x2d, 0xd9, 0x88, 0x64, 0x07, 0xee,
+	0x6b, 0x67, 0x8e, 0xd0, 0x8f, 0x00, 0x0c, 0xbb, 0x25, 0x5d, 0x0c, 0x00, 0x20, 0xd6, 0xeb, 0xac,
+	0xc5, 0x35, 0xb9, 0xe2, 0x92, 0x45, 0x4c, 0xb8, 0x09, 0x56, 0xda, 0xd3, 0x9f, 0x83, 0x53, 0x26,
+	0xfe, 0x3e, 0xbe, 0xac, 0x5b, 0x02, 0xe9, 0xab, 0x65, 0xdd, 0x1a, 0x67, 0xc5, 0xd4, 0x9c, 0xde,
+	0x88, 0x04, 0x6b, 0x87, 0x9b, 0xd0, 0x3f, 0x06, 0xb0, 0xdf, 0x7d, 0x6a, 0xc4, 0xee, 0xd9, 0xd8,
+	0xdf, 0x74, 0x06, 0x40, 0x07, 0xeb, 0xeb, 0x55, 0xab, 0x92, 0xed, 0xfd, 0xd0, 0xf8, 0x07, 0xb3,
+	0x20, 0x9f, 0xfe, 0x1c, 0x1c, 0xd9, 0x51, 0x21, 0x67, 0x0c, 0x23, 0x12, 0x5a, 0xde, 0xc1, 0x8f,
+	0xde, 0xae, 0x25, 0x38, 0xd9, 0xde, 0x61, 0xaa, 0x45, 0xc5, 0xe9, 0xb5, 0x3b, 0x01, 0x23, 0xd9,
+	0xeb, 0x24, 0x3e, 0x99, 0x65, 0xa3, 0x16, 0x15, 0xbb, 0xbd, 0x25, 0xd8, 0xe7, 0x27, 0xee, 0x6e,
+	0x80, 0x8b, 0x57, 0xdf, 0xd8, 0x1d, 0x42, 0xc9, 0xd6, 0xda, 0x2b, 0x45, 0x0b, 0x3b, 0x4a, 0x73,
+	0x9d, 0x8e, 0x27, 0x13, 0x51, 0x59, 0x51, 0x35, 0x92, 0x1e, 0x8c, 0x5d, 0x0f, 0xa8, 0x3f, 0xef,
+	0xa4, 0x44, 0xf1, 0x4c, 0x74, 0x78, 0xd0, 0xdf, 0xa1, 0x0e, 0x8b, 0x4b, 0xca, 0x9b, 0x7b, 0x36,
+	0xf4, 0x27, 0x3e, 0x7f, 0x54, 0xc7, 0x5c, 0x1b, 0x1b, 0xbf, 0x85, 0xc5, 0x4b, 0x3d, 0xb2, 0xa7,
+	0xf0, 0x55, 0x18, 0xc5, 0xfc, 0xf6, 0x2d, 0x07, 0xd4, 0xd1, 0x98, 0xdb, 0x7d, 0xee, 0x32, 0xeb,
+	0x6e, 0xd1, 0xcd, 0xc7, 0x56, 0xb5, 0x99, 0xe5, 0x25, 0x5e, 0xae, 0xa8, 0x9e, 0x6f, 0x48, 0x81,
+	0xbd, 0xde, 0x8a, 0x9a, 0xb1, 0xd7, 0xf7, 0x66, 0x9a, 0x78, 0x7a, 0x8b, 0xa4, 0x66, 0xed, 0x80,
+	0x79, 0x96, 0x97, 0x22, 0x9e, 0xe6, 0x98, 0xe8, 0x3d, 0x78, 0xdc, 0x0e, 0x7b, 0x9a, 0x8a, 0x66,
+	0xaa, 0xc4, 0x28, 0x22, 0x6e, 0x04, 0x8b, 0x74, 0xfd, 0x00, 0x04, 0x0c, 0x51, 0x54, 0x1a, 0x66,
+	0xdc, 0x8b, 0x36, 0x33, 0x76, 0x27, 0x58, 0xc4, 0xeb, 0x01, 0x1c, 0xf0, 0x97, 0xf9, 0x27, 0x54,
+	0xe6, 0xe5, 0xbd, 0x2d, 0xf6, 0x9d, 0x92, 0x9d, 0x8e, 0x8b, 0x4a, 0x7d, 0xa6, 0x4f, 0xc1, 0xae,
+	0x8d, 0x4f, 0xad, 0xe4, 0x0d, 0xa5, 0xb2, 0x6e, 0xd1, 0x81, 0xba, 0x12, 0xd0, 0x16, 0xe4, 0x6c,
+	0x7c, 0x37, 0x2a, 0x92, 0xc3, 0x82, 0xfe, 0x04, 0x38, 0xdb, 0xb8, 0x57, 0x96, 0xb8, 0xb7, 0x41,
+	0xbf, 0xb1, 0xb0, 0xb4, 0x66, 0x28, 0xb2, 0x35, 0x27, 0x5b, 0xca, 0xaa, 0x6e, 0x38, 0x46, 0x48,
+	0xfd, 0x5e, 0xee, 0x6c, 0x4c, 0xc8, 0xde, 0xcb, 0x3d, 0xd5, 0xb8, 0x5e, 0xdb, 0x7f, 0x2d, 0x22,
+	0x2f, 0x5f, 0x56, 0xcc, 0xb5, 0xd8, 0x6a, 0x40, 0x83, 0xfa, 0x9c, 0x6d, 0x97, 0xd6, 0x60, 0x5e,
+	0x31, 0xd7, 0xd0, 0x55, 0x88, 0x6c, 0x83, 0xc4, 0x25, 0x46, 0x0d, 0x14, 0xc3, 0xc2, 0x74, 0x2e,
+	0x29, 0x1f, 0xc1, 0x1e, 0x72, 0x91, 0xa9, 0xaa, 0x59, 0x8a, 0xa1, 0xc9, 0xa5, 0xd8, 0x57, 0x9d,
+	0x7b, 0x5e, 0x82, 0xfd, 0x9f, 0x3f, 0xf2, 0x32, 0x93, 0xf8, 0x46, 0x37, 0x7e, 0x75, 0x83, 0xbd,
+	0x41, 0xc7, 0x60, 0x17, 0x89, 0x5a, 0x93, 0xcb, 0xac, 0xfe, 0x8a, 0xdc, 0x14, 0x29, 0x71, 0xf8,
+	0x0d, 0xb9, 0xb3, 0x2a, 0x0b, 0x39, 0xfb, 0xee, 0xcf, 0xd8, 0xef, 0x3a, 0x7d, 0x5d, 0x6c, 0xdf,
+	0x8b, 0x42, 0x27, 0xae, 0x6a, 0xe6, 0x0d, 0x6d, 0x45, 0x97, 0x3a, 0x8b, 0xf4, 0x07, 0x9a, 0x83,
+	0xed, 0xa6, 0x25, 0x5b, 0x4a, 0xec, 0x7f, 0x77, 0x92, 0xf3, 0x11, 0x41, 0x62, 0x26, 0xee, 0xd0,
+	0x87, 0xac, 0x6e, 0x5a, 0x8b, 0x98, 0x49, 0xa2, 0xbc, 0x68, 0x19, 0xf6, 0x3a, 0x89, 0xb9, 0x3c,
+	0x15, 0xf7, 0xd7, 0x54, 0xdc, 0x44, 0xa0, 0x55, 0xe7, 0xa4, 0xab, 0xf0, 0x56, 0x80, 0xd9, 0xc4,
+	0xae, 0x5a, 0xa8, 0xa1, 0x47, 0x66, 0x39, 0x39, 0xf2, 0x05, 0x2d, 0xc2, 0x48, 0xad, 0x0c, 0xd2,
+	0xf0, 0x6f, 0x3a, 0x1b, 0x44, 0x69, 0x5c, 0x45, 0xd8, 0x79, 0x3d, 0xdc, 0x56, 0x82, 0xd6, 0xef,
+	0x96, 0x5d, 0x6f, 0xd0, 0x5b, 0x30, 0x4a, 0xc7, 0x40, 0x21, 0xb9, 0x2b, 0x2a, 0xf7, 0x3f, 0x53,
+	0x58, 0x9a, 0x7f, 0x6a, 0xe8, 0x06, 0x23, 0xbf, 0x73, 0x63, 0x81, 0x74, 0x64, 0xaf, 0xcd, 0x7f,
+	0x47, 0xad, 0x10, 0x91, 0x75, 0xb7, 0x26, 0xbc, 0xbf, 0xff, 0x5b, 0x13, 0xee, 0xc1, 0x9e, 0x55,
+	0x43, 0xae, 0xac, 0x7d, 0x5a, 0x62, 0xce, 0xec, 0x07, 0xa4, 0x3e, 0x27, 0xfd, 0x43, 0x18, 0x6f,
+	0x62, 0xd2, 0xb7, 0x6e, 0xee, 0x3d, 0x74, 0xd1, 0xcd, 0x84, 0x53, 0x77, 0xf5, 0x11, 0x8c, 0x32,
+	0x57, 0x5d, 0x29, 0xe6, 0x19, 0x3c, 0x24, 0xf6, 0xe1, 0xfe, 0x31, 0x29, 0xde, 0xa2, 0x79, 0xff,
+	0x04, 0x07, 0xef, 0x14, 0x45, 0x65, 0x99, 0xe8, 0x16, 0x1c, 0x32, 0x37, 0x4c, 0x4b, 0x29, 0x3b,
+	0x29, 0x44, 0x86, 0x84, 0x32, 0x63, 0x72, 0xc0, 0x8a, 0xec, 0x97, 0x06, 0x28, 0x1b, 0x4b, 0x1e,
+	0x32, 0x30, 0x94, 0x89, 0x96, 0x61, 0xbf, 0x59, 0xd2, 0x1f, 0xe4, 0xeb, 0xa2, 0x02, 0xb1, 0x8f,
+	0x88, 0xb0, 0xc0, 0xd9, 0xb8, 0x58, 0xd2, 0x1f, 0x78, 0x43, 0x01, 0xd9, 0x7e, 0x09, 0x61, 0x69,
+	0x57, 0x3d, 0x6e, 0x3e, 0x7a, 0x0f, 0x46, 0x3e, 0x79, 0x60, 0xe5, 0xef, 0x3b, 0x57, 0xe2, 0xc5,
+	0x96, 0x03, 0xae, 0xa8, 0x75, 0x6d, 0x84, 0xb9, 0xbb, 0x4b, 0xb5, 0x7b, 0xf4, 0xd8, 0xc0, 0xf7,
+	0x7c, 0xf2, 0xc0, 0xaa, 0xbd, 0x44, 0xdf, 0x87, 0x83, 0xa5, 0x69, 0x5a, 0x7b, 0x7a, 0x41, 0x92,
+	0xdd, 0x2f, 0x31, 0x3d, 0xa0, 0x3b, 0x06, 0xa4, 0xbe, 0xd2, 0x34, 0xae, 0xe5, 0x15, 0xc2, 0xc3,
+	0x3a, 0x05, 0xbd, 0x09, 0xfb, 0xeb, 0x84, 0x91, 0x80, 0x51, 0xac, 0x12, 0x28, 0x2a, 0xea, 0x16,
+	0x25, 0x62, 0x06, 0xb4, 0x01, 0x8f, 0xd6, 0x09, 0xf2, 0x24, 0x16, 0x3e, 0x7d, 0xd1, 0xc4, 0xc2,
+	0x80, 0x34, 0xe4, 0x2e, 0x34, 0xe7, 0x4a, 0x32, 0xdc, 0x82, 0x7d, 0x75, 0x45, 0x6b, 0xba, 0xa6,
+	0xc4, 0x8c, 0xdd, 0xad, 0x6e, 0x2c, 0x96, 0x77, 0x8b, 0xbd, 0xa5, 0x6b, 0x0a, 0x9a, 0x87, 0xd0,
+	0xb5, 0x4b, 0x99, 0x07, 0xd9, 0xa4, 0xa4, 0xae, 0x82, 0xb3, 0x2b, 0xfd, 0x13, 0x00, 0x4f, 0xd4,
+	0x69, 0x78, 0xec, 0x64, 0x94, 0x74, 0x73, 0xdd, 0x50, 0xd8, 0xf2, 0xb5, 0xf6, 0xe7, 0x7d, 0xba,
+	0xb5, 0xf9, 0x55, 0x47, 0x16, 0x0d, 0x85, 0x79, 0x40, 0x8a, 0xc7, 0xcc, 0x00, 0xd2, 0x8b, 0xff,
+	0xb1, 0xf5, 0x17, 0x55, 0xf0, 0x1f, 0x5a, 0xe1, 0x51, 0xd8, 0xc7, 0x00, 0x68, 0x04, 0x9e, 0x7a,
+	0x53, 0xa4, 0x47, 0x74, 0x42, 0x09, 0x21, 0x91, 0x86, 0x7d, 0xb0, 0x93, 0xe6, 0x06, 0x4d, 0xc4,
+	0x4d, 0x09, 0xa9, 0x84, 0x90, 0x98, 0x4c, 0xc0, 0x1e, 0xd8, 0x21, 0xd1, 0x44, 0x24, 0x98, 0x1e,
+	0x03, 0x70, 0x1c, 0xc6, 0xee, 0x2a, 0xcb, 0xf1, 0x2b, 0x95, 0x4a, 0x89, 0xf5, 0x42, 0xdc, 0x49,
+	0x94, 0x45, 0x13, 0x53, 0x42, 0x2a, 0x25, 0x4c, 0xa5, 0x84, 0xd9, 0x84, 0x30, 0x9b, 0x14, 0x66,
+	0x53, 0xb0, 0x1f, 0x46, 0x44, 0x9d, 0x1e, 0x12, 0xb0, 0x8f, 0xfd, 0x67, 0xa6, 0xe0, 0x19, 0x18,
+	0xb9, 0xb2, 0x70, 0xc3, 0xfd, 0xb6, 0x6f, 0x6a, 0x56, 0x98, 0x4e, 0x0a, 0xb3, 0x33, 0xc2, 0x4c,
+	0x52, 0x48, 0xa4, 0x26, 0x85, 0x44, 0x62, 0x0a, 0x1e, 0x85, 0x91, 0xab, 0xfa, 0xa2, 0x9b, 0xac,
+	0x2b, 0x91, 0x98, 0x14, 0x52, 0xd3, 0xc2, 0x2c, 0xfe, 0xd8, 0x47, 0x2d, 0xee, 0x71, 0x6c, 0x59,
+	0xdb, 0x97, 0x0f, 0xa0, 0xd6, 0x99, 0xcc, 0x18, 0x80, 0xb3, 0x30, 0x36, 0x47, 0x56, 0x5a, 0xdc,
+	0xbe, 0xf0, 0xc0, 0xbe, 0x3d, 0xc1, 0x44, 0xc7, 0xd3, 0x93, 0xc2, 0x54, 0x5a, 0x48, 0x4c, 0x26,
+	0x85, 0xcc, 0xac, 0x30, 0x3d, 0x2b, 0x24, 0x33, 0x42, 0x32, 0x21, 0xa4, 0x32, 0x42, 0x2a, 0x2d,
+	0xcc, 0xc0, 0x38, 0x8c, 0xdc, 0xb6, 0xd6, 0x14, 0x23, 0x6e, 0x1b, 0x55, 0x28, 0x92, 0xc8, 0x08,
+	0xe9, 0xb4, 0x30, 0x9d, 0x12, 0x12, 0xd3, 0x42, 0x62, 0x56, 0x3c, 0x0b, 0xa3, 0xee, 0x31, 0x22,
+	0xf7, 0x01, 0x92, 0x93, 0xf7, 0x47, 0x19, 0xe8, 0xac, 0x23, 0x39, 0x2d, 0xa4, 0x84, 0xa4, 0xf8,
+	0xaa, 0x07, 0x68, 0xe0, 0xba, 0x8b, 0x6e, 0xab, 0x0a, 0x7a, 0xb7, 0xab, 0xa0, 0x2b, 0x41, 0xa1,
+	0xc8, 0x89, 0xa4, 0x78, 0x1e, 0x22, 0x57, 0x82, 0xde, 0x4d, 0xfc, 0xee, 0x56, 0x15, 0xbc, 0xb3,
+	0x5d, 0x05, 0xed, 0x33, 0xb3, 0xc2, 0xec, 0x24, 0x41, 0xb2, 0x5d, 0xf0, 0x3f, 0xd2, 0x1a, 0xdb,
+	0xac, 0x82, 0x63, 0x0c, 0xb9, 0x76, 0x82, 0xdc, 0x3d, 0x40, 0x2f, 0x68, 0x98, 0x14, 0x33, 0x9e,
+	0x9b, 0x11, 0xce, 0x6e, 0x56, 0x41, 0xd8, 0xb9, 0x1c, 0x36, 0x21, 0x64, 0x92, 0x9f, 0x3d, 0xf3,
+	0xb3, 0xbc, 0x44, 0x01, 0x46, 0x9c, 0x65, 0x4d, 0x5b, 0x39, 0xec, 0xba, 0xda, 0x20, 0x92, 0x9c,
+	0x12, 0x66, 0x33, 0x42, 0x62, 0x46, 0x48, 0xa6, 0x85, 0x4c, 0x42, 0x3c, 0x05, 0x23, 0x4e, 0xea,
+	0xaa, 0x76, 0x9d, 0xc0, 0x6b, 0x5b, 0x55, 0xf0, 0x3d, 0x5c, 0xd0, 0xd4, 0xa4, 0x90, 0x9c, 0x14,
+	0xcf, 0xc1, 0xa8, 0x2b, 0x51, 0xe4, 0x6a, 0xa6, 0x7d, 0xb7, 0x6e, 0x57, 0x32, 0x29, 0x24, 0x92,
+	0x93, 0x42, 0x32, 0x25, 0x8e, 0x63, 0x73, 0xd9, 0x73, 0x0b, 0xbd, 0xeb, 0x82, 0x85, 0x57, 0xb7,
+	0xaa, 0x60, 0x0c, 0x37, 0x32, 0x9d, 0x10, 0xd2, 0x49, 0x21, 0x9d, 0x12, 0x53, 0xbe, 0x77, 0x49,
+	0x1c, 0xdf, 0xac, 0x82, 0xf1, 0xad, 0x2a, 0x10, 0xb6, 0xab, 0x20, 0x9a, 0xce, 0x08, 0xe9, 0x29,
+	0x21, 0x3d, 0x2d, 0xa4, 0x67, 0x84, 0xf4, 0xac, 0x90, 0x99, 0x14, 0x53, 0x70, 0xa4, 0x41, 0x20,
+	0xca, 0xdd, 0x88, 0xdc, 0x56, 0x15, 0xdc, 0xc0, 0x8d, 0x98, 0x4e, 0x0b, 0xd3, 0x19, 0x3c, 0xae,
+	0xe5, 0x12, 0xbb, 0xf9, 0xc7, 0x69, 0x03, 0xeb, 0xf8, 0x0c, 0x39, 0x4f, 0x9c, 0x16, 0x32, 0x19,
+	0x32, 0x54, 0x57, 0x76, 0x47, 0x9d, 0x8d, 0x6c, 0x56, 0xc1, 0x5b, 0x5b, 0x55, 0x70, 0xdb, 0x3b,
+	0x0a, 0xb6, 0xcb, 0x25, 0x4e, 0x35, 0x40, 0xb8, 0x61, 0xbe, 0xa5, 0xad, 0x2a, 0x90, 0x1a, 0xf0,
+	0x7d, 0x0a, 0x91, 0xdb, 0x83, 0x67, 0x5c, 0xef, 0x6f, 0x56, 0xc1, 0xec, 0x56, 0x15, 0xcc, 0x6c,
+	0x57, 0x01, 0xcc, 0x4c, 0x0b, 0x99, 0x19, 0xbc, 0xca, 0xc9, 0xc5, 0x18, 0x9f, 0x3d, 0x03, 0xaf,
+	0xef, 0x21, 0x52, 0x20, 0x34, 0x74, 0xd9, 0xc5, 0x1c, 0x1c, 0xf6, 0xf1, 0xa2, 0xed, 0xa2, 0x85,
+	0xcd, 0x2a, 0xb8, 0xb3, 0x55, 0x05, 0x6f, 0x93, 0xd9, 0x3c, 0x25, 0xcc, 0x4c, 0xb3, 0x52, 0x99,
+	0xeb, 0x3d, 0x8e, 0x99, 0x6c, 0xa1, 0xe2, 0x75, 0x9a, 0x56, 0xac, 0xf9, 0x7b, 0xb6, 0x98, 0xf1,
+	0xcd, 0x2a, 0xb8, 0xbe, 0x55, 0x05, 0xd7, 0xb6, 0xab, 0x20, 0x3c, 0x3d, 0x29, 0x4c, 0x27, 0x84,
+	0xa9, 0x69, 0x61, 0x2a, 0xd1, 0xa0, 0x1b, 0x32, 0xf0, 0x98, 0xaf, 0xd3, 0xe5, 0x9e, 0x7c, 0x3f,
+	0xc0, 0x23, 0xf7, 0x04, 0x90, 0x23, 0x37, 0x78, 0xdb, 0x4b, 0x25, 0xc5, 0x37, 0x60, 0xbf, 0xc7,
+	0xbd, 0x71, 0x2f, 0x9e, 0x2b, 0x5b, 0x55, 0x70, 0x99, 0xcc, 0xe9, 0x8c, 0x30, 0x35, 0xd5, 0x60,
+	0xf1, 0xbc, 0x0a, 0x91, 0xcb, 0xa3, 0x70, 0xdf, 0x75, 0xb9, 0xba, 0x55, 0x05, 0x2b, 0xa4, 0xac,
+	0xc9, 0x94, 0x90, 0x98, 0xcc, 0x88, 0x93, 0xf0, 0xa8, 0x9f, 0x99, 0xe2, 0x9e, 0x81, 0xf2, 0x56,
+	0x15, 0x7c, 0x8c, 0x8b, 0x9c, 0x9d, 0x16, 0x66, 0xd3, 0xe2, 0xeb, 0x70, 0xc4, 0xd1, 0x83, 0xd8,
+	0x0c, 0x76, 0x31, 0x51, 0xbd, 0x88, 0x8e, 0x6e, 0x56, 0x81, 0xbe, 0x55, 0x05, 0xda, 0x76, 0x15,
+	0xf4, 0x26, 0x12, 0x09, 0x21, 0x91, 0x48, 0x0a, 0x89, 0x44, 0x4a, 0x48, 0x24, 0xd2, 0x0e, 0x90,
+	0x95, 0xde, 0x4f, 0xf9, 0x0e, 0xff, 0x6e, 0x2e, 0xc4, 0x9d, 0xe0, 0xe3, 0xce, 0xd5, 0x1e, 0xf4,
+	0x76, 0x68, 0xc8, 0x87, 0x9d, 0x4b, 0x3d, 0xbe, 0xc7, 0xbf, 0xe6, 0xdc, 0x20, 0x3d, 0xc6, 0xbf,
+	0x9a, 0x0b, 0x71, 0x02, 0x3f, 0x9e, 0x0b, 0x71, 0x37, 0xf8, 0x5c, 0x2e, 0xc4, 0x65, 0xf8, 0xa9,
+	0x5c, 0x88, 0xbb, 0xc9, 0xcf, 0xe7, 0x42, 0xdc, 0x3c, 0x7f, 0x2b, 0x17, 0xe2, 0x6e, 0xf1, 0xb7,
+	0x73, 0x21, 0xee, 0x36, 0xbf, 0x90, 0x0b, 0x71, 0x12, 0xbf, 0x98, 0x0b, 0x71, 0x33, 0xfc, 0x6c,
+	0x2e, 0xc4, 0xbd, 0xcd, 0xdf, 0xc9, 0x85, 0xb8, 0x6b, 0xfc, 0xf5, 0x5c, 0x07, 0xf7, 0x04, 0xf0,
+	0x3f, 0x00, 0xb9, 0x10, 0x77, 0x99, 0xbf, 0x92, 0x0b, 0x71, 0x2b, 0xfc, 0x6a, 0x2e, 0xc4, 0xad,
+	0xf1, 0x6a, 0x2e, 0xc4, 0x7d, 0xcc, 0xcb, 0xb9, 0x10, 0xa7, 0xf1, 0xfa, 0xe8, 0x7f, 0x03, 0xf0,
+	0x58, 0x90, 0x0e, 0x44, 0x3f, 0x03, 0x30, 0x5e, 0x37, 0xbe, 0xe4, 0xff, 0x25, 0xe4, 0x55, 0xad,
+	0x76, 0x4c, 0x9b, 0xe2, 0x2c, 0x67, 0x0f, 0xa2, 0x73, 0xb1, 0x7a, 0x34, 0xc5, 0xa4, 0x63, 0xcb,
+	0x16, 0x6b, 0xb6, 0xac, 0xd7, 0xa0, 0x0e, 0x6d, 0xda, 0xa7, 0x27, 0x98, 0x79, 0xeb, 0x55, 0xc8,
+	0x44, 0xce, 0x0d, 0xcd, 0x06, 0x3a, 0x8f, 0xfe, 0x05, 0x07, 0xd1, 0xce, 0x82, 0xd0, 0x45, 0xc8,
+	0x95, 0x15, 0x4b, 0xc6, 0xed, 0x68, 0x70, 0xc6, 0x7d, 0x5e, 0x31, 0x4d, 0x79, 0x55, 0x99, 0x57,
+	0x28, 0x8b, 0xe4, 0xd0, 0xa3, 0x73, 0x30, 0x54, 0x96, 0xcd, 0x7b, 0xbb, 0x40, 0x80, 0x09, 0x0d,
+	0xc9, 0x87, 0x28, 0xe4, 0x50, 0x78, 0xf0, 0x25, 0x27, 0x8c, 0x0a, 0xdd, 0x85, 0xdd, 0x78, 0x35,
+	0xda, 0xd7, 0x3c, 0xb2, 0xa3, 0x45, 0xc9, 0x3d, 0x84, 0x5e, 0xec, 0x0b, 0x91, 0xae, 0x2a, 0x96,
+	0xac, 0x96, 0xcc, 0x2c, 0x90, 0xc2, 0x72, 0xed, 0x2d, 0xba, 0x09, 0xbb, 0x96, 0x65, 0x93, 0x1e,
+	0x0f, 0x60, 0xff, 0x02, 0x61, 0xdc, 0x3e, 0x27, 0xf1, 0x0c, 0x44, 0x38, 0x30, 0x06, 0x26, 0xc1,
+	0xc5, 0x0e, 0xba, 0xd9, 0xb2, 0xab, 0x1e, 0xbf, 0x6a, 0x75, 0x6e, 0x71, 0x7e, 0x0c, 0xb2, 0x40,
+	0xe2, 0xb0, 0x84, 0x05, 0x7a, 0x8d, 0x4b, 0x17, 0xae, 0xe6, 0xaa, 0xa1, 0xaf, 0x57, 0xd8, 0x1d,
+	0x91, 0xa7, 0xdc, 0xd2, 0x5a, 0x7d, 0xa4, 0x31, 0x19, 0x72, 0x45, 0x7d, 0x13, 0xb3, 0xa1, 0x25,
+	0x18, 0x5a, 0xd6, 0x8b, 0x1b, 0x0c, 0x96, 0x7c, 0x79, 0x8f, 0x93, 0x46, 0xd4, 0x8b, 0x1b, 0x8b,
+	0x74, 0x63, 0x9f, 0x97, 0xcd, 0x7b, 0xaa, 0xb6, 0xca, 0x80, 0x1e, 0x12, 0x91, 0x76, 0xf1, 0xbf,
+	0xb6, 0xfd, 0xa2, 0x0a, 0x5e, 0x87, 0x3d, 0x90, 0x9b, 0xb7, 0xc7, 0x0b, 0x24, 0x60, 0x14, 0x76,
+	0x33, 0xea, 0xf8, 0xbc, 0x5e, 0x54, 0x10, 0x48, 0xc2, 0x30, 0xec, 0x58, 0x92, 0x8d, 0x55, 0xc5,
+	0x42, 0x20, 0x03, 0xbb, 0x61, 0xe7, 0x82, 0x6c, 0x61, 0x97, 0x12, 0x81, 0xd9, 0x5f, 0x57, 0xc1,
+	0x9f, 0xb6, 0xc1, 0x21, 0x18, 0xc2, 0x4e, 0xff, 0x70, 0x2f, 0xec, 0xb1, 0x47, 0x7e, 0x42, 0x93,
+	0xcb, 0x0a, 0x5c, 0x86, 0x91, 0x39, 0x5d, 0xa3, 0xc7, 0x0c, 0x88, 0x55, 0x77, 0x6e, 0x01, 0xde,
+	0x82, 0xc7, 0xbc, 0x03, 0x97, 0xec, 0xc6, 0x86, 0x97, 0xdd, 0xfb, 0x70, 0xd0, 0xd5, 0xfb, 0xc9,
+	0x2e, 0x51, 0x36, 0x15, 0x7a, 0xaa, 0x74, 0xd0, 0xd5, 0x8f, 0xc9, 0x2e, 0xcc, 0x42, 0xfa, 0x06,
+	0x9a, 0xb0, 0xb7, 0x56, 0x06, 0x39, 0xd2, 0x74, 0xee, 0x63, 0xf8, 0x11, 0x1c, 0xa3, 0x41, 0x40,
+	0xbb, 0x10, 0x72, 0xc0, 0x12, 0xf5, 0xf9, 0xbc, 0x84, 0x31, 0x57, 0x81, 0x28, 0xec, 0x7a, 0xc0,
+	0x5f, 0x9c, 0x22, 0xf1, 0x17, 0xe7, 0x01, 0x9e, 0x81, 0x9d, 0xf4, 0xc0, 0xa8, 0x29, 0x0e, 0x53,
+	0x5d, 0xe8, 0xc8, 0xa4, 0xa7, 0x4a, 0x4d, 0x1e, 0x4e, 0x02, 0x18, 0x87, 0x1c, 0xeb, 0x2b, 0x53,
+	0xea, 0x87, 0x08, 0x85, 0x71, 0xbf, 0x4f, 0xac, 0xa8, 0x4a, 0xa9, 0x68, 0x0e, 0xb7, 0x7d, 0x5f,
+	0xd9, 0x80, 0x0b, 0xde, 0xde, 0x3e, 0x77, 0x19, 0x5e, 0x82, 0x47, 0xe9, 0xa2, 0x49, 0xf6, 0xe1,
+	0x2f, 0x71, 0x67, 0x45, 0xc6, 0xf1, 0x92, 0x84, 0x27, 0xec, 0x55, 0x92, 0x1c, 0x90, 0xc8, 0xdf,
+	0x3a, 0x02, 0xf1, 0x15, 0xd8, 0x57, 0xa6, 0x12, 0xf3, 0x65, 0xbd, 0xa8, 0xb8, 0x81, 0xe4, 0x6d,
+	0x5b, 0x55, 0xd0, 0xba, 0x5d, 0x05, 0x6d, 0x29, 0x21, 0x2d, 0x9e, 0x87, 0xc3, 0x78, 0x57, 0xc2,
+	0x36, 0x03, 0xed, 0xbc, 0x3c, 0x7d, 0xa4, 0xe4, 0x3d, 0x9b, 0x55, 0xd0, 0xc1, 0xce, 0x7c, 0x02,
+	0xbc, 0x93, 0xb6, 0xf2, 0x6d, 0xec, 0xcc, 0xe7, 0x4f, 0x01, 0x3c, 0xd2, 0x70, 0x6a, 0xa1, 0xc7,
+	0x00, 0x76, 0xd0, 0x06, 0x32, 0xe8, 0xf6, 0xda, 0xd7, 0xcc, 0xef, 0xb6, 0x11, 0xda, 0x5f, 0x79,
+	0x1f, 0xc7, 0xbc, 0x68, 0xee, 0xb8, 0xe7, 0xe3, 0x17, 0x7e, 0x2e, 0xbb, 0x1b, 0xcd, 0x5d, 0xdb,
+	0xdd, 0x5a, 0x24, 0x56, 0xee, 0xe8, 0x3f, 0x7b, 0x03, 0x46, 0xe6, 0xb0, 0x9a, 0x53, 0x1c, 0x40,
+	0x79, 0xac, 0x0e, 0x50, 0xde, 0x04, 0x81, 0x7b, 0x40, 0xe0, 0x7f, 0x5b, 0x61, 0xd7, 0x6f, 0xbd,
+	0x18, 0xec, 0xda, 0x0f, 0x70, 0xfd, 0xee, 0xe1, 0x00, 0xae, 0xfd, 0xa0, 0xd5, 0x4b, 0x87, 0x02,
+	0xad, 0xfe, 0x96, 0x40, 0xd5, 0xff, 0xe0, 0xdb, 0x85, 0x08, 0x07, 0x02, 0x83, 0xb3, 0x2f, 0x0a,
+	0x8f, 0x76, 0x80, 0xcf, 0x17, 0xf7, 0x07, 0x31, 0x3e, 0x28, 0xb8, 0xb8, 0xcd, 0x03, 0x2e, 0x7e,
+	0xf3, 0xa0, 0xe0, 0xe2, 0x6c, 0x9b, 0x17, 0x35, 0x7c, 0xd2, 0x0f, 0x35, 0x7c, 0x70, 0xac, 0x70,
+	0xe8, 0xa5, 0x61, 0x85, 0x43, 0x3b, 0xb1, 0xc2, 0xef, 0x1c, 0x1a, 0x56, 0x18, 0xd7, 0xdb, 0x8d,
+	0x12, 0xce, 0x1f, 0x22, 0x4a, 0x38, 0x1b, 0xf2, 0xc1, 0x06, 0x97, 0x5e, 0x06, 0x36, 0x38, 0x1b,
+	0x6a, 0x80, 0x08, 0x7e, 0xff, 0x90, 0x11, 0xc1, 0x2f, 0x86, 0x05, 0x6e, 0xdf, 0x81, 0x05, 0x7e,
+	0xfb, 0x05, 0xb1, 0xc0, 0xd9, 0x76, 0x5f, 0xcc, 0xaf, 0x72, 0xe8, 0x90, 0xdf, 0x43, 0xc2, 0xf3,
+	0x76, 0xf8, 0xe0, 0x79, 0x97, 0x0e, 0x03, 0xcf, 0x9b, 0xed, 0xa8, 0x43, 0xf1, 0x2e, 0x1d, 0x12,
+	0x8a, 0x37, 0xdb, 0xe1, 0xc6, 0xef, 0xfe, 0xdd, 0xc3, 0x81, 0xef, 0x1e, 0x0b, 0x82, 0xef, 0x36,
+	0x46, 0xed, 0x7e, 0x70, 0x68, 0xa0, 0x5d, 0x3f, 0x38, 0xee, 0xe2, 0x21, 0xc0, 0x71, 0x77, 0x20,
+	0x6d, 0x3f, 0x38, 0x4c, 0xa0, 0xed, 0x0e, 0x08, 0xed, 0x07, 0x87, 0x89, 0xa0, 0xdd, 0x81, 0x8d,
+	0x2d, 0x1e, 0x36, 0x36, 0xd6, 0x17, 0x15, 0x7b, 0xef, 0xe5, 0x80, 0x62, 0x5f, 0x0a, 0xdc, 0xb5,
+	0xf3, 0xf0, 0xe1, 0xae, 0x9d, 0xdf, 0x16, 0xdc, 0xb5, 0xf3, 0x10, 0xe0, 0xae, 0xdc, 0x81, 0xe1,
+	0xae, 0xdc, 0x41, 0xe0, 0xae, 0xdc, 0x0b, 0xc1, 0x5d, 0xb9, 0x97, 0x04, 0x77, 0xe5, 0x5e, 0x3a,
+	0xdc, 0x95, 0x3b, 0x3c, 0xb8, 0x6b, 0xd7, 0x77, 0x00, 0x77, 0xed, 0x0a, 0x84, 0xbb, 0xaa, 0x2f,
+	0x0f, 0xee, 0x9a, 0x85, 0x5e, 0xa0, 0xeb, 0xcc, 0xde, 0x81, 0xae, 0x59, 0xe8, 0x81, 0xb8, 0x7e,
+	0xf8, 0x42, 0x10, 0xd7, 0x6c, 0xf8, 0x25, 0x43, 0x59, 0xc3, 0xbb, 0x41, 0x59, 0x57, 0x0f, 0x1d,
+	0xca, 0x9a, 0xed, 0x3e, 0x3c, 0xc8, 0x6a, 0xb7, 0x3f, 0x64, 0xf5, 0xfa, 0xbe, 0x21, 0xab, 0xd9,
+	0x1e, 0x3f, 0xa4, 0xea, 0xfb, 0x87, 0x0a, 0x54, 0xcd, 0xf6, 0x78, 0x80, 0xa7, 0x95, 0x97, 0x87,
+	0x3b, 0xcd, 0xf6, 0xf8, 0x22, 0x4a, 0x5f, 0x0c, 0xf1, 0x17, 0xf9, 0x8e, 0x11, 0x7f, 0x11, 0x7f,
+	0xc4, 0xdf, 0xc1, 0x10, 0xa6, 0xbd, 0x0d, 0x10, 0xa6, 0xdf, 0x3f, 0x38, 0xc2, 0x34, 0xdb, 0xfb,
+	0xad, 0x20, 0x46, 0x7b, 0x7d, 0x10, 0xa3, 0x1f, 0x1c, 0x1e, 0x62, 0x34, 0xdb, 0xbb, 0x03, 0x28,
+	0x7a, 0x20, 0x4c, 0x25, 0xef, 0x8f, 0xa9, 0x2c, 0xbd, 0x1c, 0x48, 0x65, 0x96, 0xf7, 0x85, 0x4e,
+	0xbe, 0x00, 0x84, 0x3a, 0xfa, 0x5d, 0x40, 0xa8, 0xa3, 0x7e, 0x10, 0xea, 0x8b, 0xfb, 0x03, 0xd6,
+	0x79, 0x20, 0x75, 0xd7, 0x0f, 0x0a, 0xa9, 0xab, 0x43, 0xcb, 0xbd, 0x73, 0x38, 0x68, 0xb9, 0xc3,
+	0x03, 0xc2, 0xa1, 0x6f, 0x07, 0x08, 0x87, 0x7c, 0x81, 0x70, 0x4b, 0x87, 0x02, 0x84, 0xab, 0x87,
+	0xc0, 0xfd, 0xff, 0x85, 0xf3, 0x3d, 0x18, 0x20, 0xaf, 0xff, 0xf0, 0x00, 0x79, 0xfd, 0x7e, 0x80,
+	0x3c, 0xf3, 0x65, 0x01, 0xf2, 0xb2, 0xfd, 0x8d, 0xa1, 0x78, 0xd7, 0xf6, 0x0d, 0xc5, 0xcb, 0xf6,
+	0xfb, 0x20, 0xf0, 0x9e, 0x7e, 0xab, 0x90, 0xb9, 0x5d, 0x50, 0x72, 0xd1, 0x5f, 0x5f, 0xaa, 0xbb,
+	0x1d, 0x49, 0x3c, 0xe7, 0x07, 0xf6, 0x1a, 0x78, 0xf2, 0x1c, 0xec, 0x7c, 0x2d, 0x8e, 0xf9, 0xe0,
+	0xbd, 0xfa, 0x9f, 0x3c, 0x07, 0x3b, 0xde, 0x8a, 0x82, 0x2f, 0xdc, 0x6b, 0xf0, 0xc9, 0x73, 0xe0,
+	0xf3, 0x5e, 0x3c, 0xe6, 0x81, 0x6f, 0x45, 0x9e, 0x3c, 0x07, 0xae, 0x67, 0xf1, 0xf4, 0x0e, 0x94,
+	0x16, 0x7a, 0xf2, 0x1c, 0xd4, 0xbd, 0xc3, 0x54, 0x75, 0xe8, 0x2c, 0x42, 0xe5, 0x7d, 0xd7, 0x00,
+	0x9e, 0x85, 0x5b, 0xbb, 0xe3, 0xb5, 0x98, 0x6c, 0x04, 0xcf, 0x3a, 0xf2, 0xe4, 0x39, 0xf0, 0xff,
+	0x84, 0xdb, 0xed, 0x83, 0xd1, 0x22, 0xed, 0xde, 0xf9, 0x5e, 0xbc, 0xba, 0x2b, 0x38, 0x6b, 0xf4,
+	0xc9, 0x73, 0xb0, 0x0b, 0x0d, 0x1e, 0x95, 0x1d, 0x68, 0x2d, 0x32, 0x2a, 0xf5, 0x6f, 0xc5, 0xeb,
+	0xbb, 0x83, 0xb5, 0x4e, 0x3d, 0x79, 0x0e, 0x76, 0x23, 0x12, 0x27, 0x1b, 0x20, 0xb6, 0x62, 0x4f,
+	0x9e, 0x03, 0xdf, 0x2f, 0xb8, 0x5f, 0x7c, 0xb0, 0x5a, 0xa4, 0x5f, 0x76, 0xbe, 0x17, 0x2f, 0xef,
+	0x02, 0x69, 0x8a, 0x3f, 0x79, 0x0e, 0x02, 0x29, 0xf0, 0xd8, 0xf9, 0x83, 0xab, 0xc8, 0xd8, 0xf9,
+	0x7e, 0xc2, 0xad, 0xf2, 0x45, 0x44, 0x91, 0x56, 0xf9, 0x7d, 0x11, 0x5f, 0x0b, 0x84, 0x83, 0x8d,
+	0x3c, 0x79, 0x0e, 0x02, 0xbe, 0x8b, 0x97, 0x82, 0x51, 0x51, 0x27, 0x9e, 0x3c, 0x07, 0x41, 0x04,
+	0xb8, 0x4f, 0x7d, 0x00, 0x58, 0xa4, 0x4f, 0x77, 0xbe, 0xc7, 0x73, 0x6d, 0x17, 0x44, 0x15, 0x99,
+	0x6b, 0xc1, 0x34, 0x75, 0xc0, 0xaa, 0x46, 0x60, 0x2a, 0x0a, 0xa3, 0x3a, 0x08, 0x80, 0xaa, 0x06,
+	0x9a, 0xba, 0xc6, 0x5f, 0x77, 0xa0, 0x53, 0x14, 0x54, 0x45, 0x41, 0x53, 0x6e, 0x18, 0x95, 0xc6,
+	0xeb, 0xa3, 0x3f, 0x7d, 0x03, 0xf6, 0x4a, 0x4a, 0xa5, 0x24, 0x17, 0x9a, 0x09, 0xfa, 0x66, 0x82,
+	0xbe, 0x99, 0xa0, 0x6f, 0x26, 0xe8, 0x9b, 0x09, 0xfa, 0x66, 0x82, 0xbe, 0x99, 0xa0, 0x6f, 0x26,
+	0xe8, 0x9b, 0x09, 0xfa, 0x66, 0x82, 0xbe, 0x99, 0xa0, 0x6f, 0x26, 0xe8, 0x9b, 0x09, 0xfa, 0x66,
+	0x82, 0xbe, 0x99, 0xa0, 0x6f, 0x26, 0xe8, 0x9b, 0x09, 0xfa, 0x66, 0x82, 0xbe, 0x99, 0xa0, 0x6f,
+	0x26, 0xe8, 0x9b, 0x09, 0xfa, 0x66, 0x82, 0xbe, 0x99, 0xa0, 0x6f, 0x26, 0xe8, 0x9b, 0x09, 0xfa,
+	0x66, 0x82, 0xbe, 0x99, 0xa0, 0x6f, 0x26, 0xe8, 0x9b, 0x09, 0xfa, 0x66, 0x82, 0xbe, 0x99, 0xa0,
+	0x7f, 0x69, 0x09, 0xfa, 0xff, 0x34, 0x07, 0xc3, 0x6f, 0x2a, 0x56, 0x33, 0x39, 0xbf, 0xb7, 0xe4,
+	0xfc, 0x93, 0x97, 0xf2, 0x2f, 0xd4, 0x9a, 0xff, 0x39, 0xad, 0x89, 0x10, 0x68, 0x22, 0x04, 0x9a,
+	0x08, 0x81, 0x26, 0x42, 0xa0, 0x89, 0x10, 0x68, 0x22, 0x04, 0x9a, 0x08, 0x81, 0x26, 0x42, 0xa0,
+	0x89, 0x10, 0x68, 0x22, 0x04, 0x9a, 0x08, 0x81, 0x26, 0x42, 0xa0, 0x89, 0x10, 0x68, 0x22, 0x04,
+	0x9a, 0x08, 0x81, 0x26, 0x42, 0xa0, 0x89, 0x10, 0x68, 0x22, 0x04, 0x9a, 0x08, 0x81, 0x26, 0x42,
+	0xa0, 0x89, 0x10, 0xd8, 0x23, 0x42, 0xe0, 0x0f, 0xea, 0x5f, 0x36, 0xfd, 0xa1, 0xfc, 0x3b, 0xa5,
+	0x26, 0xec, 0xa2, 0x09, 0xbb, 0xf8, 0xdb, 0x01, 0xbb, 0x38, 0xe4, 0xff, 0x4c, 0xd4, 0x44, 0x71,
+	0x34, 0x51, 0x1c, 0x4d, 0x14, 0x47, 0x13, 0xc5, 0xd1, 0x44, 0x71, 0xbc, 0x18, 0x8a, 0xa3, 0x83,
+	0xfb, 0xeb, 0x4e, 0xfe, 0xff, 0x74, 0x36, 0x42, 0x73, 0x88, 0x7f, 0x0e, 0xb6, 0x7e, 0x33, 0xd2,
+	0xf2, 0xc5, 0x6f, 0x46, 0x5a, 0xbe, 0xfe, 0xcd, 0x08, 0x78, 0xbc, 0x3d, 0x02, 0xfe, 0xd5, 0xf6,
+	0x08, 0xf8, 0xd5, 0xf6, 0x08, 0xd8, 0xda, 0x1e, 0x01, 0x5f, 0x6c, 0x8f, 0x80, 0xbf, 0xdc, 0x1e,
+	0x01, 0x5f, 0x6d, 0x8f, 0xb4, 0x7c, 0xbd, 0x3d, 0x02, 0x7e, 0xfc, 0xdb, 0x91, 0x96, 0xcd, 0xdf,
+	0x8e, 0x80, 0xad, 0xdf, 0x8e, 0xb4, 0x7c, 0xf1, 0xdb, 0x91, 0x96, 0xf7, 0xde, 0x5f, 0xd5, 0x2b,
+	0xf7, 0x56, 0x27, 0xee, 0xeb, 0x25, 0x4b, 0x31, 0x0c, 0x79, 0x62, 0xdd, 0xbc, 0x40, 0x7e, 0xac,
+	0xe8, 0x46, 0x79, 0xbc, 0x62, 0xe8, 0xf7, 0xd5, 0xa2, 0x62, 0x8c, 0xdb, 0x9f, 0x2f, 0x54, 0x96,
+	0x57, 0xf5, 0x0b, 0xca, 0x43, 0x8b, 0x6e, 0xd5, 0x17, 0xd8, 0x1f, 0xb2, 0x63, 0x5f, 0xd8, 0xb1,
+	0x63, 0x2f, 0x77, 0x10, 0xdc, 0x43, 0xea, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0x3f, 0x76, 0x19,
+	0xa6, 0x40, 0xcb, 0x00, 0x00,
 }
 
-func (x MobileIdentifier) String() string {
-	s, ok := MobileIdentifier_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x URLScheme) String() string {
-	s, ok := URLScheme_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x ShapeBotDefenseRegion) String() string {
-	s, ok := ShapeBotDefenseRegion_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
-func (x JavaScriptLocation) String() string {
-	s, ok := JavaScriptLocation_name[int32(x)]
-	if ok {
-		return s
-	}
-	return strconv.Itoa(int(x))
-}
 func (this *ProxyTypeHttps) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -14217,158 +11762,6 @@ func (this *AdvancedOptionsType_AdditionalDomains) Equal(that interface{}) bool 
 	}
 	return true
 }
-func (this *DDoSClientSource) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DDoSClientSource)
-	if !ok {
-		that2, ok := that.(DDoSClientSource)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AsnList.Equal(that1.AsnList) {
-		return false
-	}
-	if len(this.CountryList) != len(that1.CountryList) {
-		return false
-	}
-	for i := range this.CountryList {
-		if this.CountryList[i] != that1.CountryList[i] {
-			return false
-		}
-	}
-	if !this.TlsFingerprintMatcher.Equal(that1.TlsFingerprintMatcher) {
-		return false
-	}
-	return true
-}
-func (this *DDoSMitigationRule) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DDoSMitigationRule)
-	if !ok {
-		that2, ok := that.(DDoSMitigationRule)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Metadata.Equal(that1.Metadata) {
-		return false
-	}
-	if that1.MitigationAction == nil {
-		if this.MitigationAction != nil {
-			return false
-		}
-	} else if this.MitigationAction == nil {
-		return false
-	} else if !this.MitigationAction.Equal(that1.MitigationAction) {
-		return false
-	}
-	if that1.MitigationChoice == nil {
-		if this.MitigationChoice != nil {
-			return false
-		}
-	} else if this.MitigationChoice == nil {
-		return false
-	} else if !this.MitigationChoice.Equal(that1.MitigationChoice) {
-		return false
-	}
-	if !this.ExpirationTimestamp.Equal(that1.ExpirationTimestamp) {
-		return false
-	}
-	return true
-}
-func (this *DDoSMitigationRule_Block) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DDoSMitigationRule_Block)
-	if !ok {
-		that2, ok := that.(DDoSMitigationRule_Block)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Block.Equal(that1.Block) {
-		return false
-	}
-	return true
-}
-func (this *DDoSMitigationRule_DdosClientSource) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DDoSMitigationRule_DdosClientSource)
-	if !ok {
-		that2, ok := that.(DDoSMitigationRule_DdosClientSource)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DdosClientSource.Equal(that1.DdosClientSource) {
-		return false
-	}
-	return true
-}
-func (this *DDoSMitigationRule_IpPrefixList) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DDoSMitigationRule_IpPrefixList)
-	if !ok {
-		that2, ok := that.(DDoSMitigationRule_IpPrefixList)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.IpPrefixList.Equal(that1.IpPrefixList) {
-		return false
-	}
-	return true
-}
 func (this *SingleLoadBalancerAppSetting) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -14533,1813 +11926,6 @@ func (this *OriginServerSubsetRuleListType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ClientSideDefenseType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClientSideDefenseType)
-	if !ok {
-		that2, ok := that.(ClientSideDefenseType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Policy.Equal(that1.Policy) {
-		return false
-	}
-	return true
-}
-func (this *ClientSideDefensePolicyType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClientSideDefensePolicyType)
-	if !ok {
-		that2, ok := that.(ClientSideDefensePolicyType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.JavaScriptChoice == nil {
-		if this.JavaScriptChoice != nil {
-			return false
-		}
-	} else if this.JavaScriptChoice == nil {
-		return false
-	} else if !this.JavaScriptChoice.Equal(that1.JavaScriptChoice) {
-		return false
-	}
-	return true
-}
-func (this *ClientSideDefensePolicyType_DisableJsInsert) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClientSideDefensePolicyType_DisableJsInsert)
-	if !ok {
-		that2, ok := that.(ClientSideDefensePolicyType_DisableJsInsert)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableJsInsert.Equal(that1.DisableJsInsert) {
-		return false
-	}
-	return true
-}
-func (this *ClientSideDefensePolicyType_JsInsertAllPages) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClientSideDefensePolicyType_JsInsertAllPages)
-	if !ok {
-		that2, ok := that.(ClientSideDefensePolicyType_JsInsertAllPages)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JsInsertAllPages.Equal(that1.JsInsertAllPages) {
-		return false
-	}
-	return true
-}
-func (this *ClientSideDefensePolicyType_JsInsertAllPagesExcept) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClientSideDefensePolicyType_JsInsertAllPagesExcept)
-	if !ok {
-		that2, ok := that.(ClientSideDefensePolicyType_JsInsertAllPagesExcept)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JsInsertAllPagesExcept.Equal(that1.JsInsertAllPagesExcept) {
-		return false
-	}
-	return true
-}
-func (this *ClientSideDefensePolicyType_JsInsertionRules) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ClientSideDefensePolicyType_JsInsertionRules)
-	if !ok {
-		that2, ok := that.(ClientSideDefensePolicyType_JsInsertionRules)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JsInsertionRules.Equal(that1.JsInsertionRules) {
-		return false
-	}
-	return true
-}
-func (this *CSDJavaScriptInsertAllWithExceptionsType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CSDJavaScriptInsertAllWithExceptionsType)
-	if !ok {
-		that2, ok := that.(CSDJavaScriptInsertAllWithExceptionsType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.ExcludeList) != len(that1.ExcludeList) {
-		return false
-	}
-	for i := range this.ExcludeList {
-		if !this.ExcludeList[i].Equal(that1.ExcludeList[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *CSDJavaScriptInsertType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CSDJavaScriptInsertType)
-	if !ok {
-		that2, ok := that.(CSDJavaScriptInsertType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Rules) != len(that1.Rules) {
-		return false
-	}
-	for i := range this.Rules {
-		if !this.Rules[i].Equal(that1.Rules[i]) {
-			return false
-		}
-	}
-	if len(this.ExcludeList) != len(that1.ExcludeList) {
-		return false
-	}
-	for i := range this.ExcludeList {
-		if !this.ExcludeList[i].Equal(that1.ExcludeList[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *CSDJavaScriptInsertionRule) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CSDJavaScriptInsertionRule)
-	if !ok {
-		that2, ok := that.(CSDJavaScriptInsertionRule)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Metadata.Equal(that1.Metadata) {
-		return false
-	}
-	if that1.DomainMatcherChoice == nil {
-		if this.DomainMatcherChoice != nil {
-			return false
-		}
-	} else if this.DomainMatcherChoice == nil {
-		return false
-	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
-		return false
-	}
-	if !this.Path.Equal(that1.Path) {
-		return false
-	}
-	return true
-}
-func (this *CSDJavaScriptInsertionRule_AnyDomain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CSDJavaScriptInsertionRule_AnyDomain)
-	if !ok {
-		that2, ok := that.(CSDJavaScriptInsertionRule_AnyDomain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AnyDomain.Equal(that1.AnyDomain) {
-		return false
-	}
-	return true
-}
-func (this *CSDJavaScriptInsertionRule_Domain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CSDJavaScriptInsertionRule_Domain)
-	if !ok {
-		that2, ok := that.(CSDJavaScriptInsertionRule_Domain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Domain.Equal(that1.Domain) {
-		return false
-	}
-	return true
-}
-func (this *BotDefenseAdvancedPolicyType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*BotDefenseAdvancedPolicyType)
-	if !ok {
-		that2, ok := that.(BotDefenseAdvancedPolicyType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.ProtectedAppEndpoints) != len(that1.ProtectedAppEndpoints) {
-		return false
-	}
-	for i := range this.ProtectedAppEndpoints {
-		if !this.ProtectedAppEndpoints[i].Equal(that1.ProtectedAppEndpoints[i]) {
-			return false
-		}
-	}
-	if this.JsDownloadPath != that1.JsDownloadPath {
-		return false
-	}
-	if that1.MobileSdkChoice == nil {
-		if this.MobileSdkChoice != nil {
-			return false
-		}
-	} else if this.MobileSdkChoice == nil {
-		return false
-	} else if !this.MobileSdkChoice.Equal(that1.MobileSdkChoice) {
-		return false
-	}
-	return true
-}
-func (this *BotDefenseAdvancedPolicyType_DisableMobileSdk) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*BotDefenseAdvancedPolicyType_DisableMobileSdk)
-	if !ok {
-		that2, ok := that.(BotDefenseAdvancedPolicyType_DisableMobileSdk)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableMobileSdk.Equal(that1.DisableMobileSdk) {
-		return false
-	}
-	return true
-}
-func (this *BotDefenseAdvancedPolicyType_MobileSdkConfig) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*BotDefenseAdvancedPolicyType_MobileSdkConfig)
-	if !ok {
-		that2, ok := that.(BotDefenseAdvancedPolicyType_MobileSdkConfig)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MobileSdkConfig.Equal(that1.MobileSdkConfig) {
-		return false
-	}
-	return true
-}
-func (this *BotAdvancedMobileSDKConfigType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*BotAdvancedMobileSDKConfigType)
-	if !ok {
-		that2, ok := that.(BotAdvancedMobileSDKConfigType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MobileIdentifier.Equal(that1.MobileIdentifier) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Metadata.Equal(that1.Metadata) {
-		return false
-	}
-	if that1.DomainMatcherChoice == nil {
-		if this.DomainMatcherChoice != nil {
-			return false
-		}
-	} else if this.DomainMatcherChoice == nil {
-		return false
-	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
-		return false
-	}
-	if !this.Path.Equal(that1.Path) {
-		return false
-	}
-	if len(this.Query) != len(that1.Query) {
-		return false
-	}
-	for i := range this.Query {
-		if !this.Query[i].Equal(that1.Query[i]) {
-			return false
-		}
-	}
-	if len(this.RequestBody) != len(that1.RequestBody) {
-		return false
-	}
-	for i := range this.RequestBody {
-		if !this.RequestBody[i].Equal(that1.RequestBody[i]) {
-			return false
-		}
-	}
-	if len(this.HttpMethods) != len(that1.HttpMethods) {
-		return false
-	}
-	for i := range this.HttpMethods {
-		if this.HttpMethods[i] != that1.HttpMethods[i] {
-			return false
-		}
-	}
-	if that1.AppTrafficTypeChoice == nil {
-		if this.AppTrafficTypeChoice != nil {
-			return false
-		}
-	} else if this.AppTrafficTypeChoice == nil {
-		return false
-	} else if !this.AppTrafficTypeChoice.Equal(that1.AppTrafficTypeChoice) {
-		return false
-	}
-	if that1.FlowLabelChoice == nil {
-		if this.FlowLabelChoice != nil {
-			return false
-		}
-	} else if this.FlowLabelChoice == nil {
-		return false
-	} else if !this.FlowLabelChoice.Equal(that1.FlowLabelChoice) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType_AnyDomain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType_AnyDomain)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType_AnyDomain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AnyDomain.Equal(that1.AnyDomain) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType_Domain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType_Domain)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType_Domain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Domain.Equal(that1.Domain) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType_WebClient) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType_WebClient)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType_WebClient)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebClient.Equal(that1.WebClient) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType_MobileClient) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType_MobileClient)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType_MobileClient)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MobileClient.Equal(that1.MobileClient) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType_WebMobileClient) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType_WebMobileClient)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType_WebMobileClient)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebMobileClient.Equal(that1.WebMobileClient) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType_UndefinedFlowLabel) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType_UndefinedFlowLabel)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType_UndefinedFlowLabel)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UndefinedFlowLabel.Equal(that1.UndefinedFlowLabel) {
-		return false
-	}
-	return true
-}
-func (this *ProtectedAppEndpointType_FlowLabel) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ProtectedAppEndpointType_FlowLabel)
-	if !ok {
-		that2, ok := that.(ProtectedAppEndpointType_FlowLabel)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FlowLabel.Equal(that1.FlowLabel) {
-		return false
-	}
-	return true
-}
-func (this *RequestBody) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RequestBody)
-	if !ok {
-		that2, ok := that.(RequestBody)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if that1.ValueType == nil {
-		if this.ValueType != nil {
-			return false
-		}
-	} else if this.ValueType == nil {
-		return false
-	} else if !this.ValueType.Equal(that1.ValueType) {
-		return false
-	}
-	return true
-}
-func (this *RequestBody_ExactValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RequestBody_ExactValue)
-	if !ok {
-		that2, ok := that.(RequestBody_ExactValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ExactValue != that1.ExactValue {
-		return false
-	}
-	return true
-}
-func (this *RequestBody_RegexValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*RequestBody_RegexValue)
-	if !ok {
-		that2, ok := that.(RequestBody_RegexValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.RegexValue != that1.RegexValue {
-		return false
-	}
-	return true
-}
-func (this *Query) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Query)
-	if !ok {
-		that2, ok := that.(Query)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Name != that1.Name {
-		return false
-	}
-	if that1.ValueType == nil {
-		if this.ValueType != nil {
-			return false
-		}
-	} else if this.ValueType == nil {
-		return false
-	} else if !this.ValueType.Equal(that1.ValueType) {
-		return false
-	}
-	return true
-}
-func (this *Query_ExactValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Query_ExactValue)
-	if !ok {
-		that2, ok := that.(Query_ExactValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ExactValue != that1.ExactValue {
-		return false
-	}
-	return true
-}
-func (this *Query_RegexValue) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Query_RegexValue)
-	if !ok {
-		that2, ok := that.(Query_RegexValue)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.RegexValue != that1.RegexValue {
-		return false
-	}
-	return true
-}
-func (this *Query_CheckPresence) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*Query_CheckPresence)
-	if !ok {
-		that2, ok := that.(Query_CheckPresence)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CheckPresence.Equal(that1.CheckPresence) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefenseType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefenseType)
-	if !ok {
-		that2, ok := that.(ShapeBotDefenseType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.RegionalEndpoint != that1.RegionalEndpoint {
-		return false
-	}
-	if !this.Policy.Equal(that1.Policy) {
-		return false
-	}
-	if this.Timeout != that1.Timeout {
-		return false
-	}
-	if that1.CorsSupportChoice == nil {
-		if this.CorsSupportChoice != nil {
-			return false
-		}
-	} else if this.CorsSupportChoice == nil {
-		return false
-	} else if !this.CorsSupportChoice.Equal(that1.CorsSupportChoice) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefenseType_EnableCorsSupport) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefenseType_EnableCorsSupport)
-	if !ok {
-		that2, ok := that.(ShapeBotDefenseType_EnableCorsSupport)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EnableCorsSupport.Equal(that1.EnableCorsSupport) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefenseType_DisableCorsSupport) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefenseType_DisableCorsSupport)
-	if !ok {
-		that2, ok := that.(ShapeBotDefenseType_DisableCorsSupport)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableCorsSupport.Equal(that1.DisableCorsSupport) {
-		return false
-	}
-	return true
-}
-func (this *BotDefenseAdvancedType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*BotDefenseAdvancedType)
-	if !ok {
-		that2, ok := that.(BotDefenseAdvancedType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Web.Equal(that1.Web) {
-		return false
-	}
-	if !this.Mobile.Equal(that1.Mobile) {
-		return false
-	}
-	if !this.Policy.Equal(that1.Policy) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefensePolicyType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefensePolicyType)
-	if !ok {
-		that2, ok := that.(ShapeBotDefensePolicyType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.ProtectedAppEndpoints) != len(that1.ProtectedAppEndpoints) {
-		return false
-	}
-	for i := range this.ProtectedAppEndpoints {
-		if !this.ProtectedAppEndpoints[i].Equal(that1.ProtectedAppEndpoints[i]) {
-			return false
-		}
-	}
-	if that1.JavaScriptChoice == nil {
-		if this.JavaScriptChoice != nil {
-			return false
-		}
-	} else if this.JavaScriptChoice == nil {
-		return false
-	} else if !this.JavaScriptChoice.Equal(that1.JavaScriptChoice) {
-		return false
-	}
-	if this.JsDownloadPath != that1.JsDownloadPath {
-		return false
-	}
-	if this.JavascriptMode != that1.JavascriptMode {
-		return false
-	}
-	if that1.MobileSdkChoice == nil {
-		if this.MobileSdkChoice != nil {
-			return false
-		}
-	} else if this.MobileSdkChoice == nil {
-		return false
-	} else if !this.MobileSdkChoice.Equal(that1.MobileSdkChoice) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefensePolicyType_DisableJsInsert) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefensePolicyType_DisableJsInsert)
-	if !ok {
-		that2, ok := that.(ShapeBotDefensePolicyType_DisableJsInsert)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableJsInsert.Equal(that1.DisableJsInsert) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefensePolicyType_JsInsertAllPages) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefensePolicyType_JsInsertAllPages)
-	if !ok {
-		that2, ok := that.(ShapeBotDefensePolicyType_JsInsertAllPages)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JsInsertAllPages.Equal(that1.JsInsertAllPages) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefensePolicyType_JsInsertAllPagesExcept)
-	if !ok {
-		that2, ok := that.(ShapeBotDefensePolicyType_JsInsertAllPagesExcept)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JsInsertAllPagesExcept.Equal(that1.JsInsertAllPagesExcept) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefensePolicyType_JsInsertionRules) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefensePolicyType_JsInsertionRules)
-	if !ok {
-		that2, ok := that.(ShapeBotDefensePolicyType_JsInsertionRules)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.JsInsertionRules.Equal(that1.JsInsertionRules) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefensePolicyType_DisableMobileSdk) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefensePolicyType_DisableMobileSdk)
-	if !ok {
-		that2, ok := that.(ShapeBotDefensePolicyType_DisableMobileSdk)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableMobileSdk.Equal(that1.DisableMobileSdk) {
-		return false
-	}
-	return true
-}
-func (this *ShapeBotDefensePolicyType_MobileSdkConfig) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeBotDefensePolicyType_MobileSdkConfig)
-	if !ok {
-		that2, ok := that.(ShapeBotDefensePolicyType_MobileSdkConfig)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MobileSdkConfig.Equal(that1.MobileSdkConfig) {
-		return false
-	}
-	return true
-}
-func (this *MobileTrafficIdentifierType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MobileTrafficIdentifierType)
-	if !ok {
-		that2, ok := that.(MobileTrafficIdentifierType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Headers) != len(that1.Headers) {
-		return false
-	}
-	for i := range this.Headers {
-		if !this.Headers[i].Equal(that1.Headers[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *MobileSDKConfigType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MobileSDKConfigType)
-	if !ok {
-		that2, ok := that.(MobileSDKConfigType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ReloadHeaderName != that1.ReloadHeaderName {
-		return false
-	}
-	if !this.MobileIdentifier.Equal(that1.MobileIdentifier) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType)
-	if !ok {
-		that2, ok := that.(AppEndpointType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Metadata.Equal(that1.Metadata) {
-		return false
-	}
-	if len(this.HttpMethods) != len(that1.HttpMethods) {
-		return false
-	}
-	for i := range this.HttpMethods {
-		if this.HttpMethods[i] != that1.HttpMethods[i] {
-			return false
-		}
-	}
-	if this.Protocol != that1.Protocol {
-		return false
-	}
-	if !this.Path.Equal(that1.Path) {
-		return false
-	}
-	if that1.DomainMatcherChoice == nil {
-		if this.DomainMatcherChoice != nil {
-			return false
-		}
-	} else if this.DomainMatcherChoice == nil {
-		return false
-	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
-		return false
-	}
-	if that1.AppTrafficTypeChoice == nil {
-		if this.AppTrafficTypeChoice != nil {
-			return false
-		}
-	} else if this.AppTrafficTypeChoice == nil {
-		return false
-	} else if !this.AppTrafficTypeChoice.Equal(that1.AppTrafficTypeChoice) {
-		return false
-	}
-	if !this.Mitigation.Equal(that1.Mitigation) {
-		return false
-	}
-	if that1.FlowLabelChoice == nil {
-		if this.FlowLabelChoice != nil {
-			return false
-		}
-	} else if this.FlowLabelChoice == nil {
-		return false
-	} else if !this.FlowLabelChoice.Equal(that1.FlowLabelChoice) {
-		return false
-	}
-	if that1.GoodbotChoice == nil {
-		if this.GoodbotChoice != nil {
-			return false
-		}
-	} else if this.GoodbotChoice == nil {
-		return false
-	} else if !this.GoodbotChoice.Equal(that1.GoodbotChoice) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_AnyDomain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_AnyDomain)
-	if !ok {
-		that2, ok := that.(AppEndpointType_AnyDomain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AnyDomain.Equal(that1.AnyDomain) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_Domain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_Domain)
-	if !ok {
-		that2, ok := that.(AppEndpointType_Domain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Domain.Equal(that1.Domain) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_Web) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_Web)
-	if !ok {
-		that2, ok := that.(AppEndpointType_Web)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Web.Equal(that1.Web) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_Mobile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_Mobile)
-	if !ok {
-		that2, ok := that.(AppEndpointType_Mobile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Mobile.Equal(that1.Mobile) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_WebMobile) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_WebMobile)
-	if !ok {
-		that2, ok := that.(AppEndpointType_WebMobile)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.WebMobile.Equal(that1.WebMobile) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_UndefinedFlowLabel) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_UndefinedFlowLabel)
-	if !ok {
-		that2, ok := that.(AppEndpointType_UndefinedFlowLabel)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.UndefinedFlowLabel.Equal(that1.UndefinedFlowLabel) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_FlowLabel) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_FlowLabel)
-	if !ok {
-		that2, ok := that.(AppEndpointType_FlowLabel)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FlowLabel.Equal(that1.FlowLabel) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_AllowGoodBots) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_AllowGoodBots)
-	if !ok {
-		that2, ok := that.(AppEndpointType_AllowGoodBots)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AllowGoodBots.Equal(that1.AllowGoodBots) {
-		return false
-	}
-	return true
-}
-func (this *AppEndpointType_MitigateGoodBots) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AppEndpointType_MitigateGoodBots)
-	if !ok {
-		that2, ok := that.(AppEndpointType_MitigateGoodBots)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.MitigateGoodBots.Equal(that1.MitigateGoodBots) {
-		return false
-	}
-	return true
-}
-func (this *WebMobileTrafficType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*WebMobileTrafficType)
-	if !ok {
-		that2, ok := that.(WebMobileTrafficType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Header.Equal(that1.Header) {
-		return false
-	}
-	if len(this.Headers) != len(that1.Headers) {
-		return false
-	}
-	for i := range this.Headers {
-		if !this.Headers[i].Equal(that1.Headers[i]) {
-			return false
-		}
-	}
-	if this.MobileIdentifier != that1.MobileIdentifier {
-		return false
-	}
-	return true
-}
-func (this *ShapeJavaScriptInsertType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptInsertType)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptInsertType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Rules) != len(that1.Rules) {
-		return false
-	}
-	for i := range this.Rules {
-		if !this.Rules[i].Equal(that1.Rules[i]) {
-			return false
-		}
-	}
-	if len(this.ExcludeList) != len(that1.ExcludeList) {
-		return false
-	}
-	for i := range this.ExcludeList {
-		if !this.ExcludeList[i].Equal(that1.ExcludeList[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *ShapeJavaScriptInsertAllWithExceptionsType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptInsertAllWithExceptionsType)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptInsertAllWithExceptionsType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.JavascriptLocation != that1.JavascriptLocation {
-		return false
-	}
-	if len(this.ExcludeList) != len(that1.ExcludeList) {
-		return false
-	}
-	for i := range this.ExcludeList {
-		if !this.ExcludeList[i].Equal(that1.ExcludeList[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *ShapeJavaScriptInsertAllType) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptInsertAllType)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptInsertAllType)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.JavascriptLocation != that1.JavascriptLocation {
-		return false
-	}
-	return true
-}
-func (this *ShapeJavaScriptInsertionRule) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptInsertionRule)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptInsertionRule)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Metadata.Equal(that1.Metadata) {
-		return false
-	}
-	if that1.DomainMatcherChoice == nil {
-		if this.DomainMatcherChoice != nil {
-			return false
-		}
-	} else if this.DomainMatcherChoice == nil {
-		return false
-	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
-		return false
-	}
-	if !this.Path.Equal(that1.Path) {
-		return false
-	}
-	if this.JavascriptLocation != that1.JavascriptLocation {
-		return false
-	}
-	return true
-}
-func (this *ShapeJavaScriptInsertionRule_AnyDomain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptInsertionRule_AnyDomain)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptInsertionRule_AnyDomain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AnyDomain.Equal(that1.AnyDomain) {
-		return false
-	}
-	return true
-}
-func (this *ShapeJavaScriptInsertionRule_Domain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptInsertionRule_Domain)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptInsertionRule_Domain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Domain.Equal(that1.Domain) {
-		return false
-	}
-	return true
-}
-func (this *ShapeJavaScriptExclusionRule) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptExclusionRule)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptExclusionRule)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Metadata.Equal(that1.Metadata) {
-		return false
-	}
-	if that1.DomainMatcherChoice == nil {
-		if this.DomainMatcherChoice != nil {
-			return false
-		}
-	} else if this.DomainMatcherChoice == nil {
-		return false
-	} else if !this.DomainMatcherChoice.Equal(that1.DomainMatcherChoice) {
-		return false
-	}
-	if !this.Path.Equal(that1.Path) {
-		return false
-	}
-	return true
-}
-func (this *ShapeJavaScriptExclusionRule_AnyDomain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptExclusionRule_AnyDomain)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptExclusionRule_AnyDomain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AnyDomain.Equal(that1.AnyDomain) {
-		return false
-	}
-	return true
-}
-func (this *ShapeJavaScriptExclusionRule_Domain) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ShapeJavaScriptExclusionRule_Domain)
-	if !ok {
-		that2, ok := that.(ShapeJavaScriptExclusionRule_Domain)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Domain.Equal(that1.Domain) {
-		return false
-	}
-	return true
-}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -16464,6 +12050,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if this.UserIdChoice == nil {
 		return false
 	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
+		return false
+	}
+	if !this.ApiRateLimitLegacy.Equal(that1.ApiRateLimitLegacy) {
 		return false
 	}
 	if that1.RateLimitChoice == nil {
@@ -16602,6 +12191,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.ApiDefinitionChoice.Equal(that1.ApiDefinitionChoice) {
 		return false
 	}
+	if that1.SensitiveDataPolicyChoice == nil {
+		if this.SensitiveDataPolicyChoice != nil {
+			return false
+		}
+	} else if this.SensitiveDataPolicyChoice == nil {
+		return false
+	} else if !this.SensitiveDataPolicyChoice.Equal(that1.SensitiveDataPolicyChoice) {
+		return false
+	}
 	if that1.IpReputationChoice == nil {
 		if this.IpReputationChoice != nil {
 			return false
@@ -16692,6 +12290,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.CertState != that1.CertState {
+		return false
+	}
+	if !this.SensitiveDataDisclosureRules.Equal(that1.SensitiveDataDisclosureRules) {
 		return false
 	}
 	return true
@@ -17896,6 +13497,54 @@ func (this *GlobalSpecType_ApiDefinitions) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_DefaultSensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DefaultSensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DefaultSensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultSensitiveDataPolicy.Equal(that1.DefaultSensitiveDataPolicy) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_SensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_SensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_SensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SensitiveDataPolicy.Equal(that1.SensitiveDataPolicy) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType_DisableIpReputation) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -18136,6 +13785,229 @@ func (this *GlobalSpecType_L7DdosActionNone) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *SensitiveDataDisclosureRules) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataDisclosureRules)
+	if !ok {
+		that2, ok := that.(SensitiveDataDisclosureRules)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.SensitiveDataTypesInResponse) != len(that1.SensitiveDataTypesInResponse) {
+		return false
+	}
+	for i := range this.SensitiveDataTypesInResponse {
+		if !this.SensitiveDataTypesInResponse[i].Equal(that1.SensitiveDataTypesInResponse[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *SensitiveDataTypes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataTypes)
+	if !ok {
+		that2, ok := that.(SensitiveDataTypes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if that1.MaskingModeChoice == nil {
+		if this.MaskingModeChoice != nil {
+			return false
+		}
+	} else if this.MaskingModeChoice == nil {
+		return false
+	} else if !this.MaskingModeChoice.Equal(that1.MaskingModeChoice) {
+		return false
+	}
+	if that1.TypeConditionTypeChoice == nil {
+		if this.TypeConditionTypeChoice != nil {
+			return false
+		}
+	} else if this.TypeConditionTypeChoice == nil {
+		return false
+	} else if !this.TypeConditionTypeChoice.Equal(that1.TypeConditionTypeChoice) {
+		return false
+	}
+	if !this.Body.Equal(that1.Body) {
+		return false
+	}
+	return true
+}
+func (this *SensitiveDataTypes_Mask) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataTypes_Mask)
+	if !ok {
+		that2, ok := that.(SensitiveDataTypes_Mask)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Mask.Equal(that1.Mask) {
+		return false
+	}
+	return true
+}
+func (this *SensitiveDataTypes_Report) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataTypes_Report)
+	if !ok {
+		that2, ok := that.(SensitiveDataTypes_Report)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Report.Equal(that1.Report) {
+		return false
+	}
+	return true
+}
+func (this *SensitiveDataTypes_ApiEndpoint) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataTypes_ApiEndpoint)
+	if !ok {
+		that2, ok := that.(SensitiveDataTypes_ApiEndpoint)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ApiEndpoint.Equal(that1.ApiEndpoint) {
+		return false
+	}
+	return true
+}
+func (this *SensitiveDataTypes_BasePath) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataTypes_BasePath)
+	if !ok {
+		that2, ok := that.(SensitiveDataTypes_BasePath)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.BasePath != that1.BasePath {
+		return false
+	}
+	return true
+}
+func (this *SensitiveDataTypes_ApiGroup) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SensitiveDataTypes_ApiGroup)
+	if !ok {
+		that2, ok := that.(SensitiveDataTypes_ApiGroup)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ApiGroup != that1.ApiGroup {
+		return false
+	}
+	return true
+}
+func (this *BodySectionMaskingOptions) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BodySectionMaskingOptions)
+	if !ok {
+		that2, ok := that.(BodySectionMaskingOptions)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Fields) != len(that1.Fields) {
+		return false
+	}
+	for i := range this.Fields {
+		if this.Fields[i] != that1.Fields[i] {
+			return false
+		}
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -18243,6 +14115,9 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.UserIdChoice == nil {
 		return false
 	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
+		return false
+	}
+	if !this.ApiRateLimitLegacy.Equal(that1.ApiRateLimitLegacy) {
 		return false
 	}
 	if that1.RateLimitChoice == nil {
@@ -18363,6 +14238,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
+	if that1.SensitiveDataPolicyChoice == nil {
+		if this.SensitiveDataPolicyChoice != nil {
+			return false
+		}
+	} else if this.SensitiveDataPolicyChoice == nil {
+		return false
+	} else if !this.SensitiveDataPolicyChoice.Equal(that1.SensitiveDataPolicyChoice) {
+		return false
+	}
 	if that1.ApiDefinitionChoice == nil {
 		if this.ApiDefinitionChoice != nil {
 			return false
@@ -18437,6 +14321,9 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.L7DdosAutoMitigationAction == nil {
 		return false
 	} else if !this.L7DdosAutoMitigationAction.Equal(that1.L7DdosAutoMitigationAction) {
+		return false
+	}
+	if !this.SensitiveDataDisclosureRules.Equal(that1.SensitiveDataDisclosureRules) {
 		return false
 	}
 	return true
@@ -19425,6 +15312,54 @@ func (this *CreateSpecType_BotDefenseAdvanced) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_DefaultSensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DefaultSensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DefaultSensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultSensitiveDataPolicy.Equal(that1.DefaultSensitiveDataPolicy) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_SensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_SensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(CreateSpecType_SensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SensitiveDataPolicy.Equal(that1.SensitiveDataPolicy) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType_DisableApiDefinition) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -19918,6 +15853,9 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
 		return false
 	}
+	if !this.ApiRateLimitLegacy.Equal(that1.ApiRateLimitLegacy) {
+		return false
+	}
 	if that1.RateLimitChoice == nil {
 		if this.RateLimitChoice != nil {
 			return false
@@ -20036,6 +15974,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
+	if that1.SensitiveDataPolicyChoice == nil {
+		if this.SensitiveDataPolicyChoice != nil {
+			return false
+		}
+	} else if this.SensitiveDataPolicyChoice == nil {
+		return false
+	} else if !this.SensitiveDataPolicyChoice.Equal(that1.SensitiveDataPolicyChoice) {
+		return false
+	}
 	if that1.ApiDefinitionChoice == nil {
 		if this.ApiDefinitionChoice != nil {
 			return false
@@ -20110,6 +16057,9 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.L7DdosAutoMitigationAction == nil {
 		return false
 	} else if !this.L7DdosAutoMitigationAction.Equal(that1.L7DdosAutoMitigationAction) {
+		return false
+	}
+	if !this.SensitiveDataDisclosureRules.Equal(that1.SensitiveDataDisclosureRules) {
 		return false
 	}
 	return true
@@ -21098,6 +17048,54 @@ func (this *ReplaceSpecType_BotDefenseAdvanced) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_DefaultSensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DefaultSensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DefaultSensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultSensitiveDataPolicy.Equal(that1.DefaultSensitiveDataPolicy) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_SensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_SensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_SensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SensitiveDataPolicy.Equal(that1.SensitiveDataPolicy) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType_DisableApiDefinition) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -21599,6 +17597,9 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.UserIdChoice.Equal(that1.UserIdChoice) {
 		return false
 	}
+	if !this.ApiRateLimitLegacy.Equal(that1.ApiRateLimitLegacy) {
+		return false
+	}
 	if that1.RateLimitChoice == nil {
 		if this.RateLimitChoice != nil {
 			return false
@@ -21717,6 +17718,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if !this.BotDefenseChoice.Equal(that1.BotDefenseChoice) {
 		return false
 	}
+	if that1.SensitiveDataPolicyChoice == nil {
+		if this.SensitiveDataPolicyChoice != nil {
+			return false
+		}
+	} else if this.SensitiveDataPolicyChoice == nil {
+		return false
+	} else if !this.SensitiveDataPolicyChoice.Equal(that1.SensitiveDataPolicyChoice) {
+		return false
+	}
 	if that1.ApiDefinitionChoice == nil {
 		if this.ApiDefinitionChoice != nil {
 			return false
@@ -21819,6 +17829,9 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if this.CertState != that1.CertState {
+		return false
+	}
+	if !this.SensitiveDataDisclosureRules.Equal(that1.SensitiveDataDisclosureRules) {
 		return false
 	}
 	return true
@@ -22803,6 +18816,54 @@ func (this *GetSpecType_BotDefenseAdvanced) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.BotDefenseAdvanced.Equal(that1.BotDefenseAdvanced) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DefaultSensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DefaultSensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(GetSpecType_DefaultSensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultSensitiveDataPolicy.Equal(that1.DefaultSensitiveDataPolicy) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_SensitiveDataPolicy) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_SensitiveDataPolicy)
+	if !ok {
+		that2, ok := that.(GetSpecType_SensitiveDataPolicy)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SensitiveDataPolicy.Equal(that1.SensitiveDataPolicy) {
 		return false
 	}
 	return true
@@ -24039,67 +20100,6 @@ func (this *AdvancedOptionsType_AdditionalDomains) GoString() string {
 		`AdditionalDomains:` + fmt.Sprintf("%#v", this.AdditionalDomains) + `}`}, ", ")
 	return s
 }
-func (this *DDoSClientSource) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&http_loadbalancer.DDoSClientSource{")
-	if this.AsnList != nil {
-		s = append(s, "AsnList: "+fmt.Sprintf("%#v", this.AsnList)+",\n")
-	}
-	s = append(s, "CountryList: "+fmt.Sprintf("%#v", this.CountryList)+",\n")
-	if this.TlsFingerprintMatcher != nil {
-		s = append(s, "TlsFingerprintMatcher: "+fmt.Sprintf("%#v", this.TlsFingerprintMatcher)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *DDoSMitigationRule) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 9)
-	s = append(s, "&http_loadbalancer.DDoSMitigationRule{")
-	if this.Metadata != nil {
-		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
-	}
-	if this.MitigationAction != nil {
-		s = append(s, "MitigationAction: "+fmt.Sprintf("%#v", this.MitigationAction)+",\n")
-	}
-	if this.MitigationChoice != nil {
-		s = append(s, "MitigationChoice: "+fmt.Sprintf("%#v", this.MitigationChoice)+",\n")
-	}
-	if this.ExpirationTimestamp != nil {
-		s = append(s, "ExpirationTimestamp: "+fmt.Sprintf("%#v", this.ExpirationTimestamp)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *DDoSMitigationRule_Block) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.DDoSMitigationRule_Block{` +
-		`Block:` + fmt.Sprintf("%#v", this.Block) + `}`}, ", ")
-	return s
-}
-func (this *DDoSMitigationRule_DdosClientSource) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.DDoSMitigationRule_DdosClientSource{` +
-		`DdosClientSource:` + fmt.Sprintf("%#v", this.DdosClientSource) + `}`}, ", ")
-	return s
-}
-func (this *DDoSMitigationRule_IpPrefixList) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.DDoSMitigationRule_IpPrefixList{` +
-		`IpPrefixList:` + fmt.Sprintf("%#v", this.IpPrefixList) + `}`}, ", ")
-	return s
-}
 func (this *SingleLoadBalancerAppSetting) GoString() string {
 	if this == nil {
 		return "nil"
@@ -24159,696 +20159,11 @@ func (this *OriginServerSubsetRuleListType) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *ClientSideDefenseType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&http_loadbalancer.ClientSideDefenseType{")
-	if this.Policy != nil {
-		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ClientSideDefensePolicyType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&http_loadbalancer.ClientSideDefensePolicyType{")
-	if this.JavaScriptChoice != nil {
-		s = append(s, "JavaScriptChoice: "+fmt.Sprintf("%#v", this.JavaScriptChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ClientSideDefensePolicyType_DisableJsInsert) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ClientSideDefensePolicyType_DisableJsInsert{` +
-		`DisableJsInsert:` + fmt.Sprintf("%#v", this.DisableJsInsert) + `}`}, ", ")
-	return s
-}
-func (this *ClientSideDefensePolicyType_JsInsertAllPages) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ClientSideDefensePolicyType_JsInsertAllPages{` +
-		`JsInsertAllPages:` + fmt.Sprintf("%#v", this.JsInsertAllPages) + `}`}, ", ")
-	return s
-}
-func (this *ClientSideDefensePolicyType_JsInsertAllPagesExcept) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ClientSideDefensePolicyType_JsInsertAllPagesExcept{` +
-		`JsInsertAllPagesExcept:` + fmt.Sprintf("%#v", this.JsInsertAllPagesExcept) + `}`}, ", ")
-	return s
-}
-func (this *ClientSideDefensePolicyType_JsInsertionRules) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ClientSideDefensePolicyType_JsInsertionRules{` +
-		`JsInsertionRules:` + fmt.Sprintf("%#v", this.JsInsertionRules) + `}`}, ", ")
-	return s
-}
-func (this *CSDJavaScriptInsertAllWithExceptionsType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&http_loadbalancer.CSDJavaScriptInsertAllWithExceptionsType{")
-	if this.ExcludeList != nil {
-		s = append(s, "ExcludeList: "+fmt.Sprintf("%#v", this.ExcludeList)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CSDJavaScriptInsertType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&http_loadbalancer.CSDJavaScriptInsertType{")
-	if this.Rules != nil {
-		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
-	}
-	if this.ExcludeList != nil {
-		s = append(s, "ExcludeList: "+fmt.Sprintf("%#v", this.ExcludeList)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CSDJavaScriptInsertionRule) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&http_loadbalancer.CSDJavaScriptInsertionRule{")
-	if this.Metadata != nil {
-		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
-	}
-	if this.DomainMatcherChoice != nil {
-		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
-	}
-	if this.Path != nil {
-		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CSDJavaScriptInsertionRule_AnyDomain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CSDJavaScriptInsertionRule_AnyDomain{` +
-		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
-	return s
-}
-func (this *CSDJavaScriptInsertionRule_Domain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.CSDJavaScriptInsertionRule_Domain{` +
-		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
-	return s
-}
-func (this *BotDefenseAdvancedPolicyType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&http_loadbalancer.BotDefenseAdvancedPolicyType{")
-	if this.ProtectedAppEndpoints != nil {
-		s = append(s, "ProtectedAppEndpoints: "+fmt.Sprintf("%#v", this.ProtectedAppEndpoints)+",\n")
-	}
-	s = append(s, "JsDownloadPath: "+fmt.Sprintf("%#v", this.JsDownloadPath)+",\n")
-	if this.MobileSdkChoice != nil {
-		s = append(s, "MobileSdkChoice: "+fmt.Sprintf("%#v", this.MobileSdkChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *BotDefenseAdvancedPolicyType_DisableMobileSdk) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.BotDefenseAdvancedPolicyType_DisableMobileSdk{` +
-		`DisableMobileSdk:` + fmt.Sprintf("%#v", this.DisableMobileSdk) + `}`}, ", ")
-	return s
-}
-func (this *BotDefenseAdvancedPolicyType_MobileSdkConfig) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.BotDefenseAdvancedPolicyType_MobileSdkConfig{` +
-		`MobileSdkConfig:` + fmt.Sprintf("%#v", this.MobileSdkConfig) + `}`}, ", ")
-	return s
-}
-func (this *BotAdvancedMobileSDKConfigType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&http_loadbalancer.BotAdvancedMobileSDKConfigType{")
-	if this.MobileIdentifier != nil {
-		s = append(s, "MobileIdentifier: "+fmt.Sprintf("%#v", this.MobileIdentifier)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ProtectedAppEndpointType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 16)
-	s = append(s, "&http_loadbalancer.ProtectedAppEndpointType{")
-	if this.Metadata != nil {
-		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
-	}
-	if this.DomainMatcherChoice != nil {
-		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
-	}
-	if this.Path != nil {
-		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	}
-	if this.Query != nil {
-		s = append(s, "Query: "+fmt.Sprintf("%#v", this.Query)+",\n")
-	}
-	if this.RequestBody != nil {
-		s = append(s, "RequestBody: "+fmt.Sprintf("%#v", this.RequestBody)+",\n")
-	}
-	s = append(s, "HttpMethods: "+fmt.Sprintf("%#v", this.HttpMethods)+",\n")
-	if this.AppTrafficTypeChoice != nil {
-		s = append(s, "AppTrafficTypeChoice: "+fmt.Sprintf("%#v", this.AppTrafficTypeChoice)+",\n")
-	}
-	if this.FlowLabelChoice != nil {
-		s = append(s, "FlowLabelChoice: "+fmt.Sprintf("%#v", this.FlowLabelChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ProtectedAppEndpointType_AnyDomain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ProtectedAppEndpointType_AnyDomain{` +
-		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
-	return s
-}
-func (this *ProtectedAppEndpointType_Domain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ProtectedAppEndpointType_Domain{` +
-		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
-	return s
-}
-func (this *ProtectedAppEndpointType_WebClient) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ProtectedAppEndpointType_WebClient{` +
-		`WebClient:` + fmt.Sprintf("%#v", this.WebClient) + `}`}, ", ")
-	return s
-}
-func (this *ProtectedAppEndpointType_MobileClient) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ProtectedAppEndpointType_MobileClient{` +
-		`MobileClient:` + fmt.Sprintf("%#v", this.MobileClient) + `}`}, ", ")
-	return s
-}
-func (this *ProtectedAppEndpointType_WebMobileClient) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ProtectedAppEndpointType_WebMobileClient{` +
-		`WebMobileClient:` + fmt.Sprintf("%#v", this.WebMobileClient) + `}`}, ", ")
-	return s
-}
-func (this *ProtectedAppEndpointType_UndefinedFlowLabel) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ProtectedAppEndpointType_UndefinedFlowLabel{` +
-		`UndefinedFlowLabel:` + fmt.Sprintf("%#v", this.UndefinedFlowLabel) + `}`}, ", ")
-	return s
-}
-func (this *ProtectedAppEndpointType_FlowLabel) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ProtectedAppEndpointType_FlowLabel{` +
-		`FlowLabel:` + fmt.Sprintf("%#v", this.FlowLabel) + `}`}, ", ")
-	return s
-}
-func (this *RequestBody) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&http_loadbalancer.RequestBody{")
-	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	if this.ValueType != nil {
-		s = append(s, "ValueType: "+fmt.Sprintf("%#v", this.ValueType)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *RequestBody_ExactValue) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RequestBody_ExactValue{` +
-		`ExactValue:` + fmt.Sprintf("%#v", this.ExactValue) + `}`}, ", ")
-	return s
-}
-func (this *RequestBody_RegexValue) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.RequestBody_RegexValue{` +
-		`RegexValue:` + fmt.Sprintf("%#v", this.RegexValue) + `}`}, ", ")
-	return s
-}
-func (this *Query) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&http_loadbalancer.Query{")
-	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
-	if this.ValueType != nil {
-		s = append(s, "ValueType: "+fmt.Sprintf("%#v", this.ValueType)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *Query_ExactValue) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.Query_ExactValue{` +
-		`ExactValue:` + fmt.Sprintf("%#v", this.ExactValue) + `}`}, ", ")
-	return s
-}
-func (this *Query_RegexValue) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.Query_RegexValue{` +
-		`RegexValue:` + fmt.Sprintf("%#v", this.RegexValue) + `}`}, ", ")
-	return s
-}
-func (this *Query_CheckPresence) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.Query_CheckPresence{` +
-		`CheckPresence:` + fmt.Sprintf("%#v", this.CheckPresence) + `}`}, ", ")
-	return s
-}
-func (this *ShapeBotDefenseType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 9)
-	s = append(s, "&http_loadbalancer.ShapeBotDefenseType{")
-	s = append(s, "RegionalEndpoint: "+fmt.Sprintf("%#v", this.RegionalEndpoint)+",\n")
-	if this.Policy != nil {
-		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
-	}
-	s = append(s, "Timeout: "+fmt.Sprintf("%#v", this.Timeout)+",\n")
-	if this.CorsSupportChoice != nil {
-		s = append(s, "CorsSupportChoice: "+fmt.Sprintf("%#v", this.CorsSupportChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeBotDefenseType_EnableCorsSupport) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefenseType_EnableCorsSupport{` +
-		`EnableCorsSupport:` + fmt.Sprintf("%#v", this.EnableCorsSupport) + `}`}, ", ")
-	return s
-}
-func (this *ShapeBotDefenseType_DisableCorsSupport) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefenseType_DisableCorsSupport{` +
-		`DisableCorsSupport:` + fmt.Sprintf("%#v", this.DisableCorsSupport) + `}`}, ", ")
-	return s
-}
-func (this *BotDefenseAdvancedType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&http_loadbalancer.BotDefenseAdvancedType{")
-	if this.Web != nil {
-		s = append(s, "Web: "+fmt.Sprintf("%#v", this.Web)+",\n")
-	}
-	if this.Mobile != nil {
-		s = append(s, "Mobile: "+fmt.Sprintf("%#v", this.Mobile)+",\n")
-	}
-	if this.Policy != nil {
-		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeBotDefensePolicyType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 13)
-	s = append(s, "&http_loadbalancer.ShapeBotDefensePolicyType{")
-	if this.ProtectedAppEndpoints != nil {
-		s = append(s, "ProtectedAppEndpoints: "+fmt.Sprintf("%#v", this.ProtectedAppEndpoints)+",\n")
-	}
-	if this.JavaScriptChoice != nil {
-		s = append(s, "JavaScriptChoice: "+fmt.Sprintf("%#v", this.JavaScriptChoice)+",\n")
-	}
-	s = append(s, "JsDownloadPath: "+fmt.Sprintf("%#v", this.JsDownloadPath)+",\n")
-	s = append(s, "JavascriptMode: "+fmt.Sprintf("%#v", this.JavascriptMode)+",\n")
-	if this.MobileSdkChoice != nil {
-		s = append(s, "MobileSdkChoice: "+fmt.Sprintf("%#v", this.MobileSdkChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeBotDefensePolicyType_DisableJsInsert) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_DisableJsInsert{` +
-		`DisableJsInsert:` + fmt.Sprintf("%#v", this.DisableJsInsert) + `}`}, ", ")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_JsInsertAllPages) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_JsInsertAllPages{` +
-		`JsInsertAllPages:` + fmt.Sprintf("%#v", this.JsInsertAllPages) + `}`}, ", ")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_JsInsertAllPagesExcept{` +
-		`JsInsertAllPagesExcept:` + fmt.Sprintf("%#v", this.JsInsertAllPagesExcept) + `}`}, ", ")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_JsInsertionRules) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_JsInsertionRules{` +
-		`JsInsertionRules:` + fmt.Sprintf("%#v", this.JsInsertionRules) + `}`}, ", ")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_DisableMobileSdk) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_DisableMobileSdk{` +
-		`DisableMobileSdk:` + fmt.Sprintf("%#v", this.DisableMobileSdk) + `}`}, ", ")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_MobileSdkConfig) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeBotDefensePolicyType_MobileSdkConfig{` +
-		`MobileSdkConfig:` + fmt.Sprintf("%#v", this.MobileSdkConfig) + `}`}, ", ")
-	return s
-}
-func (this *MobileTrafficIdentifierType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&http_loadbalancer.MobileTrafficIdentifierType{")
-	if this.Headers != nil {
-		s = append(s, "Headers: "+fmt.Sprintf("%#v", this.Headers)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *MobileSDKConfigType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&http_loadbalancer.MobileSDKConfigType{")
-	s = append(s, "ReloadHeaderName: "+fmt.Sprintf("%#v", this.ReloadHeaderName)+",\n")
-	if this.MobileIdentifier != nil {
-		s = append(s, "MobileIdentifier: "+fmt.Sprintf("%#v", this.MobileIdentifier)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AppEndpointType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 18)
-	s = append(s, "&http_loadbalancer.AppEndpointType{")
-	if this.Metadata != nil {
-		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
-	}
-	s = append(s, "HttpMethods: "+fmt.Sprintf("%#v", this.HttpMethods)+",\n")
-	s = append(s, "Protocol: "+fmt.Sprintf("%#v", this.Protocol)+",\n")
-	if this.Path != nil {
-		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	}
-	if this.DomainMatcherChoice != nil {
-		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
-	}
-	if this.AppTrafficTypeChoice != nil {
-		s = append(s, "AppTrafficTypeChoice: "+fmt.Sprintf("%#v", this.AppTrafficTypeChoice)+",\n")
-	}
-	if this.Mitigation != nil {
-		s = append(s, "Mitigation: "+fmt.Sprintf("%#v", this.Mitigation)+",\n")
-	}
-	if this.FlowLabelChoice != nil {
-		s = append(s, "FlowLabelChoice: "+fmt.Sprintf("%#v", this.FlowLabelChoice)+",\n")
-	}
-	if this.GoodbotChoice != nil {
-		s = append(s, "GoodbotChoice: "+fmt.Sprintf("%#v", this.GoodbotChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AppEndpointType_AnyDomain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_AnyDomain{` +
-		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_Domain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_Domain{` +
-		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_Web) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_Web{` +
-		`Web:` + fmt.Sprintf("%#v", this.Web) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_Mobile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_Mobile{` +
-		`Mobile:` + fmt.Sprintf("%#v", this.Mobile) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_WebMobile) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_WebMobile{` +
-		`WebMobile:` + fmt.Sprintf("%#v", this.WebMobile) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_UndefinedFlowLabel) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_UndefinedFlowLabel{` +
-		`UndefinedFlowLabel:` + fmt.Sprintf("%#v", this.UndefinedFlowLabel) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_FlowLabel) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_FlowLabel{` +
-		`FlowLabel:` + fmt.Sprintf("%#v", this.FlowLabel) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_AllowGoodBots) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_AllowGoodBots{` +
-		`AllowGoodBots:` + fmt.Sprintf("%#v", this.AllowGoodBots) + `}`}, ", ")
-	return s
-}
-func (this *AppEndpointType_MitigateGoodBots) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.AppEndpointType_MitigateGoodBots{` +
-		`MitigateGoodBots:` + fmt.Sprintf("%#v", this.MitigateGoodBots) + `}`}, ", ")
-	return s
-}
-func (this *WebMobileTrafficType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&http_loadbalancer.WebMobileTrafficType{")
-	if this.Header != nil {
-		s = append(s, "Header: "+fmt.Sprintf("%#v", this.Header)+",\n")
-	}
-	if this.Headers != nil {
-		s = append(s, "Headers: "+fmt.Sprintf("%#v", this.Headers)+",\n")
-	}
-	s = append(s, "MobileIdentifier: "+fmt.Sprintf("%#v", this.MobileIdentifier)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeJavaScriptInsertType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertType{")
-	if this.Rules != nil {
-		s = append(s, "Rules: "+fmt.Sprintf("%#v", this.Rules)+",\n")
-	}
-	if this.ExcludeList != nil {
-		s = append(s, "ExcludeList: "+fmt.Sprintf("%#v", this.ExcludeList)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeJavaScriptInsertAllWithExceptionsType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertAllWithExceptionsType{")
-	s = append(s, "JavascriptLocation: "+fmt.Sprintf("%#v", this.JavascriptLocation)+",\n")
-	if this.ExcludeList != nil {
-		s = append(s, "ExcludeList: "+fmt.Sprintf("%#v", this.ExcludeList)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeJavaScriptInsertAllType) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertAllType{")
-	s = append(s, "JavascriptLocation: "+fmt.Sprintf("%#v", this.JavascriptLocation)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeJavaScriptInsertionRule) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 9)
-	s = append(s, "&http_loadbalancer.ShapeJavaScriptInsertionRule{")
-	if this.Metadata != nil {
-		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
-	}
-	if this.DomainMatcherChoice != nil {
-		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
-	}
-	if this.Path != nil {
-		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	}
-	s = append(s, "JavascriptLocation: "+fmt.Sprintf("%#v", this.JavascriptLocation)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeJavaScriptInsertionRule_AnyDomain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptInsertionRule_AnyDomain{` +
-		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
-	return s
-}
-func (this *ShapeJavaScriptInsertionRule_Domain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptInsertionRule_Domain{` +
-		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
-	return s
-}
-func (this *ShapeJavaScriptExclusionRule) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 8)
-	s = append(s, "&http_loadbalancer.ShapeJavaScriptExclusionRule{")
-	if this.Metadata != nil {
-		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
-	}
-	if this.DomainMatcherChoice != nil {
-		s = append(s, "DomainMatcherChoice: "+fmt.Sprintf("%#v", this.DomainMatcherChoice)+",\n")
-	}
-	if this.Path != nil {
-		s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *ShapeJavaScriptExclusionRule_AnyDomain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptExclusionRule_AnyDomain{` +
-		`AnyDomain:` + fmt.Sprintf("%#v", this.AnyDomain) + `}`}, ", ")
-	return s
-}
-func (this *ShapeJavaScriptExclusionRule_Domain) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&http_loadbalancer.ShapeJavaScriptExclusionRule_Domain{` +
-		`Domain:` + fmt.Sprintf("%#v", this.Domain) + `}`}, ", ")
-	return s
-}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 91)
+	s := make([]string, 0, 95)
 	s = append(s, "&http_loadbalancer.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -24890,6 +20205,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.UserIdChoice != nil {
 		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
+	}
+	if this.ApiRateLimitLegacy != nil {
+		s = append(s, "ApiRateLimitLegacy: "+fmt.Sprintf("%#v", this.ApiRateLimitLegacy)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -24942,6 +20260,9 @@ func (this *GlobalSpecType) GoString() string {
 	if this.ApiDefinitionChoice != nil {
 		s = append(s, "ApiDefinitionChoice: "+fmt.Sprintf("%#v", this.ApiDefinitionChoice)+",\n")
 	}
+	if this.SensitiveDataPolicyChoice != nil {
+		s = append(s, "SensitiveDataPolicyChoice: "+fmt.Sprintf("%#v", this.SensitiveDataPolicyChoice)+",\n")
+	}
 	if this.IpReputationChoice != nil {
 		s = append(s, "IpReputationChoice: "+fmt.Sprintf("%#v", this.IpReputationChoice)+",\n")
 	}
@@ -24982,6 +20303,9 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "L7DdosAutoMitigationAction: "+fmt.Sprintf("%#v", this.L7DdosAutoMitigationAction)+",\n")
 	}
 	s = append(s, "CertState: "+fmt.Sprintf("%#v", this.CertState)+",\n")
+	if this.SensitiveDataDisclosureRules != nil {
+		s = append(s, "SensitiveDataDisclosureRules: "+fmt.Sprintf("%#v", this.SensitiveDataDisclosureRules)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -25385,6 +20709,22 @@ func (this *GlobalSpecType_ApiDefinitions) GoString() string {
 		`ApiDefinitions:` + fmt.Sprintf("%#v", this.ApiDefinitions) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_DefaultSensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_DefaultSensitiveDataPolicy{` +
+		`DefaultSensitiveDataPolicy:` + fmt.Sprintf("%#v", this.DefaultSensitiveDataPolicy) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_SensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GlobalSpecType_SensitiveDataPolicy{` +
+		`SensitiveDataPolicy:` + fmt.Sprintf("%#v", this.SensitiveDataPolicy) + `}`}, ", ")
+	return s
+}
 func (this *GlobalSpecType_DisableIpReputation) GoString() string {
 	if this == nil {
 		return "nil"
@@ -25465,11 +20805,94 @@ func (this *GlobalSpecType_L7DdosActionNone) GoString() string {
 		`L7DdosActionNone:` + fmt.Sprintf("%#v", this.L7DdosActionNone) + `}`}, ", ")
 	return s
 }
+func (this *SensitiveDataDisclosureRules) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.SensitiveDataDisclosureRules{")
+	if this.SensitiveDataTypesInResponse != nil {
+		s = append(s, "SensitiveDataTypesInResponse: "+fmt.Sprintf("%#v", this.SensitiveDataTypesInResponse)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SensitiveDataTypes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&http_loadbalancer.SensitiveDataTypes{")
+	if this.Metadata != nil {
+		s = append(s, "Metadata: "+fmt.Sprintf("%#v", this.Metadata)+",\n")
+	}
+	if this.MaskingModeChoice != nil {
+		s = append(s, "MaskingModeChoice: "+fmt.Sprintf("%#v", this.MaskingModeChoice)+",\n")
+	}
+	if this.TypeConditionTypeChoice != nil {
+		s = append(s, "TypeConditionTypeChoice: "+fmt.Sprintf("%#v", this.TypeConditionTypeChoice)+",\n")
+	}
+	if this.Body != nil {
+		s = append(s, "Body: "+fmt.Sprintf("%#v", this.Body)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SensitiveDataTypes_Mask) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SensitiveDataTypes_Mask{` +
+		`Mask:` + fmt.Sprintf("%#v", this.Mask) + `}`}, ", ")
+	return s
+}
+func (this *SensitiveDataTypes_Report) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SensitiveDataTypes_Report{` +
+		`Report:` + fmt.Sprintf("%#v", this.Report) + `}`}, ", ")
+	return s
+}
+func (this *SensitiveDataTypes_ApiEndpoint) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SensitiveDataTypes_ApiEndpoint{` +
+		`ApiEndpoint:` + fmt.Sprintf("%#v", this.ApiEndpoint) + `}`}, ", ")
+	return s
+}
+func (this *SensitiveDataTypes_BasePath) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SensitiveDataTypes_BasePath{` +
+		`BasePath:` + fmt.Sprintf("%#v", this.BasePath) + `}`}, ", ")
+	return s
+}
+func (this *SensitiveDataTypes_ApiGroup) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.SensitiveDataTypes_ApiGroup{` +
+		`ApiGroup:` + fmt.Sprintf("%#v", this.ApiGroup) + `}`}, ", ")
+	return s
+}
+func (this *BodySectionMaskingOptions) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&http_loadbalancer.BodySectionMaskingOptions{")
+	s = append(s, "Fields: "+fmt.Sprintf("%#v", this.Fields)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 79)
+	s := make([]string, 0, 83)
 	s = append(s, "&http_loadbalancer.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -25505,6 +20928,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.UserIdChoice != nil {
 		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
+	}
+	if this.ApiRateLimitLegacy != nil {
+		s = append(s, "ApiRateLimitLegacy: "+fmt.Sprintf("%#v", this.ApiRateLimitLegacy)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -25551,6 +20977,9 @@ func (this *CreateSpecType) GoString() string {
 	if this.BotDefenseChoice != nil {
 		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
 	}
+	if this.SensitiveDataPolicyChoice != nil {
+		s = append(s, "SensitiveDataPolicyChoice: "+fmt.Sprintf("%#v", this.SensitiveDataPolicyChoice)+",\n")
+	}
 	if this.ApiDefinitionChoice != nil {
 		s = append(s, "ApiDefinitionChoice: "+fmt.Sprintf("%#v", this.ApiDefinitionChoice)+",\n")
 	}
@@ -25580,6 +21009,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.L7DdosAutoMitigationAction != nil {
 		s = append(s, "L7DdosAutoMitigationAction: "+fmt.Sprintf("%#v", this.L7DdosAutoMitigationAction)+",\n")
+	}
+	if this.SensitiveDataDisclosureRules != nil {
+		s = append(s, "SensitiveDataDisclosureRules: "+fmt.Sprintf("%#v", this.SensitiveDataDisclosureRules)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -25912,6 +21344,22 @@ func (this *CreateSpecType_BotDefenseAdvanced) GoString() string {
 		`BotDefenseAdvanced:` + fmt.Sprintf("%#v", this.BotDefenseAdvanced) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_DefaultSensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_DefaultSensitiveDataPolicy{` +
+		`DefaultSensitiveDataPolicy:` + fmt.Sprintf("%#v", this.DefaultSensitiveDataPolicy) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_SensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.CreateSpecType_SensitiveDataPolicy{` +
+		`SensitiveDataPolicy:` + fmt.Sprintf("%#v", this.SensitiveDataPolicy) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType_DisableApiDefinition) GoString() string {
 	if this == nil {
 		return "nil"
@@ -26044,7 +21492,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 79)
+	s := make([]string, 0, 83)
 	s = append(s, "&http_loadbalancer.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -26080,6 +21528,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.UserIdChoice != nil {
 		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
+	}
+	if this.ApiRateLimitLegacy != nil {
+		s = append(s, "ApiRateLimitLegacy: "+fmt.Sprintf("%#v", this.ApiRateLimitLegacy)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -26126,6 +21577,9 @@ func (this *ReplaceSpecType) GoString() string {
 	if this.BotDefenseChoice != nil {
 		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
 	}
+	if this.SensitiveDataPolicyChoice != nil {
+		s = append(s, "SensitiveDataPolicyChoice: "+fmt.Sprintf("%#v", this.SensitiveDataPolicyChoice)+",\n")
+	}
 	if this.ApiDefinitionChoice != nil {
 		s = append(s, "ApiDefinitionChoice: "+fmt.Sprintf("%#v", this.ApiDefinitionChoice)+",\n")
 	}
@@ -26155,6 +21609,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.L7DdosAutoMitigationAction != nil {
 		s = append(s, "L7DdosAutoMitigationAction: "+fmt.Sprintf("%#v", this.L7DdosAutoMitigationAction)+",\n")
+	}
+	if this.SensitiveDataDisclosureRules != nil {
+		s = append(s, "SensitiveDataDisclosureRules: "+fmt.Sprintf("%#v", this.SensitiveDataDisclosureRules)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -26487,6 +21944,22 @@ func (this *ReplaceSpecType_BotDefenseAdvanced) GoString() string {
 		`BotDefenseAdvanced:` + fmt.Sprintf("%#v", this.BotDefenseAdvanced) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_DefaultSensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_DefaultSensitiveDataPolicy{` +
+		`DefaultSensitiveDataPolicy:` + fmt.Sprintf("%#v", this.DefaultSensitiveDataPolicy) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_SensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.ReplaceSpecType_SensitiveDataPolicy{` +
+		`SensitiveDataPolicy:` + fmt.Sprintf("%#v", this.SensitiveDataPolicy) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType_DisableApiDefinition) GoString() string {
 	if this == nil {
 		return "nil"
@@ -26619,7 +22092,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 86)
+	s := make([]string, 0, 90)
 	s = append(s, "&http_loadbalancer.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.LoadbalancerType != nil {
@@ -26658,6 +22131,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.UserIdChoice != nil {
 		s = append(s, "UserIdChoice: "+fmt.Sprintf("%#v", this.UserIdChoice)+",\n")
+	}
+	if this.ApiRateLimitLegacy != nil {
+		s = append(s, "ApiRateLimitLegacy: "+fmt.Sprintf("%#v", this.ApiRateLimitLegacy)+",\n")
 	}
 	if this.RateLimitChoice != nil {
 		s = append(s, "RateLimitChoice: "+fmt.Sprintf("%#v", this.RateLimitChoice)+",\n")
@@ -26704,6 +22180,9 @@ func (this *GetSpecType) GoString() string {
 	if this.BotDefenseChoice != nil {
 		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
 	}
+	if this.SensitiveDataPolicyChoice != nil {
+		s = append(s, "SensitiveDataPolicyChoice: "+fmt.Sprintf("%#v", this.SensitiveDataPolicyChoice)+",\n")
+	}
 	if this.ApiDefinitionChoice != nil {
 		s = append(s, "ApiDefinitionChoice: "+fmt.Sprintf("%#v", this.ApiDefinitionChoice)+",\n")
 	}
@@ -26746,6 +22225,9 @@ func (this *GetSpecType) GoString() string {
 		s = append(s, "L7DdosAutoMitigationAction: "+fmt.Sprintf("%#v", this.L7DdosAutoMitigationAction)+",\n")
 	}
 	s = append(s, "CertState: "+fmt.Sprintf("%#v", this.CertState)+",\n")
+	if this.SensitiveDataDisclosureRules != nil {
+		s = append(s, "SensitiveDataDisclosureRules: "+fmt.Sprintf("%#v", this.SensitiveDataDisclosureRules)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -27075,6 +22557,22 @@ func (this *GetSpecType_BotDefenseAdvanced) GoString() string {
 	}
 	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_BotDefenseAdvanced{` +
 		`BotDefenseAdvanced:` + fmt.Sprintf("%#v", this.BotDefenseAdvanced) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DefaultSensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_DefaultSensitiveDataPolicy{` +
+		`DefaultSensitiveDataPolicy:` + fmt.Sprintf("%#v", this.DefaultSensitiveDataPolicy) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_SensitiveDataPolicy) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&http_loadbalancer.GetSpecType_SensitiveDataPolicy{` +
+		`SensitiveDataPolicy:` + fmt.Sprintf("%#v", this.SensitiveDataPolicy) + `}`}, ", ")
 	return s
 }
 func (this *GetSpecType_DisableApiDefinition) GoString() string {
@@ -29684,199 +25182,6 @@ func (m *AdvancedOptionsType_AdditionalDomains) MarshalToSizedBuffer(dAtA []byte
 	}
 	return len(dAtA) - i, nil
 }
-func (m *DDoSClientSource) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DDoSClientSource) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DDoSClientSource) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.TlsFingerprintMatcher != nil {
-		{
-			size, err := m.TlsFingerprintMatcher.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.CountryList) > 0 {
-		dAtA76 := make([]byte, len(m.CountryList)*10)
-		var j75 int
-		for _, num := range m.CountryList {
-			for num >= 1<<7 {
-				dAtA76[j75] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j75++
-			}
-			dAtA76[j75] = uint8(num)
-			j75++
-		}
-		i -= j75
-		copy(dAtA[i:], dAtA76[:j75])
-		i = encodeVarintTypes(dAtA, i, uint64(j75))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.AsnList != nil {
-		{
-			size, err := m.AsnList.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DDoSMitigationRule) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DDoSMitigationRule) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DDoSMitigationRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ExpirationTimestamp != nil {
-		{
-			size, err := m.ExpirationTimestamp.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x52
-	}
-	if m.MitigationChoice != nil {
-		{
-			size := m.MitigationChoice.Size()
-			i -= size
-			if _, err := m.MitigationChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.MitigationAction != nil {
-		{
-			size := m.MitigationAction.Size()
-			i -= size
-			if _, err := m.MitigationAction.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Metadata != nil {
-		{
-			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DDoSMitigationRule_Block) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DDoSMitigationRule_Block) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Block != nil {
-		{
-			size, err := m.Block.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DDoSMitigationRule_DdosClientSource) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DDoSMitigationRule_DdosClientSource) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DdosClientSource != nil {
-		{
-			size, err := m.DdosClientSource.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x42
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DDoSMitigationRule_IpPrefixList) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DDoSMitigationRule_IpPrefixList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.IpPrefixList != nil {
-		{
-			size, err := m.IpPrefixList.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x4a
-	}
-	return len(dAtA) - i, nil
-}
 func (m *SingleLoadBalancerAppSetting) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -30039,2009 +25344,6 @@ func (m *OriginServerSubsetRuleListType) MarshalToSizedBuffer(dAtA []byte) (int,
 	return len(dAtA) - i, nil
 }
 
-func (m *ClientSideDefenseType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ClientSideDefenseType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClientSideDefenseType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Policy != nil {
-		{
-			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ClientSideDefensePolicyType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ClientSideDefensePolicyType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClientSideDefensePolicyType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.JavaScriptChoice != nil {
-		{
-			size := m.JavaScriptChoice.Size()
-			i -= size
-			if _, err := m.JavaScriptChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ClientSideDefensePolicyType_DisableJsInsert) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClientSideDefensePolicyType_DisableJsInsert) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableJsInsert != nil {
-		{
-			size, err := m.DisableJsInsert.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ClientSideDefensePolicyType_JsInsertAllPages) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClientSideDefensePolicyType_JsInsertAllPages) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.JsInsertAllPages != nil {
-		{
-			size, err := m.JsInsertAllPages.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ClientSideDefensePolicyType_JsInsertAllPagesExcept) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClientSideDefensePolicyType_JsInsertAllPagesExcept) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.JsInsertAllPagesExcept != nil {
-		{
-			size, err := m.JsInsertAllPagesExcept.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ClientSideDefensePolicyType_JsInsertionRules) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ClientSideDefensePolicyType_JsInsertionRules) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.JsInsertionRules != nil {
-		{
-			size, err := m.JsInsertionRules.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CSDJavaScriptInsertAllWithExceptionsType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CSDJavaScriptInsertAllWithExceptionsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ExcludeList) > 0 {
-		for iNdEx := len(m.ExcludeList) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ExcludeList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *CSDJavaScriptInsertType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CSDJavaScriptInsertType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CSDJavaScriptInsertType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ExcludeList) > 0 {
-		for iNdEx := len(m.ExcludeList) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ExcludeList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Rules) > 0 {
-		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *CSDJavaScriptInsertionRule) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CSDJavaScriptInsertionRule) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CSDJavaScriptInsertionRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Path != nil {
-		{
-			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.DomainMatcherChoice != nil {
-		{
-			size := m.DomainMatcherChoice.Size()
-			i -= size
-			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Metadata != nil {
-		{
-			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *CSDJavaScriptInsertionRule_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CSDJavaScriptInsertionRule_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AnyDomain != nil {
-		{
-			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *CSDJavaScriptInsertionRule_Domain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CSDJavaScriptInsertionRule_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Domain != nil {
-		{
-			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *BotDefenseAdvancedPolicyType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *BotDefenseAdvancedPolicyType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *BotDefenseAdvancedPolicyType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MobileSdkChoice != nil {
-		{
-			size := m.MobileSdkChoice.Size()
-			i -= size
-			if _, err := m.MobileSdkChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if len(m.JsDownloadPath) > 0 {
-		i -= len(m.JsDownloadPath)
-		copy(dAtA[i:], m.JsDownloadPath)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.JsDownloadPath)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ProtectedAppEndpoints) > 0 {
-		for iNdEx := len(m.ProtectedAppEndpoints) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ProtectedAppEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *BotDefenseAdvancedPolicyType_DisableMobileSdk) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *BotDefenseAdvancedPolicyType_DisableMobileSdk) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableMobileSdk != nil {
-		{
-			size, err := m.DisableMobileSdk.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *BotDefenseAdvancedPolicyType_MobileSdkConfig) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *BotDefenseAdvancedPolicyType_MobileSdkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.MobileSdkConfig != nil {
-		{
-			size, err := m.MobileSdkConfig.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *BotAdvancedMobileSDKConfigType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *BotAdvancedMobileSDKConfigType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *BotAdvancedMobileSDKConfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MobileIdentifier != nil {
-		{
-			size, err := m.MobileIdentifier.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ProtectedAppEndpointType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ProtectedAppEndpointType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.FlowLabelChoice != nil {
-		{
-			size := m.FlowLabelChoice.Size()
-			i -= size
-			if _, err := m.FlowLabelChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.AppTrafficTypeChoice != nil {
-		{
-			size := m.AppTrafficTypeChoice.Size()
-			i -= size
-			if _, err := m.AppTrafficTypeChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if len(m.HttpMethods) > 0 {
-		dAtA100 := make([]byte, len(m.HttpMethods)*10)
-		var j99 int
-		for _, num := range m.HttpMethods {
-			for num >= 1<<7 {
-				dAtA100[j99] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j99++
-			}
-			dAtA100[j99] = uint8(num)
-			j99++
-		}
-		i -= j99
-		copy(dAtA[i:], dAtA100[:j99])
-		i = encodeVarintTypes(dAtA, i, uint64(j99))
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.RequestBody) > 0 {
-		for iNdEx := len(m.RequestBody) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.RequestBody[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x3a
-		}
-	}
-	if len(m.Query) > 0 {
-		for iNdEx := len(m.Query) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Query[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x32
-		}
-	}
-	if m.Path != nil {
-		{
-			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.DomainMatcherChoice != nil {
-		{
-			size := m.DomainMatcherChoice.Size()
-			i -= size
-			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Metadata != nil {
-		{
-			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ProtectedAppEndpointType_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AnyDomain != nil {
-		{
-			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ProtectedAppEndpointType_Domain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Domain != nil {
-		{
-			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ProtectedAppEndpointType_WebClient) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType_WebClient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.WebClient != nil {
-		{
-			size, err := m.WebClient.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x52
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ProtectedAppEndpointType_MobileClient) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType_MobileClient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.MobileClient != nil {
-		{
-			size, err := m.MobileClient.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x5a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ProtectedAppEndpointType_WebMobileClient) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType_WebMobileClient) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.WebMobileClient != nil {
-		{
-			size, err := m.WebMobileClient.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x62
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ProtectedAppEndpointType_UndefinedFlowLabel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType_UndefinedFlowLabel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.UndefinedFlowLabel != nil {
-		{
-			size, err := m.UndefinedFlowLabel.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x72
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ProtectedAppEndpointType_FlowLabel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ProtectedAppEndpointType_FlowLabel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FlowLabel != nil {
-		{
-			size, err := m.FlowLabel.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x7a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *RequestBody) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *RequestBody) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *RequestBody) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ValueType != nil {
-		{
-			size := m.ValueType.Size()
-			i -= size
-			if _, err := m.ValueType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *RequestBody_ExactValue) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *RequestBody_ExactValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.ExactValue)
-	copy(dAtA[i:], m.ExactValue)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.ExactValue)))
-	i--
-	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
-}
-func (m *RequestBody_RegexValue) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *RequestBody_RegexValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.RegexValue)
-	copy(dAtA[i:], m.RegexValue)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.RegexValue)))
-	i--
-	dAtA[i] = 0x1a
-	return len(dAtA) - i, nil
-}
-func (m *Query) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *Query) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Query) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ValueType != nil {
-		{
-			size := m.ValueType.Size()
-			i -= size
-			if _, err := m.ValueType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *Query_ExactValue) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Query_ExactValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.ExactValue)
-	copy(dAtA[i:], m.ExactValue)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.ExactValue)))
-	i--
-	dAtA[i] = 0x12
-	return len(dAtA) - i, nil
-}
-func (m *Query_RegexValue) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Query_RegexValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	i -= len(m.RegexValue)
-	copy(dAtA[i:], m.RegexValue)
-	i = encodeVarintTypes(dAtA, i, uint64(len(m.RegexValue)))
-	i--
-	dAtA[i] = 0x1a
-	return len(dAtA) - i, nil
-}
-func (m *Query_CheckPresence) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *Query_CheckPresence) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.CheckPresence != nil {
-		{
-			size, err := m.CheckPresence.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeBotDefenseType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ShapeBotDefenseType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefenseType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.CorsSupportChoice != nil {
-		{
-			size := m.CorsSupportChoice.Size()
-			i -= size
-			if _, err := m.CorsSupportChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Timeout != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Timeout))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.Policy != nil {
-		{
-			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.RegionalEndpoint != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.RegionalEndpoint))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeBotDefenseType_EnableCorsSupport) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefenseType_EnableCorsSupport) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.EnableCorsSupport != nil {
-		{
-			size, err := m.EnableCorsSupport.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeBotDefenseType_DisableCorsSupport) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefenseType_DisableCorsSupport) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableCorsSupport != nil {
-		{
-			size, err := m.DisableCorsSupport.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *BotDefenseAdvancedType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *BotDefenseAdvancedType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *BotDefenseAdvancedType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Policy != nil {
-		{
-			size, err := m.Policy.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Mobile != nil {
-		{
-			size, err := m.Mobile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Web != nil {
-		{
-			size, err := m.Web.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeBotDefensePolicyType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ShapeBotDefensePolicyType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefensePolicyType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.JavascriptMode != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptMode))
-		i--
-		dAtA[i] = 0x58
-	}
-	if m.MobileSdkChoice != nil {
-		{
-			size := m.MobileSdkChoice.Size()
-			i -= size
-			if _, err := m.MobileSdkChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.JavaScriptChoice != nil {
-		{
-			size := m.JavaScriptChoice.Size()
-			i -= size
-			if _, err := m.JavaScriptChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if len(m.JsDownloadPath) > 0 {
-		i -= len(m.JsDownloadPath)
-		copy(dAtA[i:], m.JsDownloadPath)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.JsDownloadPath)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ProtectedAppEndpoints) > 0 {
-		for iNdEx := len(m.ProtectedAppEndpoints) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ProtectedAppEndpoints[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeBotDefensePolicyType_DisableJsInsert) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefensePolicyType_DisableJsInsert) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableJsInsert != nil {
-		{
-			size, err := m.DisableJsInsert.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeBotDefensePolicyType_JsInsertAllPages) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefensePolicyType_JsInsertAllPages) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.JsInsertAllPages != nil {
-		{
-			size, err := m.JsInsertAllPages.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.JsInsertAllPagesExcept != nil {
-		{
-			size, err := m.JsInsertAllPagesExcept.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeBotDefensePolicyType_JsInsertionRules) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefensePolicyType_JsInsertionRules) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.JsInsertionRules != nil {
-		{
-			size, err := m.JsInsertionRules.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeBotDefensePolicyType_DisableMobileSdk) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefensePolicyType_DisableMobileSdk) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableMobileSdk != nil {
-		{
-			size, err := m.DisableMobileSdk.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x4a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeBotDefensePolicyType_MobileSdkConfig) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeBotDefensePolicyType_MobileSdkConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.MobileSdkConfig != nil {
-		{
-			size, err := m.MobileSdkConfig.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x52
-	}
-	return len(dAtA) - i, nil
-}
-func (m *MobileTrafficIdentifierType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MobileTrafficIdentifierType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MobileTrafficIdentifierType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Headers) > 0 {
-		for iNdEx := len(m.Headers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Headers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *MobileSDKConfigType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *MobileSDKConfigType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *MobileSDKConfigType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MobileIdentifier != nil {
-		{
-			size, err := m.MobileIdentifier.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ReloadHeaderName) > 0 {
-		i -= len(m.ReloadHeaderName)
-		copy(dAtA[i:], m.ReloadHeaderName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.ReloadHeaderName)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AppEndpointType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AppEndpointType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.GoodbotChoice != nil {
-		{
-			size := m.GoodbotChoice.Size()
-			i -= size
-			if _, err := m.GoodbotChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.FlowLabelChoice != nil {
-		{
-			size := m.FlowLabelChoice.Size()
-			i -= size
-			if _, err := m.FlowLabelChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Mitigation != nil {
-		{
-			size, err := m.Mitigation.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x62
-	}
-	if m.AppTrafficTypeChoice != nil {
-		{
-			size := m.AppTrafficTypeChoice.Size()
-			i -= size
-			if _, err := m.AppTrafficTypeChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.DomainMatcherChoice != nil {
-		{
-			size := m.DomainMatcherChoice.Size()
-			i -= size
-			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Path != nil {
-		{
-			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Protocol != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.Protocol))
-		i--
-		dAtA[i] = 0x18
-	}
-	if len(m.HttpMethods) > 0 {
-		dAtA127 := make([]byte, len(m.HttpMethods)*10)
-		var j126 int
-		for _, num := range m.HttpMethods {
-			for num >= 1<<7 {
-				dAtA127[j126] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j126++
-			}
-			dAtA127[j126] = uint8(num)
-			j126++
-		}
-		i -= j126
-		copy(dAtA[i:], dAtA127[:j126])
-		i = encodeVarintTypes(dAtA, i, uint64(j126))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Metadata != nil {
-		{
-			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AppEndpointType_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AnyDomain != nil {
-		{
-			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_Domain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Domain != nil {
-		{
-			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_Web) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_Web) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Web != nil {
-		{
-			size, err := m.Web.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x4a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_Mobile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_Mobile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Mobile != nil {
-		{
-			size, err := m.Mobile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x52
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_WebMobile) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_WebMobile) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.WebMobile != nil {
-		{
-			size, err := m.WebMobile.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x5a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_UndefinedFlowLabel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_UndefinedFlowLabel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.UndefinedFlowLabel != nil {
-		{
-			size, err := m.UndefinedFlowLabel.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x72
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_FlowLabel) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_FlowLabel) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.FlowLabel != nil {
-		{
-			size, err := m.FlowLabel.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x7a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_MitigateGoodBots) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_MitigateGoodBots) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.MitigateGoodBots != nil {
-		{
-			size, err := m.MitigateGoodBots.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x8a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AppEndpointType_AllowGoodBots) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AppEndpointType_AllowGoodBots) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AllowGoodBots != nil {
-		{
-			size, err := m.AllowGoodBots.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x9a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *WebMobileTrafficType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *WebMobileTrafficType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *WebMobileTrafficType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MobileIdentifier != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.MobileIdentifier))
-		i--
-		dAtA[i] = 0x18
-	}
-	if len(m.Headers) > 0 {
-		for iNdEx := len(m.Headers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Headers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.Header != nil {
-		{
-			size, err := m.Header.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeJavaScriptInsertType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ShapeJavaScriptInsertType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptInsertType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ExcludeList) > 0 {
-		for iNdEx := len(m.ExcludeList) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ExcludeList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.Rules) > 0 {
-		for iNdEx := len(m.Rules) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Rules[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ExcludeList) > 0 {
-		for iNdEx := len(m.ExcludeList) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ExcludeList[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.JavascriptLocation != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptLocation))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeJavaScriptInsertAllType) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ShapeJavaScriptInsertAllType) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptInsertAllType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.JavascriptLocation != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptLocation))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeJavaScriptInsertionRule) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ShapeJavaScriptInsertionRule) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptInsertionRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.JavascriptLocation != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.JavascriptLocation))
-		i--
-		dAtA[i] = 0x30
-	}
-	if m.Path != nil {
-		{
-			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.DomainMatcherChoice != nil {
-		{
-			size := m.DomainMatcherChoice.Size()
-			i -= size
-			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Metadata != nil {
-		{
-			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeJavaScriptInsertionRule_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptInsertionRule_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AnyDomain != nil {
-		{
-			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeJavaScriptInsertionRule_Domain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptInsertionRule_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Domain != nil {
-		{
-			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeJavaScriptExclusionRule) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ShapeJavaScriptExclusionRule) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptExclusionRule) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Path != nil {
-		{
-			size, err := m.Path.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.DomainMatcherChoice != nil {
-		{
-			size := m.DomainMatcherChoice.Size()
-			i -= size
-			if _, err := m.DomainMatcherChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.Metadata != nil {
-		{
-			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ShapeJavaScriptExclusionRule_AnyDomain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptExclusionRule_AnyDomain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AnyDomain != nil {
-		{
-			size, err := m.AnyDomain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ShapeJavaScriptExclusionRule_Domain) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ShapeJavaScriptExclusionRule_Domain) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Domain != nil {
-		{
-			size, err := m.Domain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -32154,6 +25456,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
+	if m.SensitiveDataPolicyChoice != nil {
+		{
+			size := m.SensitiveDataPolicyChoice.Size()
+			i -= size
+			if _, err := m.SensitiveDataPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.RateLimitChoice != nil {
 		{
 			size := m.RateLimitChoice.Size()
@@ -32162,6 +25473,20 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		{
+			size, err := m.SensitiveDataDisclosureRules.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.CertState != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CertState))
@@ -32347,6 +25672,20 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.ApiRateLimitLegacy != nil {
+		{
+			size, err := m.ApiRateLimitLegacy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.IpReputationChoice != nil {
 		{
@@ -33953,6 +27292,52 @@ func (m *GlobalSpecType_ApiRateLimit) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_DefaultSensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DefaultSensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultSensitiveDataPolicy != nil {
+		{
+			size, err := m.DefaultSensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_SensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_SensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SensitiveDataPolicy != nil {
+		{
+			size, err := m.SensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType_BotDefenseAdvanced) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -33976,6 +27361,231 @@ func (m *GlobalSpecType_BotDefenseAdvanced) MarshalToSizedBuffer(dAtA []byte) (i
 	}
 	return len(dAtA) - i, nil
 }
+func (m *SensitiveDataDisclosureRules) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SensitiveDataDisclosureRules) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataDisclosureRules) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SensitiveDataTypesInResponse) > 0 {
+		for iNdEx := len(m.SensitiveDataTypesInResponse) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.SensitiveDataTypesInResponse[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SensitiveDataTypes) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SensitiveDataTypes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataTypes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Body != nil {
+		{
+			size, err := m.Body.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.TypeConditionTypeChoice != nil {
+		{
+			size := m.TypeConditionTypeChoice.Size()
+			i -= size
+			if _, err := m.TypeConditionTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.MaskingModeChoice != nil {
+		{
+			size := m.MaskingModeChoice.Size()
+			i -= size
+			if _, err := m.MaskingModeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Metadata != nil {
+		{
+			size, err := m.Metadata.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SensitiveDataTypes_Mask) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataTypes_Mask) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Mask != nil {
+		{
+			size, err := m.Mask.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SensitiveDataTypes_Report) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataTypes_Report) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Report != nil {
+		{
+			size, err := m.Report.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SensitiveDataTypes_ApiEndpoint) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataTypes_ApiEndpoint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ApiEndpoint != nil {
+		{
+			size, err := m.ApiEndpoint.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SensitiveDataTypes_BasePath) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataTypes_BasePath) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.BasePath)
+	copy(dAtA[i:], m.BasePath)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.BasePath)))
+	i--
+	dAtA[i] = 0x3a
+	return len(dAtA) - i, nil
+}
+func (m *SensitiveDataTypes_ApiGroup) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SensitiveDataTypes_ApiGroup) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.ApiGroup)
+	copy(dAtA[i:], m.ApiGroup)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.ApiGroup)))
+	i--
+	dAtA[i] = 0x42
+	return len(dAtA) - i, nil
+}
+func (m *BodySectionMaskingOptions) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BodySectionMaskingOptions) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BodySectionMaskingOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Fields) > 0 {
+		for iNdEx := len(m.Fields) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Fields[iNdEx])
+			copy(dAtA[i:], m.Fields[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Fields[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -34005,6 +27615,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
+	if m.SensitiveDataPolicyChoice != nil {
+		{
+			size := m.SensitiveDataPolicyChoice.Size()
+			i -= size
+			if _, err := m.SensitiveDataPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.RateLimitChoice != nil {
 		{
 			size := m.RateLimitChoice.Size()
@@ -34013,6 +27632,20 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		{
+			size, err := m.SensitiveDataDisclosureRules.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.L7DdosAutoMitigationAction != nil {
 		{
@@ -34191,6 +27824,20 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.ApiRateLimitLegacy != nil {
+		{
+			size, err := m.ApiRateLimitLegacy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.IpReputationChoice != nil {
 		{
@@ -35710,6 +29357,52 @@ func (m *CreateSpecType_ApiRateLimit) MarshalToSizedBuffer(dAtA []byte) (int, er
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_DefaultSensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DefaultSensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultSensitiveDataPolicy != nil {
+		{
+			size, err := m.DefaultSensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_SensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_SensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SensitiveDataPolicy != nil {
+		{
+			size, err := m.SensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType_BotDefenseAdvanced) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -35762,6 +29455,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			}
 		}
 	}
+	if m.SensitiveDataPolicyChoice != nil {
+		{
+			size := m.SensitiveDataPolicyChoice.Size()
+			i -= size
+			if _, err := m.SensitiveDataPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.RateLimitChoice != nil {
 		{
 			size := m.RateLimitChoice.Size()
@@ -35770,6 +29472,20 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		{
+			size, err := m.SensitiveDataDisclosureRules.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.L7DdosAutoMitigationAction != nil {
 		{
@@ -35948,6 +29664,20 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.ApiRateLimitLegacy != nil {
+		{
+			size, err := m.ApiRateLimitLegacy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.IpReputationChoice != nil {
 		{
@@ -37467,6 +31197,52 @@ func (m *ReplaceSpecType_ApiRateLimit) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_DefaultSensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DefaultSensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultSensitiveDataPolicy != nil {
+		{
+			size, err := m.DefaultSensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_SensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_SensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SensitiveDataPolicy != nil {
+		{
+			size, err := m.SensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType_BotDefenseAdvanced) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -37581,6 +31357,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xca
 	}
+	if m.SensitiveDataPolicyChoice != nil {
+		{
+			size := m.SensitiveDataPolicyChoice.Size()
+			i -= size
+			if _, err := m.SensitiveDataPolicyChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.RateLimitChoice != nil {
 		{
 			size := m.RateLimitChoice.Size()
@@ -37589,6 +31374,20 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		{
+			size, err := m.SensitiveDataDisclosureRules.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.CertState != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.CertState))
@@ -37774,6 +31573,20 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				return 0, err
 			}
 		}
+	}
+	if m.ApiRateLimitLegacy != nil {
+		{
+			size, err := m.ApiRateLimitLegacy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4
+		i--
+		dAtA[i] = 0xa2
 	}
 	if m.IpReputationChoice != nil {
 		{
@@ -39309,6 +33122,52 @@ func (m *GetSpecType_ApiRateLimit) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_DefaultSensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DefaultSensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultSensitiveDataPolicy != nil {
+		{
+			size, err := m.DefaultSensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0x9a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_SensitiveDataPolicy) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_SensitiveDataPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SensitiveDataPolicy != nil {
+		{
+			size, err := m.SensitiveDataPolicy.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x8
+		i--
+		dAtA[i] = 0xa2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType_BotDefenseAdvanced) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -40514,89 +34373,6 @@ func (m *AdvancedOptionsType_AdditionalDomains) Size() (n int) {
 	}
 	return n
 }
-func (m *DDoSClientSource) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AsnList != nil {
-		l = m.AsnList.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if len(m.CountryList) > 0 {
-		l = 0
-		for _, e := range m.CountryList {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	if m.TlsFingerprintMatcher != nil {
-		l = m.TlsFingerprintMatcher.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *DDoSMitigationRule) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		l = m.Metadata.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.MitigationAction != nil {
-		n += m.MitigationAction.Size()
-	}
-	if m.MitigationChoice != nil {
-		n += m.MitigationChoice.Size()
-	}
-	if m.ExpirationTimestamp != nil {
-		l = m.ExpirationTimestamp.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *DDoSMitigationRule_Block) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Block != nil {
-		l = m.Block.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DDoSMitigationRule_DdosClientSource) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DdosClientSource != nil {
-		l = m.DdosClientSource.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DDoSMitigationRule_IpPrefixList) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.IpPrefixList != nil {
-		l = m.IpPrefixList.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *SingleLoadBalancerAppSetting) Size() (n int) {
 	if m == nil {
 		return 0
@@ -40675,945 +34451,6 @@ func (m *OriginServerSubsetRuleListType) Size() (n int) {
 	return n
 }
 
-func (m *ClientSideDefenseType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Policy != nil {
-		l = m.Policy.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *ClientSideDefensePolicyType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JavaScriptChoice != nil {
-		n += m.JavaScriptChoice.Size()
-	}
-	return n
-}
-
-func (m *ClientSideDefensePolicyType_DisableJsInsert) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableJsInsert != nil {
-		l = m.DisableJsInsert.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ClientSideDefensePolicyType_JsInsertAllPages) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JsInsertAllPages != nil {
-		l = m.JsInsertAllPages.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ClientSideDefensePolicyType_JsInsertAllPagesExcept) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JsInsertAllPagesExcept != nil {
-		l = m.JsInsertAllPagesExcept.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ClientSideDefensePolicyType_JsInsertionRules) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JsInsertionRules != nil {
-		l = m.JsInsertionRules.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ExcludeList) > 0 {
-		for _, e := range m.ExcludeList {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *CSDJavaScriptInsertType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Rules) > 0 {
-		for _, e := range m.Rules {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.ExcludeList) > 0 {
-		for _, e := range m.ExcludeList {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *CSDJavaScriptInsertionRule) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		l = m.Metadata.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DomainMatcherChoice != nil {
-		n += m.DomainMatcherChoice.Size()
-	}
-	if m.Path != nil {
-		l = m.Path.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *CSDJavaScriptInsertionRule_AnyDomain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AnyDomain != nil {
-		l = m.AnyDomain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *CSDJavaScriptInsertionRule_Domain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Domain != nil {
-		l = m.Domain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *BotDefenseAdvancedPolicyType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ProtectedAppEndpoints) > 0 {
-		for _, e := range m.ProtectedAppEndpoints {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	l = len(m.JsDownloadPath)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.MobileSdkChoice != nil {
-		n += m.MobileSdkChoice.Size()
-	}
-	return n
-}
-
-func (m *BotDefenseAdvancedPolicyType_DisableMobileSdk) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableMobileSdk != nil {
-		l = m.DisableMobileSdk.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *BotDefenseAdvancedPolicyType_MobileSdkConfig) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MobileSdkConfig != nil {
-		l = m.MobileSdkConfig.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *BotAdvancedMobileSDKConfigType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MobileIdentifier != nil {
-		l = m.MobileIdentifier.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *ProtectedAppEndpointType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		l = m.Metadata.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DomainMatcherChoice != nil {
-		n += m.DomainMatcherChoice.Size()
-	}
-	if m.Path != nil {
-		l = m.Path.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if len(m.Query) > 0 {
-		for _, e := range m.Query {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.RequestBody) > 0 {
-		for _, e := range m.RequestBody {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.HttpMethods) > 0 {
-		l = 0
-		for _, e := range m.HttpMethods {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	if m.AppTrafficTypeChoice != nil {
-		n += m.AppTrafficTypeChoice.Size()
-	}
-	if m.FlowLabelChoice != nil {
-		n += m.FlowLabelChoice.Size()
-	}
-	return n
-}
-
-func (m *ProtectedAppEndpointType_AnyDomain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AnyDomain != nil {
-		l = m.AnyDomain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ProtectedAppEndpointType_Domain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Domain != nil {
-		l = m.Domain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ProtectedAppEndpointType_WebClient) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WebClient != nil {
-		l = m.WebClient.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ProtectedAppEndpointType_MobileClient) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MobileClient != nil {
-		l = m.MobileClient.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ProtectedAppEndpointType_WebMobileClient) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WebMobileClient != nil {
-		l = m.WebMobileClient.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ProtectedAppEndpointType_UndefinedFlowLabel) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.UndefinedFlowLabel != nil {
-		l = m.UndefinedFlowLabel.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ProtectedAppEndpointType_FlowLabel) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FlowLabel != nil {
-		l = m.FlowLabel.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *RequestBody) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.ValueType != nil {
-		n += m.ValueType.Size()
-	}
-	return n
-}
-
-func (m *RequestBody_ExactValue) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ExactValue)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *RequestBody_RegexValue) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.RegexValue)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *Query) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.ValueType != nil {
-		n += m.ValueType.Size()
-	}
-	return n
-}
-
-func (m *Query_ExactValue) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ExactValue)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *Query_RegexValue) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.RegexValue)
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
-func (m *Query_CheckPresence) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.CheckPresence != nil {
-		l = m.CheckPresence.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeBotDefenseType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.RegionalEndpoint != 0 {
-		n += 1 + sovTypes(uint64(m.RegionalEndpoint))
-	}
-	if m.Policy != nil {
-		l = m.Policy.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Timeout != 0 {
-		n += 1 + sovTypes(uint64(m.Timeout))
-	}
-	if m.CorsSupportChoice != nil {
-		n += m.CorsSupportChoice.Size()
-	}
-	return n
-}
-
-func (m *ShapeBotDefenseType_EnableCorsSupport) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EnableCorsSupport != nil {
-		l = m.EnableCorsSupport.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeBotDefenseType_DisableCorsSupport) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableCorsSupport != nil {
-		l = m.DisableCorsSupport.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *BotDefenseAdvancedType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Web != nil {
-		l = m.Web.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Mobile != nil {
-		l = m.Mobile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Policy != nil {
-		l = m.Policy.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *ShapeBotDefensePolicyType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ProtectedAppEndpoints) > 0 {
-		for _, e := range m.ProtectedAppEndpoints {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	l = len(m.JsDownloadPath)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.JavaScriptChoice != nil {
-		n += m.JavaScriptChoice.Size()
-	}
-	if m.MobileSdkChoice != nil {
-		n += m.MobileSdkChoice.Size()
-	}
-	if m.JavascriptMode != 0 {
-		n += 1 + sovTypes(uint64(m.JavascriptMode))
-	}
-	return n
-}
-
-func (m *ShapeBotDefensePolicyType_DisableJsInsert) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableJsInsert != nil {
-		l = m.DisableJsInsert.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeBotDefensePolicyType_JsInsertAllPages) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JsInsertAllPages != nil {
-		l = m.JsInsertAllPages.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JsInsertAllPagesExcept != nil {
-		l = m.JsInsertAllPagesExcept.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeBotDefensePolicyType_JsInsertionRules) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JsInsertionRules != nil {
-		l = m.JsInsertionRules.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeBotDefensePolicyType_DisableMobileSdk) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableMobileSdk != nil {
-		l = m.DisableMobileSdk.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeBotDefensePolicyType_MobileSdkConfig) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MobileSdkConfig != nil {
-		l = m.MobileSdkConfig.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *MobileTrafficIdentifierType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Headers) > 0 {
-		for _, e := range m.Headers {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *MobileSDKConfigType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ReloadHeaderName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.MobileIdentifier != nil {
-		l = m.MobileIdentifier.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *AppEndpointType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		l = m.Metadata.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if len(m.HttpMethods) > 0 {
-		l = 0
-		for _, e := range m.HttpMethods {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	if m.Protocol != 0 {
-		n += 1 + sovTypes(uint64(m.Protocol))
-	}
-	if m.Path != nil {
-		l = m.Path.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DomainMatcherChoice != nil {
-		n += m.DomainMatcherChoice.Size()
-	}
-	if m.AppTrafficTypeChoice != nil {
-		n += m.AppTrafficTypeChoice.Size()
-	}
-	if m.Mitigation != nil {
-		l = m.Mitigation.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.FlowLabelChoice != nil {
-		n += m.FlowLabelChoice.Size()
-	}
-	if m.GoodbotChoice != nil {
-		n += m.GoodbotChoice.Size()
-	}
-	return n
-}
-
-func (m *AppEndpointType_AnyDomain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AnyDomain != nil {
-		l = m.AnyDomain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_Domain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Domain != nil {
-		l = m.Domain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_Web) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Web != nil {
-		l = m.Web.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_Mobile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Mobile != nil {
-		l = m.Mobile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_WebMobile) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WebMobile != nil {
-		l = m.WebMobile.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_UndefinedFlowLabel) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.UndefinedFlowLabel != nil {
-		l = m.UndefinedFlowLabel.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_FlowLabel) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.FlowLabel != nil {
-		l = m.FlowLabel.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_MitigateGoodBots) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MitigateGoodBots != nil {
-		l = m.MitigateGoodBots.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AppEndpointType_AllowGoodBots) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AllowGoodBots != nil {
-		l = m.AllowGoodBots.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *WebMobileTrafficType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Header != nil {
-		l = m.Header.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if len(m.Headers) > 0 {
-		for _, e := range m.Headers {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if m.MobileIdentifier != 0 {
-		n += 1 + sovTypes(uint64(m.MobileIdentifier))
-	}
-	return n
-}
-
-func (m *ShapeJavaScriptInsertType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Rules) > 0 {
-		for _, e := range m.Rules {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.ExcludeList) > 0 {
-		for _, e := range m.ExcludeList {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JavascriptLocation != 0 {
-		n += 1 + sovTypes(uint64(m.JavascriptLocation))
-	}
-	if len(m.ExcludeList) > 0 {
-		for _, e := range m.ExcludeList {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *ShapeJavaScriptInsertAllType) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.JavascriptLocation != 0 {
-		n += 1 + sovTypes(uint64(m.JavascriptLocation))
-	}
-	return n
-}
-
-func (m *ShapeJavaScriptInsertionRule) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		l = m.Metadata.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DomainMatcherChoice != nil {
-		n += m.DomainMatcherChoice.Size()
-	}
-	if m.Path != nil {
-		l = m.Path.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.JavascriptLocation != 0 {
-		n += 1 + sovTypes(uint64(m.JavascriptLocation))
-	}
-	return n
-}
-
-func (m *ShapeJavaScriptInsertionRule_AnyDomain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AnyDomain != nil {
-		l = m.AnyDomain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeJavaScriptInsertionRule_Domain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Domain != nil {
-		l = m.Domain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeJavaScriptExclusionRule) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Metadata != nil {
-		l = m.Metadata.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.DomainMatcherChoice != nil {
-		n += m.DomainMatcherChoice.Size()
-	}
-	if m.Path != nil {
-		l = m.Path.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *ShapeJavaScriptExclusionRule_AnyDomain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AnyDomain != nil {
-		l = m.AnyDomain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ShapeJavaScriptExclusionRule_Domain) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Domain != nil {
-		l = m.Domain.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -41728,6 +34565,10 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.IpReputationChoice != nil {
 		n += m.IpReputationChoice.Size()
 	}
+	if m.ApiRateLimitLegacy != nil {
+		l = m.ApiRateLimitLegacy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	if m.ApiProtectionRules != nil {
 		l = m.ApiProtectionRules.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -41782,6 +34623,13 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.CertState != 0 {
 		n += 2 + sovTypes(uint64(m.CertState))
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		l = m.SensitiveDataDisclosureRules.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.SensitiveDataPolicyChoice != nil {
+		n += m.SensitiveDataPolicyChoice.Size()
 	}
 	if m.ViewInternal != nil {
 		l = m.ViewInternal.Size()
@@ -42522,6 +35370,30 @@ func (m *GlobalSpecType_ApiRateLimit) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_DefaultSensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultSensitiveDataPolicy != nil {
+		l = m.DefaultSensitiveDataPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_SensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SensitiveDataPolicy != nil {
+		l = m.SensitiveDataPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType_BotDefenseAdvanced) Size() (n int) {
 	if m == nil {
 		return 0
@@ -42534,6 +35406,115 @@ func (m *GlobalSpecType_BotDefenseAdvanced) Size() (n int) {
 	}
 	return n
 }
+func (m *SensitiveDataDisclosureRules) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.SensitiveDataTypesInResponse) > 0 {
+		for _, e := range m.SensitiveDataTypesInResponse {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *SensitiveDataTypes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.MaskingModeChoice != nil {
+		n += m.MaskingModeChoice.Size()
+	}
+	if m.TypeConditionTypeChoice != nil {
+		n += m.TypeConditionTypeChoice.Size()
+	}
+	if m.Body != nil {
+		l = m.Body.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *SensitiveDataTypes_Mask) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Mask != nil {
+		l = m.Mask.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SensitiveDataTypes_Report) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Report != nil {
+		l = m.Report.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SensitiveDataTypes_ApiEndpoint) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ApiEndpoint != nil {
+		l = m.ApiEndpoint.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SensitiveDataTypes_BasePath) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.BasePath)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *SensitiveDataTypes_ApiGroup) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ApiGroup)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *BodySectionMaskingOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Fields) > 0 {
+		for _, s := range m.Fields {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -42639,6 +35620,10 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.IpReputationChoice != nil {
 		n += m.IpReputationChoice.Size()
 	}
+	if m.ApiRateLimitLegacy != nil {
+		l = m.ApiRateLimitLegacy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	if m.ApiProtectionRules != nil {
 		l = m.ApiProtectionRules.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -42690,6 +35675,13 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.L7DdosAutoMitigationAction != nil {
 		n += m.L7DdosAutoMitigationAction.Size()
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		l = m.SensitiveDataDisclosureRules.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.SensitiveDataPolicyChoice != nil {
+		n += m.SensitiveDataPolicyChoice.Size()
 	}
 	return n
 }
@@ -43366,6 +36358,30 @@ func (m *CreateSpecType_ApiRateLimit) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_DefaultSensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultSensitiveDataPolicy != nil {
+		l = m.DefaultSensitiveDataPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_SensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SensitiveDataPolicy != nil {
+		l = m.SensitiveDataPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType_BotDefenseAdvanced) Size() (n int) {
 	if m == nil {
 		return 0
@@ -43483,6 +36499,10 @@ func (m *ReplaceSpecType) Size() (n int) {
 	if m.IpReputationChoice != nil {
 		n += m.IpReputationChoice.Size()
 	}
+	if m.ApiRateLimitLegacy != nil {
+		l = m.ApiRateLimitLegacy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	if m.ApiProtectionRules != nil {
 		l = m.ApiProtectionRules.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -43534,6 +36554,13 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.L7DdosAutoMitigationAction != nil {
 		n += m.L7DdosAutoMitigationAction.Size()
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		l = m.SensitiveDataDisclosureRules.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.SensitiveDataPolicyChoice != nil {
+		n += m.SensitiveDataPolicyChoice.Size()
 	}
 	return n
 }
@@ -44210,6 +37237,30 @@ func (m *ReplaceSpecType_ApiRateLimit) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_DefaultSensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultSensitiveDataPolicy != nil {
+		l = m.DefaultSensitiveDataPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_SensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SensitiveDataPolicy != nil {
+		l = m.SensitiveDataPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType_BotDefenseAdvanced) Size() (n int) {
 	if m == nil {
 		return 0
@@ -44333,6 +37384,10 @@ func (m *GetSpecType) Size() (n int) {
 	if m.IpReputationChoice != nil {
 		n += m.IpReputationChoice.Size()
 	}
+	if m.ApiRateLimitLegacy != nil {
+		l = m.ApiRateLimitLegacy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	if m.ApiProtectionRules != nil {
 		l = m.ApiProtectionRules.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -44387,6 +37442,13 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.CertState != 0 {
 		n += 2 + sovTypes(uint64(m.CertState))
+	}
+	if m.SensitiveDataDisclosureRules != nil {
+		l = m.SensitiveDataDisclosureRules.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	if m.SensitiveDataPolicyChoice != nil {
+		n += m.SensitiveDataPolicyChoice.Size()
 	}
 	l = len(m.HostName)
 	if l > 0 {
@@ -45082,6 +38144,30 @@ func (m *GetSpecType_ApiRateLimit) Size() (n int) {
 	_ = l
 	if m.ApiRateLimit != nil {
 		l = m.ApiRateLimit.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DefaultSensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultSensitiveDataPolicy != nil {
+		l = m.DefaultSensitiveDataPolicy.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_SensitiveDataPolicy) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SensitiveDataPolicy != nil {
+		l = m.SensitiveDataPolicy.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -46010,61 +39096,6 @@ func (this *AdvancedOptionsType_AdditionalDomains) String() string {
 	}, "")
 	return s
 }
-func (this *DDoSClientSource) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DDoSClientSource{`,
-		`AsnList:` + strings.Replace(fmt.Sprintf("%v", this.AsnList), "AsnMatchList", "policy.AsnMatchList", 1) + `,`,
-		`CountryList:` + fmt.Sprintf("%v", this.CountryList) + `,`,
-		`TlsFingerprintMatcher:` + strings.Replace(fmt.Sprintf("%v", this.TlsFingerprintMatcher), "TlsFingerprintMatcherType", "policy.TlsFingerprintMatcherType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DDoSMitigationRule) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DDoSMitigationRule{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
-		`MitigationAction:` + fmt.Sprintf("%v", this.MitigationAction) + `,`,
-		`MitigationChoice:` + fmt.Sprintf("%v", this.MitigationChoice) + `,`,
-		`ExpirationTimestamp:` + strings.Replace(fmt.Sprintf("%v", this.ExpirationTimestamp), "Timestamp", "types.Timestamp", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DDoSMitigationRule_Block) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DDoSMitigationRule_Block{`,
-		`Block:` + strings.Replace(fmt.Sprintf("%v", this.Block), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DDoSMitigationRule_DdosClientSource) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DDoSMitigationRule_DdosClientSource{`,
-		`DdosClientSource:` + strings.Replace(fmt.Sprintf("%v", this.DdosClientSource), "DDoSClientSource", "DDoSClientSource", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DDoSMitigationRule_IpPrefixList) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DDoSMitigationRule_IpPrefixList{`,
-		`IpPrefixList:` + strings.Replace(fmt.Sprintf("%v", this.IpPrefixList), "PrefixMatchList", "policy.PrefixMatchList", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *SingleLoadBalancerAppSetting) String() string {
 	if this == nil {
 		return "nil"
@@ -46131,737 +39162,6 @@ func (this *OriginServerSubsetRuleListType) String() string {
 	}, "")
 	return s
 }
-func (this *ClientSideDefenseType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClientSideDefenseType{`,
-		`Policy:` + strings.Replace(this.Policy.String(), "ClientSideDefensePolicyType", "ClientSideDefensePolicyType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClientSideDefensePolicyType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClientSideDefensePolicyType{`,
-		`JavaScriptChoice:` + fmt.Sprintf("%v", this.JavaScriptChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClientSideDefensePolicyType_DisableJsInsert) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClientSideDefensePolicyType_DisableJsInsert{`,
-		`DisableJsInsert:` + strings.Replace(fmt.Sprintf("%v", this.DisableJsInsert), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClientSideDefensePolicyType_JsInsertAllPages) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClientSideDefensePolicyType_JsInsertAllPages{`,
-		`JsInsertAllPages:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertAllPages), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClientSideDefensePolicyType_JsInsertAllPagesExcept) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClientSideDefensePolicyType_JsInsertAllPagesExcept{`,
-		`JsInsertAllPagesExcept:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertAllPagesExcept), "CSDJavaScriptInsertAllWithExceptionsType", "CSDJavaScriptInsertAllWithExceptionsType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ClientSideDefensePolicyType_JsInsertionRules) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ClientSideDefensePolicyType_JsInsertionRules{`,
-		`JsInsertionRules:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertionRules), "CSDJavaScriptInsertType", "CSDJavaScriptInsertType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CSDJavaScriptInsertAllWithExceptionsType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForExcludeList := "[]*ShapeJavaScriptExclusionRule{"
-	for _, f := range this.ExcludeList {
-		repeatedStringForExcludeList += strings.Replace(f.String(), "ShapeJavaScriptExclusionRule", "ShapeJavaScriptExclusionRule", 1) + ","
-	}
-	repeatedStringForExcludeList += "}"
-	s := strings.Join([]string{`&CSDJavaScriptInsertAllWithExceptionsType{`,
-		`ExcludeList:` + repeatedStringForExcludeList + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CSDJavaScriptInsertType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForRules := "[]*CSDJavaScriptInsertionRule{"
-	for _, f := range this.Rules {
-		repeatedStringForRules += strings.Replace(f.String(), "CSDJavaScriptInsertionRule", "CSDJavaScriptInsertionRule", 1) + ","
-	}
-	repeatedStringForRules += "}"
-	repeatedStringForExcludeList := "[]*ShapeJavaScriptExclusionRule{"
-	for _, f := range this.ExcludeList {
-		repeatedStringForExcludeList += strings.Replace(f.String(), "ShapeJavaScriptExclusionRule", "ShapeJavaScriptExclusionRule", 1) + ","
-	}
-	repeatedStringForExcludeList += "}"
-	s := strings.Join([]string{`&CSDJavaScriptInsertType{`,
-		`Rules:` + repeatedStringForRules + `,`,
-		`ExcludeList:` + repeatedStringForExcludeList + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CSDJavaScriptInsertionRule) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CSDJavaScriptInsertionRule{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
-		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
-		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CSDJavaScriptInsertionRule_AnyDomain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CSDJavaScriptInsertionRule_AnyDomain{`,
-		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CSDJavaScriptInsertionRule_Domain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CSDJavaScriptInsertionRule_Domain{`,
-		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *BotDefenseAdvancedPolicyType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForProtectedAppEndpoints := "[]*ProtectedAppEndpointType{"
-	for _, f := range this.ProtectedAppEndpoints {
-		repeatedStringForProtectedAppEndpoints += strings.Replace(f.String(), "ProtectedAppEndpointType", "ProtectedAppEndpointType", 1) + ","
-	}
-	repeatedStringForProtectedAppEndpoints += "}"
-	s := strings.Join([]string{`&BotDefenseAdvancedPolicyType{`,
-		`ProtectedAppEndpoints:` + repeatedStringForProtectedAppEndpoints + `,`,
-		`JsDownloadPath:` + fmt.Sprintf("%v", this.JsDownloadPath) + `,`,
-		`MobileSdkChoice:` + fmt.Sprintf("%v", this.MobileSdkChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *BotDefenseAdvancedPolicyType_DisableMobileSdk) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&BotDefenseAdvancedPolicyType_DisableMobileSdk{`,
-		`DisableMobileSdk:` + strings.Replace(fmt.Sprintf("%v", this.DisableMobileSdk), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *BotDefenseAdvancedPolicyType_MobileSdkConfig) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&BotDefenseAdvancedPolicyType_MobileSdkConfig{`,
-		`MobileSdkConfig:` + strings.Replace(fmt.Sprintf("%v", this.MobileSdkConfig), "BotAdvancedMobileSDKConfigType", "BotAdvancedMobileSDKConfigType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *BotAdvancedMobileSDKConfigType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&BotAdvancedMobileSDKConfigType{`,
-		`MobileIdentifier:` + strings.Replace(this.MobileIdentifier.String(), "MobileTrafficIdentifierType", "MobileTrafficIdentifierType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForQuery := "[]*Query{"
-	for _, f := range this.Query {
-		repeatedStringForQuery += strings.Replace(f.String(), "Query", "Query", 1) + ","
-	}
-	repeatedStringForQuery += "}"
-	repeatedStringForRequestBody := "[]*RequestBody{"
-	for _, f := range this.RequestBody {
-		repeatedStringForRequestBody += strings.Replace(f.String(), "RequestBody", "RequestBody", 1) + ","
-	}
-	repeatedStringForRequestBody += "}"
-	s := strings.Join([]string{`&ProtectedAppEndpointType{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
-		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
-		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
-		`Query:` + repeatedStringForQuery + `,`,
-		`RequestBody:` + repeatedStringForRequestBody + `,`,
-		`HttpMethods:` + fmt.Sprintf("%v", this.HttpMethods) + `,`,
-		`AppTrafficTypeChoice:` + fmt.Sprintf("%v", this.AppTrafficTypeChoice) + `,`,
-		`FlowLabelChoice:` + fmt.Sprintf("%v", this.FlowLabelChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType_AnyDomain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtectedAppEndpointType_AnyDomain{`,
-		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType_Domain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtectedAppEndpointType_Domain{`,
-		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType_WebClient) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtectedAppEndpointType_WebClient{`,
-		`WebClient:` + strings.Replace(fmt.Sprintf("%v", this.WebClient), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType_MobileClient) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtectedAppEndpointType_MobileClient{`,
-		`MobileClient:` + strings.Replace(fmt.Sprintf("%v", this.MobileClient), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType_WebMobileClient) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtectedAppEndpointType_WebMobileClient{`,
-		`WebMobileClient:` + strings.Replace(fmt.Sprintf("%v", this.WebMobileClient), "WebMobileTrafficType", "WebMobileTrafficType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType_UndefinedFlowLabel) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtectedAppEndpointType_UndefinedFlowLabel{`,
-		`UndefinedFlowLabel:` + strings.Replace(fmt.Sprintf("%v", this.UndefinedFlowLabel), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ProtectedAppEndpointType_FlowLabel) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ProtectedAppEndpointType_FlowLabel{`,
-		`FlowLabel:` + strings.Replace(fmt.Sprintf("%v", this.FlowLabel), "BotDefenseFlowLabelCategoriesChoiceType", "schema.BotDefenseFlowLabelCategoriesChoiceType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RequestBody) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RequestBody{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`ValueType:` + fmt.Sprintf("%v", this.ValueType) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RequestBody_ExactValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RequestBody_ExactValue{`,
-		`ExactValue:` + fmt.Sprintf("%v", this.ExactValue) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *RequestBody_RegexValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&RequestBody_RegexValue{`,
-		`RegexValue:` + fmt.Sprintf("%v", this.RegexValue) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Query) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Query{`,
-		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
-		`ValueType:` + fmt.Sprintf("%v", this.ValueType) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Query_ExactValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Query_ExactValue{`,
-		`ExactValue:` + fmt.Sprintf("%v", this.ExactValue) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Query_RegexValue) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Query_RegexValue{`,
-		`RegexValue:` + fmt.Sprintf("%v", this.RegexValue) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *Query_CheckPresence) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&Query_CheckPresence{`,
-		`CheckPresence:` + strings.Replace(fmt.Sprintf("%v", this.CheckPresence), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefenseType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefenseType{`,
-		`RegionalEndpoint:` + fmt.Sprintf("%v", this.RegionalEndpoint) + `,`,
-		`Policy:` + strings.Replace(this.Policy.String(), "ShapeBotDefensePolicyType", "ShapeBotDefensePolicyType", 1) + `,`,
-		`Timeout:` + fmt.Sprintf("%v", this.Timeout) + `,`,
-		`CorsSupportChoice:` + fmt.Sprintf("%v", this.CorsSupportChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefenseType_EnableCorsSupport) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefenseType_EnableCorsSupport{`,
-		`EnableCorsSupport:` + strings.Replace(fmt.Sprintf("%v", this.EnableCorsSupport), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefenseType_DisableCorsSupport) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefenseType_DisableCorsSupport{`,
-		`DisableCorsSupport:` + strings.Replace(fmt.Sprintf("%v", this.DisableCorsSupport), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *BotDefenseAdvancedType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&BotDefenseAdvancedType{`,
-		`Web:` + strings.Replace(fmt.Sprintf("%v", this.Web), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`Mobile:` + strings.Replace(fmt.Sprintf("%v", this.Mobile), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
-		`Policy:` + strings.Replace(this.Policy.String(), "BotDefenseAdvancedPolicyType", "BotDefenseAdvancedPolicyType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefensePolicyType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForProtectedAppEndpoints := "[]*AppEndpointType{"
-	for _, f := range this.ProtectedAppEndpoints {
-		repeatedStringForProtectedAppEndpoints += strings.Replace(f.String(), "AppEndpointType", "AppEndpointType", 1) + ","
-	}
-	repeatedStringForProtectedAppEndpoints += "}"
-	s := strings.Join([]string{`&ShapeBotDefensePolicyType{`,
-		`ProtectedAppEndpoints:` + repeatedStringForProtectedAppEndpoints + `,`,
-		`JsDownloadPath:` + fmt.Sprintf("%v", this.JsDownloadPath) + `,`,
-		`JavaScriptChoice:` + fmt.Sprintf("%v", this.JavaScriptChoice) + `,`,
-		`MobileSdkChoice:` + fmt.Sprintf("%v", this.MobileSdkChoice) + `,`,
-		`JavascriptMode:` + fmt.Sprintf("%v", this.JavascriptMode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_DisableJsInsert) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefensePolicyType_DisableJsInsert{`,
-		`DisableJsInsert:` + strings.Replace(fmt.Sprintf("%v", this.DisableJsInsert), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_JsInsertAllPages) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefensePolicyType_JsInsertAllPages{`,
-		`JsInsertAllPages:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertAllPages), "ShapeJavaScriptInsertAllType", "ShapeJavaScriptInsertAllType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_JsInsertAllPagesExcept) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefensePolicyType_JsInsertAllPagesExcept{`,
-		`JsInsertAllPagesExcept:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertAllPagesExcept), "ShapeJavaScriptInsertAllWithExceptionsType", "ShapeJavaScriptInsertAllWithExceptionsType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_JsInsertionRules) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefensePolicyType_JsInsertionRules{`,
-		`JsInsertionRules:` + strings.Replace(fmt.Sprintf("%v", this.JsInsertionRules), "ShapeJavaScriptInsertType", "ShapeJavaScriptInsertType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_DisableMobileSdk) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefensePolicyType_DisableMobileSdk{`,
-		`DisableMobileSdk:` + strings.Replace(fmt.Sprintf("%v", this.DisableMobileSdk), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeBotDefensePolicyType_MobileSdkConfig) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeBotDefensePolicyType_MobileSdkConfig{`,
-		`MobileSdkConfig:` + strings.Replace(fmt.Sprintf("%v", this.MobileSdkConfig), "MobileSDKConfigType", "MobileSDKConfigType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MobileTrafficIdentifierType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForHeaders := "[]*HeaderMatcherTypeBasic{"
-	for _, f := range this.Headers {
-		repeatedStringForHeaders += strings.Replace(fmt.Sprintf("%v", f), "HeaderMatcherTypeBasic", "policy.HeaderMatcherTypeBasic", 1) + ","
-	}
-	repeatedStringForHeaders += "}"
-	s := strings.Join([]string{`&MobileTrafficIdentifierType{`,
-		`Headers:` + repeatedStringForHeaders + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *MobileSDKConfigType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&MobileSDKConfigType{`,
-		`ReloadHeaderName:` + fmt.Sprintf("%v", this.ReloadHeaderName) + `,`,
-		`MobileIdentifier:` + strings.Replace(this.MobileIdentifier.String(), "MobileTrafficIdentifierType", "MobileTrafficIdentifierType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
-		`HttpMethods:` + fmt.Sprintf("%v", this.HttpMethods) + `,`,
-		`Protocol:` + fmt.Sprintf("%v", this.Protocol) + `,`,
-		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
-		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
-		`AppTrafficTypeChoice:` + fmt.Sprintf("%v", this.AppTrafficTypeChoice) + `,`,
-		`Mitigation:` + strings.Replace(fmt.Sprintf("%v", this.Mitigation), "ShapeBotMitigationAction", "policy.ShapeBotMitigationAction", 1) + `,`,
-		`FlowLabelChoice:` + fmt.Sprintf("%v", this.FlowLabelChoice) + `,`,
-		`GoodbotChoice:` + fmt.Sprintf("%v", this.GoodbotChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_AnyDomain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_AnyDomain{`,
-		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_Domain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_Domain{`,
-		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_Web) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_Web{`,
-		`Web:` + strings.Replace(fmt.Sprintf("%v", this.Web), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_Mobile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_Mobile{`,
-		`Mobile:` + strings.Replace(fmt.Sprintf("%v", this.Mobile), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_WebMobile) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_WebMobile{`,
-		`WebMobile:` + strings.Replace(fmt.Sprintf("%v", this.WebMobile), "WebMobileTrafficType", "WebMobileTrafficType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_UndefinedFlowLabel) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_UndefinedFlowLabel{`,
-		`UndefinedFlowLabel:` + strings.Replace(fmt.Sprintf("%v", this.UndefinedFlowLabel), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_FlowLabel) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_FlowLabel{`,
-		`FlowLabel:` + strings.Replace(fmt.Sprintf("%v", this.FlowLabel), "BotDefenseFlowLabelCategoriesChoiceType", "schema.BotDefenseFlowLabelCategoriesChoiceType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_MitigateGoodBots) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_MitigateGoodBots{`,
-		`MitigateGoodBots:` + strings.Replace(fmt.Sprintf("%v", this.MitigateGoodBots), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AppEndpointType_AllowGoodBots) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AppEndpointType_AllowGoodBots{`,
-		`AllowGoodBots:` + strings.Replace(fmt.Sprintf("%v", this.AllowGoodBots), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *WebMobileTrafficType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForHeaders := "[]*HeaderMatcherTypeBasic{"
-	for _, f := range this.Headers {
-		repeatedStringForHeaders += strings.Replace(fmt.Sprintf("%v", f), "HeaderMatcherTypeBasic", "policy.HeaderMatcherTypeBasic", 1) + ","
-	}
-	repeatedStringForHeaders += "}"
-	s := strings.Join([]string{`&WebMobileTrafficType{`,
-		`Header:` + strings.Replace(fmt.Sprintf("%v", this.Header), "HeaderMatcherTypeBasic", "policy.HeaderMatcherTypeBasic", 1) + `,`,
-		`Headers:` + repeatedStringForHeaders + `,`,
-		`MobileIdentifier:` + fmt.Sprintf("%v", this.MobileIdentifier) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptInsertType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForRules := "[]*ShapeJavaScriptInsertionRule{"
-	for _, f := range this.Rules {
-		repeatedStringForRules += strings.Replace(f.String(), "ShapeJavaScriptInsertionRule", "ShapeJavaScriptInsertionRule", 1) + ","
-	}
-	repeatedStringForRules += "}"
-	repeatedStringForExcludeList := "[]*ShapeJavaScriptExclusionRule{"
-	for _, f := range this.ExcludeList {
-		repeatedStringForExcludeList += strings.Replace(f.String(), "ShapeJavaScriptExclusionRule", "ShapeJavaScriptExclusionRule", 1) + ","
-	}
-	repeatedStringForExcludeList += "}"
-	s := strings.Join([]string{`&ShapeJavaScriptInsertType{`,
-		`Rules:` + repeatedStringForRules + `,`,
-		`ExcludeList:` + repeatedStringForExcludeList + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptInsertAllWithExceptionsType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForExcludeList := "[]*ShapeJavaScriptExclusionRule{"
-	for _, f := range this.ExcludeList {
-		repeatedStringForExcludeList += strings.Replace(f.String(), "ShapeJavaScriptExclusionRule", "ShapeJavaScriptExclusionRule", 1) + ","
-	}
-	repeatedStringForExcludeList += "}"
-	s := strings.Join([]string{`&ShapeJavaScriptInsertAllWithExceptionsType{`,
-		`JavascriptLocation:` + fmt.Sprintf("%v", this.JavascriptLocation) + `,`,
-		`ExcludeList:` + repeatedStringForExcludeList + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptInsertAllType) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeJavaScriptInsertAllType{`,
-		`JavascriptLocation:` + fmt.Sprintf("%v", this.JavascriptLocation) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptInsertionRule) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeJavaScriptInsertionRule{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
-		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
-		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
-		`JavascriptLocation:` + fmt.Sprintf("%v", this.JavascriptLocation) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptInsertionRule_AnyDomain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeJavaScriptInsertionRule_AnyDomain{`,
-		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptInsertionRule_Domain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeJavaScriptInsertionRule_Domain{`,
-		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptExclusionRule) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeJavaScriptExclusionRule{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
-		`DomainMatcherChoice:` + fmt.Sprintf("%v", this.DomainMatcherChoice) + `,`,
-		`Path:` + strings.Replace(fmt.Sprintf("%v", this.Path), "PathMatcherType", "schema.PathMatcherType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptExclusionRule_AnyDomain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeJavaScriptExclusionRule_AnyDomain{`,
-		`AnyDomain:` + strings.Replace(fmt.Sprintf("%v", this.AnyDomain), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ShapeJavaScriptExclusionRule_Domain) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ShapeJavaScriptExclusionRule_Domain{`,
-		`Domain:` + strings.Replace(fmt.Sprintf("%v", this.Domain), "DomainType", "schema.DomainType", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -46893,7 +39193,7 @@ func (this *GlobalSpecType) String() string {
 	repeatedStringForTrustedClients += "}"
 	repeatedStringForDdosMitigationRules := "[]*DDoSMitigationRule{"
 	for _, f := range this.DdosMitigationRules {
-		repeatedStringForDdosMitigationRules += strings.Replace(f.String(), "DDoSMitigationRule", "DDoSMitigationRule", 1) + ","
+		repeatedStringForDdosMitigationRules += strings.Replace(fmt.Sprintf("%v", f), "DDoSMitigationRule", "common_security.DDoSMitigationRule", 1) + ","
 	}
 	repeatedStringForDdosMitigationRules += "}"
 	repeatedStringForDownstreamTlsCertificateExpirationTimestamps := "[]*Timestamp{"
@@ -46953,6 +39253,7 @@ func (this *GlobalSpecType) String() string {
 		`DownstreamTlsCertificateExpirationTimestamps:` + repeatedStringForDownstreamTlsCertificateExpirationTimestamps + `,`,
 		`DataGuardRules:` + repeatedStringForDataGuardRules + `,`,
 		`IpReputationChoice:` + fmt.Sprintf("%v", this.IpReputationChoice) + `,`,
+		`ApiRateLimitLegacy:` + strings.Replace(fmt.Sprintf("%v", this.ApiRateLimitLegacy), "APIRateLimitLegacy", "common_waf.APIRateLimitLegacy", 1) + `,`,
 		`ApiProtectionRules:` + strings.Replace(fmt.Sprintf("%v", this.ApiProtectionRules), "APIProtectionRules", "common_waf.APIProtectionRules", 1) + `,`,
 		`TrustClientIpHeadersChoice:` + fmt.Sprintf("%v", this.TrustClientIpHeadersChoice) + `,`,
 		`MaliciousUserDetectionChoice:` + fmt.Sprintf("%v", this.MaliciousUserDetectionChoice) + `,`,
@@ -46968,6 +39269,8 @@ func (this *GlobalSpecType) String() string {
 		`ThreatMeshChoice:` + fmt.Sprintf("%v", this.ThreatMeshChoice) + `,`,
 		`L7DdosAutoMitigationAction:` + fmt.Sprintf("%v", this.L7DdosAutoMitigationAction) + `,`,
 		`CertState:` + fmt.Sprintf("%v", this.CertState) + `,`,
+		`SensitiveDataDisclosureRules:` + strings.Replace(this.SensitiveDataDisclosureRules.String(), "SensitiveDataDisclosureRules", "SensitiveDataDisclosureRules", 1) + `,`,
+		`SensitiveDataPolicyChoice:` + fmt.Sprintf("%v", this.SensitiveDataPolicyChoice) + `,`,
 		`ViewInternal:` + strings.Replace(fmt.Sprintf("%v", this.ViewInternal), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
@@ -47294,7 +39597,7 @@ func (this *GlobalSpecType_BotDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_BotDefense{`,
-		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "common_security.ShapeBotDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -47444,7 +39747,7 @@ func (this *GlobalSpecType_ClientSideDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_ClientSideDefense{`,
-		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "ClientSideDefenseType", 1) + `,`,
+		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "common_security.ClientSideDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -47569,12 +39872,120 @@ func (this *GlobalSpecType_ApiRateLimit) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_DefaultSensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DefaultSensitiveDataPolicy{`,
+		`DefaultSensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSensitiveDataPolicy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_SensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_SensitiveDataPolicy{`,
+		`SensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.SensitiveDataPolicy), "SensitiveDataPolicySettings", "common_security.SensitiveDataPolicySettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType_BotDefenseAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GlobalSpecType_BotDefenseAdvanced{`,
-		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "BotDefenseAdvancedType", 1) + `,`,
+		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "common_security.BotDefenseAdvancedType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataDisclosureRules) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForSensitiveDataTypesInResponse := "[]*SensitiveDataTypes{"
+	for _, f := range this.SensitiveDataTypesInResponse {
+		repeatedStringForSensitiveDataTypesInResponse += strings.Replace(f.String(), "SensitiveDataTypes", "SensitiveDataTypes", 1) + ","
+	}
+	repeatedStringForSensitiveDataTypesInResponse += "}"
+	s := strings.Join([]string{`&SensitiveDataDisclosureRules{`,
+		`SensitiveDataTypesInResponse:` + repeatedStringForSensitiveDataTypesInResponse + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataTypes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SensitiveDataTypes{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "MessageMetaType", "schema.MessageMetaType", 1) + `,`,
+		`MaskingModeChoice:` + fmt.Sprintf("%v", this.MaskingModeChoice) + `,`,
+		`TypeConditionTypeChoice:` + fmt.Sprintf("%v", this.TypeConditionTypeChoice) + `,`,
+		`Body:` + strings.Replace(this.Body.String(), "BodySectionMaskingOptions", "BodySectionMaskingOptions", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataTypes_Mask) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SensitiveDataTypes_Mask{`,
+		`Mask:` + strings.Replace(fmt.Sprintf("%v", this.Mask), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataTypes_Report) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SensitiveDataTypes_Report{`,
+		`Report:` + strings.Replace(fmt.Sprintf("%v", this.Report), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataTypes_ApiEndpoint) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SensitiveDataTypes_ApiEndpoint{`,
+		`ApiEndpoint:` + strings.Replace(fmt.Sprintf("%v", this.ApiEndpoint), "ApiEndpointDetails", "common_waf.ApiEndpointDetails", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataTypes_BasePath) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SensitiveDataTypes_BasePath{`,
+		`BasePath:` + fmt.Sprintf("%v", this.BasePath) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SensitiveDataTypes_ApiGroup) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SensitiveDataTypes_ApiGroup{`,
+		`ApiGroup:` + fmt.Sprintf("%v", this.ApiGroup) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BodySectionMaskingOptions) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BodySectionMaskingOptions{`,
+		`Fields:` + fmt.Sprintf("%v", this.Fields) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -47610,7 +40021,7 @@ func (this *CreateSpecType) String() string {
 	repeatedStringForTrustedClients += "}"
 	repeatedStringForDdosMitigationRules := "[]*DDoSMitigationRule{"
 	for _, f := range this.DdosMitigationRules {
-		repeatedStringForDdosMitigationRules += strings.Replace(f.String(), "DDoSMitigationRule", "DDoSMitigationRule", 1) + ","
+		repeatedStringForDdosMitigationRules += strings.Replace(fmt.Sprintf("%v", f), "DDoSMitigationRule", "common_security.DDoSMitigationRule", 1) + ","
 	}
 	repeatedStringForDdosMitigationRules += "}"
 	repeatedStringForDataGuardRules := "[]*SimpleDataGuardRule{"
@@ -47653,6 +40064,7 @@ func (this *CreateSpecType) String() string {
 		`ApiDefinitionChoice:` + fmt.Sprintf("%v", this.ApiDefinitionChoice) + `,`,
 		`DataGuardRules:` + repeatedStringForDataGuardRules + `,`,
 		`IpReputationChoice:` + fmt.Sprintf("%v", this.IpReputationChoice) + `,`,
+		`ApiRateLimitLegacy:` + strings.Replace(fmt.Sprintf("%v", this.ApiRateLimitLegacy), "APIRateLimitLegacy", "common_waf.APIRateLimitLegacy", 1) + `,`,
 		`ApiProtectionRules:` + strings.Replace(fmt.Sprintf("%v", this.ApiProtectionRules), "APIProtectionRules", "common_waf.APIProtectionRules", 1) + `,`,
 		`TrustClientIpHeadersChoice:` + fmt.Sprintf("%v", this.TrustClientIpHeadersChoice) + `,`,
 		`MaliciousUserDetectionChoice:` + fmt.Sprintf("%v", this.MaliciousUserDetectionChoice) + `,`,
@@ -47667,6 +40079,8 @@ func (this *CreateSpecType) String() string {
 		`OriginServerSubsetRuleList:` + strings.Replace(this.OriginServerSubsetRuleList.String(), "OriginServerSubsetRuleListType", "OriginServerSubsetRuleListType", 1) + `,`,
 		`ThreatMeshChoice:` + fmt.Sprintf("%v", this.ThreatMeshChoice) + `,`,
 		`L7DdosAutoMitigationAction:` + fmt.Sprintf("%v", this.L7DdosAutoMitigationAction) + `,`,
+		`SensitiveDataDisclosureRules:` + strings.Replace(this.SensitiveDataDisclosureRules.String(), "SensitiveDataDisclosureRules", "SensitiveDataDisclosureRules", 1) + `,`,
+		`SensitiveDataPolicyChoice:` + fmt.Sprintf("%v", this.SensitiveDataPolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -47956,7 +40370,7 @@ func (this *CreateSpecType_BotDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_BotDefense{`,
-		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "common_security.ShapeBotDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -48106,7 +40520,7 @@ func (this *CreateSpecType_ClientSideDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_ClientSideDefense{`,
-		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "ClientSideDefenseType", 1) + `,`,
+		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "common_security.ClientSideDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -48231,12 +40645,32 @@ func (this *CreateSpecType_ApiRateLimit) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_DefaultSensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DefaultSensitiveDataPolicy{`,
+		`DefaultSensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSensitiveDataPolicy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_SensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_SensitiveDataPolicy{`,
+		`SensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.SensitiveDataPolicy), "SensitiveDataPolicySettings", "common_security.SensitiveDataPolicySettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType_BotDefenseAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateSpecType_BotDefenseAdvanced{`,
-		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "BotDefenseAdvancedType", 1) + `,`,
+		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "common_security.BotDefenseAdvancedType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -48272,7 +40706,7 @@ func (this *ReplaceSpecType) String() string {
 	repeatedStringForTrustedClients += "}"
 	repeatedStringForDdosMitigationRules := "[]*DDoSMitigationRule{"
 	for _, f := range this.DdosMitigationRules {
-		repeatedStringForDdosMitigationRules += strings.Replace(f.String(), "DDoSMitigationRule", "DDoSMitigationRule", 1) + ","
+		repeatedStringForDdosMitigationRules += strings.Replace(fmt.Sprintf("%v", f), "DDoSMitigationRule", "common_security.DDoSMitigationRule", 1) + ","
 	}
 	repeatedStringForDdosMitigationRules += "}"
 	repeatedStringForDataGuardRules := "[]*SimpleDataGuardRule{"
@@ -48315,6 +40749,7 @@ func (this *ReplaceSpecType) String() string {
 		`ApiDefinitionChoice:` + fmt.Sprintf("%v", this.ApiDefinitionChoice) + `,`,
 		`DataGuardRules:` + repeatedStringForDataGuardRules + `,`,
 		`IpReputationChoice:` + fmt.Sprintf("%v", this.IpReputationChoice) + `,`,
+		`ApiRateLimitLegacy:` + strings.Replace(fmt.Sprintf("%v", this.ApiRateLimitLegacy), "APIRateLimitLegacy", "common_waf.APIRateLimitLegacy", 1) + `,`,
 		`ApiProtectionRules:` + strings.Replace(fmt.Sprintf("%v", this.ApiProtectionRules), "APIProtectionRules", "common_waf.APIProtectionRules", 1) + `,`,
 		`TrustClientIpHeadersChoice:` + fmt.Sprintf("%v", this.TrustClientIpHeadersChoice) + `,`,
 		`MaliciousUserDetectionChoice:` + fmt.Sprintf("%v", this.MaliciousUserDetectionChoice) + `,`,
@@ -48329,6 +40764,8 @@ func (this *ReplaceSpecType) String() string {
 		`OriginServerSubsetRuleList:` + strings.Replace(this.OriginServerSubsetRuleList.String(), "OriginServerSubsetRuleListType", "OriginServerSubsetRuleListType", 1) + `,`,
 		`ThreatMeshChoice:` + fmt.Sprintf("%v", this.ThreatMeshChoice) + `,`,
 		`L7DdosAutoMitigationAction:` + fmt.Sprintf("%v", this.L7DdosAutoMitigationAction) + `,`,
+		`SensitiveDataDisclosureRules:` + strings.Replace(this.SensitiveDataDisclosureRules.String(), "SensitiveDataDisclosureRules", "SensitiveDataDisclosureRules", 1) + `,`,
+		`SensitiveDataPolicyChoice:` + fmt.Sprintf("%v", this.SensitiveDataPolicyChoice) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -48618,7 +41055,7 @@ func (this *ReplaceSpecType_BotDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_BotDefense{`,
-		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "common_security.ShapeBotDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -48768,7 +41205,7 @@ func (this *ReplaceSpecType_ClientSideDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_ClientSideDefense{`,
-		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "ClientSideDefenseType", 1) + `,`,
+		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "common_security.ClientSideDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -48893,12 +41330,32 @@ func (this *ReplaceSpecType_ApiRateLimit) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_DefaultSensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DefaultSensitiveDataPolicy{`,
+		`DefaultSensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSensitiveDataPolicy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_SensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_SensitiveDataPolicy{`,
+		`SensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.SensitiveDataPolicy), "SensitiveDataPolicySettings", "common_security.SensitiveDataPolicySettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType_BotDefenseAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_BotDefenseAdvanced{`,
-		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "BotDefenseAdvancedType", 1) + `,`,
+		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "common_security.BotDefenseAdvancedType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -48934,7 +41391,7 @@ func (this *GetSpecType) String() string {
 	repeatedStringForTrustedClients += "}"
 	repeatedStringForDdosMitigationRules := "[]*DDoSMitigationRule{"
 	for _, f := range this.DdosMitigationRules {
-		repeatedStringForDdosMitigationRules += strings.Replace(f.String(), "DDoSMitigationRule", "DDoSMitigationRule", 1) + ","
+		repeatedStringForDdosMitigationRules += strings.Replace(fmt.Sprintf("%v", f), "DDoSMitigationRule", "common_security.DDoSMitigationRule", 1) + ","
 	}
 	repeatedStringForDdosMitigationRules += "}"
 	repeatedStringForDownstreamTlsCertificateExpirationTimestamps := "[]*Timestamp{"
@@ -48993,6 +41450,7 @@ func (this *GetSpecType) String() string {
 		`DownstreamTlsCertificateExpirationTimestamps:` + repeatedStringForDownstreamTlsCertificateExpirationTimestamps + `,`,
 		`DataGuardRules:` + repeatedStringForDataGuardRules + `,`,
 		`IpReputationChoice:` + fmt.Sprintf("%v", this.IpReputationChoice) + `,`,
+		`ApiRateLimitLegacy:` + strings.Replace(fmt.Sprintf("%v", this.ApiRateLimitLegacy), "APIRateLimitLegacy", "common_waf.APIRateLimitLegacy", 1) + `,`,
 		`ApiProtectionRules:` + strings.Replace(fmt.Sprintf("%v", this.ApiProtectionRules), "APIProtectionRules", "common_waf.APIProtectionRules", 1) + `,`,
 		`TrustClientIpHeadersChoice:` + fmt.Sprintf("%v", this.TrustClientIpHeadersChoice) + `,`,
 		`MaliciousUserDetectionChoice:` + fmt.Sprintf("%v", this.MaliciousUserDetectionChoice) + `,`,
@@ -49008,6 +41466,8 @@ func (this *GetSpecType) String() string {
 		`ThreatMeshChoice:` + fmt.Sprintf("%v", this.ThreatMeshChoice) + `,`,
 		`L7DdosAutoMitigationAction:` + fmt.Sprintf("%v", this.L7DdosAutoMitigationAction) + `,`,
 		`CertState:` + fmt.Sprintf("%v", this.CertState) + `,`,
+		`SensitiveDataDisclosureRules:` + strings.Replace(this.SensitiveDataDisclosureRules.String(), "SensitiveDataDisclosureRules", "SensitiveDataDisclosureRules", 1) + `,`,
+		`SensitiveDataPolicyChoice:` + fmt.Sprintf("%v", this.SensitiveDataPolicyChoice) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
@@ -49302,7 +41762,7 @@ func (this *GetSpecType_BotDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_BotDefense{`,
-		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "ShapeBotDefenseType", 1) + `,`,
+		`BotDefense:` + strings.Replace(fmt.Sprintf("%v", this.BotDefense), "ShapeBotDefenseType", "common_security.ShapeBotDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -49452,7 +41912,7 @@ func (this *GetSpecType_ClientSideDefense) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_ClientSideDefense{`,
-		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "ClientSideDefenseType", 1) + `,`,
+		`ClientSideDefense:` + strings.Replace(fmt.Sprintf("%v", this.ClientSideDefense), "ClientSideDefenseType", "common_security.ClientSideDefenseType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -49577,12 +42037,32 @@ func (this *GetSpecType_ApiRateLimit) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_DefaultSensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DefaultSensitiveDataPolicy{`,
+		`DefaultSensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.DefaultSensitiveDataPolicy), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_SensitiveDataPolicy) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_SensitiveDataPolicy{`,
+		`SensitiveDataPolicy:` + strings.Replace(fmt.Sprintf("%v", this.SensitiveDataPolicy), "SensitiveDataPolicySettings", "common_security.SensitiveDataPolicySettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType_BotDefenseAdvanced) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetSpecType_BotDefenseAdvanced{`,
-		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "BotDefenseAdvancedType", 1) + `,`,
+		`BotDefenseAdvanced:` + strings.Replace(fmt.Sprintf("%v", this.BotDefenseAdvanced), "BotDefenseAdvancedType", "common_security.BotDefenseAdvancedType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -54314,430 +46794,6 @@ func (m *AdvancedOptionsType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *DDoSClientSource) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DDoSClientSource: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DDoSClientSource: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AsnList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AsnList == nil {
-				m.AsnList = &policy.AsnMatchList{}
-			}
-			if err := m.AsnList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType == 0 {
-				var v policy.CountryCode
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= policy.CountryCode(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.CountryList = append(m.CountryList, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthTypes
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				if elementCount != 0 && len(m.CountryList) == 0 {
-					m.CountryList = make([]policy.CountryCode, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v policy.CountryCode
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= policy.CountryCode(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.CountryList = append(m.CountryList, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field CountryList", wireType)
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TlsFingerprintMatcher", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.TlsFingerprintMatcher == nil {
-				m.TlsFingerprintMatcher = &policy.TlsFingerprintMatcherType{}
-			}
-			if err := m.TlsFingerprintMatcher.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DDoSMitigationRule) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DDoSMitigationRule: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DDoSMitigationRule: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = &schema.MessageMetaType{}
-			}
-			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Block", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MitigationAction = &DDoSMitigationRule_Block{v}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DdosClientSource", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &DDoSClientSource{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MitigationChoice = &DDoSMitigationRule_DdosClientSource{v}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IpPrefixList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &policy.PrefixMatchList{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MitigationChoice = &DDoSMitigationRule_IpPrefixList{v}
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExpirationTimestamp", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ExpirationTimestamp == nil {
-				m.ExpirationTimestamp = &types.Timestamp{}
-			}
-			if err := m.ExpirationTimestamp.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
 func (m *SingleLoadBalancerAppSetting) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -54991,4137 +47047,6 @@ func (m *OriginServerSubsetRuleListType) Unmarshal(dAtA []byte) error {
 			}
 			m.OriginServerSubsetRules = append(m.OriginServerSubsetRules, &policy.OriginServerSubsetRule{})
 			if err := m.OriginServerSubsetRules[len(m.OriginServerSubsetRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ClientSideDefenseType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ClientSideDefenseType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ClientSideDefenseType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Policy == nil {
-				m.Policy = &ClientSideDefensePolicyType{}
-			}
-			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ClientSideDefensePolicyType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ClientSideDefensePolicyType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ClientSideDefensePolicyType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableJsInsert", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ClientSideDefensePolicyType_DisableJsInsert{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertAllPages", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ClientSideDefensePolicyType_JsInsertAllPages{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertAllPagesExcept", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &CSDJavaScriptInsertAllWithExceptionsType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ClientSideDefensePolicyType_JsInsertAllPagesExcept{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertionRules", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &CSDJavaScriptInsertType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ClientSideDefensePolicyType_JsInsertionRules{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CSDJavaScriptInsertAllWithExceptionsType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CSDJavaScriptInsertAllWithExceptionsType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CSDJavaScriptInsertAllWithExceptionsType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExcludeList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ExcludeList = append(m.ExcludeList, &ShapeJavaScriptExclusionRule{})
-			if err := m.ExcludeList[len(m.ExcludeList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CSDJavaScriptInsertType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CSDJavaScriptInsertType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CSDJavaScriptInsertType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rules", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Rules = append(m.Rules, &CSDJavaScriptInsertionRule{})
-			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExcludeList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ExcludeList = append(m.ExcludeList, &ShapeJavaScriptExclusionRule{})
-			if err := m.ExcludeList[len(m.ExcludeList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CSDJavaScriptInsertionRule) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CSDJavaScriptInsertionRule: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CSDJavaScriptInsertionRule: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = &schema.MessageMetaType{}
-			}
-			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &CSDJavaScriptInsertionRule_AnyDomain{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.DomainType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &CSDJavaScriptInsertionRule_Domain{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Path == nil {
-				m.Path = &schema.PathMatcherType{}
-			}
-			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *BotDefenseAdvancedPolicyType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BotDefenseAdvancedPolicyType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BotDefenseAdvancedPolicyType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProtectedAppEndpoints", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProtectedAppEndpoints = append(m.ProtectedAppEndpoints, &ProtectedAppEndpointType{})
-			if err := m.ProtectedAppEndpoints[len(m.ProtectedAppEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsDownloadPath", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.JsDownloadPath = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableMobileSdk", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MobileSdkChoice = &BotDefenseAdvancedPolicyType_DisableMobileSdk{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MobileSdkConfig", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &BotAdvancedMobileSDKConfigType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MobileSdkChoice = &BotDefenseAdvancedPolicyType_MobileSdkConfig{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *BotAdvancedMobileSDKConfigType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BotAdvancedMobileSDKConfigType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BotAdvancedMobileSDKConfigType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MobileIdentifier", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.MobileIdentifier == nil {
-				m.MobileIdentifier = &MobileTrafficIdentifierType{}
-			}
-			if err := m.MobileIdentifier.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ProtectedAppEndpointType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ProtectedAppEndpointType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ProtectedAppEndpointType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = &schema.MessageMetaType{}
-			}
-			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &ProtectedAppEndpointType_AnyDomain{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.DomainType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &ProtectedAppEndpointType_Domain{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Path == nil {
-				m.Path = &schema.PathMatcherType{}
-			}
-			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Query", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Query = append(m.Query, &Query{})
-			if err := m.Query[len(m.Query)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RequestBody", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.RequestBody = append(m.RequestBody, &RequestBody{})
-			if err := m.RequestBody[len(m.RequestBody)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 8:
-			if wireType == 0 {
-				var v schema.BotHttpMethod
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= schema.BotHttpMethod(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.HttpMethods = append(m.HttpMethods, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthTypes
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				if elementCount != 0 && len(m.HttpMethods) == 0 {
-					m.HttpMethods = make([]schema.BotHttpMethod, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v schema.BotHttpMethod
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= schema.BotHttpMethod(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.HttpMethods = append(m.HttpMethods, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field HttpMethods", wireType)
-			}
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebClient", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AppTrafficTypeChoice = &ProtectedAppEndpointType_WebClient{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MobileClient", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AppTrafficTypeChoice = &ProtectedAppEndpointType_MobileClient{v}
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebMobileClient", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &WebMobileTrafficType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AppTrafficTypeChoice = &ProtectedAppEndpointType_WebMobileClient{v}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UndefinedFlowLabel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FlowLabelChoice = &ProtectedAppEndpointType_UndefinedFlowLabel{v}
-			iNdEx = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FlowLabel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.BotDefenseFlowLabelCategoriesChoiceType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FlowLabelChoice = &ProtectedAppEndpointType_FlowLabel{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *RequestBody) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: RequestBody: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: RequestBody: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExactValue", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValueType = &RequestBody_ExactValue{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RegexValue", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValueType = &RequestBody_RegexValue{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Query) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Query: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Query: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExactValue", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValueType = &Query_ExactValue{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RegexValue", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValueType = &Query_RegexValue{string(dAtA[iNdEx:postIndex])}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CheckPresence", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ValueType = &Query_CheckPresence{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ShapeBotDefenseType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ShapeBotDefenseType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ShapeBotDefenseType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RegionalEndpoint", wireType)
-			}
-			m.RegionalEndpoint = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RegionalEndpoint |= ShapeBotDefenseRegion(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Policy == nil {
-				m.Policy = &ShapeBotDefensePolicyType{}
-			}
-			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Timeout", wireType)
-			}
-			m.Timeout = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Timeout |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EnableCorsSupport", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.CorsSupportChoice = &ShapeBotDefenseType_EnableCorsSupport{v}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableCorsSupport", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.CorsSupportChoice = &ShapeBotDefenseType_DisableCorsSupport{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *BotDefenseAdvancedType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BotDefenseAdvancedType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BotDefenseAdvancedType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Web", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Web == nil {
-				m.Web = &views.ObjectRefType{}
-			}
-			if err := m.Web.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mobile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Mobile == nil {
-				m.Mobile = &views.ObjectRefType{}
-			}
-			if err := m.Mobile.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Policy", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Policy == nil {
-				m.Policy = &BotDefenseAdvancedPolicyType{}
-			}
-			if err := m.Policy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ShapeBotDefensePolicyType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ShapeBotDefensePolicyType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ShapeBotDefensePolicyType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProtectedAppEndpoints", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProtectedAppEndpoints = append(m.ProtectedAppEndpoints, &AppEndpointType{})
-			if err := m.ProtectedAppEndpoints[len(m.ProtectedAppEndpoints)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsDownloadPath", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.JsDownloadPath = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableJsInsert", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ShapeBotDefensePolicyType_DisableJsInsert{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertAllPages", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ShapeJavaScriptInsertAllType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ShapeBotDefensePolicyType_JsInsertAllPages{v}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertAllPagesExcept", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ShapeJavaScriptInsertAllWithExceptionsType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ShapeBotDefensePolicyType_JsInsertAllPagesExcept{v}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JsInsertionRules", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ShapeJavaScriptInsertType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.JavaScriptChoice = &ShapeBotDefensePolicyType_JsInsertionRules{v}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableMobileSdk", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MobileSdkChoice = &ShapeBotDefensePolicyType_DisableMobileSdk{v}
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MobileSdkConfig", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &MobileSDKConfigType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.MobileSdkChoice = &ShapeBotDefensePolicyType_MobileSdkConfig{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptMode", wireType)
-			}
-			m.JavascriptMode = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.JavascriptMode |= schema.JavaScriptMode(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MobileTrafficIdentifierType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MobileTrafficIdentifierType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MobileTrafficIdentifierType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Headers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Headers = append(m.Headers, &policy.HeaderMatcherTypeBasic{})
-			if err := m.Headers[len(m.Headers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MobileSDKConfigType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MobileSDKConfigType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MobileSDKConfigType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ReloadHeaderName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ReloadHeaderName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MobileIdentifier", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.MobileIdentifier == nil {
-				m.MobileIdentifier = &MobileTrafficIdentifierType{}
-			}
-			if err := m.MobileIdentifier.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AppEndpointType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AppEndpointType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AppEndpointType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = &schema.MessageMetaType{}
-			}
-			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType == 0 {
-				var v schema.BotHttpMethod
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= schema.BotHttpMethod(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.HttpMethods = append(m.HttpMethods, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthTypes
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				if elementCount != 0 && len(m.HttpMethods) == 0 {
-					m.HttpMethods = make([]schema.BotHttpMethod, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v schema.BotHttpMethod
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= schema.BotHttpMethod(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.HttpMethods = append(m.HttpMethods, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field HttpMethods", wireType)
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Protocol", wireType)
-			}
-			m.Protocol = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Protocol |= URLScheme(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Path == nil {
-				m.Path = &schema.PathMatcherType{}
-			}
-			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &AppEndpointType_AnyDomain{v}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.DomainType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &AppEndpointType_Domain{v}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Web", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AppTrafficTypeChoice = &AppEndpointType_Web{v}
-			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mobile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AppTrafficTypeChoice = &AppEndpointType_Mobile{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WebMobile", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &WebMobileTrafficType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AppTrafficTypeChoice = &AppEndpointType_WebMobile{v}
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Mitigation", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Mitigation == nil {
-				m.Mitigation = &policy.ShapeBotMitigationAction{}
-			}
-			if err := m.Mitigation.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UndefinedFlowLabel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FlowLabelChoice = &AppEndpointType_UndefinedFlowLabel{v}
-			iNdEx = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FlowLabel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.BotDefenseFlowLabelCategoriesChoiceType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FlowLabelChoice = &AppEndpointType_FlowLabel{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MitigateGoodBots", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.GoodbotChoice = &AppEndpointType_MitigateGoodBots{v}
-			iNdEx = postIndex
-		case 19:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowGoodBots", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.GoodbotChoice = &AppEndpointType_AllowGoodBots{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *WebMobileTrafficType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: WebMobileTrafficType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: WebMobileTrafficType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Header", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Header == nil {
-				m.Header = &policy.HeaderMatcherTypeBasic{}
-			}
-			if err := m.Header.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Headers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Headers = append(m.Headers, &policy.HeaderMatcherTypeBasic{})
-			if err := m.Headers[len(m.Headers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MobileIdentifier", wireType)
-			}
-			m.MobileIdentifier = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MobileIdentifier |= MobileIdentifier(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ShapeJavaScriptInsertType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rules", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Rules = append(m.Rules, &ShapeJavaScriptInsertionRule{})
-			if err := m.Rules[len(m.Rules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExcludeList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ExcludeList = append(m.ExcludeList, &ShapeJavaScriptExclusionRule{})
-			if err := m.ExcludeList[len(m.ExcludeList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ShapeJavaScriptInsertAllWithExceptionsType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertAllWithExceptionsType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertAllWithExceptionsType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptLocation", wireType)
-			}
-			m.JavascriptLocation = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.JavascriptLocation |= JavaScriptLocation(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExcludeList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ExcludeList = append(m.ExcludeList, &ShapeJavaScriptExclusionRule{})
-			if err := m.ExcludeList[len(m.ExcludeList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ShapeJavaScriptInsertAllType) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertAllType: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertAllType: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptLocation", wireType)
-			}
-			m.JavascriptLocation = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.JavascriptLocation |= JavaScriptLocation(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ShapeJavaScriptInsertionRule) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertionRule: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ShapeJavaScriptInsertionRule: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = &schema.MessageMetaType{}
-			}
-			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &ShapeJavaScriptInsertionRule_AnyDomain{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.DomainType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &ShapeJavaScriptInsertionRule_Domain{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Path == nil {
-				m.Path = &schema.PathMatcherType{}
-			}
-			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field JavascriptLocation", wireType)
-			}
-			m.JavascriptLocation = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.JavascriptLocation |= JavaScriptLocation(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ShapeJavaScriptExclusionRule) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ShapeJavaScriptExclusionRule: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ShapeJavaScriptExclusionRule: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Metadata == nil {
-				m.Metadata = &schema.MessageMetaType{}
-			}
-			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnyDomain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &ShapeJavaScriptExclusionRule_AnyDomain{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.DomainType{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.DomainMatcherChoice = &ShapeJavaScriptExclusionRule_Domain{v}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Path == nil {
-				m.Path = &schema.PathMatcherType{}
-			}
-			if err := m.Path.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -60129,7 +48054,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DdosMitigationRules = append(m.DdosMitigationRules, &DDoSMitigationRule{})
+			m.DdosMitigationRules = append(m.DdosMitigationRules, &common_security.DDoSMitigationRule{})
 			if err := m.DdosMitigationRules[len(m.DdosMitigationRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -60653,7 +48578,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ShapeBotDefenseType{}
+			v := &common_security.ShapeBotDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -60901,6 +48826,42 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ApiDefinitionChoice = &GlobalSpecType_ApiSpecification{v}
+			iNdEx = postIndex
+		case 68:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimitLegacy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiRateLimitLegacy == nil {
+				m.ApiRateLimitLegacy = &common_waf.APIRateLimitLegacy{}
+			}
+			if err := m.ApiRateLimitLegacy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 70:
 			if wireType != 2 {
@@ -61282,7 +49243,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ClientSideDefenseType{}
+			v := &common_security.ClientSideDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -61868,6 +49829,42 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 116:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataDisclosureRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SensitiveDataDisclosureRules == nil {
+				m.SensitiveDataDisclosureRules = &SensitiveDataDisclosureRules{}
+			}
+			if err := m.SensitiveDataDisclosureRules.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 120:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimit", wireType)
@@ -61902,6 +49899,76 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.RateLimitChoice = &GlobalSpecType_ApiRateLimit{v}
+			iNdEx = postIndex
+		case 131:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultSensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &GlobalSpecType_DefaultSensitiveDataPolicy{v}
+			iNdEx = postIndex
+		case 132:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_security.SensitiveDataPolicySettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &GlobalSpecType_SensitiveDataPolicy{v}
 			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
@@ -62108,7 +50175,7 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &BotDefenseAdvancedType{}
+			v := &common_security.BotDefenseAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -62147,6 +50214,472 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.InternetVipInfo[len(m.InternetVipInfo)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SensitiveDataDisclosureRules) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SensitiveDataDisclosureRules: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SensitiveDataDisclosureRules: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataTypesInResponse", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SensitiveDataTypesInResponse = append(m.SensitiveDataTypesInResponse, &SensitiveDataTypes{})
+			if err := m.SensitiveDataTypesInResponse[len(m.SensitiveDataTypesInResponse)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SensitiveDataTypes) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SensitiveDataTypes: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SensitiveDataTypes: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &schema.MessageMetaType{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Mask", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaskingModeChoice = &SensitiveDataTypes_Mask{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Report", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.MaskingModeChoice = &SensitiveDataTypes_Report{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiEndpoint", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_waf.ApiEndpointDetails{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TypeConditionTypeChoice = &SensitiveDataTypes_ApiEndpoint{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BasePath", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TypeConditionTypeChoice = &SensitiveDataTypes_BasePath{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiGroup", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TypeConditionTypeChoice = &SensitiveDataTypes_ApiGroup{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Body", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Body == nil {
+				m.Body = &BodySectionMaskingOptions{}
+			}
+			if err := m.Body.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *BodySectionMaskingOptions) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BodySectionMaskingOptions: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BodySectionMaskingOptions: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Fields", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Fields = append(m.Fields, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -63050,7 +51583,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DdosMitigationRules = append(m.DdosMitigationRules, &DDoSMitigationRule{})
+			m.DdosMitigationRules = append(m.DdosMitigationRules, &common_security.DDoSMitigationRule{})
 			if err := m.DdosMitigationRules[len(m.DdosMitigationRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -63574,7 +52107,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ShapeBotDefenseType{}
+			v := &common_security.ShapeBotDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -63788,6 +52321,42 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ApiDefinitionChoice = &CreateSpecType_ApiSpecification{v}
+			iNdEx = postIndex
+		case 68:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimitLegacy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiRateLimitLegacy == nil {
+				m.ApiRateLimitLegacy = &common_waf.APIRateLimitLegacy{}
+			}
+			if err := m.ApiRateLimitLegacy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 70:
 			if wireType != 2 {
@@ -64169,7 +52738,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ClientSideDefenseType{}
+			v := &common_security.ClientSideDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -64736,6 +53305,42 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.L7DdosAutoMitigationAction = &CreateSpecType_L7DdosActionNone{v}
 			iNdEx = postIndex
+		case 116:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataDisclosureRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SensitiveDataDisclosureRules == nil {
+				m.SensitiveDataDisclosureRules = &SensitiveDataDisclosureRules{}
+			}
+			if err := m.SensitiveDataDisclosureRules.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 120:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimit", wireType)
@@ -64771,6 +53376,76 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.RateLimitChoice = &CreateSpecType_ApiRateLimit{v}
 			iNdEx = postIndex
+		case 131:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultSensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &CreateSpecType_DefaultSensitiveDataPolicy{v}
+			iNdEx = postIndex
+		case 132:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_security.SensitiveDataPolicySettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &CreateSpecType_SensitiveDataPolicy{v}
+			iNdEx = postIndex
 		case 1011:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BotDefenseAdvanced", wireType)
@@ -64800,7 +53475,7 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &BotDefenseAdvancedType{}
+			v := &common_security.BotDefenseAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -65708,7 +54383,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DdosMitigationRules = append(m.DdosMitigationRules, &DDoSMitigationRule{})
+			m.DdosMitigationRules = append(m.DdosMitigationRules, &common_security.DDoSMitigationRule{})
 			if err := m.DdosMitigationRules[len(m.DdosMitigationRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -66232,7 +54907,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ShapeBotDefenseType{}
+			v := &common_security.ShapeBotDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -66446,6 +55121,42 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ApiDefinitionChoice = &ReplaceSpecType_ApiSpecification{v}
+			iNdEx = postIndex
+		case 68:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimitLegacy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiRateLimitLegacy == nil {
+				m.ApiRateLimitLegacy = &common_waf.APIRateLimitLegacy{}
+			}
+			if err := m.ApiRateLimitLegacy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 70:
 			if wireType != 2 {
@@ -66827,7 +55538,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ClientSideDefenseType{}
+			v := &common_security.ClientSideDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -67394,6 +56105,42 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.L7DdosAutoMitigationAction = &ReplaceSpecType_L7DdosActionNone{v}
 			iNdEx = postIndex
+		case 116:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataDisclosureRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SensitiveDataDisclosureRules == nil {
+				m.SensitiveDataDisclosureRules = &SensitiveDataDisclosureRules{}
+			}
+			if err := m.SensitiveDataDisclosureRules.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 120:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimit", wireType)
@@ -67429,6 +56176,76 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.RateLimitChoice = &ReplaceSpecType_ApiRateLimit{v}
 			iNdEx = postIndex
+		case 131:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultSensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &ReplaceSpecType_DefaultSensitiveDataPolicy{v}
+			iNdEx = postIndex
+		case 132:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_security.SensitiveDataPolicySettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &ReplaceSpecType_SensitiveDataPolicy{v}
+			iNdEx = postIndex
 		case 1011:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BotDefenseAdvanced", wireType)
@@ -67458,7 +56275,7 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &BotDefenseAdvancedType{}
+			v := &common_security.BotDefenseAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -68366,7 +57183,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.DdosMitigationRules = append(m.DdosMitigationRules, &DDoSMitigationRule{})
+			m.DdosMitigationRules = append(m.DdosMitigationRules, &common_security.DDoSMitigationRule{})
 			if err := m.DdosMitigationRules[len(m.DdosMitigationRules)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -68890,7 +57707,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ShapeBotDefenseType{}
+			v := &common_security.ShapeBotDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -69138,6 +57955,42 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ApiDefinitionChoice = &GetSpecType_ApiSpecification{v}
+			iNdEx = postIndex
+		case 68:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimitLegacy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ApiRateLimitLegacy == nil {
+				m.ApiRateLimitLegacy = &common_waf.APIRateLimitLegacy{}
+			}
+			if err := m.ApiRateLimitLegacy.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 70:
 			if wireType != 2 {
@@ -69519,7 +58372,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &ClientSideDefenseType{}
+			v := &common_security.ClientSideDefenseType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -70105,6 +58958,42 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 116:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataDisclosureRules", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SensitiveDataDisclosureRules == nil {
+				m.SensitiveDataDisclosureRules = &SensitiveDataDisclosureRules{}
+			}
+			if err := m.SensitiveDataDisclosureRules.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 120:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ApiRateLimit", wireType)
@@ -70139,6 +59028,76 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.RateLimitChoice = &GetSpecType_ApiRateLimit{v}
+			iNdEx = postIndex
+		case 131:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultSensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &GetSpecType_DefaultSensitiveDataPolicy{v}
+			iNdEx = postIndex
+		case 132:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SensitiveDataPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &common_security.SensitiveDataPolicySettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SensitiveDataPolicyChoice = &GetSpecType_SensitiveDataPolicy{v}
 			iNdEx = postIndex
 		case 1001:
 			if wireType != 2 {
@@ -70290,7 +59249,7 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			v := &BotDefenseAdvancedType{}
+			v := &common_security.BotDefenseAdvancedType{}
 			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

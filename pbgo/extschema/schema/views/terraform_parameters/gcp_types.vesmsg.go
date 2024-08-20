@@ -585,6 +585,33 @@ func (m *GCPVpcSiteType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *GCPVpcSiteType) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *GCPVpcSiteType) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *GCPVpcSiteType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.AdminPasswordBlindfolded = ""
+
+	return nil
+}
+
 func (m *GCPVpcSiteType) DeepCopy() *GCPVpcSiteType {
 	if m == nil {
 		return nil
@@ -628,6 +655,33 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_blindfolded"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_blindfolded"))
+		if err := fv(ctx, m.GetAdminPasswordBlindfolded(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_password_clear_b64"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password_clear_b64"))
+		if err := fv(ctx, m.GetAdminPasswordClearB64(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["certified_hw"]; exists {

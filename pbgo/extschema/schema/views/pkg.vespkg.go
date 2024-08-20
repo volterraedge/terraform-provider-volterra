@@ -91,10 +91,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.OriginPoolWithWeight"] = OriginPoolWithWeightValidator()
 	vr["ves.io.schema.views.PerformanceEnhancementModeType"] = PerformanceEnhancementModeTypeValidator()
 	vr["ves.io.schema.views.PrefixStringListType"] = PrefixStringListTypeValidator()
+	vr["ves.io.schema.views.RegionalEdgeSelection"] = RegionalEdgeSelectionValidator()
 	vr["ves.io.schema.views.SegmentRefList"] = SegmentRefListValidator()
 	vr["ves.io.schema.views.SiteLocator"] = SiteLocatorValidator()
 	vr["ves.io.schema.views.SiteReferenceListType"] = SiteReferenceListTypeValidator()
 	vr["ves.io.schema.views.SiteRegionLocator"] = SiteRegionLocatorValidator()
+	vr["ves.io.schema.views.SpecificRE"] = SpecificREValidator()
 	vr["ves.io.schema.views.TlsConfig"] = TlsConfigValidator()
 	vr["ves.io.schema.views.VolterraSoftwareType"] = VolterraSoftwareTypeValidator()
 	vr["ves.io.schema.views.WhereCloudEdgeSegment"] = WhereCloudEdgeSegmentValidator()
@@ -107,6 +109,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.WhereVirtualNetwork"] = WhereVirtualNetworkValidator()
 	vr["ves.io.schema.views.WhereVirtualSite"] = WhereVirtualSiteValidator()
 	vr["ves.io.schema.views.WhereVirtualSiteSegment"] = WhereVirtualSiteSegmentValidator()
+	vr["ves.io.schema.views.WhereVirtualSiteSpecifiedVIP"] = WhereVirtualSiteSpecifiedVIPValidator()
 	vr["ves.io.schema.views.XfccHeaderKeys"] = XfccHeaderKeysValidator()
 
 }

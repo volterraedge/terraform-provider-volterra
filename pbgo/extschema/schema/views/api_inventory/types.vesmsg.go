@@ -75,6 +75,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSensitiveDataPolicyRefDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSensitiveDataPolicyRefDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetViewInternalDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetViewInternalDRefInfo() FAILED")
 	} else {
@@ -119,6 +125,55 @@ func (m *GlobalSpecType) GetApiDefinitionRefDBEntries(ctx context.Context, d db.
 	}
 	ref := &ves_io_schema.ObjectRefType{
 		Kind:      "api_definition.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetSensitiveDataPolicyRefDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSensitiveDataPolicyRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("sensitive_data_policy.Object")
+	dri := db.DRefInfo{
+		RefdType:   "sensitive_data_policy.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "sensitive_data_policy_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSensitiveDataPolicyRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetSensitiveDataPolicyRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "sensitive_data_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: sensitive_data_policy")
+	}
+
+	vref := m.GetSensitiveDataPolicyRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "sensitive_data_policy.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -222,6 +277,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["sensitive_data_policy_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sensitive_data_policy_ref"))
+		if err := fv(ctx, m.GetSensitiveDataPolicyRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
@@ -241,6 +305,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["internal_api_groups_builders"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
 	v.FldValidators["api_definition_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["sensitive_data_policy_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

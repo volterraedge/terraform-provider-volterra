@@ -554,7 +554,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-configkubeconfigapi-createlocalkubeconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-configkubeconfigapi-createlocalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.ConfigKubeConfigAPI.CreateLocalKubeConfig"
             },
@@ -646,7 +646,7 @@ var ConfigKubeConfigAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-site-configkubeconfigapi-listlocalkubeconfig"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-site-configkubeconfigapi-listlocalkubeconfig"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.site.ConfigKubeConfigAPI.ListLocalKubeConfig"
             },

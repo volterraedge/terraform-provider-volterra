@@ -229,6 +229,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["last_unsubscribe_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_unsubscribe_timestamp"))
+		if err := fv(ctx, m.GetLastUnsubscribeTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["product_code"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("product_code"))

@@ -389,7 +389,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-privatecustomapi-updateservicedomains"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-privatecustomapi-updateservicedomains"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI.UpdateServiceDomains"
             },
@@ -489,7 +489,7 @@ var PrivateCustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-privatecustomapi-updateservicedomains"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-cdn_loadbalancer-privatecustomapi-updateservicedomains"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.cdn_loadbalancer.PrivateCustomAPI.UpdateServiceDomains"
             },

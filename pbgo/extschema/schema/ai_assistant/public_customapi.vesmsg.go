@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema_ai_assistant_gen_dashboard_filter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/gen_dashboard_filter"
+	ves_io_schema_ai_assistant_site_analysis "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/site_analysis"
 )
 
 var (
@@ -198,6 +199,28 @@ func (v *ValidateAIAssistantQueryResponse) Validate(ctx context.Context, pm inte
 				return err
 			}
 		}
+	case *AIAssistantQueryResponse_GenericResponse:
+		if fv, exists := v.FldValidators["response_choice.generic_response"]; exists {
+			val := m.GetResponseChoice().(*AIAssistantQueryResponse_GenericResponse).GenericResponse
+			vOpts := append(opts,
+				db.WithValidateField("response_choice"),
+				db.WithValidateField("generic_response"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AIAssistantQueryResponse_SiteAnalysisResponse:
+		if fv, exists := v.FldValidators["response_choice.site_analysis_response"]; exists {
+			val := m.GetResponseChoice().(*AIAssistantQueryResponse_SiteAnalysisResponse).SiteAnalysisResponse
+			vOpts := append(opts,
+				db.WithValidateField("response_choice"),
+				db.WithValidateField("site_analysis_response"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -209,6 +232,7 @@ var DefaultAIAssistantQueryResponseValidator = func() *ValidateAIAssistantQueryR
 	v := &ValidateAIAssistantQueryResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["response_choice.gen_dashboard_filter"] = ves_io_schema_ai_assistant_gen_dashboard_filter.GenDashboardFilterResponseValidator().Validate
+	v.FldValidators["response_choice.site_analysis_response"] = ves_io_schema_ai_assistant_site_analysis.SiteAnalysisResponseValidator().Validate
 
 	return v
 }()

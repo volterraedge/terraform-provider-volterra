@@ -395,7 +395,7 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-filter_set-customapi-findfiltersets"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-filter_set-customapi-findfiltersets"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.filter_set.CustomAPI.FindFilterSets"
             },

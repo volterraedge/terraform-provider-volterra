@@ -562,7 +562,7 @@ var CustomActionAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-customactionapi-forcedelete"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-customactionapi-forcedelete"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomActionAPI.ForceDelete"
             },
@@ -670,7 +670,7 @@ var CustomActionAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://www.volterra.io/docs/reference/api-ref/ves-io-schema-views-terraform_parameters-customactionapi-run"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-terraform_parameters-customactionapi-run"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.views.terraform_parameters.CustomActionAPI.Run"
             },
