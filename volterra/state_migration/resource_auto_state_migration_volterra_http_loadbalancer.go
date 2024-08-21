@@ -19326,6 +19326,39 @@ func ResourceHttpLoadbalancerInstanceStateUpgradeV1(ctx context.Context, rawStat
 		}
 	}
 
+	https, ok := rawState["https"].([]interface{})
+	if !ok {
+		return rawState, nil
+	}
+
+	for _, v := range https {
+		a, ok := v.(map[string]interface{})
+		if !ok {
+			continue
+		}
+
+		httpProtocolOptions, ok := a["http_protocol_options"].([]interface{})
+		if !ok {
+			continue
+		}
+
+		for _, va := range httpProtocolOptions {
+			aa, ok := va.(map[string]interface{})
+			if !ok {
+				continue
+			}
+
+			value, ok := aa["http_protocol_enable_v1_only"]
+			if ok && reflect.TypeOf(value).Kind() == reflect.Bool {
+				aa["http_protocol_enable_v1_only"] = []interface{}{map[string]interface{}{
+					"header_transformation": []interface{}{map[string]interface{}{
+						"legacy_header_transformation": true,
+					}},
+				}}
+			}
+		}
+	}
+
 	defaultPool, ok := rawState["default_pool"].([]interface{})
 	if !ok {
 		return rawState, nil
