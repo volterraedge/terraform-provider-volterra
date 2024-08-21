@@ -54,5 +54,5 @@ signs:
 release:
   # If you want to manually examine the release before its live, uncomment this line:
   prerelease: auto
-changelog:
-  skip: true
+# changelog:
+#   skip: true
