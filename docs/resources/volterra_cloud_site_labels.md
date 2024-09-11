@@ -10,7 +10,7 @@ Resource volterra_cloud_site_labels
 
 volterra_cloud_site_labels resource updates the labels for the cloud site also known as view sites
 
-~> **Note:** Please add ignore_lifecycle hooks for your you cloud sites to ignore updates on labels and control the update of site label through this resource. Below is a sample snippet.
+~> **Note:** Please add ignore_lifecycle hooks for your cloud sites to ignore updates on labels and control the update of site label through this resource. Below is a sample snippet.
 
 ```
 lifecycle {

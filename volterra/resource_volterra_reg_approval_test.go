@@ -112,6 +112,7 @@ func TestRegistrationApproval(t *testing.T) {
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(resourceName, "registration_name", name),
 					resource.TestCheckResourceAttr(resourceName, "cluster_name", "site-1"),
+					resource.TestCheckResourceAttr(resourceName, "private_network_name", "private_network_name"),
 				),
 			},
 		},
@@ -132,6 +133,7 @@ func testRegApproval(name string) string {
 		  longitude = 50
 		  hostname = "master-0"
 		  tunnel_type = "SITE_TO_SITE_TUNNEL_IPSEC"
+		  private_network_name = "private_network_name"
 		}
 		`, approvalResource, name)
 }

@@ -18,7 +18,7 @@ description: "The apm allows CRUD of Apm  resource on Volterra SaaS"
 
 The Apm  allows CRUD of Apm  resource on Volterra SaaS
 
-~> **Note:** Please refer to [Apm  API docs](https://docs.cloud.f5.com/docs-v2/api/apm) to learn more
+~> **Note:** Please refer to [Apm  API docs]( https://docs.cloud.f5.com/docs-v2/api/bigip-apm) to learn more
 
 ## Example Usage
 

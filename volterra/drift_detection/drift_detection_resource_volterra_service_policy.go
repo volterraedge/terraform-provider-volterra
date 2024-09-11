@@ -14,7 +14,8 @@ func FlattenPrefixList(f *ves_io_schema_views.PrefixStringListType) []interface{
 	rslt := make([]interface{}, 0)
 	if f != nil {
 		val := map[string]interface{}{
-			"prefixes": f.GetPrefixes(),
+			"prefixes":      f.GetPrefixes(),
+			"ipv6_prefixes": f.GetIpv6Prefixes(),
 		}
 		rslt = append(rslt, val)
 	}
@@ -61,25 +62,11 @@ func FlattenPortMatcher(f *ves_io_schema_policy.PortMatcherType) []interface{} {
 	return rslt
 }
 
-func FlattenRulesServicePolicy(f []*ves_io_schema.ObjectRefType) interface{} {
-	rstl := make([]interface{}, 0)
-	for _, fval := range f {
-		val := map[string]interface{}{
-			"kind":      fval.GetKind(),
-			"name":      fval.GetName(),
-			"namespace": fval.GetNamespace(),
-			"tenant":    fval.GetTenant(),
-		}
-		rstl = append(rstl, val)
-	}
-	return rstl
-}
-
 func FlattenLegacyRuleList(f *ves_io_schema_service_policy.LegacyRuleList) []interface{} {
 	rslt := make([]interface{}, 0)
 	if f != nil {
 		val := map[string]interface{}{
-			"rules": FlattenRulesServicePolicy(f.GetRules()),
+			"rules": FlattenObjectRefTypeList(f.GetRules()),
 		}
 		rslt = append(rslt, val)
 	}
@@ -139,17 +126,7 @@ func FlattenContentRewriteAction(f *ves_io_schema_policy.ContentRewriteAction) i
 			"element_selector": f.GetElementSelector(),
 			"insert_content":   f.GetInsertContent(),
 			"position":         f.GetPosition().String(),
-		}
-		rslt = append(rslt, val)
-	}
-	return rslt
-}
-
-func FlattenDstAsnList(f *ves_io_schema_policy.AsnMatchList) interface{} {
-	rslt := make([]interface{}, 0)
-	if f != nil {
-		val := map[string]interface{}{
-			"as_numbers": FlattenAsNumbers(f.GetAsNumbers()),
+			// "inserted_types":   f.GetInsertedTypes(),
 		}
 		rslt = append(rslt, val)
 	}
@@ -195,11 +172,12 @@ func FlattenPathServicePolicy(f *ves_io_schema_policy.PathMatcherType) interface
 	rslt := make([]interface{}, 0)
 	if f != nil {
 		val := map[string]interface{}{
-			"exact_values":  f.GetExactValues(),
-			"prefix_values": f.GetPrefixValues(),
-			"regex_values":  f.GetRegexValues(),
-			"suffix_values": f.GetSuffixValues(),
-			"transformers":  FlattenTransformers(f.GetTransformers()),
+			"exact_values":   f.GetExactValues(),
+			"prefix_values":  f.GetPrefixValues(),
+			"regex_values":   f.GetRegexValues(),
+			"suffix_values":  f.GetSuffixValues(),
+			"transformers":   FlattenTransformers(f.GetTransformers()),
+			"invert_matcher": f.GetInvertMatcher(),
 		}
 		rslt = append(rslt, val)
 	}
@@ -221,8 +199,12 @@ func FlattenShapeProtectedEndpointAction(f *ves_io_schema_policy.ShapeProtectedE
 	rslt := make([]interface{}, 0)
 	if f != nil {
 		val := map[string]interface{}{
-			"app_traffic_type": f.GetAppTrafficType().String(),
-			"mitigation":       FlattenSPMitigation(f.GetMitigation()),
+			"app_traffic_type":   f.GetAppTrafficType().String(),
+			"mitigation":         FlattenMitigation(f.GetMitigation()),
+			"allow_goodbot":      f.GetAllowGoodbot(),
+			"web_scraping":       f.GetWebScraping(),
+			"flow_label":         f.GetFlowLabel(),
+			"transaction_result": FlattenTransactionResult(f.GetTransactionResult()),
 		}
 		rslt = append(rslt, val)
 	}
@@ -282,6 +264,7 @@ func FlattenSpecServicePolicy(f *ves_io_schema_service_policy_rule.GlobalSpecTyp
 			"asn_matcher":                     FlattenAsnMatcher(f.GetAsnMatcher()),
 			"body_matcher":                    FlattenItem(f.GetBodyMatcher()),
 			"bot_action":                      FlattenBotAction(f.GetBotAction()),
+			"mum_action":                      FlattenMumAction(f.GetMumAction()),
 			"challenge_action":                f.GetChallengeAction().String(),
 			"any_client":                      f.GetAnyClient() != nil,
 			"client_name":                     f.GetClientName(),
@@ -293,11 +276,11 @@ func FlattenSpecServicePolicy(f *ves_io_schema_service_policy_rule.GlobalSpecTyp
 			"cookie_matchers":                 FlattenCookieMatchers(f.GetCookieMatchers()),
 			"domain_matcher":                  FlattenItem(f.GetDomainMatcher()),
 			"any_dst_asn":                     isEmpty(f.GetAnyDstAsn()),
-			"dst_asn_list":                    FlattenDstAsnList(f.GetDstAsnList()),
+			"dst_asn_list":                    FlattenAsnList(f.GetDstAsnList()),
 			"dst_asn_matcher":                 FlattenAsnMatcher(f.GetDstAsnMatcher()),
 			"any_dst_ip":                      f.GetAnyDstIp() != nil,
 			"dst_ip_matcher":                  FlattenIpMatcher(f.GetDstIpMatcher()),
-			"dst_ip_prefix_list":              FlattenSPIpPrefixList(f.GetDstIpPrefixList()),
+			"dst_ip_prefix_list":              FlattenIpPrefixList(f.GetDstIpPrefixList()),
 			"expiration_timestamp":            FlattenExpirationTimestamp(f.GetExpirationTimestamp()),
 			"forwarding_class":                FlattenObjectRefTypeList(f.GetForwardingClass()),
 			"goto_policy":                     FlattenObjectRefTypeList(f.GetGotoPolicy()),
@@ -305,7 +288,7 @@ func FlattenSpecServicePolicy(f *ves_io_schema_service_policy_rule.GlobalSpecTyp
 			"http_method":                     FlattenHttpMethod(f.GetHttpMethod()),
 			"any_ip":                          f.GetAnyIp() != nil,
 			"ip_matcher":                      FlattenIpMatcher(f.GetIpMatcher()),
-			"ip_prefix_list":                  FlattenSPIpPrefixList(f.GetIpPrefixList()),
+			"ip_prefix_list":                  FlattenIpPrefixList(f.GetIpPrefixList()),
 			"l4_dest_matcher":                 FlattenL4DestMatcher(f.GetL4DestMatcher()),
 			"label_matcher":                   FlattenLabelMatcher(f.GetLabelMatcher()),
 			"path":                            FlattenPathServicePolicy(f.GetPath()),
@@ -319,6 +302,95 @@ func FlattenSpecServicePolicy(f *ves_io_schema_service_policy_rule.GlobalSpecTyp
 			"url_matcher":                     FlattenUrlMatcher(f.GetUrlMatcher()),
 			"virtual_host_matcher":            FlattenItem(f.GetVirtualHostMatcher()),
 			"waf_action":                      FlattenWafAction(f.GetWafAction()),
+			"jwt_claims":                      FlattenJwtClaims(f.GetJwtClaims()),
+			"request_constraints":             FlattenRequestConstraints(f.GetRequestConstraints()),
+			"user_identity_matcher":           FlattenUserIdentityMatcher(f.GetUserIdentityMatcher()),
+			"segment_policy":                  FlattenSegmentPolicy(f.GetSegmentPolicy()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenSegmentPolicy(x *ves_io_schema_policy.SegmentPolicyType) interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		temp := map[string]interface{}{
+			"src_segments": FlattenSrcSegments(x.GetSrcSegments()),
+			"src_any":      isEmpty(x.GetSrcAny()),
+		}
+		rslt = append(rslt, temp)
+	}
+	return rslt
+
+}
+
+func FlattenSrcSegments(x *ves_io_schema_views.SegmentRefList) interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		temp := map[string]interface{}{
+			"segments": FlattenVObjectRefTypeList(x.GetSegments()),
+		}
+		rslt = append(rslt, temp)
+	}
+	return rslt
+}
+
+func FlattenUserIdentityMatcher(x *ves_io_schema_policy.MatcherTypeBasic) interface{} {
+	res := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"exact_values": x.GetExactValues(),
+			"regex_values": x.GetRegexValues(),
+		}
+		res = append(res, val)
+	}
+	return res
+}
+
+func FlattenRequestConstraints(f *ves_io_schema_policy.RequestConstraintType) interface{} {
+
+	rslt := make([]interface{}, 0)
+	if f != nil {
+		val := map[string]interface{}{
+			"max_cookie_count_none":            isEmpty(f.GetMaxCookieCountNone()),
+			"max_cookie_count_exceeds":         f.GetMaxCookieCountExceeds(),
+			"max_cookie_key_size_none":         isEmpty(f.GetMaxCookieKeySizeNone()),
+			"max_cookie_key_size_exceeds":      f.GetMaxCookieKeySizeExceeds(),
+			"max_cookie_value_size_none":       isEmpty(f.GetMaxCookieKeySizeNone()),
+			"max_cookie_value_size_exceeds":    f.GetMaxCookieValueSizeExceeds(),
+			"max_header_count_none":            isEmpty(f.GetMaxHeaderCountNone()),
+			"max_header_count_exceeds":         f.GetMaxHeaderCountExceeds(),
+			"max_header_key_size_none":         isEmpty(f.GetMaxHeaderKeySizeNone()),
+			"max_header_key_size_exceeds":      f.GetMaxHeaderKeySizeExceeds(),
+			"max_header_value_size_none":       isEmpty(f.GetMaxHeaderValueSizeNone()),
+			"max_header_value_size_exceeds":    f.GetMaxHeaderKeySizeExceeds(),
+			"max_parameter_count_none":         isEmpty(f.GetMaxParameterCountNone()),
+			"max_parameter_count_exceeds":      f.GetMaxParameterCountExceeds(),
+			"max_parameter_name_size_none":     isEmpty(f.GetMaxParameterNameSizeNone()),
+			"max_parameter_name_size_exceeds":  f.GetMaxParameterValueSizeExceeds(),
+			"max_parameter_value_size_none":    isEmpty(f.GetMaxParameterValueSizeNone()),
+			"max_parameter_value_size_exceeds": f.GetMaxParameterValueSizeExceeds(),
+			"max_url_size_none":                isEmpty(f.GetMaxUrlSizeNone()),
+			"max_url_size_exceeds":             f.GetMaxUrlSizeExceeds(),
+			"max_query_size_none":              isEmpty(f.GetMaxQuerySizeNone()),
+			"max_query_size_exceeds":           f.GetMaxQuerySizeExceeds(),
+			"max_request_line_size_none":       isEmpty(f.GetMaxRequestLineSizeNone()),
+			"max_request_line_size_exceeds":    f.GetMaxRequestLineSizeExceeds(),
+			"max_request_size_none":            isEmpty(f.GetMaxRequestSizeNone()),
+			"max_request_size_exceeds":         f.GetMaxRequestSizeExceeds(),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenMumAction(f *ves_io_schema_policy.ModifyAction) interface{} {
+	rslt := make([]interface{}, 0)
+	if f != nil {
+		val := map[string]interface{}{
+			"skip_processing": isEmpty(f.GetSkipProcessing()),
+			"none":            isEmpty(f.GetDefault()),
 		}
 		rslt = append(rslt, val)
 	}
@@ -403,10 +475,22 @@ func FlattenSPAppFirewallDetectionControl(x *ves_io_schema_policy.AppFirewallDet
 			"exclude_attack_type_contexts": FlattenSPExcludeAttackTypeContexts(x.GetExcludeAttackTypeContexts()),
 			"exclude_signature_contexts":   FlattenSPExcludeSignatureContexts(x.GetExcludeSignatureContexts()),
 			"exclude_violation_contexts":   FlattenSPExcludeViolationContexts(x.GetExcludeViolationContexts()),
+			"exclude_bot_names":            FlattenExcludeBotNames(x.GetExcludeBotNameContexts()),
 		}
 		afdcValue = append(afdcValue, afdcVal)
 	}
 	return afdcValue
+}
+
+func FlattenExcludeBotNames(x []*ves_io_schema_policy.BotNameContext) []interface{} {
+	rslt := make([]interface{}, 0)
+	for _, val := range x {
+		mapValue := map[string]interface{}{
+			"bot_name": val.GetBotName(),
+		}
+		rslt = append(rslt, mapValue)
+	}
+	return rslt
 }
 
 func FlattenSPExcludeAttackTypeContexts(x []*ves_io_schema_policy.AppFirewallAttackTypeContext) []interface{} {
@@ -414,6 +498,8 @@ func FlattenSPExcludeAttackTypeContexts(x []*ves_io_schema_policy.AppFirewallAtt
 	for _, val := range x {
 		mapValue := map[string]interface{}{
 			"exclude_attack_type": val.GetExcludeAttackType().String(),
+			"context":             val.GetContext().String(),
+			"context_name":        val.GetContextName(),
 		}
 		rslt = append(rslt, mapValue)
 	}
@@ -424,6 +510,8 @@ func FlattenSPExcludeSignatureContexts(x []*ves_io_schema_policy.AppFirewallSign
 	for _, val := range x {
 		mapValue := map[string]interface{}{
 			"signature_id": val.GetSignatureId(),
+			"context":      val.GetContext().String(),
+			"context_name": val.GetContextName(),
 		}
 		rslt = append(rslt, mapValue)
 	}
@@ -435,6 +523,8 @@ func FlattenSPExcludeViolationContexts(x []*ves_io_schema_policy.AppFirewallViol
 	for _, val := range x {
 		mapValue := map[string]interface{}{
 			"exclude_violation": val.GetExcludeViolation().String(),
+			"context":           val.GetContext().String(),
+			"context_name":      val.GetContextName(),
 		}
 		rslt = append(rslt, mapValue)
 	}

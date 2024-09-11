@@ -69,7 +69,7 @@ func isIntfNil(v interface{}) bool {
 }
 
 func parseTime(t string) (*google_protobuf1.Timestamp, error) {
-	layout := "0001-01-01T00:00:00Z"
+	layout := time.RFC3339
 	timeFmt, err := time.Parse(layout, t)
 	if err != nil {
 		return nil, err

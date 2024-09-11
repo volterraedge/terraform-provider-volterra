@@ -190,7 +190,7 @@ resource "volterra_service_policy_rule" "example" {
 
 
 
-`content_rewrite_action` - (Optional) Rewrite HTML response action to insert HTML content such as Javascript <script> tags into the HTML document. See [Content Rewrite Action ](#content-rewrite-action) below for details.(Deprecated)
+`content_rewrite_action` - (Optional) Rewrite HTML response action to insert HTML content such as Javascript script tags into the HTML document. See [Content Rewrite Action ](#content-rewrite-action) below for details.(Deprecated)
 
 
 
@@ -794,7 +794,7 @@ resource "volterra_service_policy_rule" "example" {
 
 ### Content Rewrite Action 
 
- Rewrite HTML response action to insert HTML content such as Javascript <script> tags into the HTML document.
+ Rewrite HTML response action to insert HTML content such as Javascript script tags into the HTML document.
 
 `element_selector` - (Required) Element selector to insert into. (`String`).
 

@@ -70,6 +70,8 @@ func resourceVolterraToken() *schema.Resource {
 func resourceVolterraTokenCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*APIClient)
 	var name, namespace string
+	var token *ves_io_schema_token.ListResponseItem
+	token = nil
 	if v, ok := d.GetOk("name"); ok && !isIntfNil(v) {
 		name = v.(string)
 	}
@@ -79,7 +81,16 @@ func resourceVolterraTokenCreate(d *schema.ResourceData, meta interface{}) error
 	}
 
 	tokenListResp, err := client.ListObjects(context.Background(), ves_io_schema_token.ObjectType, namespace)
-	if err != nil || len(tokenListResp) == 0 {
+	if err == nil {
+		for _, item := range tokenListResp {
+			tok := item.(*ves_io_schema_token.ListResponseItem)
+			if tok.GetSpec == nil || tok.GetSpec.Type == ves_io_schema_token.NORMAL {
+				token = tok
+				break
+			}
+		}
+	}
+	if token == nil {
 		createMeta := &ves_io_schema.ObjectCreateMetaType{
 			Name:      name,
 			Namespace: namespace,
@@ -127,7 +138,6 @@ func resourceVolterraTokenCreate(d *schema.ResourceData, meta interface{}) error
 		d.Set("tenant_name", createTokenResp.GetObjSystemMetadata().GetTenant())
 		return resourceVolterraTokenRead(d, meta)
 	}
-	token := tokenListResp[0].(*ves_io_schema_token.ListResponseItem)
 	d.SetId(token.GetUid())
 	d.Set("tenant_name", token.GetTenant())
 	d.Set("created_by_tf", false)
@@ -160,8 +170,18 @@ func resourceVolterraTokenRead(d *schema.ResourceData, meta interface{}) error {
 	if err != nil {
 		return fmt.Errorf("Error getting list of Volterra Tokens during read %q: %s", d.Id(), err)
 	}
-	token := tokenListResp[0].(*ves_io_schema_token.ListResponseItem)
-	d.Set("tenant_name", token.GetTenant())
+	var token *ves_io_schema_token.ListResponseItem
+	token = nil
+	for _, item := range tokenListResp {
+		tok := item.(*ves_io_schema_token.ListResponseItem)
+		if tok.GetSpec == nil || tok.GetSpec.Type == ves_io_schema_token.NORMAL {
+			token = tok
+			break
+		}
+	}
+	if token != nil {
+		d.Set("tenant_name", token.GetTenant())
+	}
 	return nil
 }
 
